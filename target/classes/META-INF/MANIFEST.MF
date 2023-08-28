@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Build-Jdk-Spec: 17
+Class-Path: libs/lwjgl-3.3.2.jar libs/lwjgl-assimp-3.3.2.jar libs/lwjgl-
+ glfw-3.3.2.jar libs/lwjgl-openal-3.3.2.jar libs/lwjgl-opengl-3.3.2.jar 
+ libs/lwjgl-stb-3.3.2.jar libs/lwjgl-3.3.2-natives-linux.jar libs/lwjgl-
+ assimp-3.3.2-natives-linux.jar libs/lwjgl-glfw-3.3.2-natives-linux.jar 
+ libs/lwjgl-openal-3.3.2-natives-linux.jar libs/lwjgl-opengl-3.3.2-nativ
+ es-linux.jar libs/lwjgl-stb-3.3.2-natives-linux.jar libs/steamworks4j-s
+ erver-1.9.0.jar libs/steamworks4j-1.9.0.jar libs/joml-1.10.5.jar
+Main-Class: lu.pcy113.pdr.client.ClientMain
+Created-By: Maven Integration for Eclipse
+

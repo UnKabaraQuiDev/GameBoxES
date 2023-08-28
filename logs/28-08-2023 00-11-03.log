@@ -1,0 +1,149 @@
+[00:11:03][INFO](lu.pcy113.pdr.client.ClientMain#main@22) Starting
+[00:11:03][FINEST](lu.pcy113.pdr.client.game.PDRClientGame#<init>@19) <- lu.pcy113.pdr.client.ClientMain#main@31
+[00:11:03][FINEST](lu.pcy113.pdr.engine.GameEngine#<init>@20) <- lu.pcy113.pdr.client.ClientMain#main@32
+[00:11:04][FINEST](lu.pcy113.pdr.engine.graph.Renderer#<init>@18) <- lu.pcy113.pdr.engine.GameEngine#<init>@28
+[00:11:04][FINEST](lu.pcy113.pdr.engine.graph.SceneRenderer#<init>@23) <- lu.pcy113.pdr.engine.graph.Renderer#<init>@22
+[00:11:04][FINEST](lu.pcy113.pdr.engine.graph.shader.ShaderProgram#<init>@17) <- lu.pcy113.pdr.engine.graph.SceneRenderer#<init>@28
+[00:11:04][FINEST](lu.pcy113.pdr.engine.graph.shader.ShaderProgram#createShader@73) <- lu.pcy113.pdr.engine.graph.shader.ShaderProgram#lambda$0@25
+[00:11:04][FINEST](lu.pcy113.pdr.engine.graph.shader.ShaderProgram#createShader@73) <- lu.pcy113.pdr.engine.graph.shader.ShaderProgram#lambda$0@25
+[00:11:04][FINEST](lu.pcy113.pdr.engine.graph.shader.ShaderProgram#link@52) <- lu.pcy113.pdr.engine.graph.shader.ShaderProgram#<init>@27
+[00:11:04][FINEST](lu.pcy113.pdr.engine.graph.SceneRenderer#createUniforms@41) <- lu.pcy113.pdr.engine.graph.SceneRenderer#<init>@30
+[00:11:04][FINEST](lu.pcy113.pdr.engine.graph.UniformsMap#<init>@18) <- lu.pcy113.pdr.engine.graph.SceneRenderer#createUniforms@43
+[00:11:04][FINEST](lu.pcy113.pdr.engine.graph.UniformsMap#createUniform@25) <- lu.pcy113.pdr.engine.graph.SceneRenderer#createUniforms@44
+[00:11:04][FINEST](lu.pcy113.pdr.engine.scene.Scene#<init>@17) <- lu.pcy113.pdr.engine.GameEngine#<init>@29
+[00:11:04][FINEST](lu.pcy113.pdr.client.game.PDRClientGame#init@24) <- lu.pcy113.pdr.engine.GameEngine#<init>@31
+[00:11:04][FINEST](lu.pcy113.pdr.engine.graph.Mesh#<init>@21) <- lu.pcy113.pdr.client.game.PDRClientGame#init@43
+[00:11:04][FINEST](lu.pcy113.pdr.engine.scene.Scene#addMesh@24) <- lu.pcy113.pdr.client.game.PDRClientGame#init@44
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#start@36) <- lu.pcy113.pdr.client.ClientMain#main@33
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@49) <- lu.pcy113.pdr.engine.GameEngine#start@39
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@60) -------------------------- + 0
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#resize@102) resized: 1858x1016
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@69) start: 1693174264564
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@70) timeU: 33.333332
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@71) timeR: 16.666666
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@72) dUpdate: 0.030000001
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@73) dFps: 0.060000002
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@74) updateTime: 1693174264564
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@75) now: 1693174264565
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@60) -------------------------- + 1
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@69) start: 1693174264565
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@70) timeU: 33.333332
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@71) timeR: 16.666666
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@72) dUpdate: 0.060000002
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@73) dFps: 0.120000005
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@74) updateTime: 1693174264564
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@75) now: 1693174264566
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@60) -------------------------- + 2
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@69) start: 1693174264566
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@70) timeU: 33.333332
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@71) timeR: 16.666666
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@72) dUpdate: 0.120000005
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@73) dFps: 0.24000001
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@74) updateTime: 1693174264564
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@75) now: 1693174264568
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@60) -------------------------- + 3
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@69) start: 1693174264568
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@70) timeU: 33.333332
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@71) timeR: 16.666666
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@72) dUpdate: 0.15
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@73) dFps: 0.3
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@74) updateTime: 1693174264564
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@75) now: 1693174264569
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@60) -------------------------- + 4
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@69) start: 1693174264569
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@70) timeU: 33.333332
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@71) timeR: 16.666666
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@72) dUpdate: 0.18
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@73) dFps: 0.36
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@74) updateTime: 1693174264564
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@75) now: 1693174264570
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@60) -------------------------- + 5
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@69) start: 1693174264570
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@70) timeU: 33.333332
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@71) timeR: 16.666666
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@72) dUpdate: 0.21000001
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@73) dFps: 0.42000002
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@74) updateTime: 1693174264564
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@75) now: 1693174264571
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@60) -------------------------- + 6
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@69) start: 1693174264571
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@70) timeU: 33.333332
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@71) timeR: 16.666666
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@72) dUpdate: 0.24000001
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@73) dFps: 0.48000002
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@74) updateTime: 1693174264564
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@75) now: 1693174264572
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@60) -------------------------- + 7
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@69) start: 1693174264572
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@70) timeU: 33.333332
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@71) timeR: 16.666666
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@72) dUpdate: 0.27
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@73) dFps: 0.54
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@74) updateTime: 1693174264564
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@75) now: 1693174264573
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@60) -------------------------- + 8
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@69) start: 1693174264573
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@70) timeU: 33.333332
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@71) timeR: 16.666666
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@72) dUpdate: 0.3
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@73) dFps: 0.6
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@74) updateTime: 1693174264564
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@75) now: 1693174264574
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@60) -------------------------- + 9
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@69) start: 1693174264574
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@70) timeU: 33.333332
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@71) timeR: 16.666666
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@72) dUpdate: 0.33
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@73) dFps: 0.66
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@74) updateTime: 1693174264564
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@75) now: 1693174264575
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@60) -------------------------- + 10
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@69) start: 1693174264575
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@70) timeU: 33.333332
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@71) timeR: 16.666666
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@72) dUpdate: 0.36
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@73) dFps: 0.72
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@74) updateTime: 1693174264564
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@75) now: 1693174264576
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@60) -------------------------- + 11
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@69) start: 1693174264576
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@70) timeU: 33.333332
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@71) timeR: 16.666666
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@72) dUpdate: 0.39000002
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@73) dFps: 0.78000003
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@74) updateTime: 1693174264564
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@75) now: 1693174264577
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@60) -------------------------- + 12
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@69) start: 1693174264577
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@70) timeU: 33.333332
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@71) timeR: 16.666666
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@72) dUpdate: 0.42000002
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@73) dFps: 0.84000003
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@74) updateTime: 1693174264564
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@75) now: 1693174264578
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@60) -------------------------- + 13
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@69) start: 1693174264578
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@70) timeU: 33.333332
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@71) timeR: 16.666666
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@72) dUpdate: 0.45000002
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@73) dFps: 0.90000004
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@74) updateTime: 1693174264564
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@75) now: 1693174264579
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@60) -------------------------- + 14
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@69) start: 1693174264579
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@70) timeU: 33.333332
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@71) timeR: 16.666666
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@72) dUpdate: 0.48000002
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@73) dFps: 0.96000004
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@74) updateTime: 1693174264564
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@75) now: 1693174264580
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@60) -------------------------- + 15
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@69) start: 1693174264580
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@70) timeU: 33.333332
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@71) timeR: 16.666666
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@72) dUpdate: 0.51
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@73) dFps: 1.02
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@74) updateTime: 1693174264564
+[00:11:04][FINEST](lu.pcy113.pdr.engine.GameEngine#run@75) now: 1693174264581
+[00:11:04][FINEST](lu.pcy113.pdr.client.game.PDRClientGame#input@49) <- lu.pcy113.pdr.engine.GameEngine#run@78
+[00:11:04][FINEST](lu.pcy113.pdr.engine.graph.Renderer#render@33) <- lu.pcy113.pdr.engine.GameEngine#run@90
