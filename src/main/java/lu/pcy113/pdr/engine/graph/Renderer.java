@@ -2,8 +2,6 @@ package lu.pcy113.pdr.engine.graph;
 
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL30;
-import org.lwjgl.opengl.GLUtil;
 
 import lu.pcy113.pdr.engine.Window;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
@@ -18,7 +16,7 @@ public class Renderer implements Cleanupable {
 		Logger.log();
 		
 		GL.createCapabilities();
-		GLUtil.setupDebugMessageCallback(System.err);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		sceneRenderer = new SceneRenderer();
 	}
 	
@@ -32,7 +30,7 @@ public class Renderer implements Cleanupable {
 	public void render(Window window, Scene scene) {
 		Logger.log();
 		
-		//GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BITS);
+		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 		GL11.glViewport(0, 0, window.getWidth(), window.getHeight());
 		//GL11.glClearColor(0, 1, 0, 1);
 		

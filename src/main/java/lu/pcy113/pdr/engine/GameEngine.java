@@ -54,11 +54,11 @@ public class GameEngine implements Runnable, Cleanupable {
 		float dUpdate = 0;
 		float dFps = 0;
 		
-		int i = 0;
+		//int i = 0;
 		long updateTime = start;
 		while(running && !window.windowShouldClose()) {
-			Logger.log("-------------------------- + "+i);
-			i++;
+			//Logger.log("-------------------------- + "+i);
+			//i++;
 			
 			window.pollEvents();
 			
@@ -66,13 +66,13 @@ public class GameEngine implements Runnable, Cleanupable {
 			dUpdate += (now - start) / timeU;
 			dFps += (now - start) / timeR;
 			
-			Logger.log("start: "+start);
+			/*Logger.log("start: "+start);
 			Logger.log("timeU: "+timeU);
 			Logger.log("timeR: "+timeR);
 			Logger.log("dUpdate: "+dUpdate);
 			Logger.log("dFps: "+dFps);
 			Logger.log("updateTime: "+updateTime);
-			Logger.log("now: "+now);
+			Logger.log("now: "+now);*/
 			
 			if(targetFps <= 0 || dFps >= 1) {
 				gameLogic.input(window, scene, now-start);
@@ -80,7 +80,7 @@ public class GameEngine implements Runnable, Cleanupable {
 			
 			if(dUpdate >= 1) {
 				long diffTime = start - updateTime;
-				Logger.log("diffTime: "+diffTime);
+				//Logger.log("diffTime: "+diffTime);
 				gameLogic.update(window, scene, diffTime);
 				updateTime = now;
 				dUpdate--;

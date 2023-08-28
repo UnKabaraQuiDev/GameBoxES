@@ -114,6 +114,7 @@ public class Window implements Cleanupable {
 	}
 	
 	public boolean isKeyPressed(int key) {
+		//Logger.log(GLFW.glfwGetKey(windowHandle, key)+" for key "+key);
 		return GLFW.glfwGetKey(windowHandle, key) == GLFW.GLFW_PRESS;
 	}
 	
@@ -122,7 +123,7 @@ public class Window implements Cleanupable {
 	}
 	
 	private void key(int key, int scan, int action, int mods) {
-		System.out.println(key +"key");
+		//Logger.log(GLFW.glfwGetKey(windowHandle, key)+" callback key "+key);
 		if(key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_RELEASE) {
 			GLFW.glfwSetWindowShouldClose(windowHandle, true);
 		}

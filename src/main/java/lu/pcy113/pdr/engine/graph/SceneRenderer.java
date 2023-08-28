@@ -4,13 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.lwjgl.opengl.GL30;
-import org.lwjgl.opengl.GLUtil;
-
-import com.codedisaster.steamworks.SteamUtils;
 
 import lu.pcy113.pdr.engine.graph.shader.ShaderModuleData;
 import lu.pcy113.pdr.engine.graph.shader.ShaderProgram;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
+import lu.pcy113.pdr.engine.scene.Entity;
 import lu.pcy113.pdr.engine.scene.Scene;
 import lu.pcy113.pdr.utils.Logger;
 
@@ -42,6 +40,7 @@ public class SceneRenderer implements Cleanupable {
 		
 		uniformsMap = new UniformsMap(shaderProgram.getProgramId());
 		uniformsMap.createUniform("projectionMatrix");
+		uniformsMap.createUniform("modelMatrix");
 	}
 	
 	public void render(Scene scene) {
@@ -51,16 +50,20 @@ public class SceneRenderer implements Cleanupable {
 		
 		uniformsMap.setUniform("projectionMatrix", scene.getProjection().getProjMatrix());
 		
-		scene.getMeshMap().values().forEach((mesh) -> {
-			Logger.log(mesh.getNumVertices()+" mesh "+mesh.getVaoId());
+		for(Model model : scene.getModels().values()) {
+			Logger.log("Model: "+model.getId()+" > E"+model.getEntities().size()+" & M"+model.getMeshes().size());
 			
-			GL30.glBindVertexArray(mesh.getVaoId());
-			GL30.glEnableVertexAttribArray(0);
-			
-			GL30.glDrawElements(GL30.GL_TRIANGLES, mesh.getNumVertices(), GL30.GL_UNSIGNED_INT, 0);
-			
-			GL30.glDisableVertexAttribArray(0);
-		});
+			for(Mesh mesh : model.getMeshes()) {
+				Logger.log("Mesh: "+mesh.getVaoId()+" > V"+mesh.getNumVertices());
+				GL30.glBindVertexArray(mesh.getVaoId());
+				GL30.glEnableVertexAttribArray(0);
+				
+				for(Entity entity : model.getEntities()) {
+					uniformsMap.setUniform("modelMatrix", entity.getModelMatrix());
+					GL30.glDrawElements(GL30.GL_TRIANGLES, mesh.getNumVertices(), GL30.GL_UNSIGNED_INT, 0);
+				}
+			}
+		}
 		
 		GL30.glBindVertexArray(0);
 		
