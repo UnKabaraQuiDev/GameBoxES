@@ -1,49 +1,52 @@
 package lu.pcy113.pdr.engine.scene;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import lu.pcy113.pdr.engine.graph.Model;
+import lu.pcy113.pdr.engine.Window;
+import lu.pcy113.pdr.engine.graph.renderer.Renderer;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
+import lu.pcy113.pdr.engine.impl.UniqueId;
 import lu.pcy113.pdr.utils.Logger;
 
-public class Scene implements Cleanupable {
+public class Scene implements Cleanupable, UniqueId {
 	
-	private Map<String, Model> models;
+	private final String id;
 	
+	private Renderer<Scene> renderer;
+	
+	private boolean visible = true;
 	private Projection projection;
 	
-	public Scene(int w, int h) {
+	public Scene(String id, int w, int h, Renderer<Scene> renderer) {
 		Logger.log();
 		
-		models = new HashMap<>();
-		projection = new Projection(w, h);
+		this.id = id;
+		
+		this.projection = new Projection(w, h);
+		this.renderer = renderer;
+		
+		renderer.attach(this);
+	}
+	
+	public void render(Window window) {
+		renderer.render(window, this);
 	}
 	
 	@Override
 	public void cleanup() {
 		Logger.log();
 		
-		models.values().forEach(Model::cleanup);
+		renderer.cleanup();
 	}
 	
-	public void addEntity(Entity entity) {
-		String modelId = entity.getModelId();
-		Model model = models.get(modelId);
-		if(model == null)
-			throw new RuntimeException("Could not find model: "+modelId+" in entity: "+entity.getId());
-		model.getEntities().add(entity);
-	}
-	
-	public void addModel(Model model) {models.put(model.getId(), model);}
-	public Map<String, Model> getModels() {return models;}
-	public void setModels(Map<String, Model> models) {this.models = models;}
+	@Override
+	public String getId() {return id;}
 	public Projection getProjection() {return projection;}
 	public void setProjection(Projection projection) {this.projection = projection;}
+	public Renderer getRenderer() {return renderer;}
+	public boolean isVisible() {return visible;}
+	public void setVisible(boolean visible) {this.visible = visible;}
 	
 	public void resize(int width, int height) {
-		Logger.log();
-		projection.updateProjMatrix(width, height);
+		projection.persp_UpdateProjMatrix(width, height);
 	}
 	
 }

@@ -1,4 +1,4 @@
-package lu.pcy113.pdr.engine.graph;
+package lu.pcy113.pdr.engine.scene.geom;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -7,17 +7,20 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.system.MemoryStack;
+import org.lwjgl.system.MemoryUtil;
 
+import lu.pcy113.pdr.engine.graph.UniformsMap;
+import lu.pcy113.pdr.engine.impl.Bindable;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.utils.Logger;
 
 public class Mesh implements Cleanupable {
 	
-	private int numVertices;
-	private int vaoId;
-	private List<Integer> vboIdList;
+	protected int numVertices;
+	protected int vaoId;
+	protected List<Integer> vboIdList;
 	
-	public Mesh(float[] pos, float[] col, int[] ids) {
+	public Mesh(float[] pos, float[] uv, int[] ids) {
 		Logger.log();
 		
 		try(MemoryStack stack = MemoryStack.stackPush()) {
@@ -37,15 +40,15 @@ public class Mesh implements Cleanupable {
 			GL30.glEnableVertexAttribArray(0);
 			GL30.glVertexAttribPointer(0, 3, GL30.GL_FLOAT, false, 0, 0);
 			
-			// Color vbo
+			// UV vbo
 			vboId = GL30.glGenBuffers();
 			vboIdList.add(vboId);
-			FloatBuffer colBuffer = stack.callocFloat(col.length);
-			colBuffer.put(col).flip();
+			FloatBuffer uvBuffer = MemoryUtil.memAllocFloat(uv.length);
+			uvBuffer.put(uv).flip();
 			GL30.glBindBuffer(GL30.GL_ARRAY_BUFFER, vboId);
-			GL30.glBufferData(GL30.GL_ARRAY_BUFFER, colBuffer, GL30.GL_STATIC_DRAW);
+			GL30.glBufferData(GL30.GL_ARRAY_BUFFER, uvBuffer, GL30.GL_STATIC_DRAW);
 			GL30.glEnableVertexAttribArray(1);
-			GL30.glVertexAttribPointer(1, 3, GL30.GL_FLOAT, false, 0, 0);
+			GL30.glVertexAttribPointer(1, 2, GL30.GL_FLOAT, false, 0, 0);
 			
 			// Index vbo
 			vboId = GL30.glGenBuffers();
@@ -66,7 +69,14 @@ public class Mesh implements Cleanupable {
 				MemoryUtil.memFree(idBuffer);*/
 		}
 	}
-
+	
+	public void bind(UniformsMap uniforms) {
+		GL30.glBindVertexArray(vaoId);
+		//GL30.glBindBuffer(GL30.GL_ARRAY_BUFFER, vaoId);
+	}
+	public void unbind() {
+	}
+	
 	@Override
 	public void cleanup() {
 		Logger.log();
@@ -77,5 +87,5 @@ public class Mesh implements Cleanupable {
 	
 	public int getNumVertices() {return numVertices;}
 	public int getVaoId() {return vaoId;}
-	
+
 }

@@ -12,15 +12,17 @@ public class Projection {
 
 	public Projection(int width, int height) {
 		projMatrix = new Matrix4f();
-		updateProjMatrix(width, height);
+		persp_UpdateProjMatrix(width, height);
 	}
 
-	public Matrix4f getProjMatrix() {
-		return projMatrix;
-	}
+	public Matrix4f getProjMatrix() {return projMatrix;}
 
-	public void updateProjMatrix(int width, int height) {
+	public void persp_UpdateProjMatrix(int width, int height) {
 		projMatrix.setPerspective(FOV, (float) width / height, Z_NEAR, Z_FAR);
+	}
+	
+	public void ortho_UpdateProjMatrix(int width, int height) {
+		projMatrix.setOrthoSymmetric(width, height, Z_NEAR, Z_FAR);
 	}
 	
 }

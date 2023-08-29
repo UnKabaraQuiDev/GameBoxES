@@ -137,7 +137,7 @@ public final class Logger {
 	}
 	
 	public static void log(Object string) {
-		log(Level.FINEST, string.toString());
+		log(Level.FINEST, string == null ? "null" : string.toString());
 	}
 	public static void log() {
 		log(Level.FINEST, "<- "+getCallerClassName(true));

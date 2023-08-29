@@ -1,0 +1,3 @@
+txtSampler
+modelMatrix
+projectionMatrix

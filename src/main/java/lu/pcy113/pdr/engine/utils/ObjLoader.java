@@ -1,73 +1,107 @@
 package lu.pcy113.pdr.engine.utils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.joml.Vector3i;
 
-import lu.pcy113.pdr.engine.graph.Mesh;
+import lu.pcy113.pdr.engine.scene.geom.Mesh;
 
 public final class ObjLoader {
 	
-	public static List<Mesh> loadMesh(String file) {
-		String[] lines = FileUtils.getResource("models/"+file).split("\n");
-		System.out.println(Arrays.toString(lines));
-		int line = 0;
+	public static Mesh loadMesh(String path) {
+		String[] lines = FileUtils.getResource("models/"+path).split("\n");
 		
-		List<Mesh> meshes = new ArrayList<>();
-		
-		List<Vector3f> positions = new ArrayList<>();
+		List<Vector3f> vertices = new ArrayList<>();
 		List<Vector3f> normals = new ArrayList<>();
-		List<Integer>  indices = new ArrayList<>();
+		List<Vector2f> uvs = new ArrayList<>();
+		List<Vector3i> faces = new ArrayList<>();
 		
-		while(line < lines.length) {
-			String cl = lines[line];
-			line++;
-			System.out.println(line+": "+cl);
-			
-			if(cl.startsWith("#"))
-				continue;
-			
-			String[] tokens = cl.split(" ");
+		int li = 0;
+		while(li < lines.length) {
+			String line = lines[li++];
+			String[] tokens = line.split("\\s+");
 			
 			switch(tokens[0]) {
-				case "o":
-					break;
-				case "v":
-					positions.add(new Vector3f(Float.parseFloat(tokens[1]), Float.parseFloat(tokens[2]), Float.parseFloat(tokens[3])));
-					break;
-				case "vn":
-					normals.add(new Vector3f(Float.parseFloat(tokens[1]), Float.parseFloat(tokens[2]), Float.parseFloat(tokens[3])));
-					break;
-				case "s":
-					// scale ?
-					break;
-				case "f":
-					indices.add(Integer.parseInt(tokens[1].split("/")[0]));
-					indices.add(Integer.parseInt(tokens[2].split("/")[0]));
-					indices.add(Integer.parseInt(tokens[3].split("/")[0]));
-					break;
+			case "v":
+				vertices.add(new Vector3f(
+						Float.parseFloat(tokens[1]),
+						Float.parseFloat(tokens[2]),
+						Float.parseFloat(tokens[3])
+				));
+				break;
+			case "vt":
+				uvs.add(new Vector2f(
+						Float.parseFloat(tokens[1]),
+						Float.parseFloat(tokens[2])
+				));
+				break;
+			case "vn":
+				normals.add(new Vector3f(
+						Float.parseFloat(tokens[1]),
+						Float.parseFloat(tokens[2]),
+						Float.parseFloat(tokens[3])
+				));
+				break;
+			case "f":
+				processFace(tokens[1], faces);
+				processFace(tokens[2], faces);
+				processFace(tokens[3], faces);
+				break;
 			}
 		}
-		meshes.add(new Mesh(
-				toFloat(positions),
-				toFloat(normals),
-				indices.stream().mapToInt(i -> i).toArray()
-		));
+		List<Integer> indices = new ArrayList<>();
+		float[] verticesArr = new float[vertices.size() *3];
+		int i = 0;
+		for(Vector3f pos : vertices) {
+			verticesArr[i*3+0] = pos.x;
+			verticesArr[i*3+1] = pos.y;
+			verticesArr[i*3+2] = pos.z;
+			i++;
+		}
 		
-		return meshes;
+		float[] uvsArr = new float[vertices.size() *2];
+		float[] normalsArr = new float[vertices.size() *3];
+		
+		for(Vector3i face : faces) {
+			int pos = face.x;
+			int tex = face.y;
+			int nor = face.z;
+			
+			indices.add(pos);
+			
+			if(tex >= 0) {
+				Vector2f v = uvs.get(tex);
+				uvsArr[pos*2+0] = v.x;
+				uvsArr[pos*2+1] = 1-v.y;
+			}
+			
+			if(nor >= 0) {
+				Vector3f v = normals.get(nor);
+				normalsArr[pos*3+0] = v.x;
+				normalsArr[pos*3+1] = v.y;
+				normalsArr[pos*3+2] = v.z;
+			}
+		}
+		
+		int[] indicesArr = indices.stream().mapToInt((v) -> v).toArray();
+		return new Mesh(verticesArr, uvsArr, indicesArr);
 	}
 	
-	private static float[] toFloat(List<Vector3f> doub) {
-		float[] result = new float[doub.size() *3];
-		int i = 0;
-		for (Vector3f f : doub) {
-			result[i++] = f.x;
-			result[i++] = f.y;
-			result[i++] = f.z;
-		}
-		return result;
+	private static void processFace(String token, List<Vector3i> faces) {
+		String[] tokens = token.split("/");
+		int len = tokens.length;
+		int pos = -1, coords = -1, normals = -1;
+		pos = Integer.parseInt(tokens[0])-1;
+		if(len > 1)
+			coords = Integer.parseInt(tokens[1])-1;
+		if(len > 2)
+			normals = Integer.parseInt(tokens[2])-1;
+		faces.add(new Vector3i(
+				pos, coords, normals
+		));
 	}
 	
 }

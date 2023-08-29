@@ -7,7 +7,6 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.opengl.GL20;
-import org.lwjgl.system.MemoryStack;
 
 import lu.pcy113.pdr.utils.Logger;
 
@@ -70,12 +69,23 @@ public class UniformsMap {
 	public void setUniform(String name, Matrix4f value) {
 		Logger.log();
 		
-		try(MemoryStack stack = MemoryStack.stackPush()) {
+		GL20.glUniformMatrix4fv(uniforms.get(name), false, value.get(new float[4*4]));
+		
+		/*try(MemoryStack stack = MemoryStack.stackPush()) {
 			Integer loc = uniforms.get(name);
 			if(loc == null)
 				throw new RuntimeException("Could not find uniform "+name+".");
 			GL20.glUniformMatrix4fv(loc.intValue(), false, value.get(stack.mallocFloat(16)));
-		}
+		}*/
+	}
+	
+	@Override
+	public String toString() {
+		return uniforms.toString();
+	}
+
+	public boolean hasUniform(String string) {
+		return uniforms.containsKey(string);
 	}
 	
 }

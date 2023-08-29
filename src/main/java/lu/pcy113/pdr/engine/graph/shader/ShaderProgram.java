@@ -1,19 +1,24 @@
 package lu.pcy113.pdr.engine.graph.shader;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.lwjgl.opengl.GL30;
 
+import lu.pcy113.pdr.engine.graph.UniformsMap;
+import lu.pcy113.pdr.engine.impl.Bindable;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.utils.FileUtils;
 import lu.pcy113.pdr.utils.Logger;
 
-public class ShaderProgram implements Cleanupable {
+public class ShaderProgram implements Cleanupable, Bindable<UniformsMap> {
 	
 	private final int programId;
+	private UniformsMap uniformsMap;
 	
-	public ShaderProgram(List<ShaderModuleData> modules) {
+	public ShaderProgram(List<ShaderModuleData> modules, List<String> uniforms) {
 		Logger.log();
 		
 		programId = GL30.glCreateProgram();
@@ -22,16 +27,33 @@ public class ShaderProgram implements Cleanupable {
 		}
 		
 		List<Integer> shaderModules = new ArrayList<>();
-		modules.forEach((s) -> shaderModules.add(createShader(FileUtils.getResource("shaders/"+s.getFile()), s.getType())));
+		modules.forEach((s) -> shaderModules.add(createShader(FileUtils.getShader(s.getFile(), s.getType()), s.getType())));
 		
 		link(shaderModules);
+		
+		uniformsMap = new UniformsMap(programId);
+		createUniforms(uniforms, (e) -> e.printStackTrace());
 	}
 	
-	public void bind() {
+	public void createUniforms(List<String> uniforms, Consumer<RuntimeException> err) {
+		for(String s : uniforms)
+			if(!uniformsMap.hasUniform(s))
+				try {
+					uniformsMap.createUniform(s);
+				}catch(RuntimeException e) {
+					err.accept(e);
+				}
+	}
+	
+	@Override
+	public UniformsMap bind() {
 		Logger.log();
 		
 		GL30.glUseProgram(programId);
+		
+		return uniformsMap;
 	}
+	@Override
 	public void unbind() {
 		Logger.log();
 		
@@ -89,6 +111,15 @@ public class ShaderProgram implements Cleanupable {
 		return shaderId;
 	}
 	
+	public UniformsMap getUniformsMap() {return uniformsMap;}
 	public int getProgramId() {return programId;}
-	
+
+	public static ShaderProgram create(String string) {
+		return new ShaderProgram(Arrays.asList(
+				new ShaderModuleData(string, GL30.GL_VERTEX_SHADER),
+				new ShaderModuleData(string, GL30.GL_FRAGMENT_SHADER)
+		),
+				FileUtils.getShaderUniforms(string));
+	}
+
 }
