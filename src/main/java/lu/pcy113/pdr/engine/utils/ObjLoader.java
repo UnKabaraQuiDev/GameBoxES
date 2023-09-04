@@ -11,8 +11,8 @@ import lu.pcy113.pdr.engine.scene.geom.Mesh;
 
 public final class ObjLoader {
 	
-	public static Mesh loadMesh(String path) {
-		String[] lines = FileUtils.getResource("models/"+path).split("\n");
+	public static Mesh loadMesh(String name, String path) {
+		String[] lines = FileUtils.readFile(path).split("\n");
 		
 		List<Vector3f> vertices = new ArrayList<>();
 		List<Vector3f> normals = new ArrayList<>();
@@ -87,7 +87,7 @@ public final class ObjLoader {
 		}
 		
 		int[] indicesArr = indices.stream().mapToInt((v) -> v).toArray();
-		return new Mesh(verticesArr, uvsArr, indicesArr);
+		return new Mesh(name, verticesArr, normalsArr, uvsArr, indicesArr);
 	}
 	
 	private static void processFace(String token, List<Vector3i> faces) {

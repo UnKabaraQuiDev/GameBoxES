@@ -1,0 +1,123 @@
+- Entity > UniqueID
+  - final String name
+  - Transform3D
+  - String mesh
+
+- Mesh > UniqueID
+  - final String name
+  - final int vao
+  - final List<Integer> vbos
+  - String material
+
+- Material > UniqueID
+  - final String name
+  - Map<String, Object> properties
+  - String shader
+  - bindProperties()
+- TextureMaterial : Material
+  - String texture
+
+- Shader > UniqueID
+  - final String name
+  - Map<ShaderPart> parts
+
+- Texture > UniqueID
+  - final String name
+  - long address (?)
+
+- EntityInstances > UniqueID
+  - final String name
+  - final int count
+  - String mesh
+  - Transform3D[]
+
+- Components2D > UniqueID
+  - final String name
+  - Transform2D[]
+  - String mesh
+
+- CachedManager
+  - Map<String, Entity>
+  - Map<String, Texture>
+  - Map<String, Shader>
+  - Map<String, Material>
+  - Map<String, Mesh>
+  - Map<String, EntityInstances>
+  - Map<String, Scene>
+  - Map<String, Components2D>
+- SharedCacheManager : CachedManager
+
+- GameLogic
+  - init()
+  - input()
+  - update()
+  - render()
+
+- GameEngine
+  - Window
+  - GameLogic
+  - ShaderCacheManager
+  - List<String> currentScenes
+  - PostProcessor
+  - render()
+    - Window.clear()
+    - PostProcessor#render(currentScenes)
+    - Window.update()
+
+- Window
+  - final long handle
+  - WindowOptions
+  - clear()
+  - update()
+
+- WindowOptions
+  - boolean fullscreen
+  - Vector2i resolution
+  - boolean resizable
+
+- UniqueID
+  - getID()
+
+- Scene > UniqueID
+  - final String id
+  - Camera
+- Scene3D : Scene
+  - List<String> entities
+  - List<String> entityInstances
+- Scene2D : Scene
+  - List<String> components
+
+- PostProcessor
+  - List<String> materials
+  - String quadMesh
+  - render(List<String> scenes)
+    - // new clear fbo
+    - // new depth buffer
+    - // new texture
+    - for Scene:
+      - Scene_DRenderer#render(scene)
+
+    - // clear render buffer
+    - // bind quad mesh
+    - for Material:
+      - material.shader#bind()
+      - material#bindProperties()
+      - // render
+    - // unbind quad mesh
+
+- Scene2DRenderer > UniqueID
+  - render(Scene2D, CacheManager)
+    - for Component2D:
+      - for Mesh:
+        - mesh#bind
+        - mesh.material.shader#bind()
+        - mesh.material#bindProperties()
+        - // render
+- Scene3DRenderer > UniqueID
+  - render(Scene3D, CacheManager)
+    - for Entity & EntityInstance:
+      - for Mesh:
+        - mesh#bind()
+        - mesh.material.shader#bind()
+        - mesh.material#bindProperties()
+        - // render

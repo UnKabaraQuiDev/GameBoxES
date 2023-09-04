@@ -2,27 +2,34 @@ package lu.pcy113.pdr.engine.scene;
 
 import org.joml.Matrix4f;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class Projection {
-
-	private static final float FOV = (float) Math.toRadians(60.0f);
-	private static final float Z_FAR = 1000.f;
-	private static final float Z_NEAR = 0.01f;
-
-	private Matrix4f projMatrix;
-
-	public Projection(int width, int height) {
-		projMatrix = new Matrix4f();
-		persp_UpdateProjMatrix(width, height);
-	}
-
-	public Matrix4f getProjMatrix() {return projMatrix;}
-
-	public void persp_UpdateProjMatrix(int width, int height) {
-		projMatrix.setPerspective(FOV, (float) width / height, Z_NEAR, Z_FAR);
+	
+	@Getter @Setter
+	private float fov;
+	@Getter @Setter
+	private float zNear, zFar;
+	@Getter @Setter
+	private Matrix4f matrix;
+	
+	public Projection(float fov, float near, float far) {
+		this.fov = fov;
+		this.zNear = near;
+		this.zFar = far;
+		
+		matrix = new Matrix4f();
 	}
 	
-	public void ortho_UpdateProjMatrix(int width, int height) {
-		projMatrix.setOrthoSymmetric(width, height, Z_NEAR, Z_FAR);
+	public Projection fov(float fov) {
+		this.fov = fov;
+		return this;
+	}
+	
+	public Matrix4f updateMatrix(float w, float h) {
+		matrix.setPerspective(fov, w/h, zNear, zFar);
+		return matrix;
 	}
 	
 }
