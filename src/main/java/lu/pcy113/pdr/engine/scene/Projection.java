@@ -2,34 +2,35 @@ package lu.pcy113.pdr.engine.scene;
 
 import org.joml.Matrix4f;
 
-import lombok.Getter;
-import lombok.Setter;
-
 public class Projection {
 	
-	@Getter @Setter
-	private float fov;
-	@Getter @Setter
-	private float zNear, zFar;
-	@Getter @Setter
-	private Matrix4f matrix;
+	protected Matrix4f projMatrix;
+	protected float fov;
+	protected float near, far;
 	
 	public Projection(float fov, float near, float far) {
 		this.fov = fov;
-		this.zNear = near;
-		this.zFar = far;
+		this.near = near;
+		this.far = far;
 		
-		matrix = new Matrix4f();
+		this.projMatrix = new Matrix4f();
 	}
 	
-	public Projection fov(float fov) {
-		this.fov = fov;
-		return this;
+	public Matrix4f perspectiveUpdateMatrix(int width, int height) {
+		return projMatrix.setPerspective(fov, (float) width / height, near, far);
+	}
+	public Matrix4f orthographicUpdateMatrix(int width, int height) {
+		return projMatrix.setOrthoSymmetric(width, height, near, far);
 	}
 	
-	public Matrix4f updateMatrix(float w, float h) {
-		matrix.setPerspective(fov, w/h, zNear, zFar);
-		return matrix;
-	}
+	public Matrix4f getProjMatrix() {return projMatrix;}
+	public void setProjMatrix(Matrix4f projMatrix) {this.projMatrix = projMatrix;}
+	
+	public float getFar() {return far;}
+	public void setFar(float far) {this.far = far;}
+	public float getFov() {return fov;}
+	public void setFov(float fov) {this.fov = fov;}
+	public float getNear() {return near;}
+	public void setNear(float near) {this.near = near;}
 	
 }

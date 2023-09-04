@@ -1,8 +1,10 @@
 package lu.pcy113.pdr.engine.logic;
 
+import lu.pcy113.pdr.engine.GameEngine;
+
 public interface GameLogic {
 	
-	void init();
+	void init(GameEngine e);
 	
 	void input(float dTime);
 	

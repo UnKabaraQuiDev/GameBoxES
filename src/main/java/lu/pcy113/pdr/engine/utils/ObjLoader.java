@@ -7,11 +7,11 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 
-import lu.pcy113.pdr.engine.scene.geom.Mesh;
+import lu.pcy113.pdr.engine.geom.Mesh;
 
 public final class ObjLoader {
 	
-	public static Mesh loadMesh(String name, String path) {
+	public static Mesh loadMesh(String name, String material, String path) {
 		String[] lines = FileUtils.readFile(path).split("\n");
 		
 		List<Vector3f> vertices = new ArrayList<>();
@@ -87,7 +87,7 @@ public final class ObjLoader {
 		}
 		
 		int[] indicesArr = indices.stream().mapToInt((v) -> v).toArray();
-		return new Mesh(name, verticesArr, normalsArr, uvsArr, indicesArr);
+		return new Mesh(name, verticesArr, normalsArr, uvsArr, indicesArr, material);
 	}
 	
 	private static void processFace(String token, List<Vector3i> faces) {

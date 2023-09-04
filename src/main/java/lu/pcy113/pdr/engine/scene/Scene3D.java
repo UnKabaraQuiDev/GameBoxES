@@ -1,25 +1,33 @@
 package lu.pcy113.pdr.engine.scene;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
-import lombok.Getter;
-import lombok.Setter;
-import lu.pcy113.pdr.engine.geom.Entity;
-import lu.pcy113.pdr.engine.impl.Renderable;
-
-public class Scene3D extends Scene implements Renderable {
+public class Scene3D extends Scene {
 	
-	@Getter @Setter
-	private Camera camera;
+	public static final String NAME = Scene3D.class.getName();
 	
-	private Map<String, Entity> entities = new HashMap<>();
+	protected List<String> meshes;
+	protected List<String> models;
 	
-	public Scene3D(Camera cam) {
-		this.camera = cam;
+	public Scene3D(String name) {
+		super(name, Camera.camera3D());
+		
+		this.meshes = new ArrayList<>();
+		this.models = new ArrayList<>();
 	}
 	
-	public void addEntity(Entity entity) {entities.put(entity.getID(), entity);}
-	public Map<String, Entity> getEntities() {return entities;}
+	@Override
+	public void cleanup() {}
 	
+	public List<String> getMeshes() {return meshes;}
+	public List<String> getModels() {return models;}
+
+	public void addMesh(String mesh) {
+		meshes.add(mesh);
+	}
+	public void addModel(String model) {
+		models.add(model);
+	}
+
 }

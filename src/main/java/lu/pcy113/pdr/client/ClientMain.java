@@ -8,7 +8,7 @@ import java.util.logging.Level;
 
 import lu.pcy113.pdr.client.game.PDRClientGame;
 import lu.pcy113.pdr.engine.GameEngine;
-import lu.pcy113.pdr.engine.WindowOptions;
+import lu.pcy113.pdr.engine.graph.window.WindowOptions;
 import lu.pcy113.pdr.utils.Logger;
 
 public class ClientMain {
@@ -26,10 +26,9 @@ public class ClientMain {
 		try {
 			
 			WindowOptions options = new WindowOptions();
-			options.fps = 60;
-			options.compatibleProfile = true;
+			options.fullscreen = true;
 			PDRClientGame game = new PDRClientGame();
-			GameEngine engine = new GameEngine("PDR Client Game", options, game);
+			GameEngine engine = new GameEngine(game, options);
 			engine.start();
 		
 		}catch(Exception e) {
@@ -37,7 +36,7 @@ public class ClientMain {
 			System.exit(-1);
 		}
 			
-		Logger.log(Level.INFO, "Started in "+(System.currentTimeMillis()-start)+"ms");
+		Logger.log(Level.INFO, "Stopped after "+(System.currentTimeMillis()-start)+"ms");
 		
 	}
 	

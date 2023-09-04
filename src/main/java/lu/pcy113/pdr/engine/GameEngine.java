@@ -1,51 +1,58 @@
 package lu.pcy113.pdr.engine;
 
-import org.lwjgl.glfw.GLFW;
-import org.lwjgl.glfw.GLFWErrorCallback;
-import org.lwjgl.opengl.GL;
-
-import lombok.Getter;
-import lombok.Setter;
-import lu.pcy113.pdr.engine.graph.EntityRenderer;
-import lu.pcy113.pdr.engine.graph.RenderManager;
-import lu.pcy113.pdr.engine.graph.Scene3DRenderer;
+import lu.pcy113.pdr.engine.cache.SharedCacheManager;
+import lu.pcy113.pdr.engine.graph.window.Window;
+import lu.pcy113.pdr.engine.graph.window.WindowOptions;
 import lu.pcy113.pdr.engine.logic.GameLogic;
 
 public class GameEngine implements Runnable {
 	
-	@Getter @Setter
-	private Window window;
-	@Getter @Setter
+	private final Window window;
 	private GameLogic gameLogic;
-	@Getter @Setter
-	private RenderManager renderManager;
 	
-	public GameEngine(WindowOptions options, GameLogic gl) {
-		this.gameLogic = gl;
-		
-		GLFW.glfwSetErrorCallback(GLFWErrorCallback.createPrint(System.err));
-		GL.createCapabilities();
-		
+	private boolean running = false;
+	private long startTime;
+	
+	private SharedCacheManager cache;
+	
+	public GameEngine(GameLogic game, WindowOptions options) {
+		this.gameLogic = game;
 		this.window = new Window(options);
-		
-		this.renderManager = new RenderManager();
-		this.renderManager.addRenderer(new Scene3DRenderer(renderManager));
-		this.renderManager.addRenderer(new EntityRenderer(renderManager));
 	}
 	
 	@Override
 	public void run() {
-		render(0);
+		while(!window.shouldClose() && running) {
+			window.pollEvents();
+			
+			gameLogic.input(0);
+			
+			gameLogic.update(0);
+			
+			window.clear();
+			
+			gameLogic.render(0);
+			
+			window.swapBuffers();
+		}
+		running = !window.shouldClose();
 	}
 	
-	private void render(float dTime) {
-		window.prepare();
-		gameLogic.render(0);
-		window.update();
+	public void start() {
+		cache = new SharedCacheManager();
+		gameLogic.init(this);
+		running = true;
+		startTime = System.currentTimeMillis();
+		run();
+	}
+	public void stop() {
+		this.running = false;
+		cache.cleanup();
 	}
 	
-	public Window getWindow() {return window;}
-	public RenderManager getRenderManager() {return renderManager;}
 	public GameLogic getGameLogic() {return gameLogic;}
-
+	public Window getWindow() {return window;}
+	public boolean isRunning() {return running;}
+	public SharedCacheManager getCache() {return cache;}
+	
 }
