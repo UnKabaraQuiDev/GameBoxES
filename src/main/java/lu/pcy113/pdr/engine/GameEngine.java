@@ -4,6 +4,7 @@ import lu.pcy113.pdr.engine.cache.SharedCacheManager;
 import lu.pcy113.pdr.engine.graph.window.Window;
 import lu.pcy113.pdr.engine.graph.window.WindowOptions;
 import lu.pcy113.pdr.engine.logic.GameLogic;
+import lu.pcy113.pdr.engine.utils.DebugOptions;
 
 public class GameEngine implements Runnable {
 	
@@ -13,7 +14,7 @@ public class GameEngine implements Runnable {
 	private boolean running = false;
 	private long startTime;
 	
-	private boolean debug = true;
+	public static DebugOptions DEBUG = new DebugOptions();
 	
 	private SharedCacheManager cache;
 	

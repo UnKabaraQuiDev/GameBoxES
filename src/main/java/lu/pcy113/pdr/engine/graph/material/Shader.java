@@ -14,6 +14,10 @@ import lu.pcy113.pdr.utils.Logger;
 
 public abstract class Shader implements UniqueID, Cleanupable {
 	
+	public static final String PROJECTION_MATRIX = "projectionMatrix";
+	public static final String VIEW_MATRIX = "viewMatrix";
+	public static final String TRANSFORMATION_MATRIX = "transformationMatrix";
+	
 	protected final String name;
 	protected final int shaderProgram;
 	protected Map<Integer, ShaderPart> parts;

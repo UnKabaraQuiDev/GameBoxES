@@ -1,4 +1,0 @@
-txtSampler
-t
-modelMatrix
-projectionMatrix

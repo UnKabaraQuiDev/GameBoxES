@@ -1,22 +1,19 @@
 package lu.pcy113.pdr.client.game;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFWGamepadState;
 
 import lu.pcy113.pdr.engine.GameEngine;
-import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.graph.Texture;
 import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.Shader;
-import lu.pcy113.pdr.engine.graph.material.ShaderPart;
 import lu.pcy113.pdr.engine.graph.render.MeshRenderer;
 import lu.pcy113.pdr.engine.graph.render.ModelRenderer;
 import lu.pcy113.pdr.engine.graph.render.Scene3DRenderer;
 import lu.pcy113.pdr.engine.logic.GameLogic;
 import lu.pcy113.pdr.engine.objs.Model;
+import lu.pcy113.pdr.engine.objs.PointLight;
 import lu.pcy113.pdr.engine.scene.Camera3D;
 import lu.pcy113.pdr.engine.scene.Scene3D;
 import lu.pcy113.pdr.engine.utils.ObjLoader;
@@ -32,11 +29,11 @@ public class PDRClientGame implements GameLogic {
 	
 	protected Mesh mesh;
 	protected Model model;
-	protected Shader shader;
-	protected Texture texture;
-	protected Material material;
-	protected Material material2;
+	protected Shader diffShader, txtDiffShader;
+	protected Texture diffTexture, specTexture;
+	protected Material material, txtMaterial;
 	protected Scene3D scene;
+	protected PointLight light;
 	protected Scene3DRenderer scene3DRenderer;
 	
 	public PDRClientGame() {
@@ -48,35 +45,31 @@ public class PDRClientGame implements GameLogic {
 		Logger.log();
 		
 		this.engine = e;
+		GameEngine.DEBUG.wireframe = false;
+		//GameEngine.DEBUG.ignoreDepth = false;
 		
-		this.shader = new SceneShader();
-		engine.getCache().addShader(shader);
 		
-		Shader shader2 = new Shader("truesceneshader",
-				new ShaderPart("./resources/shaders/scene/scene.vert"),
-				new ShaderPart("./resources/shaders/scene/scene.frag")) {
-			@Override
-			public void createUniforms() {
-				getUniform("projectionMatrix");
-				getUniform("viewMatrix");
-				getUniform("modelMatrix");
-				getUniform("t");
-			}
-		};
-		engine.getCache().addShader(shader2);
+		this.txtDiffShader = new TxtDiffuse1Shader();
+		engine.getCache().addShader(txtDiffShader);
 		
-		this.material2 = new Material("truescenematerial", shader2.getId());
-		engine.getCache().addMaterial(material2);
+		this.diffTexture = new Texture("cube-diffTexture", "./resources/textures/cube.png");
+		engine.getCache().addTexture(diffTexture);
 		
-		this.texture = new Texture("cube-texture", "./resources/textures/cube.png");
-		engine.getCache().addTexture(texture);
+		this.specTexture = new Texture("cube-specTexture", "./resources/textures/default.png");
+		engine.getCache().addTexture(specTexture);
 		
-		Map<String, String> txts = new HashMap<>();
-		txts.put("txtSampler", texture.getId());
-		this.material = new SceneMaterial(shader.getId(), txts);
+		this.txtMaterial = new TxtDiffuseMaterial("txtDiffuse", diffTexture.getId(), new Vector3f(1), specTexture.getId(), 0.5f);
+		engine.getCache().addMaterial(txtMaterial);
+		
+		
+		this.diffShader = new DiffuseShader();
+		engine.getCache().addShader(diffShader);
+		
+		this.material = new DiffuseMaterial("diffuse", new Vector3f(1, 0.5f, 0.5f), new Vector3f(0.5f, 0.2f, 0), new Vector3f(1), 0.5f);
 		engine.getCache().addMaterial(material);
 		
-		this.mesh = ObjLoader.loadMesh("cube-mesh", material.getId(), "./resources/models/cube.obj");
+		
+		this.mesh = ObjLoader.loadMesh("cube-mesh", txtMaterial.getId(), "./resources/models/cube.obj");
 		engine.getCache().addMesh(mesh);
 		
 		this.model = new Model("cube-model", mesh.getId(), new Transform3D());
@@ -87,8 +80,17 @@ public class PDRClientGame implements GameLogic {
 		((Transform3D) model1.getTransform()).scaleMul(0.1f, 0.1f, 0.1f).updateMatrix();
 		engine.getCache().addModel(model1);
 		
-		Mesh mesh2 = ObjLoader.loadMesh("monkey-mesh", material2.getId(), "./resources/models/monkey.obj");
+		this.light = new PointLight(
+				"point-1",
+				new Vector3f(0, 2, 0),
+				1, 1, 1,
+				new Vector3f(0, 0, 1), new Vector3f(0, 0.5f, 0.5f), new Vector3f(0, 0.2f, 0.5f));
+		engine.getCache().addPointLight(light);
+		
+		
+		Mesh mesh2 = ObjLoader.loadMesh("monkey-mesh", material.getId(), "./resources/models/monkey.obj");
 		engine.getCache().addMesh(mesh2);
+		
 		Model model2 = new Model("cube-model2", mesh2.getId(), new Transform3D());
 		((Transform3D) model2.getTransform()).translateAdd(0, 1, 1.5f).updateMatrix();
 		engine.getCache().addModel(model2);
@@ -98,6 +100,7 @@ public class PDRClientGame implements GameLogic {
 		this.scene.addModel(model.getId());
 		this.scene.addModel(model1.getId());
 		this.scene.addModel(model2.getId());
+		this.scene.addPointLight(light.getId());
 		engine.getCache().addScene(scene);
 		
 		this.scene3DRenderer = new Scene3DRenderer();
@@ -107,7 +110,9 @@ public class PDRClientGame implements GameLogic {
 		
 		engine.getWindow().onResize((w, h) -> scene.getCamera().getProjection().perspectiveUpdateMatrix(w, h));
 	}
-
+	
+	float GX = 0;
+	
 	@Override
 	public void input(float dTime) {
 		if(engine.getWindow().isJoystickPresent()) {
@@ -128,7 +133,11 @@ public class PDRClientGame implements GameLogic {
 				cam.setPitch(cam.getPitch()+y2*camRotSpeed);
 				cam.updateMatrix();
 				
-				material2.setProperty("t", x2);
+				light.setPosition(new Vector3f(0, (float) Math.sin(GX)+1.5f, 0));
+				
+				GX += 0.01f;
+				
+				//material.setProperty(DiffuseShader.DIFFUSE_COLOR, new Vector3f(x2/2+0.5f, y2/2+0.5f, x/2+0.5f));
 				
 				//System.err.println(cam.getPosition()+" > "+cam.getPitch()+" : "+cam.getYaw());
 				//System.err.println(cam.getViewMatrix());

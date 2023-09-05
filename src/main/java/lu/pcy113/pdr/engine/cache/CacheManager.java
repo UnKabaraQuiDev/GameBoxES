@@ -10,6 +10,7 @@ import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.render.Renderer;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.objs.Model;
+import lu.pcy113.pdr.engine.objs.PointLight;
 import lu.pcy113.pdr.engine.scene.Scene;
 import lu.pcy113.pdr.engine.scene.Scene3D;
 
@@ -22,6 +23,7 @@ public class CacheManager implements Cleanupable {
 	protected Map<String, Shader> shaders;
 	protected Map<String, Model> models;
 	protected Map<String, Texture> textures;
+	protected Map<String, PointLight> pointLights;
 	
 	public CacheManager() {
 		this.meshes = new HashMap<>();
@@ -31,6 +33,7 @@ public class CacheManager implements Cleanupable {
 		this.shaders = new HashMap<>();
 		this.models = new HashMap<>();
 		this.textures = new HashMap<>();
+		this.pointLights = new HashMap<>();
 	}
 	
 	@Override
@@ -55,6 +58,9 @@ public class CacheManager implements Cleanupable {
 		
 		textures.values().forEach(Texture::cleanup);
 		textures.clear();
+		
+		//pointLights.values().forEach(PointLight::cleanup);
+		pointLights.clear();
 	}
 	
 	public boolean addMesh(Mesh mesh) {
@@ -78,6 +84,9 @@ public class CacheManager implements Cleanupable {
 	public boolean addTexture(Texture texture) {
 		return this.textures.putIfAbsent(texture.getId(), texture) == null;
 	}
+	public boolean addPointLight(PointLight pointLight) {
+		return this.pointLights.putIfAbsent(pointLight.getId(), pointLight) == null;
+	}
 	
 	public Mesh getMesh(String name) {
 		return meshes.get(name);
@@ -99,6 +108,9 @@ public class CacheManager implements Cleanupable {
 	}
 	public Texture getTexture(String name) {
 		return textures.get(name);
+	}
+	public PointLight getPointLight(String name) {
+		return pointLights.get(name);
 	}
 	
 	public Map<String, Mesh> getMeshes() {return meshes;}

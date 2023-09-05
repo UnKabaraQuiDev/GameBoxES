@@ -3,6 +3,7 @@ package lu.pcy113.pdr.engine.graph.render;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL30;
 
+import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.graph.material.Material;
@@ -36,14 +37,18 @@ public class ModelRenderer extends Renderer<Scene3D, Model> {
 		
 		Matrix4f projectionMatrix = scene.getCamera().getProjection().getProjMatrix();
 		Matrix4f viewMatrix = scene.getCamera().getViewMatrix();
-		material.setProperty("projectionMatrix", projectionMatrix);
-		material.setProperty("viewMatrix", viewMatrix);
-		material.setProperty("modelMatrix", model.getTransform().getMatrix());
-		material.bindProperties(cache, shader);
+		material.setProperty(Shader.PROJECTION_MATRIX, projectionMatrix);
+		material.setProperty(Shader.VIEW_MATRIX, viewMatrix);
+		material.setProperty(Shader.TRANSFORMATION_MATRIX, model.getTransform().getMatrix());
 		
-		//GL30.glUniformMatrix4fv(obj.getProjectionMatrixLocation(), false, projectionMatrix);
+		material.bindLights(cache, scene.getPointLights());
+		
+		material.bindProperties(cache, scene, shader);
 		
 		GL30.glDrawElements(GL30.GL_TRIANGLES, mesh.getVertexCount(), GL30.GL_UNSIGNED_INT, 0);
+		
+		// debug only
+		GameEngine.DEBUG.wireframe(cache, scene, mesh, projectionMatrix, viewMatrix, model.getTransform().getMatrix());
 		
 		mesh.unbind();
 	}
