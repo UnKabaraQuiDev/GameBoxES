@@ -26,7 +26,7 @@ public class ClientMain {
 		try {
 			
 			WindowOptions options = new WindowOptions();
-			options.fullscreen = true;
+			options.fullscreen = false;
 			PDRClientGame game = new PDRClientGame();
 			GameEngine engine = new GameEngine(game, options);
 			engine.start();

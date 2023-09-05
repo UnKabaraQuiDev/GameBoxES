@@ -5,12 +5,12 @@ layout (location=2) in vec2 uv;
 
 out vec2 texCoord;
 
-uniform mat4 modelMatrix;
 uniform mat4 projectionMatrix;
-uniform float t;
+uniform mat4 viewMatrix;
+uniform mat4 modelMatrix;
 
 void main()
 {
-    gl_Position = projectionMatrix * modelMatrix * vec4(position, 1.0);
+    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
     texCoord = uv;
 }

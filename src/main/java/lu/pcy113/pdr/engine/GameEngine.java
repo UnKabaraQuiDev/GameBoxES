@@ -13,6 +13,8 @@ public class GameEngine implements Runnable {
 	private boolean running = false;
 	private long startTime;
 	
+	private boolean debug = true;
+	
 	private SharedCacheManager cache;
 	
 	public GameEngine(GameLogic game, WindowOptions options) {
@@ -41,6 +43,7 @@ public class GameEngine implements Runnable {
 	public void start() {
 		cache = new SharedCacheManager();
 		gameLogic.init(this);
+		window.runCallbacks();
 		running = true;
 		startTime = System.currentTimeMillis();
 		run();

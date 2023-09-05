@@ -1,18 +1,21 @@
 package lu.pcy113.pdr.client.game;
 
-import lu.pcy113.pdr.engine.graph.material.Material;
-import lu.pcy113.pdr.engine.graph.material.Shader;
+import java.util.Map;
 
-public class SceneMaterial extends Material {
+import lu.pcy113.pdr.engine.cache.CacheManager;
+import lu.pcy113.pdr.engine.graph.material.Shader;
+import lu.pcy113.pdr.engine.graph.material.TextureMaterial;
+
+public class SceneMaterial extends TextureMaterial {
 	
-	public SceneMaterial(String shader) {
-		super("scene", shader);
+	public SceneMaterial(String shader, Map<String, String> txts) {
+		super("scene", shader, txts);
 	}
 	
 	@Override
-	public void bindProperties(Shader shader) {
+	public void bindProperties(CacheManager cache, Shader shader) {
 		properties.put("t", (float) Math.random()/100);
-		super.bindProperties(shader);
+		super.bindProperties(cache, shader);
 	}
 	
 }

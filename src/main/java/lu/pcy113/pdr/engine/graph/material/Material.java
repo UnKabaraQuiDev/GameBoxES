@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 
 import org.joml.Matrix4f;
 
+import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.impl.UniqueID;
 
 public class Material implements UniqueID {
@@ -20,13 +21,13 @@ public class Material implements UniqueID {
 		this.shader = shader;
 	}
 	
-	public void bindProperties(Shader shader) {
+	public void bindProperties(CacheManager cache, Shader shader) {
 		for(Entry<String, Object> eso : properties.entrySet()) {
 			shader.setUniform(eso.getKey(), eso.getValue());
 		}
 	}
 	
-	public void setProperty(String name, Matrix4f value) {
+	public void setProperty(String name, Object value) {
 		properties.put(name, value);
 	}
 	

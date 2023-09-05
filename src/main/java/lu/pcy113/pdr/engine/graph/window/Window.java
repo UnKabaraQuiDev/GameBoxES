@@ -84,6 +84,9 @@ public class Window {
 	private void callback_key(long window, int key, int scancode, int action, int mods) {
 		if(key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS) {
 			GLFW.glfwSetWindowShouldClose(window, true);
+		}else if(key == GLFW.GLFW_KEY_F11 && action == GLFW.GLFW_PRESS) {
+			options.fullscreen = !options.fullscreen;
+			updateOptions();
 		}
 	}
 	
@@ -159,5 +162,14 @@ public class Window {
 	public void setBackground(Vector4f background) {this.background = background;}
 
 	public void onResize(BiConsumer<Integer, Integer> object) {this.onResize = object;}
+
+	public void runCallbacks() {
+		if(onResize != null) {
+			int[] w = new int[1];
+			int[] h = new int[1];
+			GLFW.glfwGetWindowSize(handle, w, h);
+			onResize.accept(w[0], h[0]);
+		}
+	}
 	
 }

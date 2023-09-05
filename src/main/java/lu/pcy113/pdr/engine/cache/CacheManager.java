@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import lu.pcy113.pdr.engine.geom.Mesh;
+import lu.pcy113.pdr.engine.graph.Texture;
 import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.render.Renderer;
@@ -20,6 +21,7 @@ public class CacheManager implements Cleanupable {
 	protected Map<String, Material> materials;
 	protected Map<String, Shader> shaders;
 	protected Map<String, Model> models;
+	protected Map<String, Texture> textures;
 	
 	public CacheManager() {
 		this.meshes = new HashMap<>();
@@ -28,6 +30,7 @@ public class CacheManager implements Cleanupable {
 		this.materials = new HashMap<>();
 		this.shaders = new HashMap<>();
 		this.models = new HashMap<>();
+		this.textures = new HashMap<>();
 	}
 	
 	@Override
@@ -49,6 +52,9 @@ public class CacheManager implements Cleanupable {
 		
 		//models.values().forEach(Model::cleanup);
 		models.clear();
+		
+		textures.values().forEach(Texture::cleanup);
+		textures.clear();
 	}
 	
 	public boolean addMesh(Mesh mesh) {
@@ -69,6 +75,9 @@ public class CacheManager implements Cleanupable {
 	public boolean addModel(Model model) {
 		return this.models.putIfAbsent(model.getId(), model) == null;
 	}
+	public boolean addTexture(Texture texture) {
+		return this.textures.putIfAbsent(texture.getId(), texture) == null;
+	}
 	
 	public Mesh getMesh(String name) {
 		return meshes.get(name);
@@ -88,6 +97,9 @@ public class CacheManager implements Cleanupable {
 	public Model getModel(String name) {
 		return models.get(name);
 	}
+	public Texture getTexture(String name) {
+		return textures.get(name);
+	}
 	
 	public Map<String, Mesh> getMeshes() {return meshes;}
 	public void setMeshes(Map<String, Mesh> meshes) {this.meshes = meshes;}
@@ -99,5 +111,7 @@ public class CacheManager implements Cleanupable {
 	public void setMaterials(Map<String, Material> materials) {this.materials = materials;}
 	public Map<String, Shader> getShaders() {return shaders;}
 	public void setShaders(Map<String, Shader> shaders) {this.shaders = shaders;}
+	public Map<String, Texture> getTextures() {return textures;}
+	public void setTextures(Map<String, Texture> textures) {this.textures = textures;}
 
 }

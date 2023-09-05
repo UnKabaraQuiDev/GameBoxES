@@ -1,4 +1,4 @@
-- Entity > UniqueID
+- Model > UniqueID
   - final String name
   - Transform3D
   - String mesh
@@ -25,7 +25,7 @@
   - final String name
   - long address (?)
 
-- EntityInstances > UniqueID
+- ModelInstances > UniqueID
   - final String name
   - final int count
   - String mesh
@@ -37,7 +37,7 @@
   - String mesh
 
 - CachedManager
-  - Map<String, Entity>
+  - Map<String, Model>
   - Map<String, Texture>
   - Map<String, Shader>
   - Map<String, Material>
@@ -115,7 +115,7 @@
         - // render
 - Scene3DRenderer > UniqueID
   - render(Scene3D, CacheManager)
-    - for Entity & EntityInstance:
+    - for Model & ModelInstance:
       - for Mesh:
         - mesh#bind()
         - mesh.material.shader#bind()

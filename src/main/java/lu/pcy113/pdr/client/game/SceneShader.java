@@ -7,15 +7,17 @@ public class SceneShader extends Shader {
 	
 	public SceneShader() {
 		super("scene",
-				new ShaderPart("./resources/shaders/scene/scene.vert"),
-				new ShaderPart("./resources/shaders/scene/scene.frag"));
+				new ShaderPart("./resources/shaders/instances/instances.vert"),
+				new ShaderPart("./resources/shaders/instances/instances.frag"));
 	}
 	
 	@Override
 	public void createUniforms() {
 		getUniform("projectionMatrix");
+		getUniform("viewMatrix");
 		getUniform("modelMatrix");
 		getUniform("t");
+		getUniform("txtSampler");
 	}
 
 }

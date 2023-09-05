@@ -32,8 +32,10 @@ public class MeshRenderer extends Renderer<Scene3D, Mesh> {
 		shader.bind();
 		
 		Matrix4f projectionMatrix = scene.getCamera().getProjection().getProjMatrix();
+		Matrix4f viewMatrix = scene.getCamera().getViewMatrix();
 		material.setProperty("projectionMatrix", projectionMatrix);
-		material.bindProperties(shader);
+		material.setProperty("viewMatrix", viewMatrix);
+		material.bindProperties(cache, shader);
 		
 		//GL30.glUniformMatrix4fv(obj.getProjectionMatrixLocation(), false, projectionMatrix);
 		

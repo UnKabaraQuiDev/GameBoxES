@@ -1,26 +1,28 @@
 package lu.pcy113.pdr.engine.scene;
 
-import lu.pcy113.pdr.engine.utils.transform.Transform;
-import lu.pcy113.pdr.engine.utils.transform.Transform3D;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
-public class Camera {
-	
-	protected Transform transform;
+public abstract class Camera {
 	
 	protected Projection projection;
 	
-	public Camera(Transform tr, Projection proj) {
-		this.transform = tr;
+	protected Matrix4f viewMatrix;
+	
+	public Camera(Projection proj) {
 		this.projection = proj;
+		this.viewMatrix = new Matrix4f();
 	}
 	
-	public Transform getTransform() {return transform;}
-	public void setTransform(Transform transform) {this.transform = transform;}
+	public abstract Matrix4f updateMatrix();
+	
+	public Matrix4f getViewMatrix() {return viewMatrix;}
+	
 	public Projection getProjection() {return projection;}
 	public void setProjection(Projection projection) {this.projection = projection;}
 	
-	public static final Camera camera3D() {
-		return new Camera(new Transform3D(), new Projection((float) Math.toRadians(60), 0.01f, 1000f));
+	public static final Camera3D camera3D() {
+		return new Camera3D(new Vector3f(), 0, 0, new Projection((float) Math.toRadians(60), 0.01f, 1000f));
 	}
 	
 }

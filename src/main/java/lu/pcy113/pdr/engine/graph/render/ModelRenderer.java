@@ -35,9 +35,11 @@ public class ModelRenderer extends Renderer<Scene3D, Model> {
 		shader.bind();
 		
 		Matrix4f projectionMatrix = scene.getCamera().getProjection().getProjMatrix();
+		Matrix4f viewMatrix = scene.getCamera().getViewMatrix();
 		material.setProperty("projectionMatrix", projectionMatrix);
+		material.setProperty("viewMatrix", viewMatrix);
 		material.setProperty("modelMatrix", model.getTransform().getMatrix());
-		material.bindProperties(shader);
+		material.bindProperties(cache, shader);
 		
 		//GL30.glUniformMatrix4fv(obj.getProjectionMatrixLocation(), false, projectionMatrix);
 		

@@ -26,7 +26,6 @@ public class Scene3DRenderer extends Renderer<GameEngine, Scene3D> {
 		ModelRenderer modelRenderer = (ModelRenderer) cache.getRenderer(Model.NAME);
 		for(String modelId : scene.getModels()) {
 			Model model = cache.getModel(modelId);
-			System.out.println("model: "+modelId);
 			if(model != null)
 				modelRenderer.render(cache, scene, model);
 		}

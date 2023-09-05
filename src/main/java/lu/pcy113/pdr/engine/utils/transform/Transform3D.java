@@ -61,25 +61,35 @@ public class Transform3D extends Transform {
 	}
 	
 	public Transform3D scaleAdd(Vector3f v) {
-		translation.add(v);
+		scale.add(v);
 		return this;
 	}
 	public Transform3D scaleAdd(float x, float y, float z) {
-		translation.add(x, y, z);
+		scale.add(x, y, z);
 		return this;
 	}
 	public Transform3D scaleMul(Vector3f v) {
-		translation.mul(v);
+		scale.mul(v);
 		return this;
 	}
 	public Transform3D scaleMul(float x, float y, float z) {
-		translation.mul(x, y, z);
+		scale.mul(x, y, z);
 		return this;
 	}
 	
 	@Override
 	public Matrix4f updateMatrix() {
 		return matrix.translationRotateScale(translation, rotation, scale);
+	}
+	
+	public Vector3f getTranslation() {
+		return translation;
+	}
+	public Quaternionf getRotation() {
+		return rotation;
+	}
+	public Vector3f getScale() {
+		return scale;
 	}
 	
 }
