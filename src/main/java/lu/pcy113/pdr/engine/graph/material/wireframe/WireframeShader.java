@@ -7,6 +7,8 @@ public class WireframeShader extends Shader {
 	
 	public static final String NAME = WireframeShader.class.getName();
 	
+	public static final String COLOR = "color";
+	
 	public WireframeShader() {
 		super(NAME,
 				new ShaderPart("./resources/shaders/debug/debug.vert"),
@@ -15,9 +17,12 @@ public class WireframeShader extends Shader {
 	
 	@Override
 	public void createUniforms() {
+		// vert
 		getUniform(Shader.PROJECTION_MATRIX);
 		getUniform(Shader.VIEW_MATRIX);
 		getUniform(Shader.TRANSFORMATION_MATRIX);
+		// frag
+		getUniform(COLOR);
 	}
 
 }

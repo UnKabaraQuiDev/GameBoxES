@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
+import org.joml.Vector4f;
 import org.lwjgl.opengl.GL30;
 
 import lu.pcy113.pdr.engine.impl.Cleanupable;
@@ -62,6 +63,8 @@ public abstract class Shader implements UniqueID, Cleanupable {
 			GL30.glUniform3f(getUniform(key), ((Vector3f) value).x, ((Vector3f) value).y, ((Vector3f) value).z);
 		}else if(value instanceof Vector3i) {
 			GL30.glUniform3i(getUniform(key), ((Vector3i) value).x, ((Vector3i) value).y, ((Vector3i) value).z);
+		}else if(value instanceof Vector4f) {
+			GL30.glUniform4f(getUniform(key), ((Vector4f) value).x, ((Vector4f) value).y, ((Vector4f) value).z, ((Vector4f) value).w);
 		}
 	}
 	public int getUniform(String name) {

@@ -1,6 +1,7 @@
 package lu.pcy113.pdr.client.game;
 
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFWGamepadState;
 
 import lu.pcy113.pdr.engine.GameEngine;
@@ -8,6 +9,7 @@ import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.Shader;
+import lu.pcy113.pdr.engine.graph.material.gizmo.GizmoMaterial;
 import lu.pcy113.pdr.engine.graph.render.GizmoModelRenderer;
 import lu.pcy113.pdr.engine.graph.render.MeshRenderer;
 import lu.pcy113.pdr.engine.graph.render.ModelRenderer;
@@ -48,7 +50,8 @@ public class PDRClientGame implements GameLogic {
 		Logger.log();
 		
 		this.engine = e;
-		GameEngine.DEBUG.wireframe = false;
+		GameEngine.DEBUG.wireframe = true;
+		GameEngine.DEBUG.wireframeColor = new Vector4f(0.5f, 0, 0, 1);
 		//GameEngine.DEBUG.ignoreDepth = false;
 		
 		
@@ -71,6 +74,11 @@ public class PDRClientGame implements GameLogic {
 		this.material = new DiffuseMaterial("diffuse", new Vector3f(1, 0.5f, 0.5f), new Vector3f(0.5f, 0.2f, 0), new Vector3f(1), 0.5f);
 		engine.getCache().addMaterial(material);
 		
+		Mesh chestMesh = ObjLoader.loadMesh("chest-mesh", GizmoMaterial.NAME, "./resources/models/chest.obj");
+		Model chestModel = new Model("chest-model", chestMesh.getId(), new Transform3D());
+		((Transform3D) chestModel.getTransform()).translateAdd(5, 0, 5).updateMatrix();
+		engine.getCache().addMesh(chestMesh);
+		engine.getCache().addModel(chestModel);
 		
 		this.mesh = ObjLoader.loadMesh("cube-mesh", txtMaterial.getId(), "./resources/models/cube.obj");
 		engine.getCache().addMesh(mesh);
@@ -103,6 +111,7 @@ public class PDRClientGame implements GameLogic {
 		this.scene.addModel(model1.getId());
 		this.scene.addModel(model2.getId());
 		this.scene.addPointLight(light.getId());
+		this.scene.addModel(chestModel.getId());
 		engine.getCache().addScene(scene);
 		
 		Gizmo gizmo = ObjLoader.loadGizmo("gizmo", "./resources/models/cube_wireframe.obj");

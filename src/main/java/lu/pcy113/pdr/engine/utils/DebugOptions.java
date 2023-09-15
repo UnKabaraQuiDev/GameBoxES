@@ -1,6 +1,7 @@
 package lu.pcy113.pdr.engine.utils;
 
 import org.joml.Matrix4f;
+import org.joml.Vector4f;
 import org.lwjgl.opengl.GL30;
 
 import lu.pcy113.pdr.engine.GameEngine;
@@ -93,6 +94,7 @@ public class DebugOptions {
 	}
 	
 	public boolean wireframe = true;
+	public Vector4f wireframeColor = new Vector4f(1, 0, 0, 1);
 	
 	public void wireframe(CacheManager cache, Scene scene, Mesh mesh, Matrix4f projectionMatrix, Matrix4f viewMatrix, Matrix4f modelMatrix) {
 		if(GameEngine.DEBUG.wireframe) {
@@ -112,6 +114,7 @@ public class DebugOptions {
 				deb.setProperty(Shader.TRANSFORMATION_MATRIX, modelMatrix);
 			else
 				deb.setProperty(Shader.TRANSFORMATION_MATRIX, new Matrix4f());
+			deb.setProperty(WireframeShader.COLOR, wireframeColor);
 			deb.bindProperties(cache, scene, debShader);
 			
 			if(GameEngine.DEBUG.ignoreDepth)
