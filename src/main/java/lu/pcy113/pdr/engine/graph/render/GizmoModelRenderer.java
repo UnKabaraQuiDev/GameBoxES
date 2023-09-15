@@ -12,7 +12,6 @@ import lu.pcy113.pdr.engine.graph.material.gizmo.GizmoShader;
 import lu.pcy113.pdr.engine.objs.GizmoModel;
 import lu.pcy113.pdr.engine.scene.Camera3D;
 import lu.pcy113.pdr.engine.scene.Scene;
-import lu.pcy113.pdr.utils.Logger;
 
 public class GizmoModelRenderer extends Renderer<Scene, GizmoModel> {
 
@@ -48,7 +47,7 @@ public class GizmoModelRenderer extends Renderer<Scene, GizmoModel> {
 		//((Camera3D) scene.getCamera()).updateMatrix();
 		material.setProperty(Shader.VIEW_POSITION, ((Camera3D) scene.getCamera()).getPosition());
 		
-		Logger.log("cam: "+((Camera3D) scene.getCamera()).getPosition());
+		//Logger.log("cam: "+((Camera3D) scene.getCamera()).getPosition());
 		
 		material.bindProperties(cache, scene, shader);
 		

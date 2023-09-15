@@ -92,4 +92,17 @@ public class Transform3D extends Transform {
 		return scale;
 	}
 	
+	public Transform3D setTranslation(Vector3f translation) {
+		this.translation = translation;
+		return this;
+	}
+	public Transform3D setRotation(Quaternionf rotation) {
+		this.rotation = rotation;
+		return this;
+	}
+	public Transform3D setScale(Vector3f scale) {
+		this.scale = scale;
+		return this;
+	}
+	
 }

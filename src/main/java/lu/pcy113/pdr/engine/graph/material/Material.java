@@ -28,14 +28,14 @@ public class Material implements UniqueID {
 	public void bindProperties(CacheManager cache, Scene scene, Shader shader) {
 		for(Entry<String, Object> eso : properties.entrySet()) {
 			shader.setUniform(eso.getKey(), eso.getValue());
-			System.out.println(name+" prop: "+eso.getKey()+" = "+eso.getValue());
+			//System.out.println(name+" prop: "+eso.getKey()+" = "+eso.getValue());
 		}
 	}
 	
 	public void bindLights(CacheManager cache, List<String> pointLights) {
 		if(lights == null || lightCount == null)
 			return;
-		System.err.println(name+" lights not null: "+pointLights);
+		//System.err.println(name+" lights not null: "+pointLights);
 		
 		int i = 0;
 		for(String pLight : pointLights) {

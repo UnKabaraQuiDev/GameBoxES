@@ -1,6 +1,5 @@
 package lu.pcy113.pdr.client.game;
 
-import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFWGamepadState;
 
@@ -100,8 +99,6 @@ public class PDRClientGame implements GameLogic {
 		engine.getCache().addModel(model2);
 		
 		this.scene = new Scene3D("main-scene");
-		//((Camera3D) scene.getCamera()).setPosition(new Vector3f(-10, 10, 0)).updateMatrix();
-		//this.scene.addMesh(mesh.getId());
 		this.scene.addModel(model.getId());
 		this.scene.addModel(model1.getId());
 		this.scene.addModel(model2.getId());
@@ -116,24 +113,8 @@ public class PDRClientGame implements GameLogic {
 		engine.getCache().addGizmoModel(gizmoModel);
 		this.scene.addGizmoModel(gizmoModel.getId());
 		
-		/*Gizmo gizmoGrid = ObjLoader.loadGizmo("gizmoGrid", "./resources/models/grid.obj");
-		GizmoModel gizmoModelGridx = new GizmoModel("gizmoModelGridY", gizmoGrid.getId(), new Transform3D());
-		((Transform3D) gizmoModelGridx.getTransform()).rotateFromAxisAngleRad(0, 1, 0, 90).updateMatrix();
-		GizmoModel gizmoModelGridy = new GizmoModel("gizmoModelGridX", gizmoGrid.getId(), new Transform3D());
-		((Transform3D) gizmoModelGridy.getTransform()).rotateFromAxisAngleRad(1, 0, 0, 90).updateMatrix();
-		GizmoModel gizmoModelGridz = new GizmoModel("gizmoModelGridZ", gizmoGrid.getId(), new Transform3D());
-		((Transform3D) gizmoModelGridz.getTransform()).rotateFromAxisAngleRad(0, 0, 1, 90).updateMatrix();
-		
-		engine.getCache().addGizmo(gizmoGrid);
-		engine.getCache().addGizmoModel(gizmoModelGridx);
-		this.scene.addGizmoModel(gizmoModelGridx.getId());
-		engine.getCache().addGizmoModel(gizmoModelGridy);
-		this.scene.addGizmoModel(gizmoModelGridy.getId());
-		engine.getCache().addGizmoModel(gizmoModelGridz);
-		this.scene.addGizmoModel(gizmoModelGridz.getId());*/
-		
 		Gizmo gizmoAxisGrid = ObjLoader.loadGizmo("gizmoGrid", "./resources/models/axis_grid.obj");
-		GizmoModel gizmoModelAxisGrid = new GizmoModel("gizmoModelGridY", gizmoAxisGrid.getId(), new Transform3D());
+		GizmoModel gizmoModelAxisGrid = new GizmoModel("gizmoModelGridXYZ", gizmoAxisGrid.getId(), new Transform3D());
 		//((Transform3D) gizmoModelAxisGrid.getTransform()).rotateFromAxisAngleRad(0, 1, 0, 90).updateMatrix();
 		
 		engine.getCache().addGizmo(gizmoAxisGrid);
@@ -166,31 +147,14 @@ public class PDRClientGame implements GameLogic {
 				//System.out.println(x+" "+y+" : "+x2+" "+y2);
 				
 				Camera3D cam = (Camera3D) scene.getCamera();
-				/*Quaternionf q = cam.getRotation();
+				//cam.rotate(x2 * camRotSpeed, y2 * camRotSpeed);
+				//cam.moveLocal(x * camSpeed, y * camSpeed);
 				
-				Vector3f localX = q.transform(new Vector3f(1, 0, 0)).normalize();
-				Vector3f localY = q.transform(new Vector3f(0, 1, 0)).normalize();
-				Vector3f localZ = q.transform(new Vector3f(0, 0, 1)).normalize();*/
+				cam.rotate(x2*camRotSpeed, y2*camRotSpeed);
+				cam.moveLocalXZ(x*camSpeed, y*camSpeed);
 				
-				/*Matrix4f matrix = new Matrix4f()
-						.identity();
-				q.get(matrix);
-				
-				Vector3f localX = matrix.getColumn(0, new Vector3f());
-				Vector3f localY = matrix.getColumn(1, new Vector3f());
-				Vector3f localZ = matrix.getColumn(2, new Vector3f());*/
-				
-				/*cam.getPosition()
-						.add(localZ.mul(y*camSpeed))
-						.add(localY.mul(x*camSpeed));*/
-				
-				/*cam.setYaw(cam.getYaw()+x2*camRotSpeed);
-				cam.setPitch(cam.getPitch()+y2*camRotSpeed);*/
-				/*cam.getRotation().rotateLocalY(x2*camRotSpeed);
-				cam.getRotation().rotateLocalZ(y2*camRotSpeed);*/
-				
-				cam.moveLocal(x * camSpeed, y * camSpeed);
-				cam.rotate(x2 * camRotSpeed, y2 * camRotSpeed);
+				/*((Transform3D) model.getTransform()).setRotation(cam.getRotation()).getRotation();//.mul(-1);
+				model.getTransform().updateMatrix();*/
 				
 				cam.updateMatrix();
 				
@@ -226,7 +190,7 @@ public class PDRClientGame implements GameLogic {
 	
 	@Override
 	public void update(float dTime) {
-		((Transform3D) model.getTransform()).rotate(0.1f, 0.05f, 0.025f).updateMatrix();
+		//((Transform3D) model.getTransform()).rotate(0.1f, 0.05f, 0.025f).updateMatrix();
 		//Logger.log();
 	}
 

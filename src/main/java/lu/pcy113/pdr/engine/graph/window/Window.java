@@ -8,15 +8,19 @@ import java.util.logging.Level;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWFramebufferSizeCallback;
 import org.lwjgl.glfw.GLFWGamepadState;
+import org.lwjgl.glfw.GLFWJoystickCallback;
+import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.system.MemoryUtil;
 
+import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.utils.Logger;
 
-public class Window {
+public class Window implements Cleanupable {
 	
 	private WindowOptions options;
 	
@@ -28,6 +32,10 @@ public class Window {
 	private Vector4f background = new Vector4f(0, 0.1f, 0, 1);
 	
 	private BiConsumer<Integer, Integer> onResize;
+	
+	private GLFWKeyCallback keyCallback;
+	private GLFWJoystickCallback joystickCallback;
+	private GLFWFramebufferSizeCallback frameBufferCallback;
 	
 	public Window(WindowOptions options) {
 		Logger.log();
@@ -58,9 +66,12 @@ public class Window {
 		
 		updateOptions();
 		
-		GLFW.glfwSetKeyCallback(handle, (window, key, scancode, action, mods) -> callback_key(window, key, scancode, action, mods));
-		GLFW.glfwSetJoystickCallback((joystick, event) -> callback_joystick(joystick, event));
-		GLFW.glfwSetFramebufferSizeCallback(handle, (window, width, height) -> callback_frameBuffer(window, width, height));
+		keyCallback = GLFWKeyCallback.create((window, key, scancode, action, mods) -> callback_key(window, key, scancode, action, mods));
+		GLFW.glfwSetKeyCallback(handle, keyCallback);
+		joystickCallback = GLFWJoystickCallback.create((jid, event) -> callback_joystick(jid, event));
+		GLFW.glfwSetJoystickCallback(joystickCallback);
+		frameBufferCallback = GLFWFramebufferSizeCallback.create((window, width, height) -> callback_frameBuffer(window, width, height));
+		GLFW.glfwSetFramebufferSizeCallback(handle, frameBufferCallback);
 		
 		gamepadState = GLFWGamepadState.create();
 		
@@ -160,6 +171,7 @@ public class Window {
 	
 	public Vector4f getBackground() {return background;}
 	public void setBackground(Vector4f background) {this.background = background;}
+	public WindowOptions getOptions() {return options;}
 
 	public void onResize(BiConsumer<Integer, Integer> object) {this.onResize = object;}
 
@@ -170,6 +182,13 @@ public class Window {
 			GLFW.glfwGetWindowSize(handle, w, h);
 			onResize.accept(w[0], h[0]);
 		}
+	}
+	
+	@Override
+	public void cleanup() {
+		keyCallback.free();
+		joystickCallback.free();
+		frameBufferCallback.free();
 	}
 	
 }

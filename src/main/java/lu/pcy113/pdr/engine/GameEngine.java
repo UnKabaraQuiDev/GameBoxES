@@ -3,16 +3,19 @@ package lu.pcy113.pdr.engine;
 import lu.pcy113.pdr.engine.cache.SharedCacheManager;
 import lu.pcy113.pdr.engine.graph.window.Window;
 import lu.pcy113.pdr.engine.graph.window.WindowOptions;
+import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.logic.GameLogic;
 import lu.pcy113.pdr.engine.utils.DebugOptions;
 
-public class GameEngine implements Runnable {
+public class GameEngine implements Runnable, Cleanupable {
 	
 	private final Window window;
 	private GameLogic gameLogic;
 	
 	private boolean running = false;
 	private long startTime;
+	
+	public int targetUps, targetFps;
 	
 	public static DebugOptions DEBUG = new DebugOptions();
 	
@@ -25,20 +28,52 @@ public class GameEngine implements Runnable {
 	
 	@Override
 	public void run() {
+		targetUps = window.getOptions().ups;
+		targetFps = window.getOptions().fps;
+		
+		startTime = System.currentTimeMillis();
+		long initialTime = startTime;
+		float timeU = 1000.0f / targetUps;
+		float timeR = targetFps > 0 ? 1000.0f / targetFps : 0;
+		float deltaUpdate = 0;
+		float deltaFps = 0;
+		
+		long updateTime = startTime;
+		long renderTime = startTime;
+		long inputTime = startTime;
 		while(!window.shouldClose() && running) {
 			window.pollEvents();
 			
-			gameLogic.input(0);
+			long now = System.currentTimeMillis();
+			deltaUpdate += (now - initialTime) / timeU;
+			deltaFps += (now - initialTime) / timeR;
 			
-			gameLogic.update(0);
+			if(targetFps <= 0 || deltaFps >= 1) {
+				gameLogic.input(now - initialTime);
+				inputTime = now;
+			}
 			
-			window.clear();
+			if(deltaUpdate >= 1) {
+				gameLogic.update(now - initialTime);
+				updateTime = now;
+				deltaUpdate--;
+			}
 			
-			gameLogic.render(0);
+			if(targetFps <= 0 || deltaFps >= 1) {
+				window.clear();
+				
+				gameLogic.render(deltaFps);
+				
+				window.swapBuffers();
+				renderTime = now;
+				deltaFps--;
+			}
 			
-			window.swapBuffers();
+			initialTime = now;
 		}
 		running = !window.shouldClose();
+		
+		this.cleanup();
 	}
 	
 	public void start() {
@@ -46,7 +81,6 @@ public class GameEngine implements Runnable {
 		gameLogic.init(this);
 		window.runCallbacks();
 		running = true;
-		startTime = System.currentTimeMillis();
 		run();
 	}
 	public void stop() {
@@ -58,5 +92,11 @@ public class GameEngine implements Runnable {
 	public Window getWindow() {return window;}
 	public boolean isRunning() {return running;}
 	public SharedCacheManager getCache() {return cache;}
+	
+	@Override
+	public void cleanup() {
+		cache.cleanup();
+		window.cleanup();
+	}
 	
 }
