@@ -29,7 +29,7 @@ public class DiffuseShader extends Shader {
 		getUniform(Shader.TRANSFORMATION_MATRIX);
 		
 		// frag
-		getUniform(VIEW_POS);
+		getUniform(Shader.VIEW_POSITION);
 		getUniform(SHININESS);
 		getUniform(DIFFUSE_COLOR);
 		getUniform(SPECULAR_COLOR);

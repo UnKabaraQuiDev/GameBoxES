@@ -3,6 +3,7 @@ package lu.pcy113.pdr.engine.graph.render;
 import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.geom.Mesh;
+import lu.pcy113.pdr.engine.objs.GizmoModel;
 import lu.pcy113.pdr.engine.objs.Model;
 import lu.pcy113.pdr.engine.scene.Scene3D;
 
@@ -28,6 +29,13 @@ public class Scene3DRenderer extends Renderer<GameEngine, Scene3D> {
 			Model model = cache.getModel(modelId);
 			if(model != null)
 				modelRenderer.render(cache, scene, model);
+		}
+		
+		GizmoModelRenderer gizmoModelRenderer = (GizmoModelRenderer) cache.getRenderer(GizmoModel.NAME);
+		for(String gizmoId : scene.getGizmoModels()) {
+			GizmoModel gizmo = cache.getGizmoModel(gizmoId);
+			if(gizmo != null)
+				gizmoModelRenderer.render(cache, scene, gizmo);
 		}
 	}
 	

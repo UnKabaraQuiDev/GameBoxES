@@ -51,6 +51,7 @@ public class ModelRenderer extends Renderer<Scene3D, Model> {
 		GameEngine.DEBUG.wireframe(cache, scene, mesh, projectionMatrix, viewMatrix, model.getTransform().getMatrix());
 		
 		mesh.unbind();
+		GameEngine.DEBUG.gizmos(cache, scene, projectionMatrix, viewMatrix, model.getTransform().getMatrix());
 	}
 	
 	@Override

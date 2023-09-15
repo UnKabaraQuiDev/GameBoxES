@@ -10,6 +10,7 @@ public class Scene3D extends Scene {
 	protected List<String> meshes;
 	protected List<String> models;
 	protected List<String> pointLights;
+	protected List<String> gizmoModels;
 	
 	public Scene3D(String name) {
 		super(name, Camera.camera3D());
@@ -17,6 +18,7 @@ public class Scene3D extends Scene {
 		this.meshes = new ArrayList<>();
 		this.models = new ArrayList<>();
 		this.pointLights = new ArrayList<>();
+		this.gizmoModels = new ArrayList<>();
 	}
 	
 	@Override
@@ -25,6 +27,7 @@ public class Scene3D extends Scene {
 	public List<String> getMeshes() {return meshes;}
 	public List<String> getModels() {return models;}
 	public List<String> getPointLights() {return pointLights;}
+	public List<String> getGizmoModels() {return gizmoModels;}
 	
 	public void addMesh(String mesh) {
 		meshes.add(mesh);
@@ -34,6 +37,9 @@ public class Scene3D extends Scene {
 	}
 	public void addPointLight(String id) {
 		pointLights.add(id);
+	}
+	public void addGizmoModel(String id) {
+		gizmoModels.add(id);
 	}
 
 }

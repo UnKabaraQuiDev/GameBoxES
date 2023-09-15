@@ -27,7 +27,7 @@ public class TxtDiffuse1Shader extends Shader {
 		getUniform(Shader.TRANSFORMATION_MATRIX);
 		
 		// frag
-		getUniform(VIEW_POS);
+		getUniform(Shader.VIEW_POSITION);
 		getUniform(SHININESS);
 		getUniform(LIGHT_COUNT);
 		getUniform(LIGHTS);

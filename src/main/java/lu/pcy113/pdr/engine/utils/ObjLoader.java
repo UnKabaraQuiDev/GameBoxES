@@ -1,17 +1,98 @@
 package lu.pcy113.pdr.engine.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.joml.Vector2f;
+import org.joml.Vector2i;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
+import org.joml.Vector4f;
 
 import lu.pcy113.pdr.engine.cache.attrib.FloatAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.IntAttribArray;
+import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.geom.Mesh;
+import lu.pcy113.pdr.utils.Logger;
 
 public final class ObjLoader {
+	
+	public static Gizmo loadGizmo(String name, String path) {
+		String[] lines = FileUtils.readFile(path).split("\n");
+		
+		List<Vector3f> vertices = new ArrayList<>();
+		/*List<Vector3f> normals = new ArrayList<>();
+		List<Vector2f> uvs = new ArrayList<>();*/
+		List<Vector2i> edges = new ArrayList<>();
+		List<Vector4f> colors = new ArrayList<>();
+		
+		int li = 0;
+		while(li < lines.length) {
+			String line = lines[li++];
+			String[] tokens = line.split("\\s+");
+			
+			switch(tokens[0]) {
+			case "v":
+				vertices.add(new Vector3f(
+						Float.parseFloat(tokens[1]),
+						Float.parseFloat(tokens[2]),
+						Float.parseFloat(tokens[3])
+				));
+				if(tokens.length > 4)
+					colors.add(new Vector4f(
+							Float.parseFloat(tokens[4]),
+							Float.parseFloat(tokens[5]),
+							Float.parseFloat(tokens[6]),
+							tokens.length > 7 ? Float.parseFloat(tokens[7]) : 1
+					));
+				break;
+			case "l":
+				edges.add(new Vector2i(
+						Integer.parseInt(tokens[1]),
+						Integer.parseInt(tokens[2])
+				));
+				break;
+			}
+		}
+		List<Integer> indices = new ArrayList<>();
+		float[] verticesArr = new float[vertices.size() *3];
+		float[] colorArr = new float[vertices.size() *4];
+		for(int i = 0; i < vertices.size(); i++) {
+			Vector3f pos = vertices.get(i);
+			
+			verticesArr[i*3+0] = pos.x;
+			verticesArr[i*3+1] = pos.y;
+			verticesArr[i*3+2] = pos.z;
+			
+			Vector4f col = colors.get(i);
+			colorArr[i*4+0] = col.x;
+			colorArr[i*4+1] = col.y;
+			colorArr[i*4+2] = col.z;
+			colorArr[i*4+3] = col.w;
+		}
+		
+		for(Vector2i edge : edges) {
+			int i1 = edge.x;
+			int i2 = edge.y;
+			
+			indices.add(i1-1);
+			indices.add(i2-1);
+		}
+		int[] indicesArr = indices.stream().mapToInt((v) -> v).toArray();
+		
+		/*Logger.log(Level.INFO, "Loaded " + name);
+		Logger.log(Level.INFO, "Vertices " + Arrays.toString(verticesArr));
+		Logger.log(Level.INFO, "Color " + Arrays.toString(colorArr));
+		Logger.log(Level.INFO, "Indices " + Arrays.toString(indicesArr));*/
+		
+		return new Gizmo(
+				name,
+				new FloatAttribArray("pos", 0, 3, verticesArr),
+				new IntAttribArray("ind", -1, 1, indicesArr),
+				new FloatAttribArray("col", 1, 4, colorArr));
+	}
 	
 	public static Mesh loadMesh(String name, String material, String path) {
 		String[] lines = FileUtils.readFile(path).split("\n");

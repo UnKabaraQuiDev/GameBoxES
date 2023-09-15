@@ -3,12 +3,14 @@ package lu.pcy113.pdr.engine.cache;
 import java.util.HashMap;
 import java.util.Map;
 
+import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.render.Renderer;
 import lu.pcy113.pdr.engine.graph.texture.Texture;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
+import lu.pcy113.pdr.engine.objs.GizmoModel;
 import lu.pcy113.pdr.engine.objs.Model;
 import lu.pcy113.pdr.engine.objs.PointLight;
 import lu.pcy113.pdr.engine.scene.Scene;
@@ -24,6 +26,8 @@ public class CacheManager implements Cleanupable {
 	protected Map<String, Model> models;
 	protected Map<String, Texture> textures;
 	protected Map<String, PointLight> pointLights;
+	protected Map<String, Gizmo> gizmos;
+	protected Map<String, GizmoModel> gizmoModels;
 	
 	public CacheManager() {
 		this.meshes = new HashMap<>();
@@ -34,6 +38,8 @@ public class CacheManager implements Cleanupable {
 		this.models = new HashMap<>();
 		this.textures = new HashMap<>();
 		this.pointLights = new HashMap<>();
+		this.gizmos = new HashMap<>();
+		this.gizmoModels = new HashMap<>();
 	}
 	
 	@Override
@@ -61,6 +67,12 @@ public class CacheManager implements Cleanupable {
 		
 		//pointLights.values().forEach(PointLight::cleanup);
 		pointLights.clear();
+		
+		gizmos.values().forEach(Gizmo::cleanup);
+		gizmos.clear();
+		
+		//gizmoModels.values().forEach(GizmoModel::cleanup);
+		gizmoModels.clear();
 	}
 	
 	public boolean addMesh(Mesh mesh) {
@@ -87,6 +99,12 @@ public class CacheManager implements Cleanupable {
 	public boolean addPointLight(PointLight pointLight) {
 		return this.pointLights.putIfAbsent(pointLight.getId(), pointLight) == null;
 	}
+	public boolean addGizmo(Gizmo gizmo) {
+		return this.gizmos.putIfAbsent(gizmo.getId(), gizmo) == null;
+	}
+	public boolean addGizmoModel(GizmoModel gizmoModel) {
+		return this.gizmoModels.putIfAbsent(gizmoModel.getId(), gizmoModel) == null;
+	}
 	
 	public Mesh getMesh(String name) {
 		return meshes.get(name);
@@ -112,6 +130,12 @@ public class CacheManager implements Cleanupable {
 	public PointLight getPointLight(String name) {
 		return pointLights.get(name);
 	}
+	public Gizmo getGizmo(String name) {
+		return gizmos.get(name);
+	}
+	public GizmoModel getGizmoModel(String name) {
+		return gizmoModels.get(name);
+	}
 	
 	public Map<String, Mesh> getMeshes() {return meshes;}
 	public void setMeshes(Map<String, Mesh> meshes) {this.meshes = meshes;}
@@ -125,5 +149,9 @@ public class CacheManager implements Cleanupable {
 	public void setShaders(Map<String, Shader> shaders) {this.shaders = shaders;}
 	public Map<String, Texture> getTextures() {return textures;}
 	public void setTextures(Map<String, Texture> textures) {this.textures = textures;}
-
+	public Map<String, Gizmo> getGizmos() {return gizmos;}
+	public void setGizmos(Map<String, Gizmo> gizmos) {this.gizmos = gizmos;}
+	public Map<String, GizmoModel> getGizmoModels() {return gizmoModels;}
+	public void setGizmoModels(Map<String, GizmoModel> gizmoModels) {this.gizmoModels = gizmoModels;}
+	
 }

@@ -1,6 +1,7 @@
 package lu.pcy113.pdr.engine.scene;
 
 import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 public abstract class Camera {
@@ -22,7 +23,7 @@ public abstract class Camera {
 	public void setProjection(Projection projection) {this.projection = projection;}
 	
 	public static final Camera3D camera3D() {
-		return new Camera3D(new Vector3f(), 0, 0, new Projection((float) Math.toRadians(60), 0.01f, 1000f));
+		return new Camera3D(new Vector3f(), new Quaternionf(), new Projection((float) Math.toRadians(60), 0.01f, 1000f));
 	}
 	
 }

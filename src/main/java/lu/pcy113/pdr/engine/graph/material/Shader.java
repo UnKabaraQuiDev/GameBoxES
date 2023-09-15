@@ -6,6 +6,7 @@ import java.util.logging.Level;
 
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
+import org.joml.Vector3i;
 import org.lwjgl.opengl.GL30;
 
 import lu.pcy113.pdr.engine.impl.Cleanupable;
@@ -17,6 +18,7 @@ public abstract class Shader implements UniqueID, Cleanupable {
 	public static final String PROJECTION_MATRIX = "projectionMatrix";
 	public static final String VIEW_MATRIX = "viewMatrix";
 	public static final String TRANSFORMATION_MATRIX = "transformationMatrix";
+	public static final String VIEW_POSITION = "viewPos";
 	
 	protected final String name;
 	protected final int shaderProgram;
@@ -58,6 +60,8 @@ public abstract class Shader implements UniqueID, Cleanupable {
 			GL30.glUniformMatrix4fv(getUniform(key), false, ((Matrix4f) value).get(new float[4*4]));
 		}else if(value instanceof Vector3f) {
 			GL30.glUniform3f(getUniform(key), ((Vector3f) value).x, ((Vector3f) value).y, ((Vector3f) value).z);
+		}else if(value instanceof Vector3i) {
+			GL30.glUniform3i(getUniform(key), ((Vector3i) value).x, ((Vector3i) value).y, ((Vector3i) value).z);
 		}
 	}
 	public int getUniform(String name) {
