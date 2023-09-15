@@ -14,7 +14,7 @@ import org.lwjgl.glfw.GLFWJoystickCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.GL40;
 import org.lwjgl.system.MemoryUtil;
 
 import lu.pcy113.pdr.engine.impl.Cleanupable;
@@ -62,7 +62,7 @@ public class Window implements Cleanupable {
 		GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 3);
 		GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_PROFILE, GLFW.GLFW_OPENGL_CORE_PROFILE);
 		GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_FORWARD_COMPAT, GLFW.GLFW_TRUE);
-		GL30.glEnable(GL30.GL_DEPTH_TEST);
+		GL40.glEnable(GL40.GL_DEPTH_TEST);
 		
 		updateOptions();
 		
@@ -83,7 +83,7 @@ public class Window implements Cleanupable {
 			options.windowSize.set(w, h);
 		if(onResize != null)
 			onResize.accept(w, h);
-		GL30.glViewport(0, 0, w, h);
+		GL40.glViewport(0, 0, w, h);
 	}
 	private void callback_joystick(int jid, int event) {
 		if(event == GLFW.GLFW_CONNECTED) {
@@ -143,8 +143,8 @@ public class Window implements Cleanupable {
 	}
 	
 	public void clear() {
-		GL30.glClear(GL30.GL_COLOR_BUFFER_BIT | GL30.GL_DEPTH_BUFFER_BIT);
-		GL30.glClearColor(background.x, background.y, background.z, background.w);
+		GL40.glClear(GL40.GL_COLOR_BUFFER_BIT | GL40.GL_DEPTH_BUFFER_BIT);
+		GL40.glClearColor(background.x, background.y, background.z, background.w);
 	}
 	public void swapBuffers() {
 		GLFW.glfwSwapBuffers(handle);

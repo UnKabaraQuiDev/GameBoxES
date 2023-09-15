@@ -2,7 +2,7 @@ package lu.pcy113.pdr.engine.utils;
 
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
-import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.GL40;
 
 import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.cache.CacheManager;
@@ -63,7 +63,7 @@ public class DebugOptions {
 		
 		gizmoXYZ.bind();
 		
-		GL30.glPolygonMode(GL30.GL_FRONT_AND_BACK, GL30.GL_LINE);
+		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_LINE);
 		Material deb = cache.getMaterial(GizmoMaterial.NAME);
 		if(deb == null) {
 			deb = new GizmoMaterial();
@@ -82,13 +82,13 @@ public class DebugOptions {
 		deb.bindProperties(cache, scene, debShader);
 		
 		if(GameEngine.DEBUG.ignoreDepth)
-			GL30.glDisable(GL30.GL_DEPTH_TEST);
+			GL40.glDisable(GL40.GL_DEPTH_TEST);
 		
-		GL30.glLineWidth(2.5f);
-		GL30.glDrawElements(GL30.GL_LINES, gizmoXYZ.getVertexCount(), GL30.GL_UNSIGNED_INT, 0);
+		GL40.glLineWidth(2.5f);
+		GL40.glDrawElements(GL40.GL_LINES, gizmoXYZ.getVertexCount(), GL40.GL_UNSIGNED_INT, 0);
 		
-		GL30.glPolygonMode(GL30.GL_FRONT_AND_BACK, GL30.GL_FILL);
-		GL30.glEnable(GL30.GL_DEPTH_TEST);
+		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_FILL);
+		GL40.glEnable(GL40.GL_DEPTH_TEST);
 		
 		gizmoXYZ.unbind();
 	}
@@ -98,7 +98,7 @@ public class DebugOptions {
 	
 	public void wireframe(CacheManager cache, Scene scene, Mesh mesh, Matrix4f projectionMatrix, Matrix4f viewMatrix, Matrix4f modelMatrix) {
 		if(GameEngine.DEBUG.wireframe) {
-			GL30.glPolygonMode(GL30.GL_FRONT_AND_BACK, GL30.GL_LINE);
+			GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_LINE);
 			Material deb = cache.getMaterial(WireframeMaterial.NAME);
 			if(deb == null) {
 				deb = new WireframeMaterial();
@@ -118,12 +118,12 @@ public class DebugOptions {
 			deb.bindProperties(cache, scene, debShader);
 			
 			if(GameEngine.DEBUG.ignoreDepth)
-				GL30.glDisable(GL30.GL_DEPTH_TEST);
+				GL40.glDisable(GL40.GL_DEPTH_TEST);
 			
-			GL30.glDrawElements(GL30.GL_TRIANGLES, mesh.getVertexCount(), GL30.GL_UNSIGNED_INT, 0);
+			GL40.glDrawElements(GL40.GL_TRIANGLES, mesh.getVertexCount(), GL40.GL_UNSIGNED_INT, 0);
 			
-			GL30.glPolygonMode(GL30.GL_FRONT_AND_BACK, GL30.GL_FILL);
-			GL30.glEnable(GL30.GL_DEPTH_TEST);
+			GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_FILL);
+			GL40.glEnable(GL40.GL_DEPTH_TEST);
 		}
 	}
 	

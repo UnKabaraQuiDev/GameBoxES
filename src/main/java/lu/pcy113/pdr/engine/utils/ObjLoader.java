@@ -1,9 +1,7 @@
 package lu.pcy113.pdr.engine.utils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
 
 import org.joml.Vector2f;
 import org.joml.Vector2i;
@@ -15,7 +13,6 @@ import lu.pcy113.pdr.engine.cache.attrib.FloatAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.IntAttribArray;
 import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.geom.Mesh;
-import lu.pcy113.pdr.utils.Logger;
 
 public final class ObjLoader {
 	

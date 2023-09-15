@@ -3,7 +3,7 @@ package lu.pcy113.pdr.engine.geom;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.GL40;
 
 import lu.pcy113.pdr.engine.cache.attrib.FloatAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.IntAttribArray;
@@ -45,7 +45,7 @@ public class Gizmo implements UniqueID, Cleanupable {
 		System.out.println("gizmo color ("+(color.getLength()/4)+"*4): "+Arrays.toString(color.getData()));
 		System.out.println("gizmo indices ("+indices.getDataCount()+Arrays.toString(indices.getData()));
 		
-		this.vao = GL30.glGenVertexArrays();
+		this.vao = GL40.glGenVertexArrays();
 		bind();
 		storeElementArray(indices);
 		storeAttribArray(0, 3, vertices);
@@ -56,41 +56,41 @@ public class Gizmo implements UniqueID, Cleanupable {
 	}
 	
 	protected void storeAttribArray(int index, int size, IntAttribArray data) {
-		int vbo = GL30.glGenBuffers();
+		int vbo = GL40.glGenBuffers();
 		this.vbo.put(index, vbo);
-		GL30.glBindBuffer(GL30.GL_ARRAY_BUFFER, vbo);
-		GL30.glBufferData(GL30.GL_ARRAY_BUFFER, data.getData(), GL30.GL_STATIC_DRAW);
-		GL30.glEnableVertexAttribArray(index);
-		GL30.glVertexAttribPointer(index, size, GL30.GL_UNSIGNED_INT, false, 0, 0);
-		GL30.glBindBuffer(GL30.GL_ARRAY_BUFFER, 0);
+		GL40.glBindBuffer(GL40.GL_ARRAY_BUFFER, vbo);
+		GL40.glBufferData(GL40.GL_ARRAY_BUFFER, data.getData(), GL40.GL_STATIC_DRAW);
+		GL40.glEnableVertexAttribArray(index);
+		GL40.glVertexAttribPointer(index, size, GL40.GL_UNSIGNED_INT, false, 0, 0);
+		GL40.glBindBuffer(GL40.GL_ARRAY_BUFFER, 0);
 	}
 	protected void storeAttribArray(int index, int size, FloatAttribArray data) {
-		int vbo = GL30.glGenBuffers();
+		int vbo = GL40.glGenBuffers();
 		this.vbo.put(index, vbo);
-		GL30.glBindBuffer(GL30.GL_ARRAY_BUFFER, vbo);
-		GL30.glBufferData(GL30.GL_ARRAY_BUFFER, data.getData(), GL30.GL_STATIC_DRAW);
-		GL30.glEnableVertexAttribArray(index);
-		GL30.glVertexAttribPointer(index, size, GL30.GL_FLOAT, false, 0, 0);
-		GL30.glBindBuffer(GL30.GL_ARRAY_BUFFER, 0);
+		GL40.glBindBuffer(GL40.GL_ARRAY_BUFFER, vbo);
+		GL40.glBufferData(GL40.GL_ARRAY_BUFFER, data.getData(), GL40.GL_STATIC_DRAW);
+		GL40.glEnableVertexAttribArray(index);
+		GL40.glVertexAttribPointer(index, size, GL40.GL_FLOAT, false, 0, 0);
+		GL40.glBindBuffer(GL40.GL_ARRAY_BUFFER, 0);
 	}
 	private void storeElementArray(IntAttribArray indices) {
-		int vbo = GL30.glGenBuffers();
+		int vbo = GL40.glGenBuffers();
 		this.vbo.put(-1, vbo);
-		GL30.glBindBuffer(GL30.GL_ELEMENT_ARRAY_BUFFER, vbo);
-		GL30.glBufferData(GL30.GL_ELEMENT_ARRAY_BUFFER, indices.getData(), GL30.GL_STATIC_DRAW);
+		GL40.glBindBuffer(GL40.GL_ELEMENT_ARRAY_BUFFER, vbo);
+		GL40.glBufferData(GL40.GL_ELEMENT_ARRAY_BUFFER, indices.getData(), GL40.GL_STATIC_DRAW);
 	}
 	
 	public void bind() {
-		GL30.glBindVertexArray(vao);
+		GL40.glBindVertexArray(vao);
 	}
 	public void unbind() {
-		GL30.glBindVertexArray(0);
+		GL40.glBindVertexArray(0);
 	}
 	
 	@Override
 	public void cleanup() {
-		GL30.glDeleteVertexArrays(vao);
-		vbo.values().forEach(GL30::glDeleteBuffers);
+		GL40.glDeleteVertexArrays(vao);
+		vbo.values().forEach(GL40::glDeleteBuffers);
 	}
 	
 	@Override

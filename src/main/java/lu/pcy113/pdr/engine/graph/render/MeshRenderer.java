@@ -1,7 +1,7 @@
 package lu.pcy113.pdr.engine.graph.render;
 
 import org.joml.Matrix4f;
-import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.GL40;
 
 import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.cache.CacheManager;
@@ -38,7 +38,7 @@ public class MeshRenderer extends Renderer<Scene3D, Mesh> {
 		material.setProperty(Shader.VIEW_MATRIX, viewMatrix);
 		material.bindProperties(cache, scene, shader);
 		
-		GL30.glDrawElements(GL30.GL_TRIANGLES, mesh.getVertexCount(), GL30.GL_UNSIGNED_INT, 0);
+		GL40.glDrawElements(GL40.GL_TRIANGLES, mesh.getVertexCount(), GL40.GL_UNSIGNED_INT, 0);
 		
 		// debug only
 		GameEngine.DEBUG.wireframe(cache, scene, mesh, projectionMatrix, viewMatrix, null);

@@ -8,7 +8,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 import org.joml.Vector4f;
-import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.GL40;
 
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
@@ -29,16 +29,16 @@ public abstract class Shader implements UniqueID, Cleanupable {
 	public Shader(String name, ShaderPart... parts) {
 		this.name = name;
 		
-		this.shaderProgram = GL30.glCreateProgram();
+		this.shaderProgram = GL40.glCreateProgram();
 		this.parts = new HashMap<>();
 		for(ShaderPart sp : parts) {
 			this.parts.put(sp.getType(), sp);
-			GL30.glAttachShader(shaderProgram, sp.getSid());
+			GL40.glAttachShader(shaderProgram, sp.getSid());
 		}
-		GL30.glLinkProgram(shaderProgram);
+		GL40.glLinkProgram(shaderProgram);
 		
-		if(GL30.glGetProgrami(shaderProgram, GL30.GL_LINK_STATUS) == GL30.GL_FALSE) {
-			Logger.log(Level.SEVERE, GL30.glGetProgramInfoLog(shaderProgram, 1024));
+		if(GL40.glGetProgrami(shaderProgram, GL40.GL_LINK_STATUS) == GL40.GL_FALSE) {
+			Logger.log(Level.SEVERE, GL40.glGetProgramInfoLog(shaderProgram, 1024));
 			cleanup();
 		}
 		
@@ -54,22 +54,22 @@ public abstract class Shader implements UniqueID, Cleanupable {
 		//System.err.println(value.getClass().getName());
 		
 		if(value instanceof Integer) {
-			GL30.glUniform1i(getUniform(key), (int) value);
+			GL40.glUniform1i(getUniform(key), (int) value);
 		}else if(value instanceof Float) {
-			GL30.glUniform1f(getUniform(key), (float) value);
+			GL40.glUniform1f(getUniform(key), (float) value);
 		}else if(value instanceof Matrix4f) {
-			GL30.glUniformMatrix4fv(getUniform(key), false, ((Matrix4f) value).get(new float[4*4]));
+			GL40.glUniformMatrix4fv(getUniform(key), false, ((Matrix4f) value).get(new float[4*4]));
 		}else if(value instanceof Vector3f) {
-			GL30.glUniform3f(getUniform(key), ((Vector3f) value).x, ((Vector3f) value).y, ((Vector3f) value).z);
+			GL40.glUniform3f(getUniform(key), ((Vector3f) value).x, ((Vector3f) value).y, ((Vector3f) value).z);
 		}else if(value instanceof Vector3i) {
-			GL30.glUniform3i(getUniform(key), ((Vector3i) value).x, ((Vector3i) value).y, ((Vector3i) value).z);
+			GL40.glUniform3i(getUniform(key), ((Vector3i) value).x, ((Vector3i) value).y, ((Vector3i) value).z);
 		}else if(value instanceof Vector4f) {
-			GL30.glUniform4f(getUniform(key), ((Vector4f) value).x, ((Vector4f) value).y, ((Vector4f) value).z, ((Vector4f) value).w);
+			GL40.glUniform4f(getUniform(key), ((Vector4f) value).x, ((Vector4f) value).y, ((Vector4f) value).z, ((Vector4f) value).w);
 		}
 	}
 	public int getUniform(String name) {
 		if(!hasUniform(name))
-			uniforms.put(name, GL30.glGetUniformLocation(shaderProgram, name));
+			uniforms.put(name, GL40.glGetUniformLocation(shaderProgram, name));
 		return uniforms.get(name);
 	}
 	public boolean hasUniform(String name) {
@@ -77,17 +77,17 @@ public abstract class Shader implements UniqueID, Cleanupable {
 	}
 	
 	public void bind() {
-		GL30.glUseProgram(shaderProgram);
+		GL40.glUseProgram(shaderProgram);
 	}
 	public void unbind() {
-		GL30.glUseProgram(0);
+		GL40.glUseProgram(0);
 	}
 	
 	@Override
 	public void cleanup() {
 		parts.values().forEach(ShaderPart::cleanup);
-		//parts.values().forEach(s -> {GL30.glDetachShader(shaderProgram, s.getSid()); s.cleanup();});
-		GL30.glDeleteProgram(shaderProgram);
+		//parts.values().forEach(s -> {GL40.glDetachShader(shaderProgram, s.getSid()); s.cleanup();});
+		GL40.glDeleteProgram(shaderProgram);
 	}
 	
 	@Override

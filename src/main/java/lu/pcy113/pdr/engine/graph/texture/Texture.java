@@ -2,7 +2,7 @@ package lu.pcy113.pdr.engine.graph.texture;
 
 import java.nio.ByteBuffer;
 
-import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.GL40;
 import org.lwjgl.stb.STBImage;
 
 import lu.pcy113.pdr.engine.impl.Cleanupable;
@@ -34,14 +34,14 @@ public class Texture implements Cleanupable, UniqueID {
 	}
 	
 	private int generateTexture(int w, int h, ByteBuffer buffer) {
-		int tid = GL30.glGenTextures();
+		int tid = GL40.glGenTextures();
 		
-		GL30.glBindTexture(GL30.GL_TEXTURE_2D, tid);
-		GL30.glPixelStorei(GL30.GL_UNPACK_ALIGNMENT, 1);
-		GL30.glTexParameteri(GL30.GL_TEXTURE_2D, GL30.GL_TEXTURE_MIN_FILTER, GL30.GL_LINEAR);
-		GL30.glTexParameteri(GL30.GL_TEXTURE_2D, GL30.GL_TEXTURE_MAG_FILTER, GL30.GL_LINEAR);
-		GL30.glTexImage2D(GL30.GL_TEXTURE_2D, 0, GL30.GL_RGBA, w, h, 0, GL30.GL_RGBA, GL30.GL_UNSIGNED_BYTE, buffer);
-		GL30.glGenerateMipmap(GL30.GL_TEXTURE_2D);
+		GL40.glBindTexture(GL40.GL_TEXTURE_2D, tid);
+		GL40.glPixelStorei(GL40.GL_UNPACK_ALIGNMENT, 1);
+		GL40.glTexParameteri(GL40.GL_TEXTURE_2D, GL40.GL_TEXTURE_MIN_FILTER, GL40.GL_LINEAR);
+		GL40.glTexParameteri(GL40.GL_TEXTURE_2D, GL40.GL_TEXTURE_MAG_FILTER, GL40.GL_LINEAR);
+		GL40.glTexImage2D(GL40.GL_TEXTURE_2D, 0, GL40.GL_RGBA, w, h, 0, GL40.GL_RGBA, GL40.GL_UNSIGNED_BYTE, buffer);
+		GL40.glGenerateMipmap(GL40.GL_TEXTURE_2D);
 		
 		return tid;
 	}
@@ -49,13 +49,13 @@ public class Texture implements Cleanupable, UniqueID {
 	public void bind(int i) {
 		if(i > 31)
 			return;
-		GL30.glActiveTexture(GL30.GL_TEXTURE0+i);
-		GL30.glBindTexture(GL30.GL_TEXTURE_2D, tid);
+		GL40.glActiveTexture(GL40.GL_TEXTURE0+i);
+		GL40.glBindTexture(GL40.GL_TEXTURE_2D, tid);
 	}
 	
 	@Override
 	public void cleanup() {
-		GL30.glDeleteTextures(tid);
+		GL40.glDeleteTextures(tid);
 	}
 
 	@Override

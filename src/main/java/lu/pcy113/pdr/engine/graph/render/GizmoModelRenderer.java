@@ -1,7 +1,7 @@
 package lu.pcy113.pdr.engine.graph.render;
 
 import org.joml.Matrix4f;
-import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.GL40;
 
 import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.geom.Gizmo;
@@ -28,7 +28,7 @@ public class GizmoModelRenderer extends Renderer<Scene, GizmoModel> {
 			return;
 		gizmo.bind();
 		
-		GL30.glPolygonMode(GL30.GL_FRONT_AND_BACK, GL30.GL_LINE);
+		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_LINE);
 		Material material = cache.getMaterial(GizmoMaterial.NAME);
 		if(material == null) {
 			material = new GizmoMaterial();
@@ -52,13 +52,13 @@ public class GizmoModelRenderer extends Renderer<Scene, GizmoModel> {
 		material.bindProperties(cache, scene, shader);
 		
 		/*if(GameEngine.DEBUG.ignoreDepth)
-			GL30.glDisable(GL30.GL_DEPTH_TEST);*/
+			GL40.glDisable(GL40.GL_DEPTH_TEST);*/
 		
-		GL30.glLineWidth(model.getLineWidth());
-		GL30.glDrawElements(GL30.GL_LINES, gizmo.getVertexCount(), GL30.GL_UNSIGNED_INT, 0);
+		GL40.glLineWidth(model.getLineWidth());
+		GL40.glDrawElements(GL40.GL_LINES, gizmo.getVertexCount(), GL40.GL_UNSIGNED_INT, 0);
 		
-		GL30.glPolygonMode(GL30.GL_FRONT_AND_BACK, GL30.GL_FILL);
-		//GL30.glEnable(GL30.GL_DEPTH_TEST);
+		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_FILL);
+		//GL40.glEnable(GL40.GL_DEPTH_TEST);
 		
 		gizmo.unbind();
 	}

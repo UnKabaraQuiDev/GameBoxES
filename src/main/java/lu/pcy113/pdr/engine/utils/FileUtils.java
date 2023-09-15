@@ -27,7 +27,7 @@ public final class FileUtils {
 	}
 
 	public static String getShader(String string, int type) {
-		return readFile(RESOURCES+SHADERS+string+"/"+string+"."+(type == GL30.GL_VERTEX_SHADER ? "vert" : (type == GL30.GL_FRAGMENT_SHADER ? "frag" : null)));
+		return readFile(RESOURCES+SHADERS+string+"/"+string+"."+(type == GL40.GL_VERTEX_SHADER ? "vert" : (type == GL40.GL_FRAGMENT_SHADER ? "frag" : null)));
 	}*/
 	
 }
