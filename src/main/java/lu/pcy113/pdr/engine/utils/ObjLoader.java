@@ -7,6 +7,8 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 
+import lu.pcy113.pdr.engine.cache.attrib.FloatAttribArray;
+import lu.pcy113.pdr.engine.cache.attrib.IntAttribArray;
 import lu.pcy113.pdr.engine.geom.Mesh;
 
 public final class ObjLoader {
@@ -87,7 +89,13 @@ public final class ObjLoader {
 		}
 		
 		int[] indicesArr = indices.stream().mapToInt((v) -> v).toArray();
-		return new Mesh(name, verticesArr, normalsArr, uvsArr, indicesArr, material);
+		return new Mesh(
+				name,
+				material,
+				new FloatAttribArray("pos", 0, 3, verticesArr),
+				new IntAttribArray("ind", -1, 1, indicesArr),
+				new FloatAttribArray("norm", 1, 3, normalsArr),
+				new FloatAttribArray("uv", 2, 2, uvsArr));
 	}
 	
 	private static void processFace(String token, List<Vector3i> faces) {

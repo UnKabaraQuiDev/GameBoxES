@@ -23,10 +23,12 @@
 	</classpathentry>
 	<classpathentry kind="src" output="target/test-classes" path="src/test/java">
 		<attributes>
+			<attribute name="test" value="true"/>
 			<attribute name="optional" value="true"/>
 			<attribute name="maven.pomderived" value="true"/>
-			<attribute name="test" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/sdd2/workspaces/java2/PDRClient/libs/jbcodec-release_1.0.jar"/>
+	<classpathentry kind="lib" path="/sdd2/workspaces/java2/PDRClient/libs/packets4j-release_0.2.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
