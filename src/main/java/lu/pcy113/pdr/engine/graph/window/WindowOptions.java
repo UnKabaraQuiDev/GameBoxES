@@ -11,6 +11,6 @@ public class WindowOptions {
 	public boolean vsync = true;
 	public boolean resizable = true;
 	public Vector2i windowSize = new Vector2i(800, 600);
-	public String title = Consts.title;
+	public String title = Consts.TITLE;
 	
 }

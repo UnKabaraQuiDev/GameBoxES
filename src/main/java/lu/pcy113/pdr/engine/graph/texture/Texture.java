@@ -1,4 +1,4 @@
-package lu.pcy113.pdr.engine.graph;
+package lu.pcy113.pdr.engine.graph.texture;
 
 import java.nio.ByteBuffer;
 

@@ -5,7 +5,7 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 
 import lu.pcy113.pdr.engine.cache.CacheManager;
-import lu.pcy113.pdr.engine.graph.Texture;
+import lu.pcy113.pdr.engine.graph.texture.Texture;
 import lu.pcy113.pdr.engine.scene.Scene;
 import lu.pcy113.pdr.utils.Logger;
 

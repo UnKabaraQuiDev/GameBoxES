@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import lu.pcy113.pdr.engine.geom.Mesh;
-import lu.pcy113.pdr.engine.graph.Texture;
 import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.render.Renderer;
+import lu.pcy113.pdr.engine.graph.texture.Texture;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.objs.Model;
 import lu.pcy113.pdr.engine.objs.PointLight;
