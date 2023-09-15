@@ -1,5 +1,0 @@
-[17:44:31][INFO](lu.pcy113.pdr.client.ClientMain#main@22) Starting
-[17:44:31][FINEST](lu.pcy113.pdr.client.game.PDRClientGame#<init>@45) <- lu.pcy113.pdr.client.ClientMain#main@30
-[17:44:31][FINEST](lu.pcy113.pdr.engine.graph.window.Window#<init>@41) <- lu.pcy113.pdr.engine.GameEngine#<init>@26
-[17:44:32][FINEST](lu.pcy113.pdr.client.game.PDRClientGame#init@50) <- lu.pcy113.pdr.engine.GameEngine#start@81
-[17:44:36][INFO](lu.pcy113.pdr.client.ClientMain#main@39) Stopped after 4663ms
