@@ -97,34 +97,35 @@ public class DebugOptions {
 	public Vector4f wireframeColor = new Vector4f(1, 0, 0, 1);
 	
 	public void wireframe(CacheManager cache, Scene scene, Mesh mesh, Matrix4f projectionMatrix, Matrix4f viewMatrix, Matrix4f modelMatrix) {
-		if(GameEngine.DEBUG.wireframe) {
-			GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_LINE);
-			Material deb = cache.getMaterial(WireframeMaterial.NAME);
-			if(deb == null) {
-				deb = new WireframeMaterial();
-				cache.addShader(new WireframeShader());
-				cache.addMaterial(deb);
-			}
-			Shader debShader = cache.getShader(deb.getShader());
-			debShader.bind();
-			
-			deb.setProperty(Shader.PROJECTION_MATRIX, projectionMatrix);
-			deb.setProperty(Shader.VIEW_MATRIX, viewMatrix);
-			if(modelMatrix != null)
-				deb.setProperty(Shader.TRANSFORMATION_MATRIX, modelMatrix);
-			else
-				deb.setProperty(Shader.TRANSFORMATION_MATRIX, new Matrix4f());
-			deb.setProperty(WireframeShader.COLOR, wireframeColor);
-			deb.bindProperties(cache, scene, debShader);
-			
-			if(GameEngine.DEBUG.ignoreDepth)
-				GL40.glDisable(GL40.GL_DEPTH_TEST);
-			
-			GL40.glDrawElements(GL40.GL_TRIANGLES, mesh.getVertexCount(), GL40.GL_UNSIGNED_INT, 0);
-			
-			GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_FILL);
-			GL40.glEnable(GL40.GL_DEPTH_TEST);
+		if(!wireframe)
+			return;
+		
+		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_LINE);
+		Material deb = cache.getMaterial(WireframeMaterial.NAME);
+		if(deb == null) {
+			deb = new WireframeMaterial();
+			cache.addShader(new WireframeShader());
+			cache.addMaterial(deb);
 		}
+		Shader debShader = cache.getShader(deb.getShader());
+		debShader.bind();
+		
+		deb.setProperty(Shader.PROJECTION_MATRIX, projectionMatrix);
+		deb.setProperty(Shader.VIEW_MATRIX, viewMatrix);
+		if(modelMatrix != null)
+			deb.setProperty(Shader.TRANSFORMATION_MATRIX, modelMatrix);
+		else
+			deb.setProperty(Shader.TRANSFORMATION_MATRIX, new Matrix4f());
+		deb.setProperty(WireframeShader.COLOR, wireframeColor);
+		deb.bindProperties(cache, scene, debShader);
+		
+		if(GameEngine.DEBUG.ignoreDepth)
+			GL40.glDisable(GL40.GL_DEPTH_TEST);
+		
+		GL40.glDrawElements(GL40.GL_TRIANGLES, mesh.getVertexCount(), GL40.GL_UNSIGNED_INT, 0);
+		
+		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_FILL);
+		GL40.glEnable(GL40.GL_DEPTH_TEST);
 	}
 	
 }
