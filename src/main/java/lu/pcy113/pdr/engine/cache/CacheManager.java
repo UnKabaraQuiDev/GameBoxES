@@ -5,6 +5,7 @@ import java.util.Map;
 
 import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.geom.Mesh;
+import lu.pcy113.pdr.engine.graph.composition.RenderLayer;
 import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.render.Renderer;
@@ -28,6 +29,7 @@ public class CacheManager implements Cleanupable {
 	protected Map<String, PointLight> pointLights;
 	protected Map<String, Gizmo> gizmos;
 	protected Map<String, GizmoModel> gizmoModels;
+	protected Map<String, RenderLayer> renderLayers;
 	
 	public CacheManager() {
 		this.meshes = new HashMap<>();
@@ -40,6 +42,7 @@ public class CacheManager implements Cleanupable {
 		this.pointLights = new HashMap<>();
 		this.gizmos = new HashMap<>();
 		this.gizmoModels = new HashMap<>();
+		this.renderLayers = new HashMap<>();
 	}
 	
 	@Override
@@ -73,6 +76,9 @@ public class CacheManager implements Cleanupable {
 		
 		//gizmoModels.values().forEach(GizmoModel::cleanup);
 		gizmoModels.clear();
+		
+		renderLayers.values().forEach(RenderLayer::cleanup);
+		renderLayers.clear();
 	}
 	
 	public boolean addMesh(Mesh mesh) {
@@ -105,6 +111,9 @@ public class CacheManager implements Cleanupable {
 	public boolean addGizmoModel(GizmoModel gizmoModel) {
 		return this.gizmoModels.putIfAbsent(gizmoModel.getId(), gizmoModel) == null;
 	}
+	public boolean addRenderLayer(RenderLayer renderLayer) {
+		return this.renderLayers.putIfAbsent(renderLayer.getId(), renderLayer) == null;
+	}
 	
 	public Mesh getMesh(String name) {
 		return meshes.get(name);
@@ -136,6 +145,9 @@ public class CacheManager implements Cleanupable {
 	public GizmoModel getGizmoModel(String name) {
 		return gizmoModels.get(name);
 	}
+	public RenderLayer getRenderLayer(String name) {
+		return renderLayers.get(name);
+	}
 	
 	public Map<String, Mesh> getMeshes() {return meshes;}
 	public void setMeshes(Map<String, Mesh> meshes) {this.meshes = meshes;}
@@ -153,5 +165,7 @@ public class CacheManager implements Cleanupable {
 	public void setGizmos(Map<String, Gizmo> gizmos) {this.gizmos = gizmos;}
 	public Map<String, GizmoModel> getGizmoModels() {return gizmoModels;}
 	public void setGizmoModels(Map<String, GizmoModel> gizmoModels) {this.gizmoModels = gizmoModels;}
+	public Map<String, RenderLayer> getRenderLayers() {return renderLayers;}
+	public void setRenderLayers(Map<String, RenderLayer> renderLayers) {this.renderLayers = renderLayers;}
 	
 }

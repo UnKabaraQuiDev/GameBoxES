@@ -1,9 +1,10 @@
 package lu.pcy113.pdr.engine.scene;
 
 import lu.pcy113.pdr.engine.impl.Cleanupable;
+import lu.pcy113.pdr.engine.impl.Renderable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
 
-public abstract class Scene implements UniqueID, Cleanupable {
+public abstract class Scene implements UniqueID, Cleanupable, Renderable {
 	
 	protected final String name;
 	protected Camera camera;

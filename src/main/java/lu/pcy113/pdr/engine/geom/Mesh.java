@@ -10,10 +10,11 @@ import lu.pcy113.pdr.engine.cache.attrib.AttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.FloatAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.IntAttribArray;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
+import lu.pcy113.pdr.engine.impl.Renderable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
 import lu.pcy113.pdr.utils.Logger;
 
-public class Mesh implements UniqueID, Cleanupable {
+public class Mesh implements UniqueID, Cleanupable, Renderable {
 	
 	public static final String NAME = Mesh.class.getName();
 	

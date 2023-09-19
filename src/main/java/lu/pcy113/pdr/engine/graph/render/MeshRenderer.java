@@ -32,10 +32,13 @@ public class MeshRenderer extends Renderer<Scene3D, Mesh> {
 		
 		shader.bind();
 		
-		Matrix4f projectionMatrix = scene.getCamera().getProjection().getProjMatrix();
-		Matrix4f viewMatrix = scene.getCamera().getViewMatrix();
-		material.setProperty(Shader.PROJECTION_MATRIX, projectionMatrix);
-		material.setProperty(Shader.VIEW_MATRIX, viewMatrix);
+		Matrix4f projectionMatrix = null, viewMatrix = null;
+		if(scene != null) {
+			projectionMatrix = scene.getCamera().getProjection().getProjMatrix();
+			viewMatrix = scene.getCamera().getViewMatrix();
+			material.setProperty(Shader.PROJECTION_MATRIX, projectionMatrix);
+			material.setProperty(Shader.VIEW_MATRIX, viewMatrix);
+		}
 		material.bindProperties(cache, scene, shader);
 		
 		GL40.glDrawElements(GL40.GL_TRIANGLES, mesh.getVertexCount(), GL40.GL_UNSIGNED_INT, 0);

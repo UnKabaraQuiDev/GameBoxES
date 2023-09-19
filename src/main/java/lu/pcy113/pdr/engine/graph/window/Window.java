@@ -37,6 +37,8 @@ public class Window implements Cleanupable {
 	private GLFWJoystickCallback joystickCallback;
 	private GLFWFramebufferSizeCallback frameBufferCallback;
 	
+	private int width, height;
+	
 	public Window(WindowOptions options) {
 		Logger.log();
 		
@@ -84,6 +86,8 @@ public class Window implements Cleanupable {
 		if(onResize != null)
 			onResize.accept(w, h);
 		GL40.glViewport(0, 0, w, h);
+		this.width = w;
+		this.height = h;
 	}
 	private void callback_joystick(int jid, int event) {
 		if(event == GLFW.GLFW_CONNECTED) {
@@ -172,7 +176,9 @@ public class Window implements Cleanupable {
 	public Vector4f getBackground() {return background;}
 	public void setBackground(Vector4f background) {this.background = background;}
 	public WindowOptions getOptions() {return options;}
-
+	public int getWidth() {return width;}
+	public int getHeight() {return height;}
+	
 	public void onResize(BiConsumer<Integer, Integer> object) {this.onResize = object;}
 
 	public void runCallbacks() {

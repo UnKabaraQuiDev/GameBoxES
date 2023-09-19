@@ -2,9 +2,10 @@ package lu.pcy113.pdr.engine.graph.render;
 
 import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
+import lu.pcy113.pdr.engine.impl.Renderable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
 
-public abstract class Renderer<T, K> implements UniqueID, Cleanupable {
+public abstract class Renderer<T, K extends Renderable> implements UniqueID, Cleanupable {
 	
 	private final String clazz;
 	
