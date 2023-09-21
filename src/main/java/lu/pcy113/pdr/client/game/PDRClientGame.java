@@ -9,7 +9,6 @@ import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.graph.composition.Compositor;
 import lu.pcy113.pdr.engine.graph.composition.PassRenderLayer;
-import lu.pcy113.pdr.engine.graph.composition.RenderLayer;
 import lu.pcy113.pdr.engine.graph.composition.SceneRenderLayer;
 import lu.pcy113.pdr.engine.graph.composition.blur.gaussian.GaussianBlurMaterial;
 import lu.pcy113.pdr.engine.graph.composition.blur.gaussian.GaussianBlurShader;
