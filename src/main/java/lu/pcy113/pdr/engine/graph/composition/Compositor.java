@@ -18,7 +18,7 @@ public class Compositor {
 	protected LinkedList<String> layers = new LinkedList<>();
 	
 	public void render(CacheManager cache, GameEngine engine) {
-		int fbo = GL40.glGenFramebuffers();
+		/*int fbo = GL40.glGenFramebuffers();
 		GL40.glBindFramebuffer(GL40.GL_FRAMEBUFFER, fbo);
 		
 		if(GL40.glCheckFramebufferStatus(GL40.GL_FRAMEBUFFER) != GL40.GL_FRAMEBUFFER_COMPLETE) {
@@ -35,7 +35,7 @@ public class Compositor {
 		
 		GL40.glClearColor(background.x, background.y, background.z, background.w);
 		GL40.glClear(GL40.GL_COLOR_BUFFER_BIT | GL40.GL_DEPTH_BUFFER_BIT);
-		GL40.glEnable(GL40.GL_DEPTH_TEST);
+		GL40.glEnable(GL40.GL_DEPTH_TEST);*/
 		
 		for(String l : layers) {
 			RenderLayer rl = cache.getRenderLayer(l);

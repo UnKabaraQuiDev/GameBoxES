@@ -163,8 +163,8 @@ public class PDRClientGame implements GameLogic {
 		
 		compositor = new Compositor();
 		compositor.addRenderLayer(0, passRender.getId());
-		compositor.addRenderLayer(1, sceneRender.getId());
-		compositor.addRenderLayer(2, sceneRender.getId());
+		//compositor.addRenderLayer(1, sceneRender.getId());
+		//compositor.addRenderLayer(2, sceneRender.getId());
 		
 		engine.getWindow().onResize((w, h) -> scene.getCamera().getProjection().perspectiveUpdateMatrix(w, h));
 	}
