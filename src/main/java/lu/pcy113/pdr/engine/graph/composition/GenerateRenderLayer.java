@@ -10,13 +10,10 @@ import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 
-public class PassRenderLayer extends RenderLayer<GameEngine, Mesh> {
-	
-	public static final String SCREEN_WIDTH = "screen_width";
-	public static final String SCREEN_HEIGHT = "screen_height";
+public class GenerateRenderLayer extends RenderLayer<GameEngine, Mesh> {
 	
 	private static Mesh SCREEN = new Mesh(
-			"PASS_SCREEN", null,
+			"GEN_SCREEN", null,
 			new FloatAttribArray("pos", 0, 3, new float[] {
 					-1, 1, 0,
 					1, 1, 0,
@@ -28,16 +25,16 @@ public class PassRenderLayer extends RenderLayer<GameEngine, Mesh> {
 					0, 2, 3
 			}),
 			new FloatAttribArray("uv", 1, 2, new float[] {
-					0, 1,
+					-1, 1,
 					1, 1,
-					1, 0,
-					0, 0
+					1, -1,
+					-1, -1
 			})
 			);
 	
 	protected String material;
 	
-	public PassRenderLayer(String name, String material) {
+	public GenerateRenderLayer(String name, String material) {
 		super(name, SCREEN);
 		this.material = material;
 	}
@@ -61,19 +58,12 @@ public class PassRenderLayer extends RenderLayer<GameEngine, Mesh> {
 		
 		material.bindProperties(cache, this, shader);
 		
-		if(shader.hasUniform(SCREEN_WIDTH)) {
-			shader.setUniform(SCREEN_WIDTH, engine.getWindow().getWidth());
-		}
-		if(shader.hasUniform(SCREEN_HEIGHT)) {
-			shader.setUniform(SCREEN_HEIGHT, engine.getWindow().getHeight());
-		}
-		
 		//GL40.glDisable(GL40.GL_DEPTH_TEST);
-		//GL40.glDepthMask(false);
+		GL40.glDepthMask(false);
 		
 		GL40.glDrawElements(GL40.GL_TRIANGLES, target.getVertexCount(), GL40.GL_UNSIGNED_INT, 0);
 		
-		//GL40.glDepthMask(true);
+		GL40.glDepthMask(true);
 		
 		target.unbind();
 	}

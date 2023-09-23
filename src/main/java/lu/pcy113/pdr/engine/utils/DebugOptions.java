@@ -10,6 +10,10 @@ import lu.pcy113.pdr.engine.cache.attrib.FloatAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.IntAttribArray;
 import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.geom.Mesh;
+import lu.pcy113.pdr.engine.graph.composition.RenderLayer;
+import lu.pcy113.pdr.engine.graph.composition.debug.PerfHistoryLayer;
+import lu.pcy113.pdr.engine.graph.composition.debug.PerfHistoryLayerMaterial;
+import lu.pcy113.pdr.engine.graph.composition.debug.PerfHistoryLayerShader;
 import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.material.gizmo.GizmoMaterial;
@@ -19,6 +23,20 @@ import lu.pcy113.pdr.engine.graph.material.wireframe.WireframeShader;
 import lu.pcy113.pdr.engine.scene.Scene;
 
 public class DebugOptions {
+	
+	public boolean perfHistory = true;
+	
+	public void perfHistory(CacheManager cache, GameEngine engine, double deltaUpdate, double deltaRender, double timeUpdate, double timeRender) {
+		RenderLayer rl = cache.getRenderLayer(PerfHistoryLayer.NAME);
+		if(rl == null) {
+			rl = new PerfHistoryLayer();
+			cache.addRenderLayer(rl);
+			cache.addShader(new PerfHistoryLayerShader());
+			cache.addMaterial(new PerfHistoryLayerMaterial());
+		}
+		
+		((PerfHistoryLayer) rl).update(engine, deltaUpdate, deltaRender, timeUpdate, timeRender);
+	}
 	
 	public boolean ignoreDepth = true;
 	

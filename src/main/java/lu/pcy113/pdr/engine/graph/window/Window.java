@@ -171,6 +171,8 @@ public class Window implements Cleanupable {
 				0, 0,
 				!options.fullscreen ? options.windowSize.x : vidMode.width(), !options.fullscreen ? options.windowSize.y : vidMode.height(),
 				options.fps);
+		this.width = !options.fullscreen ? options.windowSize.x : vidMode.width();
+		this.height = !options.fullscreen ? options.windowSize.y : vidMode.height();
 	}
 	
 	public Vector4f getBackground() {return background;}
@@ -192,9 +194,18 @@ public class Window implements Cleanupable {
 	
 	@Override
 	public void cleanup() {
-		keyCallback.free();
-		joystickCallback.free();
-		frameBufferCallback.free();
+		if(keyCallback != null) {
+			keyCallback.free();
+			keyCallback = null;
+		}
+		if(joystickCallback != null) {
+			joystickCallback.free();
+			joystickCallback = null;
+		}
+		if(frameBufferCallback != null) {
+			frameBufferCallback.free();
+			frameBufferCallback = null;
+		}
 	}
 	
 }

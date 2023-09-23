@@ -1,5 +1,7 @@
 package lu.pcy113.pdr.engine.graph.render;
 
+import java.util.logging.Level;
+
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL40;
 
@@ -12,6 +14,7 @@ import lu.pcy113.pdr.engine.graph.material.gizmo.GizmoShader;
 import lu.pcy113.pdr.engine.objs.GizmoModel;
 import lu.pcy113.pdr.engine.scene.Camera3D;
 import lu.pcy113.pdr.engine.scene.Scene;
+import lu.pcy113.pdr.utils.Logger;
 
 public class GizmoModelRenderer extends Renderer<Scene, GizmoModel> {
 
@@ -21,7 +24,7 @@ public class GizmoModelRenderer extends Renderer<Scene, GizmoModel> {
 	
 	@Override
 	public void render(CacheManager cache, Scene scene, GizmoModel model) {
-		System.out.println("Gizmo : "+model.getId());
+		Logger.log(Level.INFO, "Gizmo : "+model.getId());
 		
 		Gizmo gizmo = cache.getGizmo(model.getGizmo());
 		if(gizmo == null)
@@ -64,6 +67,8 @@ public class GizmoModelRenderer extends Renderer<Scene, GizmoModel> {
 	}
 	
 	@Override
-	public void cleanup() {}
+	public void cleanup() {
+		super.cleanup();
+	}
 
 }

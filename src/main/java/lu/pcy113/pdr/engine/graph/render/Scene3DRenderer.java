@@ -1,11 +1,14 @@
 package lu.pcy113.pdr.engine.graph.render;
 
+import java.util.logging.Level;
+
 import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.objs.GizmoModel;
 import lu.pcy113.pdr.engine.objs.Model;
 import lu.pcy113.pdr.engine.scene.Scene3D;
+import lu.pcy113.pdr.utils.Logger;
 
 public class Scene3DRenderer extends Renderer<GameEngine, Scene3D> {
 	
@@ -15,7 +18,7 @@ public class Scene3DRenderer extends Renderer<GameEngine, Scene3D> {
 
 	@Override
 	public void render(CacheManager cache, GameEngine ge, Scene3D scene) {
-		System.out.println("Scene3D : "+scene.getId());
+		Logger.log(Level.INFO, "Scene3D : "+scene.getId());
 		
 		MeshRenderer meshRenderer = (MeshRenderer) cache.getRenderer(Mesh.NAME);
 		for(String meshId : scene.getMeshes()) {
@@ -41,7 +44,7 @@ public class Scene3DRenderer extends Renderer<GameEngine, Scene3D> {
 	
 	@Override
 	public void cleanup() {
-		
+		super.cleanup();
 	}
 	
 }

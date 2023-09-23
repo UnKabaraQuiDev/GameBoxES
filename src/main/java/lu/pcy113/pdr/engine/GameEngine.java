@@ -38,9 +38,12 @@ public class GameEngine implements Runnable, Cleanupable {
 		float deltaUpdate = 0;
 		float deltaFps = 0;
 		
-		long updateTime = startTime;
-		long renderTime = startTime;
-		long inputTime = startTime;
+		/* DEBUG */
+		long lRender = 0, lUpdate = 0, tRender = 0, tUpdate = 0;
+		
+		long lastUpdate = startTime;
+		long lastRender = startTime;
+		long lastInput = startTime;
 		while(!window.shouldClose() && running) {
 			window.pollEvents();
 			
@@ -49,25 +52,39 @@ public class GameEngine implements Runnable, Cleanupable {
 			deltaFps += (now - initialTime) / timeR;
 			
 			if(targetFps <= 0 || deltaFps >= 1) {
-				gameLogic.input(now - initialTime);
-				inputTime = now;
+				long start = System.nanoTime();
+				gameLogic.input(now - lastInput);
+				tUpdate = System.nanoTime() - start;
+				
+				lastInput = now;
 			}
 			
 			if(deltaUpdate >= 1) {
-				gameLogic.update(now - initialTime);
-				updateTime = now;
+				long start = System.nanoTime();
+				gameLogic.update(now - lastUpdate);
+				lUpdate = now - lastUpdate;
+				tUpdate += System.nanoTime() - start;
+				
+				lastUpdate = now;
 				deltaUpdate--;
 			}
 			
 			if(targetFps <= 0 || deltaFps >= 1) {
+				long start = System.nanoTime();
 				window.clear();
 				
-				gameLogic.render(deltaFps);
+				gameLogic.render(now - lastRender);
+				lRender = now - lastRender;
 				
 				window.swapBuffers();
-				renderTime = now;
+				tRender += System.nanoTime() - start;
+				
+				lastRender = now;
 				deltaFps--;
 			}
+			
+			if(DEBUG.perfHistory)
+				DEBUG.perfHistory(cache, this, lUpdate, lRender, tUpdate, tRender);
 			
 			initialTime = now;
 		}

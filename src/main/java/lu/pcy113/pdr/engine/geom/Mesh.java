@@ -19,8 +19,8 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 	public static final String NAME = Mesh.class.getName();
 	
 	protected final String name;
-	protected final int vao;
-	protected final HashMap<Integer, Integer> vbo = new HashMap<>();
+	protected int vao = -1;
+	protected HashMap<Integer, Integer> vbo = new HashMap<>();
 	protected String material;
 	
 	protected FloatAttribArray vertices;
@@ -47,10 +47,10 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 		
 		this.vertexCount = indices.getDataCount();
 		
-		System.out.println("vertices ("+(vertices.getLength()/3)+"*3): "+Arrays.toString(vertices.getData()));
+		//System.out.println("vertices ("+(vertices.getLength()/3)+"*3): "+Arrays.toString(vertices.getData()));
 		//System.out.println("normals ("+(normals.length/3)+"*3): "+Arrays.toString(normals));
 		//System.out.println("uvs ("+(uvs.length/2)+"*2): "+Arrays.toString(uvs));
-		System.out.println("indices ("+(indices.getDataCount()/3)+"*3): "+Arrays.toString(indices.getData()));
+		//System.out.println("indices ("+(indices.getDataCount()/3)+"*3): "+Arrays.toString(indices.getData()));
 		
 		//try(MemoryStack stack = MemoryStack.stackPush()) {
 			this.vao = GL40.glGenVertexArrays();
@@ -74,8 +74,6 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 			storeAttribArray(2, 2, uvs);*/
 			unbind();
 		//}
-			
-		System.out.println(vbo);
 	}
 	
 	protected void storeAttribArray(int index, int size, IntAttribArray data) {
@@ -112,8 +110,12 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 	
 	@Override
 	public void cleanup() {
+		if(vao == -1)
+			return;
+		
 		GL40.glDeleteVertexArrays(vao);
 		vbo.values().forEach(GL40::glDeleteBuffers);
+		vao = -1;
 	}
 	
 	@Override

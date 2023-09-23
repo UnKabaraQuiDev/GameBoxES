@@ -22,7 +22,7 @@ public abstract class Shader implements UniqueID, Cleanupable {
 	public static final String VIEW_POSITION = "viewPos";
 	
 	protected final String name;
-	protected final int shaderProgram;
+	protected int shaderProgram = -1;
 	protected Map<Integer, ShaderPart> parts;
 	protected Map<String, Integer> uniforms;
 	
@@ -65,6 +65,8 @@ public abstract class Shader implements UniqueID, Cleanupable {
 			GL40.glUniform3i(getUniform(key), ((Vector3i) value).x, ((Vector3i) value).y, ((Vector3i) value).z);
 		}else if(value instanceof Vector4f) {
 			GL40.glUniform4f(getUniform(key), ((Vector4f) value).x, ((Vector4f) value).y, ((Vector4f) value).z, ((Vector4f) value).w);
+		}else if(value instanceof Double) {
+			GL40.glUniform1d(getUniform(key), (double) value);
 		}
 	}
 	public int getUniform(String name) {
@@ -85,9 +87,11 @@ public abstract class Shader implements UniqueID, Cleanupable {
 	
 	@Override
 	public void cleanup() {
-		parts.values().forEach(ShaderPart::cleanup);
-		//parts.values().forEach(s -> {GL40.glDetachShader(shaderProgram, s.getSid()); s.cleanup();});
-		GL40.glDeleteProgram(shaderProgram);
+		if(shaderProgram != -1) {
+			parts.values().forEach(ShaderPart::cleanup);
+			GL40.glDeleteProgram(shaderProgram);
+			shaderProgram = -1;
+		}
 	}
 	
 	@Override

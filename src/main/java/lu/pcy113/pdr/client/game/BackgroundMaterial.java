@@ -7,7 +7,7 @@ public class BackgroundMaterial extends Material {
 	public static final String NAME = BackgroundMaterial.class.getName();
 	
 	public BackgroundMaterial(int index) {
-		super(NAME+"-"+index, null, null, BackgroundShader.NAME+"-"+index);
+		super(NAME+"-"+index, BackgroundShader.NAME+"-"+index);
 	}
 	
 }

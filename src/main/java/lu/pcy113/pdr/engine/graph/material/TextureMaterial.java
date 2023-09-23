@@ -6,15 +6,15 @@ import java.util.logging.Level;
 
 import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.graph.texture.Texture;
-import lu.pcy113.pdr.engine.scene.Scene;
+import lu.pcy113.pdr.engine.impl.Renderable;
 import lu.pcy113.pdr.utils.Logger;
 
 public class TextureMaterial extends Material {
 	
 	private Map<String, String> textures;
 	
-	public TextureMaterial(String name, String lights, String lightCount, String shader, Map<String, String> textures) {
-		super(name, lights, lightCount, shader);
+	public TextureMaterial(String name, /*String lights, String lightCount,*/ String shader, Map<String, String> textures) {
+		super(name, /*lights, lightCount,*/ shader);
 		
 		this.textures = textures;
 		int i = 0;
@@ -24,7 +24,7 @@ public class TextureMaterial extends Material {
 	}
 	
 	@Override
-	public void bindProperties(CacheManager cache, Scene scene, Shader shader) {
+	public void bindProperties(CacheManager cache, Renderable scene, Shader shader) {
 		super.bindProperties(cache, scene, shader);
 		
 		int i = 0;

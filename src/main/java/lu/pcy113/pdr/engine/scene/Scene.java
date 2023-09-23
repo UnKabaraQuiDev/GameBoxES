@@ -6,12 +6,19 @@ import lu.pcy113.pdr.engine.impl.UniqueID;
 
 public abstract class Scene implements UniqueID, Cleanupable, Renderable {
 	
-	protected final String name;
+	protected String name;
 	protected Camera camera;
 	
 	public Scene(String name, Camera cam) {
 		this.name = name;
 		this.camera = cam;
+	}
+	
+	@Override
+	public void cleanup() {
+		if(name != null) {
+			name = null;
+		}
 	}
 	
 	@Override

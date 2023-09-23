@@ -22,7 +22,9 @@ public class Scene3D extends Scene {
 	}
 	
 	@Override
-	public void cleanup() {}
+	public void cleanup() {
+		super.cleanup();
+	}
 	
 	public List<String> getMeshes() {return meshes;}
 	public List<String> getModels() {return models;}

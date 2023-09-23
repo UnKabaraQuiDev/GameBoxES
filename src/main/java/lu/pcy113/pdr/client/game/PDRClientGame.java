@@ -8,10 +8,14 @@ import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.graph.composition.Compositor;
+import lu.pcy113.pdr.engine.graph.composition.GenerateRenderLayer;
 import lu.pcy113.pdr.engine.graph.composition.PassRenderLayer;
 import lu.pcy113.pdr.engine.graph.composition.SceneRenderLayer;
 import lu.pcy113.pdr.engine.graph.composition.blur.gaussian.GaussianBlurMaterial;
 import lu.pcy113.pdr.engine.graph.composition.blur.gaussian.GaussianBlurShader;
+import lu.pcy113.pdr.engine.graph.composition.debug.PerfHistoryLayer;
+import lu.pcy113.pdr.engine.graph.composition.debug.PerfHistoryLayerMaterial;
+import lu.pcy113.pdr.engine.graph.composition.debug.PerfHistoryLayerShader;
 import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.material.gizmo.GizmoMaterial;
@@ -153,17 +157,22 @@ public class PDRClientGame implements GameLogic {
 		engine.getCache().addShader(blurRenderShader);
 		engine.getCache().addMaterial(blurRenderMaterial);
 		
-		PassRenderLayer passRender = new PassRenderLayer("background", passRenderMaterial.getId());
+		GenerateRenderLayer passRender = new GenerateRenderLayer("background", passRenderMaterial.getId());
 		engine.getCache().addRenderLayer(passRender);
 		SceneRenderLayer sceneRender = new SceneRenderLayer("scene", scene);
 		engine.getCache().addRenderLayer(sceneRender);
 		PassRenderLayer blurRender = new PassRenderLayer("blur", blurRenderMaterial.getId());
 		engine.getCache().addRenderLayer(blurRender);
+		PerfHistoryLayer perfRender = new PerfHistoryLayer();
+		engine.getCache().addShader(new PerfHistoryLayerShader());
+		engine.getCache().addMaterial(new PerfHistoryLayerMaterial());
+		engine.getCache().addRenderLayer(perfRender);
 		
 		compositor = new Compositor();
-		compositor.addRenderLayer(0, passRender.getId());
-		//compositor.addRenderLayer(1, sceneRender.getId());
-		//compositor.addRenderLayer(2, sceneRender.getId());
+		compositor.addRenderLayer(0, passRender);
+		compositor.addRenderLayer(1, sceneRender);
+		//compositor.addRenderLayer(0, blurRender);
+		//compositor.addRenderLayer(2, perfRender.getId());
 		
 		engine.getWindow().onResize((w, h) -> scene.getCamera().getProjection().perspectiveUpdateMatrix(w, h));
 	}

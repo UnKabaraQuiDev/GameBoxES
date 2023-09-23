@@ -7,7 +7,7 @@ public class GizmoMaterial extends Material {
 	public static final String NAME = GizmoMaterial.class.getName();
 	
 	public GizmoMaterial() {
-		super(NAME, null, null, GizmoShader.NAME);
+		super(NAME, GizmoShader.NAME);
 	}
 
 }

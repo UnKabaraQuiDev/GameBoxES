@@ -16,7 +16,7 @@ public class Gizmo implements UniqueID, Cleanupable, Renderable {
 	public static final String NAME = Gizmo.class.getName();
 	
 	protected final String name;
-	protected final int vao;
+	protected int vao = -1;
 	protected final HashMap<Integer, Integer> vbo = new HashMap<>();
 	
 	protected FloatAttribArray vertices;
@@ -90,8 +90,11 @@ public class Gizmo implements UniqueID, Cleanupable, Renderable {
 	
 	@Override
 	public void cleanup() {
-		GL40.glDeleteVertexArrays(vao);
-		vbo.values().forEach(GL40::glDeleteBuffers);
+		if(vao != -1) {
+			GL40.glDeleteVertexArrays(vao);
+			vbo.values().forEach(GL40::glDeleteBuffers);
+			vao = -1;
+		}
 	}
 	
 	@Override

@@ -1,5 +1,6 @@
 package lu.pcy113.pdr.engine.graph.composition.blur.gaussian;
 
+import lu.pcy113.pdr.engine.graph.composition.PassRenderLayer;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.material.ShaderPart;
 
@@ -16,8 +17,8 @@ public class GaussianBlurShader extends Shader {
 	
 	public GaussianBlurShader() {
 		super(NAME,
-				new ShaderPart("./resources/shaders/blur/gaussian.vert"),
-				new ShaderPart("./resources/shaders/blur/gaussian.frag"));
+				new ShaderPart("./resources/shaders/composite/plain.vert"),
+				new ShaderPart("./resources/shaders/composite/blur/gaussian.frag"));
 	}
 
 	@Override
@@ -30,6 +31,8 @@ public class GaussianBlurShader extends Shader {
 		getUniform(KERNEL);
 		getUniform(WIDTH);
 		getUniform(HEIGHT);
+		getUniform(PassRenderLayer.SCREEN_WIDTH);
+		getUniform(PassRenderLayer.SCREEN_HEIGHT);
 	}
 
 }

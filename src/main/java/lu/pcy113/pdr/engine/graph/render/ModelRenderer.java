@@ -1,5 +1,7 @@
 package lu.pcy113.pdr.engine.graph.render;
 
+import java.util.logging.Level;
+
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL40;
 
@@ -10,6 +12,7 @@ import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.objs.Model;
 import lu.pcy113.pdr.engine.scene.Scene3D;
+import lu.pcy113.pdr.utils.Logger;
 
 public class ModelRenderer extends Renderer<Scene3D, Model> {
 
@@ -19,7 +22,7 @@ public class ModelRenderer extends Renderer<Scene3D, Model> {
 
 	@Override
 	public void render(CacheManager cache, Scene3D scene, Model model) {
-		System.out.println("Model : "+model.getId());
+		Logger.log(Level.INFO, "Model : "+model.getId());
 		
 		Mesh mesh = cache.getMesh(model.getMesh());
 		if(mesh == null)
@@ -41,7 +44,7 @@ public class ModelRenderer extends Renderer<Scene3D, Model> {
 		material.setProperty(Shader.VIEW_MATRIX, viewMatrix);
 		material.setProperty(Shader.TRANSFORMATION_MATRIX, model.getTransform().getMatrix());
 		
-		material.bindLights(cache, scene.getPointLights());
+		//material.bindLights(cache, scene.getPointLights());
 		
 		material.bindProperties(cache, scene, shader);
 		
@@ -55,6 +58,8 @@ public class ModelRenderer extends Renderer<Scene3D, Model> {
 	}
 	
 	@Override
-	public void cleanup() {}
+	public void cleanup() {
+		super.cleanup();
+	}
 	
 }

@@ -12,7 +12,7 @@ public class Texture implements Cleanupable, UniqueID {
 	
 	private final String path;
 	private final String name;
-	private final int tid;
+	private int tid = -1;
 	
 	public Texture(String name, int w, int h, ByteBuffer buffer) {
 		this.name = name;
@@ -55,7 +55,10 @@ public class Texture implements Cleanupable, UniqueID {
 	
 	@Override
 	public void cleanup() {
-		GL40.glDeleteTextures(tid);
+		if(tid != -1) {
+			GL40.glDeleteTextures(tid);
+			tid = -1;
+		}
 	}
 
 	@Override

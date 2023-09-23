@@ -1,5 +1,7 @@
 package lu.pcy113.pdr.engine.graph.render;
 
+import java.util.logging.Level;
+
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL40;
 
@@ -9,6 +11,7 @@ import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.scene.Scene3D;
+import lu.pcy113.pdr.utils.Logger;
 
 public class MeshRenderer extends Renderer<Scene3D, Mesh> {
 
@@ -17,13 +20,8 @@ public class MeshRenderer extends Renderer<Scene3D, Mesh> {
 	}
 
 	@Override
-	public void cleanup() {
-		
-	}
-
-	@Override
 	public void render(CacheManager cache, Scene3D scene, Mesh mesh) {
-		System.out.println("Mesh : "+mesh.getId()+", vao:"+mesh.getVao()+", vec:"+mesh.getVertexCount()+", vbo:"+mesh.getVbo());
+		Logger.log(Level.INFO, "Mesh : "+mesh.getId()+", vao:"+mesh.getVao()+", vec:"+mesh.getVertexCount()+", vbo:"+mesh.getVbo());
 		
 		mesh.bind();
 		
@@ -47,6 +45,11 @@ public class MeshRenderer extends Renderer<Scene3D, Mesh> {
 		GameEngine.DEBUG.wireframe(cache, scene, mesh, projectionMatrix, viewMatrix, null);
 		
 		mesh.unbind();
+	}
+	
+	@Override
+	public void cleanup() {
+		super.cleanup();
 	}
 
 }

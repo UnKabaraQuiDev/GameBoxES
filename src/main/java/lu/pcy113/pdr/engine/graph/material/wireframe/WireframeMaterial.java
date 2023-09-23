@@ -7,7 +7,7 @@ public class WireframeMaterial extends Material {
 	public static final String NAME = WireframeMaterial.class.getName();
 	
 	public WireframeMaterial() {
-		super(NAME, null, null, WireframeShader.NAME);
+		super(NAME, WireframeShader.NAME);
 	}
 
 }

@@ -11,8 +11,8 @@ public class BackgroundShader extends Shader {
 	
 	public BackgroundShader(int index) {
 		super(NAME+"-"+index,
-				new ShaderPart("./resources/shaders/background/background-"+index+".frag"),
-				new ShaderPart("./resources/shaders/background/background-"+index+".vert"));
+				new ShaderPart("./resources/shaders/composite/background/background-"+index+".frag"),
+				new ShaderPart("./resources/shaders/composite/plain.vert"));
 	}
 	
 	@Override
