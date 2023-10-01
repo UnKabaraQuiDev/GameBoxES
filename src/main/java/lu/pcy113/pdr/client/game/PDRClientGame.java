@@ -13,6 +13,8 @@ import lu.pcy113.pdr.engine.graph.composition.PassRenderLayer;
 import lu.pcy113.pdr.engine.graph.composition.SceneRenderLayer;
 import lu.pcy113.pdr.engine.graph.composition.blur.gaussian.GaussianBlurMaterial;
 import lu.pcy113.pdr.engine.graph.composition.blur.gaussian.GaussianBlurShader;
+import lu.pcy113.pdr.engine.graph.composition.color_filter.ColorFilterMaterial;
+import lu.pcy113.pdr.engine.graph.composition.color_filter.ColorFilterShader;
 import lu.pcy113.pdr.engine.graph.composition.debug.PerfHistoryLayer;
 import lu.pcy113.pdr.engine.graph.composition.debug.PerfHistoryLayerMaterial;
 import lu.pcy113.pdr.engine.graph.composition.debug.PerfHistoryLayerShader;
@@ -168,11 +170,22 @@ public class PDRClientGame implements GameLogic {
 		engine.getCache().addMaterial(new PerfHistoryLayerMaterial());
 		engine.getCache().addRenderLayer(perfRender);
 		
+		ColorFilterMaterial colorFilterMaterial = new ColorFilterMaterial();
+		engine.getCache().addMaterial(colorFilterMaterial);
+		ColorFilterShader colorFilterShader = new ColorFilterShader();
+		engine.getCache().addShader(colorFilterShader);
+		PassRenderLayer colorFilterRender = new PassRenderLayer("colorFilter", colorFilterMaterial.getId());
+		engine.getCache().addRenderLayer(colorFilterRender);
+		
+		colorFilterMaterial.setMul(new Vector4f(1, 0, 1, 1));
+		//colorFilterMaterial.setAdd(new Vector4f(0, 1, 0, 0));
+		
 		compositor = new Compositor();
 		compositor.addRenderLayer(0, passRender);
 		compositor.addRenderLayer(1, sceneRender);
 		//compositor.addRenderLayer(0, blurRender);
 		//compositor.addRenderLayer(2, perfRender.getId());
+		compositor.addRenderLayer(0, colorFilterRender);
 		
 		engine.getWindow().onResize((w, h) -> scene.getCamera().getProjection().perspectiveUpdateMatrix(w, h));
 	}

@@ -24,8 +24,8 @@ public class Window implements Cleanupable {
 	
 	private WindowOptions options;
 	
-	private final long monitor;
-	private final long handle;
+	private long monitor;
+	private long handle;
 	
 	private GLFWGamepadState gamepadState;
 	
@@ -36,6 +36,7 @@ public class Window implements Cleanupable {
 	private GLFWKeyCallback keyCallback;
 	private GLFWJoystickCallback joystickCallback;
 	private GLFWFramebufferSizeCallback frameBufferCallback;
+	private GLFWErrorCallback errorCallback;
 	
 	private int width, height;
 	
@@ -44,7 +45,8 @@ public class Window implements Cleanupable {
 		
 		this.options = options;
 		
-		GLFWErrorCallback.createPrint(System.err).set();
+		errorCallback = GLFWErrorCallback.createPrint(System.err);
+		errorCallback.set();
 		
 		if(!GLFW.glfwInit())
 			throw new RuntimeException("Failed to initialize GLFW");
@@ -60,8 +62,8 @@ public class Window implements Cleanupable {
 		
 		GLFW.glfwDefaultWindowHints();
 		GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);
-		GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 3);
-		GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 3);
+		GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 4);
+		GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 0);
 		GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_PROFILE, GLFW.GLFW_OPENGL_CORE_PROFILE);
 		GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_FORWARD_COMPAT, GLFW.GLFW_TRUE);
 		GL40.glEnable(GL40.GL_DEPTH_TEST);
@@ -205,6 +207,18 @@ public class Window implements Cleanupable {
 		if(frameBufferCallback != null) {
 			frameBufferCallback.free();
 			frameBufferCallback = null;
+		}
+		if(errorCallback != null) {
+			errorCallback.free();
+			errorCallback = null;
+		}
+		if(handle != -1) {
+			GLFW.glfwDestroyWindow(handle);
+			GLFW.glfwTerminate();
+			handle = -1;
+		}
+		if(GL.getCapabilities() != null) {
+			GL.setCapabilities(null);
 		}
 	}
 	
