@@ -172,8 +172,8 @@ public class PDRClientGame implements GameLogic {
 		
 		ColorFilterMaterial colorFilterMaterial = new ColorFilterMaterial();
 		engine.getCache().addMaterial(colorFilterMaterial);
-		ColorFilterShader colorFilterShader = new ColorFilterShader();
-		engine.getCache().addShader(colorFilterShader);
+		//ColorFilterShader colorFilterShader = new ColorFilterShader();
+		//engine.getCache().addShader(colorFilterShader);
 		PassRenderLayer colorFilterRender = new PassRenderLayer("colorFilter", colorFilterMaterial.getId());
 		engine.getCache().addRenderLayer(colorFilterRender);
 		
