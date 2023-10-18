@@ -12,8 +12,8 @@ import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.material.gizmo.GizmoMaterial;
 import lu.pcy113.pdr.engine.graph.material.gizmo.GizmoShader;
 import lu.pcy113.pdr.engine.objs.GizmoModel;
-import lu.pcy113.pdr.engine.scene.Camera3D;
 import lu.pcy113.pdr.engine.scene.Scene;
+import lu.pcy113.pdr.engine.scene.camera.Camera3D;
 import lu.pcy113.pdr.utils.Logger;
 
 public class GizmoModelRenderer extends Renderer<Scene, GizmoModel> {

@@ -64,5 +64,6 @@ public class Texture implements Cleanupable, UniqueID {
 	@Override
 	public String getId() {return name;}
 	public int getTid() {return tid;}
+	public String getPath() {return path;}
 	
 }

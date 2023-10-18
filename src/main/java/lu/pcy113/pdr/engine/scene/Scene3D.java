@@ -3,6 +3,8 @@ package lu.pcy113.pdr.engine.scene;
 import java.util.ArrayList;
 import java.util.List;
 
+import lu.pcy113.pdr.engine.scene.camera.Camera;
+
 public class Scene3D extends Scene {
 	
 	public static final String NAME = Scene3D.class.getName();

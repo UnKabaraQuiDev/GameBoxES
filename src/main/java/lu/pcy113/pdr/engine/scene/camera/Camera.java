@@ -1,4 +1,4 @@
-package lu.pcy113.pdr.engine.scene;
+package lu.pcy113.pdr.engine.scene.camera;
 
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;

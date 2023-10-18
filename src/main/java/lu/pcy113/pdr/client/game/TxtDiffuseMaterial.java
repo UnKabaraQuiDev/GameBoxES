@@ -8,8 +8,8 @@ import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.material.TextureMaterial;
 import lu.pcy113.pdr.engine.impl.Renderable;
-import lu.pcy113.pdr.engine.scene.Camera3D;
 import lu.pcy113.pdr.engine.scene.Scene;
+import lu.pcy113.pdr.engine.scene.camera.Camera3D;
 
 public class TxtDiffuseMaterial extends TextureMaterial {
 
