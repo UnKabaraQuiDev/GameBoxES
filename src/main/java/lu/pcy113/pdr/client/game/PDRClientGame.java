@@ -13,12 +13,12 @@ import lu.pcy113.pdr.engine.graph.composition.PassRenderLayer;
 import lu.pcy113.pdr.engine.graph.composition.SceneRenderLayer;
 import lu.pcy113.pdr.engine.graph.composition.blur.gaussian.GaussianBlurMaterial;
 import lu.pcy113.pdr.engine.graph.composition.blur.gaussian.GaussianBlurShader;
-import lu.pcy113.pdr.engine.graph.composition.color_filter.ColorFilterMaterial;
 import lu.pcy113.pdr.engine.graph.composition.debug.PerfHistoryLayer;
 import lu.pcy113.pdr.engine.graph.composition.debug.PerfHistoryLayerMaterial;
 import lu.pcy113.pdr.engine.graph.composition.debug.PerfHistoryLayerShader;
 import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.Shader;
+import lu.pcy113.pdr.engine.graph.material.components.PointLightMaterialComponent;
 import lu.pcy113.pdr.engine.graph.material.gizmo.GizmoMaterial;
 import lu.pcy113.pdr.engine.graph.render.GizmoModelRenderer;
 import lu.pcy113.pdr.engine.graph.render.MeshRenderer;
@@ -33,6 +33,7 @@ import lu.pcy113.pdr.engine.objs.entity.Entity;
 import lu.pcy113.pdr.engine.objs.entity.components.GizmoModelComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.ModelComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.PointLightComponent;
+import lu.pcy113.pdr.engine.objs.entity.components.PointLightSurfaceComponent;
 import lu.pcy113.pdr.engine.scene.Scene3D;
 import lu.pcy113.pdr.engine.scene.camera.Camera3D;
 import lu.pcy113.pdr.engine.utils.ObjLoader;
@@ -80,14 +81,16 @@ public class PDRClientGame implements GameLogic {
 		this.specTexture = new Texture("cube-specTexture", "./resources/textures/default.png");
 		engine.getCache().addTexture(specTexture);
 		
-		this.txtMaterial = new TxtDiffuseMaterial("txtDiffuse", diffTexture.getId(), new Vector3f(1), specTexture.getId(), 0.5f);
+		this.txtMaterial = new TxtDiffuseMaterial("txtDiffuse", diffTexture.getId(), new Vector3f(1), specTexture.getId(), 0.5f)
+				.addComponent(new PointLightMaterialComponent("lights", "lightCount", 10));
 		engine.getCache().addMaterial(txtMaterial);
 		
 		
 		this.diffShader = new DiffuseShader();
 		engine.getCache().addShader(diffShader);
 		
-		this.material = new DiffuseMaterial("diffuse", new Vector3f(1, 0.5f, 0.5f), new Vector3f(0.5f, 0.2f, 0), new Vector3f(1), 0.5f);
+		this.material = new DiffuseMaterial("diffuse", new Vector3f(1, 0.5f, 0.5f), new Vector3f(0.5f, 0.2f, 0), new Vector3f(1), 0.5f)
+				.addComponent(new PointLightMaterialComponent("lights", "lightCount", 10));
 		engine.getCache().addMaterial(material);
 		
 		Mesh chestMesh = ObjLoader.loadMesh("chest-mesh", GizmoMaterial.NAME, "./resources/models/chest.obj");
@@ -123,11 +126,20 @@ public class PDRClientGame implements GameLogic {
 		engine.getCache().addModel(model2);
 		
 		this.scene = new Scene3D("main-scene");
-		this.scene.addEntity(new Entity().addComponent(new ModelComponent(model)));
-		this.scene.addEntity(new Entity().addComponent(new ModelComponent(model1)));
-		this.scene.addEntity(new Entity().addComponent(new ModelComponent(model2)));
-		this.scene.addEntity(new Entity().addComponent(new PointLightComponent(light)));
-		this.scene.addEntity(new Entity().addComponent(new ModelComponent(chestModel)));
+		this.scene.addEntity("model", new Entity()
+				.addComponent(new ModelComponent(model))
+				.addComponent(new PointLightSurfaceComponent()));
+		this.scene.addEntity("model1", new Entity()
+				.addComponent(new ModelComponent(model1))
+				.addComponent(new PointLightSurfaceComponent()));
+		this.scene.addEntity("model2", new Entity()
+				.addComponent(new ModelComponent(model2))
+				.addComponent(new PointLightSurfaceComponent()));
+		this.scene.addEntity("light", new Entity()
+				.addComponent(new PointLightComponent(light)));
+		this.scene.addEntity("chestModel", new Entity()
+				.addComponent(new ModelComponent(chestModel))
+				.addComponent(new PointLightSurfaceComponent()));
 		engine.getCache().addScene(scene);
 		
 		Gizmo gizmo = ObjLoader.loadGizmo("gizmo", "./resources/models/cube_wireframe.obj");
@@ -136,7 +148,7 @@ public class PDRClientGame implements GameLogic {
 		
 		engine.getCache().addGizmo(gizmo);
 		engine.getCache().addGizmoModel(gizmoModel);
-		this.scene.addEntity(new Entity().addComponent(new GizmoModelComponent(gizmoModel)));
+		this.scene.addEntity("gizmoModel", new Entity().addComponent(new GizmoModelComponent(gizmoModel)));
 		
 		Gizmo gizmoAxisGrid = ObjLoader.loadGizmo("gizmoGrid", "./resources/models/axis_grid.obj");
 		GizmoModel gizmoModelAxisGrid = new GizmoModel("gizmoModelGridXYZ", gizmoAxisGrid.getId(), new Transform3D());
@@ -144,7 +156,7 @@ public class PDRClientGame implements GameLogic {
 		
 		engine.getCache().addGizmo(gizmoAxisGrid);
 		engine.getCache().addGizmoModel(gizmoModelAxisGrid);
-		this.scene.addEntity(new Entity().addComponent(new GizmoModelComponent(gizmoModelAxisGrid)));
+		this.scene.addEntity("gizmoModelAxisGrid", new Entity().addComponent(new GizmoModelComponent(gizmoModelAxisGrid)));
 		
 		this.scene3DRenderer = new Scene3DRenderer();
 		engine.getCache().addRenderer(scene3DRenderer);

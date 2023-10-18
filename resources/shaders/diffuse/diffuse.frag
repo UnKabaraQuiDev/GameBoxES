@@ -52,7 +52,7 @@ void main()
 		diffuse += lights[i].color * diff;*/
 
 		PointLight light = lights[i];
-
+		fragColor = vec4(light.diffuseColor, 1);
 		vec3 lightDir = normalize(light.position - fragPos);
 		// diffuse shading
 		float diff = max(dot(normal, lightDir), 0.0);
@@ -71,6 +71,6 @@ void main()
 	}
 
 	vec3 result = (ambient + diffuse + specular);
-	fragColor = vec4(result, 1.0);
+	//fragColor = vec4(result, 1.0);
 
 }

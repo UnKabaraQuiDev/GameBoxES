@@ -1,10 +1,11 @@
 package lu.pcy113.pdr.engine.objs.entity.components;
 
 import lu.pcy113.pdr.engine.cache.CacheManager;
+import lu.pcy113.pdr.engine.impl.Renderable;
 import lu.pcy113.pdr.engine.objs.GizmoModel;
 import lu.pcy113.pdr.engine.objs.entity.Component;
 
-public class GizmoModelComponent extends Component {
+public class GizmoModelComponent extends Component implements Renderable {
 	
 	private String gizmoModelId;
 	
@@ -14,8 +15,6 @@ public class GizmoModelComponent extends Component {
 	public GizmoModelComponent(String gizmoModelId) {
 		this.gizmoModelId = gizmoModelId;
 	}
-	
-	public void render(float dRender) {}
 	
 	public String getGizmoModelId() {return gizmoModelId;}
 	public void setGizmoModelId(String gizmoModelId) {this.gizmoModelId = gizmoModelId;}

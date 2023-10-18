@@ -32,7 +32,7 @@ public class TxtDiffuseMaterial extends TextureMaterial {
 	@Override
 	public void bindProperties(CacheManager cache, Renderable scene, Shader shader) {
 		if(scene instanceof Scene)
-		super.setProperty(DiffuseShader.VIEW_POS, ((Camera3D) ((Scene) scene).getCamera()).getPosition());
+			super.setProperty(DiffuseShader.VIEW_POS, ((Camera3D) ((Scene) scene).getCamera()).getPosition());
 		
 		super.bindProperties(cache, scene, shader);
 	}

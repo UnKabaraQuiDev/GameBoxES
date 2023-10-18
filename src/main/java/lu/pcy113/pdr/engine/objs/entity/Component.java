@@ -5,7 +5,7 @@ public class Component {
 	private Entity parent;
 	
 	public boolean attach(Entity parent) {
-		if(parent != null)
+		if(this.parent  != null)
 			return false;
 		this.parent = parent;
 		return true;

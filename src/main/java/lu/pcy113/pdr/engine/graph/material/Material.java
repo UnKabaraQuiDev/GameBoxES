@@ -3,22 +3,21 @@ package lu.pcy113.pdr.engine.graph.material;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import lu.pcy113.pdr.engine.cache.CacheManager;
+import lu.pcy113.pdr.engine.graph.material.components.MaterialComponent;
 import lu.pcy113.pdr.engine.impl.Renderable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
 
 public class Material implements UniqueID {
 	
 	protected final String name;
-	//protected final String lights, lightCount;
 	protected Map<String, Object> properties;
 	protected String shader;
 	
 	public Material(String name, String shader) {
 		this.name = name;
-		/*this.lights = lights;
-		this.lightCount = lightCount;*/
 		this.properties = new HashMap<>();
 		this.shader = shader;
 	}
@@ -57,5 +56,31 @@ public class Material implements UniqueID {
 	public void setProperties(Map<String, Object> properties) {this.properties = properties;}
 	public String getShader() {return shader;}
 	public void setShader(String shader) {this.shader = shader;}
-
+	
+	/*
+	 * COMPONENTS
+	 */
+	private Map<Class<? extends MaterialComponent>, MaterialComponent> components = new HashMap<>();
+	
+	public Material addComponent(MaterialComponent component) {
+		if(component.attach(this))
+			components.put(component.getClass(), component);
+		return this;
+	}
+	
+	public <T extends MaterialComponent> T getComponent(Class<T> componentClass) {
+		return (T) components.get(componentClass);
+	}
+	public boolean hasComponent(Class<? extends MaterialComponent> clazz) {
+		return components
+				.keySet()
+				.stream()
+				.map(t -> clazz.isAssignableFrom(t))
+				.collect(Collectors.reducing((a, b) -> a || b))
+				.get();
+	}
+	
+	public Map<Class<? extends MaterialComponent>, MaterialComponent> getComponents() {return components;}
+	public void setComponents(Map<Class<? extends MaterialComponent>, MaterialComponent> components) {this.components = components;}
+	
 }

@@ -1,10 +1,11 @@
 package lu.pcy113.pdr.engine.objs.entity.components;
 
 import lu.pcy113.pdr.engine.cache.CacheManager;
+import lu.pcy113.pdr.engine.impl.Renderable;
 import lu.pcy113.pdr.engine.objs.Model;
 import lu.pcy113.pdr.engine.objs.entity.Component;
 
-public class ModelComponent extends Component {
+public class ModelComponent extends Component implements Renderable {
 	
 	private String modelId;
 	
@@ -14,9 +15,6 @@ public class ModelComponent extends Component {
 	public ModelComponent(String modelId) {
 		this.modelId = modelId;
 	}
-	
-	public void update(float dUpdate) {}
-	public void render(float dRender) {}
 	
 	public String getModelId() {return modelId;}
 	public void setModelId(String modelId) {this.modelId = modelId;}

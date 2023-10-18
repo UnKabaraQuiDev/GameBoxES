@@ -28,17 +28,14 @@ public class Scene3DRenderer extends Renderer<GameEngine, Scene3D> {
 		Logger.log(Level.INFO, "Scene3D : "+scene.getId());
 		
 		MeshRenderer meshRenderer = (MeshRenderer) cache.getRenderer(Mesh.NAME);
-		
 		ModelRenderer modelRenderer = (ModelRenderer) cache.getRenderer(Model.NAME);
-		
 		GizmoModelRenderer gizmoModelRenderer = (GizmoModelRenderer) cache.getRenderer(GizmoModel.NAME);
 		GizmoRenderer gizmoRenderer = (GizmoRenderer) cache.getRenderer(Gizmo.NAME);
 		
-		
-		for(Entity e : scene.getEntities()) {
+		for(Entity e : scene.getEntities().values()) {
 			Component c = null;
 			if((c = e.getComponent(ModelComponent.class)) != null) {
-				modelRenderer.render(cache, scene, ((ModelComponent) c).getModel(cache));
+				modelRenderer.render(cache, scene, (ModelComponent) c);
 			} else if((c = e.getComponent(MeshComponent.class)) != null) {
 				meshRenderer.render(cache, scene, ((MeshComponent) c).getMesh(cache));
 			}
