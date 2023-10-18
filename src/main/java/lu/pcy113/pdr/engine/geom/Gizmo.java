@@ -14,6 +14,8 @@ import lu.pcy113.pdr.engine.impl.UniqueID;
 public class Gizmo implements UniqueID, Cleanupable, Renderable {
 	
 	public static final String NAME = Gizmo.class.getName();
+
+	public static final float LINE_WIDTH = 2.5f;
 	
 	protected final String name;
 	protected int vao = -1;

@@ -1,5 +1,7 @@
 package lu.pcy113.pdr.engine.graph.composition;
 
+import java.util.logging.Level;
+
 import org.lwjgl.opengl.GL40;
 
 import lu.pcy113.pdr.engine.GameEngine;
@@ -9,6 +11,7 @@ import lu.pcy113.pdr.engine.cache.attrib.IntAttribArray;
 import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.Shader;
+import lu.pcy113.pdr.utils.Logger;
 
 public class PassRenderLayer extends RenderLayer<GameEngine, Mesh> {
 	
@@ -44,6 +47,8 @@ public class PassRenderLayer extends RenderLayer<GameEngine, Mesh> {
 	
 	@Override
 	public void render(CacheManager cache, GameEngine engine) {
+		Logger.log(Level.INFO, "PassRenderLayer : m:"+material);
+		
 		/*MeshRenderer renderer = (MeshRenderer) cache.getRenderer(Mesh.NAME);
 		if(renderer == null) {
 			Logger.log(Level.SEVERE, "No renderer found for: "+Mesh.NAME);
@@ -55,7 +60,11 @@ public class PassRenderLayer extends RenderLayer<GameEngine, Mesh> {
 		target.bind();
 		
 		Material material = cache.getMaterial(this.material);
+		if(material == null)
+			return;
 		Shader shader = cache.getShader(material.getShader());
+		if(shader == null)
+			return;
 		
 		shader.bind();
 		

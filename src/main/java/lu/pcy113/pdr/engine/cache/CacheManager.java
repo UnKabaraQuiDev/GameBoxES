@@ -81,38 +81,49 @@ public class CacheManager implements Cleanupable {
 		renderLayers.clear();
 	}
 	
-	public boolean addMesh(Mesh mesh) {
-		return this.meshes.putIfAbsent(mesh.getId(), mesh) == null;
+	public boolean addMesh(Mesh m) {
+		if(meshes.containsKey(m.getId())) meshes.remove(m.getId()).cleanup();
+		return this.meshes.putIfAbsent(m.getId(), m) == null;
 	}
-	public boolean addScene(Scene3D scene) {
-		return this.scenes.putIfAbsent(scene.getId(), scene) == null;
+	public boolean addScene(Scene3D m) {
+		if(scenes.containsKey(m.getId())) scenes.remove(m.getId()).cleanup();
+		return this.scenes.putIfAbsent(m.getId(), m) == null;
 	}
-	public boolean addRenderer(Renderer<?, ?> renderer) {
-		return this.renderers.putIfAbsent(renderer.getId(), renderer) == null;
+	public boolean addRenderer(Renderer<?, ?> m) {
+		if(renderers.containsKey(m.getId())) renderers.remove(m.getId()).cleanup();
+		return this.renderers.putIfAbsent(m.getId(), m) == null;
 	}
-	public boolean addMaterial(Material material) {
-		return this.materials.putIfAbsent(material.getId(), material) == null;
+	public boolean addMaterial(Material m) {
+		if(materials.containsKey(m.getId())) materials.remove(m.getId());
+		return this.materials.putIfAbsent(m.getId(), m) == null;
 	}
-	public boolean addShader(Shader shader) {
-		return this.shaders.putIfAbsent(shader.getId(), shader) == null;
+	public boolean addShader(Shader m) {
+		if(shaders.containsKey(m.getId())) shaders.remove(m.getId()).cleanup();
+		return this.shaders.putIfAbsent(m.getId(), m) == null;
 	}
-	public boolean addModel(Model model) {
-		return this.models.putIfAbsent(model.getId(), model) == null;
+	public boolean addModel(Model m) {
+		if(models.containsKey(m.getId())) models.remove(m.getId());
+		return this.models.putIfAbsent(m.getId(), m) == null;
 	}
-	public boolean addTexture(Texture texture) {
-		return this.textures.putIfAbsent(texture.getId(), texture) == null;
+	public boolean addTexture(Texture m) {
+		if(textures.containsKey(m.getId())) textures.remove(m.getId()).cleanup();
+		return this.textures.putIfAbsent(m.getId(), m) == null;
 	}
-	public boolean addPointLight(PointLight pointLight) {
-		return this.pointLights.putIfAbsent(pointLight.getId(), pointLight) == null;
+	public boolean addPointLight(PointLight m) {
+		if(pointLights.containsKey(m.getId())) pointLights.remove(m.getId());
+		return this.pointLights.putIfAbsent(m.getId(), m) == null;
 	}
-	public boolean addGizmo(Gizmo gizmo) {
-		return this.gizmos.putIfAbsent(gizmo.getId(), gizmo) == null;
+	public boolean addGizmo(Gizmo m) {
+		if(gizmos.containsKey(m.getId())) gizmos.remove(m.getId()).cleanup();
+		return this.gizmos.putIfAbsent(m.getId(), m) == null;
 	}
-	public boolean addGizmoModel(GizmoModel gizmoModel) {
-		return this.gizmoModels.putIfAbsent(gizmoModel.getId(), gizmoModel) == null;
+	public boolean addGizmoModel(GizmoModel m) {
+		if(gizmoModels.containsKey(m.getId())) gizmoModels.remove(m.getId());
+		return this.gizmoModels.putIfAbsent(m.getId(), m) == null;
 	}
-	public boolean addRenderLayer(RenderLayer renderLayer) {
-		return this.renderLayers.putIfAbsent(renderLayer.getId(), renderLayer) == null;
+	public boolean addRenderLayer(RenderLayer m) {
+		if(renderLayers.containsKey(m.getId())) renderLayers.remove(m.getId()).cleanup();
+		return this.renderLayers.putIfAbsent(m.getId(), m) == null;
 	}
 	
 	public Mesh getMesh(String name) {

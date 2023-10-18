@@ -4,9 +4,16 @@ import java.util.logging.Level;
 
 import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.cache.CacheManager;
+import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.objs.GizmoModel;
 import lu.pcy113.pdr.engine.objs.Model;
+import lu.pcy113.pdr.engine.objs.entity.Component;
+import lu.pcy113.pdr.engine.objs.entity.Entity;
+import lu.pcy113.pdr.engine.objs.entity.components.GizmoComponent;
+import lu.pcy113.pdr.engine.objs.entity.components.GizmoModelComponent;
+import lu.pcy113.pdr.engine.objs.entity.components.MeshComponent;
+import lu.pcy113.pdr.engine.objs.entity.components.ModelComponent;
 import lu.pcy113.pdr.engine.scene.Scene3D;
 import lu.pcy113.pdr.utils.Logger;
 
@@ -21,24 +28,25 @@ public class Scene3DRenderer extends Renderer<GameEngine, Scene3D> {
 		Logger.log(Level.INFO, "Scene3D : "+scene.getId());
 		
 		MeshRenderer meshRenderer = (MeshRenderer) cache.getRenderer(Mesh.NAME);
-		for(String meshId : scene.getMeshes()) {
-			Mesh mesh = cache.getMesh(meshId);
-			if(mesh != null)
-				meshRenderer.render(cache, scene, mesh);
-		}
 		
 		ModelRenderer modelRenderer = (ModelRenderer) cache.getRenderer(Model.NAME);
-		for(String modelId : scene.getModels()) {
-			Model model = cache.getModel(modelId);
-			if(model != null)
-				modelRenderer.render(cache, scene, model);
-		}
 		
 		GizmoModelRenderer gizmoModelRenderer = (GizmoModelRenderer) cache.getRenderer(GizmoModel.NAME);
-		for(String gizmoId : scene.getGizmoModels()) {
-			GizmoModel gizmo = cache.getGizmoModel(gizmoId);
-			if(gizmo != null)
-				gizmoModelRenderer.render(cache, scene, gizmo);
+		GizmoRenderer gizmoRenderer = (GizmoRenderer) cache.getRenderer(Gizmo.NAME);
+		
+		
+		for(Entity e : scene.getEntities()) {
+			Component c = null;
+			if((c = e.getComponent(ModelComponent.class)) != null) {
+				modelRenderer.render(cache, scene, ((ModelComponent) c).getModel(cache));
+			} else if((c = e.getComponent(MeshComponent.class)) != null) {
+				meshRenderer.render(cache, scene, ((MeshComponent) c).getMesh(cache));
+			}
+			if((c = e.getComponent(GizmoModelComponent.class)) != null) {
+				gizmoModelRenderer.render(cache, scene, ((GizmoModelComponent) c).getGizmoModel(cache));
+			}else if((c = e.getComponent(GizmoComponent.class)) != null) {
+				gizmoRenderer.render(cache, scene, ((GizmoComponent) c).getGizmo(cache));
+			}
 		}
 	}
 	

@@ -1,5 +1,6 @@
 package lu.pcy113.pdr.engine.objs;
 
+import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.impl.Renderable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
 import lu.pcy113.pdr.engine.utils.transform.Transform;
@@ -12,7 +13,7 @@ public class GizmoModel implements UniqueID, Renderable {
 	private String gizmo;
 	private Transform transform;
 	
-	protected float lineWidth = 2.5f;
+	protected float lineWidth = Gizmo.LINE_WIDTH;
 	
 	public GizmoModel(String name, String gizmo, Transform transform) {
 		this.name = name;

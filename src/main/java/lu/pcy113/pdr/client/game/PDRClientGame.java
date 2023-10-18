@@ -14,7 +14,6 @@ import lu.pcy113.pdr.engine.graph.composition.SceneRenderLayer;
 import lu.pcy113.pdr.engine.graph.composition.blur.gaussian.GaussianBlurMaterial;
 import lu.pcy113.pdr.engine.graph.composition.blur.gaussian.GaussianBlurShader;
 import lu.pcy113.pdr.engine.graph.composition.color_filter.ColorFilterMaterial;
-import lu.pcy113.pdr.engine.graph.composition.color_filter.ColorFilterShader;
 import lu.pcy113.pdr.engine.graph.composition.debug.PerfHistoryLayer;
 import lu.pcy113.pdr.engine.graph.composition.debug.PerfHistoryLayerMaterial;
 import lu.pcy113.pdr.engine.graph.composition.debug.PerfHistoryLayerShader;
@@ -30,6 +29,10 @@ import lu.pcy113.pdr.engine.logic.GameLogic;
 import lu.pcy113.pdr.engine.objs.GizmoModel;
 import lu.pcy113.pdr.engine.objs.Model;
 import lu.pcy113.pdr.engine.objs.PointLight;
+import lu.pcy113.pdr.engine.objs.entity.Entity;
+import lu.pcy113.pdr.engine.objs.entity.components.GizmoModelComponent;
+import lu.pcy113.pdr.engine.objs.entity.components.ModelComponent;
+import lu.pcy113.pdr.engine.objs.entity.components.PointLightComponent;
 import lu.pcy113.pdr.engine.scene.Scene3D;
 import lu.pcy113.pdr.engine.scene.camera.Camera3D;
 import lu.pcy113.pdr.engine.utils.ObjLoader;
@@ -120,11 +123,11 @@ public class PDRClientGame implements GameLogic {
 		engine.getCache().addModel(model2);
 		
 		this.scene = new Scene3D("main-scene");
-		this.scene.addModel(model.getId());
-		this.scene.addModel(model1.getId());
-		this.scene.addModel(model2.getId());
-		this.scene.addPointLight(light.getId());
-		this.scene.addModel(chestModel.getId());
+		this.scene.addEntity(new Entity().addComponent(new ModelComponent(model)));
+		this.scene.addEntity(new Entity().addComponent(new ModelComponent(model1)));
+		this.scene.addEntity(new Entity().addComponent(new ModelComponent(model2)));
+		this.scene.addEntity(new Entity().addComponent(new PointLightComponent(light)));
+		this.scene.addEntity(new Entity().addComponent(new ModelComponent(chestModel)));
 		engine.getCache().addScene(scene);
 		
 		Gizmo gizmo = ObjLoader.loadGizmo("gizmo", "./resources/models/cube_wireframe.obj");
@@ -133,7 +136,7 @@ public class PDRClientGame implements GameLogic {
 		
 		engine.getCache().addGizmo(gizmo);
 		engine.getCache().addGizmoModel(gizmoModel);
-		this.scene.addGizmoModel(gizmoModel.getId());
+		this.scene.addEntity(new Entity().addComponent(new GizmoModelComponent(gizmoModel)));
 		
 		Gizmo gizmoAxisGrid = ObjLoader.loadGizmo("gizmoGrid", "./resources/models/axis_grid.obj");
 		GizmoModel gizmoModelAxisGrid = new GizmoModel("gizmoModelGridXYZ", gizmoAxisGrid.getId(), new Transform3D());
@@ -141,7 +144,7 @@ public class PDRClientGame implements GameLogic {
 		
 		engine.getCache().addGizmo(gizmoAxisGrid);
 		engine.getCache().addGizmoModel(gizmoModelAxisGrid);
-		this.scene.addGizmoModel(gizmoModelAxisGrid.getId());
+		this.scene.addEntity(new Entity().addComponent(new GizmoModelComponent(gizmoModelAxisGrid)));
 		
 		this.scene3DRenderer = new Scene3DRenderer();
 		engine.getCache().addRenderer(scene3DRenderer);
@@ -170,7 +173,7 @@ public class PDRClientGame implements GameLogic {
 		engine.getCache().addMaterial(new PerfHistoryLayerMaterial());
 		engine.getCache().addRenderLayer(perfRender);
 		
-		ColorFilterMaterial colorFilterMaterial = new ColorFilterMaterial();
+		/*ColorFilterMaterial colorFilterMaterial = new ColorFilterMaterial();
 		engine.getCache().addMaterial(colorFilterMaterial);
 		//ColorFilterShader colorFilterShader = new ColorFilterShader();
 		//engine.getCache().addShader(colorFilterShader);
@@ -178,14 +181,14 @@ public class PDRClientGame implements GameLogic {
 		engine.getCache().addRenderLayer(colorFilterRender);
 		
 		colorFilterMaterial.setMul(new Vector4f(1, 0, 1, 1));
-		//colorFilterMaterial.setAdd(new Vector4f(0, 1, 0, 0));
+		//colorFilterMaterial.setAdd(new Vector4f(0, 1, 0, 0));*/
 		
 		compositor = new Compositor();
 		compositor.addRenderLayer(0, passRender);
 		compositor.addRenderLayer(1, sceneRender);
 		//compositor.addRenderLayer(0, blurRender);
 		//compositor.addRenderLayer(2, perfRender.getId());
-		compositor.addRenderLayer(0, colorFilterRender);
+		//compositor.addRenderLayer(0, colorFilterRender);
 		
 		engine.getWindow().onResize((w, h) -> scene.getCamera().getProjection().perspectiveUpdateMatrix(w, h));
 	}

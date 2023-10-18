@@ -11,24 +11,20 @@ import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.material.gizmo.GizmoMaterial;
 import lu.pcy113.pdr.engine.graph.material.gizmo.GizmoShader;
-import lu.pcy113.pdr.engine.objs.GizmoModel;
 import lu.pcy113.pdr.engine.scene.Scene;
 import lu.pcy113.pdr.engine.scene.camera.Camera3D;
 import lu.pcy113.pdr.utils.Logger;
 
-public class GizmoModelRenderer extends Renderer<Scene, GizmoModel> {
+public class GizmoRenderer extends Renderer<Scene, Gizmo> {
 
-	public GizmoModelRenderer() {
-		super(GizmoModel.class);
+	public GizmoRenderer() {
+		super(Gizmo.class);
 	}
 	
 	@Override
-	public void render(CacheManager cache, Scene scene, GizmoModel model) {
-		Logger.log(Level.INFO, "GizmoModel : "+model.getId());
+	public void render(CacheManager cache, Scene scene, Gizmo gizmo) {
+		Logger.log(Level.INFO, "Gizmo : "+gizmo.getId());
 		
-		Gizmo gizmo = cache.getGizmo(model.getGizmo());
-		if(gizmo == null)
-			return;
 		gizmo.bind();
 		
 		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_LINE);
@@ -46,7 +42,7 @@ public class GizmoModelRenderer extends Renderer<Scene, GizmoModel> {
 		Matrix4f viewMatrix = scene.getCamera().getViewMatrix();
 		material.setProperty(Shader.PROJECTION_MATRIX, projectionMatrix);
 		material.setProperty(Shader.VIEW_MATRIX, viewMatrix);
-		material.setProperty(Shader.TRANSFORMATION_MATRIX, model.getTransform().getMatrix());
+		//material.setProperty(Shader.TRANSFORMATION_MATRIX, model.getTransform().getMatrix());
 		//((Camera3D) scene.getCamera()).updateMatrix();
 		material.setProperty(Shader.VIEW_POSITION, ((Camera3D) scene.getCamera()).getPosition());
 		
@@ -57,7 +53,7 @@ public class GizmoModelRenderer extends Renderer<Scene, GizmoModel> {
 		/*if(GameEngine.DEBUG.ignoreDepth)
 			GL40.glDisable(GL40.GL_DEPTH_TEST);*/
 		
-		GL40.glLineWidth(model.getLineWidth());
+		GL40.glLineWidth(Gizmo.LINE_WIDTH);
 		GL40.glDrawElements(GL40.GL_LINES, gizmo.getVertexCount(), GL40.GL_UNSIGNED_INT, 0);
 		
 		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_FILL);
