@@ -31,7 +31,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/ssd2/workspaces/java2/JByteCodec/build/release_2_0/jbcodec-release_2.0.jar"/>
-	<classpathentry kind="lib" path="/ssd2/workspaces/java2/packets4j/build/release_0_2/packets4j-release_0.2.jar"/>
+	<classpathentry kind="lib" path="/home/pcy113/workspaces/java/packets4j/build/pre-release_0_3/packets4j-pre-release_0.3.jar"/>
+	<classpathentry kind="lib" path="/home/pcy113/workspaces/java/jbcodec/build/release_2_0/jbcodec-release_2.0.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

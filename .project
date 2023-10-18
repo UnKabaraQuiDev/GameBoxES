@@ -24,7 +24,7 @@
 		<link>
 			<name>PDRUtils</name>
 			<type>2</type>
-			<location>/ssd2/workspaces/java2/PDRUtils/src</location>
+			<locationURI>WORKSPACE_LOC/PDRUtils/src</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>
