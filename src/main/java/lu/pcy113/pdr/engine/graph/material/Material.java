@@ -3,12 +3,14 @@ package lu.pcy113.pdr.engine.graph.material;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.graph.material.components.MaterialComponent;
 import lu.pcy113.pdr.engine.impl.Renderable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
+import lu.pcy113.pdr.utils.Logger;
 
 public class Material implements UniqueID {
 	
@@ -25,7 +27,7 @@ public class Material implements UniqueID {
 	public void bindProperties(CacheManager cache, Renderable parent, Shader shader) {
 		for(Entry<String, Object> eso : properties.entrySet()) {
 			shader.setUniform(eso.getKey(), eso.getValue());
-			//System.out.println(name+" prop: "+eso.getKey()+" = "+eso.getValue());
+			Logger.log(Level.INFO, "Material "+name+"."+eso.getKey()+"="+eso.getValue());
 		}
 	}
 	

@@ -10,13 +10,9 @@ import lu.pcy113.pdr.engine.objs.entity.Component;
 public class PointLightSurfaceComponent extends Component {
 
 	public void bindLights(CacheManager cache, List<LightComponent> lights, Material mat) {
-		System.out.println(lights);
-		
 		PointLightMaterialComponent plm;
-		if((plm = mat.getComponent(PointLightMaterialComponent.class)) == null) {
-			System.err.println(mat.getId()+" is null");
+		if((plm = mat.getComponent(PointLightMaterialComponent.class)) == null)
 			return;
-		}
 		
 		int i = 0;
 		for(LightComponent lc : lights) {

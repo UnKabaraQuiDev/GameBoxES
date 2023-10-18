@@ -2,6 +2,7 @@ package lu.pcy113.pdr.engine.geom;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.logging.Level;
 
 import org.lwjgl.opengl.GL40;
 
@@ -10,6 +11,7 @@ import lu.pcy113.pdr.engine.cache.attrib.IntAttribArray;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.impl.Renderable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
+import lu.pcy113.pdr.utils.Logger;
 
 public class Gizmo implements UniqueID, Cleanupable, Renderable {
 	
@@ -44,9 +46,9 @@ public class Gizmo implements UniqueID, Cleanupable, Renderable {
 		
 		this.vertexCount = indices.getDataCount();
 		
-		System.out.println("gizmo vertices ("+(vertices.getLength()/3)+"*3): "+Arrays.toString(vertices.getData()));
-		System.out.println("gizmo color ("+(color.getLength()/4)+"*4): "+Arrays.toString(color.getData()));
-		System.out.println("gizmo indices ("+indices.getDataCount()+Arrays.toString(indices.getData()));
+		//System.out.println("gizmo vertices ("+(vertices.getLength()/3)+"*3): "+Arrays.toString(vertices.getData()));
+		//System.out.println("gizmo color ("+(color.getLength()/4)+"*4): "+Arrays.toString(color.getData()));
+		//System.out.println("gizmo indices ("+indices.getDataCount()+Arrays.toString(indices.getData()));
 		
 		this.vao = GL40.glGenVertexArrays();
 		bind();
@@ -55,7 +57,7 @@ public class Gizmo implements UniqueID, Cleanupable, Renderable {
 		storeAttribArray(1, 4, color);
 		unbind();
 			
-		System.out.println(vbo);
+		Logger.log(Level.INFO, "Gizmo "+name+": "+vao+" & ("+vbo+")");
 	}
 	
 	protected void storeAttribArray(int index, int size, IntAttribArray data) {

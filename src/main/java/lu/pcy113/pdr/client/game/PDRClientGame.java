@@ -156,7 +156,8 @@ public class PDRClientGame implements GameLogic {
 		
 		engine.getCache().addGizmo(gizmoAxisGrid);
 		engine.getCache().addGizmoModel(gizmoModelAxisGrid);
-		this.scene.addEntity("gizmoModelAxisGrid", new Entity().addComponent(new GizmoModelComponent(gizmoModelAxisGrid)));
+		this.scene.addEntity("gizmoModelAxisGrid", new Entity()
+				.addComponent(new GizmoModelComponent(gizmoModelAxisGrid)));
 		
 		this.scene3DRenderer = new Scene3DRenderer();
 		engine.getCache().addRenderer(scene3DRenderer);

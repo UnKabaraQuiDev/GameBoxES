@@ -31,8 +31,6 @@ public class PerfHistoryLayer extends PassRenderLayer {
 		this.timeRender.add(timeRender);
 		this.timeUpdate.add(timeUpdate);
 		
-		//System.out.println("deltaRender ("+this.deltaRender.size()+"): "+this.deltaRender);
-		
 		if(this.deltaRender.size() > PerfHistoryLayerShader.MAX)
 			this.deltaRender.removeFirst();
 		if(this.deltaUpdate.size() > PerfHistoryLayerShader.MAX)

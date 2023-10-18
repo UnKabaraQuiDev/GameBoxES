@@ -55,11 +55,8 @@ public class ModelRenderer extends Renderer<Scene3D, ModelComponent> {
 		material.setProperty(Shader.TRANSFORMATION_MATRIX, c.getTransform().getMatrix());
 		
 		PointLightSurfaceComponent plsc = co.getParent().getComponent(PointLightSurfaceComponent.class);
-		if(plsc != null) {
-			System.out.println("lights bound");
+		if(plsc != null)
 			plsc.bindLights(cache, scene.getLights(), material);
-		}
-		//material.bindLights(cache, scene.getPointLights());
 		
 		material.bindProperties(cache, scene, shader);
 		
