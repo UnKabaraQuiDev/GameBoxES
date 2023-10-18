@@ -18,7 +18,7 @@ vec3 hsv(float hue) {
 }
 
 void main() {
-	float x = fragCoord.x;
+	/*float x = fragCoord.x;
     float y = fragCoord.y;
     float scale = 20;
     float tScale = 2;
@@ -27,5 +27,6 @@ void main() {
     float ny = floor(y*scale)*tScale;
     float width = sin(nx)*0.5+0.5;
     float height = sin(ny*yScale)*0.5+0.5;
-    fragColor = vec4(hsv(cos(width)*0.5+0.5+0.45), 1.0) * (width * height);
+    fragColor = vec4(hsv(cos(width)*0.5+0.5+0.45), 1.0) * (width * height);*/
+    fragColor = vec4(0.2, 0.3, 0.4, 1.0);
 }

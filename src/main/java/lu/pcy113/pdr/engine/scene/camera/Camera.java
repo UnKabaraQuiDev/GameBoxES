@@ -23,7 +23,7 @@ public abstract class Camera {
 	public void setProjection(Projection projection) {this.projection = projection;}
 	
 	public static final Camera3D camera3D() {
-		return new Camera3D(new Vector3f(), new Quaternionf(), new Projection((float) Math.toRadians(60), 0.01f, 1000f));
+		return new Camera3D(new Vector3f(), new Quaternionf().identity(), new Projection((float) Math.toRadians(60), 0.01f, 1000f));
 	}
 	
 }

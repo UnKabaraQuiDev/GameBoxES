@@ -1,5 +1,9 @@
 package lu.pcy113.pdr.client.game;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFWGamepadState;
@@ -43,9 +47,6 @@ import lu.pcy113.pdr.utils.Logger;
 public class PDRClientGame implements GameLogic {
 	
 	private GameEngine engine;
-	
-	protected float camSpeed = 0.1f;
-	protected float camRotSpeed = (float) Math.toRadians(2.5);
 	
 	protected Mesh mesh;
 	protected Model model;
@@ -204,9 +205,24 @@ public class PDRClientGame implements GameLogic {
 		//compositor.addRenderLayer(0, colorFilterRender);
 		
 		engine.getWindow().onResize((w, h) -> scene.getCamera().getProjection().perspectiveUpdateMatrix(w, h));
+		
+		try {
+			fw = new FileWriter(new File("./logs/io.txt"));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 	}
 	
 	float GX = 0;
+	
+	protected float camSpeed = 0.1f;
+	protected float camRotSpeed = (float) Math.toRadians(2.5);
+	
+	protected FileWriter fw;
+	
+	private float applyThreshold(float axes, float f) {
+		return Math.abs(axes) < f ? 0 : axes;
+	}
 	
 	@Override
 	public void input(float dTime) {
@@ -214,23 +230,23 @@ public class PDRClientGame implements GameLogic {
 			if(engine.getWindow().updateGamepad(0)) {
 				GLFWGamepadState gps = engine.getWindow().getGamepad();
 				
-				float x = gps.axes(0);
-				float y = gps.axes(1);
+				float ax = applyThreshold(gps.axes(0), 0.01f);
+				float ay = applyThreshold(gps.axes(1), 0.01f)*(-1);
 				
-				float x2 = gps.axes(2);
-				float y2 = gps.axes(3);
+				float bx = applyThreshold(gps.axes(2), 0.01f);
+				float by = applyThreshold(gps.axes(3), 0.01f)*(-1);
 				
-				//System.out.println(x+" "+y+" : "+x2+" "+y2);
+				System.err.println("ax"+ax+" ay"+ay+" : bx"+bx+" by"+by);
+				try {
+					fw.write("ax"+ax+" ay"+ay+" : bx"+bx+" by"+by+"\n");
+					fw.flush();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 				
 				Camera3D cam = (Camera3D) scene.getCamera();
-				//cam.rotate(x2 * camRotSpeed, y2 * camRotSpeed);
-				//cam.moveLocal(x * camSpeed, y * camSpeed);
 				
-				cam.rotate(x2*camRotSpeed, y2*camRotSpeed);
-				cam.moveLocalXZ(x*camSpeed, y*camSpeed);
-				
-				/*((Transform3D) model.getTransform()).setRotation(cam.getRotation()).getRotation();//.mul(-1);
-				model.getTransform().updateMatrix();*/
+				cam.move(ax, ay, bx, by, camSpeed, camRotSpeed);
 				
 				cam.updateMatrix();
 				
