@@ -100,7 +100,7 @@ public class PDRClientGame implements GameLogic {
 		engine.getCache().addMesh(chestMesh);
 		engine.getCache().addModel(chestModel);
 		
-		this.mesh = ObjLoader.loadMesh("cube-mesh", txtMaterial.getId(), "./resources/models/cube.obj");
+		this.mesh = ObjLoader.loadMesh("cube-mesh", txtMaterial.getId(), "./resources/models/cube2.obj");
 		engine.getCache().addMesh(mesh);
 		
 		this.model = new Model("cube-model", mesh.getId(), new Transform3D());

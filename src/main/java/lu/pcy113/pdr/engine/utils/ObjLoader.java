@@ -53,9 +53,15 @@ public final class ObjLoader {
 				break;
 			}
 		}
+		
+		if(colors.isEmpty()) {
+			colors = null;
+		}
+		
 		List<Integer> indices = new ArrayList<>();
 		float[] verticesArr = new float[vertices.size() *3];
 		float[] colorArr = new float[vertices.size() *4];
+		
 		for(int i = 0; i < vertices.size(); i++) {
 			Vector3f pos = vertices.get(i);
 			
@@ -63,11 +69,13 @@ public final class ObjLoader {
 			verticesArr[i*3+1] = pos.y;
 			verticesArr[i*3+2] = pos.z;
 			
-			Vector4f col = colors.get(i);
-			colorArr[i*4+0] = col.x;
-			colorArr[i*4+1] = col.y;
-			colorArr[i*4+2] = col.z;
-			colorArr[i*4+3] = col.w;
+			if(colors != null) {
+				Vector4f col = colors.get(i);
+				colorArr[i*4+0] = col.x;
+				colorArr[i*4+1] = col.y;
+				colorArr[i*4+2] = col.z;
+				colorArr[i*4+3] = col.w;
+			}
 		}
 		
 		for(Vector2i edge : edges) {

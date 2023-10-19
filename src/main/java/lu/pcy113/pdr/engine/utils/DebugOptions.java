@@ -48,35 +48,7 @@ public class DebugOptions {
 			return;
 		
 		if(gizmoXYZ == null) {
-			gizmoXYZ = new Gizmo(
-					"xyz",
-					new FloatAttribArray("pos", 0, 3, new float[] {
-							// x
-							0, 0, 0,
-							1, 0, 0,
-							// y
-							0, 0, 0,
-							0, 1, 0,
-							// z
-							0, 0, 0,
-							0, 0, 1
-					}),
-					new IntAttribArray("ind", -1, 1, new int[] {
-							0, 1, // x
-							2, 3, // y
-							4, 5  // z
-					}),
-					new FloatAttribArray("col", 1, 4, new float[] {
-							// x
-							1, 0, 0, 1,
-							1, 0, 0, 1,
-							// y
-							0, 1, 0, 1,
-							0, 1, 0, 1,
-							// z
-							0, 0, 1, 1,
-							0, 0, 1, 1,
-					}));
+			gizmoXYZ = ObjLoader.loadGizmo("named_xyz", "./resources/models/gizmos/named_XYZ.obj");
 		}
 		
 		gizmoXYZ.bind();
