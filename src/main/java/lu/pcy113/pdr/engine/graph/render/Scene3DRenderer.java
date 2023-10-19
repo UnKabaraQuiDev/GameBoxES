@@ -14,6 +14,8 @@ import lu.pcy113.pdr.engine.objs.entity.components.GizmoComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.GizmoModelComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.MeshComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.ModelComponent;
+import lu.pcy113.pdr.engine.objs.entity.components.TextModelComponent;
+import lu.pcy113.pdr.engine.objs.text.TextModel;
 import lu.pcy113.pdr.engine.scene.Scene3D;
 import lu.pcy113.pdr.utils.Logger;
 
@@ -31,18 +33,23 @@ public class Scene3DRenderer extends Renderer<GameEngine, Scene3D> {
 		ModelRenderer modelRenderer = (ModelRenderer) cache.getRenderer(Model.NAME);
 		GizmoModelRenderer gizmoModelRenderer = (GizmoModelRenderer) cache.getRenderer(GizmoModel.NAME);
 		GizmoRenderer gizmoRenderer = (GizmoRenderer) cache.getRenderer(Gizmo.NAME);
+		TextModelRenderer textModelRenderer = (TextModelRenderer) cache.getRenderer(TextModel.NAME);
 		
 		for(Entity e : scene.getEntities().values()) {
 			Component c = null;
 			if((c = e.getComponent(ModelComponent.class)) != null) {
 				modelRenderer.render(cache, scene, (ModelComponent) c);
 			} else if((c = e.getComponent(MeshComponent.class)) != null) {
-				meshRenderer.render(cache, scene, ((MeshComponent) c).getMesh(cache));
+				meshRenderer.render(cache, scene, (MeshComponent) c);
 			}
 			if((c = e.getComponent(GizmoModelComponent.class)) != null) {
-				gizmoModelRenderer.render(cache, scene, ((GizmoModelComponent) c).getGizmoModel(cache));
+				gizmoModelRenderer.render(cache, scene, (GizmoModelComponent) c);
 			}else if((c = e.getComponent(GizmoComponent.class)) != null) {
-				gizmoRenderer.render(cache, scene, ((GizmoComponent) c).getGizmo(cache));
+				gizmoRenderer.render(cache, scene, (GizmoComponent) c);
+			}
+			if((c = e.getComponent(TextModelComponent.class)) != null) {
+				System.err.println(c);
+				textModelRenderer.render(cache, scene, (TextModelComponent) c);
 			}
 		}
 	}

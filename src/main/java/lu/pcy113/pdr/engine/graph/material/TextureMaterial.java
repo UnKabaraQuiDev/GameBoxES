@@ -13,8 +13,8 @@ public class TextureMaterial extends Material {
 	
 	private Map<String, String> textures;
 	
-	public TextureMaterial(String name, /*String lights, String lightCount,*/ String shader, Map<String, String> textures) {
-		super(name, /*lights, lightCount,*/ shader);
+	public TextureMaterial(String name, String shader, Map<String, String> textures) {
+		super(name, shader);
 		
 		this.textures = textures;
 		int i = 0;
@@ -35,7 +35,6 @@ public class TextureMaterial extends Material {
 				continue;
 			}
 			texture.bind(i++);
-			//shader.setUniform(txt.getKey(), txt.getValue());
 		}
 	}
 	

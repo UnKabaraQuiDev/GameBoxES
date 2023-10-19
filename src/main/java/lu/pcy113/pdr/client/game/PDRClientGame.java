@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFWGamepadState;
@@ -12,6 +13,7 @@ import lu.pcy113.pdr.client.game.options.KeyOptions;
 import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.geom.Mesh;
+import lu.pcy113.pdr.engine.geom.text.TextMesh;
 import lu.pcy113.pdr.engine.graph.composition.Compositor;
 import lu.pcy113.pdr.engine.graph.composition.GenerateRenderLayer;
 import lu.pcy113.pdr.engine.graph.composition.PassRenderLayer;
@@ -29,16 +31,15 @@ import lu.pcy113.pdr.engine.graph.render.GizmoModelRenderer;
 import lu.pcy113.pdr.engine.graph.render.MeshRenderer;
 import lu.pcy113.pdr.engine.graph.render.ModelRenderer;
 import lu.pcy113.pdr.engine.graph.render.Scene3DRenderer;
+import lu.pcy113.pdr.engine.graph.render.TextModelRenderer;
 import lu.pcy113.pdr.engine.graph.texture.Texture;
 import lu.pcy113.pdr.engine.logic.GameLogic;
 import lu.pcy113.pdr.engine.objs.GizmoModel;
 import lu.pcy113.pdr.engine.objs.Model;
 import lu.pcy113.pdr.engine.objs.PointLight;
 import lu.pcy113.pdr.engine.objs.entity.Entity;
-import lu.pcy113.pdr.engine.objs.entity.components.GizmoModelComponent;
-import lu.pcy113.pdr.engine.objs.entity.components.ModelComponent;
-import lu.pcy113.pdr.engine.objs.entity.components.PointLightComponent;
-import lu.pcy113.pdr.engine.objs.entity.components.PointLightSurfaceComponent;
+import lu.pcy113.pdr.engine.objs.entity.components.TextModelComponent;
+import lu.pcy113.pdr.engine.objs.text.TextModel;
 import lu.pcy113.pdr.engine.scene.Scene3D;
 import lu.pcy113.pdr.engine.scene.camera.Camera3D;
 import lu.pcy113.pdr.engine.utils.ObjLoader;
@@ -57,6 +58,9 @@ public class PDRClientGame implements GameLogic {
 	protected Scene3D scene;
 	protected PointLight light;
 	protected Scene3DRenderer scene3DRenderer;
+	protected FillTextShader fillTShader;
+	protected FillTextMaterial fillTMaterial;
+	protected TextModel tModel;
 	
 	protected Compositor compositor;
 	
@@ -71,8 +75,26 @@ public class PDRClientGame implements GameLogic {
 		this.engine = e;
 		GameEngine.DEBUG.wireframe = true;
 		GameEngine.DEBUG.wireframeColor = new Vector4f(0.2f, 0.2f, 0.2f, 0.2f);
-		//GameEngine.DEBUG.ignoreDepth = false;
+		GameEngine.DEBUG.gizmos = false;
 		
+		
+		this.fillTShader = new FillTextShader();
+		engine.getCache().addShader(fillTShader);
+		
+		Texture raster = new Texture("raster", "./resources/textures/fonts/font1.png");
+		engine.getCache().addTexture(raster);
+		
+		Texture rasterIndex = new Texture("rasterIndex", "./resources/textures/fonts/font1indices.png");
+		engine.getCache().addTexture(rasterIndex);
+		
+		this.fillTMaterial = new FillTextMaterial("fillTMaterial", raster.getId(), rasterIndex.getId(), new Vector4f(1, 0.5f, 0.5f, 1));
+		engine.getCache().addMaterial(fillTMaterial);
+		
+		TextMesh tMesh = new TextMesh(100);
+		engine.getCache().addMesh(tMesh);
+		
+		tModel = new TextModel("tModel", fillTMaterial.getId(), new Transform3D().scaleMul(0.3f, 0.3f, 0.3f), "Test Text", new Vector2f(0.3f, 0.3f));
+		engine.getCache().addTextModel(tModel);
 		
 		this.txtDiffShader = new TxtDiffuse1Shader();
 		engine.getCache().addShader(txtDiffShader);
@@ -128,7 +150,7 @@ public class PDRClientGame implements GameLogic {
 		engine.getCache().addModel(model2);
 		
 		this.scene = new Scene3D("main-scene");
-		this.scene.addEntity("model", new Entity()
+		/*this.scene.addEntity("model", new Entity()
 				.addComponent(new ModelComponent(model))
 				.addComponent(new PointLightSurfaceComponent()));
 		this.scene.addEntity("model1", new Entity()
@@ -141,7 +163,11 @@ public class PDRClientGame implements GameLogic {
 				.addComponent(new PointLightComponent(light)));
 		this.scene.addEntity("chestModel", new Entity()
 				.addComponent(new ModelComponent(chestModel))
-				.addComponent(new PointLightSurfaceComponent()));
+				.addComponent(new PointLightSurfaceComponent()));*/
+		
+		this.scene.addEntity("tMod", new Entity()
+				.addComponent(new TextModelComponent(tModel)));
+		
 		engine.getCache().addScene(scene);
 		
 		Gizmo gizmo = ObjLoader.loadGizmo("gizmo", "./resources/models/cube_wireframe.obj");
@@ -150,7 +176,8 @@ public class PDRClientGame implements GameLogic {
 		
 		engine.getCache().addGizmo(gizmo);
 		engine.getCache().addGizmoModel(gizmoModel);
-		this.scene.addEntity("gizmoModel", new Entity().addComponent(new GizmoModelComponent(gizmoModel)));
+		//this.scene.addEntity("gizmoModel", new Entity()
+		//		.addComponent(new GizmoModelComponent(gizmoModel)));
 		
 		Gizmo gizmoAxisGrid = ObjLoader.loadGizmo("gizmoGrid", "./resources/models/gizmos/grid_xyz.obj");
 		GizmoModel gizmoModelAxisGrid = new GizmoModel("gizmoModelGridXYZ", gizmoAxisGrid.getId(), new Transform3D());
@@ -166,6 +193,7 @@ public class PDRClientGame implements GameLogic {
 		engine.getCache().addRenderer(new MeshRenderer());
 		engine.getCache().addRenderer(new ModelRenderer());
 		engine.getCache().addRenderer(new GizmoModelRenderer());
+		engine.getCache().addRenderer(new TextModelRenderer());
 		
 		Shader passRenderShader = new BackgroundShader(0);
 		Material passRenderMaterial = new BackgroundMaterial(0);
@@ -207,9 +235,9 @@ public class PDRClientGame implements GameLogic {
 		
 		engine.getWindow().onResize((w, h) -> scene.getCamera().getProjection().update(w, h));
 		
-		((Camera3D) scene.getCamera()).lookAt(new Vector3f(0, -5, 9.17f).mul(0.5f), new Vector3f().zero());
-		((Camera3D) scene.getCamera()).getProjection().setPerspective(false);
-		((Camera3D) scene.getCamera()).getProjection().setSize(100f);
+		//((Camera3D) scene.getCamera()).lookAt(new Vector3f(0, -5, 9.17f).mul(0.5f), new Vector3f().zero());
+		//((Camera3D) scene.getCamera()).getProjection().setPerspective(false);
+		//((Camera3D) scene.getCamera()).getProjection().setSize(100f);
 		
 		try {
 			fw = new FileWriter(new File("./logs/io.txt"));
@@ -250,6 +278,8 @@ public class PDRClientGame implements GameLogic {
 				
 				cam.move(cx, cy, camSpeed);
 				
+				cam.move(ax, ay, bx, by, camSpeed, camRotSpeed);
+				
 				float scrollSpeed = 0.5f;
 				
 				cam.getProjection().setSize((float) (org.joml.Math.clamp(0, 150, cam.getProjection().getSize()+engine.getWindow().getScroll().y*scrollSpeed)));
@@ -268,6 +298,8 @@ public class PDRClientGame implements GameLogic {
 				light.setPosition(new Vector3f(0, (float) Math.sin(GX)+1.5f, 0));
 				
 				GX += 0.01f;
+				
+				tModel.getTransform().scaleMul(0, 0, 0).rotate(0.5f, 0.2f, 0.1f).updateMatrix();
 				
 				//material.setProperty(DiffuseShader.DIFFUSE_COLOR, new Vector3f(x2/2+0.5f, y2/2+0.5f, x/2+0.5f));
 				

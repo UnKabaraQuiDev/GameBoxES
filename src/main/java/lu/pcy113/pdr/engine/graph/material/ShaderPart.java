@@ -27,7 +27,7 @@ public class ShaderPart implements UniqueID, Cleanupable {
 		GL40.glCompileShader(sid);
 		
 		if(GL40.glGetShaderi(sid, GL40.GL_COMPILE_STATUS) == GL40.GL_FALSE) {
-			Logger.log(Level.SEVERE, GL40.glGetShaderInfoLog(sid, 1024));
+			Logger.log(Level.SEVERE, file+"> "+GL40.glGetShaderInfoLog(sid, 1024));
 			cleanup();
 		}
 	}
@@ -49,7 +49,7 @@ public class ShaderPart implements UniqueID, Cleanupable {
 			return GL40.GL_VERTEX_SHADER;
 		case "frag":
 			return GL40.GL_FRAGMENT_SHADER;
-		case "geom":
+		case "geo":
 			return GL40.GL_GEOMETRY_SHADER;
 		}
 		return -1;

@@ -11,18 +11,23 @@ import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.material.gizmo.GizmoMaterial;
 import lu.pcy113.pdr.engine.graph.material.gizmo.GizmoShader;
+import lu.pcy113.pdr.engine.objs.entity.components.GizmoComponent;
 import lu.pcy113.pdr.engine.scene.Scene;
 import lu.pcy113.pdr.engine.scene.camera.Camera3D;
 import lu.pcy113.pdr.utils.Logger;
 
-public class GizmoRenderer extends Renderer<Scene, Gizmo> {
+public class GizmoRenderer extends Renderer<Scene, GizmoComponent> {
 
 	public GizmoRenderer() {
 		super(Gizmo.class);
 	}
 	
 	@Override
-	public void render(CacheManager cache, Scene scene, Gizmo gizmo) {
+	public void render(CacheManager cache, Scene scene, GizmoComponent gi) {
+		Gizmo gizmo = gi.getGizmo(cache);
+		if(gizmo == null)
+			return;
+		
 		Logger.log(Level.INFO, "Gizmo : "+gizmo.getId());
 		
 		gizmo.bind();

@@ -10,17 +10,22 @@ import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.Shader;
+import lu.pcy113.pdr.engine.objs.entity.components.MeshComponent;
 import lu.pcy113.pdr.engine.scene.Scene3D;
 import lu.pcy113.pdr.utils.Logger;
 
-public class MeshRenderer extends Renderer<Scene3D, Mesh> {
+public class MeshRenderer extends Renderer<Scene3D, MeshComponent> {
 
 	public MeshRenderer() {
 		super(Mesh.class);
 	}
 
 	@Override
-	public void render(CacheManager cache, Scene3D scene, Mesh mesh) {
+	public void render(CacheManager cache, Scene3D scene, MeshComponent m) {
+		Mesh mesh = m.getMesh(cache);
+		if(mesh == null)
+			return;
+		
 		Logger.log(Level.INFO, "Mesh : "+mesh.getId()+", vao:"+mesh.getVao()+", vec:"+mesh.getVertexCount()+", vbo:"+mesh.getVbo());
 		
 		mesh.bind();

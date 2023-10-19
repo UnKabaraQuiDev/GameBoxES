@@ -28,5 +28,5 @@ public class Entity {
 	
 	public Map<Class<? extends Component>, Component> getComponents() {return components;}
 	public void setComponents(Map<Class<? extends Component>, Component> components) {this.components = components;}
-	
+
 }

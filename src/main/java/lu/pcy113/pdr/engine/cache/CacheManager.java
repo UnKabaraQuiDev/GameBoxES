@@ -14,6 +14,7 @@ import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.objs.GizmoModel;
 import lu.pcy113.pdr.engine.objs.Model;
 import lu.pcy113.pdr.engine.objs.PointLight;
+import lu.pcy113.pdr.engine.objs.text.TextModel;
 import lu.pcy113.pdr.engine.scene.Scene;
 import lu.pcy113.pdr.engine.scene.Scene3D;
 
@@ -30,6 +31,7 @@ public class CacheManager implements Cleanupable {
 	protected Map<String, Gizmo> gizmos;
 	protected Map<String, GizmoModel> gizmoModels;
 	protected Map<String, RenderLayer> renderLayers;
+	protected Map<String, TextModel> textModels;
 	
 	public CacheManager() {
 		this.meshes = new HashMap<>();
@@ -43,6 +45,7 @@ public class CacheManager implements Cleanupable {
 		this.gizmos = new HashMap<>();
 		this.gizmoModels = new HashMap<>();
 		this.renderLayers = new HashMap<>();
+		this.textModels = new HashMap<>();
 	}
 	
 	@Override
@@ -79,6 +82,9 @@ public class CacheManager implements Cleanupable {
 		
 		renderLayers.values().forEach(RenderLayer::cleanup);
 		renderLayers.clear();
+		
+		//textModels.values().forEach(TextModel::cleanup);
+		textModels.clear();
 	}
 	
 	public boolean addMesh(Mesh m) {
@@ -125,6 +131,9 @@ public class CacheManager implements Cleanupable {
 		if(renderLayers.containsKey(m.getId())) renderLayers.remove(m.getId()).cleanup();
 		return this.renderLayers.putIfAbsent(m.getId(), m) == null;
 	}
+	public boolean addTextModel(TextModel m) {
+		return this.textModels.putIfAbsent(m.getId(), m) == null;
+	}
 	
 	public Mesh getMesh(String name) {
 		return meshes.get(name);
@@ -159,6 +168,9 @@ public class CacheManager implements Cleanupable {
 	public RenderLayer getRenderLayer(String name) {
 		return renderLayers.get(name);
 	}
+	public TextModel getTextModel(String name) {
+		return textModels.get(name);
+	}
 	
 	public Map<String, Mesh> getMeshes() {return meshes;}
 	public void setMeshes(Map<String, Mesh> meshes) {this.meshes = meshes;}
@@ -178,5 +190,7 @@ public class CacheManager implements Cleanupable {
 	public void setGizmoModels(Map<String, GizmoModel> gizmoModels) {this.gizmoModels = gizmoModels;}
 	public Map<String, RenderLayer> getRenderLayers() {return renderLayers;}
 	public void setRenderLayers(Map<String, RenderLayer> renderLayers) {this.renderLayers = renderLayers;}
+	public Map<String, TextModel> getTextModels() {return textModels;}
+	public void setTextModels(Map<String, TextModel> textModels) {this.textModels = textModels;}
 	
 }
