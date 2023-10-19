@@ -1,5 +1,7 @@
 package lu.pcy113.pdr.engine;
 
+import org.joml.Vector3f;
+
 import lu.pcy113.pdr.engine.cache.SharedCacheManager;
 import lu.pcy113.pdr.engine.graph.window.Window;
 import lu.pcy113.pdr.engine.graph.window.WindowOptions;
@@ -20,6 +22,20 @@ public class GameEngine implements Runnable, Cleanupable {
 	public static DebugOptions DEBUG = new DebugOptions();
 	
 	private SharedCacheManager cache;
+	
+	public static Vector3f X_POS = new Vector3f(1, 0, 0);
+	public static Vector3f X_NEG = new Vector3f(-1, 0, 0);
+	public static Vector3f Y_POS = new Vector3f(0, 1, 0);
+	public static Vector3f Y_NEG = new Vector3f(0, -1, 0);
+	public static Vector3f Z_POS = new Vector3f(0, 0, 1);
+	public static Vector3f Z_NEG = new Vector3f(0, 0, -1);
+	
+	public static Vector3f UP = new Vector3f(Z_POS);
+	public static Vector3f DOWN = new Vector3f(Z_NEG);
+	public static Vector3f LEFT = new Vector3f(X_NEG);
+	public static Vector3f RIGHT = new Vector3f(X_POS);
+	public static Vector3f FORWARD = new Vector3f(Y_POS);
+	public static Vector3f BACK = new Vector3f(Y_NEG);
 	
 	public GameEngine(GameLogic game, WindowOptions options) {
 		this.gameLogic = game;
@@ -55,6 +71,7 @@ public class GameEngine implements Runnable, Cleanupable {
 				long start = System.nanoTime();
 				gameLogic.input(now - lastInput);
 				tUpdate = System.nanoTime() - start;
+				window.clearScroll();
 				
 				lastInput = now;
 			}

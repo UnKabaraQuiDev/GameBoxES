@@ -5,6 +5,7 @@ import java.nio.FloatBuffer;
 import java.util.function.BiConsumer;
 import java.util.logging.Level;
 
+import org.joml.Vector2d;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
@@ -12,6 +13,7 @@ import org.lwjgl.glfw.GLFWFramebufferSizeCallback;
 import org.lwjgl.glfw.GLFWGamepadState;
 import org.lwjgl.glfw.GLFWJoystickCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
+import org.lwjgl.glfw.GLFWScrollCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL40;
@@ -37,6 +39,8 @@ public class Window implements Cleanupable {
 	private GLFWJoystickCallback joystickCallback;
 	private GLFWFramebufferSizeCallback frameBufferCallback;
 	private GLFWErrorCallback errorCallback;
+	private Vector2d scroll = new Vector2d();
+	private GLFWScrollCallback scrollCallback;
 	
 	private int width, height;
 	
@@ -76,13 +80,24 @@ public class Window implements Cleanupable {
 		GLFW.glfwSetJoystickCallback(joystickCallback);
 		frameBufferCallback = GLFWFramebufferSizeCallback.create((window, width, height) -> callback_frameBuffer(window, width, height));
 		GLFW.glfwSetFramebufferSizeCallback(handle, frameBufferCallback);
+		scrollCallback = GLFWScrollCallback.create((window, sx, sy) -> callback_scroll(window, sx, sy));
+		GLFW.glfwSetScrollCallback(handle, scrollCallback);
 		
 		gamepadState = GLFWGamepadState.create();
 		
 		GLFW.glfwShowWindow(handle);
 	}
 	
+	private void callback_scroll(long window, double sx, double sy) {
+		System.err.println("scroll: "+sx+", "+sy+" handle"+window);
+		if(window != handle)
+			return;
+		scroll.add(sx, sy);
+	}
+
 	private void callback_frameBuffer(long window, int w, int h) {
+		if(window != handle)
+			return;
 		if(!options.fullscreen)
 			options.windowSize.set(w, h);
 		if(onResize != null)
@@ -99,6 +114,8 @@ public class Window implements Cleanupable {
 		}
 	}
 	private void callback_key(long window, int key, int scancode, int action, int mods) {
+		if(window != handle)
+			return;
 		if(key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS) {
 			GLFW.glfwSetWindowShouldClose(window, true);
 		}else if(key == GLFW.GLFW_KEY_F11 && action == GLFW.GLFW_PRESS) {
@@ -182,6 +199,8 @@ public class Window implements Cleanupable {
 	public WindowOptions getOptions() {return options;}
 	public int getWidth() {return width;}
 	public int getHeight() {return height;}
+	public Vector2d getScroll() {return scroll;}
+	public void clearScroll() {scroll.set(0, 0);}
 	
 	public void onResize(BiConsumer<Integer, Integer> object) {this.onResize = object;}
 

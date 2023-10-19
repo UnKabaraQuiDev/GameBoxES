@@ -5,11 +5,20 @@ import org.joml.Matrix4f;
 public class Projection {
 	
 	protected Matrix4f projMatrix;
-	protected float fov;
 	protected float near, far;
+	protected boolean perspective = true;
 	
-	public Projection(float fov, float near, float far) {
-		this.fov = fov;
+	// perspective only
+	protected float fov;
+	
+	// orthographic only
+	protected float size = 1;
+	
+	protected int width, height;
+	
+	public Projection(boolean perspective, float fov_size, float near, float far) {
+		this.fov = fov_size;
+		this.size = fov_size;
 		this.near = near;
 		this.far = far;
 		
@@ -20,7 +29,20 @@ public class Projection {
 		return projMatrix.setPerspective(fov, (float) width / height, near, far);
 	}
 	public Matrix4f orthographicUpdateMatrix(int width, int height) {
-		return projMatrix.setOrthoSymmetric(width, height, near, far);
+		return projMatrix.setOrthoSymmetric(width/size, height/size, near, far);
+	}
+	
+	public Matrix4f update(int w, int h) {
+		this.width = w;
+		this.height = h;
+		if(perspective) {
+			return perspectiveUpdateMatrix(w, h);
+		}else {
+			return orthographicUpdateMatrix(w, h);
+		}
+	}
+	public void update() {
+		update(width, height);
 	}
 	
 	public Matrix4f getProjMatrix() {return projMatrix;}
@@ -32,5 +54,10 @@ public class Projection {
 	public void setFov(float fov) {this.fov = fov;}
 	public float getNear() {return near;}
 	public void setNear(float near) {this.near = near;}
-	
+	public boolean isPerspective() {return perspective;}
+	public boolean isOrthographic() {return !perspective;}
+	public void setPerspective(boolean perspective) {this.perspective = perspective;}
+	public float getSize() {return size;}
+	public void setSize(float size) {this.size = size;}
+
 }

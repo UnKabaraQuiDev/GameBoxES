@@ -19,7 +19,7 @@ public class Scene3D extends Scene {
 	protected List<String> lightEmittors = new ArrayList<>();
 	
 	public Scene3D(String name) {
-		super(name, Camera.camera3D());
+		super(name, Camera.perspectiveCamera3D());
 	}
 	
 	@Override

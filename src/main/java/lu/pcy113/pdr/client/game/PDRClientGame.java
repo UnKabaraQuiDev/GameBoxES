@@ -8,6 +8,7 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFWGamepadState;
 
+import lu.pcy113.pdr.client.game.options.KeyOptions;
 import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.geom.Mesh;
@@ -69,7 +70,7 @@ public class PDRClientGame implements GameLogic {
 		
 		this.engine = e;
 		GameEngine.DEBUG.wireframe = true;
-		GameEngine.DEBUG.wireframeColor = new Vector4f(0.5f, 0, 0, 1);
+		GameEngine.DEBUG.wireframeColor = new Vector4f(0.2f, 0.2f, 0.2f, 0.2f);
 		//GameEngine.DEBUG.ignoreDepth = false;
 		
 		
@@ -100,7 +101,7 @@ public class PDRClientGame implements GameLogic {
 		engine.getCache().addMesh(chestMesh);
 		engine.getCache().addModel(chestModel);
 		
-		this.mesh = ObjLoader.loadMesh("cube-mesh", txtMaterial.getId(), "./resources/models/cube2.obj");
+		this.mesh = ObjLoader.loadMesh("scene-mesh", txtMaterial.getId(), "./resources/models/scene_pdrassets_1.obj");
 		engine.getCache().addMesh(mesh);
 		
 		this.model = new Model("cube-model", mesh.getId(), new Transform3D());
@@ -151,14 +152,14 @@ public class PDRClientGame implements GameLogic {
 		engine.getCache().addGizmoModel(gizmoModel);
 		this.scene.addEntity("gizmoModel", new Entity().addComponent(new GizmoModelComponent(gizmoModel)));
 		
-		Gizmo gizmoAxisGrid = ObjLoader.loadGizmo("gizmoGrid", "./resources/models/axis_grid.obj");
+		Gizmo gizmoAxisGrid = ObjLoader.loadGizmo("gizmoGrid", "./resources/models/gizmos/grid_xyz.obj");
 		GizmoModel gizmoModelAxisGrid = new GizmoModel("gizmoModelGridXYZ", gizmoAxisGrid.getId(), new Transform3D());
 		//((Transform3D) gizmoModelAxisGrid.getTransform()).rotateFromAxisAngleRad(0, 1, 0, 90).updateMatrix();
 		
 		engine.getCache().addGizmo(gizmoAxisGrid);
 		engine.getCache().addGizmoModel(gizmoModelAxisGrid);
-		this.scene.addEntity("gizmoModelAxisGrid", new Entity()
-				.addComponent(new GizmoModelComponent(gizmoModelAxisGrid)));
+		//this.scene.addEntity("gizmoModelAxisGrid", new Entity()
+		//		.addComponent(new GizmoModelComponent(gizmoModelAxisGrid)));
 		
 		this.scene3DRenderer = new Scene3DRenderer();
 		engine.getCache().addRenderer(scene3DRenderer);
@@ -204,7 +205,11 @@ public class PDRClientGame implements GameLogic {
 		//compositor.addRenderLayer(2, perfRender.getId());
 		//compositor.addRenderLayer(0, colorFilterRender);
 		
-		engine.getWindow().onResize((w, h) -> scene.getCamera().getProjection().perspectiveUpdateMatrix(w, h));
+		engine.getWindow().onResize((w, h) -> scene.getCamera().getProjection().update(w, h));
+		
+		((Camera3D) scene.getCamera()).lookAt(new Vector3f(0, -5, 9.17f).mul(0.5f), new Vector3f().zero());
+		((Camera3D) scene.getCamera()).getProjection().setPerspective(false);
+		((Camera3D) scene.getCamera()).getProjection().setSize(100f);
 		
 		try {
 			fw = new FileWriter(new File("./logs/io.txt"));
@@ -236,17 +241,27 @@ public class PDRClientGame implements GameLogic {
 				float bx = applyThreshold(gps.axes(2), 0.01f);
 				float by = applyThreshold(gps.axes(3), 0.01f)*(-1);
 				
-				System.err.println("ax"+ax+" ay"+ay+" : bx"+bx+" by"+by);
+				Camera3D cam = (Camera3D) scene.getCamera();
+				
+				cam.roll(by*camRotSpeed);
+				
+				float cy = (engine.getWindow().isKeyPressed(KeyOptions.FORWARD) ? 1 : 0) - (engine.getWindow().isKeyPressed(KeyOptions.BACKWARD) ? 1 : 0);
+				float cx = (engine.getWindow().isKeyPressed(KeyOptions.RIGHT) ? 1 : 0) - (engine.getWindow().isKeyPressed(KeyOptions.LEFT) ? 1 : 0);
+				
+				cam.move(cx, cy, camSpeed);
+				
+				float scrollSpeed = 0.5f;
+				
+				cam.getProjection().setSize((float) (org.joml.Math.clamp(0, 150, cam.getProjection().getSize()+engine.getWindow().getScroll().y*scrollSpeed)));
+				cam.getProjection().update();
+				
+				System.err.println("ax"+ax+" ay"+ay+" : bx"+bx+" by"+by+" : sx"+engine.getWindow().getScroll().x+" sy"+engine.getWindow().getScroll().y+" > s"+cam.getProjection().getSize());
 				try {
-					fw.write("ax"+ax+" ay"+ay+" : bx"+bx+" by"+by+"\n");
+					fw.write("ax"+ax+" ay"+ay+" : bx"+bx+" by"+by+" : sx"+engine.getWindow().getScroll().x+" sy"+engine.getWindow().getScroll().y+" > s"+cam.getProjection().getSize()+"\n");
 					fw.flush();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				
-				Camera3D cam = (Camera3D) scene.getCamera();
-				
-				cam.move(ax, ay, bx, by, camSpeed, camRotSpeed);
 				
 				cam.updateMatrix();
 				
