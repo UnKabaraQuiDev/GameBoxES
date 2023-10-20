@@ -74,7 +74,7 @@ public class PDRClientGame implements GameLogic {
 		Logger.log();
 		
 		this.engine = e;
-		GameEngine.DEBUG.wireframe = true;
+		GameEngine.DEBUG.wireframe = false;
 		GameEngine.DEBUG.wireframeColor = new Vector4f(0.2f, 0.2f, 0.2f, 0.2f);
 		GameEngine.DEBUG.gizmos = false;
 		
@@ -301,7 +301,7 @@ public class PDRClientGame implements GameLogic {
 				
 				GX += 0.01f;
 				
-				tModel.getTransform().scaleMul(0, 0, 0).rotate(0.5f, 0.2f, 0.1f).updateMatrix();
+				//tModel.getTransform().scaleMul(0, 0, 0).rotate(0.5f, 0.2f, 0.1f).updateMatrix();
 				
 				//material.setProperty(DiffuseShader.DIFFUSE_COLOR, new Vector3f(x2/2+0.5f, y2/2+0.5f, x/2+0.5f));
 				

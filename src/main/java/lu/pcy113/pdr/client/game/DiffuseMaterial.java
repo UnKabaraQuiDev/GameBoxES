@@ -15,7 +15,6 @@ public class DiffuseMaterial extends Material {
 			Vector3f diffuse, Vector3f specular, Vector3f ambient,
 			float shininess) {
 		super(name,
-				//DiffuseShader.LIGHTS, DiffuseShader.LIGHT_COUNT,
 				DiffuseShader.NAME);
 		
 		super.setProperty(DiffuseShader.DIFFUSE_COLOR, diffuse);

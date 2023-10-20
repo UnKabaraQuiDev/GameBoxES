@@ -27,37 +27,34 @@ public class ModelRenderer extends Renderer<Scene3D, ModelComponent> {
 		Model c = co.getModel(cache);
 		if(c == null)
 			return;
-		System.out.println("model ok");
 		
 		Logger.log(Level.INFO, "Model : "+c.getId());
 		
 		Mesh mesh = cache.getMesh(c.getMesh());
 		if(mesh == null)
 			return;
-		System.out.println("mesh ok");
 		
 		/*MeshRenderer meshRender = (MeshRenderer) cache.getRenderer(Mesh.NAME);
 		meshRender.render(cache, scene, mesh);*/
 		
 		mesh.bind();
-		System.out.println("mesh bound");
 		
 		Material material = cache.getMaterial(mesh.getMaterial());
+		System.out.println(material);
 		if(material == null)
 			return;
-		System.out.println("material ok");
 		Shader shader = cache.getShader(material.getShader());
+		System.out.println(shader);
 		if(shader == null)
 			return;
-		System.out.println("shader ok");
 		
 		shader.bind();
 		
 		Matrix4f projectionMatrix = scene.getCamera().getProjection().getProjMatrix();
 		Matrix4f viewMatrix = scene.getCamera().getViewMatrix();
-		material.setProperty(Shader.PROJECTION_MATRIX, projectionMatrix);
-		material.setProperty(Shader.VIEW_MATRIX, viewMatrix);
-		material.setProperty(Shader.TRANSFORMATION_MATRIX, c.getTransform().getMatrix());
+		material.setPropertyIfPresent(Shader.PROJECTION_MATRIX, projectionMatrix);
+		material.setPropertyIfPresent(Shader.VIEW_MATRIX, viewMatrix);
+		material.setPropertyIfPresent(Shader.TRANSFORMATION_MATRIX, c.getTransform().getMatrix());
 		
 		PointLightSurfaceComponent plsc = co.getParent().getComponent(PointLightSurfaceComponent.class);
 		if(plsc != null)
@@ -68,7 +65,7 @@ public class ModelRenderer extends Renderer<Scene3D, ModelComponent> {
 		GL40.glDrawElements(GL40.GL_TRIANGLES, mesh.getVertexCount(), GL40.GL_UNSIGNED_INT, 0);
 		
 		// debug only
-		GameEngine.DEBUG.wireframe(cache, scene, mesh, projectionMatrix, viewMatrix, c.getTransform().getMatrix());
+		//GameEngine.DEBUG.wireframe(cache, scene, mesh, projectionMatrix, viewMatrix, c.getTransform().getMatrix());
 		
 		mesh.unbind();
 		GameEngine.DEBUG.gizmos(cache, scene, projectionMatrix, viewMatrix, c.getTransform().getMatrix());

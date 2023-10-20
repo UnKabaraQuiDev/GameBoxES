@@ -13,7 +13,7 @@ public class TextureMaterial extends Material {
 	
 	private Map<String, String> textures;
 	
-	public TextureMaterial(String name, String shader, Map<String, String> textures) {
+	public TextureMaterial(String name, Shader shader, Map<String, String> textures) {
 		super(name, shader);
 		
 		this.textures = textures;

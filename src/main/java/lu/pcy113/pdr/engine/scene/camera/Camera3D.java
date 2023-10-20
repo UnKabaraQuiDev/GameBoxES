@@ -46,7 +46,7 @@ public class Camera3D extends Camera {
 	}
 	
 	public void move(float ax, float ay, float bx, float by, float moveSpeed, float rotationSpeed) {
-		// Adjust camera rotation based on input
+		/*// Adjust camera rotation based on input
 		float yaw = -bx * rotationSpeed;
 		float pitch = by * rotationSpeed;
 		rotation.rotateLocalX(-pitch);
@@ -62,7 +62,7 @@ public class Camera3D extends Camera {
 		
 		// Update camera position
 		position.add(forwardVector.mul(forward));
-		position.add(rightVector.mul(right));
+		position.add(rightVector.mul(right));*/
 		
 		/*float yaw = bx * rotationSpeed;
 		float pitch = -by * rotationSpeed;
@@ -88,14 +88,14 @@ public class Camera3D extends Camera {
 		// Update the camera's rotation
 		rotation.mul(rotationChange);*/
 		
-		/*// Calculate the rotation
+		// Calculate the rotation
 		Quaternionf rotationChange = new Quaternionf().rotateYXZ(by * rotationSpeed, ax * rotationSpeed, 0);
 		rotation.mul(rotationChange);
 		
 		// Calculate the movement
 		Vector3f movement = new Vector3f(0, 0, -ay * moveSpeed);
 		rotation.transform(movement);
-		position.add(movement);*/
+		position.add(movement);
 		
 		/*Quaternionf pitch = new Quaternionf().rotateAxis(rotationSpeed*bx, UP);
 		Quaternionf yaw = new Quaternionf().rotateXYZ(0, rotationSpeed*by, 0);
@@ -181,7 +181,6 @@ public class Camera3D extends Camera {
 	
 	public Matrix4f updateMatrix() {
 		viewMatrix.identity();
-		//viewMatrix.rotateXYZ(rotation);
 		viewMatrix.rotate(rotation);
 		viewMatrix.translate(-position.x, -position.y, -position.z);
 		return viewMatrix;

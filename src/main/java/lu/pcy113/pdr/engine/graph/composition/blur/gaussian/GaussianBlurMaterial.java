@@ -16,8 +16,8 @@ public class GaussianBlurMaterial extends Material {
 	private int width, height;
 	private float[] kernel;
 	
-	public GaussianBlurMaterial(int width, int height) {
-		super(NAME, GaussianBlurShader.NAME);
+	public GaussianBlurMaterial(GaussianBlurShader shader, int width, int height) {
+		super(NAME, shader);
 		
 		if(width % 2 == 0 || height % 2 == 0)
 			throw new RuntimeException("Kernel width/height cannot be even");

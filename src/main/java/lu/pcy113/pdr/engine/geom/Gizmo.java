@@ -1,6 +1,5 @@
 package lu.pcy113.pdr.engine.geom;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.logging.Level;
 
@@ -57,7 +56,7 @@ public class Gizmo implements UniqueID, Cleanupable, Renderable {
 		storeAttribArray(1, 4, color);
 		unbind();
 			
-		Logger.log(Level.INFO, "Gizmo "+name+": "+vao+" & ("+vbo+")");
+		Logger.log(Level.INFO, "Gizmo "+name+": "+vao+" & "+vbo);
 	}
 	
 	protected void storeAttribArray(int index, int size, IntAttribArray data) {

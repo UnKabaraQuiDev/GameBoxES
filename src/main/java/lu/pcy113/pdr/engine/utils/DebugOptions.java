@@ -29,8 +29,9 @@ public class DebugOptions {
 		if(rl == null) {
 			rl = new PerfHistoryLayer();
 			cache.addRenderLayer(rl);
-			cache.addShader(new PerfHistoryLayerShader());
-			cache.addMaterial(new PerfHistoryLayerMaterial());
+			PerfHistoryLayerShader shader = new PerfHistoryLayerShader();
+			cache.addShader(shader);
+			cache.addMaterial(new PerfHistoryLayerMaterial(shader));
 		}
 		
 		((PerfHistoryLayer) rl).update(engine, deltaUpdate, deltaRender, timeUpdate, timeRender);
@@ -54,8 +55,9 @@ public class DebugOptions {
 		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_LINE);
 		Material deb = cache.getMaterial(GizmoMaterial.NAME);
 		if(deb == null) {
-			deb = new GizmoMaterial();
-			cache.addShader(new GizmoShader());
+			GizmoShader shader = new GizmoShader();
+			cache.addShader(shader);
+			deb = new GizmoMaterial(shader);
 			cache.addMaterial(deb);
 		}
 		Shader debShader = cache.getShader(deb.getShader());
@@ -91,8 +93,9 @@ public class DebugOptions {
 		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_LINE);
 		Material deb = cache.getMaterial(WireframeMaterial.NAME);
 		if(deb == null) {
-			deb = new WireframeMaterial();
-			cache.addShader(new WireframeShader());
+			WireframeShader shader = new WireframeShader();
+			cache.addShader(shader);
+			deb = new WireframeMaterial(shader);
 			cache.addMaterial(deb);
 		}
 		Shader debShader = cache.getShader(deb.getShader());
@@ -123,8 +126,9 @@ public class DebugOptions {
 		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_POINT);
 		Material deb = cache.getMaterial(WireframeMaterial.NAME);
 		if(deb == null) {
-			deb = new WireframeMaterial();
-			cache.addShader(new WireframeShader());
+			WireframeShader shader = new WireframeShader();
+			cache.addShader(shader);
+			deb = new WireframeMaterial(shader);
 			cache.addMaterial(deb);
 		}
 		Shader debShader = cache.getShader(deb.getShader());

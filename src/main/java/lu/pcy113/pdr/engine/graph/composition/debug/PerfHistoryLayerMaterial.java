@@ -11,8 +11,8 @@ public class PerfHistoryLayerMaterial extends Material {
 	
 	public static final String NAME = PerfHistoryLayerMaterial.class.getName();
 	
-	public PerfHistoryLayerMaterial() {
-		super(NAME, PerfHistoryLayerShader.NAME);
+	public PerfHistoryLayerMaterial(PerfHistoryLayerShader shader) {
+		super(NAME, shader);
 	}
 	
 	@Override

@@ -3,14 +3,12 @@ package lu.pcy113.pdr.engine.graph.material;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.graph.material.components.MaterialComponent;
 import lu.pcy113.pdr.engine.impl.Renderable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
-import lu.pcy113.pdr.utils.Logger;
 
 public class Material implements UniqueID {
 	
@@ -18,35 +16,27 @@ public class Material implements UniqueID {
 	protected Map<String, Object> properties;
 	protected String shader;
 	
-	public Material(String name, String shader) {
+	public Material(String name, Shader shader) {
 		this.name = name;
 		this.properties = new HashMap<>();
-		this.shader = shader;
+		shader.getUniforms().keySet().forEach(t -> properties.put(t, null));
+		this.shader = shader.getId();
 	}
 	
 	public void bindProperties(CacheManager cache, Renderable parent, Shader shader) {
 		for(Entry<String, Object> eso : properties.entrySet()) {
 			shader.setUniform(eso.getKey(), eso.getValue());
-			Logger.log(Level.INFO, ("Material "+name+"."+eso.getKey()+"="+eso.getValue()).replace("\n", " [nl] "));
+			//Logger.log(Level.INFO, ("Material "+name+"."+eso.getKey()+"="+eso.getValue()).replace("\n", " [nl] "));
 		}
 	}
 	
-	/*public void bindLights(CacheManager cache, List<String> pointLights) {
-		if(lights == null || lightCount == null)
-			return;
-		//System.err.println(name+" lights not null: "+pointLights);
-		
-		int i = 0;
-		for(String pLight : pointLights) {
-			PointLight pointLight = cache.getPointLight(pLight);
-			if(pointLight != null)
-				pointLight.bind(this, lights, i++);
-		}
-		properties.put(lightCount, pointLights.size());
-	}*/
-	
 	public void setProperty(String name, Object value) {
 		properties.put(name, value);
+	}
+	public void setPropertyIfPresent(String name, Object value) {
+		System.out.println(name+" contained: "+properties.containsKey(name));
+		if(properties.containsKey(name))
+			properties.put(name, value);
 	}
 	public Object getProperty(String name) {
 		return properties.get(name);
@@ -84,5 +74,5 @@ public class Material implements UniqueID {
 	
 	public Map<Class<? extends MaterialComponent>, MaterialComponent> getComponents() {return components;}
 	public void setComponents(Map<Class<? extends MaterialComponent>, MaterialComponent> components) {this.components = components;}
-	
+
 }

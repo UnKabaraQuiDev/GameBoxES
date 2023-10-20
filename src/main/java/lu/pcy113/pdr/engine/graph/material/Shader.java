@@ -88,7 +88,12 @@ public abstract class Shader implements UniqueID, Cleanupable {
 	}
 	
 	public boolean createUniform(String name) {
-		return GL40.glGetUniformLocation(shaderProgram, name) != MemoryUtil.NULL;
+		int loc = GL40.glGetUniformLocation(shaderProgram, name);
+		if(loc != MemoryUtil.NULL) {
+			uniforms.put(name, loc);
+			return true;
+		}
+		return false;
 	}
 	
 	public void bind() {

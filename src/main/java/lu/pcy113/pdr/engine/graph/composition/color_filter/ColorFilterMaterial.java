@@ -13,8 +13,8 @@ public class ColorFilterMaterial extends Material {
 	
 	protected Vector4f mul, add;
 	
-	public ColorFilterMaterial() {
-		super(NAME, ColorFilterShader.NAME);
+	public ColorFilterMaterial(ColorFilterShader shader) {
+		super(NAME, shader);
 	}
 	
 	@Override

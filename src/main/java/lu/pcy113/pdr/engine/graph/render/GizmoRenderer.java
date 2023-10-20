@@ -35,8 +35,9 @@ public class GizmoRenderer extends Renderer<Scene, GizmoComponent> {
 		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_LINE);
 		Material material = cache.getMaterial(GizmoMaterial.NAME);
 		if(material == null) {
-			material = new GizmoMaterial();
-			cache.addShader(new GizmoShader());
+			GizmoShader shader = new GizmoShader();
+			cache.addShader(shader);
+			material = new GizmoMaterial(shader);
 			cache.addMaterial(material);
 		}
 		Shader shader = cache.getShader(material.getShader());
