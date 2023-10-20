@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFWGamepadState;
@@ -13,7 +12,6 @@ import lu.pcy113.pdr.client.game.options.KeyOptions;
 import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.geom.Mesh;
-import lu.pcy113.pdr.engine.geom.text.TextMesh;
 import lu.pcy113.pdr.engine.graph.composition.Compositor;
 import lu.pcy113.pdr.engine.graph.composition.GenerateRenderLayer;
 import lu.pcy113.pdr.engine.graph.composition.PassRenderLayer;
@@ -38,10 +36,10 @@ import lu.pcy113.pdr.engine.objs.GizmoModel;
 import lu.pcy113.pdr.engine.objs.Model;
 import lu.pcy113.pdr.engine.objs.PointLight;
 import lu.pcy113.pdr.engine.objs.entity.Entity;
+import lu.pcy113.pdr.engine.objs.entity.components.GizmoModelComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.ModelComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.PointLightComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.PointLightSurfaceComponent;
-import lu.pcy113.pdr.engine.objs.entity.components.TextModelComponent;
 import lu.pcy113.pdr.engine.objs.text.TextModel;
 import lu.pcy113.pdr.engine.scene.Scene3D;
 import lu.pcy113.pdr.engine.scene.camera.Camera3D;
@@ -188,8 +186,8 @@ public class PDRClientGame implements GameLogic {
 		
 		engine.getCache().addGizmo(gizmoAxisGrid);
 		engine.getCache().addGizmoModel(gizmoModelAxisGrid);
-		//this.scene.addEntity("gizmoModelAxisGrid", new Entity()
-		//		.addComponent(new GizmoModelComponent(gizmoModelAxisGrid)));
+		this.scene.addEntity("gizmoModelAxisGrid", new Entity()
+				.addComponent(new GizmoModelComponent(gizmoModelAxisGrid)));
 		
 		this.scene3DRenderer = new Scene3DRenderer();
 		engine.getCache().addRenderer(scene3DRenderer);
