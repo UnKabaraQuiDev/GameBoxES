@@ -88,16 +88,16 @@ public class Camera3D extends Camera {
 		// Update the camera's rotation
 		rotation.mul(rotationChange);*/
 		
-		// Calculate the rotation
+		/*// Calculate the rotation
 		Quaternionf rotationChange = new Quaternionf().rotateYXZ(by * rotationSpeed, ax * rotationSpeed, 0);
 		rotation.mul(rotationChange);
 		
 		// Calculate the movement
 		Vector3f movement = new Vector3f(0, 0, -ay * moveSpeed);
 		rotation.transform(movement);
-		position.add(movement);
+		position.add(movement);*/
 		
-		/*Quaternionf pitch = new Quaternionf().rotateAxis(rotationSpeed*bx, UP);
+		/*Quaternionf pitch = new Quaternionf().rotateAxis(rotationSpeed*bx, new Vector3f(0, 0, 1));
 		Quaternionf yaw = new Quaternionf().rotateXYZ(0, rotationSpeed*by, 0);
 		Quaternionf cr = new Quaternionf().identity();
 		cr.mul(yaw);
@@ -108,7 +108,7 @@ public class Camera3D extends Camera {
 		moveDir.mul(moveSpeed);
 		position.add(moveDir);*/
 		
-		/*// Calculate camera rotation based on the bx and by joystick values.
+		// Calculate camera rotation based on the bx and by joystick values.
 		float pitch = by * rotationSpeed;
 		float yaw = bx * rotationSpeed;
 		Quaternionf rotationDelta = new Quaternionf().rotationYXZ(0, pitch, yaw);
@@ -126,7 +126,7 @@ public class Camera3D extends Camera {
 		
 		// Update the camera position.
 		position.add(forward.mul(moveY));
-		position.add(right.mul(moveX));*/
+		position.add(right.mul(moveX));
 		
 		/*// Calculate the forward direction
 		Vector3f forward = new Vector3f(0, 0, -1);
@@ -175,14 +175,20 @@ public class Camera3D extends Camera {
 
 	public void moveLocalXZ(float leftRight, float forwardsBackwards) {
 		// Calculate the movement vector in the camera's local coordinate system
-		position.add(rotation.positiveZ(new Vector3f()).mul(forwardsBackwards));
-		position.add(rotation.positiveX(new Vector3f()).mul(leftRight));
+		position.add(rotation.positiveZ(new Vector3f(0)).mul(forwardsBackwards));
+		position.add(rotation.positiveX(new Vector3f(0)).mul(leftRight));
 	}
 	
 	public Matrix4f updateMatrix() {
 		viewMatrix.identity();
-		viewMatrix.rotate(rotation);
-		viewMatrix.translate(-position.x, -position.y, -position.z);
+		viewMatrix.set(rotation);
+		viewMatrix.m30(position.x);
+		viewMatrix.m31(position.y);
+		viewMatrix.m32(position.z);
+		viewMatrix.invert();
+		
+		System.err.println("VEC "+position+"\n"+rotation);
+		
 		return viewMatrix;
 	}
 	

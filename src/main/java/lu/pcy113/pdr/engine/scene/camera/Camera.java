@@ -26,14 +26,14 @@ public abstract class Camera {
 	
 	public static final Camera3D perspectiveCamera3D() {
 		return new Camera3D(
-				new Vector3f(), 
-				new Quaternionf().identity().lookAlong(GameEngine.FORWARD.x, GameEngine.FORWARD.y, GameEngine.FORWARD.z, GameEngine.UP.x, GameEngine.UP.y, GameEngine.UP.z).rotateZ((float) Math.PI),
+				new Vector3f(0), 
+				new Quaternionf().identity(),//.lookAlong(GameEngine.FORWARD.x, GameEngine.FORWARD.y, GameEngine.FORWARD.z, GameEngine.UP.x, GameEngine.UP.y, GameEngine.UP.z).rotateZ((float) Math.PI),
 				//rotateXYZ((float) Math.toRadians(90), (float) Math.toRadians(180), 0),
 				new Projection(true, (float) Math.toRadians(60), 0.01f, 1000f));
 	}
 	public static final Camera3D orthographicCamera3D() {
 		return new Camera3D(
-				new Vector3f(), 
+				new Vector3f(0), 
 				new Quaternionf().identity().lookAlong(GameEngine.FORWARD.x, GameEngine.FORWARD.y, GameEngine.FORWARD.z, GameEngine.UP.x, GameEngine.UP.y, GameEngine.UP.z).rotateZ((float) Math.PI),
 				//rotateXYZ((float) Math.toRadians(90), (float) Math.toRadians(180), 0),
 				new Projection(false, (float) Math.toRadians(60), 0.01f, 1000f));

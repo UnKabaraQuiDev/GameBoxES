@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL40;
 
 import lu.pcy113.pdr.engine.cache.attrib.FloatAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.IntAttribArray;
+import lu.pcy113.pdr.engine.cache.attrib.UIntAttribArray;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.impl.Renderable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
@@ -23,7 +24,7 @@ public class Gizmo implements UniqueID, Cleanupable, Renderable {
 	protected final HashMap<Integer, Integer> vbo = new HashMap<>();
 	
 	protected FloatAttribArray vertices;
-	protected IntAttribArray indices;
+	protected UIntAttribArray indices;
 	protected FloatAttribArray color;
 	
 	protected int vertexCount;
@@ -33,7 +34,7 @@ public class Gizmo implements UniqueID, Cleanupable, Renderable {
 	 * normals as attribArray 1,
 	 * uvs as attribArray 2
 	 */
-	public Gizmo(String name, FloatAttribArray vertices, IntAttribArray indices, FloatAttribArray color) {
+	public Gizmo(String name, FloatAttribArray vertices, UIntAttribArray indices, FloatAttribArray color) {
 		this.name = name;
 		this.vertices = vertices;
 		this.indices = indices;
@@ -77,7 +78,7 @@ public class Gizmo implements UniqueID, Cleanupable, Renderable {
 		GL40.glVertexAttribPointer(index, size, GL40.GL_FLOAT, false, 0, 0);
 		GL40.glBindBuffer(GL40.GL_ARRAY_BUFFER, 0);
 	}
-	private void storeElementArray(IntAttribArray indices) {
+	private void storeElementArray(UIntAttribArray indices) {
 		int vbo = GL40.glGenBuffers();
 		this.vbo.put(-1, vbo);
 		GL40.glBindBuffer(GL40.GL_ELEMENT_ARRAY_BUFFER, vbo);
@@ -106,7 +107,7 @@ public class Gizmo implements UniqueID, Cleanupable, Renderable {
 	public int getVao() {return vao;}
 	public HashMap<Integer, Integer> getVbo() {return vbo;}
 	public String getName() {return name;}
-	public IntAttribArray getIndices() {return indices;}
+	public UIntAttribArray getIndices() {return indices;}
 	public FloatAttribArray getVertices() {return vertices;}
 	public FloatAttribArray getColor() {return color;}
 	

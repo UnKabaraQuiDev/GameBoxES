@@ -5,6 +5,7 @@ import java.util.logging.Level;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL40;
 
+import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.graph.material.Material;
@@ -50,18 +51,18 @@ public class GizmoModelRenderer extends Renderer<Scene, GizmoModelComponent> {
 		
 		Matrix4f projectionMatrix = scene.getCamera().getProjection().getProjMatrix();
 		Matrix4f viewMatrix = scene.getCamera().getViewMatrix();
-		material.setProperty(Shader.PROJECTION_MATRIX, projectionMatrix);
-		material.setProperty(Shader.VIEW_MATRIX, viewMatrix);
-		material.setProperty(Shader.TRANSFORMATION_MATRIX, model.getTransform().getMatrix());
+		material.setPropertyIfPresent(Shader.PROJECTION_MATRIX, projectionMatrix);
+		material.setPropertyIfPresent(Shader.VIEW_MATRIX, viewMatrix);
+		material.setPropertyIfPresent(Shader.TRANSFORMATION_MATRIX, model.getTransform().getMatrix());
 		//((Camera3D) scene.getCamera()).updateMatrix();
-		material.setProperty(Shader.VIEW_POSITION, ((Camera3D) scene.getCamera()).getPosition());
+		material.setPropertyIfPresent(Shader.VIEW_POSITION, ((Camera3D) scene.getCamera()).getPosition());
 		
 		//Logger.log("cam: "+((Camera3D) scene.getCamera()).getPosition());
 		
 		material.bindProperties(cache, scene, shader);
 		
-		/*if(GameEngine.DEBUG.ignoreDepth)
-			GL40.glDisable(GL40.GL_DEPTH_TEST);*/
+		if(GameEngine.DEBUG.ignoreDepth)
+			GL40.glDisable(GL40.GL_DEPTH_TEST);
 		
 		GL40.glLineWidth(model.getLineWidth());
 		GL40.glDrawElements(GL40.GL_LINES, gizmo.getVertexCount(), GL40.GL_UNSIGNED_INT, 0);

@@ -5,7 +5,7 @@ import org.lwjgl.opengl.GL40;
 import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.cache.attrib.FloatAttribArray;
-import lu.pcy113.pdr.engine.cache.attrib.IntAttribArray;
+import lu.pcy113.pdr.engine.cache.attrib.UIntAttribArray;
 import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.Shader;
@@ -20,7 +20,7 @@ public class GenerateRenderLayer extends RenderLayer<GameEngine, Mesh> {
 					1, -1, 0,
 					-1, -1, 0
 			}),
-			new IntAttribArray("ind", -1, 1, new int[] {
+			new UIntAttribArray("ind", -1, 1, new int[] {
 					0, 1, 2,
 					0, 2, 3
 			}),

@@ -1,22 +1,27 @@
 package lu.pcy113.pdr.client.game;
 
+import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFWGamepadState;
 
 import lu.pcy113.pdr.client.game.options.KeyOptions;
 import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.cache.CacheManager;
+import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.graph.composition.Compositor;
 import lu.pcy113.pdr.engine.graph.composition.SceneRenderLayer;
 import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.material.ShaderPart;
+import lu.pcy113.pdr.engine.graph.render.GizmoModelRenderer;
 import lu.pcy113.pdr.engine.graph.render.ModelRenderer;
 import lu.pcy113.pdr.engine.graph.render.Scene3DRenderer;
 import lu.pcy113.pdr.engine.logic.GameLogic;
+import lu.pcy113.pdr.engine.objs.GizmoModel;
 import lu.pcy113.pdr.engine.objs.Model;
 import lu.pcy113.pdr.engine.objs.entity.Entity;
+import lu.pcy113.pdr.engine.objs.entity.components.GizmoModelComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.ModelComponent;
 import lu.pcy113.pdr.engine.scene.Scene3D;
 import lu.pcy113.pdr.engine.scene.camera.Camera3D;
@@ -72,17 +77,28 @@ public class PDRClientGame2 implements GameLogic {
 		this.scene.addEntity("model", new Entity()
 				.addComponent(new ModelComponent(model)));
 		
+		Gizmo gizmoXYZ = ObjLoader.loadGizmo("gizmoXYZ", "./resources/models/gizmos/grid_xyz.obj");
+		GizmoModel gizmoXYZModel = new GizmoModel("gizmoXYZ", gizmoXYZ.getId(), new Transform3D());
+		this.scene.addEntity("gizmoXYZ", new Entity()
+				.addComponent(new GizmoModelComponent(gizmoXYZModel)));
+		
 		SceneRenderLayer sceneRender = new SceneRenderLayer("scene", scene);
 		cache.addRenderLayer(sceneRender);
 		
 		cache.addRenderer(new Scene3DRenderer());
 		cache.addRenderer(new ModelRenderer());
+		cache.addRenderer(new GizmoModelRenderer());
 		
 		compositor = new Compositor();
 		compositor.addRenderLayer(0, sceneRender);
 		
 		engine.getWindow().onResize((w, h) -> scene.getCamera().getProjection().update(w, h));
 		engine.getWindow().setBackground(new Vector4f(1, 1, 1, 1));
+		
+		Camera3D cam = (Camera3D) scene.getCamera();
+		cam.getProjection().setPerspective(true);
+		cam.getProjection().setFov((float) Math.toRadians(60));
+		cam.setPosition(new Vector3f(5, 0, 0)).updateMatrix();
 		
 	}
 	

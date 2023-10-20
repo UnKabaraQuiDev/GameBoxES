@@ -11,6 +11,7 @@ import org.joml.Vector4f;
 
 import lu.pcy113.pdr.engine.cache.attrib.FloatAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.IntAttribArray;
+import lu.pcy113.pdr.engine.cache.attrib.UIntAttribArray;
 import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.geom.Mesh;
 
@@ -95,7 +96,7 @@ public final class ObjLoader {
 		return new Gizmo(
 				name,
 				new FloatAttribArray("pos", 0, 3, verticesArr),
-				new IntAttribArray("ind", -1, 1, indicesArr),
+				new UIntAttribArray("ind", -1, 1, indicesArr),
 				new FloatAttribArray("col", 1, 4, colorArr));
 	}
 	
@@ -179,7 +180,7 @@ public final class ObjLoader {
 				name,
 				material,
 				new FloatAttribArray("pos", 0, 3, verticesArr),
-				new IntAttribArray("ind", -1, 1, indicesArr),
+				new UIntAttribArray("ind", -1, 1, indicesArr),
 				new FloatAttribArray("norm", 1, 3, normalsArr),
 				new FloatAttribArray("uv", 2, 2, uvsArr));
 	}
