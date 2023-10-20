@@ -55,9 +55,24 @@ public class TextModel implements UniqueID, Renderable {
 			
 			material.setProperty(TextShader.TXT_BUFFER+"["+j+"]", (Character) c);
 			
-			nPos[j*3] = (currentChar++)*charSize.x;
-			nPos[j*3+1] = (currentLine)*charSize.y;
-			nPos[j*3+2] = 0;
+			float cx = (currentChar++)*charSize.x;
+			float cy = (currentLine)*charSize.y;
+			
+			nPos[(j*4+0)*3+0] = (cx-0.5f)*charSize.x;
+			nPos[(j*4+0)*3+1] = (cy+0.5f)*charSize.y;
+			nPos[(j*4+0)*3+2] = 0;
+			
+			nPos[(j*4+1)*3+0] = (cx+0.5f)*charSize.x;
+			nPos[(j*4+1)*3+1] = (cy+0.5f)*charSize.y;
+			nPos[(j*4+1)*3+2] = 0;
+			
+			nPos[(j*4+2)*3+0] = (cx+0.5f)*charSize.x;
+			nPos[(j*4+2)*3+1] = (cy-0.5f)*charSize.y;
+			nPos[(j*4+2)*3+2] = 0;
+			
+			nPos[(j*4+3)*3+0] = (cx-0.5f)*charSize.x;
+			nPos[(j*4+3)*3+1] = (cy-0.5f)*charSize.y;
+			nPos[(j*4+3)*3+2] = 0;
 			
 			System.out.println(" =================== "+i+" >> "+j+"("+nPos[j*3]+", "+nPos[j*3+1]+")");
 			j++;

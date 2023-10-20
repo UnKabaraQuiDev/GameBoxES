@@ -8,7 +8,7 @@ public class TextShader extends Shader {
 	public TextShader(String name) {
 		super(TextShader.class.getName()+"."+name, new ShaderPart[] {
 			new ShaderPart("./resources/shaders/text/text.vert"),
-			new ShaderPart("./resources/shaders/text/text.geo"),
+			//new ShaderPart("./resources/shaders/text/text.geo"),
 			new ShaderPart("./resources/shaders/text/"+name+".frag")
 		});
 	}

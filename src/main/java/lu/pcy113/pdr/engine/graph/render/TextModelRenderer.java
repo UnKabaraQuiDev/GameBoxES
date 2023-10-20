@@ -73,7 +73,10 @@ public class TextModelRenderer extends Renderer<Scene, TextModelComponent> {
 		material.bindProperties(cache, scene, shader);
 		System.err.println("mat props bound");
 		
+		GL40.glEnable(GL40.GL_BLEND);
+		GL40.glBlendFunc(GL40.GL_SRC_ALPHA, GL40.GL_ONE_MINUS_SRC_ALPHA);
 		GL40.glDrawElements(GL40.GL_POINTS, mesh.getVertexCount(), GL40.GL_UNSIGNED_INT, 0);
+		GL40.glDisable(GL40.GL_BLEND);
 		
 		// debug only
 		//GameEngine.DEBUG.wireframe(cache, scene, mesh, projectionMatrix, viewMatrix, tModel.getTransform().getMatrix());

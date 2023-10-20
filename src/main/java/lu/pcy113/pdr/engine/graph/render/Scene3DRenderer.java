@@ -37,6 +37,7 @@ public class Scene3DRenderer extends Renderer<GameEngine, Scene3D> {
 		
 		for(Entity e : scene.getEntities().values()) {
 			Component c = null;
+			System.out.println("entity: "+e.getComponents());
 			if((c = e.getComponent(ModelComponent.class)) != null) {
 				modelRenderer.render(cache, scene, (ModelComponent) c);
 			} else if((c = e.getComponent(MeshComponent.class)) != null) {

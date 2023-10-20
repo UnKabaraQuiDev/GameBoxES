@@ -1,5 +1,7 @@
 package lu.pcy113.pdr.engine.cache.attrib;
 
+import java.util.Arrays;
+
 import org.lwjgl.opengl.GL40;
 
 public class FloatAttribArray extends AttribArray {
@@ -26,6 +28,9 @@ public class FloatAttribArray extends AttribArray {
 		if(nPos.length != data.length)
 			return;
 		data = nPos;
+		
+		System.out.println("New data is"+Arrays.toString(data));
+		
 		GL40.glBufferSubData(GL40.GL_ARRAY_BUFFER, 0, data);
 	}
 	

@@ -28,5 +28,5 @@ void main() {
     float width = sin(nx)*0.5+0.5;
     float height = sin(ny*yScale)*0.5+0.5;
     fragColor = vec4(hsv(cos(width)*0.5+0.5+0.45), 1.0) * (width * height);*/
-    fragColor = vec4(0.2, 0.3, 0.4, 1.0);
+    fragColor = vec4(0, 0, 0, 1.0);
 }

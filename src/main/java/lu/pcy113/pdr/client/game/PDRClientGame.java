@@ -38,6 +38,9 @@ import lu.pcy113.pdr.engine.objs.GizmoModel;
 import lu.pcy113.pdr.engine.objs.Model;
 import lu.pcy113.pdr.engine.objs.PointLight;
 import lu.pcy113.pdr.engine.objs.entity.Entity;
+import lu.pcy113.pdr.engine.objs.entity.components.ModelComponent;
+import lu.pcy113.pdr.engine.objs.entity.components.PointLightComponent;
+import lu.pcy113.pdr.engine.objs.entity.components.PointLightSurfaceComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.TextModelComponent;
 import lu.pcy113.pdr.engine.objs.text.TextModel;
 import lu.pcy113.pdr.engine.scene.Scene3D;
@@ -90,11 +93,11 @@ public class PDRClientGame implements GameLogic {
 		this.fillTMaterial = new FillTextMaterial("fillTMaterial", raster.getId(), rasterIndex.getId(), new Vector4f(1, 0.5f, 0.5f, 1));
 		engine.getCache().addMaterial(fillTMaterial);
 		
-		TextMesh tMesh = new TextMesh(100);
+		/*TextMesh tMesh = new TextMesh(64);
 		engine.getCache().addMesh(tMesh);
 		
 		tModel = new TextModel("tModel", fillTMaterial.getId(), new Transform3D().scaleMul(0.3f, 0.3f, 0.3f), "Test Text", new Vector2f(0.3f, 0.3f));
-		engine.getCache().addTextModel(tModel);
+		engine.getCache().addTextModel(tModel);*/
 		
 		this.txtDiffShader = new TxtDiffuse1Shader();
 		engine.getCache().addShader(txtDiffShader);
@@ -150,7 +153,7 @@ public class PDRClientGame implements GameLogic {
 		engine.getCache().addModel(model2);
 		
 		this.scene = new Scene3D("main-scene");
-		/*this.scene.addEntity("model", new Entity()
+		this.scene.addEntity("model", new Entity()
 				.addComponent(new ModelComponent(model))
 				.addComponent(new PointLightSurfaceComponent()));
 		this.scene.addEntity("model1", new Entity()
@@ -161,12 +164,12 @@ public class PDRClientGame implements GameLogic {
 				.addComponent(new PointLightSurfaceComponent()));
 		this.scene.addEntity("light", new Entity()
 				.addComponent(new PointLightComponent(light)));
-		this.scene.addEntity("chestModel", new Entity()
+		/*this.scene.addEntity("chestModel", new Entity()
 				.addComponent(new ModelComponent(chestModel))
 				.addComponent(new PointLightSurfaceComponent()));*/
 		
-		this.scene.addEntity("tMod", new Entity()
-				.addComponent(new TextModelComponent(tModel)));
+		/*this.scene.addEntity("tMod", new Entity()
+				.addComponent(new TextModelComponent(tModel)));*/
 		
 		engine.getCache().addScene(scene);
 		
@@ -234,6 +237,7 @@ public class PDRClientGame implements GameLogic {
 		//compositor.addRenderLayer(0, colorFilterRender);
 		
 		engine.getWindow().onResize((w, h) -> scene.getCamera().getProjection().update(w, h));
+		engine.getWindow().setBackground(new Vector4f(1, 1, 1, 1));
 		
 		//((Camera3D) scene.getCamera()).lookAt(new Vector3f(0, -5, 9.17f).mul(0.5f), new Vector3f().zero());
 		//((Camera3D) scene.getCamera()).getProjection().setPerspective(false);
@@ -278,12 +282,12 @@ public class PDRClientGame implements GameLogic {
 				
 				cam.move(cx, cy, camSpeed);
 				
-				cam.move(ax, ay, bx, by, camSpeed, camRotSpeed);
+				//cam.move(ax, ay, bx, by, camSpeed, camRotSpeed);
 				
 				float scrollSpeed = 0.5f;
 				
-				cam.getProjection().setSize((float) (org.joml.Math.clamp(0, 150, cam.getProjection().getSize()+engine.getWindow().getScroll().y*scrollSpeed)));
-				cam.getProjection().update();
+				//cam.getProjection().setSize((float) (org.joml.Math.clamp(0, 150, cam.getProjection().getSize()+engine.getWindow().getScroll().y*scrollSpeed)));
+				//cam.getProjection().update();
 				
 				System.err.println("ax"+ax+" ay"+ay+" : bx"+bx+" by"+by+" : sx"+engine.getWindow().getScroll().x+" sy"+engine.getWindow().getScroll().y+" > s"+cam.getProjection().getSize());
 				try {
@@ -293,7 +297,7 @@ public class PDRClientGame implements GameLogic {
 					e.printStackTrace();
 				}
 				
-				cam.updateMatrix();
+				//cam.updateMatrix();
 				
 				light.setPosition(new Vector3f(0, (float) Math.sin(GX)+1.5f, 0));
 				

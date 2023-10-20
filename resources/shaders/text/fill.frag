@@ -1,6 +1,6 @@
 #version 400 core
 
-flat in int FragIndex;
+flat in int VertexIndex;
 in vec2 texCoord;
 
 out vec4 fragColor;

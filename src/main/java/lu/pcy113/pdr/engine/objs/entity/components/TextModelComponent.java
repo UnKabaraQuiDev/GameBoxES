@@ -8,7 +8,7 @@ import lu.pcy113.pdr.engine.objs.text.TextModel;
 public class TextModelComponent extends Component implements Renderable {
 	
 	private String textModelId;
-	private int textSize = 100;
+	private int textSize = 64;
 	
 	public TextModelComponent(TextModel textTextModel) {
 		this.textModelId = textTextModel.getId();

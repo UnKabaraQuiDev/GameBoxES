@@ -27,24 +27,29 @@ public class ModelRenderer extends Renderer<Scene3D, ModelComponent> {
 		Model c = co.getModel(cache);
 		if(c == null)
 			return;
+		System.out.println("model ok");
 		
 		Logger.log(Level.INFO, "Model : "+c.getId());
 		
 		Mesh mesh = cache.getMesh(c.getMesh());
 		if(mesh == null)
 			return;
+		System.out.println("mesh ok");
 		
 		/*MeshRenderer meshRender = (MeshRenderer) cache.getRenderer(Mesh.NAME);
 		meshRender.render(cache, scene, mesh);*/
 		
 		mesh.bind();
+		System.out.println("mesh bound");
 		
 		Material material = cache.getMaterial(mesh.getMaterial());
 		if(material == null)
 			return;
+		System.out.println("material ok");
 		Shader shader = cache.getShader(material.getShader());
 		if(shader == null)
 			return;
+		System.out.println("shader ok");
 		
 		shader.bind();
 		

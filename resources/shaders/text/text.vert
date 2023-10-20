@@ -10,6 +10,6 @@ uniform mat4 viewMatrix;
 uniform mat4 modelMatrix;
 
 void main() {
-	gl_Position = vec4(pos, 1);
+	gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(pos, 1);
 	VertexIndex = index;
 }

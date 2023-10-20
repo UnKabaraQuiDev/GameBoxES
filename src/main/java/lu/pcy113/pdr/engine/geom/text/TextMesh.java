@@ -12,9 +12,9 @@ public class TextMesh extends Mesh {
 	public TextMesh(int size) {
 		super(NAME+"_"+size,
 				null,
-				new FloatAttribArray("pos", 0, 3, new float[size*3], false),
+				new FloatAttribArray("pos", 0, 3, new float[size*4*3], false),
 				new IntAttribArray("ind", -1, 1, ArrayUtils.intCountingUp(0, size)),
-				new IntAttribArray("index", 1, 1, ArrayUtils.intCountingUp(0, size)));
+				new IntAttribArray("index", 1, 1, ArrayUtils.intCountingUp(0, size, 1, 4)));
 	}
 
 }
