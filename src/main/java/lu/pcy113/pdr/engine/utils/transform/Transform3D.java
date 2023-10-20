@@ -11,7 +11,7 @@ public class Transform3D extends Transform {
 	protected Vector3f scale;
 	
 	public Transform3D() {
-		this(new Vector3f(), new Quaternionf(), new Vector3f(1f));
+		this(new Vector3f(0), new Quaternionf().identity(), new Vector3f(1));
 	}
 	public Transform3D(Vector3f trans, Quaternionf rot, Vector3f scale) {
 		this.translation = trans;

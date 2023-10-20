@@ -30,6 +30,7 @@ public class PDRClientGame2 implements GameLogic {
 	CacheManager cache;
 	
 	Scene3D scene;
+	Model model;
 	
 	Compositor compositor;
 	
@@ -48,7 +49,7 @@ public class PDRClientGame2 implements GameLogic {
 		GameEngine.DEBUG.gizmos = false;
 		
 		Shader shader = new Shader("main",
-				new ShaderPart("./resources/shaders/main/main.frag"),
+				new ShaderPart("./resources/shaders/main/uv.frag"),
 				new ShaderPart("./resources/shaders/main/main.vert")) {
 			@Override
 			public void createUniforms() {
@@ -62,9 +63,9 @@ public class PDRClientGame2 implements GameLogic {
 			
 		}};
 		cache.addMaterial(mat);
-		Mesh mesh = ObjLoader.loadMesh("chest", mat.getId(), "./resources/models/cube2.obj");
+		Mesh mesh = ObjLoader.loadMesh("chest", mat.getId(), "./resources/models/cube.obj");
 		cache.addMesh(mesh);
-		Model model = new Model("model", mesh.getId(), new Transform3D());
+		model = new Model("model", mesh.getId(), new Transform3D());
 		cache.addModel(model);
 		
 		this.scene = new Scene3D("main-scene");
@@ -119,11 +120,16 @@ public class PDRClientGame2 implements GameLogic {
 				
 				cam.move(ax, ay, bx, by, camSpeed, camRotSpeed);
 				
+				System.err.println(cam.getViewMatrix());
+				
 				cam.getProjection().setPerspective(true);
+				cam.getProjection().setFov((float) Math.toRadians(80));
 				cam.getProjection().update();
 				cam.updateMatrix();
 				
 				GX += 0.01f;
+				
+				((Transform3D) model.getTransform()).rotate(0.01f, 0.01f, 0.01f).updateMatrix();
 				
 				engine.getWindow().setBackground(new Vector4f(GX % 1, GX % 1, GX % 1, 1));
 				

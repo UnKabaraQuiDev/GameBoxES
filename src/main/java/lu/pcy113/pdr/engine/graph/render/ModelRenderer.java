@@ -1,5 +1,6 @@
 package lu.pcy113.pdr.engine.graph.render;
 
+import java.util.Arrays;
 import java.util.logging.Level;
 
 import org.joml.Matrix4f;
@@ -61,6 +62,10 @@ public class ModelRenderer extends Renderer<Scene3D, ModelComponent> {
 			plsc.bindLights(cache, scene.getLights(), material);
 		
 		material.bindProperties(cache, scene, shader);
+		
+		System.err.println(material.getProperties());
+		System.err.println(Arrays.toString(mesh.getAttribs()));
+		System.err.println(mesh.getVertices());
 		
 		GL40.glDrawElements(GL40.GL_TRIANGLES, mesh.getVertexCount(), GL40.GL_UNSIGNED_INT, 0);
 		

@@ -66,4 +66,9 @@ public abstract class AttribArray {
 	public int getVbo() {return vbo;}
 	public boolean isStatic() {return iStatic;}
 	
+	@Override
+	public String toString() {
+		return getVbo()+"|"+getIndex()+") "+getName()+": "+getLength()+"/"+getDataSize()+"="+getDataCount();
+	}
+	
 }
