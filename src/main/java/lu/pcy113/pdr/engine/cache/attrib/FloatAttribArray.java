@@ -12,6 +12,14 @@ public class FloatAttribArray extends AttribArray {
 		super(name, index, dataSize);
 		this.data = data;
 	}
+	public FloatAttribArray(String name, int index, int dataSize, float[] data, int bufferType) {
+		super(name, index, dataSize, bufferType);
+		this.data = data;
+	}
+	public FloatAttribArray(String name, int index, int dataSize, float[] data, int bufferType, boolean s) {
+		super(name, index, dataSize, bufferType, s);
+		this.data = data;
+	}
 	public FloatAttribArray(String name, int index, int dataSize, float[] data, boolean s) {
 		super(name, index, dataSize, s);
 		this.data = data;
@@ -20,12 +28,18 @@ public class FloatAttribArray extends AttribArray {
 	public float[] getData() {return data;}
 	
 	@Override
+	public void init() {
+		GL40.glBufferData(bufferType, data, iStatic ? GL40.GL_STATIC_DRAW : GL40.GL_DYNAMIC_DRAW);
+		GL40.glVertexAttribPointer(index, dataSize, GL40.GL_FLOAT, false, 0, 0);
+	}
+	
+	@Override
 	public int getLength() {
 		return data.length;
 	}
 	
 	public void update(float[] nPos) {
-		if(nPos.length != data.length)
+		if(!iStatic && nPos.length != data.length)
 			return;
 		data = nPos;
 		
