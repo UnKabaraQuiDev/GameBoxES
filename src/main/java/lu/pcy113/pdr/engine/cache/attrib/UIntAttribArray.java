@@ -10,8 +10,12 @@ public class UIntAttribArray extends AttribArray {
 		super(name, index, dataSize);
 		this.data = data;
 	}
-	public UIntAttribArray(String name, int index, int dataSize, int[] data, boolean s) {
-		super(name, index, dataSize, s);
+	public UIntAttribArray(String name, int index, int dataSize, int[] data, int bufferType) {
+		super(name, index, dataSize, bufferType);
+		this.data = data;
+	}
+	public UIntAttribArray(String name, int index, int dataSize, int[] data, int bufferType, boolean s) {
+		super(name, index, dataSize, bufferType, s);
 		this.data = data;
 	}
 	

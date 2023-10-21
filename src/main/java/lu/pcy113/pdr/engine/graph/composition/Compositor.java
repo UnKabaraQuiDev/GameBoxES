@@ -59,7 +59,7 @@ public class Compositor {
 			
 			RenderLayer rl = cache.getRenderLayer(l);
 			if(rl == null) {
-				Logger.log(Level.WARNING, "Render Layer: "+rl.getId()+", not found in Cache");
+				Logger.log(Level.WARNING, "Render Layer: "+l+", not found in Cache");
 				break;
 			}
 			

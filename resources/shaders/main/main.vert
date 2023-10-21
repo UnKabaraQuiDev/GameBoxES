@@ -9,11 +9,11 @@ out vec3 normal;
 
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
-uniform mat4 modelMatrix;
+uniform mat4 transformationMatrix;
 
 void main()
 {
-    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(positions, 1.0);
+    gl_Position = projectionMatrix * viewMatrix * transformationMatrix * vec4(positions, 1.0);
     texCoord = uvs;
     normal = normals;
 }

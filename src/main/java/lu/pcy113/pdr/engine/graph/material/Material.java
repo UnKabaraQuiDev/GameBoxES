@@ -34,7 +34,6 @@ public class Material implements UniqueID {
 		properties.put(name, value);
 	}
 	public void setPropertyIfPresent(String name, Object value) {
-		System.out.println(name+" contained: "+properties.containsKey(name));
 		if(properties.containsKey(name))
 			properties.put(name, value);
 	}

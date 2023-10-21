@@ -44,7 +44,7 @@ public class MeshRenderer extends Renderer<Scene3D, MeshComponent> {
 		}
 		material.bindProperties(cache, scene, shader);
 		
-		GL40.glDrawElements(GL40.GL_TRIANGLES, mesh.getVertexCount(), GL40.GL_UNSIGNED_INT, 0);
+		GL40.glDrawElements(GL40.GL_TRIANGLES, mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);
 		
 		// debug only
 		GameEngine.DEBUG.wireframe(cache, scene, mesh, projectionMatrix, viewMatrix, null);

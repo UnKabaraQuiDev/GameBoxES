@@ -7,7 +7,7 @@ public class BackgroundShader extends Shader {
 	
 	public static final String NAME = BackgroundShader.class.getName();
 	
-	public static final String HUE = "hue";
+	public static final String COLOR = "color";
 	
 	public BackgroundShader(int index) {
 		super(NAME+"-"+index,
@@ -20,7 +20,7 @@ public class BackgroundShader extends Shader {
 		// vert
 		// None
 		// frag
-		getUniform(HUE);
+		createUniform(COLOR);
 	}
 
 }

@@ -21,8 +21,8 @@ public class GenerateRenderLayer extends RenderLayer<GameEngine, Mesh> {
 					-1, -1, 0
 			}),
 			new UIntAttribArray("ind", -1, 1, new int[] {
-					0, 1, 2,
-					0, 2, 3
+					0, 1, 3,
+					1, 2, 3
 			}),
 			new FloatAttribArray("uv", 1, 2, new float[] {
 					-1, 1,
@@ -41,14 +41,6 @@ public class GenerateRenderLayer extends RenderLayer<GameEngine, Mesh> {
 	
 	@Override
 	public void render(CacheManager cache, GameEngine engine) {
-		/*MeshRenderer renderer = (MeshRenderer) cache.getRenderer(Mesh.NAME);
-		if(renderer == null) {
-			Logger.log(Level.SEVERE, "No renderer found for: "+Mesh.NAME);
-			return;
-		}
-		
-		renderer.render(cache, null, (Mesh) target);*/
-		
 		target.bind();
 		
 		Material material = cache.getMaterial(this.material);
@@ -61,7 +53,7 @@ public class GenerateRenderLayer extends RenderLayer<GameEngine, Mesh> {
 		//GL40.glDisable(GL40.GL_DEPTH_TEST);
 		GL40.glDepthMask(false);
 		
-		GL40.glDrawElements(GL40.GL_TRIANGLES, target.getVertexCount(), GL40.GL_UNSIGNED_INT, 0);
+		GL40.glDrawElements(GL40.GL_TRIANGLES, target.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);
 		
 		GL40.glDepthMask(true);
 		

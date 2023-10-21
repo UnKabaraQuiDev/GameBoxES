@@ -66,8 +66,9 @@ public class ModelRenderer extends Renderer<Scene3D, ModelComponent> {
 		System.err.println(material.getProperties());
 		System.err.println(Arrays.toString(mesh.getAttribs()));
 		System.err.println(mesh.getVertices());
+		System.err.println(mesh.getIndices());
 		
-		GL40.glDrawElements(GL40.GL_TRIANGLES, mesh.getVertexCount(), GL40.GL_UNSIGNED_INT, 0);
+		GL40.glDrawElements(GL40.GL_TRIANGLES, mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);
 		
 		// debug only
 		//GameEngine.DEBUG.wireframe(cache, scene, mesh, projectionMatrix, viewMatrix, c.getTransform().getMatrix());

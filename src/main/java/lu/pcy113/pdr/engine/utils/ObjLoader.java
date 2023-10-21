@@ -8,6 +8,7 @@ import org.joml.Vector2i;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 import org.joml.Vector4f;
+import org.lwjgl.opengl.GL40;
 
 import lu.pcy113.pdr.engine.cache.attrib.FloatAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.IntAttribArray;
@@ -95,9 +96,9 @@ public final class ObjLoader {
 		
 		return new Gizmo(
 				name,
-				new FloatAttribArray("pos", 0, 3, verticesArr),
-				new UIntAttribArray("ind", -1, 1, indicesArr),
-				new FloatAttribArray("col", 1, 4, colorArr));
+				new FloatAttribArray("pos", 0, 3, verticesArr, GL40.GL_ARRAY_BUFFER),
+				new UIntAttribArray("ind", -1, 1, indicesArr, GL40.GL_ELEMENT_ARRAY_BUFFER),
+				new FloatAttribArray("col", 1, 4, colorArr, GL40.GL_ARRAY_BUFFER));
 	}
 	
 	public static Mesh loadMesh(String name, String material, String path) {
@@ -179,10 +180,10 @@ public final class ObjLoader {
 		return new Mesh(
 				name,
 				material,
-				new FloatAttribArray("pos", 0, 3, verticesArr),
-				new UIntAttribArray("ind", -1, 1, indicesArr),
-				new FloatAttribArray("norm", 1, 3, normalsArr),
-				new FloatAttribArray("uv", 2, 2, uvsArr));
+				new FloatAttribArray("pos", 0, 3, verticesArr, GL40.GL_ARRAY_BUFFER),
+				new UIntAttribArray("ind", -1, 1, indicesArr, GL40.GL_ELEMENT_ARRAY_BUFFER),
+				new FloatAttribArray("norm", 1, 3, normalsArr, GL40.GL_ARRAY_BUFFER),
+				new FloatAttribArray("uv", 2, 2, uvsArr, GL40.GL_ARRAY_BUFFER));
 	}
 	
 	private static void processFace(String token, List<Vector3i> faces) {

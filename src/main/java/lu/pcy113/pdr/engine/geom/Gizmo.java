@@ -27,7 +27,7 @@ public class Gizmo implements UniqueID, Cleanupable, Renderable {
 	protected UIntAttribArray indices;
 	protected FloatAttribArray color;
 	
-	protected int vertexCount;
+	protected int vertexCount, indicesCount;
 	
 	/**
 	 * Positions are stored as attribArray 0,
@@ -44,7 +44,8 @@ public class Gizmo implements UniqueID, Cleanupable, Renderable {
 			Logger.log(Level.WARNING, "Indices ("+indices.getLength()+"/"+indices.getDataSize()+"="+indices.getDataCount()+") must be equal to vertices ("+vertices.getLength()+"/"+vertices.getDataSize()+"="+vertices.getDataCount()+")");
 		}*/
 		
-		this.vertexCount = indices.getDataCount();
+		this.vertexCount = vertices.getDataCount();
+		this.indicesCount = indices.getLength();
 		
 		//System.out.println("gizmo vertices ("+(vertices.getLength()/3)+"*3): "+Arrays.toString(vertices.getData()));
 		//System.out.println("gizmo color ("+(color.getLength()/4)+"*4): "+Arrays.toString(color.getData()));
@@ -110,5 +111,6 @@ public class Gizmo implements UniqueID, Cleanupable, Renderable {
 	public UIntAttribArray getIndices() {return indices;}
 	public FloatAttribArray getVertices() {return vertices;}
 	public FloatAttribArray getColor() {return color;}
+	public int getIndicesCount() {return indicesCount;}
 	
 }

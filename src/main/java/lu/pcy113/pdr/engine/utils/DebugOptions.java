@@ -22,9 +22,12 @@ import lu.pcy113.pdr.engine.scene.Scene;
 
 public class DebugOptions {
 	
-	public boolean perfHistory = true;
+	public boolean perfHistory = false;
 	
 	public void perfHistory(CacheManager cache, GameEngine engine, double deltaUpdate, double deltaRender, double timeUpdate, double timeRender) {
+		if(!perfHistory)
+			return;
+		
 		RenderLayer rl = cache.getRenderLayer(PerfHistoryLayer.NAME);
 		if(rl == null) {
 			rl = new PerfHistoryLayer();

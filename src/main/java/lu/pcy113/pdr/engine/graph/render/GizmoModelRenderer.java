@@ -65,7 +65,7 @@ public class GizmoModelRenderer extends Renderer<Scene, GizmoModelComponent> {
 			GL40.glDisable(GL40.GL_DEPTH_TEST);
 		
 		GL40.glLineWidth(model.getLineWidth());
-		GL40.glDrawElements(GL40.GL_LINES, gizmo.getVertexCount(), GL40.GL_UNSIGNED_INT, 0);
+		GL40.glDrawElements(GL40.GL_LINES, gizmo.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);
 		
 		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_FILL);
 		//GL40.glEnable(GL40.GL_DEPTH_TEST);

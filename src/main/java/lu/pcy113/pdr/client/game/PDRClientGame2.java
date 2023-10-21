@@ -10,11 +10,13 @@ import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.graph.composition.Compositor;
+import lu.pcy113.pdr.engine.graph.composition.GenerateRenderLayer;
 import lu.pcy113.pdr.engine.graph.composition.SceneRenderLayer;
 import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.material.ShaderPart;
 import lu.pcy113.pdr.engine.graph.render.GizmoModelRenderer;
+import lu.pcy113.pdr.engine.graph.render.MeshRenderer;
 import lu.pcy113.pdr.engine.graph.render.ModelRenderer;
 import lu.pcy113.pdr.engine.graph.render.Scene3DRenderer;
 import lu.pcy113.pdr.engine.logic.GameLogic;
@@ -22,6 +24,7 @@ import lu.pcy113.pdr.engine.objs.GizmoModel;
 import lu.pcy113.pdr.engine.objs.Model;
 import lu.pcy113.pdr.engine.objs.entity.Entity;
 import lu.pcy113.pdr.engine.objs.entity.components.GizmoModelComponent;
+import lu.pcy113.pdr.engine.objs.entity.components.MeshComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.ModelComponent;
 import lu.pcy113.pdr.engine.scene.Scene3D;
 import lu.pcy113.pdr.engine.scene.camera.Camera3D;
@@ -36,6 +39,7 @@ public class PDRClientGame2 implements GameLogic {
 	
 	Scene3D scene;
 	Model model;
+	BackgroundMaterial genMat;
 	
 	Compositor compositor;
 	
@@ -74,6 +78,8 @@ public class PDRClientGame2 implements GameLogic {
 		cache.addModel(model);
 		
 		this.scene = new Scene3D("main-scene");
+		this.scene.addEntity("mesh", new Entity()
+				.addComponent(new MeshComponent(mesh)));
 		this.scene.addEntity("model", new Entity()
 				.addComponent(new ModelComponent(model)));
 		
@@ -82,23 +88,33 @@ public class PDRClientGame2 implements GameLogic {
 		this.scene.addEntity("gizmoXYZ", new Entity()
 				.addComponent(new GizmoModelComponent(gizmoXYZModel)));
 		
-		SceneRenderLayer sceneRender = new SceneRenderLayer("scene", scene);
-		cache.addRenderLayer(sceneRender);
-		
 		cache.addRenderer(new Scene3DRenderer());
 		cache.addRenderer(new ModelRenderer());
 		cache.addRenderer(new GizmoModelRenderer());
+		cache.addRenderer(new MeshRenderer());
+		
+		SceneRenderLayer sceneRender = new SceneRenderLayer("scene", scene);
+		cache.addRenderLayer(sceneRender);
+		
+		BackgroundShader genShader = new BackgroundShader(0);
+		cache.addShader(genShader);
+		genMat = new BackgroundMaterial(0, genShader);
+		cache.addMaterial(genMat);
+		GenerateRenderLayer genLayer = new GenerateRenderLayer("gen", genMat.getId());
+		cache.addRenderLayer(genLayer);
 		
 		compositor = new Compositor();
-		compositor.addRenderLayer(0, sceneRender);
+		compositor.addRenderLayer(0, genLayer);
+		compositor.addRenderLayer(1, sceneRender);
 		
+		scene.getCamera().getProjection().setPerspective(true);
 		engine.getWindow().onResize((w, h) -> scene.getCamera().getProjection().update(w, h));
 		engine.getWindow().setBackground(new Vector4f(1, 1, 1, 1));
 		
 		Camera3D cam = (Camera3D) scene.getCamera();
 		cam.getProjection().setPerspective(true);
 		cam.getProjection().setFov((float) Math.toRadians(60));
-		cam.setPosition(new Vector3f(5, 0, 0)).updateMatrix();
+		//cam.setPosition(new Vector3f(5, 0, 0)).updateMatrix();
 		
 	}
 	
@@ -138,15 +154,14 @@ public class PDRClientGame2 implements GameLogic {
 				
 				System.err.println(cam.getViewMatrix());
 				
-				cam.getProjection().setPerspective(true);
-				cam.getProjection().setFov((float) Math.toRadians(80));
-				cam.getProjection().update();
+				//cam.getRotation().rotateZ(0.1f);
 				cam.updateMatrix();
 				
 				GX += 0.01f;
 				
 				((Transform3D) model.getTransform()).rotate(0.01f, 0.01f, 0.01f).updateMatrix();
 				
+				genMat.setColor(new Vector4f(GX % 1, GX % 1, GX % 1, 1));
 				engine.getWindow().setBackground(new Vector4f(GX % 1, GX % 1, GX % 1, 1));
 				
 				float scrollSpeed = 0.5f;
