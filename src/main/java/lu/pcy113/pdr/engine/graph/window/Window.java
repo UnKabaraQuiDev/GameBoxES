@@ -54,6 +54,7 @@ public class Window implements Cleanupable {
 		
 		if(!GLFW.glfwInit())
 			throw new RuntimeException("Failed to initialize GLFW");
+		
 			
 		monitor = GLFW.glfwGetPrimaryMonitor();
 		if(monitor == MemoryUtil.NULL)
@@ -62,7 +63,8 @@ public class Window implements Cleanupable {
 		handle = GLFW.glfwCreateWindow(options.windowSize.x, options.windowSize.y, options.title, MemoryUtil.NULL, MemoryUtil.NULL);
 		
 		GLFW.glfwMakeContextCurrent(handle);
-		GL.createCapabilities();
+		if(GL.createCapabilities() == null)
+			throw new RuntimeException("Failed to create OpenGL context");
 		
 		GLFW.glfwDefaultWindowHints();
 		GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);

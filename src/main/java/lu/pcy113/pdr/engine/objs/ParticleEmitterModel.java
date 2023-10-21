@@ -1,5 +1,6 @@
 package lu.pcy113.pdr.engine.objs;
 
+import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.geom.particles.ParticleEmitter;
 import lu.pcy113.pdr.engine.impl.Renderable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
@@ -26,6 +27,7 @@ public class ParticleEmitterModel implements UniqueID, Renderable {
 	public Transform getTransform() {return transform;}
 	public void setTransform(Transform transform) {this.transform = transform;}
 	public String getEmitter() {return emitter;}
+	public ParticleEmitter getEmitter(CacheManager cache) {return cache.getParticleEmitter(emitter);}
 	public void setEmitter(String emitter) {this.emitter = emitter;}
 	
 }

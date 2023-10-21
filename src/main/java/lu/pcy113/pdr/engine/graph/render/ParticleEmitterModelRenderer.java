@@ -36,15 +36,12 @@ public class ParticleEmitterModelRenderer extends Renderer<Scene3D, ParticleEmit
 		if(pe == null)
 			return;
 		System.out.println("pe ok");
-		Mesh mesh = cache.getMesh(pe.getMesh());
+		Mesh mesh = pe.getParticleMesh();
 		if(mesh == null)
 			return;
 		System.out.println("mesh ok");
 		
-		mesh.bind();
-		System.out.println("mesh bound");
-		
-		Material material = cache.getMaterial(pe.getMaterial());
+		Material material = cache.getMaterial(mesh.getMaterial());
 		if(material == null)
 			return;
 		System.out.println("material ok");
@@ -67,35 +64,20 @@ public class ParticleEmitterModelRenderer extends Renderer<Scene3D, ParticleEmit
 			plsc.bindLights(cache, scene.getLights(), material);
 		
 		material.bindProperties(cache, scene, shader);
-		System.out.println("material props bound");
+		System.out.println("material props bound XX");
 		
 		if(shader.isTransparent()) {
 			GL40.glEnable(GL40.GL_BLEND);
 			GL40.glBlendFunc(GL40.GL_SRC_ALPHA, GL40.GL_ONE_MINUS_SRC_ALPHA);
 		}
 		
-		//pe.getMatrices().enable();
-		System.out.println("matrices enabled");
+		pe.bind();
+		System.out.println("mesh bound");
 		
-		//pe.getMatrices().bind();
-		System.out.println("matrices bound");
-		
-		//GL40.glVertexAttribPointer(pe.getMatrices().getIndex(), 4, GL40.GL_FLOAT, false, 16, 0);
-		System.out.println("matrices attrib pointer");
-		
-		//GL40.glVertexAttribDivisor(pe.getMatrices().getIndex(), 1);
-		System.out.println("matrices divisor 1");
-		
-		GL40.glDrawArraysInstanced(GL40.GL_TRIANGLES, 0, 3, pe.getParticleCount());
-		System.out.println("drawn");
+		GL40.glDrawElementsInstanced(GL40.GL_TRIANGLES, mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0, pe.getParticleCount());
+		System.out.println("drawn, but: "+GL40.glGetError());
 		
 		GL40.glDisable(GL40.GL_BLEND);
-		
-		//pe.getMatrices().unbind();
-		System.out.println("matrices unbound");
-		
-		//GL40.glVertexAttribDivisor(pe.getMatrices().getIndex(), 0);
-		System.out.println("matrices divisor 0");
 		
 		// debug only
 		//GameEngine.DEBUG.wireframe(cache, scene, mesh, projectionMatrix, viewMatrix, c.getTransform().getMatrix());

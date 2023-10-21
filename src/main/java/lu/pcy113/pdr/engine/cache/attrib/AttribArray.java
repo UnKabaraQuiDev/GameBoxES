@@ -1,8 +1,12 @@
 package lu.pcy113.pdr.engine.cache.attrib;
 
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.opengl.GL40;
 
 import lu.pcy113.pdr.engine.impl.Cleanupable;
+import lu.pcy113.pdr.engine.utils.ArrayUtils;
 
 public abstract class AttribArray implements Cleanupable {
 	
@@ -13,7 +17,7 @@ public abstract class AttribArray implements Cleanupable {
 	
 	protected String name;
 	protected int index;
-	protected int dataSize;
+	protected final int dataSize, divisor;
 	
 	public AttribArray(String name, int index, int dataSize) {
 		this(name, index, dataSize, GL40.GL_ARRAY_BUFFER, true);
@@ -24,12 +28,19 @@ public abstract class AttribArray implements Cleanupable {
 	public AttribArray(String name, int index, int dataSize, boolean iStatic) {
 		this(name, index, dataSize, GL40.GL_ARRAY_BUFFER, iStatic);
 	}
+	public AttribArray(String name, int index, int dataSize, boolean iStatic, int divisor) {
+		this(name, index, dataSize, GL40.GL_ARRAY_BUFFER, iStatic, divisor);
+	}
 	public AttribArray(String name, int index, int dataSize, int bufferType, boolean iStatic) {
+		this(name, index, dataSize, bufferType, iStatic, 0);
+	}
+	public AttribArray(String name, int index, int dataSize, int bufferType, boolean iStatic, int divisor) {
 		this.name = name;
 		this.index = index;
 		this.dataSize = dataSize;
 		this.bufferType = bufferType;
 		this.iStatic = iStatic;
+		this.divisor = divisor;
 	}
 	
 	public int getDataCount() {
@@ -38,9 +49,11 @@ public abstract class AttribArray implements Cleanupable {
 	
 	public abstract int getLength();
 	public abstract void init();
+	public abstract Object get(int i);
 	
 	public void enable() {
 		GL40.glEnableVertexAttribArray(index);
+		GL40.glVertexAttribDivisor(index, divisor);
 	}
 	public void disable() {
 		GL40.glDisableVertexAttribArray(index);
@@ -72,10 +85,25 @@ public abstract class AttribArray implements Cleanupable {
 	public void setVbo(int vbo) {this.vbo = vbo;}
 	public int getVbo() {return vbo;}
 	public boolean isStatic() {return iStatic;}
+	public int getDivisor() {return divisor;}
 	
 	@Override
 	public String toString() {
 		return getVbo()+"|"+getIndex()+") "+getName()+": "+getLength()+"/"+getDataSize()+"="+getDataCount();
+	}
+	public static <T> boolean update(AttribArray arr, T[] data) {
+		arr.bind();
+		if(arr instanceof IntAttribArray || arr instanceof UIntAttribArray)
+			return ((IntAttribArray) arr).update(ArrayUtils.toPrimitiveInt((Integer[]) data));
+		else if(arr instanceof FloatAttribArray)
+			return ((FloatAttribArray) arr).update(ArrayUtils.toPrimitiveFloat((Float[]) data));
+		else if(arr instanceof Mat4fAttribArray)
+			return ((Mat4fAttribArray) arr).update((Matrix4f[]) data);
+		else if(arr instanceof Vec4fAttribArray)
+			return ((Vec4fAttribArray) arr).update((Vector4f[]) data);
+		else if(arr instanceof Vec3fAttribArray)
+			return ((Vec3fAttribArray) arr).update((Vector3f[]) data);
+		return false;
 	}
 	
 }

@@ -11,4 +11,6 @@ public abstract class Transform {
 	public Matrix4f getMatrix() {return matrix;}
 	public void setMatrix(Matrix4f matrix) {this.matrix = matrix;}
 	
+	public abstract Transform clone();
+	
 }

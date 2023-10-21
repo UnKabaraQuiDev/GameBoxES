@@ -112,4 +112,14 @@ public class Transform3D extends Transform {
 		return this;
 	}
 	
+	@Override
+	public Transform clone() {
+		return new Transform3D(translation, rotation, scale);
+	}
+	
+	@Override
+	public String toString() {
+		return "Transform:3D[t"+translation+", r"+rotation+", s"+scale+"]";
+	}
+	
 }

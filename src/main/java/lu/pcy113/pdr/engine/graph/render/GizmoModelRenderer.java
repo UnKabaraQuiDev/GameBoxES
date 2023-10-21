@@ -35,17 +35,22 @@ public class GizmoModelRenderer extends Renderer<Scene, GizmoModelComponent> {
 		Gizmo gizmo = cache.getGizmo(model.getGizmo());
 		if(gizmo == null)
 			return;
+		System.out.println("gizmo ok");
 		gizmo.bind();
+		System.out.println("gizmo bound");
 		
-		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_LINE);
 		Material material = cache.getMaterial(GizmoMaterial.NAME);
 		if(material == null) {
+			System.out.println("no material");
 			GizmoShader shader = new GizmoShader();
 			cache.addShader(shader);
 			material = new GizmoMaterial(shader);
 			cache.addMaterial(material);
 		}
 		Shader shader = cache.getShader(material.getShader());
+		if(shader == null)
+			return;
+		System.out.println("shader ok");
 		
 		shader.bind();
 		
@@ -63,6 +68,7 @@ public class GizmoModelRenderer extends Renderer<Scene, GizmoModelComponent> {
 		
 		if(GameEngine.DEBUG.ignoreDepth)
 			GL40.glDisable(GL40.GL_DEPTH_TEST);
+		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_LINE);
 		
 		GL40.glLineWidth(model.getLineWidth());
 		GL40.glDrawElements(GL40.GL_LINES, gizmo.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);

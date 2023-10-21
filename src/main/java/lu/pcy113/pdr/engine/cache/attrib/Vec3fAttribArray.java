@@ -29,12 +29,13 @@ public class Vec3fAttribArray extends AttribArray {
 			GL40.glVertexAttribPointer(index, dataSize*3, GL40.GL_FLOAT, false, 0, 0);
 	}
 	
-	public void update(Vector3f[] nPos) {
+	public boolean update(Vector3f[] nPos) {
 		if(!iStatic && nPos.length != data.length)
-			return;
+			return false;
 		data = nPos;
 		
 		GL40.glBufferSubData(GL40.GL_ARRAY_BUFFER, 0, toFlatArray());
+		return GL40.glGetError() == GL40.GL_NO_ERROR;
 	}
 	
 	public float[] toFlatArray() {
@@ -55,5 +56,8 @@ public class Vec3fAttribArray extends AttribArray {
 		return data.length;
 	}
 	public Vector3f[] getData() {return data;}
+	public Vector3f get(int i) {
+		return data[i];
+	}
 	
 }

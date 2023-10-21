@@ -28,7 +28,6 @@ import lu.pcy113.pdr.engine.objs.Model;
 import lu.pcy113.pdr.engine.objs.ParticleEmitterModel;
 import lu.pcy113.pdr.engine.objs.entity.Entity;
 import lu.pcy113.pdr.engine.objs.entity.components.GizmoModelComponent;
-import lu.pcy113.pdr.engine.objs.entity.components.MeshComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.ModelComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.ParticleEmitterModelComponent;
 import lu.pcy113.pdr.engine.scene.Scene3D;
@@ -93,7 +92,16 @@ public class PDRClientGame2 implements GameLogic {
 		cache.addMaterial(partMat);
 		Mesh partCube = ObjLoader.loadMesh("partCube", partMat.getId(), "./resources/models/cube.obj");
 		cache.addMesh(partCube);
-		parts = new ParticleEmitter("parts", 10, partCube, partMat, new Transform3D());
+		parts = new ParticleEmitter("parts", partCube, 10, new Transform3D());
+		parts.update((part) -> {
+			((Transform3D) part.getTransform())
+			.setTranslation(new Vector3f(
+					(float) Math.cos(2*Math.PI/parts.getParticleCount()*part.getIndex()),
+					(float) Math.sin(2*Math.PI/parts.getParticleCount()*part.getIndex()),
+					0))
+			.setScale(new Vector3f(0.2f, 0.2f, 0.2f))
+			.updateMatrix();
+		});
 		cache.addParticleEmitter(parts);
 		
 		Material mat = new Material("main", shader1);
@@ -102,12 +110,11 @@ public class PDRClientGame2 implements GameLogic {
 		cache.addMesh(plane);
 		this.plane = new Model("plane", plane, new Transform3D(new Vector3f(1, 1, 1), new Quaternionf(), new Vector3f(0.2f)));
 		cache.addModel(this.plane);
-		
 		partsModel = new ParticleEmitterModel("parts", parts, new Transform3D());
 		cache.addParticleEmitterModel(partsModel);
 		
 		this.scene = new Scene3D("main-scene");
-		this.scene.addEntity("mesh", new Entity(new MeshComponent(partCube))).setActive(false);
+		//this.scene.addEntity("mesh", new Entity(new MeshComponent(partCube))).setActive(false);
 		this.scene.addEntity("model", new Entity(new ModelComponent(this.plane)));
 		this.scene.addEntity("parts", new Entity(new ParticleEmitterModelComponent(partsModel)));
 		
@@ -204,10 +211,10 @@ public class PDRClientGame2 implements GameLogic {
 	
 	@Override
 	public void update(float dTime) {
-		parts.update((part) -> {
-			System.out.println("Updated :"+part.getIndex());
-			((Transform3D) part.getTransform()).scaleMul(0.9f, 0.9f, 0.9f).translateMul(new Vector3f(0), 1.1f, 1.1f, 1.1f);
+		partsModel.getEmitter(cache).update((part) -> {
+			((Transform3D) part.getTransform()).rotate(0, 0, 0.1f).updateMatrix();
 		});
+		((Transform3D) partsModel.getTransform()).rotate(0, 0, -0.1f).updateMatrix();
 	}
 
 	@Override

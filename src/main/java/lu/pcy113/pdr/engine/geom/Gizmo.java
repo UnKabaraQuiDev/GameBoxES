@@ -1,6 +1,5 @@
 package lu.pcy113.pdr.engine.geom;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.logging.Level;
 
@@ -8,7 +7,6 @@ import org.lwjgl.opengl.GL40;
 
 import lu.pcy113.pdr.engine.cache.attrib.AttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.FloatAttribArray;
-import lu.pcy113.pdr.engine.cache.attrib.IntAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.UIntAttribArray;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.impl.Renderable;

@@ -26,19 +26,22 @@ public class IntAttribArray extends AttribArray {
 			GL40.glVertexAttribPointer(index, dataSize, GL40.GL_INT, false, 0, 0);
 	}
 	
-	public int[] getData() {return data;}
-	
 	@Override
 	public int getLength() {
 		return data.length;
 	}
+	public int[] getData() {return data;}
+	public Integer get(int i) {
+		return data[i];
+	}
 	
-	public void update(int[] nPos) {
+	public boolean update(int[] nPos) {
 		if(!iStatic && nPos.length != data.length)
-			return;
+			return false;
 		data = nPos;
 		
 		GL40.glBufferSubData(GL40.GL_ARRAY_BUFFER, 0, data);
+		return GL40.glGetError() == GL40.GL_NO_ERROR;
 	}
 
 }
