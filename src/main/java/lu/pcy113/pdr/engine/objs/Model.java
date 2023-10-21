@@ -1,5 +1,6 @@
 package lu.pcy113.pdr.engine.objs;
 
+import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.impl.Renderable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
 import lu.pcy113.pdr.engine.utils.transform.Transform;
@@ -12,9 +13,9 @@ public class Model implements UniqueID, Renderable {
 	private String mesh;
 	private Transform transform;
 	
-	public Model(String name, String mesh, Transform transform) {
+	public Model(String name, Mesh mesh, Transform transform) {
 		this.name = name;
-		this.mesh = mesh;
+		this.mesh = mesh.getId();
 		this.transform = transform;
 	}
 	

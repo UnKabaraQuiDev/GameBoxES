@@ -1,10 +1,12 @@
 package lu.pcy113.pdr.engine.geom;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.logging.Level;
 
 import org.lwjgl.opengl.GL40;
 
+import lu.pcy113.pdr.engine.cache.attrib.AttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.FloatAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.IntAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.UIntAttribArray;
@@ -54,36 +56,27 @@ public class Gizmo implements UniqueID, Cleanupable, Renderable {
 		this.vao = GL40.glGenVertexArrays();
 		bind();
 		storeElementArray(indices);
-		storeAttribArray(0, 3, vertices);
-		storeAttribArray(1, 4, color);
+		vertices.setIndex(0);
+		storeAttribArray(vertices);
+		color.setIndex(1);
+		storeAttribArray(color);
 		unbind();
 			
 		Logger.log(Level.INFO, "Gizmo "+name+": "+vao+" & "+vbo);
 	}
 	
-	protected void storeAttribArray(int index, int size, IntAttribArray data) {
-		int vbo = GL40.glGenBuffers();
-		this.vbo.put(index, vbo);
-		GL40.glBindBuffer(GL40.GL_ARRAY_BUFFER, vbo);
-		GL40.glBufferData(GL40.GL_ARRAY_BUFFER, data.getData(), GL40.GL_STATIC_DRAW);
-		GL40.glEnableVertexAttribArray(index);
-		GL40.glVertexAttribPointer(index, size, GL40.GL_UNSIGNED_INT, false, 0, 0);
-		GL40.glBindBuffer(GL40.GL_ARRAY_BUFFER, 0);
-	}
-	protected void storeAttribArray(int index, int size, FloatAttribArray data) {
-		int vbo = GL40.glGenBuffers();
-		this.vbo.put(index, vbo);
-		GL40.glBindBuffer(GL40.GL_ARRAY_BUFFER, vbo);
-		GL40.glBufferData(GL40.GL_ARRAY_BUFFER, data.getData(), GL40.GL_STATIC_DRAW);
-		GL40.glEnableVertexAttribArray(index);
-		GL40.glVertexAttribPointer(index, size, GL40.GL_FLOAT, false, 0, 0);
-		GL40.glBindBuffer(GL40.GL_ARRAY_BUFFER, 0);
+	protected void storeAttribArray(AttribArray data) {
+		this.vbo.put(data.getIndex(), data.gen());
+		data.bind();
+		data.init();
+		data.enable();
+		data.unbind();
 	}
 	private void storeElementArray(UIntAttribArray indices) {
-		int vbo = GL40.glGenBuffers();
-		this.vbo.put(-1, vbo);
-		GL40.glBindBuffer(GL40.GL_ELEMENT_ARRAY_BUFFER, vbo);
-		GL40.glBufferData(GL40.GL_ELEMENT_ARRAY_BUFFER, indices.getData(), GL40.GL_STATIC_DRAW);
+		indices.setBufferType(GL40.GL_ELEMENT_ARRAY_BUFFER);
+		this.vbo.put(indices.getIndex(), indices.gen());
+		indices.bind();
+		indices.init();
 	}
 	
 	public void bind() {
@@ -97,7 +90,8 @@ public class Gizmo implements UniqueID, Cleanupable, Renderable {
 	public void cleanup() {
 		if(vao != -1) {
 			GL40.glDeleteVertexArrays(vao);
-			vbo.values().forEach(GL40::glDeleteBuffers);
+			vertices.cleanup();
+			indices.cleanup();
 			vao = -1;
 		}
 	}

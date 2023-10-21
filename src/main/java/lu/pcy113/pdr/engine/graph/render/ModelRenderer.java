@@ -34,9 +34,6 @@ public class ModelRenderer extends Renderer<Scene3D, ModelComponent> {
 		if(mesh == null)
 			return;
 		
-		/*MeshRenderer meshRender = (MeshRenderer) cache.getRenderer(Mesh.NAME);
-		meshRender.render(cache, scene, mesh);*/
-		
 		mesh.bind();
 		
 		Material material = cache.getMaterial(mesh.getMaterial());

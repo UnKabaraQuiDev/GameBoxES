@@ -31,7 +31,11 @@ public class MeshRenderer extends Renderer<Scene3D, MeshComponent> {
 		mesh.bind();
 		
 		Material material = cache.getMaterial(mesh.getMaterial());
+		if(material == null)
+			return;
 		Shader shader = cache.getShader(material.getShader());
+		if(shader == null)
+			return;
 		
 		shader.bind();
 		
@@ -39,8 +43,9 @@ public class MeshRenderer extends Renderer<Scene3D, MeshComponent> {
 		if(scene != null) {
 			projectionMatrix = scene.getCamera().getProjection().getProjMatrix();
 			viewMatrix = scene.getCamera().getViewMatrix();
-			material.setProperty(Shader.PROJECTION_MATRIX, projectionMatrix);
-			material.setProperty(Shader.VIEW_MATRIX, viewMatrix);
+			material.setPropertyIfPresent(Shader.PROJECTION_MATRIX, projectionMatrix);
+			material.setPropertyIfPresent(Shader.VIEW_MATRIX, viewMatrix);
+			material.setPropertyIfPresent(Shader.TRANSFORMATION_MATRIX, new Matrix4f().identity());
 		}
 		material.bindProperties(cache, scene, shader);
 		

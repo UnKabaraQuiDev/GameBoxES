@@ -53,16 +53,19 @@ public class Scene3DRenderer extends Renderer<GameEngine, Scene3D> {
 			} else if((c = e.getComponent(MeshComponent.class)) != null) {
 				meshRenderer.render(cache, scene, (MeshComponent) c);
 			}
+			
 			if((c = e.getComponent(GizmoModelComponent.class)) != null) {
 				gizmoModelRenderer.render(cache, scene, (GizmoModelComponent) c);
 			}else if((c = e.getComponent(GizmoComponent.class)) != null) {
 				gizmoRenderer.render(cache, scene, (GizmoComponent) c);
 			}
+			
 			if((c = e.getComponent(ParticleEmitterModelComponent.class)) != null) {
 				particleEmitterModelRenderer.render(cache, scene, (ParticleEmitterModelComponent) c);
 			}else if((c = e.getComponent(ParticleEmitterComponent.class)) != null) {
 				//particleEmitterRenderer.render(cache, scene, (GizmoComponent) c);
 			}
+			
 			if((c = e.getComponent(TextModelComponent.class)) != null) {
 				System.err.println(c);
 				textModelRenderer.render(cache, scene, (TextModelComponent) c);

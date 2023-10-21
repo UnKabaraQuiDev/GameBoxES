@@ -68,6 +68,7 @@ public class ParticleEmitterModelRenderer extends Renderer<Scene3D, ParticleEmit
 			GL40.glBlendFunc(GL40.GL_SRC_ALPHA, GL40.GL_ONE_MINUS_SRC_ALPHA);
 		}
 		
+		pe.getMatrices().enable();
 		GL40.glDrawArraysInstanced(GL40.GL_TRIANGLES, 0, mesh.getIndicesCount(), pe.getParticleCount());
 		
 		GL40.glDisable(GL40.GL_BLEND);

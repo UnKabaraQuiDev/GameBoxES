@@ -1,5 +1,6 @@
 package lu.pcy113.pdr.client.game;
 
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFWGamepadState;
@@ -42,7 +43,7 @@ public class PDRClientGame2 implements GameLogic {
 	CacheManager cache;
 	
 	Scene3D scene;
-	Model model;
+	Model plane;
 	BackgroundMaterial genMat;
 	ParticleEmitter parts;
 	ParticleEmitterModel partsModel;
@@ -63,8 +64,7 @@ public class PDRClientGame2 implements GameLogic {
 		GameEngine.DEBUG.wireframeColor = new Vector4f(0.2f, 0.2f, 0.2f, 0.2f);
 		GameEngine.DEBUG.gizmos = false;
 		
-		Shader shader = new Shader("main",
-				true,
+		Shader shader1 = new Shader("main1",
 				new ShaderPart("./resources/shaders/main/uv.frag"),
 				new ShaderPart("./resources/shaders/main/main.vert")) {
 			@Override
@@ -74,30 +74,47 @@ public class PDRClientGame2 implements GameLogic {
 				createUniform(Shader.TRANSFORMATION_MATRIX);
 			}
 		};
-		cache.addShader(shader);
-		Material mat = new Material("main", shader);
-		cache.addMaterial(mat);
-		Mesh mesh = ObjLoader.loadMesh("chest", mat.getId(), "./resources/models/cube.obj");
-		cache.addMesh(mesh);
-		model = new Model("model", mesh.getId(), new Transform3D());
-		cache.addModel(model);
+		cache.addShader(shader1);
 		
-		Material partMat = new Material("parts", shader);
+		Shader partShader = new Shader("partMain",
+				new ShaderPart("./resources/shaders/main/uv.frag"),
+				new ShaderPart("./resources/shaders/main/main.vert")) {
+			@Override
+			public void createUniforms() {
+				createUniform(Shader.PROJECTION_MATRIX);
+				createUniform(Shader.VIEW_MATRIX);
+				createUniform(Shader.TRANSFORMATION_MATRIX);
+			}
+		};
+		System.err.println(partShader.getUniforms());
+		cache.addShader(partShader);
+		
+		Material partMat = new Material("parts", partShader);
 		cache.addMaterial(partMat);
-		Mesh partMesh = ObjLoader.loadMesh("part", partMat.getId(), "./resources/models/plane.obj");
-		cache.addMesh(partMesh);
-		parts = new ParticleEmitter("parts", 10, partMesh, partMat, new Transform3D());
+		Mesh partCube = ObjLoader.loadMesh("partCube", partMat.getId(), "./resources/models/cube.obj");
+		cache.addMesh(partCube);
+		parts = new ParticleEmitter("parts", 10, partCube, partMat, new Transform3D());
 		cache.addParticleEmitter(parts);
+		
+		Material mat = new Material("main", shader1);
+		cache.addMaterial(mat);
+		Mesh plane = ObjLoader.loadMesh("chest", mat.getId(), "./resources/models/plane.obj");
+		cache.addMesh(plane);
+		this.plane = new Model("plane", plane, new Transform3D(new Vector3f(1, 1, 1), new Quaternionf(), new Vector3f(0.2f)));
+		cache.addModel(this.plane);
+		
 		partsModel = new ParticleEmitterModel("parts", parts, new Transform3D());
 		cache.addParticleEmitterModel(partsModel);
 		
 		this.scene = new Scene3D("main-scene");
-		this.scene.addEntity("mesh", new Entity(new MeshComponent(mesh)) {{setActive(true);}});
-		this.scene.addEntity("model", new Entity(new ModelComponent(model)) {{setActive(true);}});
+		this.scene.addEntity("mesh", new Entity(new MeshComponent(partCube))).setActive(false);
+		this.scene.addEntity("model", new Entity(new ModelComponent(this.plane)));
 		this.scene.addEntity("parts", new Entity(new ParticleEmitterModelComponent(partsModel)));
 		
 		Gizmo gizmoXYZ = ObjLoader.loadGizmo("gizmoXYZ", "./resources/models/gizmos/grid_xyz.obj");
+		cache.addGizmo(gizmoXYZ);
 		GizmoModel gizmoXYZModel = new GizmoModel("gizmoXYZ", gizmoXYZ.getId(), new Transform3D());
+		cache.addGizmoModel(gizmoXYZModel);
 		this.scene.addEntity("gizmoXYZ", new Entity(new GizmoModelComponent(gizmoXYZModel)));
 		
 		cache.addRenderer(new Scene3DRenderer());
@@ -172,7 +189,7 @@ public class PDRClientGame2 implements GameLogic {
 				
 				GX += 0.01f;
 				
-				((Transform3D) model.getTransform()).rotate(0.01f, 0.01f, 0.01f).updateMatrix();
+				((Transform3D) plane.getTransform()).rotate(0.01f, 0.01f, 0.01f).updateMatrix();
 				
 				genMat.setColor(new Vector4f(GX % 1, GX % 1, GX % 1, 1));
 				engine.getWindow().setBackground(new Vector4f(GX % 1, GX % 1, GX % 1, 1));
@@ -188,6 +205,7 @@ public class PDRClientGame2 implements GameLogic {
 	@Override
 	public void update(float dTime) {
 		parts.update((part) -> {
+			System.out.println("Updated :"+part.getIndex());
 			((Transform3D) part.getTransform()).scaleMul(0.9f, 0.9f, 0.9f).translateMul(new Vector3f(0), 1.1f, 1.1f, 1.1f);
 		});
 	}
