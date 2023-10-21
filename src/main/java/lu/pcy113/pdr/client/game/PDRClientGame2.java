@@ -78,7 +78,7 @@ public class PDRClientGame2 implements GameLogic {
 		
 		Shader partShader = new Shader("partMain",
 				new ShaderPart("./resources/shaders/main/uv.frag"),
-				new ShaderPart("./resources/shaders/main/main.vert")) {
+				new ShaderPart("./resources/shaders/parts/main.vert")) {
 			@Override
 			public void createUniforms() {
 				createUniform(Shader.PROJECTION_MATRIX);

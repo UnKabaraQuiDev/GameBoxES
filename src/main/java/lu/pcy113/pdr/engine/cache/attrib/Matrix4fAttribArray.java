@@ -24,7 +24,7 @@ public class Matrix4fAttribArray extends AttribArray {
 	public void init() {
 		GL40.glBufferData(bufferType, toFlatArray(), iStatic ? GL40.GL_STATIC_DRAW : GL40.GL_DYNAMIC_DRAW);
 		if(bufferType != GL40.GL_ELEMENT_ARRAY_BUFFER)
-			GL40.glVertexAttribPointer(index, dataSize, GL40.GL_FLOAT, false, 0, 0);
+			GL40.glVertexAttribPointer(index, dataSize*16, GL40.GL_FLOAT, false, 0, 0);
 	}
 	
 	public void update(Matrix4f[] nPos) {
