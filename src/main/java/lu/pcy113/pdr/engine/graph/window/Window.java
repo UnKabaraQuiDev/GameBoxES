@@ -70,6 +70,8 @@ public class Window implements Cleanupable {
 		GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 0);
 		GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_PROFILE, GLFW.GLFW_OPENGL_CORE_PROFILE);
 		GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_FORWARD_COMPAT, GLFW.GLFW_TRUE);
+		/*GLFW.glfwWindowHint(GLFW.GLFW_SAMPLES, 4);
+		GL40.glEnable(GL40.GL_MULTISAMPLE);*/
 		GL40.glEnable(GL40.GL_DEPTH_TEST);
 		
 		updateOptions();
@@ -230,6 +232,10 @@ public class Window implements Cleanupable {
 		if(errorCallback != null) {
 			errorCallback.free();
 			errorCallback = null;
+		}
+		if(scrollCallback != null) {
+			scrollCallback.free();
+			scrollCallback = null;
 		}
 		if(handle != -1) {
 			GLFW.glfwDestroyWindow(handle);

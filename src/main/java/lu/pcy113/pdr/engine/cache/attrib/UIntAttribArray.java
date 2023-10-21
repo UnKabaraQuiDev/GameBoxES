@@ -22,12 +22,8 @@ public class UIntAttribArray extends AttribArray {
 	@Override
 	public void init() {
 		GL40.glBufferData(bufferType, data, iStatic ? GL40.GL_STATIC_DRAW : GL40.GL_DYNAMIC_DRAW);
-		if(bufferType != GL40.GL_ELEMENT_ARRAY_BUFFER) {
+		if(bufferType != GL40.GL_ELEMENT_ARRAY_BUFFER)
 			GL40.glVertexAttribPointer(index, dataSize, GL40.GL_UNSIGNED_INT, false, 0, 0);
-			System.err.println(name+" is "+bufferType+" vertex attrib true");
-		}else {
-			System.err.println(name+" is "+bufferType+" vertex attrib false");
-		}
 	}
 	
 	public int[] getData() {return data;}

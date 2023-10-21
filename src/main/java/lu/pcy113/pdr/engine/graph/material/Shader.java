@@ -28,9 +28,14 @@ public abstract class Shader implements UniqueID, Cleanupable {
 	protected int shaderProgram = -1;
 	protected Map<Integer, ShaderPart> parts;
 	protected Map<String, Integer> uniforms;
+	protected boolean transparent;
 	
 	public Shader(String name, ShaderPart... parts) {
+		this(name, false, parts);
+	}
+	public Shader(String name, boolean transparent, ShaderPart... parts) {
 		this.name = name;
+		this.transparent = transparent;
 		
 		this.shaderProgram = GL40.glCreateProgram();
 		this.parts = new HashMap<>();
@@ -116,5 +121,7 @@ public abstract class Shader implements UniqueID, Cleanupable {
 	public String getId() {return name;}
 	public Map<Integer, ShaderPart> getParts() {return parts;}
 	public Map<String, Integer> getUniforms() {return uniforms;}
+	public boolean isTransparent() {return transparent;}
+	public void setTransparent(boolean transparent) {this.transparent = transparent;}
 
 }

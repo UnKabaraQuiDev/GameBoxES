@@ -30,6 +30,13 @@ public class Transform3D extends Transform {
 		return this;
 	}
 	
+	public Transform3D translateMul(Vector3f center, float x, float y, float z) {
+		translation.add(center.negate());
+		translation.mul(x, y, z);
+		translation.add(center);
+		return this;
+	}
+	
 	public Transform3D rotateFromAxisAngleRad(Vector3f v, float angle) {
 		rotation.fromAxisAngleRad(v, angle);
 		return this;

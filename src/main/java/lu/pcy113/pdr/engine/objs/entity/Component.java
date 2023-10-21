@@ -1,6 +1,6 @@
 package lu.pcy113.pdr.engine.objs.entity;
 
-public class Component {
+public abstract class Component {
 	
 	private Entity parent;
 	
@@ -12,5 +12,10 @@ public class Component {
 	}
 	
 	public Entity getParent() {return parent;}
+	
+	@Override
+	public String toString() {
+		return "Component@"+getClass().getSimpleName()+"[parent=" + parent + "]";
+	}
 	
 }

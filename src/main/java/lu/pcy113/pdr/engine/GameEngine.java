@@ -106,8 +106,7 @@ public class GameEngine implements Runnable, Cleanupable {
 			initialTime = now;
 		}
 		running = !window.shouldClose();
-		
-		this.cleanup();
+		stop();
 	}
 	
 	public void start() {
@@ -119,7 +118,7 @@ public class GameEngine implements Runnable, Cleanupable {
 	}
 	public void stop() {
 		this.running = false;
-		cache.cleanup();
+		this.cleanup();
 	}
 	
 	public GameLogic getGameLogic() {return gameLogic;}

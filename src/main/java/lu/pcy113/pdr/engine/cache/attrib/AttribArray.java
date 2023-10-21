@@ -2,7 +2,9 @@ package lu.pcy113.pdr.engine.cache.attrib;
 
 import org.lwjgl.opengl.GL40;
 
-public abstract class AttribArray {
+import lu.pcy113.pdr.engine.impl.Cleanupable;
+
+public abstract class AttribArray implements Cleanupable {
 	
 	protected int vbo;
 	protected boolean iStatic = true;;
@@ -53,6 +55,11 @@ public abstract class AttribArray {
 	}
 	public void unbind() {
 		GL40.glBindBuffer(bufferType, 0);
+	}
+	
+	@Override
+	public void cleanup() {
+		GL40.glDeleteBuffers(vbo);
 	}
 	
 	public String getName() {return name;}

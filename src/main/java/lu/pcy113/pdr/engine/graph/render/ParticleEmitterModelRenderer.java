@@ -8,43 +8,42 @@ import org.lwjgl.opengl.GL40;
 import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.geom.Mesh;
+import lu.pcy113.pdr.engine.geom.particles.ParticleEmitter;
 import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.Shader;
-import lu.pcy113.pdr.engine.objs.Model;
-import lu.pcy113.pdr.engine.objs.entity.components.ModelComponent;
+import lu.pcy113.pdr.engine.objs.ParticleEmitterModel;
+import lu.pcy113.pdr.engine.objs.entity.components.ParticleEmitterModelComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.PointLightSurfaceComponent;
 import lu.pcy113.pdr.engine.scene.Scene3D;
 import lu.pcy113.pdr.utils.Logger;
 
-public class ModelRenderer extends Renderer<Scene3D, ModelComponent> {
-
-	public ModelRenderer() {
-		super(Model.class);
+public class ParticleEmitterModelRenderer extends Renderer<Scene3D, ParticleEmitterModelComponent> {
+	
+	public ParticleEmitterModelRenderer() {
+		super(ParticleEmitterModel.class);
 	}
-
+	
 	@Override
-	public void render(CacheManager cache, Scene3D scene, ModelComponent co) {
-		Model c = co.getModel(cache);
-		if(c == null)
+	public void render(CacheManager cache, Scene3D scene, ParticleEmitterModelComponent pec) {
+		ParticleEmitterModel pem = pec.getParticleEmitterModel(cache);
+		if(pem == null)
 			return;
 		
-		Logger.log(Level.INFO, "Model : "+c.getId());
+		Logger.log(Level.INFO, "ParticleEmitterModel : "+pem.getId());
 		
-		Mesh mesh = cache.getMesh(c.getMesh());
+		ParticleEmitter pe = cache.getParticleEmitter(pem.getEmitter());
+		if(pe == null)
+			return;
+		Mesh mesh = cache.getMesh(pe.getMesh());
 		if(mesh == null)
 			return;
 		
-		/*MeshRenderer meshRender = (MeshRenderer) cache.getRenderer(Mesh.NAME);
-		meshRender.render(cache, scene, mesh);*/
-		
 		mesh.bind();
 		
-		Material material = cache.getMaterial(mesh.getMaterial());
-		System.out.println(material);
+		Material material = cache.getMaterial(pe.getMaterial());
 		if(material == null)
 			return;
 		Shader shader = cache.getShader(material.getShader());
-		System.out.println(shader);
 		if(shader == null)
 			return;
 		
@@ -54,29 +53,33 @@ public class ModelRenderer extends Renderer<Scene3D, ModelComponent> {
 		Matrix4f viewMatrix = scene.getCamera().getViewMatrix();
 		material.setPropertyIfPresent(Shader.PROJECTION_MATRIX, projectionMatrix);
 		material.setPropertyIfPresent(Shader.VIEW_MATRIX, viewMatrix);
-		material.setPropertyIfPresent(Shader.TRANSFORMATION_MATRIX, c.getTransform().getMatrix());
+		material.setPropertyIfPresent(Shader.TRANSFORMATION_MATRIX, pem.getTransform().getMatrix());
 		
-		PointLightSurfaceComponent plsc = co.getParent().getComponent(PointLightSurfaceComponent.class);
+		PointLightSurfaceComponent plsc = pec.getParent().getComponent(PointLightSurfaceComponent.class);
 		if(plsc != null)
 			plsc.bindLights(cache, scene.getLights(), material);
 		
 		material.bindProperties(cache, scene, shader);
+		
+		pe.getMatrices().bind();
 		
 		if(shader.isTransparent()) {
 			GL40.glEnable(GL40.GL_BLEND);
 			GL40.glBlendFunc(GL40.GL_SRC_ALPHA, GL40.GL_ONE_MINUS_SRC_ALPHA);
 		}
 		
-		GL40.glDrawElements(GL40.GL_TRIANGLES, mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);
+		GL40.glDrawArraysInstanced(GL40.GL_TRIANGLES, 0, mesh.getIndicesCount(), pe.getParticleCount());
 		
 		GL40.glDisable(GL40.GL_BLEND);
+		
+		pe.getMatrices().unbind();
 		
 		// debug only
 		//GameEngine.DEBUG.wireframe(cache, scene, mesh, projectionMatrix, viewMatrix, c.getTransform().getMatrix());
 		
 		mesh.unbind();
 		
-		GameEngine.DEBUG.gizmos(cache, scene, projectionMatrix, viewMatrix, c.getTransform().getMatrix());
+		GameEngine.DEBUG.gizmos(cache, scene, projectionMatrix, viewMatrix, pem.getTransform().getMatrix());
 	}
 	
 	@Override

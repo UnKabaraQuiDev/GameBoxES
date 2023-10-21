@@ -53,6 +53,8 @@ public class GenerateRenderLayer extends RenderLayer<GameEngine, Mesh> {
 		//GL40.glDisable(GL40.GL_DEPTH_TEST);
 		GL40.glDepthMask(false);
 		
+		System.out.println("indices: "+target.getIndicesCount());
+		
 		GL40.glDrawElements(GL40.GL_TRIANGLES, target.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);
 		
 		GL40.glDepthMask(true);

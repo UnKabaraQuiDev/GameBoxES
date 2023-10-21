@@ -8,12 +8,15 @@ import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.objs.GizmoModel;
 import lu.pcy113.pdr.engine.objs.Model;
+import lu.pcy113.pdr.engine.objs.ParticleEmitterModel;
 import lu.pcy113.pdr.engine.objs.entity.Component;
 import lu.pcy113.pdr.engine.objs.entity.Entity;
 import lu.pcy113.pdr.engine.objs.entity.components.GizmoComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.GizmoModelComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.MeshComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.ModelComponent;
+import lu.pcy113.pdr.engine.objs.entity.components.ParticleEmitterComponent;
+import lu.pcy113.pdr.engine.objs.entity.components.ParticleEmitterModelComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.TextModelComponent;
 import lu.pcy113.pdr.engine.objs.text.TextModel;
 import lu.pcy113.pdr.engine.scene.Scene3D;
@@ -34,10 +37,17 @@ public class Scene3DRenderer extends Renderer<GameEngine, Scene3D> {
 		GizmoModelRenderer gizmoModelRenderer = (GizmoModelRenderer) cache.getRenderer(GizmoModel.NAME);
 		GizmoRenderer gizmoRenderer = (GizmoRenderer) cache.getRenderer(Gizmo.NAME);
 		TextModelRenderer textModelRenderer = (TextModelRenderer) cache.getRenderer(TextModel.NAME);
+		ParticleEmitterModelRenderer particleEmitterModelRenderer = (ParticleEmitterModelRenderer) cache.getRenderer(ParticleEmitterModel.NAME);
 		
 		for(Entity e : scene.getEntities().values()) {
+			if(!e.isActive()) {
+				System.out.println(e.getComponents().values()+" is not active");
+				continue;
+			}else {
+				System.out.println(e.getComponents().values()+" is active");
+			}
+			
 			Component c = null;
-			System.out.println("entity: "+e.getComponents());
 			if((c = e.getComponent(ModelComponent.class)) != null) {
 				modelRenderer.render(cache, scene, (ModelComponent) c);
 			} else if((c = e.getComponent(MeshComponent.class)) != null) {
@@ -47,6 +57,11 @@ public class Scene3DRenderer extends Renderer<GameEngine, Scene3D> {
 				gizmoModelRenderer.render(cache, scene, (GizmoModelComponent) c);
 			}else if((c = e.getComponent(GizmoComponent.class)) != null) {
 				gizmoRenderer.render(cache, scene, (GizmoComponent) c);
+			}
+			if((c = e.getComponent(ParticleEmitterModelComponent.class)) != null) {
+				particleEmitterModelRenderer.render(cache, scene, (ParticleEmitterModelComponent) c);
+			}else if((c = e.getComponent(ParticleEmitterComponent.class)) != null) {
+				//particleEmitterRenderer.render(cache, scene, (GizmoComponent) c);
 			}
 			if((c = e.getComponent(TextModelComponent.class)) != null) {
 				System.err.println(c);

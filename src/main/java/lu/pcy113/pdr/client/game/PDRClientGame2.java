@@ -9,6 +9,7 @@ import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.geom.Mesh;
+import lu.pcy113.pdr.engine.geom.particles.ParticleEmitter;
 import lu.pcy113.pdr.engine.graph.composition.Compositor;
 import lu.pcy113.pdr.engine.graph.composition.GenerateRenderLayer;
 import lu.pcy113.pdr.engine.graph.composition.SceneRenderLayer;
@@ -18,14 +19,17 @@ import lu.pcy113.pdr.engine.graph.material.ShaderPart;
 import lu.pcy113.pdr.engine.graph.render.GizmoModelRenderer;
 import lu.pcy113.pdr.engine.graph.render.MeshRenderer;
 import lu.pcy113.pdr.engine.graph.render.ModelRenderer;
+import lu.pcy113.pdr.engine.graph.render.ParticleEmitterModelRenderer;
 import lu.pcy113.pdr.engine.graph.render.Scene3DRenderer;
 import lu.pcy113.pdr.engine.logic.GameLogic;
 import lu.pcy113.pdr.engine.objs.GizmoModel;
 import lu.pcy113.pdr.engine.objs.Model;
+import lu.pcy113.pdr.engine.objs.ParticleEmitterModel;
 import lu.pcy113.pdr.engine.objs.entity.Entity;
 import lu.pcy113.pdr.engine.objs.entity.components.GizmoModelComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.MeshComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.ModelComponent;
+import lu.pcy113.pdr.engine.objs.entity.components.ParticleEmitterModelComponent;
 import lu.pcy113.pdr.engine.scene.Scene3D;
 import lu.pcy113.pdr.engine.scene.camera.Camera3D;
 import lu.pcy113.pdr.engine.utils.ObjLoader;
@@ -40,6 +44,8 @@ public class PDRClientGame2 implements GameLogic {
 	Scene3D scene;
 	Model model;
 	BackgroundMaterial genMat;
+	ParticleEmitter parts;
+	ParticleEmitterModel partsModel;
 	
 	Compositor compositor;
 	
@@ -58,6 +64,7 @@ public class PDRClientGame2 implements GameLogic {
 		GameEngine.DEBUG.gizmos = false;
 		
 		Shader shader = new Shader("main",
+				true,
 				new ShaderPart("./resources/shaders/main/uv.frag"),
 				new ShaderPart("./resources/shaders/main/main.vert")) {
 			@Override
@@ -68,30 +75,36 @@ public class PDRClientGame2 implements GameLogic {
 			}
 		};
 		cache.addShader(shader);
-		Material mat = new Material("main", shader) {{
-			
-		}};
+		Material mat = new Material("main", shader);
 		cache.addMaterial(mat);
 		Mesh mesh = ObjLoader.loadMesh("chest", mat.getId(), "./resources/models/cube.obj");
 		cache.addMesh(mesh);
 		model = new Model("model", mesh.getId(), new Transform3D());
 		cache.addModel(model);
 		
+		Material partMat = new Material("parts", shader);
+		cache.addMaterial(partMat);
+		Mesh partMesh = ObjLoader.loadMesh("part", partMat.getId(), "./resources/models/plane.obj");
+		cache.addMesh(partMesh);
+		parts = new ParticleEmitter("parts", 10, partMesh, partMat, new Transform3D());
+		cache.addParticleEmitter(parts);
+		partsModel = new ParticleEmitterModel("parts", parts, new Transform3D());
+		cache.addParticleEmitterModel(partsModel);
+		
 		this.scene = new Scene3D("main-scene");
-		this.scene.addEntity("mesh", new Entity()
-				.addComponent(new MeshComponent(mesh)));
-		this.scene.addEntity("model", new Entity()
-				.addComponent(new ModelComponent(model)));
+		this.scene.addEntity("mesh", new Entity(new MeshComponent(mesh)) {{setActive(true);}});
+		this.scene.addEntity("model", new Entity(new ModelComponent(model)) {{setActive(true);}});
+		this.scene.addEntity("parts", new Entity(new ParticleEmitterModelComponent(partsModel)));
 		
 		Gizmo gizmoXYZ = ObjLoader.loadGizmo("gizmoXYZ", "./resources/models/gizmos/grid_xyz.obj");
 		GizmoModel gizmoXYZModel = new GizmoModel("gizmoXYZ", gizmoXYZ.getId(), new Transform3D());
-		this.scene.addEntity("gizmoXYZ", new Entity()
-				.addComponent(new GizmoModelComponent(gizmoXYZModel)));
+		this.scene.addEntity("gizmoXYZ", new Entity(new GizmoModelComponent(gizmoXYZModel)));
 		
 		cache.addRenderer(new Scene3DRenderer());
 		cache.addRenderer(new ModelRenderer());
 		cache.addRenderer(new GizmoModelRenderer());
 		cache.addRenderer(new MeshRenderer());
+		cache.addRenderer(new ParticleEmitterModelRenderer());
 		
 		SceneRenderLayer sceneRender = new SceneRenderLayer("scene", scene);
 		cache.addRenderLayer(sceneRender);
@@ -174,6 +187,9 @@ public class PDRClientGame2 implements GameLogic {
 	
 	@Override
 	public void update(float dTime) {
+		parts.update((part) -> {
+			((Transform3D) part.getTransform()).scaleMul(0.9f, 0.9f, 0.9f).translateMul(new Vector3f(0), 1.1f, 1.1f, 1.1f);
+		});
 	}
 
 	@Override

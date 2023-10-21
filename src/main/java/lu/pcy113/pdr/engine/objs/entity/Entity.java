@@ -6,7 +6,14 @@ import java.util.stream.Collectors;
 
 public class Entity {
 	
+	private boolean active = true;
+	
 	private Map<Class<? extends Component>, Component> components = new HashMap<>();
+	
+	public Entity(Component... cs) {
+		for(Component c : cs)
+			addComponent(c);
+	}
 	
 	public Entity addComponent(Component component) {
 		if(component.attach(this))
@@ -28,5 +35,12 @@ public class Entity {
 	
 	public Map<Class<? extends Component>, Component> getComponents() {return components;}
 	public void setComponents(Map<Class<? extends Component>, Component> components) {this.components = components;}
+	public boolean isActive() {return active;}
+	public void setActive(boolean active) {this.active = active;}
+	
+	@Override
+	public String toString() {
+		return "Entity@"+getClass().getSimpleName()+"[active=" + active + ", componentCount=" + components.size() + "]";
+	}
 
 }
