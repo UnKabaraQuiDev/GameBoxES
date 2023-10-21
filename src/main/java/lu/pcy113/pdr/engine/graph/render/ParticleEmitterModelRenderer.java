@@ -28,30 +28,24 @@ public class ParticleEmitterModelRenderer extends Renderer<Scene3D, ParticleEmit
 		ParticleEmitterModel pem = pec.getParticleEmitterModel(cache);
 		if(pem == null)
 			return;
-		System.out.println("pem ok");
 		
 		Logger.log(Level.INFO, "ParticleEmitterModel : "+pem.getId());
 		
 		ParticleEmitter pe = cache.getParticleEmitter(pem.getEmitter());
 		if(pe == null)
 			return;
-		System.out.println("pe ok");
 		Mesh mesh = pe.getParticleMesh();
 		if(mesh == null)
 			return;
-		System.out.println("mesh ok");
 		
 		Material material = cache.getMaterial(mesh.getMaterial());
 		if(material == null)
 			return;
-		System.out.println("material ok");
 		Shader shader = cache.getShader(material.getShader());
 		if(shader == null)
 			return;
-		System.out.println("shader ok");
 		
 		shader.bind();
-		System.out.println("shader bound");
 		
 		Matrix4f projectionMatrix = scene.getCamera().getProjection().getProjMatrix();
 		Matrix4f viewMatrix = scene.getCamera().getViewMatrix();
@@ -64,7 +58,6 @@ public class ParticleEmitterModelRenderer extends Renderer<Scene3D, ParticleEmit
 			plsc.bindLights(cache, scene.getLights(), material);
 		
 		material.bindProperties(cache, scene, shader);
-		System.out.println("material props bound XX");
 		
 		if(shader.isTransparent()) {
 			GL40.glEnable(GL40.GL_BLEND);
@@ -72,10 +65,8 @@ public class ParticleEmitterModelRenderer extends Renderer<Scene3D, ParticleEmit
 		}
 		
 		pe.bind();
-		System.out.println("mesh bound");
 		
 		GL40.glDrawElementsInstanced(GL40.GL_TRIANGLES, mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0, pe.getParticleCount());
-		System.out.println("drawn, but: "+GL40.glGetError());
 		
 		GL40.glDisable(GL40.GL_BLEND);
 		

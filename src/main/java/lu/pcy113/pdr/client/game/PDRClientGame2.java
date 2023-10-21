@@ -61,7 +61,7 @@ public class PDRClientGame2 implements GameLogic {
 		this.cache = e.getCache();
 		GameEngine.DEBUG.wireframe = false;
 		GameEngine.DEBUG.wireframeColor = new Vector4f(0.2f, 0.2f, 0.2f, 0.2f);
-		GameEngine.DEBUG.gizmos = false;
+		GameEngine.DEBUG.gizmos = true;
 		
 		Shader shader1 = new Shader("main1",
 				new ShaderPart("./resources/shaders/main/uv.frag"),
@@ -76,6 +76,7 @@ public class PDRClientGame2 implements GameLogic {
 		cache.addShader(shader1);
 		
 		Shader partShader = new Shader("partMain",
+				true,
 				new ShaderPart("./resources/shaders/main/uv.frag"),
 				new ShaderPart("./resources/shaders/parts/main.vert")) {
 			@Override
@@ -92,14 +93,14 @@ public class PDRClientGame2 implements GameLogic {
 		cache.addMaterial(partMat);
 		Mesh partCube = ObjLoader.loadMesh("partCube", partMat.getId(), "./resources/models/cube.obj");
 		cache.addMesh(partCube);
-		parts = new ParticleEmitter("parts", partCube, 10, new Transform3D());
+		parts = new ParticleEmitter("parts", partCube, 200, new Transform3D());
 		parts.update((part) -> {
 			((Transform3D) part.getTransform())
 			.setTranslation(new Vector3f(
 					(float) Math.cos(2*Math.PI/parts.getParticleCount()*part.getIndex()),
 					(float) Math.sin(2*Math.PI/parts.getParticleCount()*part.getIndex()),
-					0))
-			.setScale(new Vector3f(0.2f, 0.2f, 0.2f))
+					(float) Math.sin(2*Math.PI/parts.getParticleCount()*part.getIndex()*5)))
+			.setScale(new Vector3f(0.05f, 0.05f, 0.05f))
 			.updateMatrix();
 		});
 		cache.addParticleEmitter(parts);
@@ -212,7 +213,7 @@ public class PDRClientGame2 implements GameLogic {
 	@Override
 	public void update(float dTime) {
 		partsModel.getEmitter(cache).update((part) -> {
-			((Transform3D) part.getTransform()).rotate(0, 0, 0.1f).updateMatrix();
+			((Transform3D) part.getTransform()).rotate(0, 0, 0.01f).updateMatrix();
 		});
 		((Transform3D) partsModel.getTransform()).rotate(0, 0, -0.1f).updateMatrix();
 	}
