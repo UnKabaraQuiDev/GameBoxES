@@ -1,9 +1,11 @@
 package lu.pcy113.pdr.client.game;
 
 import org.joml.Quaternionf;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFWGamepadState;
+import org.lwjgl.opengl.GL40;
 
 import lu.pcy113.pdr.client.game.options.KeyOptions;
 import lu.pcy113.pdr.engine.GameEngine;
@@ -11,17 +13,21 @@ import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.geom.particles.ParticleEmitter;
+import lu.pcy113.pdr.engine.geom.text.TextMesh;
 import lu.pcy113.pdr.engine.graph.composition.Compositor;
 import lu.pcy113.pdr.engine.graph.composition.GenerateRenderLayer;
 import lu.pcy113.pdr.engine.graph.composition.SceneRenderLayer;
 import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.material.ShaderPart;
+import lu.pcy113.pdr.engine.graph.material.text.TextShader;
 import lu.pcy113.pdr.engine.graph.render.GizmoModelRenderer;
 import lu.pcy113.pdr.engine.graph.render.MeshRenderer;
 import lu.pcy113.pdr.engine.graph.render.ModelRenderer;
 import lu.pcy113.pdr.engine.graph.render.ParticleEmitterModelRenderer;
 import lu.pcy113.pdr.engine.graph.render.Scene3DRenderer;
+import lu.pcy113.pdr.engine.graph.render.TextModelRenderer;
+import lu.pcy113.pdr.engine.graph.texture.Texture;
 import lu.pcy113.pdr.engine.logic.GameLogic;
 import lu.pcy113.pdr.engine.objs.GizmoModel;
 import lu.pcy113.pdr.engine.objs.Model;
@@ -30,6 +36,8 @@ import lu.pcy113.pdr.engine.objs.entity.Entity;
 import lu.pcy113.pdr.engine.objs.entity.components.GizmoModelComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.ModelComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.ParticleEmitterModelComponent;
+import lu.pcy113.pdr.engine.objs.entity.components.TextModelComponent;
+import lu.pcy113.pdr.engine.objs.text.TextModel;
 import lu.pcy113.pdr.engine.scene.Scene3D;
 import lu.pcy113.pdr.engine.scene.camera.Camera3D;
 import lu.pcy113.pdr.engine.utils.ObjLoader;
@@ -46,6 +54,7 @@ public class PDRClientGame2 implements GameLogic {
 	BackgroundMaterial genMat;
 	ParticleEmitter parts;
 	ParticleEmitterModel partsModel;
+	FillTextMaterial textMaterial;
 	
 	Compositor compositor;
 	
@@ -114,10 +123,24 @@ public class PDRClientGame2 implements GameLogic {
 		partsModel = new ParticleEmitterModel("parts", parts, new Transform3D());
 		cache.addParticleEmitterModel(partsModel);
 		
+		TextMesh textMesh = new TextMesh(64);
+		cache.addMesh(textMesh);
+		FillTextShader textShader = new FillTextShader();
+		cache.addShader(textShader);
+		Texture rasterTxt = new Texture("raster", "./resources/textures/fonts/font1.png", GL40.GL_NEAREST);
+		cache.addTexture(rasterTxt);
+		Texture rasterIndexTxt = new Texture("rasterIndex", "./resources/textures/fonts/font1indices.png", GL40.GL_NEAREST);
+		cache.addTexture(rasterIndexTxt);
+		textMaterial = new FillTextMaterial("fill", textShader, "raster", "rasterIndex", new Vector4f(0.2f, 0.5f, 0.8f, 1));
+		cache.addMaterial(textMaterial);
+		TextModel txtModel = new TextModel("text", textMaterial, new Transform3D(), "abcdefghijklmnop", new Vector2f(0.2f));
+		cache.addTextModel(txtModel);
+		
 		this.scene = new Scene3D("main-scene");
 		//this.scene.addEntity("mesh", new Entity(new MeshComponent(partCube))).setActive(false);
 		this.scene.addEntity("model", new Entity(new ModelComponent(this.plane)));
 		this.scene.addEntity("parts", new Entity(new ParticleEmitterModelComponent(partsModel)));
+		this.scene.addEntity("text", new Entity(new TextModelComponent(txtModel)));
 		
 		Gizmo gizmoXYZ = ObjLoader.loadGizmo("gizmoXYZ", "./resources/models/gizmos/grid_xyz.obj");
 		cache.addGizmo(gizmoXYZ);
@@ -130,6 +153,7 @@ public class PDRClientGame2 implements GameLogic {
 		cache.addRenderer(new GizmoModelRenderer());
 		cache.addRenderer(new MeshRenderer());
 		cache.addRenderer(new ParticleEmitterModelRenderer());
+		cache.addRenderer(new TextModelRenderer());
 		
 		SceneRenderLayer sceneRender = new SceneRenderLayer("scene", scene);
 		cache.addRenderLayer(sceneRender);
@@ -195,8 +219,6 @@ public class PDRClientGame2 implements GameLogic {
 				//cam.getRotation().rotateZ(0.1f);
 				cam.updateMatrix();
 				
-				GX += 0.01f;
-				
 				((Transform3D) plane.getTransform()).rotate(0.01f, 0.01f, 0.01f).updateMatrix();
 				
 				genMat.setColor(new Vector4f(GX % 1, GX % 1, GX % 1, 1));
@@ -212,6 +234,11 @@ public class PDRClientGame2 implements GameLogic {
 	
 	@Override
 	public void update(float dTime) {
+		GX += 0.01f;
+		
+		textMaterial.setColor(new Vector4f(GX % 1, GX % 1, GX % 1, 1));
+		textMaterial.setProperty(TextShader.SIZE, (float) GX % 1);
+		
 		partsModel.getEmitter(cache).update((part) -> {
 			((Transform3D) part.getTransform()).rotate(0, 0, 0.01f).updateMatrix();
 		});

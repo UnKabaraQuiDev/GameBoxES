@@ -9,7 +9,7 @@ public class FillTextShader extends TextShader {
 	public static final String FILL_COLOR = "fillColor";
 	
 	public FillTextShader() {
-		super("fill");
+		super("fill", true);
 	}
 	
 	@Override

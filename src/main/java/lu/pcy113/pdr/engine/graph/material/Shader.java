@@ -11,7 +11,6 @@ import org.joml.Vector3f;
 import org.joml.Vector3i;
 import org.joml.Vector4f;
 import org.lwjgl.opengl.GL40;
-import org.lwjgl.system.MemoryUtil;
 
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
@@ -59,8 +58,6 @@ public abstract class Shader implements UniqueID, Cleanupable {
 	public abstract void createUniforms();
 	
 	public void setUniform(String key, Object value) {
-		//System.err.println(value.getClass().getName());
-		
 		if(value instanceof Integer) {
 			GL40.glUniform1i(getUniform(key), (int) value);
 		}else if(value instanceof Float) {
@@ -76,7 +73,8 @@ public abstract class Shader implements UniqueID, Cleanupable {
 		}else if(value instanceof Double) {
 			GL40.glUniform1d(getUniform(key), (double) value);
 		}else if(value instanceof Character) {
-			setUniform(key, (int) (char) value);
+			System.out.println("is char: "+value+" > "+((char) value)+" > "+(Integer.valueOf((char)value)));
+			setUniform(key, Integer.valueOf((char) value));
 		}else if(value instanceof Vector2f) {
 			GL40.glUniform2f(getUniform(key), ((Vector2f) value).x, ((Vector2f) value).y);
 		}else if(value instanceof Vector2i) {
@@ -85,7 +83,8 @@ public abstract class Shader implements UniqueID, Cleanupable {
 	}
 	public int getUniform(String name) {
 		if(!hasUniform(name))
-			uniforms.put(name, GL40.glGetUniformLocation(shaderProgram, name));
+			if(!createUniform(name))
+				return -1;
 		return uniforms.get(name);
 	}
 	public boolean hasUniform(String name) {

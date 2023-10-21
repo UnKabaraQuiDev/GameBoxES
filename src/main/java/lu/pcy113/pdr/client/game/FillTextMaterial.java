@@ -7,16 +7,15 @@ import org.joml.Vector4f;
 import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.material.text.TextMaterial;
-import lu.pcy113.pdr.engine.graph.material.text.TextShader;
 import lu.pcy113.pdr.engine.impl.Renderable;
 
 public class FillTextMaterial extends TextMaterial {
 	
 	public Vector4f color;
 	
-	public FillTextMaterial(String name, String raster, String rasterIndex, Vector4f color) {
+	public FillTextMaterial(String name, FillTextShader shader, String raster, String rasterIndex, Vector4f color) {
 		super(name,
-				TextShader.class.getName()+".fill",
+				shader,
 				new HashMap<String, String>() {{
 					put("raster", raster);
 					put("rasterIndex", rasterIndex);

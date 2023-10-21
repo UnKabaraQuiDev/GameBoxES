@@ -1,6 +1,7 @@
 from matplotlib import pyplot as plt
 from PIL import Image
 import numpy as np
+from math import floor
 
 columns = 20
 rows = 5
@@ -9,14 +10,18 @@ string = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abc
 
 out = [[0, 0, 0, 0] for i in range(255)]
 
+def map(x, in_min, in_max, out_min, out_max):
+  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
+
+
 i = 0
 for x in string:
 	ascii = ord(x)
 
+	column = floor(i / columns)
 	row = i % columns
-	column = i - row
 
-	out[ascii] = [row, column, 0, 255]
+	out[ascii] = [float(row)/rows*255, map(float(column)/columns, 0, 1, 1, 0)*255, 0, 255]
 
 	i += 1
 

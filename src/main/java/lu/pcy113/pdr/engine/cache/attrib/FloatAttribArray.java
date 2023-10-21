@@ -37,10 +37,14 @@ public class FloatAttribArray extends AttribArray {
 			return false;
 		data = nPos;
 		
-		System.out.println("New data is"+Arrays.toString(data));
-		
 		GL40.glBufferSubData(GL40.GL_ARRAY_BUFFER, 0, data);
-		return GL40.glGetError() == GL40.GL_NO_ERROR;
+		
+		int err = GL40.glGetError();
+		if(err != GL40.GL_NO_ERROR)
+			System.out.println("Could not update: "+err);
+		else
+			return true;
+		return false;
 	}
 	
 	@Override

@@ -30,8 +30,14 @@ public class TextModelRenderer extends Renderer<Scene, TextModelComponent> {
 
 	@Override
 	public void render(CacheManager cache, Scene scene, TextModelComponent t) {
-		Mesh mesh = cache.getMesh(TEXT_MESH+"_"+t.getTextSize());
-		if(mesh == null)
+		Mesh msh = cache.getMesh(TEXT_MESH+"_"+t.getTextSize());
+		if(msh == null)
+			return;
+		
+		TextMesh mesh;
+		if(msh instanceof TextMesh)
+			mesh = (TextMesh) msh;
+		else
 			return;
 		
 		TextModel tModel = t.getTextModel(cache);
@@ -43,7 +49,7 @@ public class TextModelRenderer extends Renderer<Scene, TextModelComponent> {
 		mesh.bind();
 		System.err.println("mesh bound");
 		
-		TextMaterial material = (TextMaterial) cache.getMaterial(tModel.getMaterial()); //cache.getMaterial(mesh.getMaterial());
+		TextMaterial material = (TextMaterial) cache.getMaterial(tModel.getMaterial()); 
 		if(material == null)
 			return;
 		System.err.println("corr mat");
@@ -67,15 +73,23 @@ public class TextModelRenderer extends Renderer<Scene, TextModelComponent> {
 				plsc.bindLights(cache, ((Scene3D) scene).getLights(), material);
 		}
 		
-		tModel.bindText(cache, mesh.getVertices(), material);
+		if(!tModel.bindText(cache, mesh.getVertices(), material))
+			return;
 		System.err.println("text bound: "+Arrays.toString(mesh.getVertices().getData()));
 		
 		material.bindProperties(cache, scene, shader);
 		System.err.println("mat props bound");
 		
-		GL40.glEnable(GL40.GL_BLEND);
-		GL40.glBlendFunc(GL40.GL_SRC_ALPHA, GL40.GL_ONE_MINUS_SRC_ALPHA);
-		GL40.glDrawElements(GL40.GL_POINTS, mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);
+		System.err.println("shader uniforms: "+shader.getUniforms());
+		
+		if(shader.isTransparent()) {
+			GL40.glEnable(GL40.GL_BLEND);
+			GL40.glBlendFunc(GL40.GL_SRC_ALPHA, GL40.GL_ONE_MINUS_SRC_ALPHA);
+		}
+		
+		GL40.glDrawElements(GL40.GL_TRIANGLES, mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);
+		System.out.println("drawn");
+		
 		GL40.glDisable(GL40.GL_BLEND);
 		
 		// debug only
