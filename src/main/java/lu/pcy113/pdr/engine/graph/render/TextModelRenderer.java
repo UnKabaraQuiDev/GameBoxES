@@ -61,11 +61,14 @@ public class TextModelRenderer extends Renderer<Scene, TextModelComponent> {
 		shader.bind();
 		System.err.println("shader bound");
 		
-		Matrix4f projectionMatrix = scene.getCamera().getProjection().getProjMatrix();
-		Matrix4f viewMatrix = scene.getCamera().getViewMatrix();
-		material.setProperty(Shader.PROJECTION_MATRIX, projectionMatrix);
-		material.setProperty(Shader.VIEW_MATRIX, viewMatrix);
-		material.setProperty(Shader.TRANSFORMATION_MATRIX, tModel.getTransform().getMatrix());
+		Matrix4f projectionMatrix = null, viewMatrix = null, transformationMatrix = tModel.getTransform().getMatrix();
+		if(scene != null) {
+			projectionMatrix = scene.getCamera().getProjection().getProjMatrix();
+			viewMatrix = scene.getCamera().getViewMatrix();
+			material.setPropertyIfPresent(Shader.PROJECTION_MATRIX, projectionMatrix);
+			material.setPropertyIfPresent(Shader.VIEW_MATRIX, viewMatrix);
+			material.setPropertyIfPresent(Shader.TRANSFORMATION_MATRIX, transformationMatrix);
+		}
 		
 		if(scene instanceof Scene3D) {
 			PointLightSurfaceComponent plsc = t.getParent().getComponent(PointLightSurfaceComponent.class);
@@ -97,7 +100,7 @@ public class TextModelRenderer extends Renderer<Scene, TextModelComponent> {
 		//GameEngine.DEBUG.pointWireframe(cache, scene, mesh, projectionMatrix, viewMatrix, tModel.getTransform().getMatrix());
 		
 		mesh.unbind();
-		GameEngine.DEBUG.gizmos(cache, scene, projectionMatrix, viewMatrix, tModel.getTransform().getMatrix());
+		GameEngine.DEBUG.gizmos(cache, scene, projectionMatrix, viewMatrix, transformationMatrix);
 	}
 	
 	@Override

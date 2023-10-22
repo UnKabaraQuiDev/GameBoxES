@@ -18,7 +18,6 @@ import lu.pcy113.pdr.engine.objs.Model;
 import lu.pcy113.pdr.engine.objs.PointLight;
 import lu.pcy113.pdr.engine.objs.text.TextModel;
 import lu.pcy113.pdr.engine.scene.Scene;
-import lu.pcy113.pdr.engine.scene.Scene3D;
 
 public class CacheManager implements Cleanupable {
 	
@@ -103,7 +102,7 @@ public class CacheManager implements Cleanupable {
 		if(meshes.containsKey(m.getId())) meshes.remove(m.getId()).cleanup();
 		return this.meshes.putIfAbsent(m.getId(), m) == null;
 	}
-	public boolean addScene(Scene3D m) {
+	public boolean addScene(Scene m) {
 		if(scenes.containsKey(m.getId())) scenes.remove(m.getId()).cleanup();
 		return this.scenes.putIfAbsent(m.getId(), m) == null;
 	}

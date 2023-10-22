@@ -14,17 +14,18 @@ import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.objs.InstanceEmitterModel;
 import lu.pcy113.pdr.engine.objs.entity.components.InstanceEmitterModelComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.PointLightSurfaceComponent;
+import lu.pcy113.pdr.engine.scene.Scene;
 import lu.pcy113.pdr.engine.scene.Scene3D;
 import lu.pcy113.pdr.utils.Logger;
 
-public class InstanceEmitterModelRenderer extends Renderer<Scene3D, InstanceEmitterModelComponent> {
+public class InstanceEmitterModelRenderer extends Renderer<Scene, InstanceEmitterModelComponent> {
 	
 	public InstanceEmitterModelRenderer() {
 		super(InstanceEmitterModel.class);
 	}
 	
 	@Override
-	public void render(CacheManager cache, Scene3D scene, InstanceEmitterModelComponent pec) {
+	public void render(CacheManager cache, Scene scene, InstanceEmitterModelComponent pec) {
 		InstanceEmitterModel pem = pec.getInstanceEmitterModel(cache);
 		if(pem == null)
 			return;
@@ -47,7 +48,8 @@ public class InstanceEmitterModelRenderer extends Renderer<Scene3D, InstanceEmit
 		
 		shader.bind();
 		
-		Matrix4f projectionMatrix = null, viewMatrix = null, transformationMatrix = pem.getTransform().getMatrix();
+		Matrix4f projectionMatrix = null, viewMatrix = null;
+		Object transformationMatrix = pem.getTransform().getMatrix();
 		if(scene != null) {
 			projectionMatrix = scene.getCamera().getProjection().getProjMatrix();
 			viewMatrix = scene.getCamera().getViewMatrix();
@@ -56,10 +58,12 @@ public class InstanceEmitterModelRenderer extends Renderer<Scene3D, InstanceEmit
 			material.setPropertyIfPresent(Shader.TRANSFORMATION_MATRIX, transformationMatrix);
 		}
 		
-		PointLightSurfaceComponent plsc = pec.getParent().getComponent(PointLightSurfaceComponent.class);
-		if(plsc != null)
-			plsc.bindLights(cache, scene.getLights(), material);
-		
+		if(scene instanceof Scene3D) {
+			PointLightSurfaceComponent plsc = pec.getParent().getComponent(PointLightSurfaceComponent.class);
+			if(plsc != null)
+				plsc.bindLights(cache, ((Scene3D) scene).getLights(), material);
+		}
+			
 		material.bindProperties(cache, scene, shader);
 		
 		if(shader.isTransparent()) {

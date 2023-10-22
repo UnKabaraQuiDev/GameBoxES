@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
+import org.joml.Matrix3f;
+import org.joml.Matrix3x2f;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
@@ -79,6 +81,10 @@ public abstract class Shader implements UniqueID, Cleanupable {
 			GL40.glUniform2f(getUniform(key), ((Vector2f) value).x, ((Vector2f) value).y);
 		}else if(value instanceof Vector2i) {
 			GL40.glUniform2i(getUniform(key), ((Vector2i) value).x, ((Vector2i) value).y);
+		}else if(value instanceof Matrix3f) {
+			GL40.glUniformMatrix3fv(getUniform(key), false, ((Matrix3f) value).get(new float[3*3]));
+		}else if(value instanceof Matrix3x2f) {
+			GL40.glUniformMatrix3x2fv(getUniform(key), false, ((Matrix3x2f) value).get(new float[3*2]));
 		}
 	}
 	public int getUniform(String name) {

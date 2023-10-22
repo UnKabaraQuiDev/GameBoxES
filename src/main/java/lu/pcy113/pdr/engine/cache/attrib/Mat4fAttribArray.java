@@ -57,9 +57,9 @@ public class Mat4fAttribArray extends AttribArray {
 	@Override
 	public void enable() {
 		for (int i = 0; i < 4; i++) {
-			GL40.glEnableVertexAttribArray(3 + i);
-			GL40.glVertexAttribPointer(3 + i, 4, GL40.GL_FLOAT, false, 16 * 4, i * 4 * 4);
-			GL40.glVertexAttribDivisor(3 + i, divisor);
+			GL40.glEnableVertexAttribArray(index + i);
+			GL40.glVertexAttribPointer(index + i, 4, GL40.GL_FLOAT, false, 16 * 4, i * 4 * 4);
+			GL40.glVertexAttribDivisor(index + i, divisor);
 		}
 	}
 	

@@ -1,5 +1,6 @@
 package lu.pcy113.pdr.engine.cache.attrib;
 
+import org.joml.Matrix3x2f;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -98,11 +99,13 @@ public abstract class AttribArray implements Cleanupable {
 		else if(arr instanceof FloatAttribArray)
 			return ((FloatAttribArray) arr).update(ArrayUtils.toPrimitiveFloat((Float[]) data));
 		else if(arr instanceof Mat4fAttribArray)
-			return ((Mat4fAttribArray) arr).update((Matrix4f[]) data);
+			return ((Mat4fAttribArray) arr).update(ArrayUtils.castArrayMat4f(data));
 		else if(arr instanceof Vec4fAttribArray)
 			return ((Vec4fAttribArray) arr).update((Vector4f[]) data);
 		else if(arr instanceof Vec3fAttribArray)
 			return ((Vec3fAttribArray) arr).update((Vector3f[]) data);
+		else if(arr instanceof Mat3x2fAttribArray)
+			return ((Mat3x2fAttribArray) arr).update(ArrayUtils.castArrayMat3x2f(data));
 		return false;
 	}
 	

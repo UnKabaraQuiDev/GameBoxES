@@ -18,7 +18,7 @@ public class Camera3D extends Camera {
 		this.rotation = rot;
 	}
 	
-	public void lookAt(Vector3f from, Vector3f to) {
+	public Camera3D lookAt(Vector3f from, Vector3f to) {
 		// Calculate the forward direction (Z-axis) of the camera
 		Vector3f forward = new Vector3f(to).sub(from).normalize();
 		// Calculate the up direction (Y-axis) of the camera
@@ -35,17 +35,21 @@ public class Camera3D extends Camera {
 		position.set(from);
 		
 		updateMatrix();
+		
+		return this;
 	}
 	
-	public void roll(float z) {
+	public Camera3D roll(float z) {
 		rotation.rotateLocalZ(z);
+		return this;
 	}
 	
-	public void move(float ax, float ay, float moveSpeed) {
+	public Camera3D move(float ax, float ay, float moveSpeed) {
 		position.add(new Vector3f(ax*moveSpeed, ay*moveSpeed, 0));
+		return this;
 	}
 	
-	public void move(float ax, float ay, float bx, float by, float moveSpeed, float rotationSpeed) {
+	public Camera3D move(float ax, float ay, float bx, float by, float moveSpeed, float rotationSpeed) {
 		// Move the camera based on the local camera axis
 		Vector3f movement = new Vector3f(ax * moveSpeed, 0, -ay * moveSpeed);
 		movement.rotate(rotation);
@@ -58,6 +62,8 @@ public class Camera3D extends Camera {
 		
 		// Update the camera's rotation
 		rotation.mul(rotationChange);
+		
+		return this;
 	}
 	
 	public Vector3f getPosition() {return position;}
@@ -67,15 +73,8 @@ public class Camera3D extends Camera {
 	
 	public Matrix4f updateMatrix() {
 		viewMatrix.identity();
-		/*viewMatrix.set(rotation);
-		viewMatrix.m30(position.x);
-		viewMatrix.m31(position.y);
-		viewMatrix.m32(position.z);
-		viewMatrix.invert();*/
 		viewMatrix.rotate(rotation);
 		viewMatrix.translate(-position.x, -position.y, -position.z);
-		System.err.println("VEC "+position+"\n"+rotation);
-		
 		return viewMatrix;
 	}
 	

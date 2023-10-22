@@ -11,20 +11,20 @@ import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.geom.instance.InstanceEmitter;
 import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.Shader;
-import lu.pcy113.pdr.engine.objs.InstanceEmitterModel;
 import lu.pcy113.pdr.engine.objs.entity.components.InstanceEmitterComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.PointLightSurfaceComponent;
+import lu.pcy113.pdr.engine.scene.Scene;
 import lu.pcy113.pdr.engine.scene.Scene3D;
 import lu.pcy113.pdr.utils.Logger;
 
-public class InstanceEmitterRenderer extends Renderer<Scene3D, InstanceEmitterComponent> {
+public class InstanceEmitterRenderer extends Renderer<Scene, InstanceEmitterComponent> {
 	
 	public InstanceEmitterRenderer() {
 		super(InstanceEmitter.class);
 	}
 	
 	@Override
-	public void render(CacheManager cache, Scene3D scene, InstanceEmitterComponent pec) {
+	public void render(CacheManager cache, Scene scene, InstanceEmitterComponent pec) {
 		InstanceEmitter pe = pec.getInstanceEmitter(cache);
 		if(pe == null)
 			return;
@@ -53,9 +53,11 @@ public class InstanceEmitterRenderer extends Renderer<Scene3D, InstanceEmitterCo
 			material.setPropertyIfPresent(Shader.TRANSFORMATION_MATRIX, transformationMatrix);
 		}
 		
-		PointLightSurfaceComponent plsc = pec.getParent().getComponent(PointLightSurfaceComponent.class);
-		if(plsc != null)
-			plsc.bindLights(cache, scene.getLights(), material);
+		if(scene instanceof Scene3D) {
+			PointLightSurfaceComponent plsc = pec.getParent().getComponent(PointLightSurfaceComponent.class);
+			if(plsc != null)
+				plsc.bindLights(cache, ((Scene3D) scene).getLights(), material);
+		}
 		
 		material.bindProperties(cache, scene, shader);
 		

@@ -11,17 +11,17 @@ import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.objs.entity.components.MeshComponent;
-import lu.pcy113.pdr.engine.scene.Scene3D;
+import lu.pcy113.pdr.engine.scene.Scene;
 import lu.pcy113.pdr.utils.Logger;
 
-public class MeshRenderer extends Renderer<Scene3D, MeshComponent> {
+public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 
 	public MeshRenderer() {
 		super(Mesh.class);
 	}
 
 	@Override
-	public void render(CacheManager cache, Scene3D scene, MeshComponent m) {
+	public void render(CacheManager cache, Scene scene, MeshComponent m) {
 		Mesh mesh = m.getMesh(cache);
 		if(mesh == null)
 			return;

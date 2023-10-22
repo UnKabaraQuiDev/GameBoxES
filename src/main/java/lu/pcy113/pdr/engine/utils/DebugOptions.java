@@ -45,7 +45,7 @@ public class DebugOptions {
 	public boolean gizmos = true;
 	public Gizmo gizmoXYZ;
 	
-	public void gizmos(CacheManager cache, Scene scene, Matrix4f projectionMatrix, Matrix4f viewMatrix, Matrix4f modelMatrix) {
+	public void gizmos(CacheManager cache, Scene scene, Matrix4f projectionMatrix, Matrix4f viewMatrix, Object modelMatrix) {
 		if(!gizmos)
 			return;
 		
@@ -89,7 +89,7 @@ public class DebugOptions {
 	public boolean wireframe = true;
 	public Vector4f wireframeColor = new Vector4f(1, 0, 0, 1);
 	
-	public void wireframe(CacheManager cache, Scene scene, Mesh mesh, Matrix4f projectionMatrix, Matrix4f viewMatrix, Matrix4f modelMatrix) {
+	public void wireframe(CacheManager cache, Scene scene, Mesh mesh, Matrix4f projectionMatrix, Matrix4f viewMatrix, Object modelMatrix) {
 		if(!wireframe)
 			return;
 		

@@ -4,7 +4,7 @@ import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-public class Transform3D extends Transform {
+public class Transform3D extends Transform<Matrix4f> {
 	
 	protected Vector3f translation;
 	protected Quaternionf rotation;
@@ -86,7 +86,7 @@ public class Transform3D extends Transform {
 	
 	@Override
 	public Matrix4f updateMatrix() {
-		return matrix.translationRotateScale(translation, rotation, scale);
+		return matrix.identity().translationRotateScale(translation, rotation, scale);
 	}
 	
 	public Vector3f getTranslation() {

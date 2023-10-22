@@ -1,10 +1,12 @@
 package lu.pcy113.pdr.engine.geom.instance;
 
+import java.nio.FloatBuffer;
 import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 
 import org.joml.Matrix4f;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL40;
 
 import lu.pcy113.pdr.engine.cache.attrib.AttribArray;
@@ -13,7 +15,10 @@ import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.impl.Renderable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
+import lu.pcy113.pdr.engine.utils.ArrayUtils;
 import lu.pcy113.pdr.engine.utils.transform.Transform;
+import lu.pcy113.pdr.engine.utils.transform.Transform2D;
+import lu.pcy113.pdr.engine.utils.transform.Transform3D;
 import lu.pcy113.pdr.utils.Logger;
 
 public class InstanceEmitter implements Renderable, Cleanupable, UniqueID {
@@ -30,7 +35,7 @@ public class InstanceEmitter implements Renderable, Cleanupable, UniqueID {
 	
 	protected Mesh instanceMesh;
 	
-	public InstanceEmitter(String name, Mesh mesh, int count, Transform baseTransform, AttribArray... attribs) {
+	public InstanceEmitter(String name, Mesh mesh, int count, Transform<?> baseTransform, AttribArray... attribs) {
 		this.name = name;
 		this.count = count;
 		
@@ -42,7 +47,15 @@ public class InstanceEmitter implements Renderable, Cleanupable, UniqueID {
 				atts[a] = attribs[a].get(i);
 			}
 			particles[i] = new Instance(i, baseTransform.clone(), atts);
-			transforms[i] = particles[i].getTransform().updateMatrix();
+			
+			if(particles[i].getTransform() instanceof Transform2D) {
+				FloatBuffer fb = BufferUtils.createFloatBuffer(16);
+				((Transform2D) particles[i].getTransform()).getMatrix().get4x4(fb);
+				fb.flip();
+				transforms[i] = new Matrix4f(fb);
+			}else if(particles[i].getTransform() instanceof Transform3D) {
+				transforms[i] = ((Transform3D) particles[i].getTransform()).getMatrix();
+			}
 		}
 		
 		this.instancesTransforms = new Mat4fAttribArray("transforms", 3, 1, transforms, GL40.GL_ARRAY_BUFFER, false, 1);
@@ -76,7 +89,16 @@ public class InstanceEmitter implements Renderable, Cleanupable, UniqueID {
 		Object[][] atts = new Object[instancesAttribs.length][];
 		for(int i = 0; i < count; i++) {
 			update.accept(particles[i]);
-			transforms[i] = particles[i].getTransform().getMatrix();
+			
+			if(particles[i].getTransform() instanceof Transform2D) {
+				FloatBuffer fb = BufferUtils.createFloatBuffer(16);
+				((Transform2D) particles[i].getTransform()).getMatrix().get4x4(fb);
+				fb.flip();
+				transforms[i] = new Matrix4f(fb);
+			}else if(particles[i].getTransform() instanceof Transform3D) {
+				transforms[i] = ((Transform3D) particles[i].getTransform()).getMatrix();
+			}
+				
 			for(int c = 0; c < instancesAttribs.length; c++) {
 				atts[c][i] = particles[i].getBuffers()[c];
 			}
@@ -107,6 +129,6 @@ public class InstanceEmitter implements Renderable, Cleanupable, UniqueID {
 	public int getParticleCount() {return count;}
 	public Mesh getParticleMesh() {return instanceMesh;}
 	public AttribArray[] getParticleAttribs() {return instancesAttribs;}
-	public Mat4fAttribArray getParticleTransforms() {return instancesTransforms;}
+	public AttribArray getParticleTransforms() {return instancesTransforms;}
 	
 }

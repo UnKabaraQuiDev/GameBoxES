@@ -2,6 +2,9 @@ package lu.pcy113.pdr.engine.utils;
 
 import java.util.Arrays;
 
+import org.joml.Matrix3x2f;
+import org.joml.Matrix4f;
+
 public final class ArrayUtils {
 
 	public static int[] intCountingUp(int start, int end) {
@@ -64,6 +67,19 @@ public final class ArrayUtils {
 	    }
 
 	    return result;
+	}
+
+	public static Matrix4f[] castArrayMat4f(Object[] transforms) {
+		Matrix4f[] t = new Matrix4f[transforms.length];
+		for(int i = 0; i < transforms.length; i++)
+			t[i] = (Matrix4f)transforms[i];
+		return t;
+	}
+	public static Matrix3x2f[] castArrayMat3x2f(Object[] transforms) {
+		Matrix3x2f[] t = new Matrix3x2f[transforms.length];
+		for(int i = 0; i < transforms.length; i++)
+			t[i] = (Matrix3x2f) transforms[i];
+		return t;
 	}
 	
 }

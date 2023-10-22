@@ -12,7 +12,8 @@ public class Projection {
 	protected float fov;
 	
 	// orthographic only
-	protected float size = 1;
+	protected float size = 0.8f;
+	protected float left, right, bottom, top;
 	
 	protected int width, height;
 	
@@ -24,12 +25,30 @@ public class Projection {
 		
 		this.projMatrix = new Matrix4f();
 	}
+	public Projection(float near, float far, float left, float right, float bottom, float top) {
+		this(near, far, left, right, bottom, top, 0.8f*150);
+	}
+	public Projection(float near, float far, float left, float right, float bottom, float top, float size) {
+		this.perspective = false;
+		this.near = near;
+		this.far = far;
+		this.left = left;
+		this.right = right;
+		this.bottom = bottom;
+		this.top = top;
+		this.size = size;
+		
+		this.projMatrix = new Matrix4f();
+		
+		update();
+	}
 	
 	public Matrix4f perspectiveUpdateMatrix(int width, int height) {
 		return projMatrix.setPerspective(fov, (float) width / height, near, far);
 	}
 	public Matrix4f orthographicUpdateMatrix(int width, int height) {
 		return projMatrix.setOrthoSymmetric(width/size, height/size, near, far);
+		//return projMatrix.ortho(left*width/size, right*width/size, bottom*height/size, top*height/size, near, far);
 	}
 	
 	public Matrix4f update(int w, int h) {

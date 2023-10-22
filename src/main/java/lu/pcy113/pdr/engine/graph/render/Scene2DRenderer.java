@@ -20,18 +20,17 @@ import lu.pcy113.pdr.engine.objs.entity.components.MeshComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.ModelComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.TextModelComponent;
 import lu.pcy113.pdr.engine.objs.text.TextModel;
-import lu.pcy113.pdr.engine.scene.Scene3D;
+import lu.pcy113.pdr.engine.scene.Scene2D;
 import lu.pcy113.pdr.utils.Logger;
 
-public class Scene3DRenderer extends Renderer<GameEngine, Scene3D> {
-	
-	public Scene3DRenderer() {
-		super(Scene3D.class);
-	}
+public class Scene2DRenderer extends Renderer<GameEngine, Scene2D> {
 
-	@Override
-	public void render(CacheManager cache, GameEngine ge, Scene3D scene) {
-		Logger.log(Level.INFO, "Scene3D : "+scene.getId());
+	public Scene2DRenderer() {
+		super(Scene2D.class);
+	}
+	
+	public void render(CacheManager cache, GameEngine engine, Scene2D scene) {
+		Logger.log(Level.INFO, "Scene2D : "+scene.getId());
 		
 		MeshRenderer meshRenderer = (MeshRenderer) cache.getRenderer(Mesh.NAME);
 		ModelRenderer modelRenderer = (ModelRenderer) cache.getRenderer(Model.NAME);
@@ -62,11 +61,6 @@ public class Scene3DRenderer extends Renderer<GameEngine, Scene3D> {
 				textModelRenderer.render(cache, scene, (TextModelComponent) c);
 			}
 		}
-	}
-	
-	@Override
-	public void cleanup() {
-		super.cleanup();
-	}
+	};
 	
 }
