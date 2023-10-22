@@ -5,7 +5,7 @@ import java.util.Map;
 
 import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.geom.Mesh;
-import lu.pcy113.pdr.engine.geom.particles.ParticleEmitter;
+import lu.pcy113.pdr.engine.geom.instance.InstanceEmitter;
 import lu.pcy113.pdr.engine.graph.composition.RenderLayer;
 import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.Shader;
@@ -13,8 +13,8 @@ import lu.pcy113.pdr.engine.graph.render.Renderer;
 import lu.pcy113.pdr.engine.graph.texture.Texture;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.objs.GizmoModel;
+import lu.pcy113.pdr.engine.objs.InstanceEmitterModel;
 import lu.pcy113.pdr.engine.objs.Model;
-import lu.pcy113.pdr.engine.objs.ParticleEmitterModel;
 import lu.pcy113.pdr.engine.objs.PointLight;
 import lu.pcy113.pdr.engine.objs.text.TextModel;
 import lu.pcy113.pdr.engine.scene.Scene;
@@ -34,8 +34,8 @@ public class CacheManager implements Cleanupable {
 	protected Map<String, GizmoModel> gizmoModels;
 	protected Map<String, RenderLayer> renderLayers;
 	protected Map<String, TextModel> textModels;
-	protected Map<String, ParticleEmitter> particleEmitters;
-	protected Map<String, ParticleEmitterModel> particleEmitterModels;
+	protected Map<String, InstanceEmitter> instanceEmitters;
+	protected Map<String, InstanceEmitterModel> instanceEmitterModels;
 	
 	public CacheManager() {
 		this.meshes = new HashMap<>();
@@ -50,8 +50,8 @@ public class CacheManager implements Cleanupable {
 		this.gizmoModels = new HashMap<>();
 		this.renderLayers = new HashMap<>();
 		this.textModels = new HashMap<>();
-		this.particleEmitters = new HashMap<>();
-		this.particleEmitterModels = new HashMap<>();
+		this.instanceEmitters = new HashMap<>();
+		this.instanceEmitterModels = new HashMap<>();
 	}
 	
 	@Override
@@ -92,11 +92,11 @@ public class CacheManager implements Cleanupable {
 		//textModels.values().forEach(TextModel::cleanup);
 		textModels.clear();
 		
-		particleEmitters.values().forEach(ParticleEmitter::cleanup);
-		particleEmitters.clear();
+		instanceEmitters.values().forEach(InstanceEmitter::cleanup);
+		instanceEmitters.clear();
 		
-		//particleEmitterModels.values().forEach(ParticleEmitterModel::cleanup);
-		particleEmitterModels.clear();
+		//instanceEmitterModels.values().forEach(ParticleEmitterModel::cleanup);
+		instanceEmitterModels.clear();
 	}
 	
 	public boolean addMesh(Mesh m) {
@@ -146,11 +146,11 @@ public class CacheManager implements Cleanupable {
 	public boolean addTextModel(TextModel m) {
 		return this.textModels.putIfAbsent(m.getId(), m) == null;
 	}
-	public boolean addParticleEmitter(ParticleEmitter m) {
-		return this.particleEmitters.putIfAbsent(m.getId(), m) == null;
+	public boolean addInstanceEmitter(InstanceEmitter m) {
+		return this.instanceEmitters.putIfAbsent(m.getId(), m) == null;
 	}
-	public boolean addParticleEmitterModel(ParticleEmitterModel m) {
-		return this.particleEmitterModels.putIfAbsent(m.getId(), m) == null;
+	public boolean addInstanceEmitterModel(InstanceEmitterModel m) {
+		return this.instanceEmitterModels.putIfAbsent(m.getId(), m) == null;
 	}
 	
 	public Mesh getMesh(String name) {
@@ -189,11 +189,11 @@ public class CacheManager implements Cleanupable {
 	public TextModel getTextModel(String name) {
 		return textModels.get(name);
 	}
-	public ParticleEmitter getParticleEmitter(String name) {
-		return particleEmitters.get(name);
+	public InstanceEmitter getInstanceEmitter(String name) {
+		return instanceEmitters.get(name);
 	}
-	public ParticleEmitterModel getParticleEmitterModel(String name) {
-		return particleEmitterModels.get(name);
+	public InstanceEmitterModel getInstanceEmitterModel(String name) {
+		return instanceEmitterModels.get(name);
 	}
 	
 	public Map<String, Mesh> getMeshes() {return meshes;}
@@ -216,21 +216,13 @@ public class CacheManager implements Cleanupable {
 	public void setRenderLayers(Map<String, RenderLayer> renderLayers) {this.renderLayers = renderLayers;}
 	public Map<String, TextModel> getTextModels() {return textModels;}
 	public void setTextModels(Map<String, TextModel> textModels) {this.textModels = textModels;}
-	public Map<String, ParticleEmitter> getParticleEmitters() {return particleEmitters;}
-	public void setParticleEmitters(Map<String, ParticleEmitter> particleEmitters) {this.particleEmitters = particleEmitters;}
-	public Map<String, ParticleEmitterModel> getParticleEmitterModels() {return particleEmitterModels;}
-	public void setParticleEmitterModels(Map<String, ParticleEmitterModel> particleEmitterModels) {this.particleEmitterModels = particleEmitterModels;}
-	public Map<String, Model> getModels() {
-		return models;
-	}
-	public void setModels(Map<String, Model> models) {
-		this.models = models;
-	}
-	public Map<String, PointLight> getPointLights() {
-		return pointLights;
-	}
-	public void setPointLights(Map<String, PointLight> pointLights) {
-		this.pointLights = pointLights;
-	}
+	public Map<String, InstanceEmitterModel> getInstanceEmitterModels() {return instanceEmitterModels;}
+	public void setInstanceEmitterModels(Map<String, InstanceEmitterModel> instanceEmitterModels) {this.instanceEmitterModels = instanceEmitterModels;}
+	public Map<String, InstanceEmitter> getInstanceEmitters() {return instanceEmitters;}
+	public void setInstanceEmitters(Map<String, InstanceEmitter> instanceEmitters) {this.instanceEmitters = instanceEmitters;}
+	public Map<String, Model> getModels() {return models;}
+	public void setModels(Map<String, Model> models) {this.models = models;}
+	public Map<String, PointLight> getPointLights() {return pointLights;}
+	public void setPointLights(Map<String, PointLight> pointLights) {this.pointLights = pointLights;}
 	
 }

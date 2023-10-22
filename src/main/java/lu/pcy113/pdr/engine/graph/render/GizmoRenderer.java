@@ -5,6 +5,7 @@ import java.util.logging.Level;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL40;
 
+import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.graph.material.Material;
@@ -44,26 +45,26 @@ public class GizmoRenderer extends Renderer<Scene, GizmoComponent> {
 		
 		shader.bind();
 		
-		Matrix4f projectionMatrix = scene.getCamera().getProjection().getProjMatrix();
-		Matrix4f viewMatrix = scene.getCamera().getViewMatrix();
-		material.setProperty(Shader.PROJECTION_MATRIX, projectionMatrix);
-		material.setProperty(Shader.VIEW_MATRIX, viewMatrix);
-		//material.setProperty(Shader.TRANSFORMATION_MATRIX, model.getTransform().getMatrix());
-		//((Camera3D) scene.getCamera()).updateMatrix();
-		material.setProperty(Shader.VIEW_POSITION, ((Camera3D) scene.getCamera()).getPosition());
-		
-		//Logger.log("cam: "+((Camera3D) scene.getCamera()).getPosition());
+		if(scene != null) {
+			Matrix4f projectionMatrix = scene.getCamera().getProjection().getProjMatrix();
+			Matrix4f viewMatrix = scene.getCamera().getViewMatrix();
+			material.setPropertyIfPresent(Shader.PROJECTION_MATRIX, projectionMatrix);
+			material.setPropertyIfPresent(Shader.VIEW_MATRIX, viewMatrix);
+			material.setPropertyIfPresent(Shader.TRANSFORMATION_MATRIX, new Matrix4f().identity());
+			material.setPropertyIfPresent(Shader.VIEW_POSITION, ((Camera3D) scene.getCamera()).getPosition());
+		}
 		
 		material.bindProperties(cache, scene, shader);
 		
-		/*if(GameEngine.DEBUG.ignoreDepth)
-			GL40.glDisable(GL40.GL_DEPTH_TEST);*/
+		if(GameEngine.DEBUG.ignoreDepth)
+			GL40.glDisable(GL40.GL_DEPTH_TEST);
+		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_LINE);
 		
 		GL40.glLineWidth(Gizmo.LINE_WIDTH);
 		GL40.glDrawElements(GL40.GL_LINES, gizmo.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);
 		
 		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_FILL);
-		//GL40.glEnable(GL40.GL_DEPTH_TEST);
+		GL40.glEnable(GL40.GL_DEPTH_TEST);
 		
 		gizmo.unbind();
 	}

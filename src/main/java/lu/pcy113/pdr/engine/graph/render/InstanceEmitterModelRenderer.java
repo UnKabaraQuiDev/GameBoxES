@@ -8,30 +8,30 @@ import org.lwjgl.opengl.GL40;
 import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.geom.Mesh;
-import lu.pcy113.pdr.engine.geom.particles.ParticleEmitter;
+import lu.pcy113.pdr.engine.geom.instance.InstanceEmitter;
 import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.Shader;
-import lu.pcy113.pdr.engine.objs.ParticleEmitterModel;
-import lu.pcy113.pdr.engine.objs.entity.components.ParticleEmitterModelComponent;
+import lu.pcy113.pdr.engine.objs.InstanceEmitterModel;
+import lu.pcy113.pdr.engine.objs.entity.components.InstanceEmitterModelComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.PointLightSurfaceComponent;
 import lu.pcy113.pdr.engine.scene.Scene3D;
 import lu.pcy113.pdr.utils.Logger;
 
-public class ParticleEmitterModelRenderer extends Renderer<Scene3D, ParticleEmitterModelComponent> {
+public class InstanceEmitterModelRenderer extends Renderer<Scene3D, InstanceEmitterModelComponent> {
 	
-	public ParticleEmitterModelRenderer() {
-		super(ParticleEmitterModel.class);
+	public InstanceEmitterModelRenderer() {
+		super(InstanceEmitterModel.class);
 	}
 	
 	@Override
-	public void render(CacheManager cache, Scene3D scene, ParticleEmitterModelComponent pec) {
-		ParticleEmitterModel pem = pec.getParticleEmitterModel(cache);
+	public void render(CacheManager cache, Scene3D scene, InstanceEmitterModelComponent pec) {
+		InstanceEmitterModel pem = pec.getInstanceEmitterModel(cache);
 		if(pem == null)
 			return;
 		
-		Logger.log(Level.INFO, "ParticleEmitterModel : "+pem.getId());
+		Logger.log(Level.INFO, "InstanceEmitterModel : "+pem.getId());
 		
-		ParticleEmitter pe = cache.getParticleEmitter(pem.getEmitter());
+		InstanceEmitter pe = cache.getInstanceEmitter(pem.getEmitter());
 		if(pe == null)
 			return;
 		Mesh mesh = pe.getParticleMesh();
@@ -47,11 +47,14 @@ public class ParticleEmitterModelRenderer extends Renderer<Scene3D, ParticleEmit
 		
 		shader.bind();
 		
-		Matrix4f projectionMatrix = scene.getCamera().getProjection().getProjMatrix();
-		Matrix4f viewMatrix = scene.getCamera().getViewMatrix();
-		material.setPropertyIfPresent(Shader.PROJECTION_MATRIX, projectionMatrix);
-		material.setPropertyIfPresent(Shader.VIEW_MATRIX, viewMatrix);
-		material.setPropertyIfPresent(Shader.TRANSFORMATION_MATRIX, pem.getTransform().getMatrix());
+		Matrix4f projectionMatrix = null, viewMatrix = null, transformationMatrix = pem.getTransform().getMatrix();
+		if(scene != null) {
+			projectionMatrix = scene.getCamera().getProjection().getProjMatrix();
+			viewMatrix = scene.getCamera().getViewMatrix();
+			material.setPropertyIfPresent(Shader.PROJECTION_MATRIX, projectionMatrix);
+			material.setPropertyIfPresent(Shader.VIEW_MATRIX, viewMatrix);
+			material.setPropertyIfPresent(Shader.TRANSFORMATION_MATRIX, transformationMatrix);
+		}
 		
 		PointLightSurfaceComponent plsc = pec.getParent().getComponent(PointLightSurfaceComponent.class);
 		if(plsc != null)
@@ -75,7 +78,7 @@ public class ParticleEmitterModelRenderer extends Renderer<Scene3D, ParticleEmit
 		
 		mesh.unbind();
 		
-		GameEngine.DEBUG.gizmos(cache, scene, projectionMatrix, viewMatrix, pem.getTransform().getMatrix());
+		GameEngine.DEBUG.gizmos(cache, scene, projectionMatrix, viewMatrix, transformationMatrix);
 	}
 	
 	@Override

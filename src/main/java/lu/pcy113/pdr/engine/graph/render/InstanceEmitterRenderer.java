@@ -8,47 +8,43 @@ import org.lwjgl.opengl.GL40;
 import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.geom.Mesh;
+import lu.pcy113.pdr.engine.geom.instance.InstanceEmitter;
 import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.Shader;
-import lu.pcy113.pdr.engine.objs.Model;
-import lu.pcy113.pdr.engine.objs.entity.components.ModelComponent;
+import lu.pcy113.pdr.engine.objs.InstanceEmitterModel;
+import lu.pcy113.pdr.engine.objs.entity.components.InstanceEmitterComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.PointLightSurfaceComponent;
 import lu.pcy113.pdr.engine.scene.Scene3D;
-import lu.pcy113.pdr.engine.scene.camera.Camera3D;
 import lu.pcy113.pdr.utils.Logger;
 
-public class ModelRenderer extends Renderer<Scene3D, ModelComponent> {
-
-	public ModelRenderer() {
-		super(Model.class);
+public class InstanceEmitterRenderer extends Renderer<Scene3D, InstanceEmitterComponent> {
+	
+	public InstanceEmitterRenderer() {
+		super(InstanceEmitter.class);
 	}
-
+	
 	@Override
-	public void render(CacheManager cache, Scene3D scene, ModelComponent co) {
-		Model c = co.getModel(cache);
-		if(c == null)
+	public void render(CacheManager cache, Scene3D scene, InstanceEmitterComponent pec) {
+		InstanceEmitter pe = pec.getInstanceEmitter(cache);
+		if(pe == null)
 			return;
 		
-		Logger.log(Level.INFO, "Model : "+c.getId());
+		Logger.log(Level.INFO, "InstanceEmitter : "+pe.getId());
 		
-		Mesh mesh = cache.getMesh(c.getMesh());
+		Mesh mesh = pe.getParticleMesh();
 		if(mesh == null)
 			return;
 		
-		mesh.bind();
-		
 		Material material = cache.getMaterial(mesh.getMaterial());
-		System.out.println(material);
 		if(material == null)
 			return;
 		Shader shader = cache.getShader(material.getShader());
-		System.out.println(shader);
 		if(shader == null)
 			return;
 		
 		shader.bind();
 		
-		Matrix4f projectionMatrix = null, viewMatrix = null, transformationMatrix = c.getTransform().getMatrix();
+		Matrix4f projectionMatrix = null, viewMatrix = null, transformationMatrix = new Matrix4f().identity();
 		if(scene != null) {
 			projectionMatrix = scene.getCamera().getProjection().getProjMatrix();
 			viewMatrix = scene.getCamera().getViewMatrix();
@@ -57,7 +53,7 @@ public class ModelRenderer extends Renderer<Scene3D, ModelComponent> {
 			material.setPropertyIfPresent(Shader.TRANSFORMATION_MATRIX, transformationMatrix);
 		}
 		
-		PointLightSurfaceComponent plsc = co.getParent().getComponent(PointLightSurfaceComponent.class);
+		PointLightSurfaceComponent plsc = pec.getParent().getComponent(PointLightSurfaceComponent.class);
 		if(plsc != null)
 			plsc.bindLights(cache, scene.getLights(), material);
 		
@@ -68,7 +64,9 @@ public class ModelRenderer extends Renderer<Scene3D, ModelComponent> {
 			GL40.glBlendFunc(GL40.GL_SRC_ALPHA, GL40.GL_ONE_MINUS_SRC_ALPHA);
 		}
 		
-		GL40.glDrawElements(GL40.GL_TRIANGLES, mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);
+		pe.bind();
+		
+		GL40.glDrawElementsInstanced(GL40.GL_TRIANGLES, mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0, pe.getParticleCount());
 		
 		GL40.glDisable(GL40.GL_BLEND);
 		

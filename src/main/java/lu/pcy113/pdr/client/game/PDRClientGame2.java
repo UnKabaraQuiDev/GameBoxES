@@ -12,7 +12,7 @@ import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.geom.Mesh;
-import lu.pcy113.pdr.engine.geom.particles.ParticleEmitter;
+import lu.pcy113.pdr.engine.geom.instance.InstanceEmitter;
 import lu.pcy113.pdr.engine.geom.text.TextMesh;
 import lu.pcy113.pdr.engine.graph.composition.Compositor;
 import lu.pcy113.pdr.engine.graph.composition.GenerateRenderLayer;
@@ -22,20 +22,21 @@ import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.material.ShaderPart;
 import lu.pcy113.pdr.engine.graph.material.text.TextShader;
 import lu.pcy113.pdr.engine.graph.render.GizmoModelRenderer;
+import lu.pcy113.pdr.engine.graph.render.InstanceEmitterModelRenderer;
+import lu.pcy113.pdr.engine.graph.render.InstanceEmitterRenderer;
 import lu.pcy113.pdr.engine.graph.render.MeshRenderer;
 import lu.pcy113.pdr.engine.graph.render.ModelRenderer;
-import lu.pcy113.pdr.engine.graph.render.ParticleEmitterModelRenderer;
 import lu.pcy113.pdr.engine.graph.render.Scene3DRenderer;
 import lu.pcy113.pdr.engine.graph.render.TextModelRenderer;
 import lu.pcy113.pdr.engine.graph.texture.Texture;
 import lu.pcy113.pdr.engine.logic.GameLogic;
 import lu.pcy113.pdr.engine.objs.GizmoModel;
+import lu.pcy113.pdr.engine.objs.InstanceEmitterModel;
 import lu.pcy113.pdr.engine.objs.Model;
-import lu.pcy113.pdr.engine.objs.ParticleEmitterModel;
 import lu.pcy113.pdr.engine.objs.entity.Entity;
 import lu.pcy113.pdr.engine.objs.entity.components.GizmoModelComponent;
+import lu.pcy113.pdr.engine.objs.entity.components.InstanceEmitterModelComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.ModelComponent;
-import lu.pcy113.pdr.engine.objs.entity.components.ParticleEmitterModelComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.TextModelComponent;
 import lu.pcy113.pdr.engine.objs.text.TextModel;
 import lu.pcy113.pdr.engine.scene.Scene3D;
@@ -52,8 +53,8 @@ public class PDRClientGame2 implements GameLogic {
 	Scene3D scene;
 	Model plane;
 	BackgroundMaterial genMat;
-	ParticleEmitter parts;
-	ParticleEmitterModel partsModel;
+	InstanceEmitter parts;
+	InstanceEmitterModel partsModel;
 	FillTextMaterial textMaterial;
 	
 	Compositor compositor;
@@ -102,7 +103,7 @@ public class PDRClientGame2 implements GameLogic {
 		cache.addMaterial(partMat);
 		Mesh partCube = ObjLoader.loadMesh("partCube", partMat.getId(), "./resources/models/cube.obj");
 		cache.addMesh(partCube);
-		parts = new ParticleEmitter("parts", partCube, 200, new Transform3D());
+		parts = new InstanceEmitter("parts", partCube, 200, new Transform3D());
 		parts.update((part) -> {
 			((Transform3D) part.getTransform())
 			.setTranslation(new Vector3f(
@@ -112,7 +113,7 @@ public class PDRClientGame2 implements GameLogic {
 			.setScale(new Vector3f(0.05f, 0.05f, 0.05f))
 			.updateMatrix();
 		});
-		cache.addParticleEmitter(parts);
+		cache.addInstanceEmitter(parts);
 		
 		Material mat = new Material("main", shader1);
 		cache.addMaterial(mat);
@@ -120,8 +121,8 @@ public class PDRClientGame2 implements GameLogic {
 		cache.addMesh(plane);
 		this.plane = new Model("plane", plane, new Transform3D(new Vector3f(1, 1, 1), new Quaternionf(), new Vector3f(0.2f)));
 		cache.addModel(this.plane);
-		partsModel = new ParticleEmitterModel("parts", parts, new Transform3D());
-		cache.addParticleEmitterModel(partsModel);
+		partsModel = new InstanceEmitterModel("parts", parts, new Transform3D());
+		cache.addInstanceEmitterModel(partsModel);
 		
 		TextMesh textMesh = new TextMesh(64);
 		cache.addMesh(textMesh);
@@ -139,7 +140,7 @@ public class PDRClientGame2 implements GameLogic {
 		this.scene = new Scene3D("main-scene");
 		//this.scene.addEntity("mesh", new Entity(new MeshComponent(partCube))).setActive(false);
 		this.scene.addEntity("model", new Entity(new ModelComponent(this.plane)));
-		this.scene.addEntity("parts", new Entity(new ParticleEmitterModelComponent(partsModel)));
+		this.scene.addEntity("parts", new Entity(new InstanceEmitterModelComponent(partsModel)));
 		this.scene.addEntity("text", new Entity(new TextModelComponent(txtModel)));
 		
 		Gizmo gizmoXYZ = ObjLoader.loadGizmo("gizmoXYZ", "./resources/models/gizmos/grid_xyz.obj");
@@ -152,7 +153,8 @@ public class PDRClientGame2 implements GameLogic {
 		cache.addRenderer(new ModelRenderer());
 		cache.addRenderer(new GizmoModelRenderer());
 		cache.addRenderer(new MeshRenderer());
-		cache.addRenderer(new ParticleEmitterModelRenderer());
+		cache.addRenderer(new InstanceEmitterModelRenderer());
+		cache.addRenderer(new InstanceEmitterRenderer());
 		cache.addRenderer(new TextModelRenderer());
 		
 		SceneRenderLayer sceneRender = new SceneRenderLayer("scene", scene);

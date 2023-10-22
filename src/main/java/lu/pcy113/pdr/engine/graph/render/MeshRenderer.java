@@ -47,6 +47,7 @@ public class MeshRenderer extends Renderer<Scene3D, MeshComponent> {
 			material.setPropertyIfPresent(Shader.VIEW_MATRIX, viewMatrix);
 			material.setPropertyIfPresent(Shader.TRANSFORMATION_MATRIX, new Matrix4f().identity());
 		}
+		
 		material.bindProperties(cache, scene, shader);
 		
 		GL40.glDrawElements(GL40.GL_TRIANGLES, mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);

@@ -54,15 +54,14 @@ public class GizmoModelRenderer extends Renderer<Scene, GizmoModelComponent> {
 		
 		shader.bind();
 		
-		Matrix4f projectionMatrix = scene.getCamera().getProjection().getProjMatrix();
-		Matrix4f viewMatrix = scene.getCamera().getViewMatrix();
-		material.setPropertyIfPresent(Shader.PROJECTION_MATRIX, projectionMatrix);
-		material.setPropertyIfPresent(Shader.VIEW_MATRIX, viewMatrix);
-		material.setPropertyIfPresent(Shader.TRANSFORMATION_MATRIX, model.getTransform().getMatrix());
-		//((Camera3D) scene.getCamera()).updateMatrix();
-		material.setPropertyIfPresent(Shader.VIEW_POSITION, ((Camera3D) scene.getCamera()).getPosition());
-		
-		//Logger.log("cam: "+((Camera3D) scene.getCamera()).getPosition());
+		if(scene != null) {
+			Matrix4f projectionMatrix = scene.getCamera().getProjection().getProjMatrix();
+			Matrix4f viewMatrix = scene.getCamera().getViewMatrix();
+			material.setPropertyIfPresent(Shader.PROJECTION_MATRIX, projectionMatrix);
+			material.setPropertyIfPresent(Shader.VIEW_MATRIX, viewMatrix);
+			material.setPropertyIfPresent(Shader.TRANSFORMATION_MATRIX, new Matrix4f().identity());
+			material.setPropertyIfPresent(Shader.VIEW_POSITION, ((Camera3D) scene.getCamera()).getPosition());
+		}
 		
 		material.bindProperties(cache, scene, shader);
 		

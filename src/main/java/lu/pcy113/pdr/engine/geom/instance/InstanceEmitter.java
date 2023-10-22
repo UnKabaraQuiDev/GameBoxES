@@ -1,4 +1,4 @@
-package lu.pcy113.pdr.engine.geom.particles;
+package lu.pcy113.pdr.engine.geom.instance;
 
 import java.util.Arrays;
 import java.util.function.Consumer;
@@ -14,16 +14,15 @@ import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.impl.Renderable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
 import lu.pcy113.pdr.engine.utils.transform.Transform;
-import lu.pcy113.pdr.engine.utils.transform.Transform3D;
 import lu.pcy113.pdr.utils.Logger;
 
-public class ParticleEmitter implements Renderable, Cleanupable, UniqueID {
+public class InstanceEmitter implements Renderable, Cleanupable, UniqueID {
 	
-	public static final String NAME = ParticleEmitter.class.getName();
+	public static final String NAME = InstanceEmitter.class.getName();
 	
 	protected final String name;
 	
-	protected ParticleInstance[] particles;
+	protected Instance[] particles;
 	
 	protected Mat4fAttribArray instancesTransforms;
 	protected AttribArray[] instancesAttribs;
@@ -31,18 +30,18 @@ public class ParticleEmitter implements Renderable, Cleanupable, UniqueID {
 	
 	protected Mesh instanceMesh;
 	
-	public ParticleEmitter(String name, Mesh mesh, int count, Transform baseTransform, AttribArray... attribs) {
+	public InstanceEmitter(String name, Mesh mesh, int count, Transform baseTransform, AttribArray... attribs) {
 		this.name = name;
 		this.count = count;
 		
-		particles = new ParticleInstance[count];
+		particles = new Instance[count];
 		Matrix4f[] transforms = new Matrix4f[count];
 		for(int i = 0; i < count; i++) {
 			Object[] atts = new Object[attribs.length];
 			for(int a = 0; a < attribs.length; a++) {
 				atts[a] = attribs[a].get(i);
 			}
-			particles[i] = new ParticleInstance(i, baseTransform.clone(), atts);
+			particles[i] = new Instance(i, baseTransform.clone(), atts);
 			transforms[i] = particles[i].getTransform().updateMatrix();
 		}
 		
@@ -72,7 +71,7 @@ public class ParticleEmitter implements Renderable, Cleanupable, UniqueID {
 	/**
 	 * <h3>DOES NOT CALL Transform#updateMatrix()</h3>
 	 */
-	public void update(Consumer<ParticleInstance> update) {
+	public void update(Consumer<Instance> update) {
 		Matrix4f[] transforms = new Matrix4f[count];
 		Object[][] atts = new Object[instancesAttribs.length][];
 		for(int i = 0; i < count; i++) {

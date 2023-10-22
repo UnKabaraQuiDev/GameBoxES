@@ -1,14 +1,14 @@
-package lu.pcy113.pdr.engine.geom.particles;
+package lu.pcy113.pdr.engine.geom.instance;
 
 import lu.pcy113.pdr.engine.utils.transform.Transform;
 
-public class ParticleInstance {
+public class Instance {
 	
 	private final int index;
 	private Transform transform;
 	private Object[] buffers;
 	
-	public ParticleInstance(int index, Transform transform, Object... buffers) {
+	public Instance(int index, Transform transform, Object... buffers) {
 		this.index = index;
 		this.transform = transform;
 		this.buffers = buffers;
