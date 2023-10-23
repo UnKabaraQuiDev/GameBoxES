@@ -8,7 +8,7 @@ import org.lwjgl.opengl.GL40;
 
 import lu.pcy113.pdr.engine.cache.attrib.AttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.FloatAttribArray;
-import lu.pcy113.pdr.engine.cache.attrib.IntAttribArray;
+import lu.pcy113.pdr.engine.cache.attrib.UIntAttribArray;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.impl.Renderable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
@@ -24,81 +24,57 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 	protected String material;
 	
 	protected FloatAttribArray vertices;
-	protected IntAttribArray indices;
+	protected UIntAttribArray indices;
 	protected AttribArray[] attribs;
 	
-	protected int vertexCount;
+	protected int vertexCount, indicesCount;
 	
 	/**
 	 * Positions are stored as attribArray 0,
 	 * normals as attribArray 1,
 	 * uvs as attribArray 2
 	 */
-	public Mesh(String name, String material, FloatAttribArray vertices, IntAttribArray indices, AttribArray... attribs) {
+	public Mesh(String name, String material, FloatAttribArray vertices, UIntAttribArray indices, AttribArray... attribs) {
 		this.name = name;
 		this.vertices = vertices;
 		this.indices = indices;
 		this.material = material;
 		this.attribs = attribs;
 		
-		/*if(indices.getDataCount() != vertices.getDataCount()) {
-			Logger.log(Level.WARNING, "Indices ("+indices.getLength()+"/"+indices.getDataSize()+"="+indices.getDataCount()+") must be equal to vertices ("+vertices.getLength()+"/"+vertices.getDataSize()+"="+vertices.getDataCount()+")");
-		}*/
+		this.vertexCount = vertices.getDataCount();
+		this.indicesCount = indices.getLength();
 		
-		this.vertexCount = indices.getDataCount();
+		this.vao = GL40.glGenVertexArrays();
+		bind();
+		storeElementArray((UIntAttribArray) indices);
+		vertices.setIndex(0);
+		storeAttribArray((FloatAttribArray) vertices);
 		
-		//System.out.println("vertices ("+(vertices.getLength()/3)+"*3): "+Arrays.toString(vertices.getData()));
-		//System.out.println("normals ("+(normals.length/3)+"*3): "+Arrays.toString(normals));
-		//System.out.println("uvs ("+(uvs.length/2)+"*2): "+Arrays.toString(uvs));
-		//System.out.println("indices ("+(indices.getDataCount()/3)+"*3): "+Arrays.toString(indices.getData()));
-		
-		//try(MemoryStack stack = MemoryStack.stackPush()) {
-			this.vao = GL40.glGenVertexArrays();
-			bind();
-			storeElementArray(indices);
-			storeAttribArray(0, 3, vertices);
-			
-			for(AttribArray a : attribs) {
-				if(vbo.containsKey(a.getIndex())) {
-					Logger.log(Level.WARNING, "Duplicate of index: "+a.getIndex()+" from "+a.getName()+", in Mesh: "+name);
-					continue;
-				}
-				if(a instanceof FloatAttribArray) {
-					storeAttribArray(a.getIndex(), a.getDataSize(), (FloatAttribArray) a);
-				}else if(a instanceof IntAttribArray) {
-					storeAttribArray(a.getIndex(), a.getDataSize(), (IntAttribArray) a);
-				}
+		for(AttribArray a : attribs) {
+			if(vbo.containsKey(a.getIndex())) {
+				Logger.log(Level.WARNING, "Duplicate of index: "+a.getIndex()+" from "+a.getName()+", in Mesh: "+name);
+				continue;
 			}
-			
-			/*storeAttribArray(1, 3, normals);
-			storeAttribArray(2, 2, uvs);*/
-			unbind();
-		//}
+			storeAttribArray(a);
+		}
+		
+		unbind();
+		
+		Logger.log(Level.INFO, "Mesh "+name+": "+vao+" & "+vbo+"; v:"+vertexCount);
 	}
 	
-	protected void storeAttribArray(int index, int size, IntAttribArray data) {
-		int vbo = GL40.glGenBuffers();
-		this.vbo.put(index, vbo);
-		GL40.glBindBuffer(GL40.GL_ARRAY_BUFFER, vbo);
-		GL40.glBufferData(GL40.GL_ARRAY_BUFFER, data.getData(), GL40.GL_STATIC_DRAW);
-		GL40.glEnableVertexAttribArray(index);
-		GL40.glVertexAttribPointer(index, size, GL40.GL_UNSIGNED_INT, false, 0, 0);
-		GL40.glBindBuffer(GL40.GL_ARRAY_BUFFER, 0);
+	public void storeAttribArray(AttribArray data) {
+		this.vbo.put(data.getIndex(), data.gen());
+		data.bind();
+		data.init();
+		data.enable();
+		data.unbind();
 	}
-	protected void storeAttribArray(int index, int size, FloatAttribArray data) {
-		int vbo = GL40.glGenBuffers();
-		this.vbo.put(index, vbo);
-		GL40.glBindBuffer(GL40.GL_ARRAY_BUFFER, vbo);
-		GL40.glBufferData(GL40.GL_ARRAY_BUFFER, data.getData(), GL40.GL_STATIC_DRAW);
-		GL40.glEnableVertexAttribArray(index);
-		GL40.glVertexAttribPointer(index, size, GL40.GL_FLOAT, false, 0, 0);
-		GL40.glBindBuffer(GL40.GL_ARRAY_BUFFER, 0);
-	}
-	private void storeElementArray(IntAttribArray indices) {
-		int vbo = GL40.glGenBuffers();
-		this.vbo.put(-1, vbo);
-		GL40.glBindBuffer(GL40.GL_ELEMENT_ARRAY_BUFFER, vbo);
-		GL40.glBufferData(GL40.GL_ELEMENT_ARRAY_BUFFER, indices.getData(), GL40.GL_STATIC_DRAW);
+	private void storeElementArray(UIntAttribArray indices) {
+		indices.setBufferType(GL40.GL_ELEMENT_ARRAY_BUFFER);
+		this.vbo.put(indices.getIndex(), indices.gen());
+		indices.bind();
+		indices.init();
 	}
 	
 	public void bind() {
@@ -114,7 +90,7 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 			return;
 		
 		GL40.glDeleteVertexArrays(vao);
-		vbo.values().forEach(GL40::glDeleteBuffers);
+		Arrays.stream(attribs).forEach(AttribArray::cleanup);
 		vao = -1;
 	}
 	
@@ -124,9 +100,10 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 	public int getVao() {return vao;}
 	public HashMap<Integer, Integer> getVbo() {return vbo;}
 	public String getName() {return name;}
-	public IntAttribArray getIndices() {return indices;}
+	public UIntAttribArray getIndices() {return indices;}
 	public FloatAttribArray getVertices() {return vertices;}
 	public String getMaterial() {return material;}
 	public AttribArray[] getAttribs() {return attribs;}
+	public int getIndicesCount() {return indicesCount;}
 	
 }
