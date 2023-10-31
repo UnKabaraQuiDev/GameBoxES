@@ -1,6 +1,6 @@
 package lu.pcy113.pdr.engine.cache.attrib;
 
-import java.nio.FloatBuffer;
+import java.util.Arrays;
 
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL40;
@@ -21,7 +21,10 @@ public class Vec3fAttribArray extends AttribArray {
 		super(name, index, dataSize, bufferType, s);
 		this.data = data;
 	}
-	
+	public Vec3fAttribArray(String name, int index, int dataSize, Vector3f[] data, boolean b) {
+		super(name, index, dataSize, b);
+		this.data = data;
+	}
 	@Override
 	public void init() {
 		GL40.glBufferData(bufferType, toFlatArray(), iStatic ? GL40.GL_STATIC_DRAW : GL40.GL_DYNAMIC_DRAW);
@@ -42,7 +45,13 @@ public class Vec3fAttribArray extends AttribArray {
 		float[] flatArray = new float[data.length * 3];
 		for(int i = 0; i < data.length; i++) {
 			float[] dat = new float[3];
-			data[i].get(FloatBuffer.allocate(3)).get(dat);
+			Vector3f cdata = data[i];
+			if(cdata != null) {
+				dat[0] = cdata.x;
+				dat[1] = cdata.y;
+				dat[2] = cdata.z;
+			}else
+				Arrays.fill(dat, 0);
 			System.arraycopy(dat, 0, flatArray, i*3, 3);
 		}
 		return flatArray;

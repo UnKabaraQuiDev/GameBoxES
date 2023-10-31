@@ -2,8 +2,12 @@ package lu.pcy113.pdr.engine.geom.text;
 
 import java.util.Arrays;
 
-import lu.pcy113.pdr.engine.cache.attrib.FloatAttribArray;
+import org.joml.Vector2f;
+import org.joml.Vector3f;
+
 import lu.pcy113.pdr.engine.cache.attrib.UIntAttribArray;
+import lu.pcy113.pdr.engine.cache.attrib.Vec2fAttribArray;
+import lu.pcy113.pdr.engine.cache.attrib.Vec3fAttribArray;
 import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.utils.ArrayUtils;
 
@@ -14,15 +18,15 @@ public class TextMesh extends Mesh {
 	public TextMesh(int size) {
 		super(NAME+"_"+size,
 				null,
-				new FloatAttribArray("pos", 0, 3, new float[size*4*3], false),
+				new Vec3fAttribArray("pos", 0, 1, new Vector3f[size*4], false),
 				new UIntAttribArray("ind", -1, 1, ArrayUtils.intCountingUpTriQuads(size)),
 				new UIntAttribArray("index", 1, 1, ArrayUtils.intCountingUp(0, size, 1, 4)),
-				new FloatAttribArray("uv", 2, 2, ArrayUtils.floatRepeating(new float[] {
-						0, 1,
-						1, 1,
-						1, 0,
-						0, 0}, size)));
-		System.out.println("inde: "+Arrays.toString(((FloatAttribArray) attribs[1]).getData()));
+				new Vec2fAttribArray("uv", 2, 1, ArrayUtils.vec2Repeating(new Vector2f[] {
+						new Vector2f(0, 1),
+						new Vector2f(1, 1),
+						new Vector2f(1, 0),
+						new Vector2f(0, 0)}, size)));
+		System.out.println("inde: "+Arrays.toString(((Vec2fAttribArray) attribs[1]).getData()));
 	}
 
 }

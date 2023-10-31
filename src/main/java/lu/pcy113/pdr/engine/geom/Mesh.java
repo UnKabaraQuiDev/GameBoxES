@@ -7,8 +7,8 @@ import java.util.logging.Level;
 import org.lwjgl.opengl.GL40;
 
 import lu.pcy113.pdr.engine.cache.attrib.AttribArray;
-import lu.pcy113.pdr.engine.cache.attrib.FloatAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.UIntAttribArray;
+import lu.pcy113.pdr.engine.cache.attrib.Vec3fAttribArray;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.impl.Renderable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
@@ -23,7 +23,7 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 	protected HashMap<Integer, Integer> vbo = new HashMap<>();
 	protected String material;
 	
-	protected FloatAttribArray vertices;
+	protected Vec3fAttribArray vertices;
 	protected UIntAttribArray indices;
 	protected AttribArray[] attribs;
 	
@@ -34,7 +34,7 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 	 * normals as attribArray 1,
 	 * uvs as attribArray 2
 	 */
-	public Mesh(String name, String material, FloatAttribArray vertices, UIntAttribArray indices, AttribArray... attribs) {
+	public Mesh(String name, String material, Vec3fAttribArray vertices, UIntAttribArray indices, AttribArray... attribs) {
 		this.name = name;
 		this.vertices = vertices;
 		this.indices = indices;
@@ -48,7 +48,7 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 		bind();
 		storeElementArray((UIntAttribArray) indices);
 		vertices.setIndex(0);
-		storeAttribArray((FloatAttribArray) vertices);
+		storeAttribArray((Vec3fAttribArray) vertices);
 		
 		for(AttribArray a : attribs) {
 			if(vbo.containsKey(a.getIndex())) {
@@ -63,6 +63,10 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 		Logger.log(Level.INFO, "Mesh "+name+": "+vao+" & "+vbo+"; v:"+vertexCount);
 	}
 	
+	/*public Mesh(String name2, String material2, Vec3fAttribArray pos, UIntAttribArray ind, Vec3fAttribArray norm, Vec2fAttribArray uv) {
+		this(name2, material2, pos, ind, new AttribArray[] {norm, uv});
+	}*/
+
 	public void storeAttribArray(AttribArray data) {
 		this.vbo.put(data.getIndex(), data.gen());
 		data.bind();
@@ -101,7 +105,7 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 	public HashMap<Integer, Integer> getVbo() {return vbo;}
 	public String getName() {return name;}
 	public UIntAttribArray getIndices() {return indices;}
-	public FloatAttribArray getVertices() {return vertices;}
+	public Vec3fAttribArray getVertices() {return vertices;}
 	public String getMaterial() {return material;}
 	public AttribArray[] getAttribs() {return attribs;}
 	public int getIndicesCount() {return indicesCount;}

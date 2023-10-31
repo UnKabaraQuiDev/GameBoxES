@@ -6,8 +6,9 @@ import java.util.logging.Level;
 import org.lwjgl.opengl.GL40;
 
 import lu.pcy113.pdr.engine.cache.attrib.AttribArray;
-import lu.pcy113.pdr.engine.cache.attrib.FloatAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.UIntAttribArray;
+import lu.pcy113.pdr.engine.cache.attrib.Vec3fAttribArray;
+import lu.pcy113.pdr.engine.cache.attrib.Vec4fAttribArray;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.impl.Renderable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
@@ -23,9 +24,9 @@ public class Gizmo implements UniqueID, Cleanupable, Renderable {
 	protected int vao = -1;
 	protected final HashMap<Integer, Integer> vbo = new HashMap<>();
 	
-	protected FloatAttribArray vertices;
+	protected Vec3fAttribArray vertices;
 	protected UIntAttribArray indices;
-	protected FloatAttribArray color;
+	protected Vec4fAttribArray color;
 	
 	protected int vertexCount, indicesCount;
 	
@@ -34,7 +35,7 @@ public class Gizmo implements UniqueID, Cleanupable, Renderable {
 	 * normals as attribArray 1,
 	 * uvs as attribArray 2
 	 */
-	public Gizmo(String name, FloatAttribArray vertices, UIntAttribArray indices, FloatAttribArray color) {
+	public Gizmo(String name, Vec3fAttribArray vertices, UIntAttribArray indices, Vec4fAttribArray color) {
 		this.name = name;
 		this.vertices = vertices;
 		this.indices = indices;
@@ -101,8 +102,8 @@ public class Gizmo implements UniqueID, Cleanupable, Renderable {
 	public HashMap<Integer, Integer> getVbo() {return vbo;}
 	public String getName() {return name;}
 	public UIntAttribArray getIndices() {return indices;}
-	public FloatAttribArray getVertices() {return vertices;}
-	public FloatAttribArray getColor() {return color;}
+	public Vec3fAttribArray getVertices() {return vertices;}
+	public Vec4fAttribArray getColor() {return color;}
 	public int getIndicesCount() {return indicesCount;}
 	
 }

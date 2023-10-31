@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import org.joml.Matrix3x2f;
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 
 public final class ArrayUtils {
 
@@ -61,6 +62,21 @@ public final class ArrayUtils {
 	    int originalLength = is.length;
 	    int repeatedLength = originalLength * size;
 	    float[] result = new float[repeatedLength];
+
+	    for (int i = 0; i < size; i++) {
+	        System.arraycopy(is, 0, result, i * originalLength, originalLength);
+	    }
+
+	    return result;
+	}
+	public static Vector2f[] vec2Repeating(Vector2f[] is, int size) {
+		if (size <= 0) {
+	        throw new IllegalArgumentException("Size should be greater than 0");
+	    }
+
+	    int originalLength = is.length;
+	    int repeatedLength = originalLength * size;
+	    Vector2f[] result = new Vector2f[repeatedLength];
 
 	    for (int i = 0; i < size; i++) {
 	        System.arraycopy(is, 0, result, i * originalLength, originalLength);

@@ -1,7 +1,5 @@
 package lu.pcy113.pdr.engine.cache.attrib;
 
-import java.util.Arrays;
-
 import org.lwjgl.opengl.GL40;
 
 public class FloatAttribArray extends AttribArray {
