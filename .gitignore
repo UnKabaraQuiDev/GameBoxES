@@ -95,3 +95,5 @@ test/
 /target/*
 /logs/*
 /target/
+
+pom.xml
