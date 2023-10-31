@@ -1,6 +1,7 @@
 package lu.pcy113.pdr.engine.utils;
 
 import lu.pcy113.pdr.engine.cache.CacheManager;
+import lu.pcy113.pdr.engine.geom.ObjLoader;
 import lu.pcy113.pdr.engine.scene.Scene;
 import lu.pcy113.pdr.engine.scene.Scene3D;
 

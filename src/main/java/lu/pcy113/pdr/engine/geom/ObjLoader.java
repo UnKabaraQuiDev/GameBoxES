@@ -1,4 +1,4 @@
-package lu.pcy113.pdr.engine.utils;
+package lu.pcy113.pdr.engine.geom;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +14,7 @@ import lu.pcy113.pdr.engine.cache.attrib.UIntAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.Vec2fAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.Vec3fAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.Vec4fAttribArray;
-import lu.pcy113.pdr.engine.geom.Gizmo;
-import lu.pcy113.pdr.engine.geom.Mesh;
+import lu.pcy113.pdr.engine.utils.FileUtils;
 
 public final class ObjLoader {
 	

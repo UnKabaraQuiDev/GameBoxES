@@ -8,6 +8,7 @@ import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.geom.Mesh;
+import lu.pcy113.pdr.engine.geom.ObjLoader;
 import lu.pcy113.pdr.engine.graph.composition.RenderLayer;
 import lu.pcy113.pdr.engine.graph.composition.debug.PerfHistoryLayer;
 import lu.pcy113.pdr.engine.graph.composition.debug.PerfHistoryLayerMaterial;

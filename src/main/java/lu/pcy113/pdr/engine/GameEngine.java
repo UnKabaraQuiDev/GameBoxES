@@ -2,6 +2,7 @@ package lu.pcy113.pdr.engine;
 
 import org.joml.Vector3f;
 
+import lu.pcy113.pdr.engine.audio.AudioMaster;
 import lu.pcy113.pdr.engine.cache.SharedCacheManager;
 import lu.pcy113.pdr.engine.graph.window.Window;
 import lu.pcy113.pdr.engine.graph.window.WindowOptions;
@@ -12,6 +13,7 @@ import lu.pcy113.pdr.engine.utils.DebugOptions;
 public class GameEngine implements Runnable, Cleanupable {
 	
 	private final Window window;
+	private final AudioMaster audioMaster;
 	private GameLogic gameLogic;
 	
 	private boolean running = false;
@@ -40,6 +42,7 @@ public class GameEngine implements Runnable, Cleanupable {
 	public GameEngine(GameLogic game, WindowOptions options) {
 		this.gameLogic = game;
 		this.window = new Window(options);
+		this.audioMaster = new AudioMaster();
 	}
 	
 	@Override

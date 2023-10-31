@@ -3,6 +3,7 @@ package lu.pcy113.pdr.engine.cache;
 import java.util.HashMap;
 import java.util.Map;
 
+import lu.pcy113.pdr.engine.audio.Sound;
 import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.geom.instance.InstanceEmitter;
@@ -35,6 +36,7 @@ public class CacheManager implements Cleanupable {
 	protected Map<String, TextModel> textModels;
 	protected Map<String, InstanceEmitter> instanceEmitters;
 	protected Map<String, InstanceEmitterModel> instanceEmitterModels;
+	protected Map<String, Sound> sounds;
 	
 	public CacheManager() {
 		this.meshes = new HashMap<>();
@@ -51,6 +53,7 @@ public class CacheManager implements Cleanupable {
 		this.textModels = new HashMap<>();
 		this.instanceEmitters = new HashMap<>();
 		this.instanceEmitterModels = new HashMap<>();
+		this.sounds = new HashMap<>();
 	}
 	
 	@Override
