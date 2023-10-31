@@ -17,7 +17,6 @@ public class PointLight implements UniqueID {
 	
 	private final String name;
 	
-	private Vector3f position;
 	private float constant, linear, quadratic;
 	private Vector3f ambient, diffuse, specular;
 	
@@ -26,7 +25,6 @@ public class PointLight implements UniqueID {
 			float constant, float linear, float quadratic,
 			Vector3f ambient, Vector3f diffuse, Vector3f specular) {
 		this.name = name;
-		this.position = position;
 		this.constant = constant;
 		this.linear = linear;
 		this.quadratic = quadratic;
@@ -38,7 +36,7 @@ public class PointLight implements UniqueID {
 	public void bind(Material mat, String arr, int i) {
 		String ind = arr+"["+i+"].";
 		
-		mat.setProperty(ind+POSITION, position);
+		//mat.setProperty(ind+POSITION, position);
 		
 		mat.setProperty(ind+CONSTANT, constant);
 		mat.setProperty(ind+LINEAR, linear);
@@ -51,8 +49,6 @@ public class PointLight implements UniqueID {
 	
 	@Override
 	public String getId() {return name;}
-	public Vector3f getPosition() {return position;}
-	public void setPosition(Vector3f position) {this.position = position;}
 	public float getConstant() {return constant;}
 	public void setConstant(float constant) {this.constant = constant;}
 	public float getLinear() {return linear;}

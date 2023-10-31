@@ -1,5 +1,6 @@
 package lu.pcy113.pdr.engine.graph.render;
 
+import java.util.List;
 import java.util.logging.Level;
 
 import org.joml.Matrix4f;
@@ -11,8 +12,11 @@ import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.objs.Model;
+import lu.pcy113.pdr.engine.objs.entity.Component;
+import lu.pcy113.pdr.engine.objs.entity.Entity;
 import lu.pcy113.pdr.engine.objs.entity.components.ModelComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.PointLightSurfaceComponent;
+import lu.pcy113.pdr.engine.objs.entity.components.TransformComponent;
 import lu.pcy113.pdr.engine.scene.Scene;
 import lu.pcy113.pdr.engine.scene.Scene3D;
 import lu.pcy113.pdr.utils.Logger;
@@ -49,7 +53,14 @@ public class ModelRenderer extends Renderer<Scene, ModelComponent> {
 		shader.bind();
 		
 		Matrix4f projectionMatrix = null, viewMatrix = null;
-		Object transformationMatrix = c.getTransform().getMatrix();
+		Entity parent = co.getParent();
+		List<Class<? extends Component>> transforms = parent.getComponents(TransformComponent.class);
+		//TransformComponent transform = null;
+		Object transformationMatrix = null;
+		if(!transforms.isEmpty())
+			transformationMatrix = ((TransformComponent) parent.getComponent(transforms.get(0))).getTransform().getMatrix();
+		else
+			transformationMatrix = new Matrix4f().identity();
 		if(scene != null) {
 			projectionMatrix = scene.getCamera().getProjection().getProjMatrix();
 			viewMatrix = scene.getCamera().getViewMatrix();

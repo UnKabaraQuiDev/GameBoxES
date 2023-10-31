@@ -1,5 +1,6 @@
 package lu.pcy113.pdr.engine.graph.render;
 
+import java.util.List;
 import java.util.logging.Level;
 
 import org.joml.Matrix4f;
@@ -13,7 +14,10 @@ import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.material.gizmo.GizmoMaterial;
 import lu.pcy113.pdr.engine.graph.material.gizmo.GizmoShader;
 import lu.pcy113.pdr.engine.objs.GizmoModel;
+import lu.pcy113.pdr.engine.objs.entity.Component;
+import lu.pcy113.pdr.engine.objs.entity.Entity;
 import lu.pcy113.pdr.engine.objs.entity.components.GizmoModelComponent;
+import lu.pcy113.pdr.engine.objs.entity.components.TransformComponent;
 import lu.pcy113.pdr.engine.scene.Scene;
 import lu.pcy113.pdr.engine.scene.camera.Camera3D;
 import lu.pcy113.pdr.utils.Logger;
@@ -54,12 +58,21 @@ public class GizmoModelRenderer extends Renderer<Scene, GizmoModelComponent> {
 		
 		shader.bind();
 		
+		Matrix4f projectionMatrix = null, viewMatrix = null;
+		Entity parent = m.getParent();
+		List<Class<? extends Component>> transforms = parent.getComponents(TransformComponent.class);
+		//TransformComponent transform = null;
+		Object transformationMatrix = null;
+		if(!transforms.isEmpty())
+			transformationMatrix = ((TransformComponent) parent.getComponent(transforms.get(0))).getTransform().getMatrix();
+		else
+			transformationMatrix = new Matrix4f().identity();
 		if(scene != null) {
-			Matrix4f projectionMatrix = scene.getCamera().getProjection().getProjMatrix();
-			Matrix4f viewMatrix = scene.getCamera().getViewMatrix();
+			projectionMatrix = scene.getCamera().getProjection().getProjMatrix();
+			viewMatrix = scene.getCamera().getViewMatrix();
 			material.setPropertyIfPresent(Shader.PROJECTION_MATRIX, projectionMatrix);
 			material.setPropertyIfPresent(Shader.VIEW_MATRIX, viewMatrix);
-			material.setPropertyIfPresent(Shader.TRANSFORMATION_MATRIX, new Matrix4f().identity());
+			material.setPropertyIfPresent(Shader.TRANSFORMATION_MATRIX, transformationMatrix);
 			material.setPropertyIfPresent(Shader.VIEW_POSITION, ((Camera3D) scene.getCamera()).getPosition());
 		}
 		

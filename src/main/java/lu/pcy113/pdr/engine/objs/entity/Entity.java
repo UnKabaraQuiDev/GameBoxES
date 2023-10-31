@@ -1,6 +1,7 @@
 package lu.pcy113.pdr.engine.objs.entity;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -31,6 +32,13 @@ public class Entity {
 				.map(t -> clazz.isAssignableFrom(t))
 				.collect(Collectors.reducing((a, b) -> a || b))
 				.get();
+	}
+	public List<Class<? extends Component>> getComponents(Class<? extends Component> clazz) {
+		return components
+				.keySet()
+				.stream()
+				.filter(t -> clazz.isAssignableFrom(t))
+				.collect(Collectors.toList());
 	}
 	
 	public Map<Class<? extends Component>, Component> getComponents() {return components;}

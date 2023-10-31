@@ -3,7 +3,6 @@ package lu.pcy113.pdr.engine.objs;
 import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.impl.Renderable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
-import lu.pcy113.pdr.engine.utils.transform.Transform;
 
 public class GizmoModel implements UniqueID, Renderable {
 	
@@ -11,20 +10,16 @@ public class GizmoModel implements UniqueID, Renderable {
 	
 	private final String name;
 	private String gizmo;
-	private Transform transform;
 	
 	protected float lineWidth = Gizmo.LINE_WIDTH;
 	
-	public GizmoModel(String name, String gizmo, Transform transform) {
+	public GizmoModel(String name, String gizmo) {
 		this.name = name;
 		this.gizmo = gizmo;
-		this.transform = transform;
 	}
 	
 	public String getGizmo() {return gizmo;}
 	public void setGizmo(String gizmo) {this.gizmo = gizmo;}
-	public Transform getTransform() {return transform;}
-	public void setTransform(Transform transform) {this.transform = transform;}
 	public float getLineWidth() {return lineWidth;}
 	public void setLineWidth(float lineWidth) {this.lineWidth = lineWidth;}
 	@Override

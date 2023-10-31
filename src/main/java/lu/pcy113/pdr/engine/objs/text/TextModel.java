@@ -21,15 +21,13 @@ public class TextModel implements UniqueID, Renderable {
 	private final String name;
 	
 	private Vector2f charSize;
-	private Transform3D transform;
 	private CharSequence text;
 	
 	private String material;
 	
-	public TextModel(String name, TextMaterial tMaterial, Transform3D transform, CharSequence text, Vector2f size) {
+	public TextModel(String name, TextMaterial tMaterial, CharSequence text, Vector2f size) {
 		this.name = name;
 		
-		this.transform = transform;
 		this.material = tMaterial.getId();
 		this.text = text;
 		this.charSize = size;
@@ -85,8 +83,6 @@ public class TextModel implements UniqueID, Renderable {
 	}
 	
 	public String getMaterial() {return material;}
-	public Transform3D getTransform() {return transform;}
-	public void setTransform(Transform3D transform) {this.transform = transform;}
 	public CharSequence getText() {return text;}
 	public void setText(CharSequence text) {this.text = text;}
 	@Override

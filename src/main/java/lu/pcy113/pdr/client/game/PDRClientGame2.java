@@ -42,6 +42,8 @@ import lu.pcy113.pdr.engine.objs.entity.components.GizmoModelComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.InstanceEmitterModelComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.ModelComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.TextModelComponent;
+import lu.pcy113.pdr.engine.objs.entity.components.Transform2DComponent;
+import lu.pcy113.pdr.engine.objs.entity.components.Transform3DComponent;
 import lu.pcy113.pdr.engine.objs.text.TextModel;
 import lu.pcy113.pdr.engine.scene.Scene2D;
 import lu.pcy113.pdr.engine.scene.Scene3D;
@@ -65,6 +67,8 @@ public class PDRClientGame2 implements GameLogic {
 	FillTextMaterial textMaterial;
 	Model slotModel;
 	Scene2D ui;
+	
+	Entity planeEntity, partsModelEntity, txtModelEntity, slotModelEntity;
 	
 	Compositor compositor;
 	
@@ -129,9 +133,9 @@ public class PDRClientGame2 implements GameLogic {
 		cache.addMaterial(mat);
 		Mesh plane = ObjLoader.loadMesh("chest", mat.getId(), "./resources/models/plane.obj");
 		cache.addMesh(plane);
-		this.plane = new Model("plane", plane, new Transform3D(new Vector3f(1, 1, 1), new Quaternionf(), new Vector3f(0.2f)));
+		this.plane = new Model("plane", plane);
 		cache.addModel(this.plane);
-		partsModel = new InstanceEmitterModel("parts", parts, new Transform3D());
+		partsModel = new InstanceEmitterModel("parts", parts);
 		cache.addInstanceEmitterModel(partsModel);
 		
 		TextMesh textMesh = new TextMesh(64);
@@ -144,20 +148,28 @@ public class PDRClientGame2 implements GameLogic {
 		cache.addTexture(rasterIndexTxt);
 		textMaterial = new FillTextMaterial("fill", textShader, "raster", "rasterIndex", new Vector4f(0.2f, 0.5f, 0.8f, 1));
 		cache.addMaterial(textMaterial);
-		TextModel txtModel = new TextModel("text", textMaterial, new Transform3D(), "abcdefghijklmnop", new Vector2f(0.2f));
+		TextModel txtModel = new TextModel("text", textMaterial, "abcdefghijklmnop", new Vector2f(0.2f));
 		cache.addTextModel(txtModel);
 		
 		this.scene = new Scene3D("main-scene");
 		//this.scene.addEntity("mesh", new Entity(new MeshComponent(partCube))).setActive(false);
-		this.scene.addEntity("model", new Entity(new ModelComponent(this.plane)));
-		this.scene.addEntity("parts", new Entity(new InstanceEmitterModelComponent(partsModel)));
-		this.scene.addEntity("text", new Entity(new TextModelComponent(txtModel)));
+		planeEntity = this.scene.addEntity("model", new Entity(
+				new ModelComponent(this.plane),
+				new Transform3DComponent(new Transform3D(new Vector3f(1, 1, 1), new Quaternionf(), new Vector3f(0.2f)))));
+		partsModelEntity = this.scene.addEntity("parts", new Entity(
+				new InstanceEmitterModelComponent(partsModel),
+				new Transform3DComponent()));
+		txtModelEntity = this.scene.addEntity("text", new Entity(
+				new TextModelComponent(txtModel),
+				new Transform3DComponent()));
 		
 		Gizmo gizmoXYZ = ObjLoader.loadGizmo("gizmoXYZ", "./resources/models/gizmos/grid_xyz.obj");
 		cache.addGizmo(gizmoXYZ);
-		GizmoModel gizmoXYZModel = new GizmoModel("gizmoXYZ", gizmoXYZ.getId(), new Transform3D());
+		GizmoModel gizmoXYZModel = new GizmoModel("gizmoXYZ", gizmoXYZ.getId());
 		cache.addGizmoModel(gizmoXYZModel);
-		this.scene.addEntity("gizmoXYZ", new Entity(new GizmoModelComponent(gizmoXYZModel)));
+		this.scene.addEntity("gizmoXYZ", new Entity(
+				new GizmoModelComponent(gizmoXYZModel),
+				new Transform3DComponent()));
 		
 		cache.addRenderer(new Scene3DRenderer());
 		cache.addRenderer(new Scene2DRenderer());
@@ -202,9 +214,11 @@ public class PDRClientGame2 implements GameLogic {
 		cache.addMaterial(slotMaterial);
 		Mesh slot = ObjLoader.loadMesh("slot", slotMaterial.getId(), "./resources/models/plane.obj");
 		cache.addMesh(slot);
-		slotModel = new Model("slot", slot, new Transform2D());
+		slotModel = new Model("slot", slot);
 		cache.addModel(slotModel);
-		ui.addEntity("slot", new Entity(new ModelComponent(slotModel)));
+		slotModelEntity = ui.addEntity("slot", new Entity(
+				new ModelComponent(slotModel),
+				new Transform2DComponent()));
 		
 		Shader slotShader2 = new Shader("slot2", true,
 				new ShaderPart("./resources/shaders/ui/plain_inst.vert"),
@@ -240,11 +254,13 @@ public class PDRClientGame2 implements GameLogic {
 			.updateMatrix();
 			System.out.println("index: "+i+" > "+i.getTransform());
 		});
-		InstanceEmitterModel iEmit = new InstanceEmitterModel("slot inst mod", emit, new Transform3D());
-		((Transform3D) iEmit.getTransform()).translateAdd(0, -2.5f, 0).updateMatrix();
+		InstanceEmitterModel iEmit = new InstanceEmitterModel("slot inst mod", emit);
 			cache.addInstanceEmitterModel(iEmit);
 		
-		ui.addEntity("slot inst", new Entity(new InstanceEmitterModelComponent(iEmit)));
+		Entity uie = ui.addEntity("slot inst", new Entity(
+				new InstanceEmitterModelComponent(iEmit),
+				new Transform3DComponent()));
+		((Transform3D) uie.getComponent(Transform3DComponent.class).getTransform()).translateAdd(0, -2.5f, 0).updateMatrix();
 		
 		SceneRenderLayer uiRender = new SceneRenderLayer("ui", ui);
 		cache.addRenderLayer(uiRender);
@@ -315,7 +331,7 @@ public class PDRClientGame2 implements GameLogic {
 				//cam.getRotation().rotateZ(0.1f);
 				cam.updateMatrix();
 				
-				((Transform3D) plane.getTransform()).rotate(0.01f, 0.01f, 0.01f).updateMatrix();
+				((Transform3D) planeEntity.getComponent(Transform3DComponent.class).getTransform()).rotate(0.01f, 0.01f, 0.01f).updateMatrix();
 				
 				genMat.setColor(new Vector4f(GX % 1, GX % 1, GX % 1, 1));
 				engine.getWindow().setBackground(new Vector4f(GX % 1, GX % 1, GX % 1, 1));
@@ -338,7 +354,7 @@ public class PDRClientGame2 implements GameLogic {
 		textMaterial.setColor(new Vector4f(GX % 1, GX % 1, GX % 1, 1));
 		textMaterial.setProperty(TextShader.SIZE, (float) GX % 1);
 		
-		((Transform2D) slotModel.getTransform()).translateMul(new Vector2f(
+		((Transform2D) slotModelEntity.getComponent(Transform2DComponent.class).getTransform()).translateMul(new Vector2f(
 				(float) Math.cos(2*Math.PI*(GX%1)),
 				(float) Math.sin(2*Math.PI*(GX%1))
 		).normalize().mul(0.1f), 0.95f, 0.95f).rotate(-5).updateMatrix();
@@ -346,7 +362,7 @@ public class PDRClientGame2 implements GameLogic {
 		partsModel.getEmitter(cache).update((part) -> {
 			((Transform3D) part.getTransform()).rotate(0, 0, 0.01f).updateMatrix();
 		});
-		((Transform3D) partsModel.getTransform()).rotate(0, 0, -0.1f).updateMatrix();
+		((Transform3D) partsModelEntity.getComponent(Transform3DComponent.class).getTransform()).rotate(0, 0, -0.1f).updateMatrix();
 	}
 
 	@Override
