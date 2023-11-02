@@ -85,7 +85,7 @@ public class ModelRenderer extends Renderer<Scene, ModelComponent> {
 		GL40.glDisable(GL40.GL_BLEND);
 		
 		// debug only
-		//GameEngine.DEBUG.wireframe(cache, scene, mesh, projectionMatrix, viewMatrix, c.getTransform().getMatrix());
+		GameEngine.DEBUG.wireframe(cache, scene, mesh, projectionMatrix, viewMatrix, transformationMatrix);
 		
 		mesh.unbind();
 		

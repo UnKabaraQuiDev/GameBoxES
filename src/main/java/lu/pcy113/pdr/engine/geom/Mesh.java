@@ -37,6 +37,7 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 	public Mesh(String name, String material, Vec3fAttribArray vertices, UIntAttribArray indices, AttribArray... attribs) {
 		this.name = name;
 		this.vertices = vertices;
+		indices.setBufferType(GL40.GL_ELEMENT_ARRAY_BUFFER);
 		this.indices = indices;
 		this.material = material;
 		this.attribs = attribs;
