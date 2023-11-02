@@ -42,11 +42,9 @@ public class ModelRenderer extends Renderer<Scene, ModelComponent> {
 		mesh.bind();
 		
 		Material material = cache.getMaterial(mesh.getMaterial());
-		System.out.println("mat: "+material);
 		if(material == null)
 			return;
 		Shader shader = cache.getShader(material.getShader());
-		System.out.println("sha: "+shader);
 		if(shader == null)
 			return;
 		
@@ -83,7 +81,6 @@ public class ModelRenderer extends Renderer<Scene, ModelComponent> {
 		}
 		
 		GL40.glDrawElements(GL40.GL_TRIANGLES, mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);
-		System.out.println("drawn: "+mesh.getIndicesCount());
 		
 		GL40.glDisable(GL40.GL_BLEND);
 		

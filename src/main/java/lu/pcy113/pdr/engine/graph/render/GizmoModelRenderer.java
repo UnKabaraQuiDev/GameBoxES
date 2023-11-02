@@ -39,13 +39,10 @@ public class GizmoModelRenderer extends Renderer<Scene, GizmoModelComponent> {
 		Gizmo gizmo = cache.getGizmo(model.getGizmo());
 		if(gizmo == null)
 			return;
-		System.out.println("gizmo ok");
 		gizmo.bind();
-		System.out.println("gizmo bound");
 		
 		Material material = cache.getMaterial(GizmoMaterial.NAME);
 		if(material == null) {
-			System.out.println("no material");
 			GizmoShader shader = new GizmoShader();
 			cache.addShader(shader);
 			material = new GizmoMaterial(shader);
@@ -54,7 +51,6 @@ public class GizmoModelRenderer extends Renderer<Scene, GizmoModelComponent> {
 		Shader shader = cache.getShader(material.getShader());
 		if(shader == null)
 			return;
-		System.out.println("shader ok");
 		
 		shader.bind();
 		
