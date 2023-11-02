@@ -13,7 +13,7 @@ import lu.pcy113.pdr.engine.impl.Cleanupable;
 public class AudioMaster implements Cleanupable {
 	
 	public AudioMaster() {
-		ALC.create();
+		//ALC.create();
 		long device = ALC10.alcOpenDevice((ByteBuffer) null);
 		ALCCapabilities deviceCapabilities = ALC.createCapabilities(device);
 		
