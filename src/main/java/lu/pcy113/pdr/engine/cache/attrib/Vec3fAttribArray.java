@@ -34,7 +34,7 @@ public class Vec3fAttribArray extends AttribArray {
 	
 	public boolean update(Vector3f[] nPos) {
 		if(!iStatic && nPos.length != data.length)
-			return false;
+			throw new IllegalArgumentException("Array's size cannot change");
 		data = nPos;
 		
 		GL40.glBufferSubData(GL40.GL_ARRAY_BUFFER, 0, toFlatArray());

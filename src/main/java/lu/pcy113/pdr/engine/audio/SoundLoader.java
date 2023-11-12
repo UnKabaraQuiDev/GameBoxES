@@ -3,8 +3,6 @@ package lu.pcy113.pdr.engine.audio;
 import java.io.File;
 import java.nio.IntBuffer;
 
-import com.github.psambit9791.wavfile.WavFile;
-
 public final class SoundLoader {
 	
 	public static final Sound loadWav(String file) {

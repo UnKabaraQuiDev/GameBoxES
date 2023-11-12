@@ -79,7 +79,7 @@ public class DebugOptions {
 			GL40.glDisable(GL40.GL_DEPTH_TEST);
 		
 		GL40.glLineWidth(2.5f);
-		GL40.glDrawElements(GL40.GL_LINES, gizmoXYZ.getVertexCount(), GL40.GL_UNSIGNED_INT, 0);
+		GL40.glDrawElements(GL40.GL_LINES, gizmoXYZ.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);
 		
 		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_FILL);
 		GL40.glEnable(GL40.GL_DEPTH_TEST);
@@ -117,7 +117,7 @@ public class DebugOptions {
 		if(GameEngine.DEBUG.ignoreDepth)
 			GL40.glDisable(GL40.GL_DEPTH_TEST);
 		
-		GL40.glDrawElements(GL40.GL_TRIANGLES, mesh.getVertexCount(), GL40.GL_UNSIGNED_INT, 0);
+		GL40.glDrawElements(GL40.GL_TRIANGLES, mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);
 		
 		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_FILL);
 		GL40.glEnable(GL40.GL_DEPTH_TEST);
@@ -150,7 +150,7 @@ public class DebugOptions {
 		if(GameEngine.DEBUG.ignoreDepth)
 			GL40.glDisable(GL40.GL_DEPTH_TEST);
 		
-		GL40.glDrawElements(GL40.GL_POINTS, mesh.getVertexCount(), GL40.GL_UNSIGNED_INT, 0);
+		GL40.glDrawElements(GL40.GL_POINTS, mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);
 		
 		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_FILL);
 		GL40.glEnable(GL40.GL_DEPTH_TEST);
