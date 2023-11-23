@@ -90,6 +90,7 @@ public abstract class AttribArray implements Cleanupable {
 	public String toString() {
 		return getVbo()+"|"+getIndex()+") "+getName()+": "+getLength()+"/"+getDataSize()+"="+getDataCount();
 	}
+	
 	public static <T> boolean update(AttribArray arr, T[] data) {
 		arr.bind();
 		if(arr instanceof IntAttribArray || arr instanceof UIntAttribArray)
