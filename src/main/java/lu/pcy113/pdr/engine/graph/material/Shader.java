@@ -14,121 +14,141 @@ import org.joml.Vector3i;
 import org.joml.Vector4f;
 import org.lwjgl.opengl.GL40;
 
+import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
-import lu.pcy113.pdr.utils.Logger;
 
 public abstract class Shader implements UniqueID, Cleanupable {
-	
+
 	public static final String PROJECTION_MATRIX = "projectionMatrix";
 	public static final String VIEW_MATRIX = "viewMatrix";
 	public static final String TRANSFORMATION_MATRIX = "transformationMatrix";
 	public static final String VIEW_POSITION = "viewPos";
-	
+
 	protected final String name;
 	protected int shaderProgram = -1;
 	protected Map<Integer, ShaderPart> parts;
 	protected Map<String, Integer> uniforms;
 	protected boolean transparent;
-	
+
 	public Shader(String name, ShaderPart... parts) {
 		this(name, false, parts);
 	}
+
 	public Shader(String name, boolean transparent, ShaderPart... parts) {
 		this.name = name;
 		this.transparent = transparent;
-		
+
 		this.shaderProgram = GL40.glCreateProgram();
 		this.parts = new HashMap<>();
-		for(ShaderPart sp : parts) {
+		for (ShaderPart sp : parts) {
 			this.parts.put(sp.getType(), sp);
 			GL40.glAttachShader(shaderProgram, sp.getSid());
 		}
 		GL40.glLinkProgram(shaderProgram);
-		
-		if(GL40.glGetProgrami(shaderProgram, GL40.GL_LINK_STATUS) == GL40.GL_FALSE) {
-			Logger.log(Level.SEVERE, GL40.glGetProgramInfoLog(shaderProgram, 1024));
+
+		if (GL40.glGetProgrami(shaderProgram, GL40.GL_LINK_STATUS) == GL40.GL_FALSE) {
+			GlobalLogger.log(Level.SEVERE, GL40.glGetProgramInfoLog(shaderProgram, 1024));
 			cleanup();
 		}
-		
+
 		bind();
 		this.uniforms = new HashMap<>();
 		createUniforms();
 		unbind();
 	}
-	
+
 	public abstract void createUniforms();
-	
+
 	public void setUniform(String key, Object value) {
-		if(value instanceof Integer) {
+		if (value instanceof Integer) {
 			GL40.glUniform1i(getUniform(key), (int) value);
-		}else if(value instanceof Float) {
+		} else if (value instanceof Float) {
 			GL40.glUniform1f(getUniform(key), (float) value);
-		}else if(value instanceof Matrix4f) {
-			GL40.glUniformMatrix4fv(getUniform(key), false, ((Matrix4f) value).get(new float[4*4]));
-		}else if(value instanceof Vector3f) {
+		} else if (value instanceof Matrix4f) {
+			GL40.glUniformMatrix4fv(getUniform(key), false, ((Matrix4f) value).get(new float[4 * 4]));
+		} else if (value instanceof Vector3f) {
 			GL40.glUniform3f(getUniform(key), ((Vector3f) value).x, ((Vector3f) value).y, ((Vector3f) value).z);
-		}else if(value instanceof Vector3i) {
+		} else if (value instanceof Vector3i) {
 			GL40.glUniform3i(getUniform(key), ((Vector3i) value).x, ((Vector3i) value).y, ((Vector3i) value).z);
-		}else if(value instanceof Vector4f) {
-			GL40.glUniform4f(getUniform(key), ((Vector4f) value).x, ((Vector4f) value).y, ((Vector4f) value).z, ((Vector4f) value).w);
-		}else if(value instanceof Double) {
+		} else if (value instanceof Vector4f) {
+			GL40.glUniform4f(getUniform(key), ((Vector4f) value).x, ((Vector4f) value).y, ((Vector4f) value).z,
+					((Vector4f) value).w);
+		} else if (value instanceof Double) {
 			GL40.glUniform1d(getUniform(key), (double) value);
-		}else if(value instanceof Character) {
-			System.out.println("is char: "+value+" > "+((char) value)+" > "+(Integer.valueOf((char)value)));
+		} else if (value instanceof Character) {
+			System.out.println("is char: " + value + " > " + ((char) value) + " > " + (Integer.valueOf((char) value)));
 			setUniform(key, Integer.valueOf((char) value));
-		}else if(value instanceof Vector2f) {
+		} else if (value instanceof Vector2f) {
 			GL40.glUniform2f(getUniform(key), ((Vector2f) value).x, ((Vector2f) value).y);
-		}else if(value instanceof Vector2i) {
+		} else if (value instanceof Vector2i) {
 			GL40.glUniform2i(getUniform(key), ((Vector2i) value).x, ((Vector2i) value).y);
-		}else if(value instanceof Matrix3f) {
-			GL40.glUniformMatrix3fv(getUniform(key), false, ((Matrix3f) value).get(new float[3*3]));
-		}else if(value instanceof Matrix3x2f) {
-			GL40.glUniformMatrix3x2fv(getUniform(key), false, ((Matrix3x2f) value).get(new float[3*2]));
+		} else if (value instanceof Matrix3f) {
+			GL40.glUniformMatrix3fv(getUniform(key), false, ((Matrix3f) value).get(new float[3 * 3]));
+		} else if (value instanceof Matrix3x2f) {
+			GL40.glUniformMatrix3x2fv(getUniform(key), false, ((Matrix3x2f) value).get(new float[3 * 2]));
 		}
 	}
+
 	public int getUniform(String name) {
-		if(!hasUniform(name))
-			if(!createUniform(name))
+		if (!hasUniform(name))
+			if (!createUniform(name))
 				return -1;
 		return uniforms.get(name);
 	}
+
 	public boolean hasUniform(String name) {
 		return uniforms.containsKey(name);
 	}
-	
+
 	public boolean createUniform(String name) {
 		int loc = GL40.glGetUniformLocation(shaderProgram, name);
-		if(loc != -1) {
+		if (loc != -1) {
 			uniforms.put(name, loc);
 			return true;
-		}else {
-			Logger.log(Level.SEVERE, "Could not get Uniform location for: "+name+" ("+GL40.glGetError()+")");
+		} else {
+			GlobalLogger.log(Level.SEVERE,
+					"Could not get Uniform location for: " + name + " (" + GL40.glGetError() + ")");
 		}
 		return false;
 	}
-	
+
 	public void bind() {
 		GL40.glUseProgram(shaderProgram);
 	}
+
 	public void unbind() {
 		GL40.glUseProgram(0);
 	}
-	
+
 	@Override
 	public void cleanup() {
-		if(shaderProgram != -1) {
+		if (shaderProgram != -1) {
 			parts.values().forEach(ShaderPart::cleanup);
 			GL40.glDeleteProgram(shaderProgram);
 			shaderProgram = -1;
 		}
 	}
-	
+
 	@Override
-	public String getId() {return name;}
-	public Map<Integer, ShaderPart> getParts() {return parts;}
-	public Map<String, Integer> getUniforms() {return uniforms;}
-	public boolean isTransparent() {return transparent;}
-	public void setTransparent(boolean transparent) {this.transparent = transparent;}
+	public String getId() {
+		return name;
+	}
+
+	public Map<Integer, ShaderPart> getParts() {
+		return parts;
+	}
+
+	public Map<String, Integer> getUniforms() {
+		return uniforms;
+	}
+
+	public boolean isTransparent() {
+		return transparent;
+	}
+
+	public void setTransparent(boolean transparent) {
+		this.transparent = transparent;
+	}
 
 }

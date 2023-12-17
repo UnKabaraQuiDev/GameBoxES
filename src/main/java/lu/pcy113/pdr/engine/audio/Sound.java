@@ -14,10 +14,10 @@ public class Sound implements UniqueID, Cleanupable {
 
 	public Sound(String name, ByteBuffer buffer, int format, int sampleRate) {
 		this.name = name;
-		
+
 		sbo = createBuffer(buffer, format, sampleRate);
 	}
-	
+
 	private int createBuffer(ByteBuffer buffer, int format, int sampleRate) {
 		int sbo = AL10.alGenBuffers();
 		AL10.alBufferData(sbo, format, buffer, sampleRate);

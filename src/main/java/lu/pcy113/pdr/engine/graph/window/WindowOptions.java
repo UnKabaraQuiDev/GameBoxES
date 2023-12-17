@@ -5,7 +5,7 @@ import org.joml.Vector2i;
 import lu.pcy113.pdr.engine.utils.Consts;
 
 public class WindowOptions {
-	
+
 	public int fps = 60;
 	public int ups = 30;
 	public boolean fullscreen = false;
@@ -13,5 +13,5 @@ public class WindowOptions {
 	public boolean resizable = true;
 	public Vector2i windowSize = new Vector2i(800, 600);
 	public String title = Consts.TITLE;
-	
+
 }
