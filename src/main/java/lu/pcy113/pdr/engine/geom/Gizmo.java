@@ -14,7 +14,11 @@ import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.impl.Renderable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
 
-public class Gizmo implements UniqueID, Cleanupable, Renderable {
+public class Gizmo
+		implements
+		UniqueID,
+		Cleanupable,
+		Renderable {
 
 	public static final String NAME = Gizmo.class.getName();
 
@@ -104,40 +108,22 @@ public class Gizmo implements UniqueID, Cleanupable, Renderable {
 	}
 
 	@Override
-	public String getId() {
-		return name;
-	}
+	public String getId() { return name; }
 
-	public int getVertexCount() {
-		return vertexCount;
-	}
+	public int getVertexCount() { return vertexCount; }
 
-	public int getVao() {
-		return vao;
-	}
+	public int getVao() { return vao; }
 
-	public HashMap<Integer, Integer> getVbo() {
-		return vbo;
-	}
+	public HashMap<Integer, Integer> getVbo() { return vbo; }
 
-	public String getName() {
-		return name;
-	}
+	public String getName() { return name; }
 
-	public UIntAttribArray getIndices() {
-		return indices;
-	}
+	public UIntAttribArray getIndices() { return indices; }
 
-	public Vec3fAttribArray getVertices() {
-		return vertices;
-	}
+	public Vec3fAttribArray getVertices() { return vertices; }
 
-	public Vec4fAttribArray getColor() {
-		return color;
-	}
+	public Vec4fAttribArray getColor() { return color; }
 
-	public int getIndicesCount() {
-		return indicesCount;
-	}
+	public int getIndicesCount() { return indicesCount; }
 
 }

@@ -16,17 +16,18 @@ import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 
-public class PassRenderLayer extends RenderLayer<GameEngine, Mesh> {
+public class PassRenderLayer
+		extends
+		RenderLayer<GameEngine, Mesh> {
 
 	public static final String SCREEN_WIDTH = "screen_width";
 	public static final String SCREEN_HEIGHT = "screen_height";
 
 	private static Mesh SCREEN = new Mesh("PASS_SCREEN", null,
 			new Vec3fAttribArray("pos", 0, 1,
-					new Vector3f[] { new Vector3f(-1, 1, 0), new Vector3f(1, 1, 0), new Vector3f(1, -1, 0),
-							new Vector3f(1, -1, 0) }),
-			new UIntAttribArray("ind", -1, 1, new int[] { 0, 1, 2, 0, 2, 3 }), new Vec2fAttribArray("uv", 1, 1,
-					new Vector2f[] { new Vector2f(0, 1), new Vector2f(1, 1), new Vector2f(1, 0), new Vector2f(0, 0) }));
+					new Vector3f[] {new Vector3f(-1, 1, 0), new Vector3f(1, 1, 0), new Vector3f(1, -1, 0), new Vector3f(1, -1, 0)}),
+			new UIntAttribArray("ind", -1, 1, new int[] {0, 1, 2, 0, 2, 3}),
+			new Vec2fAttribArray("uv", 1, 1, new Vector2f[] {new Vector2f(0, 1), new Vector2f(1, 1), new Vector2f(1, 0), new Vector2f(0, 0)}));
 
 	protected String material;
 
@@ -50,11 +51,9 @@ public class PassRenderLayer extends RenderLayer<GameEngine, Mesh> {
 		target.bind();
 
 		Material material = cache.getMaterial(this.material);
-		if (material == null)
-			return;
+		if (material == null) return;
 		Shader shader = cache.getShader(material.getShader());
-		if (shader == null)
-			return;
+		if (shader == null) return;
 
 		shader.bind();
 

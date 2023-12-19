@@ -69,56 +69,30 @@ public class Projection {
 		update(width, height);
 	}
 
-	public Matrix4f getProjMatrix() {
-		return projMatrix;
-	}
+	public Matrix4f getProjMatrix() { return projMatrix; }
 
-	public void setProjMatrix(Matrix4f projMatrix) {
-		this.projMatrix = projMatrix;
-	}
+	public void setProjMatrix(Matrix4f projMatrix) { this.projMatrix = projMatrix; }
 
-	public float getFar() {
-		return far;
-	}
+	public float getFar() { return far; }
 
-	public void setFar(float far) {
-		this.far = far;
-	}
+	public void setFar(float far) { this.far = far; }
 
-	public float getFov() {
-		return fov;
-	}
+	public float getFov() { return fov; }
 
-	public void setFov(float fov) {
-		this.fov = fov;
-	}
+	public void setFov(float fov) { this.fov = fov; }
 
-	public float getNear() {
-		return near;
-	}
+	public float getNear() { return near; }
 
-	public void setNear(float near) {
-		this.near = near;
-	}
+	public void setNear(float near) { this.near = near; }
 
-	public boolean isPerspective() {
-		return perspective;
-	}
+	public boolean isPerspective() { return perspective; }
 
-	public boolean isOrthographic() {
-		return !perspective;
-	}
+	public boolean isOrthographic() { return !perspective; }
 
-	public void setPerspective(boolean perspective) {
-		this.perspective = perspective;
-	}
+	public void setPerspective(boolean perspective) { this.perspective = perspective; }
 
-	public float getSize() {
-		return size;
-	}
+	public float getSize() { return size; }
 
-	public void setSize(float size) {
-		this.size = size;
-	}
+	public void setSize(float size) { this.size = size; }
 
 }

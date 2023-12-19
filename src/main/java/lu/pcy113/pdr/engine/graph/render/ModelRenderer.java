@@ -21,7 +21,9 @@ import lu.pcy113.pdr.engine.objs.entity.components.TransformComponent;
 import lu.pcy113.pdr.engine.scene.Scene;
 import lu.pcy113.pdr.engine.scene.Scene3D;
 
-public class ModelRenderer extends Renderer<Scene, ModelComponent> {
+public class ModelRenderer
+		extends
+		Renderer<Scene, ModelComponent> {
 
 	public ModelRenderer() {
 		super(Model.class);
@@ -30,23 +32,19 @@ public class ModelRenderer extends Renderer<Scene, ModelComponent> {
 	@Override
 	public void render(CacheManager cache, Scene scene, ModelComponent co) {
 		Model c = co.getModel(cache);
-		if (c == null)
-			return;
+		if (c == null) return;
 
 		GlobalLogger.log(Level.INFO, "Model : " + c.getId());
 
 		Mesh mesh = cache.getMesh(c.getMesh());
-		if (mesh == null)
-			return;
+		if (mesh == null) return;
 
 		mesh.bind();
 
 		Material material = cache.getMaterial(mesh.getMaterial());
-		if (material == null)
-			return;
+		if (material == null) return;
 		Shader shader = cache.getShader(material.getShader());
-		if (shader == null)
-			return;
+		if (shader == null) return;
 
 		shader.bind();
 
@@ -56,8 +54,7 @@ public class ModelRenderer extends Renderer<Scene, ModelComponent> {
 		// TransformComponent transform = null;
 		Object transformationMatrix = null;
 		if (!transforms.isEmpty())
-			transformationMatrix = ((TransformComponent) parent.getComponent(transforms.get(0))).getTransform()
-					.getMatrix();
+			transformationMatrix = ((TransformComponent) parent.getComponent(transforms.get(0))).getTransform().getMatrix();
 		else
 			transformationMatrix = new Matrix4f().identity();
 		if (scene != null) {
@@ -70,8 +67,7 @@ public class ModelRenderer extends Renderer<Scene, ModelComponent> {
 
 		if (scene instanceof Scene3D) {
 			PointLightSurfaceComponent plsc = co.getParent().getComponent(PointLightSurfaceComponent.class);
-			if (plsc != null)
-				plsc.bindLights(cache, ((Scene3D) scene).getLights(), material);
+			if (plsc != null) plsc.bindLights(cache, ((Scene3D) scene).getLights(), material);
 		}
 
 		material.bindProperties(cache, scene, shader);

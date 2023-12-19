@@ -10,7 +10,9 @@ import lu.pcy113.pdr.engine.graph.material.components.MaterialComponent;
 import lu.pcy113.pdr.engine.impl.Renderable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
 
-public class Material implements UniqueID {
+public class Material
+		implements
+		UniqueID {
 
 	protected final String name;
 	protected Map<String, Object> properties;
@@ -36,8 +38,7 @@ public class Material implements UniqueID {
 	}
 
 	public void setPropertyIfPresent(String name, Object value) {
-		if (properties.containsKey(name))
-			properties.put(name, value);
+		if (properties.containsKey(name)) properties.put(name, value);
 	}
 
 	public Object getProperty(String name) {
@@ -45,25 +46,15 @@ public class Material implements UniqueID {
 	}
 
 	@Override
-	public String getId() {
-		return name;
-	}
+	public String getId() { return name; }
 
-	public Map<String, Object> getProperties() {
-		return properties;
-	}
+	public Map<String, Object> getProperties() { return properties; }
 
-	public void setProperties(Map<String, Object> properties) {
-		this.properties = properties;
-	}
+	public void setProperties(Map<String, Object> properties) { this.properties = properties; }
 
-	public String getShader() {
-		return shader;
-	}
+	public String getShader() { return shader; }
 
-	public void setShader(String shader) {
-		this.shader = shader;
-	}
+	public void setShader(String shader) { this.shader = shader; }
 
 	/*
 	 * COMPONENTS
@@ -71,8 +62,7 @@ public class Material implements UniqueID {
 	private Map<Class<? extends MaterialComponent>, MaterialComponent> components = new HashMap<>();
 
 	public Material addComponent(MaterialComponent component) {
-		if (component.attach(this))
-			components.put(component.getClass(), component);
+		if (component.attach(this)) components.put(component.getClass(), component);
 		return this;
 	}
 
@@ -81,16 +71,11 @@ public class Material implements UniqueID {
 	}
 
 	public boolean hasComponent(Class<? extends MaterialComponent> clazz) {
-		return components.keySet().stream().map(t -> clazz.isAssignableFrom(t))
-				.collect(Collectors.reducing((a, b) -> a || b)).get();
+		return components.keySet().stream().map(t -> clazz.isAssignableFrom(t)).collect(Collectors.reducing((a, b) -> a || b)).get();
 	}
 
-	public Map<Class<? extends MaterialComponent>, MaterialComponent> getComponents() {
-		return components;
-	}
+	public Map<Class<? extends MaterialComponent>, MaterialComponent> getComponents() { return components; }
 
-	public void setComponents(Map<Class<? extends MaterialComponent>, MaterialComponent> components) {
-		this.components = components;
-	}
+	public void setComponents(Map<Class<? extends MaterialComponent>, MaterialComponent> components) { this.components = components; }
 
 }

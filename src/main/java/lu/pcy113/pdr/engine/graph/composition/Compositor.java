@@ -27,8 +27,7 @@ public class Compositor {
 
 		int text = GL40.glGenTextures();
 		GL40.glBindTexture(GL40.GL_TEXTURE_2D, text);
-		GL40.glTexImage2D(GL40.GL_TEXTURE_2D, 0, GL40.GL_RGBA, width, height, 0, GL40.GL_RGBA, GL40.GL_UNSIGNED_BYTE,
-				MemoryUtil.NULL);
+		GL40.glTexImage2D(GL40.GL_TEXTURE_2D, 0, GL40.GL_RGBA, width, height, 0, GL40.GL_RGBA, GL40.GL_UNSIGNED_BYTE, MemoryUtil.NULL);
 		GL40.glTexParameteri(GL40.GL_TEXTURE_2D, GL40.GL_TEXTURE_MIN_FILTER, GL40.GL_LINEAR);
 		GL40.glTexParameteri(GL40.GL_TEXTURE_2D, GL40.GL_TEXTURE_MAG_FILTER, GL40.GL_LINEAR);
 		GL40.glFramebufferTexture2D(GL40.GL_FRAMEBUFFER, GL40.GL_COLOR_ATTACHMENT0, GL40.GL_TEXTURE_2D, text, 0);
@@ -36,8 +35,8 @@ public class Compositor {
 
 		int depth = GL40.glGenTextures();
 		GL40.glBindTexture(GL40.GL_TEXTURE_2D, depth);
-		GL40.glTexImage2D(GL40.GL_TEXTURE_2D, 0, GL40.GL_DEPTH_COMPONENT32, width, height, 0, GL40.GL_DEPTH_COMPONENT,
-				GL40.GL_FLOAT, MemoryUtil.NULL);
+		GL40.glTexImage2D(GL40.GL_TEXTURE_2D, 0, GL40.GL_DEPTH_COMPONENT32, width, height, 0, GL40.GL_DEPTH_COMPONENT, GL40.GL_FLOAT,
+				MemoryUtil.NULL);
 		GL40.glTexParameteri(GL40.GL_TEXTURE_2D, GL40.GL_TEXTURE_MIN_FILTER, GL40.GL_LINEAR);
 		GL40.glTexParameteri(GL40.GL_TEXTURE_2D, GL40.GL_TEXTURE_MAG_FILTER, GL40.GL_LINEAR);
 		GL40.glFramebufferTexture2D(GL40.GL_FRAMEBUFFER, GL40.GL_DEPTH_ATTACHMENT, GL40.GL_TEXTURE_2D, depth, 0);
@@ -47,8 +46,8 @@ public class Compositor {
 		System.err.println("w:" + width + " h:" + height);
 
 		if (GL40.glCheckFramebufferStatus(GL40.GL_FRAMEBUFFER) != GL40.GL_FRAMEBUFFER_COMPLETE) {
-			GlobalLogger.log(Level.SEVERE, "Framebuffer not complete: "
-					+ GL40.glCheckFramebufferStatus(GL40.GL_FRAMEBUFFER) + ", w:" + width + " h:" + height);
+			GlobalLogger.log(Level.SEVERE,
+					"Framebuffer not complete: " + GL40.glCheckFramebufferStatus(GL40.GL_FRAMEBUFFER) + ", w:" + width + " h:" + height);
 			return;
 		}
 
@@ -57,8 +56,7 @@ public class Compositor {
 		GL40.glEnable(GL40.GL_DEPTH_TEST);
 
 		for (String l : layers) {
-			if (l == null)
-				continue;
+			if (l == null) continue;
 
 			RenderLayer rl = cache.getRenderLayer(l);
 			if (rl == null) {
@@ -66,8 +64,7 @@ public class Compositor {
 				break;
 			}
 
-			if (!rl.isVisible())
-				continue;
+			if (!rl.isVisible()) continue;
 
 			rl.render(cache, engine);
 
@@ -76,8 +73,7 @@ public class Compositor {
 
 		GL40.glDepthMask(false);
 		for (String l : passes) {
-			if (l == null)
-				continue;
+			if (l == null) continue;
 
 			RenderLayer prl = cache.getRenderLayer(l);
 			if (prl == null) {
@@ -85,8 +81,7 @@ public class Compositor {
 				break;
 			}
 
-			if (!(prl instanceof PassRenderLayer))
-				continue;
+			if (!(prl instanceof PassRenderLayer)) continue;
 
 			GL40.glActiveTexture(GL40.GL_TEXTURE0);
 			GL40.glBindTexture(GL40.GL_TEXTURE_2D, text);

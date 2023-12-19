@@ -3,7 +3,9 @@ package lu.pcy113.pdr.engine.graph.composition.debug;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.material.ShaderPart;
 
-public class PerfHistoryLayerShader extends Shader {
+public class PerfHistoryLayerShader
+		extends
+		Shader {
 
 	public static final String NAME = PerfHistoryLayerShader.class.getName();
 
@@ -15,8 +17,7 @@ public class PerfHistoryLayerShader extends Shader {
 	public static final int MAX = 60;
 
 	public PerfHistoryLayerShader() {
-		super(NAME, new ShaderPart("./resources/shaders/composite/plain.vert"),
-				new ShaderPart("./resources/shaders/composite/debug/debug.frag"));
+		super(NAME, new ShaderPart("./resources/shaders/composite/plain.vert"), new ShaderPart("./resources/shaders/composite/debug/debug.frag"));
 	}
 
 	@Override

@@ -10,7 +10,9 @@ import org.lwjgl.openal.ALCCapabilities;
 
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 
-public class AudioMaster implements Cleanupable {
+public class AudioMaster
+		implements
+		Cleanupable {
 
 	public AudioMaster() {
 		// ALC.create();

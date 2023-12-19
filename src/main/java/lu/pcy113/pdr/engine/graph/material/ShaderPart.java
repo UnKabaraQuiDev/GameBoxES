@@ -9,7 +9,10 @@ import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
 import lu.pcy113.pdr.engine.utils.FileUtils;
 
-public class ShaderPart implements UniqueID, Cleanupable {
+public class ShaderPart
+		implements
+		UniqueID,
+		Cleanupable {
 
 	private final String file;
 	private final int sid;
@@ -19,8 +22,7 @@ public class ShaderPart implements UniqueID, Cleanupable {
 		this.file = file;
 		this.type = shaderType(file.substring(file.lastIndexOf(".") + 1));
 
-		if (type == -1)
-			throw new RuntimeException("Unknown shader type: " + file);
+		if (type == -1) throw new RuntimeException("Unknown shader type: " + file);
 
 		this.sid = GL40.glCreateShader(type);
 		GL40.glShaderSource(sid, FileUtils.readFile(file));
@@ -38,21 +40,13 @@ public class ShaderPart implements UniqueID, Cleanupable {
 	}
 
 	@Override
-	public String getId() {
-		return file;
-	}
+	public String getId() { return file; }
 
-	public int getSid() {
-		return sid;
-	}
+	public int getSid() { return sid; }
 
-	public String getFile() {
-		return file;
-	}
+	public String getFile() { return file; }
 
-	public int getType() {
-		return type;
-	}
+	public int getType() { return type; }
 
 	public static int shaderType(String type) {
 		switch (type.toLowerCase()) {

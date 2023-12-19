@@ -20,7 +20,9 @@ import lu.pcy113.pdr.engine.objs.PointLight;
 import lu.pcy113.pdr.engine.objs.text.TextModel;
 import lu.pcy113.pdr.engine.scene.Scene;
 
-public class CacheManager implements Cleanupable {
+public class CacheManager
+		implements
+		Cleanupable {
 
 	protected Map<String, Mesh> meshes;
 	protected Map<String, Scene> scenes;
@@ -102,68 +104,57 @@ public class CacheManager implements Cleanupable {
 	}
 
 	public boolean addMesh(Mesh m) {
-		if (this.meshes.containsKey(m.getId()))
-			this.meshes.remove(m.getId()).cleanup();
+		if (this.meshes.containsKey(m.getId())) this.meshes.remove(m.getId()).cleanup();
 		return this.meshes.putIfAbsent(m.getId(), m) == null;
 	}
 
 	public boolean addScene(Scene m) {
-		if (this.scenes.containsKey(m.getId()))
-			this.scenes.remove(m.getId()).cleanup();
+		if (this.scenes.containsKey(m.getId())) this.scenes.remove(m.getId()).cleanup();
 		return this.scenes.putIfAbsent(m.getId(), m) == null;
 	}
 
 	public boolean addRenderer(Renderer<?, ?> m) {
-		if (this.renderers.containsKey(m.getId()))
-			this.renderers.remove(m.getId()).cleanup();
+		if (this.renderers.containsKey(m.getId())) this.renderers.remove(m.getId()).cleanup();
 		return this.renderers.putIfAbsent(m.getId(), m) == null;
 	}
 
 	public boolean addMaterial(Material m) {
-		if (this.materials.containsKey(m.getId()))
-			this.materials.remove(m.getId());
+		if (this.materials.containsKey(m.getId())) this.materials.remove(m.getId());
 		return this.materials.putIfAbsent(m.getId(), m) == null;
 	}
 
 	public boolean addShader(Shader m) {
-		if (this.shaders.containsKey(m.getId()))
-			this.shaders.remove(m.getId()).cleanup();
+		if (this.shaders.containsKey(m.getId())) this.shaders.remove(m.getId()).cleanup();
 		return this.shaders.putIfAbsent(m.getId(), m) == null;
 	}
 
 	public boolean addModel(Model m) {
-		if (this.models.containsKey(m.getId()))
-			this.models.remove(m.getId());
+		if (this.models.containsKey(m.getId())) this.models.remove(m.getId());
 		return this.models.putIfAbsent(m.getId(), m) == null;
 	}
 
 	public boolean addTexture(Texture m) {
-		if (this.textures.containsKey(m.getId()))
-			this.textures.remove(m.getId()).cleanup();
+		if (this.textures.containsKey(m.getId())) this.textures.remove(m.getId()).cleanup();
 		return this.textures.putIfAbsent(m.getId(), m) == null;
 	}
 
 	public boolean addPointLight(PointLight m) {
-		if (this.pointLights.containsKey(m.getId()))
-			this.pointLights.remove(m.getId());
+		if (this.pointLights.containsKey(m.getId())) this.pointLights.remove(m.getId());
 		return this.pointLights.putIfAbsent(m.getId(), m) == null;
 	}
 
 	public boolean addGizmo(Gizmo m) {
-		if (this.gizmos.containsKey(m.getId()))
-			this.gizmos.remove(m.getId()).cleanup();
+		if (this.gizmos.containsKey(m.getId())) this.gizmos.remove(m.getId()).cleanup();
 		return this.gizmos.putIfAbsent(m.getId(), m) == null;
 	}
 
 	public boolean addGizmoModel(GizmoModel m) {
-		if (this.gizmoModels.containsKey(m.getId()))
-			this.gizmoModels.remove(m.getId());
+		if (this.gizmoModels.containsKey(m.getId())) this.gizmoModels.remove(m.getId());
 		return this.gizmoModels.putIfAbsent(m.getId(), m) == null;
 	}
 
 	public boolean addRenderLayer(RenderLayer m) {
-		if (this.renderLayers.containsKey(m.getId()))
-			this.renderLayers.remove(m.getId()).cleanup();
+		if (this.renderLayers.containsKey(m.getId())) this.renderLayers.remove(m.getId()).cleanup();
 		return this.renderLayers.putIfAbsent(m.getId(), m) == null;
 	}
 
@@ -235,116 +226,62 @@ public class CacheManager implements Cleanupable {
 		return this.instanceEmitterModels.get(name);
 	}
 
-	public Map<String, Mesh> getMeshes() {
-		return this.meshes;
-	}
+	public Map<String, Mesh> getMeshes() { return this.meshes; }
 
-	public void setMeshes(Map<String, Mesh> meshes) {
-		this.meshes = meshes;
-	}
+	public void setMeshes(Map<String, Mesh> meshes) { this.meshes = meshes; }
 
-	public Map<String, Scene> getScenes() {
-		return this.scenes;
-	}
+	public Map<String, Scene> getScenes() { return this.scenes; }
 
-	public void setScenes(Map<String, Scene> scenes) {
-		this.scenes = scenes;
-	}
+	public void setScenes(Map<String, Scene> scenes) { this.scenes = scenes; }
 
-	public Map<String, Renderer<?, ?>> getRenderers() {
-		return this.renderers;
-	}
+	public Map<String, Renderer<?, ?>> getRenderers() { return this.renderers; }
 
-	public void setRenderers(Map<String, Renderer<?, ?>> renderers) {
-		this.renderers = renderers;
-	}
+	public void setRenderers(Map<String, Renderer<?, ?>> renderers) { this.renderers = renderers; }
 
-	public Map<String, Material> getMaterials() {
-		return this.materials;
-	}
+	public Map<String, Material> getMaterials() { return this.materials; }
 
-	public void setMaterials(Map<String, Material> materials) {
-		this.materials = materials;
-	}
+	public void setMaterials(Map<String, Material> materials) { this.materials = materials; }
 
-	public Map<String, Shader> getShaders() {
-		return this.shaders;
-	}
+	public Map<String, Shader> getShaders() { return this.shaders; }
 
-	public void setShaders(Map<String, Shader> shaders) {
-		this.shaders = shaders;
-	}
+	public void setShaders(Map<String, Shader> shaders) { this.shaders = shaders; }
 
-	public Map<String, Texture> getTextures() {
-		return this.textures;
-	}
+	public Map<String, Texture> getTextures() { return this.textures; }
 
-	public void setTextures(Map<String, Texture> textures) {
-		this.textures = textures;
-	}
+	public void setTextures(Map<String, Texture> textures) { this.textures = textures; }
 
-	public Map<String, Gizmo> getGizmos() {
-		return this.gizmos;
-	}
+	public Map<String, Gizmo> getGizmos() { return this.gizmos; }
 
-	public void setGizmos(Map<String, Gizmo> gizmos) {
-		this.gizmos = gizmos;
-	}
+	public void setGizmos(Map<String, Gizmo> gizmos) { this.gizmos = gizmos; }
 
-	public Map<String, GizmoModel> getGizmoModels() {
-		return this.gizmoModels;
-	}
+	public Map<String, GizmoModel> getGizmoModels() { return this.gizmoModels; }
 
-	public void setGizmoModels(Map<String, GizmoModel> gizmoModels) {
-		this.gizmoModels = gizmoModels;
-	}
+	public void setGizmoModels(Map<String, GizmoModel> gizmoModels) { this.gizmoModels = gizmoModels; }
 
-	public Map<String, RenderLayer> getRenderLayers() {
-		return this.renderLayers;
-	}
+	public Map<String, RenderLayer> getRenderLayers() { return this.renderLayers; }
 
-	public void setRenderLayers(Map<String, RenderLayer> renderLayers) {
-		this.renderLayers = renderLayers;
-	}
+	public void setRenderLayers(Map<String, RenderLayer> renderLayers) { this.renderLayers = renderLayers; }
 
-	public Map<String, TextModel> getTextModels() {
-		return this.textModels;
-	}
+	public Map<String, TextModel> getTextModels() { return this.textModels; }
 
-	public void setTextModels(Map<String, TextModel> textModels) {
-		this.textModels = textModels;
-	}
+	public void setTextModels(Map<String, TextModel> textModels) { this.textModels = textModels; }
 
-	public Map<String, InstanceEmitterModel> getInstanceEmitterModels() {
-		return this.instanceEmitterModels;
-	}
+	public Map<String, InstanceEmitterModel> getInstanceEmitterModels() { return this.instanceEmitterModels; }
 
 	public void setInstanceEmitterModels(Map<String, InstanceEmitterModel> instanceEmitterModels) {
 		this.instanceEmitterModels = instanceEmitterModels;
 	}
 
-	public Map<String, InstanceEmitter> getInstanceEmitters() {
-		return this.instanceEmitters;
-	}
+	public Map<String, InstanceEmitter> getInstanceEmitters() { return this.instanceEmitters; }
 
-	public void setInstanceEmitters(Map<String, InstanceEmitter> instanceEmitters) {
-		this.instanceEmitters = instanceEmitters;
-	}
+	public void setInstanceEmitters(Map<String, InstanceEmitter> instanceEmitters) { this.instanceEmitters = instanceEmitters; }
 
-	public Map<String, Model> getModels() {
-		return this.models;
-	}
+	public Map<String, Model> getModels() { return this.models; }
 
-	public void setModels(Map<String, Model> models) {
-		this.models = models;
-	}
+	public void setModels(Map<String, Model> models) { this.models = models; }
 
-	public Map<String, PointLight> getPointLights() {
-		return this.pointLights;
-	}
+	public Map<String, PointLight> getPointLights() { return this.pointLights; }
 
-	public void setPointLights(Map<String, PointLight> pointLights) {
-		this.pointLights = pointLights;
-	}
+	public void setPointLights(Map<String, PointLight> pointLights) { this.pointLights = pointLights; }
 
 }

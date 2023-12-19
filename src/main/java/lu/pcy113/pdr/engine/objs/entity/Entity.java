@@ -17,8 +17,7 @@ public class Entity {
 	}
 
 	public Entity addComponent(Component component) {
-		if (component.attach(this))
-			components.put(component.getClass(), component);
+		if (component.attach(this)) components.put(component.getClass(), component);
 		return this;
 	}
 
@@ -27,34 +26,24 @@ public class Entity {
 	}
 
 	public boolean hasComponent(Class<? extends Component> clazz) {
-		return components.keySet().stream().map(t -> clazz.isAssignableFrom(t))
-				.collect(Collectors.reducing((a, b) -> a || b)).get();
+		return components.keySet().stream().map(t -> clazz.isAssignableFrom(t)).collect(Collectors.reducing((a, b) -> a || b)).get();
 	}
 
 	public List<Class<? extends Component>> getComponents(Class<? extends Component> clazz) {
 		return components.keySet().stream().filter(t -> clazz.isAssignableFrom(t)).collect(Collectors.toList());
 	}
 
-	public Map<Class<? extends Component>, Component> getComponents() {
-		return components;
-	}
+	public Map<Class<? extends Component>, Component> getComponents() { return components; }
 
-	public void setComponents(Map<Class<? extends Component>, Component> components) {
-		this.components = components;
-	}
+	public void setComponents(Map<Class<? extends Component>, Component> components) { this.components = components; }
 
-	public boolean isActive() {
-		return active;
-	}
+	public boolean isActive() { return active; }
 
-	public void setActive(boolean active) {
-		this.active = active;
-	}
+	public void setActive(boolean active) { this.active = active; }
 
 	@Override
 	public String toString() {
-		return "Entity@" + getClass().getSimpleName() + "[active=" + active + ", componentCount=" + components.size()
-				+ "]";
+		return "Entity@" + getClass().getSimpleName() + "[active=" + active + ", componentCount=" + components.size() + "]";
 	}
 
 }

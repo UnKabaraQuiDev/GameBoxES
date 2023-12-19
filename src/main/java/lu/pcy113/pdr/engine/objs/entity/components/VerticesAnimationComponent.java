@@ -4,7 +4,9 @@ import org.joml.Vector3f;
 
 import lu.pcy113.pdr.engine.objs.entity.Component;
 
-public class VerticesAnimationComponent extends Component {
+public class VerticesAnimationComponent
+		extends
+		Component {
 
 	private Vector3f[] positions;
 
@@ -12,8 +14,6 @@ public class VerticesAnimationComponent extends Component {
 		this.positions = positions;
 	}
 
-	public Vector3f[] getPositions() {
-		return this.positions;
-	}
+	public Vector3f[] getPositions() { return this.positions; }
 
 }

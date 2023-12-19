@@ -25,10 +25,8 @@ public class DebugOptions {
 
 	public boolean perfHistory = false;
 
-	public void perfHistory(CacheManager cache, GameEngine engine, double deltaUpdate, double deltaRender,
-			double timeUpdate, double timeRender) {
-		if (!perfHistory)
-			return;
+	public void perfHistory(CacheManager cache, GameEngine engine, double deltaUpdate, double deltaRender, double timeUpdate, double timeRender) {
+		if (!perfHistory) return;
 
 		RenderLayer rl = cache.getRenderLayer(PerfHistoryLayer.NAME);
 		if (rl == null) {
@@ -47,10 +45,8 @@ public class DebugOptions {
 	public boolean gizmos = true;
 	public Gizmo gizmoXYZ;
 
-	public void gizmos(CacheManager cache, Scene scene, Matrix4f projectionMatrix, Matrix4f viewMatrix,
-			Object modelMatrix) {
-		if (!gizmos)
-			return;
+	public void gizmos(CacheManager cache, Scene scene, Matrix4f projectionMatrix, Matrix4f viewMatrix, Object modelMatrix) {
+		if (!gizmos) return;
 
 		if (gizmoXYZ == null) {
 			gizmoXYZ = ObjLoader.loadGizmo("named_xyz", "./resources/models/gizmos/named_XYZ.obj");
@@ -77,8 +73,7 @@ public class DebugOptions {
 			deb.setProperty(Shader.TRANSFORMATION_MATRIX, new Matrix4f());
 		deb.bindProperties(cache, scene, debShader);
 
-		if (GameEngine.DEBUG.ignoreDepth)
-			GL40.glDisable(GL40.GL_DEPTH_TEST);
+		if (GameEngine.DEBUG.ignoreDepth) GL40.glDisable(GL40.GL_DEPTH_TEST);
 
 		GL40.glLineWidth(2.5f);
 		GL40.glDrawElements(GL40.GL_LINES, gizmoXYZ.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);
@@ -92,10 +87,8 @@ public class DebugOptions {
 	public boolean wireframe = true;
 	public Vector4f wireframeColor = new Vector4f(1, 0, 0, 1);
 
-	public void wireframe(CacheManager cache, Scene scene, Mesh mesh, Matrix4f projectionMatrix, Matrix4f viewMatrix,
-			Object modelMatrix) {
-		if (!wireframe)
-			return;
+	public void wireframe(CacheManager cache, Scene scene, Mesh mesh, Matrix4f projectionMatrix, Matrix4f viewMatrix, Object modelMatrix) {
+		if (!wireframe) return;
 
 		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_LINE);
 		Material deb = cache.getMaterial(WireframeMaterial.NAME);
@@ -117,8 +110,7 @@ public class DebugOptions {
 		deb.setProperty(WireframeShader.COLOR, wireframeColor);
 		deb.bindProperties(cache, scene, debShader);
 
-		if (GameEngine.DEBUG.ignoreDepth)
-			GL40.glDisable(GL40.GL_DEPTH_TEST);
+		if (GameEngine.DEBUG.ignoreDepth) GL40.glDisable(GL40.GL_DEPTH_TEST);
 
 		GL40.glDrawElements(GL40.GL_TRIANGLES, mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);
 
@@ -126,10 +118,8 @@ public class DebugOptions {
 		GL40.glEnable(GL40.GL_DEPTH_TEST);
 	}
 
-	public void pointWireframe(CacheManager cache, Scene scene, Mesh mesh, Matrix4f projectionMatrix,
-			Matrix4f viewMatrix, Matrix4f modelMatrix) {
-		if (!wireframe)
-			return;
+	public void pointWireframe(CacheManager cache, Scene scene, Mesh mesh, Matrix4f projectionMatrix, Matrix4f viewMatrix, Matrix4f modelMatrix) {
+		if (!wireframe) return;
 
 		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_POINT);
 		Material deb = cache.getMaterial(WireframeMaterial.NAME);
@@ -151,8 +141,7 @@ public class DebugOptions {
 		deb.setProperty(WireframeShader.COLOR, wireframeColor);
 		deb.bindProperties(cache, scene, debShader);
 
-		if (GameEngine.DEBUG.ignoreDepth)
-			GL40.glDisable(GL40.GL_DEPTH_TEST);
+		if (GameEngine.DEBUG.ignoreDepth) GL40.glDisable(GL40.GL_DEPTH_TEST);
 
 		GL40.glDrawElements(GL40.GL_POINTS, mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);
 

@@ -24,7 +24,9 @@ import lu.pcy113.pdr.engine.objs.text.TextModel;
 import lu.pcy113.pdr.engine.scene.Scene;
 import lu.pcy113.pdr.engine.scene.Scene3D;
 
-public class TextModelRenderer extends Renderer<Scene, TextModelComponent> {
+public class TextModelRenderer
+		extends
+		Renderer<Scene, TextModelComponent> {
 
 	public static final String TEXT_MESH = TextMesh.NAME;
 
@@ -35,8 +37,7 @@ public class TextModelRenderer extends Renderer<Scene, TextModelComponent> {
 	@Override
 	public void render(CacheManager cache, Scene scene, TextModelComponent t) {
 		Mesh msh = cache.getMesh(TEXT_MESH + "_" + t.getTextSize());
-		if (msh == null)
-			return;
+		if (msh == null) return;
 
 		TextMesh mesh;
 		if (msh instanceof TextMesh)
@@ -45,8 +46,7 @@ public class TextModelRenderer extends Renderer<Scene, TextModelComponent> {
 			return;
 
 		TextModel tModel = t.getTextModel(cache);
-		if (tModel == null)
-			return;
+		if (tModel == null) return;
 
 		GlobalLogger.log(Level.INFO, "TextModel : m:" + mesh.getId() + " t:" + tModel.getText());
 
@@ -54,12 +54,10 @@ public class TextModelRenderer extends Renderer<Scene, TextModelComponent> {
 		System.err.println("mesh bound");
 
 		TextMaterial material = (TextMaterial) cache.getMaterial(tModel.getMaterial());
-		if (material == null)
-			return;
+		if (material == null) return;
 		System.err.println("corr mat");
 		TextShader shader = (TextShader) cache.getShader(material.getShader());
-		if (shader == null)
-			return;
+		if (shader == null) return;
 		System.err.println("corr shader");
 
 		shader.bind();
@@ -71,8 +69,7 @@ public class TextModelRenderer extends Renderer<Scene, TextModelComponent> {
 		// TransformComponent transform = null;
 		Object transformationMatrix = null;
 		if (!transforms.isEmpty())
-			transformationMatrix = ((TransformComponent) parent.getComponent(transforms.get(0))).getTransform()
-					.getMatrix();
+			transformationMatrix = ((TransformComponent) parent.getComponent(transforms.get(0))).getTransform().getMatrix();
 		else
 			transformationMatrix = new Matrix4f().identity();
 		if (scene != null) {
@@ -85,12 +82,10 @@ public class TextModelRenderer extends Renderer<Scene, TextModelComponent> {
 
 		if (scene instanceof Scene3D) {
 			PointLightSurfaceComponent plsc = t.getParent().getComponent(PointLightSurfaceComponent.class);
-			if (plsc != null)
-				plsc.bindLights(cache, ((Scene3D) scene).getLights(), material);
+			if (plsc != null) plsc.bindLights(cache, ((Scene3D) scene).getLights(), material);
 		}
 
-		if (!tModel.bindText(cache, mesh.getVertices(), material))
-			return;
+		if (!tModel.bindText(cache, mesh.getVertices(), material)) return;
 		System.err.println("text bound: " + Arrays.toString(mesh.getVertices().getData()));
 
 		material.bindProperties(cache, scene, shader);

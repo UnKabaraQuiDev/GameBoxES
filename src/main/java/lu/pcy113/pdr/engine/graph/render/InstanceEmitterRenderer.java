@@ -17,7 +17,9 @@ import lu.pcy113.pdr.engine.objs.entity.components.PointLightSurfaceComponent;
 import lu.pcy113.pdr.engine.scene.Scene;
 import lu.pcy113.pdr.engine.scene.Scene3D;
 
-public class InstanceEmitterRenderer extends Renderer<Scene, InstanceEmitterComponent> {
+public class InstanceEmitterRenderer
+		extends
+		Renderer<Scene, InstanceEmitterComponent> {
 
 	public InstanceEmitterRenderer() {
 		super(InstanceEmitter.class);
@@ -26,21 +28,17 @@ public class InstanceEmitterRenderer extends Renderer<Scene, InstanceEmitterComp
 	@Override
 	public void render(CacheManager cache, Scene scene, InstanceEmitterComponent pec) {
 		InstanceEmitter pe = pec.getInstanceEmitter(cache);
-		if (pe == null)
-			return;
+		if (pe == null) return;
 
 		GlobalLogger.log(Level.INFO, "InstanceEmitter : " + pe.getId());
 
 		Mesh mesh = pe.getParticleMesh();
-		if (mesh == null)
-			return;
+		if (mesh == null) return;
 
 		Material material = cache.getMaterial(mesh.getMaterial());
-		if (material == null)
-			return;
+		if (material == null) return;
 		Shader shader = cache.getShader(material.getShader());
-		if (shader == null)
-			return;
+		if (shader == null) return;
 
 		shader.bind();
 
@@ -55,8 +53,7 @@ public class InstanceEmitterRenderer extends Renderer<Scene, InstanceEmitterComp
 
 		if (scene instanceof Scene3D) {
 			PointLightSurfaceComponent plsc = pec.getParent().getComponent(PointLightSurfaceComponent.class);
-			if (plsc != null)
-				plsc.bindLights(cache, ((Scene3D) scene).getLights(), material);
+			if (plsc != null) plsc.bindLights(cache, ((Scene3D) scene).getLights(), material);
 		}
 
 		material.bindProperties(cache, scene, shader);
@@ -68,8 +65,7 @@ public class InstanceEmitterRenderer extends Renderer<Scene, InstanceEmitterComp
 
 		pe.bind();
 
-		GL40.glDrawElementsInstanced(GL40.GL_TRIANGLES, mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0,
-				pe.getParticleCount());
+		GL40.glDrawElementsInstanced(GL40.GL_TRIANGLES, mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0, pe.getParticleCount());
 
 		GL40.glDisable(GL40.GL_BLEND);
 

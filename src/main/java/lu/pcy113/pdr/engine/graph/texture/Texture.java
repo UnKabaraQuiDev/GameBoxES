@@ -8,7 +8,10 @@ import org.lwjgl.stb.STBImage;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
 
-public class Texture implements Cleanupable, UniqueID {
+public class Texture
+		implements
+		Cleanupable,
+		UniqueID {
 
 	private final String path;
 	private final String name;
@@ -36,8 +39,7 @@ public class Texture implements Cleanupable, UniqueID {
 		int[] c = new int[1];
 
 		ByteBuffer buffer = STBImage.stbi_load(path, w, h, c, 4);
-		if (buffer == null)
-			throw new RuntimeException("Failed to load texture");
+		if (buffer == null) throw new RuntimeException("Failed to load texture");
 		this.tid = generateTexture(w[0], h[0], buffer);
 	}
 
@@ -59,8 +61,7 @@ public class Texture implements Cleanupable, UniqueID {
 	}
 
 	public void bind(int i) {
-		if (i > 31)
-			return;
+		if (i > 31) return;
 		GL40.glActiveTexture(GL40.GL_TEXTURE0 + i);
 		GL40.glBindTexture(GL40.GL_TEXTURE_2D, tid);
 	}
@@ -74,16 +75,10 @@ public class Texture implements Cleanupable, UniqueID {
 	}
 
 	@Override
-	public String getId() {
-		return name;
-	}
+	public String getId() { return name; }
 
-	public int getTid() {
-		return tid;
-	}
+	public int getTid() { return tid; }
 
-	public String getPath() {
-		return path;
-	}
+	public String getPath() { return path; }
 
 }

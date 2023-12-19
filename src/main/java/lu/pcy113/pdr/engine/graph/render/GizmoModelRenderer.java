@@ -22,7 +22,9 @@ import lu.pcy113.pdr.engine.objs.entity.components.TransformComponent;
 import lu.pcy113.pdr.engine.scene.Scene;
 import lu.pcy113.pdr.engine.scene.camera.Camera3D;
 
-public class GizmoModelRenderer extends Renderer<Scene, GizmoModelComponent> {
+public class GizmoModelRenderer
+		extends
+		Renderer<Scene, GizmoModelComponent> {
 
 	public GizmoModelRenderer() {
 		super(GizmoModel.class);
@@ -31,14 +33,12 @@ public class GizmoModelRenderer extends Renderer<Scene, GizmoModelComponent> {
 	@Override
 	public void render(CacheManager cache, Scene scene, GizmoModelComponent m) {
 		GizmoModel model = m.getGizmoModel(cache);
-		if (model == null)
-			return;
+		if (model == null) return;
 
 		GlobalLogger.log(Level.INFO, "GizmoModel : " + model.getId());
 
 		Gizmo gizmo = cache.getGizmo(model.getGizmo());
-		if (gizmo == null)
-			return;
+		if (gizmo == null) return;
 		gizmo.bind();
 
 		Material material = cache.getMaterial(GizmoMaterial.NAME);
@@ -49,8 +49,7 @@ public class GizmoModelRenderer extends Renderer<Scene, GizmoModelComponent> {
 			cache.addMaterial(material);
 		}
 		Shader shader = cache.getShader(material.getShader());
-		if (shader == null)
-			return;
+		if (shader == null) return;
 
 		shader.bind();
 
@@ -60,8 +59,7 @@ public class GizmoModelRenderer extends Renderer<Scene, GizmoModelComponent> {
 		// TransformComponent transform = null;
 		Object transformationMatrix = null;
 		if (!transforms.isEmpty())
-			transformationMatrix = ((TransformComponent) parent.getComponent(transforms.get(0))).getTransform()
-					.getMatrix();
+			transformationMatrix = ((TransformComponent) parent.getComponent(transforms.get(0))).getTransform().getMatrix();
 		else
 			transformationMatrix = new Matrix4f().identity();
 		if (scene != null) {
@@ -75,8 +73,7 @@ public class GizmoModelRenderer extends Renderer<Scene, GizmoModelComponent> {
 
 		material.bindProperties(cache, scene, shader);
 
-		if (GameEngine.DEBUG.ignoreDepth)
-			GL11.glDisable(GL11.GL_DEPTH_TEST);
+		if (GameEngine.DEBUG.ignoreDepth) GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
 
 		GL11.glLineWidth(model.getLineWidth());

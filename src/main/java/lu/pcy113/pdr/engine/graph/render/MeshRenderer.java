@@ -14,7 +14,9 @@ import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.objs.entity.components.MeshComponent;
 import lu.pcy113.pdr.engine.scene.Scene;
 
-public class MeshRenderer extends Renderer<Scene, MeshComponent> {
+public class MeshRenderer
+		extends
+		Renderer<Scene, MeshComponent> {
 
 	public MeshRenderer() {
 		super(Mesh.class);
@@ -23,20 +25,17 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 	@Override
 	public void render(CacheManager cache, Scene scene, MeshComponent m) {
 		Mesh mesh = m.getMesh(cache);
-		if (mesh == null)
-			return;
+		if (mesh == null) return;
 
-		GlobalLogger.log(Level.INFO, "Mesh : " + mesh.getId() + ", vao:" + mesh.getVao() + ", vec:"
-				+ mesh.getVertexCount() + ", vbo:" + mesh.getVbo());
+		GlobalLogger.log(Level.INFO,
+				"Mesh : " + mesh.getId() + ", vao:" + mesh.getVao() + ", vec:" + mesh.getVertexCount() + ", vbo:" + mesh.getVbo());
 
 		mesh.bind();
 
 		Material material = cache.getMaterial(mesh.getMaterial());
-		if (material == null)
-			return;
+		if (material == null) return;
 		Shader shader = cache.getShader(material.getShader());
-		if (shader == null)
-			return;
+		if (shader == null) return;
 
 		shader.bind();
 

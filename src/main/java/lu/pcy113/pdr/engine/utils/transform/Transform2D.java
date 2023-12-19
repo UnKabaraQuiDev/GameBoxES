@@ -3,7 +3,9 @@ package lu.pcy113.pdr.engine.utils.transform;
 import org.joml.Matrix3x2f;
 import org.joml.Vector2f;
 
-public class Transform2D extends Transform<Matrix3x2f> {
+public class Transform2D
+		extends
+		Transform<Matrix3x2f> {
 
 	protected Vector2f translation;
 	protected float rotation;
@@ -72,17 +74,11 @@ public class Transform2D extends Transform<Matrix3x2f> {
 		return matrix.identity().translate(translation).rotate(rotation).scale(scale);
 	}
 
-	public Vector2f getTranslation() {
-		return translation;
-	}
+	public Vector2f getTranslation() { return translation; }
 
-	public float getRotation() {
-		return rotation;
-	}
+	public float getRotation() { return rotation; }
 
-	public Vector2f getScale() {
-		return scale;
-	}
+	public Vector2f getScale() { return scale; }
 
 	public Transform2D setTranslation(Vector2f translation) {
 		this.translation = translation;

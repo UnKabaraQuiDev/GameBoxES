@@ -17,7 +17,9 @@ import lu.pcy113.pdr.engine.objs.entity.components.GizmoComponent;
 import lu.pcy113.pdr.engine.scene.Scene;
 import lu.pcy113.pdr.engine.scene.camera.Camera3D;
 
-public class GizmoRenderer extends Renderer<Scene, GizmoComponent> {
+public class GizmoRenderer
+		extends
+		Renderer<Scene, GizmoComponent> {
 
 	public GizmoRenderer() {
 		super(Gizmo.class);
@@ -26,8 +28,7 @@ public class GizmoRenderer extends Renderer<Scene, GizmoComponent> {
 	@Override
 	public void render(CacheManager cache, Scene scene, GizmoComponent gi) {
 		Gizmo gizmo = gi.getGizmo(cache);
-		if (gizmo == null)
-			return;
+		if (gizmo == null) return;
 
 		GlobalLogger.log(Level.INFO, "Gizmo : " + gizmo.getId());
 
@@ -56,8 +57,7 @@ public class GizmoRenderer extends Renderer<Scene, GizmoComponent> {
 
 		material.bindProperties(cache, scene, shader);
 
-		if (GameEngine.DEBUG.ignoreDepth)
-			GL40.glDisable(GL40.GL_DEPTH_TEST);
+		if (GameEngine.DEBUG.ignoreDepth) GL40.glDisable(GL40.GL_DEPTH_TEST);
 		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_LINE);
 
 		GL40.glLineWidth(Gizmo.LINE_WIDTH);

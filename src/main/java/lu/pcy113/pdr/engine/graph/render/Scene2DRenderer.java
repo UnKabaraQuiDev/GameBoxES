@@ -23,7 +23,9 @@ import lu.pcy113.pdr.engine.objs.entity.components.TextModelComponent;
 import lu.pcy113.pdr.engine.objs.text.TextModel;
 import lu.pcy113.pdr.engine.scene.Scene2D;
 
-public class Scene2DRenderer extends Renderer<GameEngine, Scene2D> {
+public class Scene2DRenderer
+		extends
+		Renderer<GameEngine, Scene2D> {
 
 	public Scene2DRenderer() {
 		super(Scene2D.class);
@@ -38,14 +40,11 @@ public class Scene2DRenderer extends Renderer<GameEngine, Scene2D> {
 		GizmoModelRenderer gizmoModelRenderer = (GizmoModelRenderer) cache.getRenderer(GizmoModel.NAME);
 		GizmoRenderer gizmoRenderer = (GizmoRenderer) cache.getRenderer(Gizmo.NAME);
 		TextModelRenderer textModelRenderer = (TextModelRenderer) cache.getRenderer(TextModel.NAME);
-		InstanceEmitterRenderer instanceEmitterRenderer = (InstanceEmitterRenderer) cache
-				.getRenderer(InstanceEmitter.NAME);
-		InstanceEmitterModelRenderer instanceEmitterModelRenderer = (InstanceEmitterModelRenderer) cache
-				.getRenderer(InstanceEmitterModel.NAME);
+		InstanceEmitterRenderer instanceEmitterRenderer = (InstanceEmitterRenderer) cache.getRenderer(InstanceEmitter.NAME);
+		InstanceEmitterModelRenderer instanceEmitterModelRenderer = (InstanceEmitterModelRenderer) cache.getRenderer(InstanceEmitterModel.NAME);
 
 		for (Entity e : scene.getEntities().values()) {
-			if (!e.isActive())
-				continue;
+			if (!e.isActive()) continue;
 
 			Component c = null;
 			if ((c = e.getComponent(ModelComponent.class)) != null) {

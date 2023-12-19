@@ -3,13 +3,14 @@ package lu.pcy113.pdr.engine.graph.material.text;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.material.ShaderPart;
 
-public class TextShader extends Shader {
+public class TextShader
+		extends
+		Shader {
 
 	public TextShader(String name, boolean b) {
-		super(TextShader.class.getName() + "." + name, b,
-				new ShaderPart[] { new ShaderPart("./resources/shaders/text/text.vert"),
-						// new ShaderPart("./resources/shaders/text/text.geo"),
-						new ShaderPart("./resources/shaders/text/" + name + ".frag") });
+		super(TextShader.class.getName() + "." + name, b, new ShaderPart[] {new ShaderPart("./resources/shaders/text/text.vert"),
+				// new ShaderPart("./resources/shaders/text/text.geo"),
+				new ShaderPart("./resources/shaders/text/" + name + ".frag")});
 	}
 
 	public TextShader(String name) {

@@ -10,7 +10,9 @@ import lu.pcy113.pdr.engine.scene.Scene;
 import lu.pcy113.pdr.engine.scene.Scene2D;
 import lu.pcy113.pdr.engine.scene.Scene3D;
 
-public class SceneRenderLayer extends RenderLayer<GameEngine, Scene> {
+public class SceneRenderLayer
+		extends
+		RenderLayer<GameEngine, Scene> {
 
 	public SceneRenderLayer(String name, Scene target) {
 		super(name, target);
@@ -33,8 +35,7 @@ public class SceneRenderLayer extends RenderLayer<GameEngine, Scene> {
 			}
 		}
 
-		if (renderer != null)
-			renderer.render(cache, parent, this.target);
+		if (renderer != null) renderer.render(cache, parent, this.target);
 	}
 
 }

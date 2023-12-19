@@ -7,7 +7,9 @@ import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.impl.Renderable;
 
-public class PerfHistoryLayerMaterial extends Material {
+public class PerfHistoryLayerMaterial
+		extends
+		Material {
 
 	public static final String NAME = PerfHistoryLayerMaterial.class.getName();
 

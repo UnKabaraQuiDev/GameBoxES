@@ -23,7 +23,9 @@ import lu.pcy113.pdr.engine.objs.entity.components.TransformComponent;
 import lu.pcy113.pdr.engine.scene.Scene;
 import lu.pcy113.pdr.engine.scene.Scene3D;
 
-public class InstanceEmitterModelRenderer extends Renderer<Scene, InstanceEmitterModelComponent> {
+public class InstanceEmitterModelRenderer
+		extends
+		Renderer<Scene, InstanceEmitterModelComponent> {
 
 	public InstanceEmitterModelRenderer() {
 		super(InstanceEmitterModel.class);
@@ -32,24 +34,19 @@ public class InstanceEmitterModelRenderer extends Renderer<Scene, InstanceEmitte
 	@Override
 	public void render(CacheManager cache, Scene scene, InstanceEmitterModelComponent pec) {
 		InstanceEmitterModel pem = pec.getInstanceEmitterModel(cache);
-		if (pem == null)
-			return;
+		if (pem == null) return;
 
 		GlobalLogger.log(Level.INFO, "InstanceEmitterModel : " + pem.getId());
 
 		InstanceEmitter pe = cache.getInstanceEmitter(pem.getEmitter());
-		if (pe == null)
-			return;
+		if (pe == null) return;
 		Mesh mesh = pe.getParticleMesh();
-		if (mesh == null)
-			return;
+		if (mesh == null) return;
 
 		Material material = cache.getMaterial(mesh.getMaterial());
-		if (material == null)
-			return;
+		if (material == null) return;
 		Shader shader = cache.getShader(material.getShader());
-		if (shader == null)
-			return;
+		if (shader == null) return;
 
 		shader.bind();
 
@@ -59,8 +56,7 @@ public class InstanceEmitterModelRenderer extends Renderer<Scene, InstanceEmitte
 		// TransformComponent transform = null;
 		Object transformationMatrix = null;
 		if (!transforms.isEmpty())
-			transformationMatrix = ((TransformComponent) parent.getComponent(transforms.get(0))).getTransform()
-					.getMatrix();
+			transformationMatrix = ((TransformComponent) parent.getComponent(transforms.get(0))).getTransform().getMatrix();
 		else
 			transformationMatrix = new Matrix4f().identity();
 		if (scene != null) {
@@ -73,8 +69,7 @@ public class InstanceEmitterModelRenderer extends Renderer<Scene, InstanceEmitte
 
 		if (scene instanceof Scene3D) {
 			PointLightSurfaceComponent plsc = pec.getParent().getComponent(PointLightSurfaceComponent.class);
-			if (plsc != null)
-				plsc.bindLights(cache, ((Scene3D) scene).getLights(), material);
+			if (plsc != null) plsc.bindLights(cache, ((Scene3D) scene).getLights(), material);
 		}
 
 		material.bindProperties(cache, scene, shader);
@@ -86,8 +81,7 @@ public class InstanceEmitterModelRenderer extends Renderer<Scene, InstanceEmitte
 
 		pe.bind();
 
-		GL31.glDrawElementsInstanced(GL11.GL_TRIANGLES, mesh.getIndicesCount(), GL11.GL_UNSIGNED_INT, 0,
-				pe.getParticleCount());
+		GL31.glDrawElementsInstanced(GL11.GL_TRIANGLES, mesh.getIndicesCount(), GL11.GL_UNSIGNED_INT, 0, pe.getParticleCount());
 
 		GL11.glDisable(GL11.GL_BLEND);
 

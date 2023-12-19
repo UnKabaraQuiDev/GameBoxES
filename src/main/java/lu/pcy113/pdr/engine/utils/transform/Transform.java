@@ -6,13 +6,9 @@ public abstract class Transform<T> {
 
 	public abstract T updateMatrix();
 
-	public T getMatrix() {
-		return matrix;
-	}
+	public T getMatrix() { return matrix; }
 
-	public void setMatrix(T matrix) {
-		this.matrix = matrix;
-	}
+	public void setMatrix(T matrix) { this.matrix = matrix; }
 
 	public abstract Transform<T> clone();
 

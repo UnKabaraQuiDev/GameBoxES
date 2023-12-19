@@ -3,7 +3,9 @@ package lu.pcy113.pdr.client.game;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.material.ShaderPart;
 
-public class DiffuseShader extends Shader {
+public class DiffuseShader
+		extends
+		Shader {
 
 	public static final String NAME = "diffuse-1";
 
@@ -16,8 +18,7 @@ public class DiffuseShader extends Shader {
 	public static final String AMBIENT_COLOR = "ambient";
 
 	public DiffuseShader() {
-		super(NAME, new ShaderPart("./resources/shaders/diffuse/diffuse.vert"),
-				new ShaderPart("./resources/shaders/diffuse/diffuse.frag"));
+		super(NAME, new ShaderPart("./resources/shaders/diffuse/diffuse.vert"), new ShaderPart("./resources/shaders/diffuse/diffuse.frag"));
 	}
 
 	@Override

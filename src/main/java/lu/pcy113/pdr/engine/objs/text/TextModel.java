@@ -11,7 +11,10 @@ import lu.pcy113.pdr.engine.graph.material.text.TextShader;
 import lu.pcy113.pdr.engine.impl.Renderable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
 
-public class TextModel implements UniqueID, Renderable {
+public class TextModel
+		implements
+		UniqueID,
+		Renderable {
 
 	public static final String NAME = TextModel.class.getName();
 
@@ -64,8 +67,7 @@ public class TextModel implements UniqueID, Renderable {
 
 			nPos[j * 4 + 3] = new Vector3f((cx - 0.5f) * (charSize.x), (cy - 0.5f) * (charSize.y), 0);
 
-			System.out.println(" =================== " + i + " >> " + j + ": " + c + "(" + nPos[j * 3] + ", "
-					+ nPos[j * 3 + 1] + ")");
+			System.out.println(" =================== " + i + " >> " + j + ": " + c + "(" + nPos[j * 3] + ", " + nPos[j * 3 + 1] + ")");
 			j++;
 		}
 		// material.setProperty(TextShader.CHAR_SIZE, charSize);
@@ -81,21 +83,13 @@ public class TextModel implements UniqueID, Renderable {
 		return true;
 	}
 
-	public String getMaterial() {
-		return material;
-	}
+	public String getMaterial() { return material; }
 
-	public CharSequence getText() {
-		return text;
-	}
+	public CharSequence getText() { return text; }
 
-	public void setText(CharSequence text) {
-		this.text = text;
-	}
+	public void setText(CharSequence text) { this.text = text; }
 
 	@Override
-	public String getId() {
-		return name;
-	}
+	public String getId() { return name; }
 
 }

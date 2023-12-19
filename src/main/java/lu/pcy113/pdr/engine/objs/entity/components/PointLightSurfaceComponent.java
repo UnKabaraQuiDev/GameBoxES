@@ -7,12 +7,13 @@ import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.components.PointLightMaterialComponent;
 import lu.pcy113.pdr.engine.objs.entity.Component;
 
-public class PointLightSurfaceComponent extends Component {
+public class PointLightSurfaceComponent
+		extends
+		Component {
 
 	public void bindLights(CacheManager cache, List<LightComponent> lights, Material mat) {
 		PointLightMaterialComponent plm;
-		if ((plm = mat.getComponent(PointLightMaterialComponent.class)) == null)
-			return;
+		if ((plm = mat.getComponent(PointLightMaterialComponent.class)) == null) return;
 
 		int i = 0;
 		for (LightComponent lc : lights) {
@@ -21,8 +22,7 @@ public class PointLightSurfaceComponent extends Component {
 			} else {
 				continue;
 			}
-			if (i >= plm.getMaxLights())
-				break;
+			if (i >= plm.getMaxLights()) break;
 		}
 
 		mat.setProperty(plm.getLightCountName(), i);

@@ -5,7 +5,11 @@ import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.impl.Renderable;
 import lu.pcy113.pdr.engine.objs.entity.Component;
 
-public class GizmoComponent extends Component implements Renderable {
+public class GizmoComponent
+		extends
+		Component
+		implements
+		Renderable {
 
 	private String gizmoId;
 
@@ -17,20 +21,14 @@ public class GizmoComponent extends Component implements Renderable {
 		this.gizmoId = gizmoId;
 	}
 
-	public String getGizmoId() {
-		return this.gizmoId;
-	}
+	public String getGizmoId() { return this.gizmoId; }
 
-	public void setGizmoId(String gizmoId) {
-		this.gizmoId = gizmoId;
-	}
+	public void setGizmoId(String gizmoId) { this.gizmoId = gizmoId; }
 
 	public Gizmo getGizmo(CacheManager cache) {
 		return cache.getGizmo(this.gizmoId);
 	}
 
-	public void setGizmo(Gizmo gizmo) {
-		this.gizmoId = gizmo.getId();
-	}
+	public void setGizmo(Gizmo gizmo) { this.gizmoId = gizmo.getId(); }
 
 }

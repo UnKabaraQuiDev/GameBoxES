@@ -5,7 +5,11 @@ import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.impl.Renderable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
 
-public abstract class RenderLayer<K, O extends Renderable> implements Renderable, UniqueID, Cleanupable {
+public abstract class RenderLayer<K, O extends Renderable>
+		implements
+		Renderable,
+		UniqueID,
+		Cleanupable {
 
 	protected final String name;
 	protected boolean visible = true;
@@ -18,29 +22,18 @@ public abstract class RenderLayer<K, O extends Renderable> implements Renderable
 
 	public abstract void render(CacheManager cache, K parent);
 
-	public O getTarget() {
-		return target;
-	}
+	public O getTarget() { return target; }
 
-	public void setTarget(O target) {
-		this.target = target;
-	}
+	public void setTarget(O target) { this.target = target; }
 
-	public boolean isVisible() {
-		return visible;
-	}
+	public boolean isVisible() { return visible; }
 
-	public void setVisible(boolean visible) {
-		this.visible = visible;
-	}
+	public void setVisible(boolean visible) { this.visible = visible; }
 
 	@Override
-	public void cleanup() {
-	}
+	public void cleanup() {}
 
 	@Override
-	public String getId() {
-		return name;
-	}
+	public String getId() { return name; }
 
 }

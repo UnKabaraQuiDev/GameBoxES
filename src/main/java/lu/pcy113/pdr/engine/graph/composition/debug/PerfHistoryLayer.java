@@ -5,7 +5,9 @@ import java.util.LinkedList;
 import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.graph.composition.PassRenderLayer;
 
-public class PerfHistoryLayer extends PassRenderLayer {
+public class PerfHistoryLayer
+		extends
+		PassRenderLayer {
 
 	public static final String NAME = PerfHistoryLayer.class.getName();
 
@@ -32,30 +34,18 @@ public class PerfHistoryLayer extends PassRenderLayer {
 		this.timeRender.add(timeRender);
 		this.timeUpdate.add(timeUpdate);
 
-		if (this.deltaRender.size() > PerfHistoryLayerShader.MAX)
-			this.deltaRender.removeFirst();
-		if (this.deltaUpdate.size() > PerfHistoryLayerShader.MAX)
-			this.deltaUpdate.removeFirst();
-		if (this.timeRender.size() > PerfHistoryLayerShader.MAX)
-			this.timeRender.removeFirst();
-		if (this.timeUpdate.size() > PerfHistoryLayerShader.MAX)
-			this.timeUpdate.removeFirst();
+		if (this.deltaRender.size() > PerfHistoryLayerShader.MAX) this.deltaRender.removeFirst();
+		if (this.deltaUpdate.size() > PerfHistoryLayerShader.MAX) this.deltaUpdate.removeFirst();
+		if (this.timeRender.size() > PerfHistoryLayerShader.MAX) this.timeRender.removeFirst();
+		if (this.timeUpdate.size() > PerfHistoryLayerShader.MAX) this.timeUpdate.removeFirst();
 	}
 
-	public LinkedList<Double> getDeltaRender() {
-		return deltaRender;
-	}
+	public LinkedList<Double> getDeltaRender() { return deltaRender; }
 
-	public LinkedList<Double> getDeltaUpdate() {
-		return deltaUpdate;
-	}
+	public LinkedList<Double> getDeltaUpdate() { return deltaUpdate; }
 
-	public LinkedList<Double> getTimeRender() {
-		return timeRender;
-	}
+	public LinkedList<Double> getTimeRender() { return timeRender; }
 
-	public LinkedList<Double> getTimeUpdate() {
-		return timeUpdate;
-	}
+	public LinkedList<Double> getTimeUpdate() { return timeUpdate; }
 
 }

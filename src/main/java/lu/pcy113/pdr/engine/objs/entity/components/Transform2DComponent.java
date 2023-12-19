@@ -2,7 +2,9 @@ package lu.pcy113.pdr.engine.objs.entity.components;
 
 import lu.pcy113.pdr.engine.utils.transform.Transform2D;
 
-public class Transform2DComponent extends TransformComponent {
+public class Transform2DComponent
+		extends
+		TransformComponent {
 
 	private Transform2D transform;
 
@@ -15,12 +17,8 @@ public class Transform2DComponent extends TransformComponent {
 	}
 
 	@Override
-	public Transform2D getTransform() {
-		return this.transform;
-	}
+	public Transform2D getTransform() { return this.transform; }
 
-	public void setTransform(Transform2D transform) {
-		this.transform = transform;
-	}
+	public void setTransform(Transform2D transform) { this.transform = transform; }
 
 }

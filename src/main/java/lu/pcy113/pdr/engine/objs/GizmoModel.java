@@ -4,7 +4,10 @@ import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.impl.Renderable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
 
-public class GizmoModel implements UniqueID, Renderable {
+public class GizmoModel
+		implements
+		UniqueID,
+		Renderable {
 
 	public static final String NAME = GizmoModel.class.getName();
 
@@ -18,25 +21,15 @@ public class GizmoModel implements UniqueID, Renderable {
 		this.gizmo = gizmo;
 	}
 
-	public String getGizmo() {
-		return gizmo;
-	}
+	public String getGizmo() { return gizmo; }
 
-	public void setGizmo(String gizmo) {
-		this.gizmo = gizmo;
-	}
+	public void setGizmo(String gizmo) { this.gizmo = gizmo; }
 
-	public float getLineWidth() {
-		return lineWidth;
-	}
+	public float getLineWidth() { return lineWidth; }
 
-	public void setLineWidth(float lineWidth) {
-		this.lineWidth = lineWidth;
-	}
+	public void setLineWidth(float lineWidth) { this.lineWidth = lineWidth; }
 
 	@Override
-	public String getId() {
-		return name;
-	}
+	public String getId() { return name; }
 
 }

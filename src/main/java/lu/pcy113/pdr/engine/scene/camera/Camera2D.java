@@ -4,7 +4,9 @@ import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector2f;
 
-public class Camera2D extends Camera {
+public class Camera2D
+		extends
+		Camera {
 
 	protected Vector2f position;
 	protected Quaternionf rotation;
@@ -19,18 +21,14 @@ public class Camera2D extends Camera {
 		rotation.rotateLocalZ(z);
 	}
 
-	public Vector2f getPosition() {
-		return position;
-	}
+	public Vector2f getPosition() { return position; }
 
 	public Camera2D setPosition(Vector2f position) {
 		this.position = position;
 		return this;
 	}
 
-	public Quaternionf getRotation() {
-		return rotation;
-	}
+	public Quaternionf getRotation() { return rotation; }
 
 	public Camera2D setRotation(Quaternionf rotation) {
 		this.rotation = rotation;

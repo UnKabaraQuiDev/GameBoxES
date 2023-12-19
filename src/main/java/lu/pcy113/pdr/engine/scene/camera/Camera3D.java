@@ -6,7 +6,9 @@ import org.joml.Vector3f;
 
 import lu.pcy113.pdr.engine.GameEngine;
 
-public class Camera3D extends Camera {
+public class Camera3D
+		extends
+		Camera {
 
 	protected Vector3f position;
 	// protected float pitch = 0, yaw = 0, roll = 0;
@@ -67,22 +69,16 @@ public class Camera3D extends Camera {
 		return this;
 	}
 
-	public Vector3f getPosition() {
-		return position;
-	}
+	public Vector3f getPosition() { return position; }
 
 	public Camera3D setPosition(Vector3f position) {
 		this.position = position;
 		return this;
 	}
 
-	public Quaternionf getRotation() {
-		return rotation;
-	}
+	public Quaternionf getRotation() { return rotation; }
 
-	public void setRotation(Quaternionf rotation) {
-		this.rotation = rotation;
-	}
+	public void setRotation(Quaternionf rotation) { this.rotation = rotation; }
 
 	public Matrix4f updateMatrix() {
 		viewMatrix.identity();

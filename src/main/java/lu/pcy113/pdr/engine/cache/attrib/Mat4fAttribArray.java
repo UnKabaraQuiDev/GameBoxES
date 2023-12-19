@@ -7,7 +7,9 @@ import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL40;
 
-public class Mat4fAttribArray extends AttribArray {
+public class Mat4fAttribArray
+		extends
+		AttribArray {
 
 	private Matrix4f[] data;
 
@@ -36,8 +38,7 @@ public class Mat4fAttribArray extends AttribArray {
 		this.data = data;
 	}
 
-	public Mat4fAttribArray(String name, int index, int dataSize, Matrix4f[] data, int bufferType, boolean iStatic,
-			int divisor) {
+	public Mat4fAttribArray(String name, int index, int dataSize, Matrix4f[] data, int bufferType, boolean iStatic, int divisor) {
 		super(name, index, dataSize, bufferType, iStatic, divisor);
 		this.data = data;
 	}
@@ -94,13 +95,9 @@ public class Mat4fAttribArray extends AttribArray {
 	}
 
 	@Override
-	public int getLength() {
-		return data.length;
-	}
+	public int getLength() { return data.length; }
 
-	public Matrix4f[] getData() {
-		return data;
-	}
+	public Matrix4f[] getData() { return data; }
 
 	public Matrix4f get(int i) {
 		return data[i];

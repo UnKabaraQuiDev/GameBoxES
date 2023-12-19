@@ -5,15 +5,12 @@ public abstract class Component {
 	private Entity parent;
 
 	public boolean attach(Entity parent) {
-		if (this.parent != null)
-			return false;
+		if (this.parent != null) return false;
 		this.parent = parent;
 		return true;
 	}
 
-	public Entity getParent() {
-		return parent;
-	}
+	public Entity getParent() { return parent; }
 
 	@Override
 	public String toString() {

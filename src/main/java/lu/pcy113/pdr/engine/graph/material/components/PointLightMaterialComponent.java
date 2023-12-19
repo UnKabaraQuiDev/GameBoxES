@@ -1,6 +1,8 @@
 package lu.pcy113.pdr.engine.graph.material.components;
 
-public class PointLightMaterialComponent extends MaterialComponent {
+public class PointLightMaterialComponent
+		extends
+		MaterialComponent {
 
 	private String lightName, lightCountName;
 	private int maxLights;
@@ -11,16 +13,10 @@ public class PointLightMaterialComponent extends MaterialComponent {
 		this.maxLights = max;
 	}
 
-	public String getLightCountName() {
-		return lightCountName;
-	}
+	public String getLightCountName() { return lightCountName; }
 
-	public String getLightName() {
-		return lightName;
-	}
+	public String getLightName() { return lightName; }
 
-	public int getMaxLights() {
-		return maxLights;
-	}
+	public int getMaxLights() { return maxLights; }
 
 }

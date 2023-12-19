@@ -10,7 +10,10 @@ import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.logic.GameLogic;
 import lu.pcy113.pdr.engine.utils.DebugOptions;
 
-public class GameEngine implements Runnable, Cleanupable {
+public class GameEngine
+		implements
+		Runnable,
+		Cleanupable {
 
 	private final Window window;
 	private final AudioMaster audioMaster;
@@ -103,8 +106,7 @@ public class GameEngine implements Runnable, Cleanupable {
 				deltaFps--;
 			}
 
-			if (DEBUG.perfHistory)
-				DEBUG.perfHistory(this.cache, this, lUpdate, lRender, tUpdate, tRender);
+			if (DEBUG.perfHistory) DEBUG.perfHistory(this.cache, this, lUpdate, lRender, tUpdate, tRender);
 
 			initialTime = now;
 		}
@@ -125,21 +127,13 @@ public class GameEngine implements Runnable, Cleanupable {
 		this.cleanup();
 	}
 
-	public GameLogic getGameLogic() {
-		return this.gameLogic;
-	}
+	public GameLogic getGameLogic() { return this.gameLogic; }
 
-	public Window getWindow() {
-		return this.window;
-	}
+	public Window getWindow() { return this.window; }
 
-	public boolean isRunning() {
-		return this.running;
-	}
+	public boolean isRunning() { return this.running; }
 
-	public SharedCacheManager getCache() {
-		return this.cache;
-	}
+	public SharedCacheManager getCache() { return this.cache; }
 
 	@Override
 	public void cleanup() {

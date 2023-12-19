@@ -1,12 +1,13 @@
 package lu.pcy113.pdr.engine.utils;
 
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 import org.joml.Matrix3x2f;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 
-public final class PDRArrayUtils {
+public final class PDRUtils {
 
 	public static int[] intCountingUp(int start, int end) {
 		int[] in = new int[end - start];
@@ -96,6 +97,16 @@ public final class PDRArrayUtils {
 		for (int i = 0; i < transforms.length; i++)
 			t[i] = (Matrix3x2f) transforms[i];
 		return t;
+	}
+
+	public static byte[] toByteArray(ByteBuffer cb) {
+		int old = cb.position();
+		System.out.println("pos: " + old + " " + cb.remaining());
+		byte[] c = new byte[cb.remaining()];
+		cb.get(c);
+		System.out.println("cont: " + Arrays.toString(c));
+		cb.position(old);
+		return c;
 	}
 
 }

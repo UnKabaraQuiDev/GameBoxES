@@ -20,7 +20,11 @@ import lu.pcy113.pdr.engine.utils.transform.Transform;
 import lu.pcy113.pdr.engine.utils.transform.Transform2D;
 import lu.pcy113.pdr.engine.utils.transform.Transform3D;
 
-public class InstanceEmitter implements Renderable, Cleanupable, UniqueID {
+public class InstanceEmitter
+		implements
+		Renderable,
+		Cleanupable,
+		UniqueID {
 
 	public static final String NAME = InstanceEmitter.class.getName();
 
@@ -67,8 +71,7 @@ public class InstanceEmitter implements Renderable, Cleanupable, UniqueID {
 		mesh.storeAttribArray(this.instancesTransforms);
 		for (AttribArray a : this.instancesAttribs) {
 			if (mesh.getVbo().containsKey(a.getIndex())) {
-				GlobalLogger.log(Level.WARNING,
-						"Duplicate of index: " + a.getIndex() + " from " + a.getName() + ", in Mesh: " + name);
+				GlobalLogger.log(Level.WARNING, "Duplicate of index: " + a.getIndex() + " from " + a.getName() + ", in Mesh: " + name);
 				continue;
 			}
 			mesh.storeAttribArray(a);
@@ -78,8 +81,7 @@ public class InstanceEmitter implements Renderable, Cleanupable, UniqueID {
 
 		System.err.println(this.instancesTransforms);
 
-		GlobalLogger.log(Level.INFO,
-				"ParticleEmitter " + name + ": m:(" + mesh.getId() + " & " + mesh.getVbo() + "); c:" + count);
+		GlobalLogger.log(Level.INFO, "ParticleEmitter " + name + ": m:(" + mesh.getId() + " & " + mesh.getVbo() + "); c:" + count);
 	}
 
 	/**
@@ -127,24 +129,14 @@ public class InstanceEmitter implements Renderable, Cleanupable, UniqueID {
 	}
 
 	@Override
-	public String getId() {
-		return this.name;
-	}
+	public String getId() { return this.name; }
 
-	public int getParticleCount() {
-		return this.count;
-	}
+	public int getParticleCount() { return this.count; }
 
-	public Mesh getParticleMesh() {
-		return this.instanceMesh;
-	}
+	public Mesh getParticleMesh() { return this.instanceMesh; }
 
-	public AttribArray[] getParticleAttribs() {
-		return this.instancesAttribs;
-	}
+	public AttribArray[] getParticleAttribs() { return this.instancesAttribs; }
 
-	public AttribArray getParticleTransforms() {
-		return this.instancesTransforms;
-	}
+	public AttribArray getParticleTransforms() { return this.instancesTransforms; }
 
 }
