@@ -17,6 +17,7 @@ import lu.pcy113.pdr.engine.objs.GizmoModel;
 import lu.pcy113.pdr.engine.objs.InstanceEmitterModel;
 import lu.pcy113.pdr.engine.objs.Model;
 import lu.pcy113.pdr.engine.objs.PointLight;
+import lu.pcy113.pdr.engine.objs.UIModel;
 import lu.pcy113.pdr.engine.objs.text.TextModel;
 import lu.pcy113.pdr.engine.scene.Scene;
 
@@ -39,6 +40,7 @@ public class CacheManager
 	protected Map<String, InstanceEmitter> instanceEmitters;
 	protected Map<String, InstanceEmitterModel> instanceEmitterModels;
 	protected Map<String, Sound> sounds;
+	protected Map<String, UIModel> uiModels;
 
 	public CacheManager() {
 		this.meshes = new HashMap<>();
@@ -56,6 +58,7 @@ public class CacheManager
 		this.instanceEmitters = new HashMap<>();
 		this.instanceEmitterModels = new HashMap<>();
 		this.sounds = new HashMap<>();
+		this.uiModels = new HashMap<>();
 	}
 
 	@Override
@@ -101,6 +104,12 @@ public class CacheManager
 
 		// instanceEmitterModels.values().forEach(ParticleEmitterModel::cleanup);
 		this.instanceEmitterModels.clear();
+		
+		this.sounds.values().forEach(Sound::cleanup);
+		this.sounds.clear();
+		
+		//this.uiModels.values().forEach(UIModel::cleanup);
+		this.uiModels.clear();
 	}
 
 	public boolean addMesh(Mesh m) {
@@ -169,6 +178,12 @@ public class CacheManager
 	public boolean addInstanceEmitterModel(InstanceEmitterModel m) {
 		return this.instanceEmitterModels.putIfAbsent(m.getId(), m) == null;
 	}
+	public boolean addSound(Sound m) {
+		return this.sounds.putIfAbsent(m.getId(), m) == null;
+	}
+	public boolean addUIModel(UIModel m) {
+		return this.uiModels.putIfAbsent(m.getId(), m) == null;
+	}
 
 	public Mesh getMesh(String name) {
 		return this.meshes.get(name);
@@ -225,6 +240,14 @@ public class CacheManager
 	public InstanceEmitterModel getInstanceEmitterModel(String name) {
 		return this.instanceEmitterModels.get(name);
 	}
+	
+	public Sound getSound(String name) {
+		return this.sounds.get(name);
+	}
+	
+	public UIModel getUIModel(String name) {
+		return this.uiModels.get(name);
+	}
 
 	public Map<String, Mesh> getMeshes() { return this.meshes; }
 
@@ -268,9 +291,7 @@ public class CacheManager
 
 	public Map<String, InstanceEmitterModel> getInstanceEmitterModels() { return this.instanceEmitterModels; }
 
-	public void setInstanceEmitterModels(Map<String, InstanceEmitterModel> instanceEmitterModels) {
-		this.instanceEmitterModels = instanceEmitterModels;
-	}
+	public void setInstanceEmitterModels(Map<String, InstanceEmitterModel> instanceEmitterModels) {this.instanceEmitterModels = instanceEmitterModels;}
 
 	public Map<String, InstanceEmitter> getInstanceEmitters() { return this.instanceEmitters; }
 

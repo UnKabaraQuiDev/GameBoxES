@@ -12,5 +12,5 @@ uniform vec3 fgColor;
 
 void main() {
 	vec4 col = texture(txt1, texCoord);
-	fragColor = vec4(col.r*fgColor + col.g*bgColor, col.a);
+	fragColor = vec4(1, 0.2, 0.2, 1);//vec4(col.r*fgColor + col.g*bgColor, col.a);
 }

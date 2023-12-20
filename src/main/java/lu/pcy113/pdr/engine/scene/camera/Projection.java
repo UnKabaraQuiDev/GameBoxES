@@ -51,6 +51,7 @@ public class Projection {
 
 	public Matrix4f orthographicUpdateMatrix(int width, int height) {
 		return projMatrix.setOrthoSymmetric(width / size, height / size, near, far);
+		//return new Matrix4f().identity();
 		// return projMatrix.ortho(left*width/size, right*width/size,
 		// bottom*height/size, top*height/size, near, far);
 	}

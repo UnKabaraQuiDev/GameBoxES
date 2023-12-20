@@ -11,6 +11,7 @@ import lu.pcy113.pdr.engine.geom.instance.InstanceEmitter;
 import lu.pcy113.pdr.engine.objs.GizmoModel;
 import lu.pcy113.pdr.engine.objs.InstanceEmitterModel;
 import lu.pcy113.pdr.engine.objs.Model;
+import lu.pcy113.pdr.engine.objs.UIModel;
 import lu.pcy113.pdr.engine.objs.entity.Component;
 import lu.pcy113.pdr.engine.objs.entity.Entity;
 import lu.pcy113.pdr.engine.objs.entity.components.GizmoComponent;
@@ -20,6 +21,7 @@ import lu.pcy113.pdr.engine.objs.entity.components.InstanceEmitterModelComponent
 import lu.pcy113.pdr.engine.objs.entity.components.MeshComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.ModelComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.TextModelComponent;
+import lu.pcy113.pdr.engine.objs.entity.components.UIModelComponent;
 import lu.pcy113.pdr.engine.objs.text.TextModel;
 import lu.pcy113.pdr.engine.scene.Scene2D;
 
@@ -42,7 +44,8 @@ public class Scene2DRenderer
 		TextModelRenderer textModelRenderer = (TextModelRenderer) cache.getRenderer(TextModel.NAME);
 		InstanceEmitterRenderer instanceEmitterRenderer = (InstanceEmitterRenderer) cache.getRenderer(InstanceEmitter.NAME);
 		InstanceEmitterModelRenderer instanceEmitterModelRenderer = (InstanceEmitterModelRenderer) cache.getRenderer(InstanceEmitterModel.NAME);
-
+		UIModelRenderer uiModelRenderer = (UIModelRenderer) cache.getRenderer(UIModel.NAME);
+		
 		for (Entity e : scene.getEntities().values()) {
 			if (!e.isActive()) continue;
 
@@ -61,6 +64,8 @@ public class Scene2DRenderer
 				instanceEmitterRenderer.render(cache, scene, (InstanceEmitterComponent) c);
 			} else if ((c = e.getComponent(TextModelComponent.class)) != null) {
 				textModelRenderer.render(cache, scene, (TextModelComponent) c);
+			}else if ((c = e.getComponent(UIModelComponent.class)) != null) {
+				uiModelRenderer.render(cache, scene, (UIModelComponent) c);
 			}
 		}
 	};
