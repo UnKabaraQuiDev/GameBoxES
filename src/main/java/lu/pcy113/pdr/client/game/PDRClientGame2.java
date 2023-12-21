@@ -239,6 +239,9 @@ public class PDRClientGame2
 		uiCam.setProjection(new Projection(0.01f, 1000f, -1, 1, -1, 1));
 		uiCam.setRotation(new Quaternionf().lookAlong(new Vector3f(0, 0, -1), new Vector3f(0, 1, 0)));
 		uiCam.updateMatrix();
+		
+		int[] numbers = {1, 2, 3};
+        System.out.println(numbers[3]); // Accessing an element out of bounds
 	}
 
 	float GX = 0;
