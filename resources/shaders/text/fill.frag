@@ -50,5 +50,5 @@ void main() {
     vec4 fontColor = texture(raster, finalUV.xy*size);
     
     // Output the color
-    fragColor = new vec4(fontColor.rgb, 1);
+    fragColor = new vec4(fontColor.r, fontColor.g, fontColor.b, 1);
 }

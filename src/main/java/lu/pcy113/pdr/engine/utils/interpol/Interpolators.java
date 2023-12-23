@@ -185,6 +185,78 @@ public enum Interpolators
 				return (float) (0.5 * (Math.sqrt(1 - (2 * x - 2) * (2 * x - 2)) + 1));
 			}
 		}
+	},
+
+	BOUNCE_IN {
+		@Override
+		public float evaluate(float x) {
+			x = Math.clamp(0, 1, x);
+			return 1 - BOUNCE_OUT.evaluate(1 - x);
+		}
+	},
+
+	BOUNCE_OUT {
+		@Override
+		public float evaluate(float x) {
+			x = Math.clamp(0, 1, x);
+			if (x < 1 / 2.75) {
+				return 7.5625f * x * x;
+			} else if (x < 2 / 2.75) {
+				x -= 1.5f / 2.75f;
+				return 7.5625f * x * x + 0.75f;
+			} else if (x < 2.5 / 2.75) {
+				x -= 2.25f / 2.75f;
+				return 7.5625f * x * x + 0.9375f;
+			} else {
+				x -= 2.625f / 2.75f;
+				return 7.5625f * x * x + 0.984375f;
+			}
+		}
+	},
+
+	BOUNCE_IN_OUT {
+		@Override
+		public float evaluate(float x) {
+			x = Math.clamp(0, 1, x);
+			if (x < 0.5f) {
+				return 0.5f * BOUNCE_IN.evaluate(x * 2);
+			} else {
+				return 0.5f * BOUNCE_OUT.evaluate(x * 2 - 1) + 0.5f;
+			}
+		}
+	},
+
+	BACK_IN {
+		@Override
+		public float evaluate(float x) {
+			x = Math.clamp(0, 1, x);
+			float s = 1.70158f;
+			return x * x * ((s + 1) * x - s);
+		}
+	},
+
+	BACK_OUT {
+		@Override
+		public float evaluate(float x) {
+			x = Math.clamp(0, 1, x);
+			float s = 1.70158f;
+			x -= 1;
+			return x * x * ((s + 1) * x + s) + 1;
+		}
+	},
+
+	BACK_IN_OUT {
+		@Override
+		public float evaluate(float x) {
+			x = Math.clamp(0, 1, x);
+			float s = 1.70158f;
+			x *= 2;
+			if (x < 1) {
+				return 0.5f * (x * x * (((s *= 1.525f) + 1) * x - s));
+			} else {
+				return 0.5f * ((x -= 2) * x * (((s *= 1.525f) + 1) * x + s) + 2);
+			}
+		}
 	};
 
 }

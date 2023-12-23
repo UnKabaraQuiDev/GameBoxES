@@ -2,7 +2,7 @@ package lu.pcy113.pdr.engine.anim;
 
 import lu.pcy113.pdr.engine.utils.interpol.Interpolator;
 
-public abstract class CallbackValueInterpolation<T, D extends Number> {
+public abstract class CallbackValueInterpolation<T, D> {
 
 	public T object;
 	public D start, end;

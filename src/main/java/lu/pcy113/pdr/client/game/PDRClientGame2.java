@@ -7,11 +7,12 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFWGamepadState;
-import org.lwjgl.opengl.GL40;
+import org.lwjgl.opengl.GL11;
 
 import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pdr.client.game.options.KeyOptions;
 import lu.pcy113.pdr.engine.GameEngine;
+import lu.pcy113.pdr.engine.anim.CallbackValueInterpolation;
 import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.geom.Mesh;
@@ -55,6 +56,7 @@ import lu.pcy113.pdr.engine.scene.Scene3D;
 import lu.pcy113.pdr.engine.scene.camera.Camera;
 import lu.pcy113.pdr.engine.scene.camera.Camera3D;
 import lu.pcy113.pdr.engine.scene.camera.Projection;
+import lu.pcy113.pdr.engine.utils.interpol.Interpolators;
 import lu.pcy113.pdr.engine.utils.transform.Transform3D;
 
 public class PDRClientGame2
@@ -77,6 +79,8 @@ public class PDRClientGame2
 
 	Compositor compositor;
 
+	CallbackValueInterpolation<BackgroundMaterial, Vector4f> genMatInterpolation;
+
 	final static String FG_COLOR = "fgColor", BG_COLOR = "bgColor";
 
 	public PDRClientGame2() {
@@ -97,151 +101,162 @@ public class PDRClientGame2
 				new ShaderPart("./resources/shaders/main/main.vert")) {
 			@Override
 			public void createUniforms() {
-				createUniform(Shader.PROJECTION_MATRIX);
-				createUniform(Shader.VIEW_MATRIX);
-				createUniform(Shader.TRANSFORMATION_MATRIX);
+				this.createUniform(Shader.PROJECTION_MATRIX);
+				this.createUniform(Shader.VIEW_MATRIX);
+				this.createUniform(Shader.TRANSFORMATION_MATRIX);
 			}
 		};
-		cache.addShader(shader1);
+		this.cache.addShader(shader1);
 
 		Shader partShader = new Shader("partMain", true, new ShaderPart("./resources/shaders/main/uv.frag"),
 				new ShaderPart("./resources/shaders/parts/main.vert")) {
 			@Override
 			public void createUniforms() {
-				createUniform(Shader.PROJECTION_MATRIX);
-				createUniform(Shader.VIEW_MATRIX);
-				createUniform(Shader.TRANSFORMATION_MATRIX);
+				this.createUniform(Shader.PROJECTION_MATRIX);
+				this.createUniform(Shader.VIEW_MATRIX);
+				this.createUniform(Shader.TRANSFORMATION_MATRIX);
 			}
 		};
-		cache.addShader(partShader);
+		this.cache.addShader(partShader);
 
 		Material partMat = new Material("parts", partShader);
-		cache.addMaterial(partMat);
+		this.cache.addMaterial(partMat);
 		Mesh partCube = ObjLoader.loadMesh("partCube", partMat.getId(), "./resources/models/cube.obj");
-		cache.addMesh(partCube);
-		parts = new InstanceEmitter("parts", partCube, 200, new Transform3D());
-		parts.update((part) -> {
+		this.cache.addMesh(partCube);
+		this.parts = new InstanceEmitter("parts", partCube, 200, new Transform3D());
+		this.parts.update((part) -> {
 			((Transform3D) part.getTransform())
-					.setTranslation(new Vector3f((float) Math.cos(2 * Math.PI / parts.getParticleCount() * part.getIndex()),
-							(float) Math.sin(2 * Math.PI / parts.getParticleCount() * part.getIndex()),
-							(float) Math.sin(2 * Math.PI / parts.getParticleCount() * part.getIndex() * 5)))
+					.setTranslation(new Vector3f((float) Math.cos(2 * Math.PI / this.parts.getParticleCount() * part.getIndex()),
+							(float) Math.sin(2 * Math.PI / this.parts.getParticleCount() * part.getIndex()),
+							(float) Math.sin(2 * Math.PI / this.parts.getParticleCount() * part.getIndex() * 5)))
 					.setScale(new Vector3f(0.05f, 0.05f, 0.05f)).updateMatrix();
 		});
-		cache.addInstanceEmitter(parts);
+		this.cache.addInstanceEmitter(this.parts);
 
 		Material mat = new Material("main", shader1);
-		cache.addMaterial(mat);
+		this.cache.addMaterial(mat);
 		Mesh plane = ObjLoader.loadMesh("chest", mat.getId(), "./resources/models/plane.obj");
-		cache.addMesh(plane);
+		this.cache.addMesh(plane);
 		this.plane = new Model("plane", plane);
-		cache.addModel(this.plane);
-		partsModel = new InstanceEmitterModel("parts", parts);
-		cache.addInstanceEmitterModel(partsModel);
+		this.cache.addModel(this.plane);
+		this.partsModel = new InstanceEmitterModel("parts", this.parts);
+		this.cache.addInstanceEmitterModel(this.partsModel);
 
 		TextMesh textMesh = new TextMesh(64);
-		cache.addMesh(textMesh);
+		this.cache.addMesh(textMesh);
 		FillTextShader textShader = new FillTextShader();
-		cache.addShader(textShader);
-		Texture rasterTxt = new Texture("raster", "./resources/textures/fonts/font1.png", GL40.GL_NEAREST);
-		cache.addTexture(rasterTxt);
-		Texture rasterIndexTxt = new Texture("rasterIndex", "./resources/textures/fonts/font1indices.png", GL40.GL_NEAREST);
-		cache.addTexture(rasterIndexTxt);
-		textMaterial = new FillTextMaterial("fill", textShader, "raster", "rasterIndex", new Vector4f(0.2f, 0.5f, 0.8f, 1));
-		cache.addMaterial(textMaterial);
-		TextModel txtModel = new TextModel("text", textMaterial, "abcdefghijklmnop", new Vector2f(0.2f));
-		cache.addTextModel(txtModel);
+		this.cache.addShader(textShader);
+		Texture rasterTxt = new Texture("raster", "./resources/textures/fonts/font1.png", GL11.GL_NEAREST);
+		this.cache.addTexture(rasterTxt);
+		Texture rasterIndexTxt = new Texture("rasterIndex", "./resources/textures/fonts/font1indices.png", GL11.GL_NEAREST);
+		this.cache.addTexture(rasterIndexTxt);
+		this.textMaterial = new FillTextMaterial("fill", textShader, "raster", "rasterIndex", new Vector4f(0.2f, 0.5f, 0.8f, 1));
+		this.cache.addMaterial(this.textMaterial);
+		TextModel txtModel = new TextModel("text", this.textMaterial, "abcdefghijklmnop", new Vector2f(0.2f));
+		this.cache.addTextModel(txtModel);
 
 		this.scene = new Scene3D("main-scene");
 		// this.scene.addEntity("mesh", new Entity(new
 		// MeshComponent(partCube))).setActive(false);
-		planeEntity = this.scene.addEntity("model", new Entity(new ModelComponent(this.plane),
+		this.planeEntity = this.scene.addEntity("model", new Entity(new ModelComponent(this.plane),
 				new Transform3DComponent(new Transform3D(new Vector3f(1, 1, 1), new Quaternionf(), new Vector3f(0.2f)))));
-		partsModelEntity = this.scene.addEntity("parts", new Entity(new InstanceEmitterModelComponent(partsModel), new Transform3DComponent()));
-		txtModelEntity = this.scene.addEntity("text", new Entity(new TextModelComponent(txtModel), new Transform3DComponent()));
+		this.partsModelEntity = this.scene.addEntity("parts",
+				new Entity(new InstanceEmitterModelComponent(this.partsModel), new Transform3DComponent()));
+		this.txtModelEntity = this.scene.addEntity("text", new Entity(new TextModelComponent(txtModel), new Transform3DComponent()));
 
 		Gizmo gizmoXYZ = ObjLoader.loadGizmo("gizmoXYZ", "./resources/models/gizmos/grid_xyz.obj");
-		cache.addGizmo(gizmoXYZ);
+		this.cache.addGizmo(gizmoXYZ);
 		GizmoModel gizmoXYZModel = new GizmoModel("gizmoXYZ", gizmoXYZ.getId());
-		cache.addGizmoModel(gizmoXYZModel);
+		this.cache.addGizmoModel(gizmoXYZModel);
 		this.scene.addEntity("gizmoXYZ", new Entity(new GizmoModelComponent(gizmoXYZModel), new Transform3DComponent()));
 
-		cache.addRenderer(new Scene3DRenderer());
-		cache.addRenderer(new Scene2DRenderer());
-		cache.addRenderer(new ModelRenderer());
-		cache.addRenderer(new GizmoModelRenderer());
-		cache.addRenderer(new MeshRenderer());
-		cache.addRenderer(new InstanceEmitterModelRenderer());
-		cache.addRenderer(new InstanceEmitterRenderer());
-		cache.addRenderer(new TextModelRenderer());
-		cache.addRenderer(new UIModelRenderer());
+		this.cache.addRenderer(new Scene3DRenderer());
+		this.cache.addRenderer(new Scene2DRenderer());
+		this.cache.addRenderer(new ModelRenderer());
+		this.cache.addRenderer(new GizmoModelRenderer());
+		this.cache.addRenderer(new MeshRenderer());
+		this.cache.addRenderer(new InstanceEmitterModelRenderer());
+		this.cache.addRenderer(new InstanceEmitterRenderer());
+		this.cache.addRenderer(new TextModelRenderer());
+		this.cache.addRenderer(new UIModelRenderer());
 
-		SceneRenderLayer sceneRender = new SceneRenderLayer("scene", scene);
-		cache.addRenderLayer(sceneRender);
+		SceneRenderLayer sceneRender = new SceneRenderLayer("scene", this.scene);
+		this.cache.addRenderLayer(sceneRender);
 
 		BackgroundShader genShader = new BackgroundShader(0);
-		cache.addShader(genShader);
-		genMat = new BackgroundMaterial(0, genShader);
-		cache.addMaterial(genMat);
-		GenerateRenderLayer genLayer = new GenerateRenderLayer("gen", genMat.getId());
-		cache.addRenderLayer(genLayer);
+		this.cache.addShader(genShader);
+		this.genMat = new BackgroundMaterial(0, genShader);
+		this.cache.addMaterial(this.genMat);
+		GenerateRenderLayer genLayer = new GenerateRenderLayer("gen", this.genMat.getId());
+		this.cache.addRenderLayer(genLayer);
 
-		ui = new Scene2D("ui", Camera.orthographicCamera3D());
-		cache.addScene(ui);
+		this.ui = new Scene2D("ui", Camera.orthographicCamera3D());
+		this.cache.addScene(this.ui);
 		Shader slotShader = new Shader("slot", true, new ShaderPart("./resources/shaders/ui/plain.vert"),
 				new ShaderPart("./resources/shaders/ui/txt1.frag")) {
 			@Override
 			public void createUniforms() {
-				createUniform(Shader.TRANSFORMATION_MATRIX);
-				createUniform(Shader.VIEW_MATRIX);
-				createUniform(Shader.PROJECTION_MATRIX);
+				this.createUniform(Shader.TRANSFORMATION_MATRIX);
+				this.createUniform(Shader.VIEW_MATRIX);
+				this.createUniform(Shader.PROJECTION_MATRIX);
 
-				createUniform(BG_COLOR);
-				createUniform(FG_COLOR);
+				this.createUniform(BG_COLOR);
+				this.createUniform(FG_COLOR);
 			}
 		};
-		cache.addShader(slotShader);
+		this.cache.addShader(slotShader);
 		Texture slotTexture = new Texture("slot", "./resources/textures/ui/single_slot.png");
-		cache.addTexture(slotTexture);
+		this.cache.addTexture(slotTexture);
 		Material slotMaterial = new TextureMaterial("slot", slotShader, new HashMap<String, String>() {
 			{
-				put("txt1", slotTexture.getId());
+				this.put("txt1", slotTexture.getId());
 			}
 		});
-		cache.addMaterial(slotMaterial);
+		this.cache.addMaterial(slotMaterial);
 		Mesh slot = ObjLoader.loadMesh("slot", slotMaterial.getId(), "./resources/models/cube.obj");
-		cache.addMesh(slot);
-		slotModel = new UIModel("slot", slot);
-		cache.addUIModel(slotModel);
-		slotModelEntity = ui.addEntity("slot", new Entity(new UIModelComponent(slotModel), new Transform2DComponent()));
+		this.cache.addMesh(slot);
+		this.slotModel = new UIModel("slot", slot);
+		this.cache.addUIModel(this.slotModel);
+		this.slotModelEntity = this.ui.addEntity("slot", new Entity(new UIModelComponent(this.slotModel), new Transform2DComponent()));
 
-		SceneRenderLayer uiRender = new SceneRenderLayer("ui", ui);
-		cache.addRenderLayer(uiRender);
+		SceneRenderLayer uiRender = new SceneRenderLayer("ui", this.ui);
+		this.cache.addRenderLayer(uiRender);
 
-		compositor = new Compositor();
-		compositor.addRenderLayer(0, genLayer);
-		compositor.addRenderLayer(1, sceneRender);
-		compositor.addRenderLayer(2, uiRender);
+		this.compositor = new Compositor();
+		this.compositor.addRenderLayer(0, genLayer);
+		this.compositor.addRenderLayer(1, sceneRender);
+		this.compositor.addRenderLayer(2, uiRender);
 
-		scene.getCamera().getProjection().setPerspective(true);
-		engine.getWindow().onResize((w, h) -> {
-			scene.getCamera().getProjection().update(w, h);
-			ui.getCamera().getProjection().update(w, h);
+		this.scene.getCamera().getProjection().setPerspective(true);
+		this.engine.getWindow().onResize((w, h) -> {
+			this.scene.getCamera().getProjection().update(w, h);
+			this.ui.getCamera().getProjection().update(w, h);
 		});
-		engine.getWindow().setBackground(new Vector4f(1, 1, 1, 1));
+		this.engine.getWindow().setBackground(new Vector4f(1, 1, 1, 1));
 
-		Camera3D cam = (Camera3D) scene.getCamera();
+		Camera3D cam = (Camera3D) this.scene.getCamera();
 		cam.getProjection().setPerspective(true);
 		cam.getProjection().setFov((float) Math.toRadians(60));
 		// cam.setPosition(new Vector3f(5, 0, 0)).updateMatrix();
-		
-		Camera3D uiCam = (Camera3D) ui.getCamera();
+
+		Camera3D uiCam = (Camera3D) this.ui.getCamera();
 		uiCam.setPosition(new Vector3f(0, 0, 1));
 		uiCam.setProjection(new Projection(0.01f, 1000f, -1, 1, -1, 1));
 		uiCam.setRotation(new Quaternionf().lookAlong(new Vector3f(0, 0, -1), new Vector3f(0, 1, 0)));
 		uiCam.updateMatrix();
-		
-		int[] numbers = {1, 2, 3};
-        System.out.println(numbers[3]); // Accessing an element out of bounds
+
+		this.genMatInterpolation = new CallbackValueInterpolation<BackgroundMaterial, Vector4f>(this.genMat, new Vector4f(0, 1, 0, 1),
+				new Vector4f(1, 0, 1, 1), Interpolators.BOUNCE_IN_OUT) {
+			@Override
+			public Vector4f evaluate(float progress) {
+				return new Vector4f(this.start).lerp(this.end, progress);
+			}
+
+			@Override
+			public void callback(BackgroundMaterial object, Vector4f value) {
+				object.setColor(value);
+			}
+		};
 	}
 
 	float GX = 0;
@@ -255,50 +270,52 @@ public class PDRClientGame2
 
 	@Override
 	public void input(float dTime) {
-		if (engine.getWindow().isJoystickPresent()) {
-			if (engine.getWindow().updateGamepad(0)) {
-				GLFWGamepadState gps = engine.getWindow().getGamepad();
+		if (this.engine.getWindow().isJoystickPresent()) {
+			if (this.engine.getWindow().updateGamepad(0)) {
+				GLFWGamepadState gps = this.engine.getWindow().getGamepad();
 
-				float ax = applyThreshold(gps.axes(0), 0.01f);
-				float ay = applyThreshold(gps.axes(1), 0.01f) * (-1);
+				float ax = this.applyThreshold(gps.axes(0), 0.01f);
+				float ay = this.applyThreshold(gps.axes(1), 0.01f) * (-1);
 
-				float bx = applyThreshold(gps.axes(2), 0.01f);
-				float by = applyThreshold(gps.axes(3), 0.01f) * (-1);
+				float bx = this.applyThreshold(gps.axes(2), 0.01f);
+				float by = this.applyThreshold(gps.axes(3), 0.01f) * (-1);
 
-				Camera3D cam = (Camera3D) scene.getCamera();
+				Camera3D cam = (Camera3D) this.scene.getCamera();
 
-				cam.roll(by * camRotSpeed);
+				cam.roll(by * this.camRotSpeed);
 
-				float cy = (engine.getWindow().isKeyPressed(KeyOptions.FORWARD) ? 1 : 0)
-						- (engine.getWindow().isKeyPressed(KeyOptions.BACKWARD) ? 1 : 0);
-				float cx = (engine.getWindow().isKeyPressed(KeyOptions.RIGHT) ? 1 : 0) - (engine.getWindow().isKeyPressed(KeyOptions.LEFT) ? 1 : 0);
+				float cy = (this.engine.getWindow().isKeyPressed(KeyOptions.FORWARD) ? 1 : 0)
+						- (this.engine.getWindow().isKeyPressed(KeyOptions.BACKWARD) ? 1 : 0);
+				float cx = (this.engine.getWindow().isKeyPressed(KeyOptions.RIGHT) ? 1 : 0)
+						- (this.engine.getWindow().isKeyPressed(KeyOptions.LEFT) ? 1 : 0);
 
 				System.err.println(ax + " " + ay + " : " + bx + " " + by + " : " + cx + " " + cy);
 
-				cam.move(cx, cy, camSpeed);
+				cam.move(cx, cy, this.camSpeed);
 
-				cam.move(ax, ay, bx, by, camSpeed, camRotSpeed);
+				cam.move(ax, ay, bx, by, this.camSpeed, this.camRotSpeed);
 
-				Camera3D uiCam = (Camera3D) ui.getCamera();
-				//uiCam.setRotation(uiCam.getRotation().rotateXYZ(0.1f, 0.1f, 0.1f));
+				Camera3D uiCam = (Camera3D) this.ui.getCamera();
+				// uiCam.setRotation(uiCam.getRotation().rotateXYZ(0.1f, 0.1f, 0.1f));
 				uiCam.updateMatrix();
-				
+
 				// uiCam.getProjection().setSize((float) (org.joml.Math.clamp(0.5f, 150f,
 				// cam.getProjection().getSize()+engine.getWindow().getScroll().y*scrollSpeed)));
 				// uiCam.getProjection().setSize(GX%1*150f);
-				//System.out.println("NEW: " + uiCam.getProjection().getSize());
-				//uiCam.getProjection().update();
-				//uiCam.move(ax, ay, bx, by, camSpeed, camRotSpeed).updateMatrix();
+				// System.out.println("NEW: " + uiCam.getProjection().getSize());
+				// uiCam.getProjection().update();
+				// uiCam.move(ax, ay, bx, by, camSpeed, camRotSpeed).updateMatrix();
 
 				System.err.println(cam.getViewMatrix());
 
 				// cam.getRotation().rotateZ(0.1f);
 				cam.updateMatrix();
 
-				((Transform3D) planeEntity.getComponent(Transform3DComponent.class).getTransform()).rotate(0.01f, 0.01f, 0.01f).updateMatrix();
+				this.planeEntity.getComponent(Transform3DComponent.class).getTransform().rotate(0.01f, 0.01f, 0.01f).updateMatrix();
 
-				genMat.setColor(new Vector4f(GX % 1, GX % 1, GX % 1, 1));
-				engine.getWindow().setBackground(new Vector4f(GX % 1, GX % 1, GX % 1, 1));
+				// this.genMat.setColor(new Vector4f(this.GX % 1, this.GX % 1, this.GX % 1, 1));
+				// this.engine.getWindow().setBackground(new Vector4f(this.GX % 1, this.GX % 1,
+				// this.GX % 1, 1));
 
 				// cam.getProjection().setSize((float) (org.joml.Math.clamp(0, 150,
 				// cam.getProjection().getSize()+engine.getWindow().getScroll().y*scrollSpeed)));
@@ -309,38 +326,48 @@ public class PDRClientGame2
 
 	@Override
 	public void update(float dTime) {
-		GX += 0.01f;
+		this.GX += 0.01f;
 
-		/*cache.getMaterial(cache.getMesh(slotModel.getMesh()).getMaterial()).setProperty(BG_COLOR,
-				new Vector3f(0.112f / 255, 0.112f / 255, 0.112f / 255));
-		cache.getMaterial(cache.getMesh(slotModel.getMesh()).getMaterial()).setProperty(FG_COLOR,
-				new Vector3f(1 * (GX % 3) / 3, 1 * ((GX + 1) % 3) / 3, 1 * ((GX + 2) % 3) / 3));
-		cache.getMaterial(cache.getMesh(slotModel.getMesh()).getMaterial() + "2").setProperty(BG_COLOR,
-				new Vector3f(0.112f / 255, 0.112f / 255, 0.112f / 255));
-		cache.getMaterial(cache.getMesh(slotModel.getMesh()).getMaterial() + "2").setProperty(FG_COLOR,
-				new Vector3f(1 * (GX % 3) / 3, 1 * ((GX + 1) % 3) / 3, 1 * ((GX + 2) % 3) / 3));*/
-		
-		//slotModelEntity.getComponent(Transform3DComponent.class).getTransform().rotate(GX%1, GX%1, GX%1).updateMatrix();
-		slotModelEntity.getComponent(Transform2DComponent.class).getTransform().rotate((GX%1)*0.01f).updateMatrix();
-		//slotModelEntity.setActive(false);
-		
-		textMaterial.setColor(new Vector4f(GX % 1, GX % 1, GX % 1, 1));
-		textMaterial.setProperty(TextShader.SIZE, (float) GX % 1);
+		/*
+		 * cache.getMaterial(cache.getMesh(slotModel.getMesh()).getMaterial()).
+		 * setProperty(BG_COLOR, new Vector3f(0.112f / 255, 0.112f / 255, 0.112f /
+		 * 255)); cache.getMaterial(cache.getMesh(slotModel.getMesh()).getMaterial()).
+		 * setProperty(FG_COLOR, new Vector3f(1 * (GX % 3) / 3, 1 * ((GX + 1) % 3) / 3,
+		 * 1 * ((GX + 2) % 3) / 3));
+		 * cache.getMaterial(cache.getMesh(slotModel.getMesh()).getMaterial() +
+		 * "2").setProperty(BG_COLOR, new Vector3f(0.112f / 255, 0.112f / 255, 0.112f /
+		 * 255)); cache.getMaterial(cache.getMesh(slotModel.getMesh()).getMaterial() +
+		 * "2").setProperty(FG_COLOR, new Vector3f(1 * (GX % 3) / 3, 1 * ((GX + 1) % 3)
+		 * / 3, 1 * ((GX + 2) % 3) / 3));
+		 */
 
-		/*((Transform2D) slotModelEntity.getComponent(Transform2DComponent.class).getTransform())
-				.translateMul(new Vector2f((float) Math.cos(2 * Math.PI * (GX % 1)), (float) Math.sin(2 * Math.PI * (GX % 1))).normalize().mul(0.1f),
-						0.95f, 0.95f)
-				.rotate(-5).updateMatrix();*/
+		this.genMatInterpolation.set(this.GX % 1);
 
-		partsModel.getEmitter(cache).update((part) -> {
+		// slotModelEntity.getComponent(Transform3DComponent.class).getTransform().rotate(GX%1,
+		// GX%1, GX%1).updateMatrix();
+		this.slotModelEntity.getComponent(Transform2DComponent.class).getTransform().rotate((this.GX % 1) * 0.01f).updateMatrix();
+		// slotModelEntity.setActive(false);
+
+		this.textMaterial.setColor(new Vector4f(this.GX % 1, this.GX % 1, this.GX % 1, 1));
+		this.textMaterial.setProperty(TextShader.SIZE, this.GX % 1);
+
+		/*
+		 * ((Transform2D)
+		 * slotModelEntity.getComponent(Transform2DComponent.class).getTransform())
+		 * .translateMul(new Vector2f((float) Math.cos(2 * Math.PI * (GX % 1)), (float)
+		 * Math.sin(2 * Math.PI * (GX % 1))).normalize().mul(0.1f), 0.95f, 0.95f)
+		 * .rotate(-5).updateMatrix();
+		 */
+
+		this.partsModel.getEmitter(this.cache).update((part) -> {
 			((Transform3D) part.getTransform()).rotate(0, 0, 0.01f).updateMatrix();
 		});
-		((Transform3D) partsModelEntity.getComponent(Transform3DComponent.class).getTransform()).rotate(0, 0, -0.1f).updateMatrix();
+		this.partsModelEntity.getComponent(Transform3DComponent.class).getTransform().rotate(0, 0, -0.1f).updateMatrix();
 	}
 
 	@Override
 	public void render(float dTime) {
-		compositor.render(engine.getCache(), engine);
+		this.compositor.render(this.engine.getCache(), this.engine);
 	}
 
 }
