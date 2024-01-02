@@ -1,5 +1,7 @@
 package lu.pcy113.pdr.engine.geom.instance;
 
+import java.util.Arrays;
+
 import lu.pcy113.pdr.engine.utils.transform.Transform;
 
 public class Instance {
@@ -15,15 +17,13 @@ public class Instance {
 	}
 
 	public int getIndex() { return this.index; }
-
 	public Transform getTransform() { return this.transform; }
-
 	public Object[] getBuffers() { return this.buffers; }
-
 	public void setTransform(Transform transform) { this.transform = transform; }
 
 	public void setBuffers(Object[] buffers) {
-		if (this.buffers.length != buffers.length) return;
+		if (this.buffers.length != buffers.length)
+			return;
 		this.buffers = buffers;
 	}
 

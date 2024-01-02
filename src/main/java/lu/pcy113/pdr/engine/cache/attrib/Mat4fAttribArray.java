@@ -9,7 +9,7 @@ import org.lwjgl.opengl.GL40;
 
 public class Mat4fAttribArray
 		extends
-		AttribArray {
+		AttribArray implements MultiAttribArray {
 
 	private Matrix4f[] data;
 
@@ -46,12 +46,6 @@ public class Mat4fAttribArray
 	@Override
 	public void init() {
 		GL40.glBufferData(bufferType, toFlatArray(), iStatic ? GL40.GL_STATIC_DRAW : GL40.GL_DYNAMIC_DRAW);
-		// GL40.glBufferData(bufferType, toFlatArray(), iStatic ? GL40.GL_STATIC_DRAW :
-		// GL40.GL_DYNAMIC_DRAW);
-		/*
-		 * if(bufferType != GL40.GL_ELEMENT_ARRAY_BUFFER)
-		 * GL40.glVertexAttribPointer(index, dataSize*16, GL40.GL_FLOAT, false, 0, 0);
-		 */
 	}
 
 	public boolean update(Matrix4f[] nPos) {
@@ -96,11 +90,24 @@ public class Mat4fAttribArray
 
 	@Override
 	public int getLength() { return data.length; }
-
 	public Matrix4f[] getData() { return data; }
 
 	public Matrix4f get(int i) {
 		return data[i];
+	}
+	
+	@Override
+	public int getMinIndex() {
+		return index;
+	}
+	@Override
+	public int getMaxIndex() {
+		return index+3;
+	}
+	
+	@Override
+	public String toString() {
+		return getVbo() + "|" + getMaxIndex() + "-" + getMaxIndex() + ") " + getName() + ": " + getLength() + "/" + getDataSize() + "=" + getDataCount();
 	}
 
 }

@@ -84,25 +84,15 @@ public abstract class AttribArray
 	}
 
 	public String getName() { return name; }
-
 	public void setName(String name) { this.name = name; }
-
 	public int getIndex() { return index; }
-
 	public void setIndex(int index) { this.index = index; }
-
 	public int getDataSize() { return dataSize; }
-
 	public int getBufferType() { return bufferType; }
-
 	public void setBufferType(int bufferType) { this.bufferType = bufferType; }
-
 	public void setVbo(int vbo) { this.vbo = vbo; }
-
 	public int getVbo() { return vbo; }
-
 	public boolean isStatic() { return iStatic; }
-
 	public int getDivisor() { return divisor; }
 
 	@Override
@@ -115,7 +105,7 @@ public abstract class AttribArray
 		if (arr instanceof IntAttribArray || arr instanceof UIntAttribArray)
 			return ((IntAttribArray) arr).update(PDRUtils.toPrimitiveInt((Integer[]) data));
 		else if (arr instanceof FloatAttribArray)
-			return ((FloatAttribArray) arr).update(PDRUtils.toPrimitiveFloat((Float[]) data));
+			return ((FloatAttribArray) arr).update(PDRUtils.toPrimitiveFloat(data));
 		else if (arr instanceof Mat4fAttribArray)
 			return ((Mat4fAttribArray) arr).update(PDRUtils.castArrayMat4f(data));
 		else if (arr instanceof Vec4fAttribArray)

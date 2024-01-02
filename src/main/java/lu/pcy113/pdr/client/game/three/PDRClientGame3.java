@@ -1,7 +1,5 @@
 package lu.pcy113.pdr.client.game.three;
 
-import org.joml.Quaternionf;
-import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
@@ -12,6 +10,7 @@ import lu.pcy113.pdr.client.game.three.SlotShader.SlotMaterial;
 import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.anim.CallbackValueInterpolation;
 import lu.pcy113.pdr.engine.cache.CacheManager;
+import lu.pcy113.pdr.engine.cache.attrib.FloatAttribArray;
 import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.geom.ObjLoader;
 import lu.pcy113.pdr.engine.geom.instance.InstanceEmitter;
@@ -35,7 +34,6 @@ import lu.pcy113.pdr.engine.scene.camera.Camera;
 import lu.pcy113.pdr.engine.scene.camera.Camera3D;
 import lu.pcy113.pdr.engine.scene.camera.Projection;
 import lu.pcy113.pdr.engine.utils.interpol.Interpolators;
-import lu.pcy113.pdr.engine.utils.transform.Transform2D;
 import lu.pcy113.pdr.engine.utils.transform.Transform3D;
 
 public class PDRClientGame3 implements GameLogic {
@@ -82,10 +80,11 @@ public class PDRClientGame3 implements GameLogic {
 		this.cache.addRenderLayer(genLayer);
 		
 		
+		FloatAttribArray faa = new FloatAttribArray("hover", 7, 1, new float[3*5], false, 1);
 		slotInstMaterial = (SlotInstanceMaterial) cache.loadMaterial(SlotInstanceShader.SlotInstanceMaterial.class, slotTexture);
 		Mesh slotInstMesh = ObjLoader.loadMesh("slotInst", slotInstMaterial, "./resources/models/plane.obj");
 		this.cache.addMesh(slotInstMesh);
-		slotInstancer = cache.loadInstanceEmitter("slotEmitter", slotInstMesh, 3*5, new Transform3D());
+		slotInstancer = cache.loadInstanceEmitter("slotEmitter", slotInstMesh, 3*5, new Transform3D(), faa);
 		slotInstancer.update((inst) -> {
 			((Transform3D) inst.getTransform()).setTranslation(new Vector3f(inst.getIndex()%3-1f, (inst.getIndex()/3)-2f, 0f).mul(1.1f));
 			System.out.println("instance: "+inst.getIndex()+" > "+((Transform3D) inst.getTransform()).getTranslation());
@@ -174,6 +173,8 @@ public class PDRClientGame3 implements GameLogic {
 	}
 	
 	float GX = 0f;
+	float hover = 0f;
+	long frame = 0;
 	
 	@Override
 	public void update(float dTime) {
@@ -184,7 +185,24 @@ public class PDRClientGame3 implements GameLogic {
 		slotEntity.getComponent(Transform3DComponent.class).getTransform().getRotation().rotateXYZ(0.01f, 0.01f, 0.01f);
 		slotEntity.getComponent(Transform3DComponent.class).getTransform().updateMatrix();
 		
-		//slotInstancer.update((inst) -> ((Transform2D) inst.getTransform()).rotate((float) Math.toRadians(Math.random())).updateMatrix());
+		slotEntityUi.getComponent(Transform3DComponent.class).getTransform().updateMatrix();
+		
+		
+		if(frame++ % 120 > 60) {
+			hover -= 0.1f;
+		}else {
+			hover += 0.2f;
+		}
+		hover = org.joml.Math.clamp(0, 1, hover);
+	
+		System.out.println("Hover: "+hover);
+		
+		slotInstancer.update((inst) -> {
+			if(inst.getIndex() == 0) {
+				inst.getBuffers()[0] = hover;
+			}
+		});
+		
 		
 		//System.out.println("GX: "+GX+" int: "+backgroundMaterial.getColor());
 	}

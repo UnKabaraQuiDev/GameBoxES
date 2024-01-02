@@ -40,10 +40,10 @@ public final class PDRUtils {
 		return Arrays.stream(data).mapToInt(Integer::intValue).toArray();
 	}
 
-	public static float[] toPrimitiveFloat(Float[] data) {
+	public static float[] toPrimitiveFloat(Object[] data) {
 		float[] y = new float[data.length];
 		for (int i = 0; i < data.length; i++)
-			y[i] = data[i].floatValue();
+			y[i] = Float.valueOf((float) data[i]);
 		return y;
 	}
 

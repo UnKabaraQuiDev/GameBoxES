@@ -8,6 +8,7 @@ import org.lwjgl.opengl.GL40;
 
 import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pdr.engine.cache.attrib.AttribArray;
+import lu.pcy113.pdr.engine.cache.attrib.MultiAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.UIntAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.Vec3fAttribArray;
 import lu.pcy113.pdr.engine.graph.material.Material;
@@ -68,11 +69,9 @@ public class Mesh
 		GlobalLogger.log(Level.INFO, "Mesh " + name + ": " + vao + " & " + vbo + "; v:" + vertexCount);
 	}
 
-	/*
-	 * public Mesh(String name2, String material2, Vec3fAttribArray pos,
-	 * UIntAttribArray ind, Vec3fAttribArray norm, Vec2fAttribArray uv) {
-	 * this(name2, material2, pos, ind, new AttribArray[] {norm, uv}); }
-	 */
+	/*public Mesh(String name2, String material2, Vec3fAttribArray pos, UIntAttribArray ind, Vec3fAttribArray norm, Vec2fAttribArray uv) {
+		this(name2, material2, pos, ind, new AttribArray[] {norm, uv});
+	}*/
 
 	public void storeAttribArray(AttribArray data) {
 		this.vbo.put(data.getIndex(), data.gen());
@@ -80,6 +79,13 @@ public class Mesh
 		data.init();
 		data.enable();
 		data.unbind();
+		
+		if(data instanceof MultiAttribArray) {
+			MultiAttribArray ma = (MultiAttribArray) data;
+			for(int a = ma.getMinIndex(); a <= ma.getMaxIndex(); a++) {
+				vbo.put(a, data.getVbo());
+			}
+		}
 	}
 
 	private void storeElementArray(UIntAttribArray indices) {

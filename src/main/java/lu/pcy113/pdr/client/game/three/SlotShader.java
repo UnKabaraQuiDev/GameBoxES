@@ -1,9 +1,7 @@
 package lu.pcy113.pdr.client.game.three;
 
 import java.util.HashMap;
-import java.util.logging.Level;
 
-import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.material.ShaderPart;
 import lu.pcy113.pdr.engine.graph.material.TextureMaterial;
@@ -26,7 +24,7 @@ public class SlotShader extends Shader {
 		createUniform(Shader.TRANSFORMATION_MATRIX);
 		createUniform(Shader.VIEW_MATRIX);
 		
-		GlobalLogger.log(Level.WARNING, "Uniform: "+TEXTURE+" created? "+createUniform(TEXTURE));
+		createUniform(TEXTURE);
 	}
 	
 	public static class SlotMaterial extends TextureMaterial {
