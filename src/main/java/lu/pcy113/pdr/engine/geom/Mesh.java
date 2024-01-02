@@ -10,6 +10,7 @@ import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pdr.engine.cache.attrib.AttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.UIntAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.Vec3fAttribArray;
+import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.impl.Renderable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
@@ -25,7 +26,7 @@ public class Mesh
 	protected final String name;
 	protected int vao = -1;
 	protected HashMap<Integer, Integer> vbo = new HashMap<>();
-	protected String material;
+	protected Material material;
 
 	protected Vec3fAttribArray vertices;
 	protected UIntAttribArray indices;
@@ -37,7 +38,7 @@ public class Mesh
 	 * Positions are stored as attribArray 0, normals as attribArray 1, uvs as
 	 * attribArray 2
 	 */
-	public Mesh(String name, String material, Vec3fAttribArray vertices, UIntAttribArray indices, AttribArray... attribs) {
+	public Mesh(String name, Material material, Vec3fAttribArray vertices, UIntAttribArray indices, AttribArray... attribs) {
 		this.name = name;
 		this.vertices = vertices;
 		indices.setBufferType(GL40.GL_ELEMENT_ARRAY_BUFFER);
@@ -109,21 +110,13 @@ public class Mesh
 	public String getId() { return name; }
 
 	public int getVertexCount() { return vertexCount; }
-
 	public int getVao() { return vao; }
-
 	public HashMap<Integer, Integer> getVbo() { return vbo; }
-
 	public String getName() { return name; }
-
 	public UIntAttribArray getIndices() { return indices; }
-
 	public Vec3fAttribArray getVertices() { return vertices; }
-
-	public String getMaterial() { return material; }
-
+	public Material getMaterial() { return material; }
 	public AttribArray[] getAttribs() { return attribs; }
-
 	public int getIndicesCount() { return indicesCount; }
 
 }

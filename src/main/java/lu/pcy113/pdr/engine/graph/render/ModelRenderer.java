@@ -41,9 +41,9 @@ public class ModelRenderer
 
 		mesh.bind();
 
-		Material material = cache.getMaterial(mesh.getMaterial());
+		Material material = mesh.getMaterial();
 		if (material == null) return;
-		Shader shader = cache.getShader(material.getShader());
+		Shader shader = material.getShader();
 		if (shader == null) return;
 
 		shader.bind();

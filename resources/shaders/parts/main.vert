@@ -13,8 +13,7 @@ uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 transformationMatrix;
 
-void main()
-{
+void main() {
     gl_Position = projectionMatrix * viewMatrix * (transformationMatrix * transform) * vec4(positions, 1.0);
     texCoord = uvs;
     normal = normals;

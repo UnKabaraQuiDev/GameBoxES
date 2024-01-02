@@ -13,15 +13,16 @@ public class TextureMaterial
 		extends
 		Material {
 
-	private Map<String, String> textures;
+	private Map<String, Texture> textures;
 
-	public TextureMaterial(String name, Shader shader, Map<String, String> textures) {
+	public TextureMaterial(String name, Shader shader, Map<String, Texture> textures) {
 		super(name, shader);
 
 		this.textures = textures;
 		int i = 0;
-		for (Entry<String, String> txt : textures.entrySet()) {
+		for (Entry<String, Texture> txt : textures.entrySet()) {
 			properties.put(txt.getKey(), i++);
+			//this.textures.put(txt.getKey(), new Texture(txt.getValue()));
 		}
 	}
 
@@ -30,10 +31,10 @@ public class TextureMaterial
 		super.bindProperties(cache, scene, shader);
 
 		int i = 0;
-		for (Entry<String, String> txt : textures.entrySet()) {
-			Texture texture = cache.getTexture(txt.getValue());
+		for (Entry<String, Texture> txt : textures.entrySet()) {
+			Texture texture = txt.getValue();
 			if (texture == null) {
-				GlobalLogger.log(Level.WARNING, "Could not find texture: " + txt.getValue());
+				GlobalLogger.log(Level.WARNING, "Could not find texture: " + txt.getKey());
 				continue;
 			}
 			texture.bind(i++);

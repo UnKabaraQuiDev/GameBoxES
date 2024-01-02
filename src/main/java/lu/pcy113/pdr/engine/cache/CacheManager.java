@@ -1,9 +1,14 @@
 package lu.pcy113.pdr.engine.cache;
 
+import java.io.PrintStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
+import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pdr.engine.audio.Sound;
+import lu.pcy113.pdr.engine.cache.attrib.AttribArray;
+import lu.pcy113.pdr.engine.exceptions.ShaderInstantiationException;
 import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.geom.instance.InstanceEmitter;
@@ -20,6 +25,7 @@ import lu.pcy113.pdr.engine.objs.PointLight;
 import lu.pcy113.pdr.engine.objs.UIModel;
 import lu.pcy113.pdr.engine.objs.text.TextModel;
 import lu.pcy113.pdr.engine.scene.Scene;
+import lu.pcy113.pdr.engine.utils.transform.Transform;
 
 public class CacheManager
 		implements
@@ -190,6 +196,8 @@ public class CacheManager
 	}
 
 	public Renderer<?, ?> getRenderer(String name) {
+		/*if (name != null && !renderers.containsKey(name))
+			GlobalLogger.log("No renderer found for: " + name);*/
 		return this.renderers.get(name);
 	}
 
@@ -250,59 +258,82 @@ public class CacheManager
 	}
 
 	public Map<String, Mesh> getMeshes() { return this.meshes; }
-
 	public void setMeshes(Map<String, Mesh> meshes) { this.meshes = meshes; }
-
 	public Map<String, Scene> getScenes() { return this.scenes; }
-
 	public void setScenes(Map<String, Scene> scenes) { this.scenes = scenes; }
-
 	public Map<String, Renderer<?, ?>> getRenderers() { return this.renderers; }
-
 	public void setRenderers(Map<String, Renderer<?, ?>> renderers) { this.renderers = renderers; }
-
 	public Map<String, Material> getMaterials() { return this.materials; }
-
 	public void setMaterials(Map<String, Material> materials) { this.materials = materials; }
-
 	public Map<String, Shader> getShaders() { return this.shaders; }
-
 	public void setShaders(Map<String, Shader> shaders) { this.shaders = shaders; }
-
 	public Map<String, Texture> getTextures() { return this.textures; }
-
 	public void setTextures(Map<String, Texture> textures) { this.textures = textures; }
-
 	public Map<String, Gizmo> getGizmos() { return this.gizmos; }
-
 	public void setGizmos(Map<String, Gizmo> gizmos) { this.gizmos = gizmos; }
-
 	public Map<String, GizmoModel> getGizmoModels() { return this.gizmoModels; }
-
 	public void setGizmoModels(Map<String, GizmoModel> gizmoModels) { this.gizmoModels = gizmoModels; }
-
 	public Map<String, RenderLayer> getRenderLayers() { return this.renderLayers; }
-
 	public void setRenderLayers(Map<String, RenderLayer> renderLayers) { this.renderLayers = renderLayers; }
-
 	public Map<String, TextModel> getTextModels() { return this.textModels; }
-
 	public void setTextModels(Map<String, TextModel> textModels) { this.textModels = textModels; }
-
 	public Map<String, InstanceEmitterModel> getInstanceEmitterModels() { return this.instanceEmitterModels; }
-
 	public void setInstanceEmitterModels(Map<String, InstanceEmitterModel> instanceEmitterModels) {this.instanceEmitterModels = instanceEmitterModels;}
-
 	public Map<String, InstanceEmitter> getInstanceEmitters() { return this.instanceEmitters; }
-
 	public void setInstanceEmitters(Map<String, InstanceEmitter> instanceEmitters) { this.instanceEmitters = instanceEmitters; }
-
 	public Map<String, Model> getModels() { return this.models; }
-
 	public void setModels(Map<String, Model> models) { this.models = models; }
-
 	public Map<String, PointLight> getPointLights() { return this.pointLights; }
-
 	public void setPointLights(Map<String, PointLight> pointLights) { this.pointLights = pointLights; }
+
+	public <T extends Material> Material loadMaterial(Class<T> clazz, Object... args) {
+		try {
+			Class[] types = new Class[args.length];
+			for (int i = 0; i < args.length; i++) {
+				types[i] = args[i].getClass();
+			}
+			
+			Material mat = clazz.getConstructor(types).newInstance(args);
+			
+			addMaterial(mat);
+			addShader(mat.getShader());
+			
+			return mat;
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e) {
+			throw new ShaderInstantiationException(e);
+		}
+	}
+
+	public void dump(PrintStream out) {
+		out.println("== DUMP:"+this.getClass().getName()+":start ==");
+		out.println(Mesh.class.getName()+": "+this.meshes.size()+": "+this.meshes);
+		out.println(Scene.class.getName()+": "+this.scenes.size()+": "+this.scenes);
+		out.println(Renderer.class.getName()+": "+this.renderers.size()+": "+this.renderers);
+		out.println(Material.class.getName()+": "+this.materials.size()+": "+this.materials);
+		out.println(Shader.class.getName()+": "+this.shaders.size()+": "+this.shaders);
+		out.println(Texture.class.getName()+": "+this.textures.size()+": "+this.textures);
+		out.println(Gizmo.class.getName()+": "+this.gizmos.size()+": "+this.gizmos);
+		out.println(GizmoModel.class.getName()+": "+this.gizmoModels.size()+": "+this.gizmoModels);
+		out.println(RenderLayer.class.getName()+": "+this.renderLayers.size()+": "+this.renderLayers);
+		out.println(TextModel.class.getName()+": "+this.textModels.size()+": "+this.textModels);
+		out.println(InstanceEmitterModel.class.getName()+": "+this.instanceEmitterModels.size()+": "+this.instanceEmitterModels);
+		out.println(InstanceEmitter.class.getName()+": "+this.instanceEmitters.size()+": "+this.instanceEmitters);
+		out.println(Model.class.getName()+": "+this.models.size()+": "+this.models);
+		out.println(PointLight.class.getName()+": "+this.pointLights.size()+": "+this.pointLights);
+		out.println("== DUMP:"+this.getClass().getName()+":end ==");
+	}
+
+	public Texture loadTexture(String string, String path) {
+		Texture texture = new Texture(string, path);
+		addTexture(texture);
+		return texture;
+	}
+
+	public InstanceEmitter loadInstanceEmitter(String name, Mesh mesh, int count, Transform baseTransform, AttribArray... attribArrays) {
+		InstanceEmitter instanceEmitter = new InstanceEmitter(name, mesh, count, baseTransform, attribArrays);
+		addInstanceEmitter(instanceEmitter);
+		return instanceEmitter;
+	}
 
 }

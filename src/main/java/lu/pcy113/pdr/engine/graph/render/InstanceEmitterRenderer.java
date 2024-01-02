@@ -14,6 +14,7 @@ import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.objs.entity.components.InstanceEmitterComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.PointLightSurfaceComponent;
+import lu.pcy113.pdr.engine.objs.entity.components.TransformComponent;
 import lu.pcy113.pdr.engine.scene.Scene;
 import lu.pcy113.pdr.engine.scene.Scene3D;
 
@@ -28,17 +29,26 @@ public class InstanceEmitterRenderer
 	@Override
 	public void render(CacheManager cache, Scene scene, InstanceEmitterComponent pec) {
 		InstanceEmitter pe = pec.getInstanceEmitter(cache);
-		if (pe == null) return;
+		if (pe == null)  {
+			GlobalLogger.log(Level.WARNING, "InstanceEmitter is null!");
+			return;
+		}
 
 		GlobalLogger.log(Level.INFO, "InstanceEmitter : " + pe.getId());
 
 		Mesh mesh = pe.getParticleMesh();
 		if (mesh == null) return;
 
-		Material material = cache.getMaterial(mesh.getMaterial());
-		if (material == null) return;
-		Shader shader = cache.getShader(material.getShader());
-		if (shader == null) return;
+		Material material = mesh.getMaterial();
+		if (material == null) {
+			GlobalLogger.log(Level.WARNING, "Material is null!");
+			return;
+		}
+		Shader shader = material.getShader();
+		if (shader == null) {
+			GlobalLogger.log(Level.WARNING, "Shader is null!");
+			return;
+		}
 
 		shader.bind();
 
@@ -48,9 +58,15 @@ public class InstanceEmitterRenderer
 			viewMatrix = scene.getCamera().getViewMatrix();
 			material.setPropertyIfPresent(Shader.PROJECTION_MATRIX, projectionMatrix);
 			material.setPropertyIfPresent(Shader.VIEW_MATRIX, viewMatrix);
-			material.setPropertyIfPresent(Shader.TRANSFORMATION_MATRIX, transformationMatrix);
 		}
-
+		if(pec.getParent().hasComponent(TransformComponent.class)) {
+			TransformComponent transform = (TransformComponent) pec.getParent().getComponent(pec.getParent().getComponents(TransformComponent.class).get(0));
+			if(transform != null) {
+				transformationMatrix = transform.getTransform().getMatrix();
+			}
+		}
+		material.setPropertyIfPresent(Shader.TRANSFORMATION_MATRIX, transformationMatrix);
+		
 		if (scene instanceof Scene3D) {
 			PointLightSurfaceComponent plsc = pec.getParent().getComponent(PointLightSurfaceComponent.class);
 			if (plsc != null) plsc.bindLights(cache, ((Scene3D) scene).getLights(), material);

@@ -156,8 +156,6 @@ public class PDRClientGame2
 		this.cache.addTextModel(txtModel);
 
 		this.scene = new Scene3D("main-scene");
-		// this.scene.addEntity("mesh", new Entity(new
-		// MeshComponent(partCube))).setActive(false);
 		this.planeEntity = this.scene.addEntity("model", new Entity(new ModelComponent(this.plane),
 				new Transform3DComponent(new Transform3D(new Vector3f(1, 1, 1), new Quaternionf(), new Vector3f(0.2f)))));
 		this.partsModelEntity = this.scene.addEntity("parts",
@@ -192,7 +190,8 @@ public class PDRClientGame2
 
 		this.ui = new Scene2D("ui", Camera.orthographicCamera3D());
 		this.cache.addScene(this.ui);
-		Shader slotShader = new Shader("slot", true, new ShaderPart("./resources/shaders/ui/plain.vert"),
+		Shader slotShader = new Shader("slot", true,
+				new ShaderPart("./resources/shaders/ui/plain.vert"),
 				new ShaderPart("./resources/shaders/ui/txt1.frag")) {
 			@Override
 			public void createUniforms() {

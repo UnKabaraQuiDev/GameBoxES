@@ -6,7 +6,7 @@ import org.joml.Vector3f;
 
 public class Transform3D
 		extends
-		Transform<Matrix4f> {
+		Transform {
 
 	protected Vector3f translation;
 	protected Quaternionf rotation;

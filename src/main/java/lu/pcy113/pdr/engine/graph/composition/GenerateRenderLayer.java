@@ -1,9 +1,12 @@
 package lu.pcy113.pdr.engine.graph.composition;
 
+import java.util.logging.Level;
+
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL40;
 
+import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.cache.attrib.UIntAttribArray;
@@ -23,9 +26,9 @@ public class GenerateRenderLayer
 			new UIntAttribArray("ind", -1, 1, new int[] {0, 1, 3, 1, 2, 3}),
 			new Vec2fAttribArray("uv", 1, 1, new Vector2f[] {new Vector2f(-1, 1), new Vector2f(1, 1), new Vector2f(1, -1), new Vector2f(-1, -1)}));
 
-	protected String material;
+	protected Material material;
 
-	public GenerateRenderLayer(String name, String material) {
+	public GenerateRenderLayer(String name, Material material) {
 		super(name, SCREEN);
 		this.material = material;
 	}
@@ -34,8 +37,16 @@ public class GenerateRenderLayer
 	public void render(CacheManager cache, GameEngine engine) {
 		target.bind();
 
-		Material material = cache.getMaterial(this.material);
-		Shader shader = cache.getShader(material.getShader());
+		Material material = this.material;
+		if(material == null) {
+			GlobalLogger.log(Level.WARNING, "Material is null!");
+			return;
+		}
+		Shader shader = material.getShader();
+		if(shader == null) {
+			GlobalLogger.log(Level.WARNING, "Shader is null!");
+			return;
+		}
 
 		shader.bind();
 
@@ -44,7 +55,7 @@ public class GenerateRenderLayer
 		// GL40.glDisable(GL40.GL_DEPTH_TEST);
 		GL40.glDepthMask(false);
 
-		System.out.println("indices: " + target.getIndicesCount());
+		//System.out.println("indices: " + target.getIndicesCount());
 
 		GL40.glDrawElements(GL40.GL_TRIANGLES, target.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);
 

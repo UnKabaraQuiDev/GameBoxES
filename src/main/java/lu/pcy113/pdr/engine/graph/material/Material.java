@@ -16,20 +16,19 @@ public class Material
 
 	protected final String name;
 	protected Map<String, Object> properties;
-	protected String shader;
+	protected Shader shader;
 
 	public Material(String name, Shader shader) {
 		this.name = name;
 		this.properties = new HashMap<>();
 		shader.getUniforms().keySet().forEach(t -> properties.put(t, null));
-		this.shader = shader.getId();
+		this.shader = shader;
 	}
 
 	public void bindProperties(CacheManager cache, Renderable parent, Shader shader) {
 		for (Entry<String, Object> eso : properties.entrySet()) {
 			shader.setUniform(eso.getKey(), eso.getValue());
-			// GlobalLogger.log(Level.INFO, ("Material
-			// "+name+"."+eso.getKey()+"="+eso.getValue()).replace("\n", " [nl] "));
+			//GlobalLogger.log(Level.INFO, ("Material "+name+"."+eso.getKey()+"="+eso.getValue()).replace("\n", " [nl] "));
 		}
 	}
 
@@ -49,12 +48,9 @@ public class Material
 	public String getId() { return name; }
 
 	public Map<String, Object> getProperties() { return properties; }
-
 	public void setProperties(Map<String, Object> properties) { this.properties = properties; }
-
-	public String getShader() { return shader; }
-
-	public void setShader(String shader) { this.shader = shader; }
+	public Shader getShader() { return shader; }
+	public void setShader(Shader shader) { this.shader = shader; }
 
 	/*
 	 * COMPONENTS

@@ -62,7 +62,7 @@ public class DebugOptions {
 			deb = new GizmoMaterial(shader);
 			cache.addMaterial(deb);
 		}
-		Shader debShader = cache.getShader(deb.getShader());
+		Shader debShader = deb.getShader();
 		debShader.bind();
 
 		deb.setProperty(Shader.PROJECTION_MATRIX, projectionMatrix);
@@ -98,7 +98,7 @@ public class DebugOptions {
 			deb = new WireframeMaterial(shader);
 			cache.addMaterial(deb);
 		}
-		Shader debShader = cache.getShader(deb.getShader());
+		Shader debShader = deb.getShader();
 		debShader.bind();
 
 		deb.setProperty(Shader.PROJECTION_MATRIX, projectionMatrix);
@@ -129,7 +129,7 @@ public class DebugOptions {
 			deb = new WireframeMaterial(shader);
 			cache.addMaterial(deb);
 		}
-		Shader debShader = cache.getShader(deb.getShader());
+		Shader debShader = deb.getShader();
 		debShader.bind();
 
 		deb.setProperty(Shader.PROJECTION_MATRIX, projectionMatrix);

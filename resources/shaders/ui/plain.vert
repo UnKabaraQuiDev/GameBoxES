@@ -13,12 +13,6 @@ uniform mat4 viewMatrix;
 uniform mat4 transformationMatrix;
 
 void main() {
-	/*mat3x3 transformation3x3 = mat3x3(
-	    transformationMatrix[0][0], transformationMatrix[0][1], 0.0,
-	    transformationMatrix[1][0], transformationMatrix[1][1], 0.0,
-	    transformationMatrix[2][0], transformationMatrix[2][1], 1.0
-	);*/
-	
 	gl_Position = projectionMatrix * viewMatrix * transformationMatrix * vec4(i_pos, 1.0);
 	fragPos = i_pos.xy;
 	texCoord = i_uv;

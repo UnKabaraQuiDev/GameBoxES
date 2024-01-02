@@ -22,7 +22,8 @@ public class ShaderPart
 		this.file = file;
 		this.type = shaderType(file.substring(file.lastIndexOf(".") + 1));
 
-		if (type == -1) throw new RuntimeException("Unknown shader type: " + file);
+		if (type == -1)
+			throw new RuntimeException("Unknown shader type: " + file);
 
 		this.sid = GL40.glCreateShader(type);
 		GL40.glShaderSource(sid, FileUtils.readFile(file));
@@ -31,6 +32,8 @@ public class ShaderPart
 		if (GL40.glGetShaderi(sid, GL40.GL_COMPILE_STATUS) == GL40.GL_FALSE) {
 			GlobalLogger.log(Level.SEVERE, file + "> " + GL40.glGetShaderInfoLog(sid, 1024));
 			cleanup();
+		}else {
+			GlobalLogger.log(Level.INFO, "ShaderPart " + file + " ("+sid+") ("+type+") created successfully");
 		}
 	}
 

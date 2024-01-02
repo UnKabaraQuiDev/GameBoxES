@@ -29,9 +29,9 @@ public class PassRenderLayer
 			new UIntAttribArray("ind", -1, 1, new int[] {0, 1, 2, 0, 2, 3}),
 			new Vec2fAttribArray("uv", 1, 1, new Vector2f[] {new Vector2f(0, 1), new Vector2f(1, 1), new Vector2f(1, 0), new Vector2f(0, 0)}));
 
-	protected String material;
+	protected Material material;
 
-	public PassRenderLayer(String name, String material) {
+	public PassRenderLayer(String name, Material material) {
 		super(name, SCREEN);
 		this.material = material;
 	}
@@ -50,9 +50,9 @@ public class PassRenderLayer
 
 		target.bind();
 
-		Material material = cache.getMaterial(this.material);
+		Material material = this.material;
 		if (material == null) return;
-		Shader shader = cache.getShader(material.getShader());
+		Shader shader = material.getShader();
 		if (shader == null) return;
 
 		shader.bind();

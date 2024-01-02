@@ -5,6 +5,8 @@ import org.joml.Quaternionf;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
+import lu.pcy113.pdr.engine.GameEngine;
+
 public abstract class Camera {
 
 	protected Projection projection;
@@ -37,14 +39,9 @@ public abstract class Camera {
 	}
 
 	public static final Camera3D orthographicCamera3D() {
-		return new Camera3D(new Vector3f(0), new Quaternionf().identity().rotateTo(new Vector3f(-1, 0, 0), new Vector3f(1, 0, 0)), // .lookAlong(GameEngine.FORWARD.x,
-																																	// GameEngine.FORWARD.y,
-																																	// GameEngine.FORWARD.z,
-																																	// GameEngine.UP.x,
-																																	// GameEngine.UP.y,
-																																	// GameEngine.UP.z).rotateZ((float)
-																																	// Math.PI),
-				// rotateXYZ((float) Math.toRadians(90), (float) Math.toRadians(180), 0),
+		return new Camera3D(
+				new Vector3f(0),
+				new Quaternionf().identity().rotateTo(GameEngine.FORWARD, GameEngine.BACK),
 				new Projection(0.01f, 1000f, 0, 1, 0, 1));
 	}
 

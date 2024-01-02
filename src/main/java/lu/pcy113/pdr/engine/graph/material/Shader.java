@@ -56,6 +56,8 @@ public abstract class Shader
 		if (GL20.glGetProgrami(this.shaderProgram, GL20.GL_LINK_STATUS) == GL11.GL_FALSE) {
 			GlobalLogger.log(Level.SEVERE, GL20.glGetProgramInfoLog(this.shaderProgram, 1024));
 			this.cleanup();
+		}else {
+			GlobalLogger.log(Level.INFO, "ShaderProgram "+name+" ("+shaderProgram+") created successfully");
 		}
 
 		this.bind();
@@ -83,7 +85,7 @@ public abstract class Shader
 		} else if (value instanceof Double) {
 			GL40.glUniform1d(this.getUniform(key), (double) value);
 		} else if (value instanceof Character) {
-			System.out.println("is char: " + value + " > " + ((char) value) + " > " + (Integer.valueOf((char) value)));
+			//System.out.println("is char: " + value + " > " + ((char) value) + " > " + (Integer.valueOf((char) value)));
 			this.setUniform(key, Integer.valueOf((char) value));
 		} else if (value instanceof Vector2f) {
 			GL20.glUniform2f(this.getUniform(key), ((Vector2f) value).x, ((Vector2f) value).y);
@@ -111,7 +113,7 @@ public abstract class Shader
 			this.uniforms.put(name, loc);
 			return true;
 		} else {
-			GlobalLogger.log(Level.SEVERE, "Could not get Uniform location for: " + name + " (" + GL11.glGetError() + ")");
+			GlobalLogger.log(Level.SEVERE, "Could not get Uniform location for: " + name + " in program "+this.name+" ("+this.shaderProgram+") (" + GL11.glGetError() + ")");
 		}
 		return false;
 	}
@@ -137,11 +139,8 @@ public abstract class Shader
 	public String getId() { return this.name; }
 
 	public Map<Integer, ShaderPart> getParts() { return this.parts; }
-
 	public Map<String, Integer> getUniforms() { return this.uniforms; }
-
 	public boolean isTransparent() { return this.transparent; }
-
 	public void setTransparent(boolean transparent) { this.transparent = transparent; }
 
 }

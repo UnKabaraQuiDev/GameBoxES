@@ -14,6 +14,7 @@ import lu.pcy113.pdr.engine.cache.attrib.UIntAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.Vec2fAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.Vec3fAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.Vec4fAttribArray;
+import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.utils.FileUtils;
 
 public final class ObjLoader {
@@ -94,7 +95,7 @@ public final class ObjLoader {
 				new Vec4fAttribArray("col", 1, 1, colorArr, GL40.GL_ARRAY_BUFFER));
 	}
 
-	public static Mesh loadMesh(String name, String material, String path) {
+	public static Mesh loadMesh(String name, Material material, String path) {
 		String[] lines = FileUtils.readFile(path).split("\n");
 
 		List<Vector3f> vertices = new ArrayList<>();

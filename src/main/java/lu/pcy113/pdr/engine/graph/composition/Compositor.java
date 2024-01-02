@@ -43,7 +43,7 @@ public class Compositor {
 
 		GL40.glBindTexture(GL40.GL_TEXTURE_2D, text);
 
-		System.err.println("w:" + width + " h:" + height);
+		//System.err.println("w:" + width + " h:" + height);
 
 		if (GL40.glCheckFramebufferStatus(GL40.GL_FRAMEBUFFER) != GL40.GL_FRAMEBUFFER_COMPLETE) {
 			GlobalLogger.log(Level.SEVERE,

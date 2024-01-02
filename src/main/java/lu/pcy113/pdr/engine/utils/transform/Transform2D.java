@@ -1,11 +1,13 @@
 package lu.pcy113.pdr.engine.utils.transform;
 
-import org.joml.Matrix3x2f;
+import org.joml.Matrix4f;
 import org.joml.Vector2f;
+
+import lu.pcy113.pdr.engine.GameEngine;
 
 public class Transform2D
 		extends
-		Transform<Matrix3x2f> {
+		Transform {
 
 	protected Vector2f translation;
 	protected float rotation;
@@ -20,7 +22,7 @@ public class Transform2D
 		this.rotation = rot;
 		this.scale = scale;
 
-		super.matrix = new Matrix3x2f();
+		super.matrix = new Matrix4f();
 	}
 
 	public Transform2D translateAdd(Vector2f v) {
@@ -70,8 +72,11 @@ public class Transform2D
 	}
 
 	@Override
-	public Matrix3x2f updateMatrix() {
-		return matrix.identity().translate(translation).rotate(rotation).scale(scale);
+	public Matrix4f updateMatrix() {
+		return new Matrix4f().identity()
+				.translate(translation.x, translation.y, 0f)
+				.rotate(rotation, GameEngine.UP)
+				.scale(scale.x, scale.y, 1f);
 	}
 
 	public Vector2f getTranslation() { return translation; }

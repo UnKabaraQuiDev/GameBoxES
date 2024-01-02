@@ -1,15 +1,17 @@
 package lu.pcy113.pdr.engine.utils.transform;
 
-public abstract class Transform<T> {
+import org.joml.Matrix4f;
 
-	protected T matrix;
+public abstract class Transform {
 
-	public abstract T updateMatrix();
+	protected Matrix4f matrix;
 
-	public T getMatrix() { return matrix; }
+	public abstract Matrix4f updateMatrix();
 
-	public void setMatrix(T matrix) { this.matrix = matrix; }
+	public Matrix4f getMatrix() { return matrix; }
 
-	public abstract Transform<T> clone();
+	public void setMatrix(Matrix4f matrix) { this.matrix = matrix; }
+
+	public abstract Transform clone();
 
 }

@@ -39,10 +39,15 @@ public class Texture
 		int[] c = new int[1];
 
 		ByteBuffer buffer = STBImage.stbi_load(path, w, h, c, 4);
-		if (buffer == null) throw new RuntimeException("Failed to load texture");
+		if (buffer == null)
+			throw new RuntimeException("Failed to load texture");
 		this.tid = generateTexture(w[0], h[0], buffer);
 	}
-
+	
+	public Texture(String path) {
+		this(path, path, GL40.GL_LINEAR);
+	}
+	
 	public Texture(String name, String path) {
 		this(name, path, GL40.GL_LINEAR);
 	}
