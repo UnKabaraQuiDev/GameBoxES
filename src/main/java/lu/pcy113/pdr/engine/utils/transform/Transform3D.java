@@ -20,6 +20,12 @@ public class Transform3D extends Transform {
 		this.scale = scale;
 
 		super.matrix = new Matrix4f();
+		
+		updateMatrix();
+	}
+
+	public Transform3D(Vector3f trans) {
+		this(trans, new Quaternionf().identity(), new Vector3f(1));
 	}
 
 	public Transform3D translateAdd(Vector3f v) {

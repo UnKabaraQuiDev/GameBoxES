@@ -13,6 +13,8 @@ import lu.pcy113.pdr.engine.objs.entity.Entity;
 import lu.pcy113.pdr.engine.objs.entity.components.GizmoComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.InstanceEmitterComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.MeshComponent;
+import lu.pcy113.pdr.engine.objs.entity.components.TextEmitterComponent;
+import lu.pcy113.pdr.engine.objs.text.TextEmitter;
 import lu.pcy113.pdr.engine.scene.Scene2D;
 
 public class Scene2DRenderer extends Renderer<GameEngine, Scene2D> {
@@ -28,6 +30,7 @@ public class Scene2DRenderer extends Renderer<GameEngine, Scene2D> {
 		MeshRenderer meshRenderer = (MeshRenderer) cache.getRenderer(Mesh.NAME);
 		GizmoRenderer gizmoRenderer = (GizmoRenderer) cache.getRenderer(Gizmo.NAME);
 		InstanceEmitterRenderer instanceEmitterRenderer = (InstanceEmitterRenderer) cache.getRenderer(InstanceEmitter.NAME);
+		TextEmitterRenderer textEmitterRenderer = (TextEmitterRenderer) cache.getRenderer(TextEmitter.NAME);
 
 		for (Entity e : scene.getEntities().values()) {
 			if (!e.isActive())
@@ -40,6 +43,8 @@ public class Scene2DRenderer extends Renderer<GameEngine, Scene2D> {
 				gizmoRenderer.render(cache, scene, (GizmoComponent) c);
 			} else if ((c = e.getComponent(InstanceEmitterComponent.class)) != null) {
 				instanceEmitterRenderer.render(cache, scene, (InstanceEmitterComponent) c);
+			} else if ((c = e.getComponent(TextEmitterComponent.class)) != null) {
+				textEmitterRenderer.render(cache, scene, (TextEmitterComponent) c);
 			}
 		}
 	};

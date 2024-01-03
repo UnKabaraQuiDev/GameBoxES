@@ -116,4 +116,9 @@ public final class PDRUtils {
 		return c;
 	}
 
+	public static double round(double round, int decimales) {
+		double places = Math.pow(10, decimales);
+		return Math.round(round * places)/places;
+	}
+
 }

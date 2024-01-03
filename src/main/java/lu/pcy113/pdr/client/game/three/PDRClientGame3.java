@@ -1,5 +1,6 @@
 package lu.pcy113.pdr.client.game.three;
 
+import org.joml.Quaternionf;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -41,6 +42,7 @@ import lu.pcy113.pdr.engine.scene.Scene3D;
 import lu.pcy113.pdr.engine.scene.camera.Camera;
 import lu.pcy113.pdr.engine.scene.camera.Camera3D;
 import lu.pcy113.pdr.engine.scene.camera.Projection;
+import lu.pcy113.pdr.engine.utils.PDRUtils;
 import lu.pcy113.pdr.engine.utils.interpolation.Interpolators;
 import lu.pcy113.pdr.engine.utils.transform.Transform3D;
 
@@ -68,6 +70,8 @@ public class PDRClientGame3 implements GameLogic {
 	
 	Compositor compositor;
 	
+	TextEmitter debugInfo;
+	
 	@Override
 	public void init(GameEngine e) {
 		engine = e;
@@ -75,7 +79,7 @@ public class PDRClientGame3 implements GameLogic {
 		window = e.getWindow();
 		GameEngine.DEBUG.wireframe = false;
 		GameEngine.DEBUG.wireframeColor = new Vector4f(0.2f, 0.2f, 0.2f, 0.2f);
-		GameEngine.DEBUG.gizmos = true;
+		GameEngine.DEBUG.gizmos = false;
 		
 		
 		Texture slotTexture = cache.loadTexture("single_slot", "./resources/textures/ui/single_slot.png");
@@ -103,19 +107,21 @@ public class PDRClientGame3 implements GameLogic {
 		// Math.toRadians(90), GameEngine.UP);
 		slotEntityUi.getComponent(Transform3DComponent.class).getTransform().updateMatrix();
 		
+		Texture txt1 = cache.loadTexture("txt1", "./resources/textures/fonts/font1row.png", GL40.GL_NEAREST, GL40.GL_TEXTURE_2D);
+		TextMaterial textMaterial = (TextMaterial) cache.loadMaterial(TextShader.TextMaterial.class, txt1);
+		debugInfo = new TextEmitter("debug_infos", textMaterial, 100, "FPS: ", new Vector2f(0.1f));
+		debugInfo.updateText();
+		cache.addTextEmitter(debugInfo);
 		
 		ui = new Scene2D("ui", Camera.orthographicCamera3D());
 		ui.addEntity("slotUi", slotEntityUi);
-		
+		ui.addEntity("debug_info", new Entity(new Transform3DComponent(new Vector3f(-6.1f, -3.3f, 0), new Quaternionf(), new Vector3f(1)), new TextEmitterComponent(debugInfo)));
 		
 		scene = new Scene3D("main");
 		slotEntity = new Entity(new Transform3DComponent(), new MeshComponent(slotMesh));
-		scene.addEntity("slot", this.slotEntity).setActive(false);
+		scene.addEntity("slot", this.slotEntity).setActive(true);
 		
 		
-		Texture lookup = cache.loadTexture("lookup", "./resources/textures/fonts/font1indices.png", GL40.GL_NEAREST, GL40.GL_TEXTURE_1D);
-		Texture txt1 = cache.loadTexture("txt1", "./resources/textures/fonts/font1row.png", GL40.GL_NEAREST, GL40.GL_TEXTURE_2D);
-		TextMaterial textMaterial = (TextMaterial) cache.loadMaterial(TextShader.TextMaterial.class, lookup, txt1);
 		TextEmitter textEmitter = new TextEmitter("text", textMaterial, 32, "text\nnew line\n\ttab", new Vector2f(0.1f));
 		textEmitter.updateText();
 		cache.addTextEmitter(textEmitter);
@@ -152,12 +158,14 @@ public class PDRClientGame3 implements GameLogic {
 		cameraUi.setPosition(new Vector3f(0, 0, -1f));
 		cameraUi.updateMatrix();
 		
+		this.ui.getCamera().getProjection().update(1920, 1080);
 		this.scene.getCamera().getProjection().setPerspective(true);
 		this.engine.getWindow().onResize((w, h) -> {
 			this.scene.getCamera().getProjection().update(w, h);
-			this.ui.getCamera().getProjection().update(w, h);
+			//this.ui.getCamera().getProjection().update(w, h);
 		});
 		this.engine.getWindow().setBackground(new Vector4f(0.1f));
+		
 		
 		this.backgroundMaterialInterpolation = new CallbackValueInterpolation<FillMaterial, Vector4f>(this.backgroundMaterial, new Vector4f(0, 0.1f, 0, 1), new Vector4f(0.1f, 0, 1, 1), Interpolators.BOUNCE_IN_OUT) {
 			@Override
@@ -214,16 +222,14 @@ public class PDRClientGame3 implements GameLogic {
 		}
 		hover = org.joml.Math.clamp(0, 1, hover);
 		
-		System.out.println("Hover: " + hover);
-		
 		slotInstancer.update((inst) -> {
 			if (inst.getIndex() == 0) {
 				inst.getBuffers()[0] = hover;
 			}
 		});
 		
-		textEntity.getComponent(TextEmitterComponent.class).getTextEmitter(cache).setText("updated... " + Long.valueOf(frame));
-		textEntity.getComponent(TextEmitterComponent.class).getTextEmitter(cache).updateText();
+		debugInfo.setText("FPS: "+PDRUtils.round(engine.getCurrentFps(), 3)+"\n").updateText();
+		textEntity.getComponent(TextEmitterComponent.class).getTextEmitter(cache).setText("updated... " + engine.getCurrentFps()).updateText();
 		
 		// System.out.println("GX: "+GX+" int: "+backgroundMaterial.getColor());
 	}

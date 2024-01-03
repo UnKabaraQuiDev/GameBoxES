@@ -15,7 +15,6 @@ public class TextShader extends Shader {
 
 	public static final String NAME = TextShader.class.getName();
 
-	public static final String LOOKUP = "lookup";
 	public static final String TXT1 = "txt1";
 	public static final String FG_COLOR = "fgColor";
 	public static final String BG_COLOR = "bgColor";
@@ -32,7 +31,6 @@ public class TextShader extends Shader {
 		createUniform(PROJECTION_MATRIX);
 		createUniform(VIEW_POSITION);
 
-		createUniform(LOOKUP);
 		createUniform(TXT1);
 
 		createUniform(FG_COLOR);
@@ -48,10 +46,9 @@ public class TextShader extends Shader {
 		private Vector4f fgColor = new Vector4f(1, 1, 1, 1);
 		private Vector4f bgColor = new Vector4f(0, 0, 0, 1);
 
-		public TextMaterial(Texture lookup, Texture txt1) {
+		public TextMaterial(Texture txt1) {
 			super(NAME, new TextShader(), new HashMap<String, Texture>() {
 				{
-					put(LOOKUP, lookup);
 					put(TXT1, txt1);
 				}
 			});

@@ -7,7 +7,6 @@ import org.joml.Matrix4f;
 import org.joml.Vector2f;
 
 import lu.pcy113.pclib.GlobalLogger;
-import lu.pcy113.pdr.engine.cache.attrib.UByteAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.UIntAttribArray;
 import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.geom.instance.InstanceEmitter;
@@ -104,8 +103,9 @@ public class TextEmitter implements Cleanupable, UniqueID {
 		return text;
 	}
 
-	public void setText(CharSequence text) {
+	public TextEmitter setText(CharSequence text) {
 		this.text = text;
+		return this;
 	}
 
 	public InstanceEmitter getInstances() {
