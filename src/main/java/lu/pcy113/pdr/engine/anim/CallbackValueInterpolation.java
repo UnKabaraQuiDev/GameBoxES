@@ -1,6 +1,6 @@
 package lu.pcy113.pdr.engine.anim;
 
-import lu.pcy113.pdr.engine.utils.interpol.Interpolator;
+import lu.pcy113.pdr.engine.utils.interpolation.Interpolator;
 
 public abstract class CallbackValueInterpolation<T, D> {
 

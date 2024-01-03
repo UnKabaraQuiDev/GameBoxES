@@ -1,4 +1,4 @@
-package lu.pcy113.pdr.engine.utils.interpol;
+package lu.pcy113.pdr.engine.utils.interpolation;
 
 import org.joml.Math;
 

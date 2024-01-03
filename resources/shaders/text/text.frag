@@ -30,8 +30,6 @@ void main() {
 		discard;
 	}
 
-	float charValue = float(instance.character-CHAR_START)/CHAR_COUNT;
-	vec2 size = vec2(1.0/CHAR_COUNT, 1.0);
 	vec4 mask = texture(
 			txt1,
 			vec2(

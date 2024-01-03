@@ -1,7 +1,10 @@
 package lu.pcy113.pdr.engine;
 
+import java.util.logging.Level;
+
 import org.joml.Vector3f;
 
+import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pdr.engine.audio.AudioMaster;
 import lu.pcy113.pdr.engine.cache.SharedCacheManager;
 import lu.pcy113.pdr.engine.graph.window.Window;
@@ -58,11 +61,14 @@ public class GameEngine implements Runnable, Cleanupable {
 		float deltaFps = 0;
 
 		/* DEBUG */
-		long lRender = 0, lUpdate = 0, tRender = 0, tUpdate = 0;
+		// time between
+		long delayInput = 0, delayRender = 0, delayUpdate = 0;
+		// time to process
+		long processInput = 0, processRender = 0, processUpdate = 0;
 
-		long lastUpdate = this.startTime;
-		long lastRender = this.startTime;
-		long lastInput = this.startTime;
+		long lastUpdate = 0;
+		long lastRender = 0;
+		long lastInput = 0;
 		while (!this.window.shouldClose() && this.running) {
 			this.window.pollEvents();
 
@@ -72,38 +78,48 @@ public class GameEngine implements Runnable, Cleanupable {
 
 			if (this.targetFps <= 0 || deltaFps >= 1) {
 				long start = System.nanoTime();
+				delayInput = now - lastInput;
+				
 				this.gameLogic.input(now - lastInput);
-				tUpdate = System.nanoTime() - start;
 				this.window.clearScroll();
-
+				
+				processInput = System.nanoTime() - start;
+				
 				lastInput = now;
 			}
 
 			if (deltaUpdate >= 1) {
 				long start = System.nanoTime();
+				delayUpdate = now - lastUpdate;
+				
 				this.gameLogic.update(now - lastUpdate);
-				lUpdate = now - lastUpdate;
-				tUpdate += System.nanoTime() - start;
-
+				
+				processUpdate = System.nanoTime() - start;
+				
 				lastUpdate = now;
 				deltaUpdate--;
 			}
 
 			if (this.targetFps <= 0 || deltaFps >= 1) {
 				long start = System.nanoTime();
+				delayRender = now - lastRender;
+				
 				this.window.clear();
-
 				this.gameLogic.render(now - lastRender);
-				lRender = now - lastRender;
-
 				this.window.swapBuffers();
-				tRender += System.nanoTime() - start;
-
+				
+				processRender = System.nanoTime() - start;
+				
 				lastRender = now;
 				deltaFps--;
 			}
 
 			initialTime = now;
+			
+			GlobalLogger.log(Level.INFO, String.format("input duration: %fms; update duration: %fms; render duration: %fms\ninput delay: %dns; update delay: %dns; render delay: %dns\nFrame rate: %ffps",
+					(double) processInput/1_000_000, (double) processUpdate/1_000_000, (double) processRender/1_000_000,
+					delayInput, delayUpdate, delayRender,
+					(double) 1/((double) delayRender/1_000)));
 		}
 		this.running = !this.window.shouldClose();
 		this.stop();

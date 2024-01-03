@@ -56,7 +56,7 @@ import lu.pcy113.pdr.engine.scene.Scene3D;
 import lu.pcy113.pdr.engine.scene.camera.Camera;
 import lu.pcy113.pdr.engine.scene.camera.Camera3D;
 import lu.pcy113.pdr.engine.scene.camera.Projection;
-import lu.pcy113.pdr.engine.utils.interpol.Interpolators;
+import lu.pcy113.pdr.engine.utils.interpolation.Interpolators;
 import lu.pcy113.pdr.engine.utils.transform.Transform3D;
 
 public class PDRClientGame2 implements GameLogic {

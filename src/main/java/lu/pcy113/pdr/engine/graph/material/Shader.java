@@ -67,7 +67,6 @@ public abstract class Shader implements UniqueID, Cleanupable {
 	public abstract void createUniforms();
 
 	public void setUniform(String key, Object value) {
-		System.out.println("setting uniform " + key + " to " + value + " in shader " + name);
 		if (value instanceof Integer) {
 			GL20.glUniform1i(this.getUniform(key), (int) value);
 		} else if (value instanceof Float) {
