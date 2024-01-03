@@ -11,9 +11,7 @@ import lu.pcy113.pdr.engine.objs.entity.components.LightComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.PointLightComponent;
 import lu.pcy113.pdr.engine.scene.camera.Camera;
 
-public class Scene3D
-		extends
-		Scene {
+public class Scene3D extends Scene {
 
 	public static final String NAME = Scene3D.class.getName();
 
@@ -29,9 +27,13 @@ public class Scene3D
 		super.cleanup();
 	}
 
-	public Map<String, Entity> getEntities() { return entities; }
+	public Map<String, Entity> getEntities() {
+		return entities;
+	}
 
-	public void setEntities(Map<String, Entity> entities) { this.entities = entities; }
+	public void setEntities(Map<String, Entity> entities) {
+		this.entities = entities;
+	}
 
 	public Entity addEntity(String str, Entity entity) {
 		/*
@@ -48,13 +50,16 @@ public class Scene3D
 		return this.entities.get(str);
 	}
 
-	public List<String> getLightEmittors() { return lightEmittors; }
+	public List<String> getLightEmittors() {
+		return lightEmittors;
+	}
 
-	public void setLightEmittors(List<String> lightEmittors) { this.lightEmittors = lightEmittors; }
+	public void setLightEmittors(List<String> lightEmittors) {
+		this.lightEmittors = lightEmittors;
+	}
 
 	public List<LightComponent> getLights() {
-		return getLightEmittors().stream().map((String e) -> (PointLightComponent) entities.get(e).getComponent(PointLightComponent.class))
-				.collect(Collectors.toList())
+		return getLightEmittors().stream().map((String e) -> (PointLightComponent) entities.get(e).getComponent(PointLightComponent.class)).collect(Collectors.toList())
 		/*
 		 * .addAll(getLightEmittors() .stream() .map((String e) -> (LightComponent)
 		 * entities.get(e).getComponent(LightComponent.class))

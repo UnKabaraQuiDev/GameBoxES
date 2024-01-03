@@ -3,9 +3,7 @@ package lu.pcy113.pdr.client.game;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.material.ShaderPart;
 
-public class DiffuseShader
-		extends
-		Shader {
+public class DiffuseShader extends Shader {
 
 	public static final String NAME = "diffuse-1";
 

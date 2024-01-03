@@ -9,10 +9,7 @@ import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
 import lu.pcy113.pdr.engine.utils.FileUtils;
 
-public class ShaderPart
-		implements
-		UniqueID,
-		Cleanupable {
+public class ShaderPart implements UniqueID, Cleanupable {
 
 	private final String file;
 	private final int sid;
@@ -32,8 +29,8 @@ public class ShaderPart
 		if (GL40.glGetShaderi(sid, GL40.GL_COMPILE_STATUS) == GL40.GL_FALSE) {
 			GlobalLogger.log(Level.SEVERE, file + "> " + GL40.glGetShaderInfoLog(sid, 1024));
 			cleanup();
-		}else {
-			GlobalLogger.log(Level.INFO, "ShaderPart " + file + " ("+sid+") ("+type+") created successfully");
+		} else {
+			GlobalLogger.log(Level.INFO, "ShaderPart " + file + " (" + sid + ") (" + type + ") created successfully");
 		}
 	}
 
@@ -43,13 +40,21 @@ public class ShaderPart
 	}
 
 	@Override
-	public String getId() { return file; }
+	public String getId() {
+		return file;
+	}
 
-	public int getSid() { return sid; }
+	public int getSid() {
+		return sid;
+	}
 
-	public String getFile() { return file; }
+	public String getFile() {
+		return file;
+	}
 
-	public int getType() { return type; }
+	public int getType() {
+		return type;
+	}
 
 	public static int shaderType(String type) {
 		switch (type.toLowerCase()) {

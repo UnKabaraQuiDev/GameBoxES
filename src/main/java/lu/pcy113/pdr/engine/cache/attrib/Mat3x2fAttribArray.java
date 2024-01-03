@@ -7,9 +7,7 @@ import org.joml.Matrix3x2f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL40;
 
-public class Mat3x2fAttribArray
-		extends
-		AttribArray {
+public class Mat3x2fAttribArray extends AttribArray {
 
 	private Matrix3x2f[] data;
 
@@ -94,9 +92,13 @@ public class Mat3x2fAttribArray
 	}
 
 	@Override
-	public int getLength() { return data.length; }
+	public int getLength() {
+		return data.length;
+	}
 
-	public Matrix3x2f[] getData() { return data; }
+	public Matrix3x2f[] getData() {
+		return data;
+	}
 
 	public Matrix3x2f get(int i) {
 		return data[i];

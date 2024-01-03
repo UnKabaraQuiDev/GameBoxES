@@ -18,7 +18,8 @@ uniform mat4 transformationMatrix;
 
 void main() {
 	gl_Position = projectionMatrix * viewMatrix * (transformationMatrix * i_transform) * vec4(i_pos, 1.0);
-	fragPos = i_pos.xy;
+
+	fragPos = gl_Position.xy;
 	texCoord = i_uv;
 	normal = i_norm;
 	index = gl_InstanceID;

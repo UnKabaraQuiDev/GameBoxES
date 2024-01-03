@@ -8,9 +8,13 @@ public abstract class Transform {
 
 	public abstract Matrix4f updateMatrix();
 
-	public Matrix4f getMatrix() { return matrix; }
+	public Matrix4f getMatrix() {
+		return matrix;
+	}
 
-	public void setMatrix(Matrix4f matrix) { this.matrix = matrix; }
+	public void setMatrix(Matrix4f matrix) {
+		this.matrix = matrix;
+	}
 
 	public abstract Transform clone();
 

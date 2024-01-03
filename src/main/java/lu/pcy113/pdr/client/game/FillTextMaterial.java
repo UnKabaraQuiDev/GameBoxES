@@ -9,9 +9,7 @@ import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.material.text.TextMaterial;
 import lu.pcy113.pdr.engine.impl.Renderable;
 
-public class FillTextMaterial
-		extends
-		TextMaterial {
+public class FillTextMaterial extends TextMaterial {
 
 	public Vector4f color;
 
@@ -32,8 +30,12 @@ public class FillTextMaterial
 		super.bindProperties(cache, scene, shader);
 	}
 
-	public Vector4f getColor() { return color; }
+	public Vector4f getColor() {
+		return color;
+	}
 
-	public void setColor(Vector4f color) { this.color = color; }
+	public void setColor(Vector4f color) {
+		this.color = color;
+	}
 
 }

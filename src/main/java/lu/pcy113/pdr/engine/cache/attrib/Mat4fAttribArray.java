@@ -7,9 +7,7 @@ import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL40;
 
-public class Mat4fAttribArray
-		extends
-		AttribArray implements MultiAttribArray {
+public class Mat4fAttribArray extends AttribArray implements MultiAttribArray {
 
 	private Matrix4f[] data;
 
@@ -45,7 +43,7 @@ public class Mat4fAttribArray
 
 	@Override
 	public void init() {
-		GL40.glBufferData(bufferType, toFlatArray(), iStatic ? GL40.GL_STATIC_DRAW : GL40.GL_DYNAMIC_DRAW);
+		GL40.glBufferData(bufferType, toFloatArray(), iStatic ? GL40.GL_STATIC_DRAW : GL40.GL_DYNAMIC_DRAW);
 	}
 
 	public boolean update(Matrix4f[] nPos) {
@@ -54,7 +52,7 @@ public class Mat4fAttribArray
 		}
 		data = nPos;
 
-		GL40.glBufferSubData(GL40.GL_ARRAY_BUFFER, 0, toFlatArray());
+		GL40.glBufferSubData(GL40.GL_ARRAY_BUFFER, 0, toFloatArray());
 		return GL40.glGetError() == GL40.GL_NO_ERROR;
 	}
 
@@ -74,37 +72,44 @@ public class Mat4fAttribArray
 		return fb;
 	}
 
-	public float[] toFlatArray() {
+	public float[] toFloatArray() {
 		float[] flatArray = new float[data.length * 16];
 		for (int i = 0; i < data.length; i++) {
 			float[] dat = new float[16];
-			data[i].get(dat);
+			if (data[i] != null)
+				data[i].get(dat);
 			System.arraycopy(dat, 0, flatArray, i * 16, 16);
 		}
 		return flatArray;
 	}
 
 	public FloatAttribArray toFloatAttribArray() {
-		return new FloatAttribArray(name, index, dataSize * 16, toFlatArray(), bufferType, iStatic);
+		return new FloatAttribArray(name, index, dataSize * 16, toFloatArray(), bufferType, iStatic);
 	}
 
 	@Override
-	public int getLength() { return data.length; }
-	public Matrix4f[] getData() { return data; }
+	public int getLength() {
+		return data.length;
+	}
+
+	public Matrix4f[] getData() {
+		return data;
+	}
 
 	public Matrix4f get(int i) {
 		return data[i];
 	}
-	
+
 	@Override
 	public int getMinIndex() {
 		return index;
 	}
+
 	@Override
 	public int getMaxIndex() {
-		return index+3;
+		return index + 3;
 	}
-	
+
 	@Override
 	public String toString() {
 		return getVbo() + "|" + getMaxIndex() + "-" + getMaxIndex() + ") " + getName() + ": " + getLength() + "/" + getDataSize() + "=" + getDataCount();

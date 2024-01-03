@@ -9,9 +9,7 @@ import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.impl.Renderable;
 
-public class GaussianBlurMaterial
-		extends
-		Material {
+public class GaussianBlurMaterial extends Material {
 
 	public static final String NAME = GaussianBlurMaterial.class.getName();
 
@@ -21,7 +19,8 @@ public class GaussianBlurMaterial
 	public GaussianBlurMaterial(GaussianBlurShader shader, int width, int height) {
 		super(NAME, shader);
 
-		if (width % 2 == 0 || height % 2 == 0) throw new RuntimeException("Kernel width/height cannot be even");
+		if (width % 2 == 0 || height % 2 == 0)
+			throw new RuntimeException("Kernel width/height cannot be even");
 
 		this.width = width;
 		this.height = height;
@@ -40,8 +39,7 @@ public class GaussianBlurMaterial
 		double halfHeight = height / 2;
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
-				kernel[y * width
-						+ x] = (float) (((halfWidth - Math.abs(x - halfWidth)) / halfWidth) * ((halfHeight - Math.abs(y - halfHeight)) / halfHeight));
+				kernel[y * width + x] = (float) (((halfWidth - Math.abs(x - halfWidth)) / halfWidth) * ((halfHeight - Math.abs(y - halfHeight)) / halfHeight));
 			}
 		}
 	}

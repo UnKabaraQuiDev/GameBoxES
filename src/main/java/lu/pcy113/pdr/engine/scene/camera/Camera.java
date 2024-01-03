@@ -20,11 +20,17 @@ public abstract class Camera {
 
 	public abstract Matrix4f updateMatrix();
 
-	public Matrix4f getViewMatrix() { return viewMatrix; }
+	public Matrix4f getViewMatrix() {
+		return viewMatrix;
+	}
 
-	public Projection getProjection() { return projection; }
+	public Projection getProjection() {
+		return projection;
+	}
 
-	public void setProjection(Projection projection) { this.projection = projection; }
+	public void setProjection(Projection projection) {
+		this.projection = projection;
+	}
 
 	public static final Camera3D perspectiveCamera3D() {
 		return new Camera3D(new Vector3f(0), new Quaternionf().identity().rotateTo(new Vector3f(-1, 0, 0), new Vector3f(1, 0, 0)), // .lookAlong(GameEngine.FORWARD.x,
@@ -39,10 +45,7 @@ public abstract class Camera {
 	}
 
 	public static final Camera3D orthographicCamera3D() {
-		return new Camera3D(
-				new Vector3f(0),
-				new Quaternionf().identity().rotateTo(GameEngine.FORWARD, GameEngine.BACK),
-				new Projection(0.01f, 1000f, 0, 1, 0, 1));
+		return new Camera3D(new Vector3f(0), new Quaternionf().identity().rotateTo(GameEngine.FORWARD, GameEngine.BACK), new Projection(0.01f, 1000f, 0, 1, 0, 1));
 	}
 
 	public static Camera2D orthographicCamera2D() {

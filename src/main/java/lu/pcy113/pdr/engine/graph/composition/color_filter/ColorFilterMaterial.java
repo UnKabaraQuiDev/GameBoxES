@@ -7,9 +7,7 @@ import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.impl.Renderable;
 
-public class ColorFilterMaterial
-		extends
-		Material {
+public class ColorFilterMaterial extends Material {
 
 	public static final String NAME = ColorFilterMaterial.class.getName();
 
@@ -27,12 +25,20 @@ public class ColorFilterMaterial
 		super.bindProperties(cache, parent, shader);
 	}
 
-	public Vector4f getMul() { return mul; }
+	public Vector4f getMul() {
+		return mul;
+	}
 
-	public void setMul(Vector4f mul) { this.mul = mul; }
+	public void setMul(Vector4f mul) {
+		this.mul = mul;
+	}
 
-	public Vector4f getAdd() { return add; }
+	public Vector4f getAdd() {
+		return add;
+	}
 
-	public void setAdd(Vector4f add) { this.add = add; }
+	public void setAdd(Vector4f add) {
+		this.add = add;
+	}
 
 }

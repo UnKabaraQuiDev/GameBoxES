@@ -5,9 +5,7 @@ import org.joml.Vector2f;
 
 import lu.pcy113.pdr.engine.GameEngine;
 
-public class Transform2D
-		extends
-		Transform {
+public class Transform2D extends Transform {
 
 	protected Vector2f translation;
 	protected float rotation;
@@ -73,17 +71,20 @@ public class Transform2D
 
 	@Override
 	public Matrix4f updateMatrix() {
-		return new Matrix4f().identity()
-				.translate(translation.x, translation.y, 0f)
-				.rotate(rotation, GameEngine.UP)
-				.scale(scale.x, scale.y, 1f);
+		return new Matrix4f().identity().translate(translation.x, translation.y, 0f).rotate(rotation, GameEngine.UP).scale(scale.x, scale.y, 1f);
 	}
 
-	public Vector2f getTranslation() { return translation; }
+	public Vector2f getTranslation() {
+		return translation;
+	}
 
-	public float getRotation() { return rotation; }
+	public float getRotation() {
+		return rotation;
+	}
 
-	public Vector2f getScale() { return scale; }
+	public Vector2f getScale() {
+		return scale;
+	}
 
 	public Transform2D setTranslation(Vector2f translation) {
 		this.translation = translation;

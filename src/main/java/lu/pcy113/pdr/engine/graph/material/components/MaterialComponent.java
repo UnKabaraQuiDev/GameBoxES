@@ -7,11 +7,14 @@ public class MaterialComponent {
 	private Material parent;
 
 	public boolean attach(Material parent) {
-		if (this.parent != null) return false;
+		if (this.parent != null)
+			return false;
 		this.parent = parent;
 		return true;
 	}
 
-	public Material getParent() { return parent; }
+	public Material getParent() {
+		return parent;
+	}
 
 }

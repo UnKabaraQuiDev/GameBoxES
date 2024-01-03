@@ -3,9 +3,7 @@ package lu.pcy113.pdr.engine.graph.material.wireframe;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.material.ShaderPart;
 
-public class WireframeShader
-		extends
-		Shader {
+public class WireframeShader extends Shader {
 
 	public static final String NAME = WireframeShader.class.getName();
 

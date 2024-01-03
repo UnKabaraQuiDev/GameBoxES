@@ -18,9 +18,7 @@ import lu.pcy113.pdr.engine.objs.entity.components.TransformComponent;
 import lu.pcy113.pdr.engine.scene.Scene;
 import lu.pcy113.pdr.engine.scene.Scene3D;
 
-public class InstanceEmitterRenderer
-		extends
-		Renderer<Scene, InstanceEmitterComponent> {
+public class InstanceEmitterRenderer extends Renderer<Scene, InstanceEmitterComponent> {
 
 	public InstanceEmitterRenderer() {
 		super(InstanceEmitter.class);
@@ -29,7 +27,7 @@ public class InstanceEmitterRenderer
 	@Override
 	public void render(CacheManager cache, Scene scene, InstanceEmitterComponent pec) {
 		InstanceEmitter pe = pec.getInstanceEmitter(cache);
-		if (pe == null)  {
+		if (pe == null) {
 			GlobalLogger.log(Level.WARNING, "InstanceEmitter is null!");
 			return;
 		}
@@ -37,7 +35,8 @@ public class InstanceEmitterRenderer
 		GlobalLogger.log(Level.INFO, "InstanceEmitter : " + pe.getId());
 
 		Mesh mesh = pe.getParticleMesh();
-		if (mesh == null) return;
+		if (mesh == null)
+			return;
 
 		Material material = mesh.getMaterial();
 		if (material == null) {
@@ -59,17 +58,18 @@ public class InstanceEmitterRenderer
 			material.setPropertyIfPresent(Shader.PROJECTION_MATRIX, projectionMatrix);
 			material.setPropertyIfPresent(Shader.VIEW_MATRIX, viewMatrix);
 		}
-		if(pec.getParent().hasComponent(TransformComponent.class)) {
+		if (pec.getParent().hasComponent(TransformComponent.class)) {
 			TransformComponent transform = (TransformComponent) pec.getParent().getComponent(pec.getParent().getComponents(TransformComponent.class).get(0));
-			if(transform != null) {
+			if (transform != null) {
 				transformationMatrix = transform.getTransform().getMatrix();
 			}
 		}
 		material.setPropertyIfPresent(Shader.TRANSFORMATION_MATRIX, transformationMatrix);
-		
+
 		if (scene instanceof Scene3D) {
 			PointLightSurfaceComponent plsc = pec.getParent().getComponent(PointLightSurfaceComponent.class);
-			if (plsc != null) plsc.bindLights(cache, ((Scene3D) scene).getLights(), material);
+			if (plsc != null)
+				plsc.bindLights(cache, ((Scene3D) scene).getLights(), material);
 		}
 
 		material.bindProperties(cache, scene, shader);

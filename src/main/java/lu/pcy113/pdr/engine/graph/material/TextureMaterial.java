@@ -9,9 +9,7 @@ import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.graph.texture.Texture;
 import lu.pcy113.pdr.engine.impl.Renderable;
 
-public class TextureMaterial
-		extends
-		Material {
+public class TextureMaterial extends Material {
 
 	private Map<String, Texture> textures;
 
@@ -22,7 +20,7 @@ public class TextureMaterial
 		int i = 0;
 		for (Entry<String, Texture> txt : textures.entrySet()) {
 			properties.put(txt.getKey(), i++);
-			//this.textures.put(txt.getKey(), new Texture(txt.getValue()));
+			// this.textures.put(txt.getKey(), new Texture(txt.getValue()));
 		}
 	}
 

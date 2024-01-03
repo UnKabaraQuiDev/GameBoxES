@@ -37,7 +37,14 @@ public final class PDRUtils {
 	}
 
 	public static int[] toPrimitiveInt(Integer[] data) {
-		return Arrays.stream(data).mapToInt(Integer::intValue).toArray();
+		return Arrays.stream(data).map((Integer i) -> (i == null ? 0 : i)).mapToInt(Integer::intValue).toArray();
+	}
+	
+	public static byte[] toPrimitiveByte(Byte[] data) {
+		byte[] y = new byte[data.length];
+		for (int i = 0; i < data.length; i++)
+			y[i] = Byte.valueOf((byte) data[i]);
+		return y;
 	}
 
 	public static float[] toPrimitiveFloat(Object[] data) {

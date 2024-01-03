@@ -59,9 +59,7 @@ import lu.pcy113.pdr.engine.scene.camera.Projection;
 import lu.pcy113.pdr.engine.utils.interpol.Interpolators;
 import lu.pcy113.pdr.engine.utils.transform.Transform3D;
 
-public class PDRClientGame2
-		implements
-		GameLogic {
+public class PDRClientGame2 implements GameLogic {
 
 	GameEngine engine;
 	CacheManager cache;
@@ -97,8 +95,7 @@ public class PDRClientGame2
 		GameEngine.DEBUG.wireframeColor = new Vector4f(0.2f, 0.2f, 0.2f, 0.2f);
 		GameEngine.DEBUG.gizmos = true;
 
-		Shader shader1 = new Shader("main1", new ShaderPart("./resources/shaders/main/uv.frag"),
-				new ShaderPart("./resources/shaders/main/main.vert")) {
+		Shader shader1 = new Shader("main1", new ShaderPart("./resources/shaders/main/uv.frag"), new ShaderPart("./resources/shaders/main/main.vert")) {
 			@Override
 			public void createUniforms() {
 				this.createUniform(Shader.PROJECTION_MATRIX);
@@ -108,8 +105,7 @@ public class PDRClientGame2
 		};
 		this.cache.addShader(shader1);
 
-		Shader partShader = new Shader("partMain", true, new ShaderPart("./resources/shaders/main/uv.frag"),
-				new ShaderPart("./resources/shaders/parts/main.vert")) {
+		Shader partShader = new Shader("partMain", true, new ShaderPart("./resources/shaders/main/uv.frag"), new ShaderPart("./resources/shaders/parts/main.vert")) {
 			@Override
 			public void createUniforms() {
 				this.createUniform(Shader.PROJECTION_MATRIX);
@@ -125,11 +121,8 @@ public class PDRClientGame2
 		this.cache.addMesh(partCube);
 		this.parts = new InstanceEmitter("parts", partCube, 200, new Transform3D());
 		this.parts.update((part) -> {
-			((Transform3D) part.getTransform())
-					.setTranslation(new Vector3f((float) Math.cos(2 * Math.PI / this.parts.getParticleCount() * part.getIndex()),
-							(float) Math.sin(2 * Math.PI / this.parts.getParticleCount() * part.getIndex()),
-							(float) Math.sin(2 * Math.PI / this.parts.getParticleCount() * part.getIndex() * 5)))
-					.setScale(new Vector3f(0.05f, 0.05f, 0.05f)).updateMatrix();
+			((Transform3D) part.getTransform()).setTranslation(new Vector3f((float) Math.cos(2 * Math.PI / this.parts.getParticleCount() * part.getIndex()), (float) Math.sin(2 * Math.PI / this.parts.getParticleCount() * part.getIndex()),
+					(float) Math.sin(2 * Math.PI / this.parts.getParticleCount() * part.getIndex() * 5))).setScale(new Vector3f(0.05f, 0.05f, 0.05f)).updateMatrix();
 		});
 		this.cache.addInstanceEmitter(this.parts);
 
@@ -156,10 +149,8 @@ public class PDRClientGame2
 		this.cache.addTextModel(txtModel);
 
 		this.scene = new Scene3D("main-scene");
-		this.planeEntity = this.scene.addEntity("model", new Entity(new ModelComponent(this.plane),
-				new Transform3DComponent(new Transform3D(new Vector3f(1, 1, 1), new Quaternionf(), new Vector3f(0.2f)))));
-		this.partsModelEntity = this.scene.addEntity("parts",
-				new Entity(new InstanceEmitterModelComponent(this.partsModel), new Transform3DComponent()));
+		this.planeEntity = this.scene.addEntity("model", new Entity(new ModelComponent(this.plane), new Transform3DComponent(new Transform3D(new Vector3f(1, 1, 1), new Quaternionf(), new Vector3f(0.2f)))));
+		this.partsModelEntity = this.scene.addEntity("parts", new Entity(new InstanceEmitterModelComponent(this.partsModel), new Transform3DComponent()));
 		this.txtModelEntity = this.scene.addEntity("text", new Entity(new TextModelComponent(txtModel), new Transform3DComponent()));
 
 		Gizmo gizmoXYZ = ObjLoader.loadGizmo("gizmoXYZ", "./resources/models/gizmos/grid_xyz.obj");
@@ -190,9 +181,7 @@ public class PDRClientGame2
 
 		this.ui = new Scene2D("ui", Camera.orthographicCamera3D());
 		this.cache.addScene(this.ui);
-		Shader slotShader = new Shader("slot", true,
-				new ShaderPart("./resources/shaders/ui/plain.vert"),
-				new ShaderPart("./resources/shaders/ui/txt1.frag")) {
+		Shader slotShader = new Shader("slot", true, new ShaderPart("./resources/shaders/ui/plain.vert"), new ShaderPart("./resources/shaders/ui/txt1.frag")) {
 			@Override
 			public void createUniforms() {
 				this.createUniform(Shader.TRANSFORMATION_MATRIX);
@@ -244,8 +233,7 @@ public class PDRClientGame2
 		uiCam.setRotation(new Quaternionf().lookAlong(new Vector3f(0, 0, -1), new Vector3f(0, 1, 0)));
 		uiCam.updateMatrix();
 
-		this.genMatInterpolation = new CallbackValueInterpolation<BackgroundMaterial, Vector4f>(this.genMat, new Vector4f(0, 1, 0, 1),
-				new Vector4f(1, 0, 1, 1), Interpolators.BOUNCE_IN_OUT) {
+		this.genMatInterpolation = new CallbackValueInterpolation<BackgroundMaterial, Vector4f>(this.genMat, new Vector4f(0, 1, 0, 1), new Vector4f(1, 0, 1, 1), Interpolators.BOUNCE_IN_OUT) {
 			@Override
 			public Vector4f evaluate(float progress) {
 				return new Vector4f(this.start).lerp(this.end, progress);
@@ -283,10 +271,8 @@ public class PDRClientGame2
 
 				cam.roll(by * this.camRotSpeed);
 
-				float cy = (this.engine.getWindow().isKeyPressed(KeyOptions.FORWARD) ? 1 : 0)
-						- (this.engine.getWindow().isKeyPressed(KeyOptions.BACKWARD) ? 1 : 0);
-				float cx = (this.engine.getWindow().isKeyPressed(KeyOptions.RIGHT) ? 1 : 0)
-						- (this.engine.getWindow().isKeyPressed(KeyOptions.LEFT) ? 1 : 0);
+				float cy = (this.engine.getWindow().isKeyPressed(KeyOptions.FORWARD) ? 1 : 0) - (this.engine.getWindow().isKeyPressed(KeyOptions.BACKWARD) ? 1 : 0);
+				float cx = (this.engine.getWindow().isKeyPressed(KeyOptions.RIGHT) ? 1 : 0) - (this.engine.getWindow().isKeyPressed(KeyOptions.LEFT) ? 1 : 0);
 
 				System.err.println(ax + " " + ay + " : " + bx + " " + by + " : " + cx + " " + cy);
 

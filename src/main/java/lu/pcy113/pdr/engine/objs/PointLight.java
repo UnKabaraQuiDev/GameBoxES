@@ -5,9 +5,7 @@ import org.joml.Vector3f;
 import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.impl.UniqueID;
 
-public class PointLight
-		implements
-		UniqueID {
+public class PointLight implements UniqueID {
 
 	public static final String POSITION = "position";
 	public static final String CONSTANT = "constant";
@@ -22,15 +20,7 @@ public class PointLight
 	private float constant, linear, quadratic;
 	private Vector3f ambient, diffuse, specular;
 
-	public PointLight(
-			String name,
-			Vector3f position,
-			float constant,
-			float linear,
-			float quadratic,
-			Vector3f ambient,
-			Vector3f diffuse,
-			Vector3f specular) {
+	public PointLight(String name, Vector3f position, float constant, float linear, float quadratic, Vector3f ambient, Vector3f diffuse, Vector3f specular) {
 		this.name = name;
 		this.constant = constant;
 		this.linear = linear;
@@ -55,30 +45,56 @@ public class PointLight
 	}
 
 	@Override
-	public String getId() { return name; }
+	public String getId() {
+		return name;
+	}
 
-	public float getConstant() { return constant; }
+	public float getConstant() {
+		return constant;
+	}
 
-	public void setConstant(float constant) { this.constant = constant; }
+	public void setConstant(float constant) {
+		this.constant = constant;
+	}
 
-	public float getLinear() { return linear; }
+	public float getLinear() {
+		return linear;
+	}
 
-	public void setLinear(float linear) { this.linear = linear; }
+	public void setLinear(float linear) {
+		this.linear = linear;
+	}
 
-	public float getQuadratic() { return quadratic; }
+	public float getQuadratic() {
+		return quadratic;
+	}
 
-	public void setQuadratic(float quadratic) { this.quadratic = quadratic; }
+	public void setQuadratic(float quadratic) {
+		this.quadratic = quadratic;
+	}
 
-	public Vector3f getAmbient() { return ambient; }
+	public Vector3f getAmbient() {
+		return ambient;
+	}
 
-	public void setAmbient(Vector3f ambient) { this.ambient = ambient; }
+	public void setAmbient(Vector3f ambient) {
+		this.ambient = ambient;
+	}
 
-	public Vector3f getDiffuse() { return diffuse; }
+	public Vector3f getDiffuse() {
+		return diffuse;
+	}
 
-	public void setDiffuse(Vector3f diffuse) { this.diffuse = diffuse; }
+	public void setDiffuse(Vector3f diffuse) {
+		this.diffuse = diffuse;
+	}
 
-	public Vector3f getSpecular() { return specular; }
+	public Vector3f getSpecular() {
+		return specular;
+	}
 
-	public void setSpecular(Vector3f specular) { this.specular = specular; }
+	public void setSpecular(Vector3f specular) {
+		this.specular = specular;
+	}
 
 }

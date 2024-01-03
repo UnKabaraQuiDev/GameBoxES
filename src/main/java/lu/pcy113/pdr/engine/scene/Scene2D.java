@@ -6,9 +6,7 @@ import java.util.Map;
 import lu.pcy113.pdr.engine.objs.entity.Entity;
 import lu.pcy113.pdr.engine.scene.camera.Camera;
 
-public class Scene2D
-		extends
-		Scene {
+public class Scene2D extends Scene {
 
 	public static final String NAME = Scene2D.class.getName();
 
@@ -27,9 +25,13 @@ public class Scene2D
 		super.cleanup();
 	}
 
-	public Map<String, Entity> getEntities() { return entities; }
+	public Map<String, Entity> getEntities() {
+		return entities;
+	}
 
-	public void setEntities(Map<String, Entity> entities) { this.entities = entities; }
+	public void setEntities(Map<String, Entity> entities) {
+		this.entities = entities;
+	}
 
 	public Entity addEntity(String str, Entity entity) {
 		this.entities.put(str, entity);

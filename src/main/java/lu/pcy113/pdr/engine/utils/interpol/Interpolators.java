@@ -2,9 +2,7 @@ package lu.pcy113.pdr.engine.utils.interpol;
 
 import org.joml.Math;
 
-public enum Interpolators
-		implements
-		Interpolator {
+public enum Interpolators implements Interpolator {
 
 	LINEAR {
 		@Override

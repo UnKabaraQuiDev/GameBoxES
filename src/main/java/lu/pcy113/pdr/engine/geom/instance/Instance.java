@@ -16,10 +16,21 @@ public class Instance {
 		this.buffers = buffers;
 	}
 
-	public int getIndex() { return this.index; }
-	public Transform getTransform() { return this.transform; }
-	public Object[] getBuffers() { return this.buffers; }
-	public void setTransform(Transform transform) { this.transform = transform; }
+	public int getIndex() {
+		return this.index;
+	}
+
+	public Transform getTransform() {
+		return this.transform;
+	}
+
+	public Object[] getBuffers() {
+		return this.buffers;
+	}
+
+	public void setTransform(Transform transform) {
+		this.transform = transform;
+	}
 
 	public void setBuffers(Object[] buffers) {
 		if (this.buffers.length != buffers.length)

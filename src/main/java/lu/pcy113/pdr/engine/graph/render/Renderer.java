@@ -5,10 +5,7 @@ import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.impl.Renderable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
 
-public abstract class Renderer<T, K extends Renderable>
-		implements
-		UniqueID,
-		Cleanupable {
+public abstract class Renderer<T, K extends Renderable> implements UniqueID, Cleanupable {
 
 	private String clazz;
 
@@ -26,6 +23,8 @@ public abstract class Renderer<T, K extends Renderable>
 	}
 
 	@Override
-	public String getId() { return clazz; }
+	public String getId() {
+		return clazz;
+	}
 
 }

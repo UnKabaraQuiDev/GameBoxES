@@ -30,24 +30,44 @@ public abstract class CallbackValueInterpolation<T, D> {
 
 	public abstract void callback(T object, D value);
 
-	public void setStart(D start) { this.start = start; }
+	public void setStart(D start) {
+		this.start = start;
+	}
 
-	public D getStart() { return this.start; }
+	public D getStart() {
+		return this.start;
+	}
 
-	public D getEnd() { return this.end; }
+	public D getEnd() {
+		return this.end;
+	}
 
-	public void setEnd(D end) { this.end = end; }
+	public void setEnd(D end) {
+		this.end = end;
+	}
 
-	public Interpolator getInterpolator() { return this.interpolator; }
+	public Interpolator getInterpolator() {
+		return this.interpolator;
+	}
 
-	public void setInterpolator(Interpolator interpolator) { this.interpolator = interpolator; }
+	public void setInterpolator(Interpolator interpolator) {
+		this.interpolator = interpolator;
+	}
 
-	public T getObject() { return this.object; }
+	public T getObject() {
+		return this.object;
+	}
 
-	public void setObject(T object) { this.object = object; }
+	public void setObject(T object) {
+		this.object = object;
+	}
 
-	public float getProgress() { return this.progress; }
+	public float getProgress() {
+		return this.progress;
+	}
 
-	public void setProgress(float progress) { this.progress = progress; }
+	public void setProgress(float progress) {
+		this.progress = progress;
+	}
 
 }

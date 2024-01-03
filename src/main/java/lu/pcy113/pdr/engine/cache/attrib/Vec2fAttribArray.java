@@ -5,9 +5,7 @@ import java.util.Arrays;
 import org.joml.Vector2f;
 import org.lwjgl.opengl.GL40;
 
-public class Vec2fAttribArray
-		extends
-		AttribArray {
+public class Vec2fAttribArray extends AttribArray {
 
 	private Vector2f[] data;
 
@@ -29,11 +27,13 @@ public class Vec2fAttribArray
 	@Override
 	public void init() {
 		GL40.glBufferData(bufferType, toFlatArray(), iStatic ? GL40.GL_STATIC_DRAW : GL40.GL_DYNAMIC_DRAW);
-		if (bufferType != GL40.GL_ELEMENT_ARRAY_BUFFER) GL40.glVertexAttribPointer(index, dataSize * 2, GL40.GL_FLOAT, false, 0, 0);
+		if (bufferType != GL40.GL_ELEMENT_ARRAY_BUFFER)
+			GL40.glVertexAttribPointer(index, dataSize * 2, GL40.GL_FLOAT, false, 0, 0);
 	}
 
 	public boolean update(Vector2f[] nPos) {
-		if (!iStatic && nPos.length != data.length) return false;
+		if (!iStatic && nPos.length != data.length)
+			return false;
 		data = nPos;
 
 		GL40.glBufferSubData(GL40.GL_ARRAY_BUFFER, 0, toFlatArray());
@@ -60,9 +60,13 @@ public class Vec2fAttribArray
 	}
 
 	@Override
-	public int getLength() { return data.length; }
+	public int getLength() {
+		return data.length;
+	}
 
-	public Vector2f[] getData() { return data; }
+	public Vector2f[] getData() {
+		return data;
+	}
 
 	public Vector2f get(int i) {
 		return data[i];

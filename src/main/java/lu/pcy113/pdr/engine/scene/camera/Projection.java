@@ -50,8 +50,8 @@ public class Projection {
 	}
 
 	public Matrix4f orthographicUpdateMatrix(int width, int height) {
-		return projMatrix.setOrtho(left*width/size, right*width/size, top*height/size, bottom*height/size, near, far);
-		//return projMatrix.setOrthoSymmetric(width / size, height / size, near, far);
+		return projMatrix.setOrtho(left * width / size, right * width / size, top * height / size, bottom * height / size, near, far);
+		// return projMatrix.setOrthoSymmetric(width / size, height / size, near, far);
 	}
 
 	public Matrix4f update(int w, int h) {
@@ -68,18 +68,56 @@ public class Projection {
 		update(width, height);
 	}
 
-	public Matrix4f getProjMatrix() { return projMatrix; }
-	public void setProjMatrix(Matrix4f projMatrix) { this.projMatrix = projMatrix; }
-	public float getFar() { return far; }
-	public void setFar(float far) { this.far = far; }
-	public float getFov() { return fov; }
-	public void setFov(float fov) { this.fov = fov; }
-	public float getNear() { return near; }
-	public void setNear(float near) { this.near = near; }
-	public boolean isPerspective() { return perspective; }
-	public boolean isOrthographic() { return !perspective; }
-	public void setPerspective(boolean perspective) { this.perspective = perspective; }
-	public float getSize() { return size; }
-	public void setSize(float size) { this.size = size; }
+	public Matrix4f getProjMatrix() {
+		return projMatrix;
+	}
+
+	public void setProjMatrix(Matrix4f projMatrix) {
+		this.projMatrix = projMatrix;
+	}
+
+	public float getFar() {
+		return far;
+	}
+
+	public void setFar(float far) {
+		this.far = far;
+	}
+
+	public float getFov() {
+		return fov;
+	}
+
+	public void setFov(float fov) {
+		this.fov = fov;
+	}
+
+	public float getNear() {
+		return near;
+	}
+
+	public void setNear(float near) {
+		this.near = near;
+	}
+
+	public boolean isPerspective() {
+		return perspective;
+	}
+
+	public boolean isOrthographic() {
+		return !perspective;
+	}
+
+	public void setPerspective(boolean perspective) {
+		this.perspective = perspective;
+	}
+
+	public float getSize() {
+		return size;
+	}
+
+	public void setSize(float size) {
+		this.size = size;
+	}
 
 }

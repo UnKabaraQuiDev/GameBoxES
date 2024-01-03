@@ -7,10 +7,7 @@ import org.lwjgl.openal.AL10;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
 
-public class Sound
-		implements
-		UniqueID,
-		Cleanupable {
+public class Sound implements UniqueID, Cleanupable {
 
 	private final String name;
 	private final int sbo;
@@ -33,6 +30,8 @@ public class Sound
 	}
 
 	@Override
-	public String getId() { return null; }
+	public String getId() {
+		return null;
+	}
 
 }

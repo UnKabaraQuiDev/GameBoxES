@@ -7,9 +7,7 @@ import org.lwjgl.opengl.GL40;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.utils.PDRUtils;
 
-public abstract class AttribArray
-		implements
-		Cleanupable {
+public abstract class AttribArray implements Cleanupable {
 
 	protected int vbo;
 	protected boolean iStatic = true;;
@@ -49,7 +47,9 @@ public abstract class AttribArray
 		this.divisor = divisor;
 	}
 
-	public int getDataCount() { return getLength() / getDataSize(); }
+	public int getDataCount() {
+		return getLength() / getDataSize();
+	}
 
 	public abstract int getLength();
 
@@ -83,17 +83,49 @@ public abstract class AttribArray
 		GL40.glDeleteBuffers(vbo);
 	}
 
-	public String getName() { return name; }
-	public void setName(String name) { this.name = name; }
-	public int getIndex() { return index; }
-	public void setIndex(int index) { this.index = index; }
-	public int getDataSize() { return dataSize; }
-	public int getBufferType() { return bufferType; }
-	public void setBufferType(int bufferType) { this.bufferType = bufferType; }
-	public void setVbo(int vbo) { this.vbo = vbo; }
-	public int getVbo() { return vbo; }
-	public boolean isStatic() { return iStatic; }
-	public int getDivisor() { return divisor; }
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
+	}
+
+	public int getDataSize() {
+		return dataSize;
+	}
+
+	public int getBufferType() {
+		return bufferType;
+	}
+
+	public void setBufferType(int bufferType) {
+		this.bufferType = bufferType;
+	}
+
+	public void setVbo(int vbo) {
+		this.vbo = vbo;
+	}
+
+	public int getVbo() {
+		return vbo;
+	}
+
+	public boolean isStatic() {
+		return iStatic;
+	}
+
+	public int getDivisor() {
+		return divisor;
+	}
 
 	@Override
 	public String toString() {
@@ -102,8 +134,10 @@ public abstract class AttribArray
 
 	public static <T> boolean update(AttribArray arr, T[] data) {
 		arr.bind();
-		if (arr instanceof IntAttribArray || arr instanceof UIntAttribArray)
+		if (arr instanceof IntAttribArray)
 			return ((IntAttribArray) arr).update(PDRUtils.toPrimitiveInt((Integer[]) data));
+		else if (arr instanceof UIntAttribArray)
+			return ((UIntAttribArray) arr).update(PDRUtils.toPrimitiveInt((Integer[]) data));
 		else if (arr instanceof FloatAttribArray)
 			return ((FloatAttribArray) arr).update(PDRUtils.toPrimitiveFloat(data));
 		else if (arr instanceof Mat4fAttribArray)
@@ -112,7 +146,8 @@ public abstract class AttribArray
 			return ((Vec4fAttribArray) arr).update((Vector4f[]) data);
 		else if (arr instanceof Vec3fAttribArray)
 			return ((Vec3fAttribArray) arr).update((Vector3f[]) data);
-		else if (arr instanceof Mat3x2fAttribArray) return ((Mat3x2fAttribArray) arr).update(PDRUtils.castArrayMat3x2f(data));
+		else if (arr instanceof Mat3x2fAttribArray)
+			return ((Mat3x2fAttribArray) arr).update(PDRUtils.castArrayMat3x2f(data));
 		return false;
 	}
 

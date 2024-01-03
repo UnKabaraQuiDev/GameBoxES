@@ -15,7 +15,7 @@ public final class FileUtils {
 
 	public static String readFile(String filePath) {
 		String str;
-		if(!Files.exists(Paths.get(filePath))) {
+		if (!Files.exists(Paths.get(filePath))) {
 			throw new RuntimeException("File [" + filePath + "] does not exist");
 		}
 		try {
@@ -35,7 +35,7 @@ public final class FileUtils {
 			for (File file : files) {
 				if (file.isFile()) {
 					list += file + "\n";
-				}else {
+				} else {
 					list += recursiveTree(file.getCanonicalPath());
 				}
 			}

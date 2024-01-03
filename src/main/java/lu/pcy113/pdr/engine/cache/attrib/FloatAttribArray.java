@@ -6,9 +6,7 @@ import org.lwjgl.opengl.GL40;
 
 import lu.pcy113.pclib.GlobalLogger;
 
-public class FloatAttribArray
-		extends
-		AttribArray {
+public class FloatAttribArray extends AttribArray {
 
 	private float[] data;
 
@@ -31,7 +29,7 @@ public class FloatAttribArray
 		super(name, index, dataSize, _static);
 		this.data = data;
 	}
-	
+
 	public FloatAttribArray(String name, int index, int dataSize, float[] data, boolean _static, int divisor) {
 		super(name, index, dataSize, _static, divisor);
 		this.data = data;
@@ -49,20 +47,19 @@ public class FloatAttribArray
 			return false;
 		data = nPos;
 
-		GL40.glBufferSubData(GL40.GL_ARRAY_BUFFER, 0, data);
+		GL40.glBufferSubData(bufferType, 0, data);
 
-		int err = GL40.glGetError();
-		if (err != GL40.GL_NO_ERROR)
-			GlobalLogger.log(Level.WARNING, "Could not update: " + err);
-		else
-			return true;
-		return false;
+		return GL40.glGetError() == GL40.GL_NO_ERROR;
 	}
 
 	@Override
-	public int getLength() { return data.length; }
+	public int getLength() {
+		return data.length;
+	}
 
-	public float[] getData() { return data; }
+	public float[] getData() {
+		return data;
+	}
 
 	public Float get(int i) {
 		return data[i];

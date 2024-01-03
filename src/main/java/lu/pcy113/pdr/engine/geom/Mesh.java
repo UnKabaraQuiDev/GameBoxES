@@ -4,23 +4,22 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.logging.Level;
 
+import org.joml.Vector2f;
+import org.joml.Vector3f;
 import org.lwjgl.opengl.GL40;
 
 import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pdr.engine.cache.attrib.AttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.MultiAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.UIntAttribArray;
+import lu.pcy113.pdr.engine.cache.attrib.Vec2fAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.Vec3fAttribArray;
 import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.impl.Renderable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
 
-public class Mesh
-		implements
-		UniqueID,
-		Cleanupable,
-		Renderable {
+public class Mesh implements UniqueID, Cleanupable, Renderable {
 
 	public static final String NAME = Mesh.class.getName();
 
@@ -69,9 +68,11 @@ public class Mesh
 		GlobalLogger.log(Level.INFO, "Mesh " + name + ": " + vao + " & " + vbo + "; v:" + vertexCount);
 	}
 
-	/*public Mesh(String name2, String material2, Vec3fAttribArray pos, UIntAttribArray ind, Vec3fAttribArray norm, Vec2fAttribArray uv) {
-		this(name2, material2, pos, ind, new AttribArray[] {norm, uv});
-	}*/
+	/*
+	 * public Mesh(String name2, String material2, Vec3fAttribArray pos,
+	 * UIntAttribArray ind, Vec3fAttribArray norm, Vec2fAttribArray uv) {
+	 * this(name2, material2, pos, ind, new AttribArray[] {norm, uv}); }
+	 */
 
 	public void storeAttribArray(AttribArray data) {
 		this.vbo.put(data.getIndex(), data.gen());
@@ -79,10 +80,10 @@ public class Mesh
 		data.init();
 		data.enable();
 		data.unbind();
-		
-		if(data instanceof MultiAttribArray) {
+
+		if (data instanceof MultiAttribArray) {
 			MultiAttribArray ma = (MultiAttribArray) data;
-			for(int a = ma.getMinIndex(); a <= ma.getMaxIndex(); a++) {
+			for (int a = ma.getMinIndex()+1; a <= ma.getMaxIndex(); a++) {
 				vbo.put(a, data.getVbo());
 			}
 		}
@@ -105,7 +106,8 @@ public class Mesh
 
 	@Override
 	public void cleanup() {
-		if (vao == -1) return;
+		if (vao == -1)
+			return;
 
 		GL40.glDeleteVertexArrays(vao);
 		Arrays.stream(attribs).forEach(AttribArray::cleanup);
@@ -113,16 +115,55 @@ public class Mesh
 	}
 
 	@Override
-	public String getId() { return name; }
+	public String getId() {
+		return name;
+	}
 
-	public int getVertexCount() { return vertexCount; }
-	public int getVao() { return vao; }
-	public HashMap<Integer, Integer> getVbo() { return vbo; }
-	public String getName() { return name; }
-	public UIntAttribArray getIndices() { return indices; }
-	public Vec3fAttribArray getVertices() { return vertices; }
-	public Material getMaterial() { return material; }
-	public AttribArray[] getAttribs() { return attribs; }
-	public int getIndicesCount() { return indicesCount; }
+	public int getVertexCount() {
+		return vertexCount;
+	}
+
+	public int getVao() {
+		return vao;
+	}
+
+	public HashMap<Integer, Integer> getVbo() {
+		return vbo;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public UIntAttribArray getIndices() {
+		return indices;
+	}
+
+	public Vec3fAttribArray getVertices() {
+		return vertices;
+	}
+
+	public Material getMaterial() {
+		return material;
+	}
+
+	public AttribArray[] getAttribs() {
+		return attribs;
+	}
+
+	public int getIndicesCount() {
+		return indicesCount;
+	}
+
+	public static Mesh newQuad(String name, Material material2, Vector2f size) {
+		Mesh mesh = new Mesh(name, material2,
+				new Vec3fAttribArray("pos", 0, 1,
+						new Vector3f[] { new Vector3f(-1f, -1f, 0f).mul(size.x, size.y, 0).div(2), new Vector3f(1f, -1f, 0f).mul(size.x, size.y, 0).div(2), new Vector3f(1f, 1f, 0f).mul(size.x, size.y, 0).div(2),
+								new Vector3f(-1f, 1f, 0f).mul(size.x, size.y, 0).div(2), }),
+				new UIntAttribArray("ind", -1, 1, new int[] { 0, 1, 2, 0, 2, 3 }, GL40.GL_ELEMENT_ARRAY_BUFFER),
+				new Vec3fAttribArray("normal", 1, 1, new Vector3f[] { new Vector3f(0, 0, 1), new Vector3f(0, 0, 1), new Vector3f(0, 0, 1), new Vector3f(0, 0, 1) }),
+				new Vec2fAttribArray("uv", 2, 1, new Vector2f[] { new Vector2f(0, 0), new Vector2f(1, 0), new Vector2f(1, 1), new Vector2f(0, 1), }));
+		return mesh;
+	}
 
 }

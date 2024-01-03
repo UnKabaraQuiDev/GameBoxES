@@ -5,11 +5,7 @@ import lu.pcy113.pdr.engine.impl.Renderable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
 import lu.pcy113.pdr.engine.scene.camera.Camera;
 
-public abstract class Scene
-		implements
-		UniqueID,
-		Cleanupable,
-		Renderable {
+public abstract class Scene implements UniqueID, Cleanupable, Renderable {
 
 	protected String name;
 	protected Camera camera;
@@ -27,8 +23,12 @@ public abstract class Scene
 	}
 
 	@Override
-	public String getId() { return name; }
+	public String getId() {
+		return name;
+	}
 
-	public Camera getCamera() { return camera; }
+	public Camera getCamera() {
+		return camera;
+	}
 
 }

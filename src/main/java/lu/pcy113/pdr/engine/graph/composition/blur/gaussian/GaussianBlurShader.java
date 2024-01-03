@@ -4,9 +4,7 @@ import lu.pcy113.pdr.engine.graph.composition.PassRenderLayer;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.material.ShaderPart;
 
-public class GaussianBlurShader
-		extends
-		Shader {
+public class GaussianBlurShader extends Shader {
 
 	public static final String NAME = GaussianBlurShader.class.getName();
 

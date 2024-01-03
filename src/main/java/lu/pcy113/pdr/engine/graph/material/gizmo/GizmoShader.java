@@ -1,11 +1,10 @@
 package lu.pcy113.pdr.engine.graph.material.gizmo;
 
+import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.material.ShaderPart;
 
-public class GizmoShader
-		extends
-		Shader {
+public class GizmoShader extends Shader {
 
 	public static final String NAME = GizmoShader.class.getName();
 
@@ -21,6 +20,16 @@ public class GizmoShader
 		getUniform(Shader.TRANSFORMATION_MATRIX);
 		// frag
 		getUniform(Shader.VIEW_POSITION);
+	}
+
+	public static class GizmoMaterial extends Material {
+
+		public static final String NAME = GizmoMaterial.class.getName();
+
+		public GizmoMaterial() {
+			super(NAME, new GizmoShader());
+		}
+
 	}
 
 }

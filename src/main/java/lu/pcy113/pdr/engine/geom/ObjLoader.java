@@ -38,8 +38,8 @@ public final class ObjLoader {
 			switch (tokens[0]) {
 			case "v":
 				vertices.add(new Vector3f(Float.parseFloat(tokens[1]), Float.parseFloat(tokens[2]), Float.parseFloat(tokens[3])));
-				if (tokens.length > 4) colors.add(new Vector4f(Float.parseFloat(tokens[4]), Float.parseFloat(tokens[5]), Float.parseFloat(tokens[6]),
-						tokens.length > 7 ? Float.parseFloat(tokens[7]) : 1));
+				if (tokens.length > 4)
+					colors.add(new Vector4f(Float.parseFloat(tokens[4]), Float.parseFloat(tokens[5]), Float.parseFloat(tokens[6]), tokens.length > 7 ? Float.parseFloat(tokens[7]) : 1));
 				break;
 			case "l":
 				edges.add(new Vector2i(Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2])));
@@ -90,9 +90,7 @@ public final class ObjLoader {
 		 * "Indices " + Arrays.toString(indicesArr));
 		 */
 
-		return new Gizmo(name, new Vec3fAttribArray("pos", 0, 1, verticesArr, GL40.GL_ARRAY_BUFFER),
-				new UIntAttribArray("ind", -1, 1, indicesArr, GL40.GL_ELEMENT_ARRAY_BUFFER),
-				new Vec4fAttribArray("col", 1, 1, colorArr, GL40.GL_ARRAY_BUFFER));
+		return new Gizmo(name, new Vec3fAttribArray("pos", 0, 1, verticesArr, GL40.GL_ARRAY_BUFFER), new UIntAttribArray("ind", -1, 1, indicesArr, GL40.GL_ELEMENT_ARRAY_BUFFER), new Vec4fAttribArray("col", 1, 1, colorArr, GL40.GL_ARRAY_BUFFER));
 	}
 
 	public static Mesh loadMesh(String name, Material material, String path) {
@@ -180,8 +178,10 @@ public final class ObjLoader {
 		int len = tokens.length;
 		int pos = -1, coords = -1, normals = -1;
 		pos = Integer.parseInt(tokens[0]) - 1;
-		if (len > 1) coords = Integer.parseInt(tokens[1]) - 1;
-		if (len > 2) normals = Integer.parseInt(tokens[2]) - 1;
+		if (len > 1)
+			coords = Integer.parseInt(tokens[1]) - 1;
+		if (len > 2)
+			normals = Integer.parseInt(tokens[2]) - 1;
 		faces.add(new Vector3i(pos, coords, normals));
 	}
 

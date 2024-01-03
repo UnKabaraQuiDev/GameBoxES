@@ -3,27 +3,55 @@ from PIL import Image
 import numpy as np
 from math import floor
 
-columns = 20
+columns = 19
 rows = 5
 
 string = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
 
-out = [[0, 0, 0, 0] for i in range(255)]
+out = [[0, 0, 0, 0] for i in range(256)]
 
 def map(x, in_min, in_max, out_min, out_max):
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
 
 
+for i in range(256):
+	char = chr(i)
+	try:
+		index = string.index(char)
+
+		x = index % columns
+		y = index // columns
+
+		out[i] = [
+			map(float(x)/columns, 0, 1, 0, 1)*255,
+			map(float(y)/rows, 0, 1, 1, 0)*255,
+			0,
+			255
+		]
+
+		print(f"char: {char}:{i}:{index} -> {x}:{y} -> {out[i]}")
+	except:
+		print(f'no index for {char}')
+
+"""
 i = 0
-for x in string:
-	ascii = ord(x)
+for st in string:
+	asc = ord(st)
 
-	column = floor(i / columns)
-	row = i % columns
+	x = i % columns
+	y = i // columns
 
-	out[ascii] = [float(row)/rows*255, map(float(column)/columns, 0, 1, 1, 0)*255, 0, 255]
+	out[asc] = [
+		(float(x)/columns)*255,
+		map(float(y)/rows, 0, 1, 1, 0)*255,
+		0,
+		255
+	]
+
+	print(f"char: {st}:{i} -> {x}:{y} -> {out[asc]}")
 
 	i += 1
+"""
 
 print(out)
 N = len(out)
@@ -41,5 +69,5 @@ for i in range(N):
 print(image_data)
 
 img = Image.fromarray(image_data, 'RGBA')
-img.save('font1indices.png')
+img.save('font1indices_1.png')
 img.show()

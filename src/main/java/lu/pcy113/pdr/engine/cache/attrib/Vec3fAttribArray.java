@@ -5,9 +5,7 @@ import java.util.Arrays;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL40;
 
-public class Vec3fAttribArray
-		extends
-		AttribArray {
+public class Vec3fAttribArray extends AttribArray {
 
 	private Vector3f[] data;
 
@@ -34,11 +32,13 @@ public class Vec3fAttribArray
 	@Override
 	public void init() {
 		GL40.glBufferData(bufferType, toFlatArray(), iStatic ? GL40.GL_STATIC_DRAW : GL40.GL_DYNAMIC_DRAW);
-		if (bufferType != GL40.GL_ELEMENT_ARRAY_BUFFER) GL40.glVertexAttribPointer(index, dataSize * 3, GL40.GL_FLOAT, false, 0, 0);
+		if (bufferType != GL40.GL_ELEMENT_ARRAY_BUFFER)
+			GL40.glVertexAttribPointer(index, dataSize * 3, GL40.GL_FLOAT, false, 0, 0);
 	}
 
 	public boolean update(Vector3f[] nPos) {
-		if (!iStatic && nPos.length != data.length) throw new IllegalArgumentException("Array's size cannot change");
+		if (!iStatic && nPos.length != data.length)
+			throw new IllegalArgumentException("Array's size cannot change");
 		data = nPos;
 
 		GL40.glBufferSubData(GL40.GL_ARRAY_BUFFER, 0, toFlatArray());
@@ -66,9 +66,13 @@ public class Vec3fAttribArray
 	}
 
 	@Override
-	public int getLength() { return data.length; }
+	public int getLength() {
+		return data.length;
+	}
 
-	public Vector3f[] getData() { return data; }
+	public Vector3f[] getData() {
+		return data;
+	}
 
 	public Vector3f get(int i) {
 		return data[i];

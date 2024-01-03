@@ -2,9 +2,7 @@ package lu.pcy113.pdr.client.game;
 
 import lu.pcy113.pdr.engine.graph.material.text.TextShader;
 
-public class FillTextShader
-		extends
-		TextShader {
+public class FillTextShader extends TextShader {
 
 	public static final String NAME = FillTextShader.class.getName();
 

@@ -17,9 +17,9 @@ public class ClientMain {
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 
 		System.out.println(Arrays.toString(new File("./config/").list()));
-		
+
 		System.out.println(FileUtils.recursiveTree("./resources"));
-		
+
 		GlobalLogger.init(new File("./config/logs.properties"));
 
 		GlobalLogger.log(Level.INFO, "Starting...");

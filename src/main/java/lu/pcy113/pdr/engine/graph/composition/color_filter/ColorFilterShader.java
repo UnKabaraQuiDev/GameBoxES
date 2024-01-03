@@ -3,9 +3,7 @@ package lu.pcy113.pdr.engine.graph.composition.color_filter;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.material.ShaderPart;
 
-public class ColorFilterShader
-		extends
-		Shader {
+public class ColorFilterShader extends Shader {
 
 	public static final String NAME = ColorFilterShader.class.getName();
 
