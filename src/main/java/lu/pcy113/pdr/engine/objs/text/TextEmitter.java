@@ -41,10 +41,10 @@ public class TextEmitter implements Cleanupable, UniqueID {
 		Integer[] chars = new Integer[bufferSize];
 		Arrays.fill(chars, 0);
 		updateTextContent(new Matrix4f[bufferSize], chars);
-		GlobalLogger.log(Level.FINEST, "SET: " + Arrays.toString(chars));
+		//GlobalLogger.log(Level.FINEST, "SET: " + Arrays.toString(chars));
 
 		this.charBuffer = new UIntAttribArray("char", 7, 1, PDRUtils.toPrimitiveInt(chars), false, 1);
-		GlobalLogger.log(Level.FINEST, Arrays.toString(charBuffer.getData()));
+		//GlobalLogger.log(Level.FINEST, Arrays.toString(charBuffer.getData()));
 		this.quad = Mesh.newQuad(name, material, size);
 
 		this.instances = new InstanceEmitter(name, quad, bufferSize, new Transform2D(), charBuffer);
@@ -64,11 +64,11 @@ public class TextEmitter implements Cleanupable, UniqueID {
 
 		updateTextContent(transforms, chars);
 
-		GlobalLogger.log(Level.FINEST, Arrays.deepToString(transforms));
+		//GlobalLogger.log(Level.FINEST, Arrays.deepToString(transforms));
 
 		instances.updateDirect(transforms, new Object[][] { chars });
 
-		GlobalLogger.log(Level.FINEST, Arrays.toString(charBuffer.getData()));
+		//GlobalLogger.log(Level.FINEST, Arrays.toString(charBuffer.getData()));
 
 		return true;
 	}

@@ -5,11 +5,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
+import lu.pcy113.pdr.client.game.three.JoystickStateShader.JoystickStateMaterial;
 import lu.pcy113.pdr.engine.audio.Sound;
 import lu.pcy113.pdr.engine.cache.attrib.AttribArray;
 import lu.pcy113.pdr.engine.exceptions.ShaderInstantiationException;
 import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.geom.Mesh;
+import lu.pcy113.pdr.engine.geom.ObjLoader;
 import lu.pcy113.pdr.engine.geom.instance.InstanceEmitter;
 import lu.pcy113.pdr.engine.graph.composition.RenderLayer;
 import lu.pcy113.pdr.engine.graph.material.Material;
@@ -356,15 +358,31 @@ public class CacheManager implements Cleanupable {
 	/*
 	 * CONTAIN
 	 */
-
+	
+	public boolean hasShader(String name) {
+		return shaders.containsKey(name);
+	}
+	
 	public boolean hasMaterial(String name) {
 		return materials.containsKey(name);
+	}
+	
+	public boolean hasMesh(String name) {
+		return meshes.containsKey(name);
 	}
 
 	/*
 	 * LOADER
 	 */
-
+	
+	public <T extends Material> Material loadOrGetMaterial(String name, Class<T> clazz, Object... args) {
+		if (materials.containsKey(name)) {
+			return materials.get(name);
+		} else {
+			return loadMaterial(clazz, name, args);
+		}
+	}
+	
 	public <T extends Material> Material loadMaterial(Class<T> clazz, Object... args) {
 		try {
 			Class[] types = new Class[args.length];
@@ -399,6 +417,12 @@ public class CacheManager implements Cleanupable {
 		InstanceEmitter instanceEmitter = new InstanceEmitter(name, mesh, count, baseTransform, attribArrays);
 		addInstanceEmitter(instanceEmitter);
 		return instanceEmitter;
+	}
+	
+	public Mesh loadMesh(String name, Material material, String path) {
+		Mesh mesh = ObjLoader.loadMesh(name, material, path);
+		addMesh(mesh);
+		return mesh;
 	}
 
 	/*

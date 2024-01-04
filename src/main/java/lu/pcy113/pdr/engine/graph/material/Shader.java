@@ -84,6 +84,7 @@ public abstract class Shader implements UniqueID, Cleanupable {
 		} else if (value instanceof Character) {
 			// System.out.println("is char: " + value + " > " + ((char) value) + " > " +
 			// (Integer.valueOf((char) value)));
+			assert value instanceof Character : "Trying to set char uniform";
 			this.setUniform(key, Integer.valueOf((char) value));
 		} else if (value instanceof Vector2f) {
 			GL20.glUniform2f(this.getUniform(key), ((Vector2f) value).x, ((Vector2f) value).y);

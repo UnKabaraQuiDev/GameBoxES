@@ -5,8 +5,10 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWGamepadState;
 import org.lwjgl.opengl.GL40;
 
+import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pdr.client.game.three.FillShader.FillMaterial;
 import lu.pcy113.pdr.client.game.three.SlotInstanceShader.SlotInstanceMaterial;
 import lu.pcy113.pdr.client.game.three.SlotShader.SlotMaterial;
@@ -71,14 +73,15 @@ public class PDRClientGame3 implements GameLogic {
 	Compositor compositor;
 	
 	TextEmitter debugInfo;
+	JoystickState leftJoystick, rightJoystick;
 	
 	@Override
 	public void init(GameEngine e) {
 		engine = e;
 		cache = e.getCache();
 		window = e.getWindow();
-		GameEngine.DEBUG.wireframe = false;
-		GameEngine.DEBUG.wireframeColor = new Vector4f(0.2f, 0.2f, 0.2f, 0.2f);
+		GameEngine.DEBUG.wireframe = true;
+		GameEngine.DEBUG.wireframeColor = new Vector4f(1f, 0.2f, 0.2f, 0.2f);
 		GameEngine.DEBUG.gizmos = false;
 		
 		
@@ -116,6 +119,11 @@ public class PDRClientGame3 implements GameLogic {
 		ui = new Scene2D("ui", Camera.orthographicCamera3D());
 		ui.addEntity("slotUi", slotEntityUi);
 		ui.addEntity("debug_info", new Entity(new Transform3DComponent(new Vector3f(-6.1f, -3.3f, 0), new Quaternionf(), new Vector3f(1)), new TextEmitterComponent(debugInfo)));
+		
+		ui.addEntity("left_joy", leftJoystick = new JoystickState(cache, new Vector3f(-5.5f, -2f, 0)));
+		leftJoystick.setColor(new Vector4f(0, 1, 0, 1));
+		ui.addEntity("right_joy", rightJoystick = new JoystickState(cache, new Vector3f(-4.5f, -2f, 0)));
+		rightJoystick.setColor(new Vector4f(1, 0, 0, 1));
 		
 		scene = new Scene3D("main");
 		slotEntity = new Entity(new Transform3DComponent(), new MeshComponent(slotMesh));
@@ -189,11 +197,30 @@ public class PDRClientGame3 implements GameLogic {
 		cache.dump(System.out);
 	}
 	
+	int col = 0, row = 0;
+	
 	@Override
 	public void input(float dTime) {
 		camera.getPosition().add((window.isKeyPressed(GLFW.GLFW_KEY_Q) ? 0.1f : 0) - (window.isKeyPressed(GLFW.GLFW_KEY_D) ? 0.1f : 0), (window.isKeyPressed(GLFW.GLFW_KEY_R) ? 0.1f : 0) - (window.isKeyPressed(GLFW.GLFW_KEY_F) ? 0.1f : 0),
 				(window.isKeyPressed(GLFW.GLFW_KEY_Z) ? 0.1f : 0) - (window.isKeyPressed(GLFW.GLFW_KEY_S) ? 0.1f : 0));
 		camera.updateMatrix();
+		
+		if(window.isJoystickPresent()) {
+			if(!window.updateGamepad(0))
+				return;
+			
+			GLFWGamepadState gps = window.getGamepad();
+			
+			float ax = PDRUtils.applyMinThreshold(gps.axes(0), 0.05f);
+			float ay = PDRUtils.applyMinThreshold(gps.axes(1), 0.05f);
+			
+			leftJoystick.setPosition(new Vector2f(ax, ay));
+			
+			float bx = PDRUtils.applyMinThreshold(gps.axes(2), 0.05f);
+			float by = PDRUtils.applyMinThreshold(gps.axes(3), 0.05f);
+			
+			rightJoystick.setPosition(new Vector2f(bx, by));
+		}
 	}
 	
 	float GX = 0f;

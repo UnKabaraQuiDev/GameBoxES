@@ -69,7 +69,7 @@ public class DebugOptions {
 	public boolean wireframe = true;
 	public Vector4f wireframeColor = new Vector4f(1, 0, 0, 1);
 
-	public void wireframe(CacheManager cache, Scene scene, Mesh mesh, Matrix4f projectionMatrix, Matrix4f viewMatrix, Object modelMatrix) {
+	public void wireframe(CacheManager cache, Scene scene, Mesh mesh, Matrix4f projectionMatrix, Matrix4f viewMatrix, Matrix4f transformationMatrix) {
 		if (!wireframe)
 			return;
 
@@ -86,10 +86,7 @@ public class DebugOptions {
 
 		deb.setProperty(Shader.PROJECTION_MATRIX, projectionMatrix);
 		deb.setProperty(Shader.VIEW_MATRIX, viewMatrix);
-		if (modelMatrix != null)
-			deb.setProperty(Shader.TRANSFORMATION_MATRIX, modelMatrix);
-		else
-			deb.setProperty(Shader.TRANSFORMATION_MATRIX, new Matrix4f());
+		deb.setProperty(Shader.TRANSFORMATION_MATRIX, transformationMatrix);
 		deb.setProperty(WireframeShader.COLOR, wireframeColor);
 		deb.bindProperties(cache, scene, debShader);
 
@@ -102,7 +99,7 @@ public class DebugOptions {
 		GL40.glEnable(GL40.GL_DEPTH_TEST);
 	}
 
-	public void pointWireframe(CacheManager cache, Scene scene, Mesh mesh, Matrix4f projectionMatrix, Matrix4f viewMatrix, Matrix4f modelMatrix) {
+	public void pointWireframe(CacheManager cache, Scene scene, Mesh mesh, Matrix4f projectionMatrix, Matrix4f viewMatrix, Matrix4f transformationMatrix) {
 		if (!wireframe)
 			return;
 
@@ -119,10 +116,7 @@ public class DebugOptions {
 
 		deb.setProperty(Shader.PROJECTION_MATRIX, projectionMatrix);
 		deb.setProperty(Shader.VIEW_MATRIX, viewMatrix);
-		if (modelMatrix != null)
-			deb.setProperty(Shader.TRANSFORMATION_MATRIX, modelMatrix);
-		else
-			deb.setProperty(Shader.TRANSFORMATION_MATRIX, new Matrix4f());
+		deb.setProperty(Shader.TRANSFORMATION_MATRIX, transformationMatrix);
 		deb.setProperty(WireframeShader.COLOR, wireframeColor);
 		deb.bindProperties(cache, scene, debShader);
 

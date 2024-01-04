@@ -121,4 +121,8 @@ public final class PDRUtils {
 		return Math.round(round * places)/places;
 	}
 
+	public static float applyMinThreshold(float x, float min) {
+		return Math.abs(x) < min ? 0 : x;
+	}
+
 }
