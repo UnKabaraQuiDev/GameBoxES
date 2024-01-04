@@ -14,6 +14,11 @@ import lu.pcy113.pdr.engine.utils.FileUtils;
 
 public class ClientMain {
 
+	/*
+	 * TODO: Add other font files x95
+	 * TODO: Add antialiasing to framebuffer renderlayer
+	 */
+	
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 
 		System.out.println(Arrays.toString(new File("./config/").list()));
