@@ -10,12 +10,13 @@ uniform vec4 color;
 uniform vec2 position;
 uniform float radius;
 uniform float threshold;
+uniform float button;
 
 void main() {
 	vec2 correctUv = (texCoord-vec2(0.5, 0.5))*2;
 	float leng = length(correctUv);
 
-	if(distance(correctUv, position) < radius) {
+	if(distance(correctUv, position) < radius+(button*2*radius)) {
 		fragColor = color;
 		return;
 	}

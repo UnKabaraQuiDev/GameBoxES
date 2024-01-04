@@ -73,7 +73,8 @@ public class PDRClientGame3 implements GameLogic {
 	
 	TextEmitter debugInfo;
 	JoystickState leftJoystick, rightJoystick;
-	FloatButtonState leftButton, rightButton;
+	FloatButtonState leftZButton, rightZButton;
+	BooleanButtonState leftButton, rightButton;
 	FourButtonState dirButtons, xyabButtons;
 	
 	@Override
@@ -128,15 +129,20 @@ public class PDRClientGame3 implements GameLogic {
 		/*ui.addEntity("dir_joy", dirJoystick = new JoystickState(cache, new Vector3f(-5.5f, -1f, 0)));
 		dirJoystick.setColor(new Vector4f(1, 0, 1, 1));*/
 		
-		ui.addEntity("left_float", leftButton = new FloatButtonState(cache, new Vector3f(-6.2f, -2f, 0)));
-		leftButton.setColor(new Vector4f(0, 1, 1, 1));
-		ui.addEntity("right_float", rightButton = new FloatButtonState(cache, new Vector3f(-3.8f, -2f, 0)));
-		rightButton.setColor(new Vector4f(1, 0, 1, 1));
+		ui.addEntity("left_float", leftZButton = new FloatButtonState(cache, new Vector3f(-6.2f, -2f, 0)));
+		leftZButton.setColor(new Vector4f(0, 1, 1, 1));
+		ui.addEntity("right_float", rightZButton = new FloatButtonState(cache, new Vector3f(-3.8f, -2f, 0)));
+		rightZButton.setColor(new Vector4f(1, 0, 1, 1));
 		
 		ui.addEntity("dir_btn", dirButtons = new FourButtonState(cache, new Vector3f(-5.5f, -1f, 0)));
 		dirButtons.setButtons(new Vector4f(0));
 		ui.addEntity("xyab_btn", xyabButtons = new FourButtonState(cache, new Vector3f(-4.5f, -1f, 0)));
 		xyabButtons.setButtons(new Vector4f(0));
+		
+		ui.addEntity("left_bumper", leftButton = new BooleanButtonState(cache, new Vector3f(-5.5f, -2.6f, 0)));
+		leftButton.setColor(new Vector4f(0, 1, 1, 1));
+		ui.addEntity("right_bumper", rightButton = new BooleanButtonState(cache, new Vector3f(-4.5f, -2.6f, 0)));
+		rightButton.setColor(new Vector4f(1, 0, 1, 1));
 		
 		scene = new Scene3D("main");
 		slotEntity = new Entity(new Transform3DComponent(), new MeshComponent(slotMesh));
@@ -225,23 +231,33 @@ public class PDRClientGame3 implements GameLogic {
 			
 			GLFWGamepadState gps = window.getGamepad();
 			
-			float ax = PDRUtils.applyMinThreshold(gps.axes(0), threshold);
-			float ay = PDRUtils.applyMinThreshold(gps.axes(1), threshold);
+			float ax = PDRUtils.applyMinThreshold(gps.axes(GLFW.GLFW_GAMEPAD_AXIS_LEFT_X), threshold);
+			float ay = PDRUtils.applyMinThreshold(gps.axes(GLFW.GLFW_GAMEPAD_AXIS_LEFT_Y), threshold);
+			float abtn = gps.buttons(GLFW.GLFW_GAMEPAD_BUTTON_LEFT_THUMB);
 			
 			leftJoystick.setPosition(new Vector2f(ax, ay));
+			leftJoystick.setButton(abtn);
 			leftJoystick.setThreshold(threshold);
 			
-			float bx = PDRUtils.applyMinThreshold(gps.axes(2), threshold);
-			float by = PDRUtils.applyMinThreshold(gps.axes(3), threshold);
+			float bx = PDRUtils.applyMinThreshold(gps.axes(GLFW.GLFW_GAMEPAD_AXIS_RIGHT_X), threshold);
+			float by = PDRUtils.applyMinThreshold(gps.axes(GLFW.GLFW_GAMEPAD_AXIS_RIGHT_Y), threshold);
+			float bbtn = gps.buttons(GLFW.GLFW_GAMEPAD_BUTTON_RIGHT_THUMB);
 			
 			rightJoystick.setPosition(new Vector2f(bx, by));
+			rightJoystick.setButton(bbtn);
 			rightJoystick.setThreshold(threshold);
 			
-			float lb = PDRUtils.applyMinThreshold(gps.axes(4), threshold);
-			float rb = PDRUtils.applyMinThreshold(gps.axes(5), threshold);
+			float lzb = PDRUtils.applyMinThreshold(gps.axes(GLFW.GLFW_GAMEPAD_AXIS_LEFT_TRIGGER), threshold);
+			float rzb = PDRUtils.applyMinThreshold(gps.axes(GLFW.GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER), threshold);
 			
-			leftButton.setValue((float) (lb/2+0.5));
-			rightButton.setValue((float) (rb/2+0.5));
+			leftZButton.setValue((float) (lzb/2+0.5));
+			rightZButton.setValue((float) (rzb/2+0.5));
+			
+			float lb = gps.buttons(GLFW.GLFW_GAMEPAD_BUTTON_LEFT_BUMPER);
+			float rb = gps.buttons(GLFW.GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER);
+			
+			leftButton.setValue(lb);
+			rightButton.setValue(rb);
 			
 			float btn_y = gps.buttons(GLFW.GLFW_GAMEPAD_BUTTON_Y);
 			float btn_b = gps.buttons(GLFW.GLFW_GAMEPAD_BUTTON_B);

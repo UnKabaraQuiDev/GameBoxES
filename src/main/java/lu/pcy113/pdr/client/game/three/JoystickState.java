@@ -50,6 +50,9 @@ public class JoystickState extends Entity {
 	public void setThreshold(float threshold) {
 		material.setThreshold(threshold);
 	}
+	public void setButton(float btn) {
+		material.setButton(btn);
+	}
 	
 	public Mesh getMesh() {
 		return mesh;

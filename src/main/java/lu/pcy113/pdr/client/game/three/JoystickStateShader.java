@@ -17,6 +17,7 @@ public class JoystickStateShader extends Shader {
 	public static final String RADIUS = "radius";
 	public static final String POSITION = "position";
 	public static final String THRESHOLD = "threshold";
+	public static final String BUTTON = "button";
 	
 	public JoystickStateShader() {
 		super(NAME,
@@ -35,6 +36,7 @@ public class JoystickStateShader extends Shader {
 		createUniform(RADIUS);
 		createUniform(POSITION);
 		createUniform(THRESHOLD);
+		createUniform(BUTTON);
 	}
 	
 	public static class JoystickStateMaterial extends Material {
@@ -42,7 +44,7 @@ public class JoystickStateShader extends Shader {
 		public static final String NAME = JoystickStateMaterial.class.getName();
 		
 		private Vector4f color;
-		private float radius, threshold;
+		private float radius, threshold, button;
 		private Vector2f position;
 		
 		public JoystickStateMaterial() {
@@ -59,6 +61,7 @@ public class JoystickStateShader extends Shader {
 			setProperty(RADIUS, radius);
 			setProperty(POSITION, position);
 			setProperty(THRESHOLD, threshold);
+			setProperty(BUTTON, button);
 			
 			super.bindProperties(cache, parent, shader);
 		}
@@ -74,6 +77,9 @@ public class JoystickStateShader extends Shader {
 		}
 		public void setThreshold(float threshold) {
 			this.threshold = threshold;
+		}
+		public void setButton(float button) {
+			this.button = button;
 		}
 		
 	}
