@@ -43,15 +43,8 @@ public final class FileUtils {
 		return list;
 	}
 
-	/*
-	 * public static List<String> getShaderUniforms(String string) { return
-	 * Arrays.asList(readFile(RESOURCES+SHADERS+string+"/info.txt").
-	 * replace("^(?:[\t ]*(?:\r?\n|\r))+|\b *", "").split("\n")); }
-	 * 
-	 * public static String getShader(String string, int type) { return
-	 * readFile(RESOURCES+SHADERS+string+"/"+string+"."+(type ==
-	 * GL40.GL_VERTEX_SHADER ? "vert" : (type == GL40.GL_FRAGMENT_SHADER ? "frag" :
-	 * null))); }
-	 */
+	public static String appendName(String name, String suffix) {
+		return name.replaceAll("(.+)(\\.[^.]+)$", "$1" + suffix + "$2");
+	}
 
 }

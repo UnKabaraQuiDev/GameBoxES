@@ -17,6 +17,8 @@ import lu.pcy113.pdr.engine.graph.composition.RenderLayer;
 import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.render.Renderer;
+import lu.pcy113.pdr.engine.graph.texture.CubemapTexture;
+import lu.pcy113.pdr.engine.graph.texture.SingleTexture;
 import lu.pcy113.pdr.engine.graph.texture.Texture;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.objs.GizmoModel;
@@ -401,14 +403,14 @@ public class CacheManager implements Cleanupable {
 		}
 	}
 
-	public Texture loadTexture(String string, String path) {
-		Texture texture = new Texture(string, path);
+	public Texture loadSingleTexture(String string, String path) {
+		Texture texture = new SingleTexture(string, path);
 		addTexture(texture);
 		return texture;
 	}
 
-	public Texture loadTexture(String string, String path, int filter, int txtResType) {
-		Texture texture = new Texture(string, path, filter, txtResType);
+	public Texture loadSingleTexture(String string, String path, int filter, int txtResType) {
+		Texture texture = new SingleTexture(string, path, filter, txtResType);
 		addTexture(texture);
 		return texture;
 	}
@@ -423,6 +425,12 @@ public class CacheManager implements Cleanupable {
 		Mesh mesh = ObjLoader.loadMesh(name, material, path);
 		addMesh(mesh);
 		return mesh;
+	}
+	
+	public CubemapTexture loadCubemapTexture(String name, String path) {
+		CubemapTexture txt = new CubemapTexture(name, path);
+		addTexture(txt);
+		return txt;
 	}
 
 	/*

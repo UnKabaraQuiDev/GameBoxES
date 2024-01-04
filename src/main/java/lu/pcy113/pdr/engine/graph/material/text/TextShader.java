@@ -8,6 +8,7 @@ import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.material.ShaderPart;
 import lu.pcy113.pdr.engine.graph.material.TextureMaterial;
+import lu.pcy113.pdr.engine.graph.texture.SingleTexture;
 import lu.pcy113.pdr.engine.graph.texture.Texture;
 import lu.pcy113.pdr.engine.impl.Renderable;
 
@@ -46,7 +47,7 @@ public class TextShader extends Shader {
 		private Vector4f fgColor = new Vector4f(1, 1, 1, 1);
 		private Vector4f bgColor = new Vector4f(0, 0, 0, 1);
 
-		public TextMaterial(Texture txt1) {
+		public TextMaterial(SingleTexture txt1) {
 			super(NAME, new TextShader(), new HashMap<String, Texture>() {
 				{
 					put(TXT1, txt1);

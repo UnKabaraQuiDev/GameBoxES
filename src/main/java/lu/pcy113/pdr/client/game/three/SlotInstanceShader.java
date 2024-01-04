@@ -5,6 +5,7 @@ import java.util.HashMap;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.material.ShaderPart;
 import lu.pcy113.pdr.engine.graph.material.TextureMaterial;
+import lu.pcy113.pdr.engine.graph.texture.SingleTexture;
 import lu.pcy113.pdr.engine.graph.texture.Texture;
 
 public class SlotInstanceShader extends Shader {
@@ -26,7 +27,7 @@ public class SlotInstanceShader extends Shader {
 
 	public static class SlotInstanceMaterial extends TextureMaterial {
 
-		public SlotInstanceMaterial(Texture texture) {
+		public SlotInstanceMaterial(SingleTexture texture) {
 			super(SlotInstanceMaterial.class.getName(), new SlotInstanceShader(), new HashMap<String, Texture>(1) {
 				{
 					put(TEXTURE, texture);

@@ -1,5 +1,7 @@
 package lu.pcy113.pdr.client.game.three;
 
+import java.util.HashMap;
+
 import org.joml.Quaternionf;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -22,6 +24,9 @@ import lu.pcy113.pdr.engine.geom.instance.InstanceEmitter;
 import lu.pcy113.pdr.engine.graph.composition.Compositor;
 import lu.pcy113.pdr.engine.graph.composition.GenerateRenderLayer;
 import lu.pcy113.pdr.engine.graph.composition.SceneRenderLayer;
+import lu.pcy113.pdr.engine.graph.material.Shader;
+import lu.pcy113.pdr.engine.graph.material.ShaderPart;
+import lu.pcy113.pdr.engine.graph.material.TextureMaterial;
 import lu.pcy113.pdr.engine.graph.material.text.TextShader;
 import lu.pcy113.pdr.engine.graph.material.text.TextShader.TextMaterial;
 import lu.pcy113.pdr.engine.graph.render.InstanceEmitterRenderer;
@@ -29,6 +34,7 @@ import lu.pcy113.pdr.engine.graph.render.MeshRenderer;
 import lu.pcy113.pdr.engine.graph.render.Scene2DRenderer;
 import lu.pcy113.pdr.engine.graph.render.Scene3DRenderer;
 import lu.pcy113.pdr.engine.graph.render.TextEmitterRenderer;
+import lu.pcy113.pdr.engine.graph.texture.CubemapTexture;
 import lu.pcy113.pdr.engine.graph.texture.Texture;
 import lu.pcy113.pdr.engine.graph.window.Window;
 import lu.pcy113.pdr.engine.logic.GameLogic;
@@ -87,7 +93,7 @@ public class PDRClientGame3 implements GameLogic {
 		GameEngine.DEBUG.gizmos = false;
 		
 		
-		Texture slotTexture = cache.loadTexture("single_slot", "./resources/textures/ui/single_slot.png");
+		Texture slotTexture = cache.loadSingleTexture("single_slot", "./resources/textures/ui/single_slot.png");
 		slotMaterial = (SlotMaterial) cache.loadMaterial(SlotShader.SlotMaterial.class, slotTexture);
 		Mesh slotMesh = ObjLoader.loadMesh("slot", slotMaterial, "./resources/models/plane.obj");
 		this.cache.addMesh(slotMesh);
@@ -112,7 +118,7 @@ public class PDRClientGame3 implements GameLogic {
 		// Math.toRadians(90), GameEngine.UP);
 		slotEntityUi.getComponent(Transform3DComponent.class).getTransform().updateMatrix();
 		
-		Texture txt1 = cache.loadTexture("txt1", "./resources/textures/fonts/font1row.png", GL40.GL_NEAREST, GL40.GL_TEXTURE_2D);
+		Texture txt1 = cache.loadSingleTexture("txt1", "./resources/textures/fonts/font1row.png", GL40.GL_NEAREST, GL40.GL_TEXTURE_2D);
 		TextMaterial textMaterial = (TextMaterial) cache.loadMaterial(TextShader.TextMaterial.class, txt1);
 		debugInfo = new TextEmitter("debug_infos", textMaterial, 100, "FPS: ", new Vector2f(0.1f));
 		debugInfo.updateText();
@@ -126,8 +132,10 @@ public class PDRClientGame3 implements GameLogic {
 		leftJoystick.setColor(new Vector4f(0, 1, 0, 1));
 		ui.addEntity("right_joy", rightJoystick = new JoystickState(cache, new Vector3f(-4.5f, -2f, 0)));
 		rightJoystick.setColor(new Vector4f(1, 0, 0, 1));
-		/*ui.addEntity("dir_joy", dirJoystick = new JoystickState(cache, new Vector3f(-5.5f, -1f, 0)));
-		dirJoystick.setColor(new Vector4f(1, 0, 1, 1));*/
+		/*
+		 * ui.addEntity("dir_joy", dirJoystick = new JoystickState(cache, new
+		 * Vector3f(-5.5f, -1f, 0))); dirJoystick.setColor(new Vector4f(1, 0, 1, 1));
+		 */
 		
 		ui.addEntity("left_float", leftZButton = new FloatButtonState(cache, new Vector3f(-6.2f, -2f, 0)));
 		leftZButton.setColor(new Vector4f(0, 1, 1, 1));
@@ -189,7 +197,7 @@ public class PDRClientGame3 implements GameLogic {
 		this.scene.getCamera().getProjection().setPerspective(true);
 		this.engine.getWindow().onResize((w, h) -> {
 			this.scene.getCamera().getProjection().update(w, h);
-			//this.ui.getCamera().getProjection().update(w, h);
+			// this.ui.getCamera().getProjection().update(w, h);
 		});
 		this.engine.getWindow().setBackground(new Vector4f(0.1f));
 		
@@ -213,6 +221,33 @@ public class PDRClientGame3 implements GameLogic {
 			}
 		};
 		
+		/* CUBE MAP */
+		CubemapTexture cmtxt = cache.loadCubemapTexture("name", "./resources/textures/skybox/.jpg");
+		final String skyboxUniform = "skybox";
+		Shader shader = new Shader("skybox",
+				new ShaderPart("./resources/shaders/plain.vert"),
+				new ShaderPart("./resources/shaders/skybox/skybox.frag")) {
+			@Override
+			public void createUniforms() {
+				createUniform(Shader.PROJECTION_MATRIX);
+				createUniform(Shader.VIEW_MATRIX);
+				createUniform(Shader.TRANSFORMATION_MATRIX);
+				createUniform(skyboxUniform);
+			}
+		};
+		cache.addShader(shader);
+		TextureMaterial material = new TextureMaterial("skybox", shader, new HashMap<String, Texture>(1) {
+			{
+				put("skybox", cmtxt);
+			}
+		});
+		cache.addMaterial(material);
+		Mesh cube = cache.loadMesh("skybox", material, "./resources/models/cube2.obj");
+		
+		scene.addEntity("skybox", new Entity(new Transform3DComponent(), new MeshComponent(cube)));
+		
+		/* DUMP */
+		
 		cache.dump(System.out);
 	}
 	
@@ -225,8 +260,8 @@ public class PDRClientGame3 implements GameLogic {
 				(window.isKeyPressed(GLFW.GLFW_KEY_Z) ? 0.1f : 0) - (window.isKeyPressed(GLFW.GLFW_KEY_S) ? 0.1f : 0));
 		camera.updateMatrix();
 		
-		if(window.isJoystickPresent()) {
-			if(!window.updateGamepad(0))
+		if (window.isJoystickPresent()) {
+			if (!window.updateGamepad(0))
 				return;
 			
 			GLFWGamepadState gps = window.getGamepad();
@@ -250,8 +285,8 @@ public class PDRClientGame3 implements GameLogic {
 			float lzb = PDRUtils.applyMinThreshold(gps.axes(GLFW.GLFW_GAMEPAD_AXIS_LEFT_TRIGGER), threshold);
 			float rzb = PDRUtils.applyMinThreshold(gps.axes(GLFW.GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER), threshold);
 			
-			leftZButton.setValue((float) (lzb/2+0.5));
-			rightZButton.setValue((float) (rzb/2+0.5));
+			leftZButton.setValue((float) (lzb / 2 + 0.5));
+			rightZButton.setValue((float) (rzb / 2 + 0.5));
 			
 			float lb = gps.buttons(GLFW.GLFW_GAMEPAD_BUTTON_LEFT_BUMPER);
 			float rb = gps.buttons(GLFW.GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER);
@@ -307,7 +342,7 @@ public class PDRClientGame3 implements GameLogic {
 			}
 		});
 		
-		debugInfo.setText("FPS: "+PDRUtils.round(engine.getCurrentFps(), 3)+"\n").updateText();
+		debugInfo.setText("FPS: " + PDRUtils.round(engine.getCurrentFps(), 3) + "\n").updateText();
 		textEntity.getComponent(TextEmitterComponent.class).getTextEmitter(cache).setText("updated... " + engine.getCurrentFps()).updateText();
 		
 		// System.out.println("GX: "+GX+" int: "+backgroundMaterial.getColor());
