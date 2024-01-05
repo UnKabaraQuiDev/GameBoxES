@@ -11,13 +11,14 @@ public abstract class Texture implements Cleanupable, UniqueID {
 	protected final String path;
 	protected final String name;
 	protected int tid = -1;
-	protected int filter, txtResType = GL20.GL_TEXTURE_2D, wrap = GL40.GL_CLAMP_TO_EDGE;
+	protected int filter, txtResType = GL20.GL_TEXTURE_2D, wrap = GL40.GL_CLAMP_TO_EDGE, channelType = GL40.GL_RGB;
 	
-	public Texture(String _name, String _path, int _filter, int _txtResType, int _wrap) {
+	public Texture(String _name, String _path, int _filter, int _txtResType, int _wrap, int _channels) {
 		this.path = _name;
 		this.name = _path;
 		this.filter = _filter;
 		this.txtResType = _txtResType;
+		this.wrap = _wrap;
 	}
 	
 	protected int gen() {
@@ -88,6 +89,10 @@ public abstract class Texture implements Cleanupable, UniqueID {
 	
 	public int getWrap() {
 		return wrap;
+	}
+	
+	public int getChannelType() {
+		return channelType;
 	}
 	
 	public static int getColorByChannels(int channels) {
