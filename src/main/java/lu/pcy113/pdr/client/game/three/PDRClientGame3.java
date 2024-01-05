@@ -41,6 +41,7 @@ import lu.pcy113.pdr.engine.logic.GameLogic;
 import lu.pcy113.pdr.engine.objs.entity.Entity;
 import lu.pcy113.pdr.engine.objs.entity.components.InstanceEmitterComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.MeshComponent;
+import lu.pcy113.pdr.engine.objs.entity.components.RenderComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.TextEmitterComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.Transform3DComponent;
 import lu.pcy113.pdr.engine.objs.text.TextEmitter;
@@ -153,7 +154,7 @@ public class PDRClientGame3 implements GameLogic {
 		rightButton.setColor(new Vector4f(1, 0, 1, 1));
 		
 		scene = new Scene3D("main");
-		slotEntity = new Entity(new Transform3DComponent(), new MeshComponent(slotMesh));
+		slotEntity = new Entity(new Transform3DComponent(), new MeshComponent(slotMesh), new RenderComponent(0));
 		scene.addEntity("slot", this.slotEntity).setActive(true);
 		
 		
@@ -161,7 +162,7 @@ public class PDRClientGame3 implements GameLogic {
 		textEmitter.updateText();
 		cache.addTextEmitter(textEmitter);
 		
-		textEntity = new Entity(new Transform3DComponent(), new TextEmitterComponent(textEmitter));
+		textEntity = new Entity(new Transform3DComponent(), new TextEmitterComponent(textEmitter), new RenderComponent(1));
 		scene.addEntity("text", textEntity);
 		
 		
@@ -244,7 +245,7 @@ public class PDRClientGame3 implements GameLogic {
 		cache.addMaterial(material);
 		Mesh cube = cache.loadMesh("skybox", material, "./resources/models/cube2.obj");
 		
-		scene.addEntity("skybox", new Entity(new Transform3DComponent(), new MeshComponent(cube)));
+		scene.addEntity("skybox", new Entity(new Transform3DComponent(), new MeshComponent(cube))).setActive(false);
 		
 		/* DUMP */
 		
