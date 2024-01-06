@@ -160,6 +160,10 @@ public class GameEngine implements Runnable, Cleanupable {
 		return currentFps;
 	}
 	
+	public AudioMaster getAudioMaster() {
+		return audioMaster;
+	}
+	
 	@Override
 	public void cleanup() {
 		this.cache.cleanup();

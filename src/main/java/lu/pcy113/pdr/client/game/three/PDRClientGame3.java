@@ -16,6 +16,7 @@ import lu.pcy113.pdr.client.game.three.SlotShader.SlotMaterial;
 import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.anim.CallbackValueInterpolation;
 import lu.pcy113.pdr.engine.anim.Vec4fCallbackValueInterpolation;
+import lu.pcy113.pdr.engine.audio.AudioMaster;
 import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.cache.attrib.FloatAttribArray;
 import lu.pcy113.pdr.engine.geom.Mesh;
@@ -83,6 +84,8 @@ public class PDRClientGame3 implements GameLogic {
 	FloatButtonState leftZButton, rightZButton;
 	BooleanButtonState leftButton, rightButton;
 	FourButtonState dirButtons, xyabButtons;
+	
+	AudioMaster audio;
 	
 	@Override
 	public void init(GameEngine e) {
@@ -164,6 +167,9 @@ public class PDRClientGame3 implements GameLogic {
 		
 		textEntity = new Entity(new Transform3DComponent(), new TextEmitterComponent(textEmitter), new RenderComponent(1));
 		scene.addEntity("text", textEntity);
+		
+		
+		this.audio = engine.getAudioMaster();
 		
 		
 		this.cache.addRenderer(new Scene3DRenderer());

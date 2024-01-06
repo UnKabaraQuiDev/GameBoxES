@@ -10,7 +10,7 @@ public final class SoundLoader {
 		 * 
 		 * return new Sound(name, ByteBuffer.wrap(buffer), AL10.);
 		 */
-		return null; // TODO
+		return null; // TODO https://github.com/LWJGL/lwjgl3/blob/master/modules/samples/src/test/java/org/lwjgl/demo/openal/ALCDemo.java
 	}
 
 }
