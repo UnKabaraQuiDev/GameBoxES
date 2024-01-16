@@ -2,7 +2,7 @@
 
 in vec3 normal;
 in vec2 texCoord;
-in vec3 fragPos;
+in vec2 fragPos;
 flat in int index;
 in float hover;
 

@@ -51,7 +51,7 @@ public abstract class Shader implements UniqueID, Cleanupable {
 		GL20.glLinkProgram(this.shaderProgram);
 
 		if (GL20.glGetProgrami(this.shaderProgram, GL20.GL_LINK_STATUS) == GL11.GL_FALSE) {
-			GlobalLogger.log(Level.SEVERE, GL20.glGetProgramInfoLog(this.shaderProgram, 1024));
+			GlobalLogger.log(Level.SEVERE, name+"("+shaderProgram+"): "+GL20.glGetProgramInfoLog(this.shaderProgram, 1024));
 			this.cleanup();
 		} else {
 			GlobalLogger.log(Level.INFO, "ShaderProgram " + name + " (" + shaderProgram + ") created successfully");

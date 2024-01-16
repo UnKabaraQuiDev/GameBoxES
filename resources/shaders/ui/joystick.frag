@@ -2,7 +2,7 @@
 
 in vec3 normal;
 in vec2 texCoord;
-in vec3 fragPos;
+in vec2 fragPos;
 
 out vec4 fragColor;
 
