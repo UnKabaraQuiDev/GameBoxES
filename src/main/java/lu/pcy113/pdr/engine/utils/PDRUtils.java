@@ -1,5 +1,6 @@
 package lu.pcy113.pdr.engine.utils;
 
+import java.awt.Color;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
@@ -123,6 +124,25 @@ public final class PDRUtils {
 
 	public static float applyMinThreshold(float x, float min) {
 		return Math.abs(x) < min ? 0 : x;
+	}
+
+	public static Color clampColor(int red, int green, int blue) {
+		return new Color(org.joml.Math.clamp(0, 255, red), org.joml.Math.clamp(0, 255, green), org.joml.Math.clamp(0, 255, blue));
+	}
+	
+	public static Color clampColor(int red, int green, int blue, int alpha) {
+		return new Color(org.joml.Math.clamp(0, 255, red), org.joml.Math.clamp(0, 255, green), org.joml.Math.clamp(0, 255, blue), org.joml.Math.clamp(0, 255, alpha));
+	}
+
+	public static String fillString(String str, String place, int length) {
+		return (str.length() < length ? repeatString(place, length - str.length()) + str : str);
+	}
+
+	private static String repeatString(String str, int count) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < count; i++)
+			sb.append(str);
+		return sb.toString();
 	}
 
 }

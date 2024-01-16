@@ -96,4 +96,4 @@ test/
 /logs/*
 /target/
 
-pom.xml
+# pom.xml
