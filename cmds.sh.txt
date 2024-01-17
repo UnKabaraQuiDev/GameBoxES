@@ -1,0 +1,3 @@
+# Count all lines
+find . -name '*.java' -o -name '*.frag' -o -name '*.geo' -o -name '*.vert' | sed 's/.*/"&"/' | xargs  wc -l
+
