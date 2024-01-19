@@ -67,10 +67,10 @@ public final class FDicRemapper {
 		int x = index * res;
 		int y = 0;
 		
-		int toX1 = (int) Math.rint((glyph.gettCoordX() - dic.getTextureSpread()+ (glyph.gethBearingX()*glyph.getWidth())) * sRes),
-			toY1 = (int) Math.rint((glyph.gettCoordY() + glyph.gettHeight()+ (glyph.gethBearingY()*glyph.gethAdvance())) * sRes),
-			toX2 = (int) Math.rint((glyph.gettCoordX() + glyph.gettWidth()+ (glyph.getvBearingX()*glyph.getWidth())) * sRes),
-			toY2 = (int) Math.rint((glyph.gettCoordY() - dic.getTextureSpread()+ (glyph.getvBearingY()*glyph.getHeight())) * sRes);
+		int toX1 = (int) Math.rint((glyph.gettCoordX() - dic.getTextureSpread()) * sRes), //+ (glyph.gethBearingX()*glyph.getWidth())) * sRes),
+			toY1 = (int) Math.rint((glyph.gettCoordY() + glyph.gettHeight()) * sRes), //+ (glyph.gethBearingY()*glyph.gethAdvance())) * sRes),
+			toX2 = (int) Math.rint((glyph.gettCoordX() + glyph.gettWidth()) * sRes), //+ (glyph.getvBearingX()*glyph.getWidth())) * sRes),
+			toY2 = (int) Math.rint((glyph.gettCoordY() - dic.getTextureSpread()) * sRes); //+ (glyph.getvBearingY()*glyph.getHeight())) * sRes);
 		
 		
 		output.drawImage(input, 
