@@ -2,7 +2,7 @@ package lu.pcy113.pdr.engine.graph.window;
 
 import org.joml.Vector2i;
 
-import lu.pcy113.pdr.engine.utils.Consts;
+import lu.pcy113.pdr.engine.utils.consts.Consts;
 
 public class WindowOptions {
 

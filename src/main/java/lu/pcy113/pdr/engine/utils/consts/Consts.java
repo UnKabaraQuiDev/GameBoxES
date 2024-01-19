@@ -1,4 +1,4 @@
-package lu.pcy113.pdr.engine.utils;
+package lu.pcy113.pdr.engine.utils.consts;
 
 public final class Consts {
 

@@ -1,10 +1,13 @@
 package lu.pcy113.pdr.engine.graph.texture;
 
+import java.text.Format;
+
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL40;
 
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
+import lu.pcy113.pdr.engine.utils.consts.TextureType;
 
 public abstract class Texture implements Cleanupable, UniqueID {
 	
@@ -13,7 +16,7 @@ public abstract class Texture implements Cleanupable, UniqueID {
 	protected int tid = -1;
 	protected int filter, txtResType = GL20.GL_TEXTURE_2D, wrap = GL40.GL_CLAMP_TO_EDGE, channelType = GL40.GL_RGB;
 	
-	public Texture(String _name, String _path, int _filter, int _txtResType, int _wrap, int _channels) {
+	public Texture(String _name, String _path, int _filter, TextureType _txtResType, int _wrap, InternalFormat _channels, Format _format) {
 		this.path = _name;
 		this.name = _path;
 		this.filter = _filter;
