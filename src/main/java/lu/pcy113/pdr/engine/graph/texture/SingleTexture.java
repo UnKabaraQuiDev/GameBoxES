@@ -115,14 +115,14 @@ public class SingleTexture extends Texture {
 	private void generateBufferTexture() {
 		gen();
 		bind();
+		
 		GL40.glPixelStorei(GL40.GL_UNPACK_ALIGNMENT, 1);
 		if (TextureType.TXT1D.equals(txtType)) {
-			GL40.glTexImage1D(txtType.getGlId(), 0, internalFormat.getGlId(), width, 0, format.getGlId(), dataType.getGlId(), MemoryUtil.NULL);
+			GL40.glTexImage1D(txtType.getGlId(), 0, internalFormat.getGlId(), width, 0, format.getGlId(), dataType.getGlId(), buffer);
 		} else if (TextureType.TXT2D.equals(txtType)) {
-			System.out.println("gen 2d");
-			GL40.glTexImage2D(txtType.getGlId(), 0, internalFormat.getGlId(), width, height, 0, format.getGlId(), dataType.getGlId(), MemoryUtil.NULL);
+			GL40.glTexImage2D(txtType.getGlId(), 0, internalFormat.getGlId(), width, height, 0, format.getGlId(), dataType.getGlId(), buffer);
 		} else if (TextureType.TXT3D.equals(txtType)) {
-			GL40.glTexImage3D(txtType.getGlId(), 0, internalFormat.getGlId(), width, height, depth, 0, format.getGlId(), dataType.getGlId(), MemoryUtil.NULL);
+			GL40.glTexImage3D(txtType.getGlId(), 0, internalFormat.getGlId(), width, height, depth, 0, format.getGlId(), dataType.getGlId(), buffer);
 		}
 		applyFilter();
 		applyWrap();
@@ -137,8 +137,6 @@ public class SingleTexture extends Texture {
 	// GEN
 	private void generateTexture() {
 		gen();
-		
-		System.out.println("format "+format+"; internalFormat "+internalFormat);
 		
 		bind();
 		if (TextureType.TXT1D.equals(txtType)) {
