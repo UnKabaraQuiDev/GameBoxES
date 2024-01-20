@@ -27,9 +27,6 @@ public abstract class Texture implements Cleanupable, UniqueID {
 		this.path = _name;
 		this.name = _path;
 		this.textureOperation = txtOp;
-		/*this.filter = _filter;
-		this.txtResType = _txtResType;
-		this.wrap = _wrap;*/
 	}
 	
 	public abstract boolean setup();

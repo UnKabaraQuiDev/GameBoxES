@@ -62,6 +62,10 @@ public class SingleTexture extends Texture {
 	
 	@Override
 	public boolean setup() {
+		if(tid != -1) {
+			throw new RuntimeException("Cannot setup already loaded Single Texture");
+		}
+		
 		if(TextureOperation.GENERATE.equals(textureOperation)) {
 			this.tid = generateTexture(width, height, depth, format, internalFormat, dataType, generateMipmaps);
 		}else if(TextureOperation.BUFFER_LOAD.equals(textureOperation)) {
