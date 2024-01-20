@@ -100,8 +100,10 @@ public class Compositor implements Cleanupable {
 			if (!rl.isVisible())
 				continue;
 			
-			rl.render(cache, engine);
+			rl.render(cache, engine, framebuffer);
 		}
+		
+		framebuffer.unbind(GL40.GL_FRAMEBUFFER);
 		
 		GL40.glDepthMask(false);
 		for (String l : passes) {
@@ -110,32 +112,33 @@ public class Compositor implements Cleanupable {
 			
 			RenderLayer prl = cache.getRenderLayer(l);
 			if (prl == null) {
-				GlobalLogger.log(Level.WARNING, "Pass Render Layer: " + prl.getId() + ", not found in Cache");
+				GlobalLogger.log(Level.WARNING, "Pass Render Layer: " + l + ", not found in Cache");
 				break;
 			}
 			
 			if (!(prl instanceof PassRenderLayer))
 				continue;
 			
-			color0.bind(0);
-			depth.bind(1);
+			//color0.bind(0);
+			//depth.bind
 			
-			prl.render(cache, engine);
+			prl.render(cache, engine, framebuffer);
 		}
 		GL40.glDepthMask(true);
 		
 		framebuffer.unbind(GL40.GL_DRAW_FRAMEBUFFER);
 		framebuffer.bind(GL40.GL_READ_FRAMEBUFFER);
 		
-		GL40.glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL40.GL_COLOR_BUFFER_BIT, GL40.GL_NEAREST);
+		//GL40.glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL40.GL_COLOR_BUFFER_BIT, GL40.GL_NEAREST);
 	}
 	
 	public void addRenderLayer(int i, RenderLayer id) {
-		if (id instanceof PassRenderLayer) {
-			passes.add(i, id.getId());
-		} else {
-			layers.add(i, id.getId());
-		}
+		if(id instanceof PassRenderLayer)
+			return;
+		layers.add(i, id.getId());
+	}
+	public void addPassLayer(int i, PassRenderLayer id) {
+		passes.add(i, id.getId());
 	}
 	
 	@Override
@@ -147,5 +150,5 @@ public class Compositor implements Cleanupable {
 		if (color0 != null)
 			color0.cleanup();
 	}
-	
+
 }

@@ -26,8 +26,6 @@ public class Material implements UniqueID {
 	public void bindProperties(CacheManager cache, Renderable parent, Shader shader) {
 		for (Entry<String, Object> eso : properties.entrySet()) {
 			shader.setUniform(eso.getKey(), eso.getValue());
-			// GlobalLogger.log(Level.INFO, ("Material
-			// "+name+"."+eso.getKey()+"="+eso.getValue()).replace("\n", " [nl] "));
 		}
 	}
 

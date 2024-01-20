@@ -10,14 +10,14 @@ import lu.pcy113.pdr.engine.scene.Scene;
 import lu.pcy113.pdr.engine.scene.Scene2D;
 import lu.pcy113.pdr.engine.scene.Scene3D;
 
-public class SceneRenderLayer extends RenderLayer<GameEngine, Scene> {
+public class SceneRenderLayer extends RenderLayer<GameEngine, Framebuffer, Scene> {
 
 	public SceneRenderLayer(String name, Scene target) {
 		super(name, target);
 	}
 
 	@Override
-	public void render(CacheManager cache, GameEngine parent) {
+	public void render(CacheManager cache, GameEngine parent, Framebuffer fb) {
 		Renderer<GameEngine, Scene> renderer = null;
 		if (this.target instanceof Scene3D) {
 			renderer = (Renderer<GameEngine, Scene>) cache.getRenderer(Scene3D.NAME);

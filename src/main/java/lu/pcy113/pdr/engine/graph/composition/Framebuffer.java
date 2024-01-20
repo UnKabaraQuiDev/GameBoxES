@@ -74,4 +74,8 @@ public class Framebuffer implements UniqueID, Cleanupable {
 		return name;
 	}
 	
+	public HashMap<Integer, Texture> getAttachments() {
+		return attachments;
+	}
+	
 }

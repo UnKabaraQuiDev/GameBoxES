@@ -20,7 +20,6 @@ public class TextureMaterial extends Material {
 		int i = 0;
 		for (Entry<String, Texture> txt : textures.entrySet()) {
 			properties.put(txt.getKey(), i++);
-			// this.textures.put(txt.getKey(), new Texture(txt.getValue()));
 		}
 	}
 

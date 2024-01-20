@@ -9,6 +9,7 @@ import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWGamepadState;
 
+import lu.pcy113.pdr.client.game.three.BoxBlurShader.BoxBlurMaterial;
 import lu.pcy113.pdr.client.game.three.FillShader.FillMaterial;
 import lu.pcy113.pdr.client.game.three.SlotInstanceShader.SlotInstanceMaterial;
 import lu.pcy113.pdr.client.game.three.SlotShader.SlotMaterial;
@@ -23,6 +24,7 @@ import lu.pcy113.pdr.engine.geom.ObjLoader;
 import lu.pcy113.pdr.engine.geom.instance.InstanceEmitter;
 import lu.pcy113.pdr.engine.graph.composition.Compositor;
 import lu.pcy113.pdr.engine.graph.composition.GenerateRenderLayer;
+import lu.pcy113.pdr.engine.graph.composition.PassRenderLayer;
 import lu.pcy113.pdr.engine.graph.composition.SceneRenderLayer;
 import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.material.ShaderPart;
@@ -186,11 +188,16 @@ public class PDRClientGame3 implements GameLogic {
 		SceneRenderLayer uiRender = new SceneRenderLayer("ui", this.ui);
 		this.cache.addRenderLayer(uiRender);
 		
+		BoxBlurMaterial boxBlurMaterial = (BoxBlurMaterial) cache.loadMaterial(BoxBlurShader.BoxBlurMaterial.class);
+		//cache.addShader(boxBlurMaterial.getShader());
+		PassRenderLayer boxBlurPass = new PassRenderLayer("boxBlurPass", boxBlurMaterial);
+		cache.addRenderLayer(boxBlurPass);
+		
 		this.compositor = new Compositor();
 		this.compositor.addRenderLayer(0, genLayer);
 		this.compositor.addRenderLayer(1, sceneRender);
 		this.compositor.addRenderLayer(2, uiRender);
-		
+		this.compositor.addPassLayer(0, boxBlurPass);
 		
 		camera = (Camera3D) this.scene.getCamera();
 		camera.getProjection().setPerspective(true);
