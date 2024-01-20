@@ -7,16 +7,19 @@ import lu.pcy113.pdr.engine.impl.UniqueID;
 import lu.pcy113.pdr.engine.utils.consts.DataType;
 import lu.pcy113.pdr.engine.utils.consts.TexelFormat;
 import lu.pcy113.pdr.engine.utils.consts.TexelInternalFormat;
+import lu.pcy113.pdr.engine.utils.consts.TextureFilter;
+import lu.pcy113.pdr.engine.utils.consts.TextureParameter;
 import lu.pcy113.pdr.engine.utils.consts.TextureType;
+import lu.pcy113.pdr.engine.utils.consts.TextureWrap;
 
 public abstract class Texture implements Cleanupable, UniqueID {
 	
 	protected final String path;
 	protected final String name;
 	protected int tid = -1;
-	protected TextureFilter filter = TextureFiler.LINEAR;
+	protected TextureFilter minFilter = TextureFilter.LINEAR, magFilter = TextureFilter.LINEAR;
 	protected TextureType txtType = TextureType.TXT2D;
-	protected TextureWrap wrap = TextureWrap.CLAMP_TO_EDGE;
+	protected TextureWrap hWrap = TextureWrap.CLAMP_TO_EDGE, vWrap = TextureWrap.CLAMP_TO_EDGE, dWrap = TextureWrap.CLAMP_TO_EDGE;
 	protected DataType dataType;
 	protected TexelFormat format = TexelFormat.RGB;
 	protected TexelInternalFormat internalFormat = TexelInternalFormat.RGB;
@@ -58,14 +61,14 @@ public abstract class Texture implements Cleanupable, UniqueID {
 	}
 	
 	public void applyFilter() {
-		GL40.glTexParameteri(txtType.getGlId(), GL40.GL_TEXTURE_MIN_FILTER, filter.getGlId());
-		GL40.glTexParameteri(txtType.getGlId(), GL40.GL_TEXTURE_MAG_FILTER, filter.getGlId());
+		GL40.glTexParameteri(txtType.getGlId(), TextureParameter.MIN_FILTER.getGlId(), minFilter.getGlId());
+		GL40.glTexParameteri(txtType.getGlId(), TextureParameter.MAG_FILTER.getGlId(), magFilter.getGlId());
 	}
 	
 	public void applyWrap() {
-		GL40.glTexParameteri(txtType.getGlId(), GL40.GL_TEXTURE_WRAP_S, wrap.getGlId());
-		GL40.glTexParameteri(txtType.getGlId(), GL40.GL_TEXTURE_WRAP_T, wrap.getGlId());
-		GL40.glTexParameteri(txtType.getGlId(), GL40.GL_TEXTURE_WRAP_R, wrap.getGlId());
+		GL40.glTexParameteri(txtType.getGlId(), TextureParameter.WRAP_HORIZONTAL.getGlId(), hWrap.getGlId());
+		GL40.glTexParameteri(txtType.getGlId(), TextureParameter.WRAP_VERTICAL.getGlId(), vWrap.getGlId());
+		GL40.glTexParameteri(txtType.getGlId(), TextureParameter.WRAP_DEPTH.getGlId(), dWrap.getGlId());
 	}
 	
 	@Override
@@ -89,30 +92,69 @@ public abstract class Texture implements Cleanupable, UniqueID {
 		return path;
 	}
 	
-	public TextureFilter getFilter() {
-		return filter;
+	public TextureFilter getMinFilter() {
+		return minFilter;
 	}
-	public void setFilter(TextureFilter filter) {
-		this.filter = filter;
+	
+	public void setMinFilter(TextureFilter minFilter) {
+		this.minFilter = minFilter;
+	}
+	
+	public TextureFilter getMagFilter() {
+		return magFilter;
+	}
+	
+	public void setMagFilter(TextureFilter magFilter) {
+		this.magFilter = magFilter;
 	}
 	
 	public TextureType getTextureType() {
 		return txtType;
 	}
+	
 	public void setTextureType(TextureType txtType) {
 		this.txtType = txtType;
 	}
 	
-	public TextureWrap getWrap() {
-		return wrap;
+	public TextureWrap gethWrap() {
+		return hWrap;
+	}
+	
+	public void sethWrap(TextureWrap hWrap) {
+		this.hWrap = hWrap;
+	}
+	
+	public TextureWrap getvWrap() {
+		return vWrap;
+	}
+	
+	public void setvWrap(TextureWrap vWrap) {
+		this.vWrap = vWrap;
+	}
+	
+	public TextureWrap getdWrap() {
+		return dWrap;
+	}
+	
+	public void setdWrap(TextureWrap dWrap) {
+		this.dWrap = dWrap;
+	}
+	
+	public void setWrap(TextureWrap hWrap, TextureWrap vWrap, TextureWrap dWrap) {
+		this.hWrap = hWrap;
+		this.vWrap = vWrap;
+		this.dWrap = dWrap;
 	}
 	public void setWrap(TextureWrap wrap) {
-		this.wrap = wrap;
+		this.hWrap = wrap;
+		this.vWrap = wrap;
+		this.dWrap = wrap;
 	}
 	
 	public TexelFormat getTexelFormat() {
 		return format;
 	}
+	
 	public void setTexelFormat(TexelFormat format) {
 		this.format = format;
 	}
@@ -120,6 +162,7 @@ public abstract class Texture implements Cleanupable, UniqueID {
 	public TexelInternalFormat getInternalFormat() {
 		return internalFormat;
 	}
+	
 	public void setInternalFormat(TexelInternalFormat internalFormat) {
 		this.internalFormat = internalFormat;
 	}
