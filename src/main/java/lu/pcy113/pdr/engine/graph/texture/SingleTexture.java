@@ -1,14 +1,13 @@
 package lu.pcy113.pdr.engine.graph.texture;
 
 import java.nio.ByteBuffer;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import org.lwjgl.opengl.GL40;
 import org.lwjgl.stb.STBImage;
 import org.lwjgl.system.MemoryUtil;
 
-import lu.pcy113.pdr.engine.utils.consts.DataType;
-import lu.pcy113.pdr.engine.utils.consts.TexelFormat;
-import lu.pcy113.pdr.engine.utils.consts.TexelInternalFormat;
 import lu.pcy113.pdr.engine.utils.consts.TextureType;
 
 public class SingleTexture extends Texture {
@@ -62,25 +61,28 @@ public class SingleTexture extends Texture {
 	
 	@Override
 	public boolean setup() {
-		if(tid != -1) {
+		if(isValid()) {
 			throw new RuntimeException("Cannot setup already loaded Single Texture");
 		}
 		
 		if(TextureOperation.GENERATE.equals(textureOperation)) {
-			this.tid = generateTexture(width, height, depth, format, internalFormat, dataType, generateMipmaps);
+			generateTexture();
 		}else if(TextureOperation.BUFFER_LOAD.equals(textureOperation)) {
-			this.tid = generateBufferTexture(width, height, depth, format, internalFormat, dataType, generateMipmaps);
+			generateBufferTexture();
 		}else if(TextureOperation.FILE_BUFFER_LOAD.equals(textureOperation)) {
-			this.tid = generateFileBufferTexture();
+			generateFileBufferTexture();
 		}
-		return tid != -1;
+		return isValid();
 	}
 	
 	// FILE BUFFER LOAD
-	private int generateFileBufferTexture() {
+	private void generateFileBufferTexture() {
 		int[] w = new int[1];
 		int[] h = new int[1];
 		int[] c = new int[1];
+		
+		if(!Files.exists(Paths.get(path)))
+			throw new RuntimeException("File '"+path+"' not found");
 		
 		ByteBuffer buffer = STBImage.stbi_load(path, w, h, c, 4);
 		
@@ -88,9 +90,10 @@ public class SingleTexture extends Texture {
 		int he = h[0];
 		int channels = c[0];
 		
-		format = getColorByChannels(c[0]);
-		if(format == null)
-			throw new RuntimeException("Invalid channel count: "+c[0]+" to "+format);
+		format = getFormatByChannels(channels);
+		internalFormat = getInternalFormatByChannels(channels);
+		if(format == null || internalFormat == null)
+			throw new RuntimeException("Invalid channel count: "+channels+" to format:"+format+" & internalFormat:"+internalFormat);
 		
 		if (buffer == null)
 			throw new RuntimeException("Failed to load texture");
@@ -103,60 +106,56 @@ public class SingleTexture extends Texture {
 		}
 		setBuffer(buffer);
 		
-		int tid = generateBufferTexture(width, height, depth, format, internalFormat, dataType, generateMipmaps);
+		generateBufferTexture();
 		
 		STBImage.stbi_image_free(buffer);
-		
-		return tid;
 	}
 	
 	// BUFFER LOAD 
-	private int generateBufferTexture(int w, int h, int d, TexelFormat format, TexelInternalFormat internalFormat, DataType dataType, boolean genMipmaps) {
-		int tid = gen();
-
-		GL40.glBindTexture(txtType.getGlId(), tid);
+	private void generateBufferTexture() {
+		gen();
+		bind();
 		GL40.glPixelStorei(GL40.GL_UNPACK_ALIGNMENT, 1);
 		if (TextureType.TXT1D.equals(txtType)) {
-			GL40.glTexImage1D(txtType.getGlId(), 0, internalFormat.getGlId(), w, 0, format.getGlId(), dataType.getGlId(), MemoryUtil.NULL);
+			GL40.glTexImage1D(txtType.getGlId(), 0, internalFormat.getGlId(), width, 0, format.getGlId(), dataType.getGlId(), MemoryUtil.NULL);
 		} else if (TextureType.TXT2D.equals(txtType)) {
-			GL40.glTexImage2D(txtType.getGlId(), 0, internalFormat.getGlId(), w, h, 0, format.getGlId(), dataType.getGlId(), MemoryUtil.NULL);
+			System.out.println("gen 2d");
+			GL40.glTexImage2D(txtType.getGlId(), 0, internalFormat.getGlId(), width, height, 0, format.getGlId(), dataType.getGlId(), MemoryUtil.NULL);
 		} else if (TextureType.TXT3D.equals(txtType)) {
-			GL40.glTexImage3D(txtType.getGlId(), 0, internalFormat.getGlId(), w, h, d, 0, format.getGlId(), dataType.getGlId(), MemoryUtil.NULL);
+			GL40.glTexImage3D(txtType.getGlId(), 0, internalFormat.getGlId(), width, height, depth, 0, format.getGlId(), dataType.getGlId(), MemoryUtil.NULL);
 		}
 		applyFilter();
 		applyWrap();
 		
-		if(genMipmaps) {
+		if(generateMipmaps) {
 			GL40.glGenerateMipmap(txtType.getGlId());
 		}
 		
 		unbind();
-		
-		return tid;
 	}
 	
 	// GEN
-	private int generateTexture(int w, int h, int d, TexelFormat format, TexelInternalFormat internalFormat, DataType dataType, boolean genMipmaps) {
-		/*int tid = gen();
-
-		GL40.glBindTexture(txtType.getGlId(), tid);
-		if (TextureType.TXT1D.equals(txtType)) {
-			GL40.glTexImage1D(txtType.getGlId(), 0, internalFormat.getGlId(), w, 0, format.getGlId(), dataType.getGlId(), MemoryUtil.NULL);
-		} else if (TextureType.TXT2D.equals(txtType)) {
-			GL40.glTexImage2D(txtType.getGlId(), 0, internalFormat.getGlId(), w, h, 0, format.getGlId(), dataType.getGlId(), MemoryUtil.NULL);
-		} else if (TextureType.TXT3D.equals(txtType)) {
-			GL40.glTexImage3D(txtType.getGlId(), 0, internalFormat.getGlId(), w, h, d, 0, format.getGlId(), dataType.getGlId(), MemoryUtil.NULL);
-		}
-		filter();
-		wrap();
+	private void generateTexture() {
+		gen();
 		
-		if(genMipmaps) {
+		System.out.println("format "+format+"; internalFormat "+internalFormat);
+		
+		bind();
+		if (TextureType.TXT1D.equals(txtType)) {
+			GL40.glTexImage1D(txtType.getGlId(), 0, internalFormat.getGlId(), width, 0, format.getGlId(), dataType.getGlId(), MemoryUtil.NULL);
+		} else if (TextureType.TXT2D.equals(txtType)) {
+			GL40.glTexImage2D(txtType.getGlId(), 0, internalFormat.getGlId(), width, height, 0, format.getGlId(), dataType.getGlId(), MemoryUtil.NULL);
+		} else if (TextureType.TXT3D.equals(txtType)) {
+			GL40.glTexImage3D(txtType.getGlId(), 0, internalFormat.getGlId(), width, height, depth, 0, format.getGlId(), dataType.getGlId(), MemoryUtil.NULL);
+		}
+		applyFilter();
+		applyWrap();
+		
+		if(generateMipmaps) {
 			GL40.glGenerateMipmap(txtType.getGlId());
 		}
 		
-		unbind();*/
-		setBuffer(null);
-		return generateBufferTexture(w, h, d, format, internalFormat, dataType, genMipmaps);
+		unbind();
 	}
 	
 	public void setSize(int width) {
@@ -170,71 +169,6 @@ public class SingleTexture extends Texture {
 		this.height = height;
 		this.depth = depth;
 	}
-	
-	/*
-	 * GEN FROM BUFFER
-	 */
-	/*public SingleTexture(String name, int w, int h, ByteBuffer buffer) {
-		this(name, w, h, buffer, GL40.GL_LINEAR);
-	}
-	
-	public SingleTexture(String name, int w, int h, ByteBuffer buffer, int filter) {
-		this(name, w, h, buffer, filter, GL40.GL_TEXTURE_2D);
-	}
-	
-	public SingleTexture(String name, int w, int h, ByteBuffer buffer, int filter, int txtResType) {
-		this(name, w, h, buffer, filter, txtResType, GL40.GL_CLAMP_TO_EDGE);
-	}
-	
-	public SingleTexture(String name, int w, int h, ByteBuffer buffer, int filter, int txtResType, int wrap) {
-		this(name, w, h, buffer, filter, txtResType, wrap, GL40.GL_RGB);
-	}
-	
-	public SingleTexture(String name, int w, int h, ByteBuffer buffer, int filter, int txtResType, int wrap, int channels) {
-		super(name, null, filter, txtResType, wrap, channels);
-
-		this.tid = generateTexture(w, h, buffer, channels);
-	}
-
-	*/
-	
-	/*
-	 * FILE
-	 */
-	/*public SingleTexture(String path) {
-		this(path, path, GL40.GL_LINEAR, GL40.GL_TEXTURE_2D, GL40.GL_CLAMP_TO_EDGE);
-	}
-
-	public SingleTexture(String name, String path) {
-		this(name, path, GL40.GL_LINEAR, GL40.GL_TEXTURE_2D, GL40.GL_CLAMP_TO_EDGE);
-	}
-	
-	public SingleTexture(String name, String path, int filter) {
-		this(name, path, filter, GL40.GL_TEXTURE_2D, GL40.GL_CLAMP_TO_EDGE);
-	}
-	
-	public SingleTexture(String name, String path, int filter, int txtResType) {
-		this(name, path, filter, txtResType, GL40.GL_CLAMP_TO_EDGE);
-	}
-	
-	public SingleTexture(String name, String path, int filter, int txtResType, int wrap) {
-		super(name, path, filter, txtResType, wrap, 0);
-		
-		int[] w = new int[1];
-		int[] h = new int[1];
-		int[] c = new int[1];
-		
-		ByteBuffer buffer = STBImage.stbi_load(path, w, h, c, 4);
-		super.channelType = getColorByChannels(c[0]);
-		if(super.channelType == -1)
-			throw new RuntimeException("Invalid channel count: "+c[0]+" to "+super.channelType);
-		
-		if (buffer == null)
-			throw new RuntimeException("Failed to load texture");
-		
-		this.tid = generateTexture(w[0], h[0], buffer, super.channelType);
-		STBImage.stbi_image_free(buffer);
-	}*/
 	
 	public ByteBuffer getBuffer() {
 		return buffer;

@@ -12,6 +12,10 @@ import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.graph.texture.SingleTexture;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
+import lu.pcy113.pdr.engine.utils.consts.DataType;
+import lu.pcy113.pdr.engine.utils.consts.FrameBufferAttachment;
+import lu.pcy113.pdr.engine.utils.consts.TexelFormat;
+import lu.pcy113.pdr.engine.utils.consts.TexelInternalFormat;
 
 public class Compositor implements Cleanupable {
 	
@@ -27,19 +31,28 @@ public class Compositor implements Cleanupable {
 	protected Vector2i resolution = new Vector2i(0, 0);
 	
 	private boolean genTextures() {
-		if (depth != null && depth.getTid() != -1)
+		if (depth != null && depth.isValid())
 			depth.cleanup();
-		if (color0 != null && color0.getTid() != -1)
+		if (color0 != null && color0.isValid())
 			color0.cleanup();
 		
 		framebuffer.clearAttachments();
 		
-		depth = new SingleTexture("depth", resolution.x, resolution.y, GL40.GL_LINEAR, GL40.GL_TEXTURE_2D, GL40.GL_CLAMP_TO_EDGE, GL40.GL_DEPTH_COMPONENT, GL40.GL_FLOAT);
-		color0 = new SingleTexture("depth", resolution.x, resolution.y, GL40.GL_LINEAR, GL40.GL_TEXTURE_2D, GL40.GL_CLAMP_TO_EDGE, GL40.GL_RGBA, GL40.GL_UNSIGNED_BYTE);
+		depth = new SingleTexture("depth", resolution.x, resolution.y);
+		depth.setInternalFormat(TexelInternalFormat.DEPTH_COMPONENT);
+		depth.setFormat(TexelFormat.DEPTH);
+		depth.setDataType(DataType.FLOAT);
+		depth.setup();
 		
-		if (!framebuffer.attachTexture(GL40.GL_DEPTH_ATTACHMENT, depth))
+		color0 = new SingleTexture("color", resolution.x, resolution.y);
+		color0.setInternalFormat(TexelInternalFormat.RGBA);
+		color0.setFormat(TexelFormat.RGBA);
+		color0.setDataType(DataType.UBYTE);
+		color0.setup();
+		
+		if (!framebuffer.attachTexture(FrameBufferAttachment.DEPTH, 0, depth))
 			return false;
-		if (!framebuffer.attachTexture(GL40.GL_COLOR_ATTACHMENT0, color0))
+		if (!framebuffer.attachTexture(FrameBufferAttachment.COLOR_FIRST, 0, color0))
 			return false;
 		
 		return true;

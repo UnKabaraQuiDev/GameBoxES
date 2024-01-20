@@ -8,7 +8,6 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWGamepadState;
-import org.lwjgl.opengl.GL40;
 
 import lu.pcy113.pdr.client.game.three.FillShader.FillMaterial;
 import lu.pcy113.pdr.client.game.three.SlotInstanceShader.SlotInstanceMaterial;
@@ -52,6 +51,8 @@ import lu.pcy113.pdr.engine.scene.camera.Camera;
 import lu.pcy113.pdr.engine.scene.camera.Camera3D;
 import lu.pcy113.pdr.engine.scene.camera.Projection;
 import lu.pcy113.pdr.engine.utils.PDRUtils;
+import lu.pcy113.pdr.engine.utils.consts.TextureFilter;
+import lu.pcy113.pdr.engine.utils.consts.TextureType;
 import lu.pcy113.pdr.engine.utils.interpolation.Interpolators;
 import lu.pcy113.pdr.engine.utils.transform.Transform3D;
 
@@ -122,7 +123,7 @@ public class PDRClientGame3 implements GameLogic {
 		// Math.toRadians(90), GameEngine.UP);
 		slotEntityUi.getComponent(Transform3DComponent.class).getTransform().updateMatrix();
 		
-		Texture txt1 = cache.loadSingleTexture("txt1", "./resources/textures/fonts/font1row.png", GL40.GL_NEAREST, GL40.GL_TEXTURE_2D);
+		Texture txt1 = cache.loadSingleTexture("txt1", "./resources/textures/fonts/font1row.png", TextureFilter.NEAREST, TextureType.TXT2D);
 		TextMaterial textMaterial = (TextMaterial) cache.loadMaterial(TextShader.TextMaterial.class, txt1);
 		debugInfo = new TextEmitter("debug_infos", textMaterial, 100, "FPS: ", new Vector2f(0.1f));
 		debugInfo.updateText();
@@ -229,7 +230,7 @@ public class PDRClientGame3 implements GameLogic {
 		};
 		
 		/* CUBE MAP */
-		CubemapTexture cmtxt = cache.loadCubemapTexture("name", "./resources/textures/skybox/.jpg");
+		CubemapTexture cmtxt = cache.loadCubemapTexture("skybox", "./resources/textures/skybox/.jpg");
 		final String skyboxUniform = "skybox";
 		Shader shader = new Shader("skybox",
 				new ShaderPart("./resources/shaders/plain.vert"),

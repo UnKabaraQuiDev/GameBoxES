@@ -10,6 +10,7 @@ import org.lwjgl.stb.STBImage;
 
 import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pdr.engine.utils.FileUtils;
+import lu.pcy113.pdr.engine.utils.consts.TextureType;
 
 public class CubemapTexture extends Texture {
 	
@@ -17,25 +18,27 @@ public class CubemapTexture extends Texture {
 	
 	public CubemapTexture(String path) {
 		super(path, path, TextureOperation.FILE_BUFFER_LOAD);
+		txtType = TextureType.CUBE_MAP;
 	}
 	
 	public CubemapTexture(String name, String path) {
 		super(name, path, TextureOperation.FILE_BUFFER_LOAD);
+		txtType = TextureType.CUBE_MAP;
 	}
 	
 	@Override
 	public boolean setup() {
-		if(tid != -1) {
+		if(isValid()) {
 			throw new RuntimeException("Cannot setup already loaded Cubemap Texture");
 		}
 		
 		if(TextureOperation.FILE_BUFFER_LOAD.equals(textureOperation)) {
-			this.tid = generateFileBufferCubeMapTexture();
+			generateFileBufferCubeMapTexture();
 		}
-		return tid != -1;
+		return isValid();
 	}
 	
-	private int generateFileBufferCubeMapTexture() {
+	private void generateFileBufferCubeMapTexture() {
 		String[] faces = new String[6];
 		for (int i = 0; i < 6; i++) {
 			faces[i] = FileUtils.appendName(path, FACES[i]);
@@ -45,9 +48,9 @@ public class CubemapTexture extends Texture {
 		}
 		GlobalLogger.log(Arrays.toString(faces));
 		
-		int tid = gen();
+		gen();
 		bind();
-		
+		//GL40.glPixelStorei(GL40.GL_UNPACK_ALIGNMENT, 1);
 		for (int i = 0; i < faces.length; i++) {
 			ByteBuffer imageBuffer;
 			int width, height, channels;
@@ -62,12 +65,15 @@ public class CubemapTexture extends Texture {
 			height = h[0];
 			channels = c[0];
 			
-			format = getColorByChannels(channels);
-			if (channels == -1)
+			format = getFormatByChannels(channels);
+			internalFormat = getInternalFormatByChannels(channels);
+			if (format == null) {
+				cleanup();
 				throw new RuntimeException("Invalid channel count: " + channels);
+			}
 			
 			if (imageBuffer != null) {
-				GL40.glTexImage2D(GL40.GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, internalFormat.getGlId(), width, height, 0, format.getGlId(), dataType.getGlId(), imageBuffer);
+				GL40.glTexImage2D(TextureType.CM_PX.getGlId() + i, 0, internalFormat.getGlId(), width, height, 0, format.getGlId(), dataType.getGlId(), imageBuffer);
 				STBImage.stbi_image_free(imageBuffer);
 			} else {
 				cleanup();
@@ -78,7 +84,7 @@ public class CubemapTexture extends Texture {
 		applyFilter();
 		applyWrap();
 		
-		return tid;
+		unbind();
 	}
 	
 }

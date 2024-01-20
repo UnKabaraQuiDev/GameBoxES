@@ -5,11 +5,11 @@ import java.util.Map.Entry;
 
 import org.lwjgl.opengl.GL40;
 
-import lu.pcy113.pclib.Pair;
 import lu.pcy113.pdr.engine.graph.texture.SingleTexture;
 import lu.pcy113.pdr.engine.graph.texture.Texture;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
+import lu.pcy113.pdr.engine.utils.consts.FrameBufferAttachment;
 
 public class Framebuffer implements UniqueID, Cleanupable {
 	
@@ -25,10 +25,10 @@ public class Framebuffer implements UniqueID, Cleanupable {
 		fbo = GL40.glGenFramebuffers();
 	}
 	
-	public boolean attachTexture(int attachmenPoint, SingleTexture texture) {
-		GL40.glFramebufferTexture(GL40.GL_FRAMEBUFFER, attachmenPoint, texture.getTid(), 0);
+	public boolean attachTexture(FrameBufferAttachment attach, int offset, SingleTexture texture) {
+		GL40.glFramebufferTexture(GL40.GL_FRAMEBUFFER, attach.getGlId()+offset, texture.getTid(), 0);
 		
-		this.attachments.put(attachmenPoint, texture);
+		this.attachments.put(attach.getGlId()+offset, texture);
 		return GL40.glGetError() == GL40.GL_NO_ERROR;
 	}
 	

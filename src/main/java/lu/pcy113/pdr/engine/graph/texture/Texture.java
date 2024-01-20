@@ -20,15 +20,15 @@ public abstract class Texture implements Cleanupable, UniqueID {
 	protected TextureFilter minFilter = TextureFilter.LINEAR, magFilter = TextureFilter.LINEAR;
 	protected TextureType txtType = TextureType.TXT2D;
 	protected TextureWrap hWrap = TextureWrap.CLAMP_TO_EDGE, vWrap = TextureWrap.CLAMP_TO_EDGE, dWrap = TextureWrap.CLAMP_TO_EDGE;
-	protected DataType dataType;
+	protected DataType dataType = DataType.UBYTE;
 	protected TexelFormat format = TexelFormat.RGB;
 	protected TexelInternalFormat internalFormat = TexelInternalFormat.RGB;
-	protected boolean generateMipmaps = false;
+	protected boolean generateMipmaps = true;
 	protected TextureOperation textureOperation = null;
 	
 	public Texture(String _name, String _path, TextureOperation txtOp) {
-		this.path = _name;
-		this.name = _path;
+		this.name = _name;
+		this.path = _path;
 		this.textureOperation = txtOp;
 	}
 	
@@ -73,7 +73,7 @@ public abstract class Texture implements Cleanupable, UniqueID {
 	
 	@Override
 	public void cleanup() {
-		if (tid != -1) {
+		if (isValid()) {
 			GL40.glDeleteTextures(tid);
 			tid = -1;
 		}
@@ -108,6 +108,16 @@ public abstract class Texture implements Cleanupable, UniqueID {
 		this.magFilter = magFilter;
 	}
 	
+	public void setFilters(TextureFilter min, TextureFilter mag) {
+		this.minFilter = min;
+		this.magFilter = mag;
+	}
+	
+	public void setFilters(TextureFilter filter) {
+		this.minFilter = filter;
+		this.magFilter = filter;
+	}
+	
 	public TextureType getTextureType() {
 		return txtType;
 	}
@@ -140,22 +150,22 @@ public abstract class Texture implements Cleanupable, UniqueID {
 		this.dWrap = dWrap;
 	}
 	
-	public void setWrap(TextureWrap hWrap, TextureWrap vWrap, TextureWrap dWrap) {
+	public void setWraps(TextureWrap hWrap, TextureWrap vWrap, TextureWrap dWrap) {
 		this.hWrap = hWrap;
 		this.vWrap = vWrap;
 		this.dWrap = dWrap;
 	}
-	public void setWrap(TextureWrap wrap) {
+	public void setWraps(TextureWrap wrap) {
 		this.hWrap = wrap;
 		this.vWrap = wrap;
 		this.dWrap = wrap;
 	}
 	
-	public TexelFormat getTexelFormat() {
+	public TexelFormat getFormat() {
 		return format;
 	}
 	
-	public void setTexelFormat(TexelFormat format) {
+	public void setFormat(TexelFormat format) {
 		this.format = format;
 	}
 	
@@ -167,7 +177,30 @@ public abstract class Texture implements Cleanupable, UniqueID {
 		this.internalFormat = internalFormat;
 	}
 	
-	public static TexelFormat getColorByChannels(int channels) {
+	public DataType getDataType() {
+		return dataType;
+	}
+	public void setDataType(DataType dataType) {
+		this.dataType = dataType;
+	}
+	
+	public boolean isValid() {
+		return tid != -1;
+	}
+	
+	public boolean isGenerateMipmaps() {
+		return generateMipmaps;
+	}
+	public void setGenerateMipmaps(boolean generateMipmaps) {
+		this.generateMipmaps = generateMipmaps;
+	}
+	
+	@Override
+	public String toString() {
+		return "{tid: " + tid + ", name: " + name + ", valid: " + isValid() + ", type: " + txtType + ", format: " + format + ", internalFormat: " + internalFormat+", dataType: " + dataType + "}";
+	}
+	
+	public static TexelFormat getFormatByChannels(int channels) {
 		switch (channels) {
 		case 1:
 			return TexelFormat.RED;
@@ -177,6 +210,20 @@ public abstract class Texture implements Cleanupable, UniqueID {
 			return TexelFormat.RGB;
 		case 4:
 			return TexelFormat.RGBA;
+		}
+		return null;
+	}
+	
+	public static TexelInternalFormat getInternalFormatByChannels(int channels) {
+		switch (channels) {
+		case 1:
+			return TexelInternalFormat.RED;
+		case 2:
+			return TexelInternalFormat.RG;
+		case 3:
+			return TexelInternalFormat.RGB;
+		case 4:
+			return TexelInternalFormat.RGBA;
 		}
 		return null;
 	}

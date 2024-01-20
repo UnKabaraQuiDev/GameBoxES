@@ -25,6 +25,8 @@ import lu.pcy113.pdr.engine.objs.GizmoModel;
 import lu.pcy113.pdr.engine.objs.PointLight;
 import lu.pcy113.pdr.engine.objs.text.TextEmitter;
 import lu.pcy113.pdr.engine.scene.Scene;
+import lu.pcy113.pdr.engine.utils.consts.TextureFilter;
+import lu.pcy113.pdr.engine.utils.consts.TextureType;
 import lu.pcy113.pdr.engine.utils.transform.Transform;
 
 public class CacheManager implements Cleanupable {
@@ -427,12 +429,17 @@ public class CacheManager implements Cleanupable {
 	
 	public Texture loadSingleTexture(String string, String path) {
 		Texture texture = new SingleTexture(string, path);
+		texture.setup();
 		addTexture(texture);
 		return texture;
 	}
 	
-	public Texture loadSingleTexture(String string, String path, int filter, int txtResType) {
-		Texture texture = new SingleTexture(string, path, filter, txtResType);
+	public Texture loadSingleTexture(String string, String path, TextureFilter filter, TextureType type) {
+		Texture texture = new SingleTexture(string, path);
+		texture.setFilters(filter);
+		texture.setTextureType(type);
+		//texture.setWraps(wrap);
+		texture.setup();
 		addTexture(texture);
 		return texture;
 	}
@@ -451,6 +458,7 @@ public class CacheManager implements Cleanupable {
 	
 	public CubemapTexture loadCubemapTexture(String name, String path) {
 		CubemapTexture txt = new CubemapTexture(name, path);
+		txt.setup();
 		addTexture(txt);
 		return txt;
 	}
