@@ -1,12 +1,12 @@
 package lu.pcy113.pdr.engine.graph.texture;
 
-import java.text.Format;
-
-import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL40;
 
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
+import lu.pcy113.pdr.engine.utils.consts.DataType;
+import lu.pcy113.pdr.engine.utils.consts.TexelFormat;
+import lu.pcy113.pdr.engine.utils.consts.TexelInternalFormat;
 import lu.pcy113.pdr.engine.utils.consts.TextureType;
 
 public abstract class Texture implements Cleanupable, UniqueID {
@@ -14,15 +14,25 @@ public abstract class Texture implements Cleanupable, UniqueID {
 	protected final String path;
 	protected final String name;
 	protected int tid = -1;
-	protected int filter, txtResType = GL20.GL_TEXTURE_2D, wrap = GL40.GL_CLAMP_TO_EDGE, channelType = GL40.GL_RGB;
+	protected TextureFilter filter = TextureFiler.LINEAR;
+	protected TextureType txtType = TextureType.TXT2D;
+	protected TextureWrap wrap = TextureWrap.CLAMP_TO_EDGE;
+	protected DataType dataType;
+	protected TexelFormat format = TexelFormat.RGB;
+	protected TexelInternalFormat internalFormat = TexelInternalFormat.RGB;
+	protected boolean generateMipmaps = false;
+	protected TextureOperation textureOperation = null;
 	
-	public Texture(String _name, String _path, int _filter, TextureType _txtResType, int _wrap, InternalFormat _channels, Format _format) {
+	public Texture(String _name, String _path, TextureOperation txtOp) {
 		this.path = _name;
 		this.name = _path;
-		this.filter = _filter;
+		this.textureOperation = txtOp;
+		/*this.filter = _filter;
 		this.txtResType = _txtResType;
-		this.wrap = _wrap;
+		this.wrap = _wrap;*/
 	}
+	
+	public abstract boolean setup();
 	
 	protected int gen() {
 		return (tid = GL40.glGenTextures());
@@ -36,7 +46,7 @@ public abstract class Texture implements Cleanupable, UniqueID {
 	}
 	
 	public void bind() {
-		GL40.glBindTexture(txtResType, tid);
+		GL40.glBindTexture(txtType.getGlId(), tid);
 	}
 	
 	public void unbind(int i) {
@@ -47,18 +57,18 @@ public abstract class Texture implements Cleanupable, UniqueID {
 	}
 	
 	public void unbind() {
-		GL40.glBindTexture(txtResType, 0);
+		GL40.glBindTexture(txtType.getGlId(), 0);
 	}
 	
-	public void filter() {
-		GL40.glTexParameteri(txtResType, GL40.GL_TEXTURE_MIN_FILTER, filter);
-		GL40.glTexParameteri(txtResType, GL40.GL_TEXTURE_MAG_FILTER, filter);
+	public void applyFilter() {
+		GL40.glTexParameteri(txtType.getGlId(), GL40.GL_TEXTURE_MIN_FILTER, filter.getGlId());
+		GL40.glTexParameteri(txtType.getGlId(), GL40.GL_TEXTURE_MAG_FILTER, filter.getGlId());
 	}
 	
-	public void wrap() {
-		GL40.glTexParameteri(txtResType, GL40.GL_TEXTURE_WRAP_S, wrap);
-		GL40.glTexParameteri(txtResType, GL40.GL_TEXTURE_WRAP_T, wrap);
-		GL40.glTexParameteri(txtResType, GL40.GL_TEXTURE_WRAP_R, wrap);
+	public void applyWrap() {
+		GL40.glTexParameteri(txtType.getGlId(), GL40.GL_TEXTURE_WRAP_S, wrap.getGlId());
+		GL40.glTexParameteri(txtType.getGlId(), GL40.GL_TEXTURE_WRAP_T, wrap.getGlId());
+		GL40.glTexParameteri(txtType.getGlId(), GL40.GL_TEXTURE_WRAP_R, wrap.getGlId());
 	}
 	
 	@Override
@@ -82,34 +92,53 @@ public abstract class Texture implements Cleanupable, UniqueID {
 		return path;
 	}
 	
-	public int getFilter() {
+	public TextureFilter getFilter() {
 		return filter;
 	}
-	
-	public int getTxtResType() {
-		return txtResType;
+	public void setFilter(TextureFilter filter) {
+		this.filter = filter;
 	}
 	
-	public int getWrap() {
+	public TextureType getTextureType() {
+		return txtType;
+	}
+	public void setTextureType(TextureType txtType) {
+		this.txtType = txtType;
+	}
+	
+	public TextureWrap getWrap() {
 		return wrap;
 	}
-	
-	public int getChannelType() {
-		return channelType;
+	public void setWrap(TextureWrap wrap) {
+		this.wrap = wrap;
 	}
 	
-	public static int getColorByChannels(int channels) {
+	public TexelFormat getTexelFormat() {
+		return format;
+	}
+	public void setTexelFormat(TexelFormat format) {
+		this.format = format;
+	}
+	
+	public TexelInternalFormat getInternalFormat() {
+		return internalFormat;
+	}
+	public void setInternalFormat(TexelInternalFormat internalFormat) {
+		this.internalFormat = internalFormat;
+	}
+	
+	public static TexelFormat getColorByChannels(int channels) {
 		switch (channels) {
 		case 1:
-			return GL40.GL_R;
+			return TexelFormat.RED;
 		case 2:
-			return GL40.GL_RG;
+			return TexelFormat.RG;
 		case 3:
-			return GL40.GL_RGB;
+			return TexelFormat.RGB;
 		case 4:
-			return GL40.GL_RGBA;
+			return TexelFormat.RGBA;
 		}
-		return -1;
+		return null;
 	}
 	
 }

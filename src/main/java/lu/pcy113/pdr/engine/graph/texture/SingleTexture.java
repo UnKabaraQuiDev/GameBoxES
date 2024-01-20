@@ -2,65 +2,175 @@ package lu.pcy113.pdr.engine.graph.texture;
 
 import java.nio.ByteBuffer;
 
-import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL40;
 import org.lwjgl.stb.STBImage;
 import org.lwjgl.system.MemoryUtil;
 
+import lu.pcy113.pdr.engine.utils.consts.DataType;
+import lu.pcy113.pdr.engine.utils.consts.TexelFormat;
+import lu.pcy113.pdr.engine.utils.consts.TexelInternalFormat;
+import lu.pcy113.pdr.engine.utils.consts.TextureType;
+
 public class SingleTexture extends Texture {
 	
-	/*
-	 * GEN 
+	private int width, height, depth;
+	private ByteBuffer buffer;
+	
+	// GEN
+	public SingleTexture(String name, int width) {
+		this(name, width, 0, 0);
+		setTextureType(TextureType.TXT1D);
+	}
+	public SingleTexture(String name, int width, int height) {
+		this(name, width, height, 0);
+		setTextureType(TextureType.TXT2D);
+	}
+	/**
+	 * GEN
 	 */
-	public SingleTexture(String name, int w, int h) {
-		this(name, w, h, GL40.GL_LINEAR);
+	public SingleTexture(String name, int width, int height, int depth) {
+		super(name, name, TextureOperation.GENERATE);
+		setSize(width, height, depth);
+		setTextureType(TextureType.TXT3D);
 	}
 	
-	public SingleTexture(String name, int w, int h, int filter) {
-		this(name, w, h, filter, GL20.GL_TEXTURE_2D);
+	// BUFFER LOAD
+	public SingleTexture(String name, int width, ByteBuffer buffer) {
+		this(name, width, 0, 0, buffer);
+		setTextureType(TextureType.TXT1D);
+	}
+	public SingleTexture(String name, int width, int height, ByteBuffer buffer) {
+		this(name, width, height, 0, buffer);
+		setTextureType(TextureType.TXT2D);
+	}
+	/**
+	 * BUFFER LOAD
+	 */
+	public SingleTexture(String name, int width, int height, int depth, ByteBuffer buffer) {
+		super(name, name, TextureOperation.BUFFER_LOAD);
+		this.buffer = buffer;
+		setSize(width, height, depth);
+		setTextureType(TextureType.TXT3D);
 	}
 	
-	public SingleTexture(String name, int w, int h, int filter, int txtResType) {
-		this(name, w, h, filter, txtResType, GL40.GL_CLAMP_TO_EDGE);
+	/**
+	 * FILE BUFFER LOAD
+	 */
+	public SingleTexture(String name, String path) {
+		super(name, path, TextureOperation.FILE_BUFFER_LOAD);
 	}
 	
-	public SingleTexture(String name, int w, int h, int filter, int txtResType, int wrap) {
-		this(name, w, h, filter, txtResType, wrap, GL40.GL_RGB);
+	@Override
+	public boolean setup() {
+		if(TextureOperation.GENERATE.equals(textureOperation)) {
+			this.tid = generateTexture(width, height, depth, format, internalFormat, dataType, generateMipmaps);
+		}else if(TextureOperation.BUFFER_LOAD.equals(textureOperation)) {
+			this.tid = generateBufferTexture(width, height, depth, format, internalFormat, dataType, generateMipmaps);
+		}else if(TextureOperation.FILE_BUFFER_LOAD.equals(textureOperation)) {
+			this.tid = generateFileBufferTexture();
+		}
+		return tid != -1;
 	}
 	
-	public SingleTexture(String name, int w, int h, int filter, int txtResType, int wrap, int channels) {
-		this(name, w, h, filter, txtResType, wrap, channels, GL40.GL_UNSIGNED_BYTE);
+	// FILE BUFFER LOAD
+	private int generateFileBufferTexture() {
+		int[] w = new int[1];
+		int[] h = new int[1];
+		int[] c = new int[1];
+		
+		ByteBuffer buffer = STBImage.stbi_load(path, w, h, c, 4);
+		
+		int wi = w[0];
+		int he = h[0];
+		int channels = c[0];
+		
+		format = getColorByChannels(c[0]);
+		if(format == null)
+			throw new RuntimeException("Invalid channel count: "+c[0]+" to "+format);
+		
+		if (buffer == null)
+			throw new RuntimeException("Failed to load texture");
+		
+		setSize(wi, he, 0);
+		if(he == 1) {
+			setTextureType(TextureType.TXT1D);
+		}else {
+			setTextureType(TextureType.TXT2D);
+		}
+		setBuffer(buffer);
+		
+		int tid = generateBufferTexture(width, height, depth, format, internalFormat, dataType, generateMipmaps);
+		
+		STBImage.stbi_image_free(buffer);
+		
+		return tid;
 	}
 	
-	public SingleTexture(String name, int w, int h, int filter, int txtResType, int wrap, int channels, int type) {
-		super(name, null, filter, txtResType, wrap, channels);
-
-		this.tid = generateTexture(w, h, channels, type);
-	}
-	
-	private int generateTexture(int w, int h, int channels, int type) {
+	// BUFFER LOAD 
+	private int generateBufferTexture(int w, int h, int d, TexelFormat format, TexelInternalFormat internalFormat, DataType dataType, boolean genMipmaps) {
 		int tid = gen();
 
-		GL40.glBindTexture(txtResType, tid);
-		if (txtResType == GL40.GL_TEXTURE_1D) {
-			GL40.glTexImage1D(txtResType, 0, channels, w, 0, channels, type, MemoryUtil.NULL);
-		} else if (txtResType == GL40.GL_TEXTURE_2D) {
-			GL40.glTexImage2D(txtResType, 0, channels, w, h, 0, channels, type, MemoryUtil.NULL);
+		GL40.glBindTexture(txtType.getGlId(), tid);
+		GL40.glPixelStorei(GL40.GL_UNPACK_ALIGNMENT, 1);
+		if (TextureType.TXT1D.equals(txtType)) {
+			GL40.glTexImage1D(txtType.getGlId(), 0, internalFormat.getGlId(), w, 0, format.getGlId(), dataType.getGlId(), MemoryUtil.NULL);
+		} else if (TextureType.TXT2D.equals(txtType)) {
+			GL40.glTexImage2D(txtType.getGlId(), 0, internalFormat.getGlId(), w, h, 0, format.getGlId(), dataType.getGlId(), MemoryUtil.NULL);
+		} else if (TextureType.TXT3D.equals(txtType)) {
+			GL40.glTexImage3D(txtType.getGlId(), 0, internalFormat.getGlId(), w, h, d, 0, format.getGlId(), dataType.getGlId(), MemoryUtil.NULL);
+		}
+		applyFilter();
+		applyWrap();
+		
+		if(genMipmaps) {
+			GL40.glGenerateMipmap(txtType.getGlId());
+		}
+		
+		unbind();
+		
+		return tid;
+	}
+	
+	// GEN
+	private int generateTexture(int w, int h, int d, TexelFormat format, TexelInternalFormat internalFormat, DataType dataType, boolean genMipmaps) {
+		/*int tid = gen();
+
+		GL40.glBindTexture(txtType.getGlId(), tid);
+		if (TextureType.TXT1D.equals(txtType)) {
+			GL40.glTexImage1D(txtType.getGlId(), 0, internalFormat.getGlId(), w, 0, format.getGlId(), dataType.getGlId(), MemoryUtil.NULL);
+		} else if (TextureType.TXT2D.equals(txtType)) {
+			GL40.glTexImage2D(txtType.getGlId(), 0, internalFormat.getGlId(), w, h, 0, format.getGlId(), dataType.getGlId(), MemoryUtil.NULL);
+		} else if (TextureType.TXT3D.equals(txtType)) {
+			GL40.glTexImage3D(txtType.getGlId(), 0, internalFormat.getGlId(), w, h, d, 0, format.getGlId(), dataType.getGlId(), MemoryUtil.NULL);
 		}
 		filter();
 		wrap();
 		
-		GL40.glGenerateMipmap(txtResType);
+		if(genMipmaps) {
+			GL40.glGenerateMipmap(txtType.getGlId());
+		}
 		
-		unbind();
-
-		return tid;
+		unbind();*/
+		setBuffer(null);
+		return generateBufferTexture(w, h, d, format, internalFormat, dataType, genMipmaps);
+	}
+	
+	public void setSize(int width) {
+		setSize(width, 0, 0);
+	}
+	public void setSize(int width, int height) {
+		setSize(width, height, 0);
+	}
+	public void setSize(int width, int height, int depth) {
+		this.width = width;
+		this.height = height;
+		this.depth = depth;
 	}
 	
 	/*
 	 * GEN FROM BUFFER
 	 */
-	public SingleTexture(String name, int w, int h, ByteBuffer buffer) {
+	/*public SingleTexture(String name, int w, int h, ByteBuffer buffer) {
 		this(name, w, h, buffer, GL40.GL_LINEAR);
 	}
 	
@@ -82,30 +192,12 @@ public class SingleTexture extends Texture {
 		this.tid = generateTexture(w, h, buffer, channels);
 	}
 
-	private int generateTexture(int w, int h, ByteBuffer buffer, int channels) {
-		int tid = gen();
-		
-		GL40.glBindTexture(txtResType, tid);
-		GL40.glPixelStorei(GL40.GL_UNPACK_ALIGNMENT, 1);
-		if (txtResType == GL40.GL_TEXTURE_1D) {
-			GL40.glTexImage1D(txtResType, 0, channels, w, 0, channels, GL40.GL_UNSIGNED_BYTE, buffer);
-		} else if (txtResType == GL40.GL_TEXTURE_2D) {
-			GL40.glTexImage2D(txtResType, 0, channels, w, h, 0, channels, GL40.GL_UNSIGNED_BYTE, buffer);
-		}
-		filter();
-		wrap();
-		
-		GL40.glGenerateMipmap(txtResType);
-		
-		unbind();
-		
-		return tid;
-	}
+	*/
 	
 	/*
 	 * FILE
 	 */
-	public SingleTexture(String path) {
+	/*public SingleTexture(String path) {
 		this(path, path, GL40.GL_LINEAR, GL40.GL_TEXTURE_2D, GL40.GL_CLAMP_TO_EDGE);
 	}
 
@@ -138,6 +230,16 @@ public class SingleTexture extends Texture {
 		
 		this.tid = generateTexture(w[0], h[0], buffer, super.channelType);
 		STBImage.stbi_image_free(buffer);
+	}*/
+	
+	public ByteBuffer getBuffer() {
+		return buffer;
+	}
+	public void setBuffer(ByteBuffer buffer) {
+		this.buffer = buffer;
+	}
+	public void destroyBuffer() {
+		buffer = null;
 	}
 
 }
