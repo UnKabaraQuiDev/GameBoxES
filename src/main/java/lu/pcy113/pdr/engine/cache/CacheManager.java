@@ -438,7 +438,6 @@ public class CacheManager implements Cleanupable {
 		Texture texture = new SingleTexture(string, path);
 		texture.setFilters(filter);
 		texture.setTextureType(type);
-		//texture.setWraps(wrap);
 		texture.setup();
 		addTexture(texture);
 		return texture;

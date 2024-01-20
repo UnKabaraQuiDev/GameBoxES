@@ -73,6 +73,7 @@ public class CubemapTexture extends Texture {
 			}
 			
 			if (imageBuffer != null) {
+				System.out.println("format "+format+"; internalFormat "+internalFormat+", dataType "+dataType+", width "+width+", height "+height);
 				GL40.glTexImage2D(TextureType.CM_PX.getGlId() + i, 0, internalFormat.getGlId(), width, height, 0, format.getGlId(), dataType.getGlId(), imageBuffer);
 				STBImage.stbi_image_free(imageBuffer);
 			} else {

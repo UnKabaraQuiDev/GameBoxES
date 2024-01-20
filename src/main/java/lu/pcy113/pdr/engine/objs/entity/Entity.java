@@ -46,8 +46,9 @@ public class Entity {
 		return active;
 	}
 
-	public void setActive(boolean active) {
+	public Entity setActive(boolean active) {
 		this.active = active;
+		return this;
 	}
 
 	@Override

@@ -252,7 +252,9 @@ public class PDRClientGame3 implements GameLogic {
 		cache.addMaterial(material);
 		Mesh cube = cache.loadMesh("skybox", material, "./resources/models/cube2.obj");
 		
-		scene.addEntity("skybox", new Entity(new Transform3DComponent(), new MeshComponent(cube))).setActive(false);
+		scene.addEntity("skybox", new Entity(new Transform3DComponent(), new MeshComponent(cube)))
+			.setActive(true)
+			.getComponent(Transform3DComponent.class).getTransform().scaleMul(new Vector3f(10)).updateMatrix();
 		
 		/* DUMP */
 		
