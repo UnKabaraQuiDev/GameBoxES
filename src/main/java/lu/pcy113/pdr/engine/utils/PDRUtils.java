@@ -7,9 +7,71 @@ import java.util.Arrays;
 import org.joml.Matrix3x2f;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
+import org.lwjgl.opengl.GL40;
+import org.lwjgl.opengl.GL45;
+
+import lu.pcy113.pdr.engine.exceptions.GLContextLost;
+import lu.pcy113.pdr.engine.exceptions.GLInvalidEnumException;
+import lu.pcy113.pdr.engine.exceptions.GLInvalidFrameBufferOperation;
+import lu.pcy113.pdr.engine.exceptions.GLInvalidIndexException;
+import lu.pcy113.pdr.engine.exceptions.GLInvalidOperationException;
+import lu.pcy113.pdr.engine.exceptions.GLInvalidValueException;
+import lu.pcy113.pdr.engine.exceptions.GLOutOfMemoryException;
+import lu.pcy113.pdr.engine.exceptions.GLStackOverflowException;
+import lu.pcy113.pdr.engine.exceptions.GLStackUnderflowException;
 
 public final class PDRUtils {
+	
+	public static String getCallerClassName(boolean parent) {
+		StackTraceElement[] stElements = Thread.currentThread().getStackTrace();
+		for (int i = 1; i < stElements.length; i++) {
+			StackTraceElement ste = stElements[i];
+			if (!PDRUtils.class.getName().equals(ste.getClassName())) {
+				if (!parent)
+					return ste.getClassName() + "#" + ste.getMethodName() + "@" + ste.getLineNumber();
+				else {
+					ste = stElements[i + 1];
+					return ste.getClassName() + "#" + ste.getMethodName() + "@" + ste.getLineNumber();
+				}
 
+			}
+		}
+		return null;
+	}
+	
+	public static boolean checkGlError(String msg) {
+		int status = GL40.glGetError();
+		
+		if(status == GL40.GL_NO_ERROR)
+			return true;
+		
+		String caller = getCallerClassName(false);
+		
+		switch (status) {
+		case GL40.GL_INVALID_OPERATION:
+			throw new GLInvalidOperationException(caller, status, msg);
+		case GL40.GL_INVALID_INDEX:
+			throw new GLInvalidIndexException(caller, status, msg);
+		case GL40.GL_INVALID_ENUM:
+			throw new GLInvalidEnumException(caller, status, msg);
+		case GL40.GL_INVALID_VALUE:
+			throw new GLInvalidValueException(caller, status, msg);
+		case GL40.GL_INVALID_FRAMEBUFFER_OPERATION:
+			throw new GLInvalidFrameBufferOperation(caller, status, msg);
+		case GL40.GL_STACK_OVERFLOW:
+			throw new GLStackOverflowException(caller, status, msg);
+		case GL40.GL_STACK_UNDERFLOW:
+			throw new GLStackUnderflowException(caller, status, msg);
+		case GL40.GL_OUT_OF_MEMORY:
+			throw new GLOutOfMemoryException(caller, status, msg);
+		case GL45.GL_CONTEXT_LOST:
+			throw new GLContextLost(caller, status, msg);
+		// case GL45.GL_TABLE_TOO_LARGE:
+		default:
+			return true;
+		}
+	}
+	
 	public static int[] intCountingUp(int start, int end) {
 		int[] in = new int[end - start];
 		for (int i = 0; i < in.length; i++)
