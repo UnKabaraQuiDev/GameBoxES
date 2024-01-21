@@ -10,6 +10,7 @@ import org.lwjgl.stb.STBImage;
 
 import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pdr.engine.utils.FileUtils;
+import lu.pcy113.pdr.engine.utils.PDRUtils;
 import lu.pcy113.pdr.engine.utils.consts.TextureType;
 
 public class CubemapTexture extends Texture {
@@ -74,6 +75,7 @@ public class CubemapTexture extends Texture {
 			
 			if (imageBuffer != null) {
 				GL40.glTexImage2D(TextureType.CM_PX.getGlId() + i, 0, internalFormat.getGlId(), width, height, 0, format.getGlId(), dataType.getGlId(), imageBuffer);
+				PDRUtils.checkGlError("TexImage2D["+(TextureType.values()[TextureType.CM_PX.ordinal()+i])+"]");
 				STBImage.stbi_image_free(imageBuffer);
 			} else {
 				cleanup();

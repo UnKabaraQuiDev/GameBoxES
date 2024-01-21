@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL40;
 
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
+import lu.pcy113.pdr.engine.utils.PDRUtils;
 import lu.pcy113.pdr.engine.utils.consts.DataType;
 import lu.pcy113.pdr.engine.utils.consts.TexelFormat;
 import lu.pcy113.pdr.engine.utils.consts.TexelInternalFormat;
@@ -35,46 +36,59 @@ public abstract class Texture implements Cleanupable, UniqueID {
 	public abstract boolean setup();
 	
 	protected int gen() {
-		return (tid = GL40.glGenTextures());
+		this.tid = GL40.glGenTextures();
+		PDRUtils.checkGlError("GenTextures");
+		return tid;
 	}
 	
-	public void bind(int i) {
+	public void active(int i) {
 		if (i > 31)
 			return;
 		GL40.glActiveTexture(GL40.GL_TEXTURE0 + i);
+		PDRUtils.checkGlError("ActiveTexture["+(GL40.GL_TEXTURE0+i)+"]");
+	}
+	
+	public void bind(int i) {
+		active(i);
 		bind();
 	}
 	
 	public void bind() {
 		GL40.glBindTexture(txtType.getGlId(), tid);
+		PDRUtils.checkGlError("BindTexture["+txtType+"]="+tid);
 	}
 	
 	public void unbind(int i) {
-		if (i > 31)
-			return;
-		GL40.glActiveTexture(GL40.GL_TEXTURE0 + i);
+		active(i);
 		unbind();
 	}
 	
 	public void unbind() {
 		GL40.glBindTexture(txtType.getGlId(), 0);
+		PDRUtils.checkGlError("BindTexture["+txtType+"]=0");
 	}
 	
 	public void applyFilter() {
 		GL40.glTexParameteri(txtType.getGlId(), TextureParameter.MIN_FILTER.getGlId(), minFilter.getGlId());
+		PDRUtils.checkGlError("TexParameter["+txtType+"].MinFilter="+minFilter);
 		GL40.glTexParameteri(txtType.getGlId(), TextureParameter.MAG_FILTER.getGlId(), magFilter.getGlId());
+		PDRUtils.checkGlError("TexParameter["+txtType+"].MagFilter="+magFilter);
 	}
 	
 	public void applyWrap() {
 		GL40.glTexParameteri(txtType.getGlId(), TextureParameter.WRAP_HORIZONTAL.getGlId(), hWrap.getGlId());
+		PDRUtils.checkGlError("TexParameter["+txtType+"].WrapHorizontal="+hWrap);
 		GL40.glTexParameteri(txtType.getGlId(), TextureParameter.WRAP_VERTICAL.getGlId(), vWrap.getGlId());
+		PDRUtils.checkGlError("TexParameter["+txtType+"].WrapVertical="+vWrap);
 		GL40.glTexParameteri(txtType.getGlId(), TextureParameter.WRAP_DEPTH.getGlId(), dWrap.getGlId());
+		PDRUtils.checkGlError("TexParameter["+txtType+"].WrapDepth="+dWrap);
 	}
 	
 	@Override
 	public void cleanup() {
 		if (isValid()) {
 			GL40.glDeleteTextures(tid);
+			PDRUtils.checkGlError("DeleteTextures["+tid+"]");
 			tid = -1;
 		}
 	}

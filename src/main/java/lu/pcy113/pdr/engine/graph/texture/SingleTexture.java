@@ -8,6 +8,7 @@ import org.lwjgl.opengl.GL40;
 import org.lwjgl.stb.STBImage;
 import org.lwjgl.system.MemoryUtil;
 
+import lu.pcy113.pdr.engine.utils.PDRUtils;
 import lu.pcy113.pdr.engine.utils.consts.TextureType;
 
 public class SingleTexture extends Texture {
@@ -117,6 +118,7 @@ public class SingleTexture extends Texture {
 		bind();
 		
 		GL40.glPixelStorei(GL40.GL_UNPACK_ALIGNMENT, 1);
+		PDRUtils.checkGlError("PixelStore.UnpackAlignment=1");
 		if (TextureType.TXT1D.equals(txtType)) {
 			GL40.glTexImage1D(txtType.getGlId(), 0, internalFormat.getGlId(), width, 0, format.getGlId(), dataType.getGlId(), buffer);
 		} else if (TextureType.TXT2D.equals(txtType)) {
@@ -124,11 +126,13 @@ public class SingleTexture extends Texture {
 		} else if (TextureType.TXT3D.equals(txtType)) {
 			GL40.glTexImage3D(txtType.getGlId(), 0, internalFormat.getGlId(), width, height, depth, 0, format.getGlId(), dataType.getGlId(), buffer);
 		}
+		PDRUtils.checkGlError("TexImage_D");
 		applyFilter();
 		applyWrap();
 		
 		if(generateMipmaps) {
 			GL40.glGenerateMipmap(txtType.getGlId());
+			PDRUtils.checkGlError("GenerateMipmap["+txtType+"]");
 		}
 		
 		unbind();
@@ -146,11 +150,13 @@ public class SingleTexture extends Texture {
 		} else if (TextureType.TXT3D.equals(txtType)) {
 			GL40.glTexImage3D(txtType.getGlId(), 0, internalFormat.getGlId(), width, height, depth, 0, format.getGlId(), dataType.getGlId(), MemoryUtil.NULL);
 		}
+		PDRUtils.checkGlError("TexImage_D");
 		applyFilter();
 		applyWrap();
 		
 		if(generateMipmaps) {
 			GL40.glGenerateMipmap(txtType.getGlId());
+			PDRUtils.checkGlError("GenerateMipmap["+txtType+"]");
 		}
 		
 		unbind();
