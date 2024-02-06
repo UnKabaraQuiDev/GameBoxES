@@ -118,15 +118,15 @@ public class SingleTexture extends Texture {
 		bind();
 		
 		GL40.glPixelStorei(GL40.GL_UNPACK_ALIGNMENT, 1);
-		PDRUtils.checkGlError("PixelStore.UnpackAlignment=1");
-		if (TextureType.TXT1D.equals(txtType)) {
+		PDRUtils.checkGlError("PixelStoreI.UnpackAlignment=1");
+		if (TextureType.TXT1D.equals(txtType) || TextureType.ARRAY1D.equals(txtType)) {
 			GL40.glTexImage1D(txtType.getGlId(), 0, internalFormat.getGlId(), width, 0, format.getGlId(), dataType.getGlId(), buffer);
-		} else if (TextureType.TXT2D.equals(txtType)) {
+		} else if (TextureType.TXT2D.equals(txtType) || TextureType.ARRAY2D.equals(txtType)) {
 			GL40.glTexImage2D(txtType.getGlId(), 0, internalFormat.getGlId(), width, height, 0, format.getGlId(), dataType.getGlId(), buffer);
 		} else if (TextureType.TXT3D.equals(txtType)) {
 			GL40.glTexImage3D(txtType.getGlId(), 0, internalFormat.getGlId(), width, height, depth, 0, format.getGlId(), dataType.getGlId(), buffer);
 		}
-		PDRUtils.checkGlError("TexImage_D");
+		PDRUtils.checkGlError("TexImage_"+txtType+"_"+(TextureType.isMultisampled(txtType) ? "MS("+sampleCount+")" : ""));
 		applyFilter();
 		applyWrap();
 		
@@ -141,16 +141,18 @@ public class SingleTexture extends Texture {
 	// GEN
 	private void generateTexture() {
 		gen();
-		
 		bind();
-		if (TextureType.TXT1D.equals(txtType)) {
+		
+		if (TextureType.TXT1D.equals(txtType) || TextureType.ARRAY1D.equals(txtType)) {
 			GL40.glTexImage1D(txtType.getGlId(), 0, internalFormat.getGlId(), width, 0, format.getGlId(), dataType.getGlId(), MemoryUtil.NULL);
-		} else if (TextureType.TXT2D.equals(txtType)) {
+		} else if (TextureType.TXT2D.equals(txtType) || TextureType.ARRAY2D.equals(txtType)) {
 			GL40.glTexImage2D(txtType.getGlId(), 0, internalFormat.getGlId(), width, height, 0, format.getGlId(), dataType.getGlId(), MemoryUtil.NULL);
 		} else if (TextureType.TXT3D.equals(txtType)) {
 			GL40.glTexImage3D(txtType.getGlId(), 0, internalFormat.getGlId(), width, height, depth, 0, format.getGlId(), dataType.getGlId(), MemoryUtil.NULL);
+		} else if (TextureType.TXT2DMS.equals(txtType) || TextureType.ARRAY2DMS.equals(txtType)) {
+			GL40.glTexImage2DMultisample(txtType.getGlId(), super.sampleCount, internalFormat.getGlId(), width, height, super.fixedSampleLocation);
 		}
-		PDRUtils.checkGlError("TexImage_D");
+		PDRUtils.checkGlError("TexImage_"+txtType+"_"+(TextureType.isMultisampled(txtType) ? "MS("+sampleCount+")" : ""));
 		applyFilter();
 		applyWrap();
 		

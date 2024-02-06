@@ -24,7 +24,8 @@ public abstract class Texture implements Cleanupable, UniqueID {
 	protected DataType dataType = DataType.UBYTE;
 	protected TexelFormat format = TexelFormat.RGB;
 	protected TexelInternalFormat internalFormat = TexelInternalFormat.RGB;
-	protected boolean generateMipmaps = true;
+	protected boolean generateMipmaps = true, fixedSampleLocation = true;
+	protected int sampleCount = 2;
 	protected TextureOperation textureOperation = null;
 	
 	public Texture(String _name, String _path, TextureOperation txtOp) {
@@ -207,6 +208,10 @@ public abstract class Texture implements Cleanupable, UniqueID {
 	}
 	public void setGenerateMipmaps(boolean generateMipmaps) {
 		this.generateMipmaps = generateMipmaps;
+	}
+	
+	public boolean isMultisampled() {
+		return TextureType.isMultisampled(txtType);
 	}
 	
 	@Override
