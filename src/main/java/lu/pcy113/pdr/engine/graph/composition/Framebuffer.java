@@ -9,6 +9,7 @@ import lu.pcy113.pdr.engine.graph.texture.SingleTexture;
 import lu.pcy113.pdr.engine.graph.texture.Texture;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
+import lu.pcy113.pdr.engine.utils.PDRUtils;
 import lu.pcy113.pdr.engine.utils.consts.FrameBufferAttachment;
 
 public class Framebuffer implements UniqueID, Cleanupable {
@@ -29,15 +30,14 @@ public class Framebuffer implements UniqueID, Cleanupable {
 		GL40.glFramebufferTexture(GL40.GL_FRAMEBUFFER, attach.getGlId()+offset, texture.getTid(), 0);
 		
 		this.attachments.put(attach.getGlId()+offset, texture);
-		return GL40.glGetError() == GL40.GL_NO_ERROR;
+		return PDRUtils.checkGlError("FrameBufferTexture["+attach+"+"+offset+"]["+name+"]="+texture.getId());
 	}
 	
 	public boolean clearAttachments() {
 		for(Entry<Integer, Texture> it : attachments.entrySet()) {
 			GL40.glFramebufferTexture(GL40.GL_FRAMEBUFFER, it.getKey(), 0, 0);
 			
-			if(GL40.glGetError() != GL40.GL_NO_ERROR)
-				return false;
+			PDRUtils.checkGlError("FrameBufferTexture["+it.getKey()+"]["+name+"]=0");
 		}
 		return true;
 	}
@@ -52,21 +52,25 @@ public class Framebuffer implements UniqueID, Cleanupable {
 	public void bind() {
 		bind(GL40.GL_FRAMEBUFFER);
 	}
-	public void bind(int i) {
-		GL40.glBindFramebuffer(i, fbo);
+	public void bind(int target) {
+		GL40.glBindFramebuffer(target, fbo);
+		PDRUtils.checkGlError("BindFrameBuffer["+target+"]["+name+"]="+fbo);
 	}
 	
 	public void unbind() {
 		unbind(GL40.GL_FRAMEBUFFER);
 	}
-	public void unbind(int i) {
-		GL40.glBindFramebuffer(i, 0);
+	public void unbind(int target) {
+		GL40.glBindFramebuffer(target, 0);
+		PDRUtils.checkGlError("BindFrameBuffer["+target+"]["+name+"]="+fbo);
 	}
 	
 	@Override
 	public void cleanup() {
-		if(fbo != -1)
+		if(fbo != -1) {
 			GL40.glDeleteFramebuffers(fbo);
+			PDRUtils.checkGlError("DeleteFrameBuffer["+fbo+"]");
+		}
 	}
 
 	@Override

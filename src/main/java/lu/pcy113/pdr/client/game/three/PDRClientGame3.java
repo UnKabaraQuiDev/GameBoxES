@@ -368,6 +368,22 @@ public class PDRClientGame3 implements GameLogic {
 	@Override
 	public void render(float dTime) {
 		compositor.render(cache, engine);
+		
+		/*TextureRenderer txtRenderer = new TextureRenderer("txtRenderer", cache, new Vector2i(800, 800), 1);
+		txtRenderer.bind();
+		
+		((Scene3DRenderer) cache.getRenderer(Scene3D.NAME)).render(cache, engine, scene);
+		
+		txtRenderer.unbind();
+		txtRenderer.bind(GL40.GL_READ_FRAMEBUFFER);
+		
+		GL40.glBlitFramebuffer(
+				0, 0, 800, 800,
+				0, 0, engine.getWindow().getWidth(), engine.getWindow().getHeight(),
+				GL40.GL_COLOR_BUFFER_BIT,GL40.GL_NEAREST);
+		
+		txtRenderer.cleanup();*/
+		
 		frame++;
 	}
 	
