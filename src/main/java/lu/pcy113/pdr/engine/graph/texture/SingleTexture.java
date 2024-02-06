@@ -156,7 +156,7 @@ public class SingleTexture extends Texture {
 		applyFilter();
 		applyWrap();
 		
-		if(generateMipmaps) {
+		if(generateMipmaps && !isMultisampled()) {
 			GL40.glGenerateMipmap(txtType.getGlId());
 			PDRUtils.checkGlError("GenerateMipmap["+txtType+"]");
 		}

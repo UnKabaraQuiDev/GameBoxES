@@ -197,7 +197,7 @@ public class PDRClientGame3 implements GameLogic {
 		this.compositor.addRenderLayer(0, genLayer);
 		this.compositor.addRenderLayer(1, sceneRender);
 		this.compositor.addRenderLayer(2, uiRender);
-		this.compositor.addPassLayer(0, boxBlurPass);
+		//this.compositor.addPassLayer(0, boxBlurPass);
 		
 		camera = (Camera3D) this.scene.getCamera();
 		camera.getProjection().setPerspective(true);
@@ -306,7 +306,7 @@ public class PDRClientGame3 implements GameLogic {
 			rightZButton.setValue((float) (rzb / 2 + 0.5));
 			
 			float lb = gps.buttons(GLFW.GLFW_GAMEPAD_BUTTON_LEFT_BUMPER);
-			float rb = gps.buttons(GLFW.GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER);
+			float rb = gps.buttons(GLFW.GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER);
 			
 			leftButton.setValue(lb);
 			rightButton.setValue(rb);

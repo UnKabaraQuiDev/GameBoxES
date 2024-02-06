@@ -16,6 +16,7 @@ import lu.pcy113.pdr.engine.utils.consts.DataType;
 import lu.pcy113.pdr.engine.utils.consts.FrameBufferAttachment;
 import lu.pcy113.pdr.engine.utils.consts.TexelFormat;
 import lu.pcy113.pdr.engine.utils.consts.TexelInternalFormat;
+import lu.pcy113.pdr.engine.utils.consts.TextureType;
 
 public class Compositor implements Cleanupable {
 	
@@ -39,12 +40,16 @@ public class Compositor implements Cleanupable {
 		framebuffer.clearAttachments();
 		
 		depth = new SingleTexture("depth", resolution.x, resolution.y);
+		depth.setTextureType(TextureType.TXT2DMS);
+		depth.setSampleCount(16);
 		depth.setInternalFormat(TexelInternalFormat.DEPTH_COMPONENT);
 		depth.setFormat(TexelFormat.DEPTH);
 		depth.setDataType(DataType.FLOAT);
 		depth.setup();
 		
 		color0 = new SingleTexture("color", resolution.x, resolution.y);
+		color0.setTextureType(TextureType.TXT2DMS);
+		color0.setSampleCount(16);
 		color0.setInternalFormat(TexelInternalFormat.RGBA);
 		color0.setFormat(TexelFormat.RGBA);
 		color0.setDataType(DataType.UBYTE);
@@ -129,7 +134,8 @@ public class Compositor implements Cleanupable {
 		framebuffer.unbind(GL40.GL_DRAW_FRAMEBUFFER);
 		framebuffer.bind(GL40.GL_READ_FRAMEBUFFER);
 		
-		//GL40.glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL40.GL_COLOR_BUFFER_BIT, GL40.GL_NEAREST);
+		if(passes.isEmpty())
+			GL40.glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL40.GL_COLOR_BUFFER_BIT, GL40.GL_NEAREST);
 	}
 	
 	public void addRenderLayer(int i, RenderLayer id) {

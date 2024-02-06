@@ -11,6 +11,7 @@ import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
 import lu.pcy113.pdr.engine.utils.PDRUtils;
 import lu.pcy113.pdr.engine.utils.consts.FrameBufferAttachment;
+import lu.pcy113.pdr.engine.utils.consts.TextureType;
 
 public class Framebuffer implements UniqueID, Cleanupable {
 	
@@ -27,7 +28,20 @@ public class Framebuffer implements UniqueID, Cleanupable {
 	}
 	
 	public boolean attachTexture(FrameBufferAttachment attach, int offset, SingleTexture texture) {
-		GL40.glFramebufferTexture(GL40.GL_FRAMEBUFFER, attach.getGlId()+offset, texture.getTid(), 0);
+		TextureType txtType = texture.getTextureType();
+		if(txtType == null) {
+			throw new IllegalStateException("TextureType is null");
+		}
+		
+		if(TextureType.TXT1D.equals(txtType)) {
+			GL40.glFramebufferTexture1D(GL40.GL_FRAMEBUFFER, attach.getGlId()+offset, txtType.getGlId(), texture.getTid(), 0);
+		} else if(TextureType.TXT2D.equals(txtType) || TextureType.TXT2DMS.equals(txtType)) {
+			GL40.glFramebufferTexture2D(GL40.GL_FRAMEBUFFER, attach.getGlId()+offset, txtType.getGlId(), texture.getTid(), 0);
+		} else if(TextureType.TXT3D.equals(txtType)) {
+			assert true : "TODO: Not implemented yet";
+			//GL40.glFramebufferTexture3D(GL40.GL_FRAMEBUFFER, attach.getGlId()+offset, texture.getTextureType().getGlId(), texture.getTid(), 0);
+		}
+			
 		
 		this.attachments.put(attach.getGlId()+offset, texture);
 		return PDRUtils.checkGlError("FrameBufferTexture["+attach+"+"+offset+"]["+name+"]="+texture.getId());
