@@ -17,6 +17,7 @@ import lu.pcy113.pdr.engine.exceptions.GLInvalidIndexException;
 import lu.pcy113.pdr.engine.exceptions.GLInvalidOperationException;
 import lu.pcy113.pdr.engine.exceptions.GLInvalidValueException;
 import lu.pcy113.pdr.engine.exceptions.GLOutOfMemoryException;
+import lu.pcy113.pdr.engine.exceptions.GLRuntimeException;
 import lu.pcy113.pdr.engine.exceptions.GLStackOverflowException;
 import lu.pcy113.pdr.engine.exceptions.GLStackUnderflowException;
 
@@ -70,6 +71,10 @@ public final class PDRUtils {
 		default:
 			return true;
 		}
+	}
+	
+	public static void throwGLError(String string) {
+		throw new GLRuntimeException(string);
 	}
 	
 	public static int[] intCountingUp(int start, int end) {

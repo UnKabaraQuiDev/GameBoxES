@@ -11,8 +11,8 @@ uniform int screen_width;
 uniform int screen_height;
 
 void main() {
-	float offsetX = 1f/screen_width;
-	float offsetY = 1f/screen_height;
+	float offsetX = 1.0/screen_width;
+	float offsetY = 1.0/screen_height;
 
 	vec3 sa = vec3(0);
 

@@ -15,6 +15,12 @@ import lu.pcy113.pdr.engine.utils.consts.TextureWrap;
 
 public abstract class Texture implements Cleanupable, UniqueID {
 	
+	public static final int MAX_DEPTH_TEXTURE_SAMPLES = GL40.glGetInteger(GL40.GL_MAX_DEPTH_TEXTURE_SAMPLES);
+	public static final int MAX_COLOR_TEXTURE_SAMPLES = GL40.glGetInteger(GL40.GL_MAX_COLOR_TEXTURE_SAMPLES);
+	public static final int MAX_INTEGER_SAMPLES = GL40.glGetInteger(GL40.GL_MAX_INTEGER_SAMPLES);
+	public static final int MAX_TEXTURE_LOD_BIAS = GL40.glGetInteger(GL40.GL_MAX_TEXTURE_LOD_BIAS);
+	public static final int MAX_TEXTURE_SIZE = GL40.glGetInteger(GL40.GL_MAX_TEXTURE_SIZE);
+	
 	protected final String path;
 	protected final String name;
 	protected int tid = -1;
@@ -35,6 +41,7 @@ public abstract class Texture implements Cleanupable, UniqueID {
 	}
 	
 	public abstract boolean setup();
+	public abstract boolean checkConfigErrors();
 	
 	protected int gen() {
 		this.tid = GL40.glGenTextures();

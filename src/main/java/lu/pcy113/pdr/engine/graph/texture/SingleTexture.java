@@ -9,6 +9,7 @@ import org.lwjgl.stb.STBImage;
 import org.lwjgl.system.MemoryUtil;
 
 import lu.pcy113.pdr.engine.utils.PDRUtils;
+import lu.pcy113.pdr.engine.utils.consts.TexelInternalFormat;
 import lu.pcy113.pdr.engine.utils.consts.TextureType;
 
 public class SingleTexture extends Texture {
@@ -61,10 +62,42 @@ public class SingleTexture extends Texture {
 	}
 	
 	@Override
+	public boolean checkConfigErrors() {
+		// Invalid operation (glTexImage2DMultisample)
+		if(((TexelInternalFormat.isDepth(super.internalFormat) || TexelInternalFormat.isStencil(super.internalFormat))
+				&& super.sampleCount > MAX_DEPTH_TEXTURE_SAMPLES)
+			|| (TexelInternalFormat.isColor(super.internalFormat)
+				&& super.sampleCount > MAX_COLOR_TEXTURE_SAMPLES)
+			|| (TexelInternalFormat.isInteger(super.internalFormat))
+				&& super.sampleCount > MAX_INTEGER_SAMPLES) {
+			PDRUtils.throwGLError(super.internalFormat+" does not support "+super.sampleCount+" samples, max are Depth:"+MAX_DEPTH_TEXTURE_SAMPLES+", Color:"+MAX_COLOR_TEXTURE_SAMPLES+", Integer:"+MAX_INTEGER_SAMPLES);
+		}
+		
+		// Invalid value (glTexImage2DMultisample)
+		if((width > MAX_TEXTURE_SIZE || width < 0)
+			|| (height > MAX_TEXTURE_SIZE || height < 0)
+			|| (depth > MAX_TEXTURE_SIZE || depth < 0)) {
+			PDRUtils.throwGLError("Invalid texture size: "+width+"x"+height+"x"+depth+", max is "+MAX_TEXTURE_SIZE);
+		}
+		if(TextureType.isMultisampled(super.txtType) && super.sampleCount < 1) {
+			PDRUtils.throwGLError("Invalid sample count: "+super.sampleCount+" for "+super.txtType+", min is 1");
+		}
+		
+		System.out.println("info: "+super.internalFormat+" does not support "+super.sampleCount+" samples, max are Depth:"+MAX_DEPTH_TEXTURE_SAMPLES+", Color:"+MAX_COLOR_TEXTURE_SAMPLES+", Integer:"+MAX_INTEGER_SAMPLES);
+		System.out.println("info: "+"Invalid texture size: "+width+"x"+height+"x"+depth+", max is "+MAX_TEXTURE_SIZE);
+		System.out.println("info: "+"Invalid sample count: "+super.sampleCount+" for "+super.txtType);
+		System.out.println("info: isms: "+TextureType.isMultisampled(super.txtType));
+		
+		return true;
+	}
+	
+	@Override
 	public boolean setup() {
 		if(isValid()) {
 			throw new RuntimeException("Cannot setup already loaded Single Texture");
 		}
+		
+		checkConfigErrors();
 		
 		if(TextureOperation.GENERATE.equals(textureOperation)) {
 			generateTexture();
@@ -150,6 +183,7 @@ public class SingleTexture extends Texture {
 		} else if (TextureType.TXT3D.equals(txtType)) {
 			GL40.glTexImage3D(txtType.getGlId(), 0, internalFormat.getGlId(), width, height, depth, 0, format.getGlId(), dataType.getGlId(), MemoryUtil.NULL);
 		} else if (TextureType.TXT2DMS.equals(txtType) || TextureType.ARRAY2DMS.equals(txtType)) {
+			System.out.println("inputs: "+txtType+" "+super.sampleCount+" "+internalFormat+" "+width+" "+height+" "+super.fixedSampleLocation);
 			GL40.glTexImage2DMultisample(txtType.getGlId(), super.sampleCount, internalFormat.getGlId(), width, height, super.fixedSampleLocation);
 		}
 		PDRUtils.checkGlError("TexImage_"+txtType+"_"+(TextureType.isMultisampled(txtType) ? "MS("+sampleCount+")" : ""));

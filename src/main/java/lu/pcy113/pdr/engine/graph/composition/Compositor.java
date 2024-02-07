@@ -41,15 +41,15 @@ public class Compositor implements Cleanupable {
 		
 		depth = new SingleTexture("depth", resolution.x, resolution.y);
 		depth.setTextureType(TextureType.TXT2DMS);
-		depth.setSampleCount(16);
-		depth.setInternalFormat(TexelInternalFormat.DEPTH_COMPONENT);
+		depth.setSampleCount(8);
+		depth.setInternalFormat(TexelInternalFormat.DEPTH_COMPONENT32F);
 		depth.setFormat(TexelFormat.DEPTH);
 		depth.setDataType(DataType.FLOAT);
 		depth.setup();
 		
 		color0 = new SingleTexture("color", resolution.x, resolution.y);
 		color0.setTextureType(TextureType.TXT2DMS);
-		color0.setSampleCount(16);
+		color0.setSampleCount(8);
 		color0.setInternalFormat(TexelInternalFormat.RGBA);
 		color0.setFormat(TexelFormat.RGBA);
 		color0.setDataType(DataType.UBYTE);

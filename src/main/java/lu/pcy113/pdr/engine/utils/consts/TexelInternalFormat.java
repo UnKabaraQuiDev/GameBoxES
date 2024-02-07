@@ -6,7 +6,17 @@ public enum TexelInternalFormat implements GLConstant {
 	
 	// Base Internal Formats
 	RED(GL40.GL_RED, null), RG(GL40.GL_RG, null), RGB(GL40.GL_RGB, null), RGBA(GL40.GL_RGBA, null),
-	DEPTH_COMPONENT(GL40.GL_DEPTH_COMPONENT, null), DEPTH_STENCIL(GL40.GL_DEPTH_STENCIL, null),
+	
+	DEPTH_COMPONENT(GL40.GL_DEPTH_COMPONENT, null), 
+	DEPTH_COMPONENT16(GL40.GL_DEPTH_COMPONENT16, DEPTH_COMPONENT), DEPTH_COMPONENT24(GL40.GL_DEPTH_COMPONENT24, DEPTH_COMPONENT),
+	DEPTH_COMPONENT32(GL40.GL_DEPTH_COMPONENT32, DEPTH_COMPONENT), DEPTH_COMPONENT32F(GL40.GL_DEPTH_COMPONENT32F, DEPTH_COMPONENT),
+	
+	DEPTH_STENCIL(GL40.GL_DEPTH_STENCIL, null),
+	DEPTH24_STENCIL8(GL40.GL_DEPTH24_STENCIL8, DEPTH_STENCIL), DEPTH32F_STENCIL8(GL40.GL_DEPTH32F_STENCIL8, DEPTH_STENCIL),
+
+	STENCIL_INDEX(GL40.GL_STENCIL_INDEX, null),
+	STENCIL_INDEX1(GL40.GL_STENCIL_INDEX1, STENCIL_INDEX), STENCIL_INDEX4(GL40.GL_STENCIL_INDEX4, STENCIL_INDEX),
+	STENCIL_INDEX8(GL40.GL_STENCIL_INDEX8, STENCIL_INDEX), STENCIL_INDEX16(GL40.GL_STENCIL_INDEX16, STENCIL_INDEX),
 	
 	// Sized Internal Formats
 	R8(GL40.GL_R8, RED), R8_SNORM(GL40.GL_R8_SNORM, RED), R16(GL40.GL_R16, RED), R16_SNORM(GL40.GL_R16_SNORM, RED),
@@ -55,5 +65,37 @@ public enum TexelInternalFormat implements GLConstant {
 	public int getGlId() {return glId;}
 	public TexelInternalFormat getBase() {return base;}
 	public boolean isBase() {return base == null;}
+
+	public static boolean isStencil(TexelInternalFormat format) {
+		if(format == null)
+			return false;
+		if(format.equals(DEPTH_STENCIL))
+			return true;
+		return false;
+	}
+
+	public static boolean isColor(TexelInternalFormat format) {
+		if(format == null)
+			return false;
+		if(format.equals(DEPTH_COMPONENT) || format.equals(DEPTH_STENCIL))
+			return false;
+		return true;
+	}
+
+	public static boolean isDepth(TexelInternalFormat format) {
+		if(format == null)
+			return false;
+		if(format.isBase() ? format.equals(DEPTH_COMPONENT) : format.getBase().equals(DEPTH_COMPONENT) || format.equals(DEPTH_STENCIL))
+			return true;
+		return false;
+	}
+
+	public static boolean isInteger(TexelInternalFormat format) {
+		if(format == null)
+			return false;
+		if(format.name().endsWith("I"))
+			return true;
+		return false;
+	}
 	
 }
