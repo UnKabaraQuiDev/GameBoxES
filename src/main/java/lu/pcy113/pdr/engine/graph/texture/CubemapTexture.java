@@ -28,6 +28,12 @@ public class CubemapTexture extends Texture {
 	}
 	
 	@Override
+	public boolean checkConfigErrors() {
+		// TODO: add cubemap checks
+		return false;
+	}
+	
+	@Override
 	public boolean setup() {
 		if(isValid()) {
 			throw new RuntimeException("Cannot setup already loaded Cubemap Texture");
