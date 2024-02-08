@@ -64,7 +64,7 @@ public class TextEmitter implements Cleanupable, UniqueID {
 
 		//GlobalLogger.log(Level.FINEST, Arrays.deepToString(transforms));
 
-		instances.updateDirect(transforms, new Object[][] { chars });
+		instances.updatePush(transforms, new Object[][] { chars });
 
 		//GlobalLogger.log(Level.FINEST, Arrays.toString(charBuffer.getData()));
 

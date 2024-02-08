@@ -68,13 +68,16 @@ public class InstanceEmitter implements Renderable, Cleanupable, UniqueID {
 
 		GlobalLogger.log(Level.INFO, "ParticleEmitter " + name + ": mesh:(" + mesh.getId() + " & " + mesh.getVbo() + "); count:" + count+"; attribs: "+Arrays.toString(attribs));
 	}
-
+	
+	private Matrix4f[] transforms;
+	private Object[][] atts;
+	
 	/**
 	 * <h3>DOES NOT CALL Transform#updateMatrix()</h3>
 	 */
-	public void update(Consumer<Instance> update) {
-		Matrix4f[] transforms = new Matrix4f[this.count];
-		Object[][] atts = new Object[this.instancesAttribs.length][this.count];
+	public void updatePush(Consumer<Instance> update) {
+		transforms = new Matrix4f[this.count];
+		atts = new Object[this.instancesAttribs.length][this.count];
 		for (int i = 0; i < this.count; i++) {
 			update.accept(this.particles[i]);
 
@@ -92,6 +95,17 @@ public class InstanceEmitter implements Renderable, Cleanupable, UniqueID {
 				atts[c][i] = this.particles[i].getBuffers()[c];
 			}
 		}
+	}
+	
+	public void updatePush(Matrix4f[] transforms, Object[][] atts) {
+		this.transforms = transforms;
+		this.atts = atts;
+	}
+	
+	public void updatePull() {
+		if(transforms == null || atts == null)
+			return;
+		
 		GlobalLogger.log(Level.INFO, "update transforms... " + AttribArray.update(this.instancesTransforms, transforms));
 		for (int c = 0; c < this.instancesAttribs.length; c++) {
 			// System.out.println(Arrays.deepToString(atts));
@@ -101,8 +115,16 @@ public class InstanceEmitter implements Renderable, Cleanupable, UniqueID {
 				GlobalLogger.log(Level.INFO, "Updated attrib array: " + this.instancesAttribs[c].getName());
 		}
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+		
+		transforms = null;
+		atts = null;
 	}
-
+	
+	public void updateDirect(Consumer<Instance> update) {
+		this.updatePush(update);
+		this.updatePull();
+	}
+	
 	public void updateDirect(Matrix4f[] transforms, Object[][] atts) {
 		if (transforms.length != this.count || atts.length != this.instancesAttribs.length)
 			throw new IllegalArgumentException();

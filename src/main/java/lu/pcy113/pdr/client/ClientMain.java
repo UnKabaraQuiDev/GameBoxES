@@ -35,7 +35,7 @@ public class ClientMain {
 
 			WindowOptions options = new WindowOptions();
 			options.fullscreen = false;
-			GameEngine engine = new GameEngine(new PDRClientGame3(), options);
+			GameEngine engine = new GameEngine("PDRClientGame3", new PDRClientGame3(), options);
 			engine.start();
 
 		} catch (Exception e) {

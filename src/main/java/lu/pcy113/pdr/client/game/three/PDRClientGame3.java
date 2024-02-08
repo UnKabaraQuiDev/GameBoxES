@@ -115,7 +115,7 @@ public class PDRClientGame3 implements GameLogic {
 		Mesh slotInstMesh = ObjLoader.loadMesh("slotInst", slotInstMaterial, "./resources/models/plane.obj");
 		this.cache.addMesh(slotInstMesh);
 		slotInstancer = cache.loadInstanceEmitter("slotEmitter", slotInstMesh, 3 * 5, new Transform3D(), faa);
-		slotInstancer.update((inst) -> {
+		slotInstancer.updateDirect((inst) -> {
 			((Transform3D) inst.getTransform()).setTranslation(new Vector3f(inst.getIndex() % 3 - 1f, (inst.getIndex() / 3) - 2f, 0f).mul(1.1f));
 			System.out.println("instance: " + inst.getIndex() + " > " + ((Transform3D) inst.getTransform()).getTranslation());
 			((Transform3D) inst.getTransform()).updateMatrix();
@@ -353,7 +353,7 @@ public class PDRClientGame3 implements GameLogic {
 		}
 		hover = org.joml.Math.clamp(0, 1, hover);
 		
-		slotInstancer.update((inst) -> {
+		slotInstancer.updatePush((inst) -> {
 			if (inst.getIndex() == 0) {
 				inst.getBuffers()[0] = hover;
 			}

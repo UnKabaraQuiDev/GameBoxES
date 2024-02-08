@@ -87,6 +87,8 @@ public class TextEmitterRenderer extends Renderer<Scene, TextEmitterComponent> {
 		}
 
 		pe.bind();
+		
+		pe.updatePull();
 
 		GL40.glDrawElementsInstanced(GL40.GL_TRIANGLES, mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0, pe.getParticleCount());
 

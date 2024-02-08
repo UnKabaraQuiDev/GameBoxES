@@ -17,6 +17,7 @@ import org.lwjgl.glfw.GLFWScrollCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL40;
+import org.lwjgl.opengl.GLCapabilities;
 import org.lwjgl.system.MemoryUtil;
 
 import lu.pcy113.pclib.GlobalLogger;
@@ -28,6 +29,7 @@ public class Window implements Cleanupable {
 
 	private long monitor;
 	private long handle;
+	private GLCapabilities capabilities;
 
 	private GLFWGamepadState gamepadState;
 
@@ -61,8 +63,8 @@ public class Window implements Cleanupable {
 
 		handle = GLFW.glfwCreateWindow(options.windowSize.x, options.windowSize.y, options.title, MemoryUtil.NULL, MemoryUtil.NULL);
 
-		GLFW.glfwMakeContextCurrent(handle);
-		if (GL.createCapabilities() == null)
+		takeGlContext();
+		if ((this.capabilities = GL.createCapabilities()) == null)
 			throw new RuntimeException("Failed to create OpenGL context");
 
 		GLFW.glfwDefaultWindowHints();
@@ -92,7 +94,16 @@ public class Window implements Cleanupable {
 
 		GLFW.glfwShowWindow(handle);
 	}
-
+	
+	public void clearGLContext() {
+		GLFW.glfwMakeContextCurrent(MemoryUtil.NULL);
+	}
+	
+	public void takeGlContext() {
+		GLFW.glfwMakeContextCurrent(handle);
+		GL.setCapabilities(this.capabilities);
+	}
+	
 	private void callback_scroll(long window, double sx, double sy) {
 		System.err.println("scroll: " + sx + ", " + sy + " handle" + window);
 		if (window != handle)

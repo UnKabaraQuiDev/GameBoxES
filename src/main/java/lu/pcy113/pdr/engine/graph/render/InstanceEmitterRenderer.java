@@ -19,11 +19,11 @@ import lu.pcy113.pdr.engine.scene.Scene;
 import lu.pcy113.pdr.engine.scene.Scene3D;
 
 public class InstanceEmitterRenderer extends Renderer<Scene, InstanceEmitterComponent> {
-
+	
 	public InstanceEmitterRenderer() {
 		super(InstanceEmitter.class);
 	}
-
+	
 	@Override
 	public void render(CacheManager cache, Scene scene, InstanceEmitterComponent pec) {
 		InstanceEmitter pe = pec.getInstanceEmitter(cache);
@@ -31,13 +31,13 @@ public class InstanceEmitterRenderer extends Renderer<Scene, InstanceEmitterComp
 			GlobalLogger.log(Level.WARNING, "InstanceEmitter is null!");
 			return;
 		}
-
+		
 		GlobalLogger.log(Level.INFO, "InstanceEmitter : " + pe.getId());
-
+		
 		Mesh mesh = pe.getParticleMesh();
 		if (mesh == null)
 			return;
-
+		
 		Material material = mesh.getMaterial();
 		if (material == null) {
 			GlobalLogger.log(Level.WARNING, "Material is null!");
@@ -48,9 +48,9 @@ public class InstanceEmitterRenderer extends Renderer<Scene, InstanceEmitterComp
 			GlobalLogger.log(Level.WARNING, "Shader is null!");
 			return;
 		}
-
+		
 		shader.bind();
-
+		
 		Matrix4f projectionMatrix = null, viewMatrix = null, transformationMatrix = new Matrix4f().identity();
 		if (scene != null) {
 			projectionMatrix = scene.getCamera().getProjection().getProjMatrix();
@@ -65,38 +65,40 @@ public class InstanceEmitterRenderer extends Renderer<Scene, InstanceEmitterComp
 			}
 		}
 		material.setPropertyIfPresent(RenderShader.TRANSFORMATION_MATRIX, transformationMatrix);
-
+		
 		if (scene instanceof Scene3D) {
 			PointLightSurfaceComponent plsc = pec.getParent().getComponent(PointLightSurfaceComponent.class);
 			if (plsc != null)
 				plsc.bindLights(cache, ((Scene3D) scene).getLights(), material);
 		}
-
+		
 		material.bindProperties(cache, scene, shader);
-
+		
 		if (shader.isTransparent()) {
 			GL40.glEnable(GL40.GL_BLEND);
 			GL40.glBlendFunc(GL40.GL_SRC_ALPHA, GL40.GL_ONE_MINUS_SRC_ALPHA);
 		}
-
+		
 		pe.bind();
-
+		
+		pe.updatePull();
+		
 		GL40.glDrawElementsInstanced(GL40.GL_TRIANGLES, mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0, pe.getParticleCount());
-
+		
 		GL40.glDisable(GL40.GL_BLEND);
-
+		
 		// debug only
 		// GameEngine.DEBUG.wireframe(cache, scene, mesh, projectionMatrix, viewMatrix,
 		// c.getTransform().getMatrix());
-
+		
 		mesh.unbind();
-
+		
 		GameEngine.DEBUG.gizmos(cache, scene, projectionMatrix, viewMatrix, transformationMatrix);
 	}
-
+	
 	@Override
 	public void cleanup() {
 		super.cleanup();
 	}
-
+	
 }
