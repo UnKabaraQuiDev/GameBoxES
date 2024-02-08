@@ -2,6 +2,7 @@ package lu.pcy113.pdr.engine.computing.shader;
 
 import org.joml.Vector3i;
 
+import lu.pcy113.pdr.engine.computing.shader.part.ComputeShaderPart;
 import lu.pcy113.pdr.engine.impl.shader.AbstractShader;
 
 public abstract class ComputeShader extends AbstractShader {

@@ -6,7 +6,7 @@ import org.lwjgl.opengl.GL40;
 import org.lwjgl.opengl.GL43;
 
 import lu.pcy113.pclib.GlobalLogger;
-import lu.pcy113.pdr.engine.computing.shader.ComputeShaderPart;
+import lu.pcy113.pdr.engine.computing.shader.part.ComputeShaderPart;
 import lu.pcy113.pdr.engine.graph.shader.part.FragmentShaderPart;
 import lu.pcy113.pdr.engine.graph.shader.part.GeometryShaderPart;
 import lu.pcy113.pdr.engine.graph.shader.part.VertexShaderPart;
