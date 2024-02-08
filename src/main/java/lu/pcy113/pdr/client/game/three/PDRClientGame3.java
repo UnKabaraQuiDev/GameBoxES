@@ -26,8 +26,6 @@ import lu.pcy113.pdr.engine.graph.composition.Compositor;
 import lu.pcy113.pdr.engine.graph.composition.GenerateRenderLayer;
 import lu.pcy113.pdr.engine.graph.composition.PassRenderLayer;
 import lu.pcy113.pdr.engine.graph.composition.SceneRenderLayer;
-import lu.pcy113.pdr.engine.graph.material.Shader;
-import lu.pcy113.pdr.engine.graph.material.ShaderPart;
 import lu.pcy113.pdr.engine.graph.material.TextureMaterial;
 import lu.pcy113.pdr.engine.graph.material.text.TextShader;
 import lu.pcy113.pdr.engine.graph.material.text.TextShader.TextMaterial;
@@ -36,9 +34,11 @@ import lu.pcy113.pdr.engine.graph.render.MeshRenderer;
 import lu.pcy113.pdr.engine.graph.render.Scene2DRenderer;
 import lu.pcy113.pdr.engine.graph.render.Scene3DRenderer;
 import lu.pcy113.pdr.engine.graph.render.TextEmitterRenderer;
+import lu.pcy113.pdr.engine.graph.shader.RenderShader;
 import lu.pcy113.pdr.engine.graph.texture.CubemapTexture;
 import lu.pcy113.pdr.engine.graph.texture.Texture;
 import lu.pcy113.pdr.engine.graph.window.Window;
+import lu.pcy113.pdr.engine.impl.shader.AbstractShaderPart;
 import lu.pcy113.pdr.engine.logic.GameLogic;
 import lu.pcy113.pdr.engine.objs.entity.Entity;
 import lu.pcy113.pdr.engine.objs.entity.components.InstanceEmitterComponent;
@@ -239,14 +239,14 @@ public class PDRClientGame3 implements GameLogic {
 		/* CUBE MAP */
 		CubemapTexture cmtxt = cache.loadCubemapTexture("skybox", "./resources/textures/skybox/.jpg");
 		final String skyboxUniform = "skybox";
-		Shader shader = new Shader("skybox",
-				new ShaderPart("./resources/shaders/plain.vert"),
-				new ShaderPart("./resources/shaders/skybox/skybox.frag")) {
+		RenderShader shader = new RenderShader("skybox",
+				AbstractShaderPart.load("./resources/shaders/plain.vert"),
+				AbstractShaderPart.load("./resources/shaders/skybox/skybox.frag")) {
 			@Override
 			public void createUniforms() {
-				createUniform(Shader.PROJECTION_MATRIX);
-				createUniform(Shader.VIEW_MATRIX);
-				createUniform(Shader.TRANSFORMATION_MATRIX);
+				createUniform(RenderShader.PROJECTION_MATRIX);
+				createUniform(RenderShader.VIEW_MATRIX);
+				createUniform(RenderShader.TRANSFORMATION_MATRIX);
 				createUniform(skyboxUniform);
 			}
 		};

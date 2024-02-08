@@ -1,12 +1,10 @@
 package lu.pcy113.pdr.engine.objs.text;
 
 import java.util.Arrays;
-import java.util.logging.Level;
 
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 
-import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pdr.engine.cache.attrib.UIntAttribArray;
 import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.geom.instance.InstanceEmitter;

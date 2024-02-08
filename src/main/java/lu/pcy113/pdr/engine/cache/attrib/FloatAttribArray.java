@@ -1,10 +1,6 @@
 package lu.pcy113.pdr.engine.cache.attrib;
 
-import java.util.logging.Level;
-
 import org.lwjgl.opengl.GL40;
-
-import lu.pcy113.pclib.GlobalLogger;
 
 public class FloatAttribArray extends AttribArray {
 

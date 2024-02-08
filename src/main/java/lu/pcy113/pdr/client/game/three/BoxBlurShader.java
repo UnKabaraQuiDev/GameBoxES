@@ -2,17 +2,17 @@ package lu.pcy113.pdr.client.game.three;
 
 import lu.pcy113.pdr.engine.graph.composition.PassRenderLayer;
 import lu.pcy113.pdr.engine.graph.material.Material;
-import lu.pcy113.pdr.engine.graph.material.Shader;
-import lu.pcy113.pdr.engine.graph.material.ShaderPart;
+import lu.pcy113.pdr.engine.graph.shader.RenderShader;
+import lu.pcy113.pdr.engine.impl.shader.AbstractShaderPart;
 
-public class BoxBlurShader extends Shader {
+public class BoxBlurShader extends RenderShader {
 	
 	public static final String NAME = BoxBlurShader.class.getName();
 	
 	public BoxBlurShader() {
 		super(NAME,
-				new ShaderPart("./resources/shaders/composite/plain.vert"),
-				new ShaderPart("./resources/shaders/composite/blur/box.frag"));
+				AbstractShaderPart.load("./resources/shaders/composite/plain.vert"),
+				AbstractShaderPart.load("./resources/shaders/composite/blur/box.frag"));
 	}
 	
 	@Override

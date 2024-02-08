@@ -1,7 +1,5 @@
 package lu.pcy113.pdr.engine.geom.instance;
 
-import java.util.Arrays;
-
 import lu.pcy113.pdr.engine.utils.transform.Transform;
 
 public class Instance {

@@ -5,14 +5,14 @@ import java.util.HashMap;
 import org.joml.Vector4f;
 
 import lu.pcy113.pdr.engine.cache.CacheManager;
-import lu.pcy113.pdr.engine.graph.material.Shader;
-import lu.pcy113.pdr.engine.graph.material.ShaderPart;
 import lu.pcy113.pdr.engine.graph.material.TextureMaterial;
+import lu.pcy113.pdr.engine.graph.shader.RenderShader;
 import lu.pcy113.pdr.engine.graph.texture.SingleTexture;
 import lu.pcy113.pdr.engine.graph.texture.Texture;
 import lu.pcy113.pdr.engine.impl.Renderable;
+import lu.pcy113.pdr.engine.impl.shader.AbstractShaderPart;
 
-public class TextShader extends Shader {
+public class TextShader extends RenderShader {
 
 	public static final String NAME = TextShader.class.getName();
 
@@ -22,7 +22,7 @@ public class TextShader extends Shader {
 	public static final String TXT_LENGTH = "length";
 
 	public TextShader() {
-		super(NAME, true, new ShaderPart("./resources/shaders/text/text.vert"), new ShaderPart("./resources/shaders/text/text.frag"));
+		super(NAME, true, AbstractShaderPart.load("./resources/shaders/text/text.vert"), AbstractShaderPart.load("./resources/shaders/text/text.frag"));
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class TextShader extends Shader {
 		}
 
 		@Override
-		public void bindProperties(CacheManager cache, Renderable scene, Shader shader) {
+		public void bindProperties(CacheManager cache, Renderable scene, RenderShader shader) {
 			setProperty(FG_COLOR, fgColor);
 			setProperty(BG_COLOR, bgColor);
 

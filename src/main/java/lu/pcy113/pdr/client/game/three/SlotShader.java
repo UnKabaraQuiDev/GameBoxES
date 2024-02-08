@@ -2,25 +2,25 @@ package lu.pcy113.pdr.client.game.three;
 
 import java.util.HashMap;
 
-import lu.pcy113.pdr.engine.graph.material.Shader;
-import lu.pcy113.pdr.engine.graph.material.ShaderPart;
 import lu.pcy113.pdr.engine.graph.material.TextureMaterial;
+import lu.pcy113.pdr.engine.graph.shader.RenderShader;
 import lu.pcy113.pdr.engine.graph.texture.SingleTexture;
 import lu.pcy113.pdr.engine.graph.texture.Texture;
+import lu.pcy113.pdr.engine.impl.shader.AbstractShaderPart;
 
-public class SlotShader extends Shader {
+public class SlotShader extends RenderShader {
 
 	public static final String TEXTURE = "txt1";
 
 	public SlotShader() {
-		super(SlotShader.class.getName(), true, new ShaderPart("./resources/shaders/ui/plain.vert"), new ShaderPart("./resources/shaders/ui/txt1.frag"));
+		super(SlotShader.class.getName(), true, AbstractShaderPart.load("./resources/shaders/ui/plain.vert"), AbstractShaderPart.load("./resources/shaders/ui/txt1.frag"));
 	}
 
 	@Override
 	public void createUniforms() {
-		createUniform(Shader.PROJECTION_MATRIX);
-		createUniform(Shader.TRANSFORMATION_MATRIX);
-		createUniform(Shader.VIEW_MATRIX);
+		createUniform(RenderShader.PROJECTION_MATRIX);
+		createUniform(RenderShader.TRANSFORMATION_MATRIX);
+		createUniform(RenderShader.VIEW_MATRIX);
 
 		createUniform(TEXTURE);
 	}

@@ -11,7 +11,7 @@ import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.geom.instance.InstanceEmitter;
 import lu.pcy113.pdr.engine.graph.material.Material;
-import lu.pcy113.pdr.engine.graph.material.Shader;
+import lu.pcy113.pdr.engine.graph.shader.RenderShader;
 import lu.pcy113.pdr.engine.objs.entity.components.PointLightSurfaceComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.TextEmitterComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.TransformComponent;
@@ -50,7 +50,7 @@ public class TextEmitterRenderer extends Renderer<Scene, TextEmitterComponent> {
 			GlobalLogger.log(Level.WARNING, "Material is null!");
 			return;
 		}
-		Shader shader = material.getShader();
+		RenderShader shader = material.getShader();
 		if (shader == null) {
 			GlobalLogger.log(Level.WARNING, "Shader is null!");
 			return;
@@ -62,8 +62,8 @@ public class TextEmitterRenderer extends Renderer<Scene, TextEmitterComponent> {
 		if (scene != null) {
 			projectionMatrix = scene.getCamera().getProjection().getProjMatrix();
 			viewMatrix = scene.getCamera().getViewMatrix();
-			material.setPropertyIfPresent(Shader.PROJECTION_MATRIX, projectionMatrix);
-			material.setPropertyIfPresent(Shader.VIEW_MATRIX, viewMatrix);
+			material.setPropertyIfPresent(RenderShader.PROJECTION_MATRIX, projectionMatrix);
+			material.setPropertyIfPresent(RenderShader.VIEW_MATRIX, viewMatrix);
 		}
 		if (tec.getParent().hasComponent(TransformComponent.class)) {
 			TransformComponent transform = (TransformComponent) tec.getParent().getComponent(tec.getParent().getComponents(TransformComponent.class).get(0));
@@ -71,7 +71,7 @@ public class TextEmitterRenderer extends Renderer<Scene, TextEmitterComponent> {
 				transformationMatrix = transform.getTransform().getMatrix();
 			}
 		}
-		material.setPropertyIfPresent(Shader.TRANSFORMATION_MATRIX, transformationMatrix);
+		material.setPropertyIfPresent(RenderShader.TRANSFORMATION_MATRIX, transformationMatrix);
 
 		if (scene instanceof Scene3D) {
 			PointLightSurfaceComponent plsc = tec.getParent().getComponent(PointLightSurfaceComponent.class);

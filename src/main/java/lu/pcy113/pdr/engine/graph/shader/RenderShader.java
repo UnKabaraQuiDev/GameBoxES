@@ -1,8 +1,9 @@
-package lu.pcy113.pdr.engine.graph.material;
+package lu.pcy113.pdr.engine.graph.shader;
 
-import lu.pcy113.pdr.engine.impl.AbstractShader;
+import lu.pcy113.pdr.engine.impl.shader.AbstractShader;
+import lu.pcy113.pdr.engine.impl.shader.AbstractShaderPart;
 
-public abstract class Shader extends AbstractShader {
+public abstract class RenderShader extends AbstractShader {
 
 	public static final String PROJECTION_MATRIX = "projectionMatrix";
 	public static final String VIEW_MATRIX = "viewMatrix";
@@ -11,11 +12,11 @@ public abstract class Shader extends AbstractShader {
 
 	protected boolean transparent;
 
-	public Shader(String name, ShaderPart... parts) {
+	public RenderShader(String name, AbstractShaderPart... parts) {
 		this(name, false, parts);
 	}
 
-	public Shader(String name, boolean transparent, ShaderPart... parts) {
+	public RenderShader(String name, boolean transparent, AbstractShaderPart... parts) {
 		super(name, parts);
 		this.transparent = transparent;
 	}

@@ -1,4 +1,4 @@
-package lu.pcy113.pdr.engine.impl;
+package lu.pcy113.pdr.engine.impl.shader;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,21 +18,22 @@ import org.lwjgl.opengl.GL21;
 import org.lwjgl.opengl.GL40;
 
 import lu.pcy113.pclib.GlobalLogger;
-import lu.pcy113.pdr.engine.graph.material.ShaderPart;
+import lu.pcy113.pdr.engine.impl.Cleanupable;
+import lu.pcy113.pdr.engine.impl.UniqueID;
 
 public abstract class AbstractShader implements UniqueID, Cleanupable {
 	
 	protected final String name;
 	protected int shaderProgram = -1;
-	protected Map<Integer, ShaderPart> parts;
+	protected Map<Integer, AbstractShaderPart> parts;
 	protected Map<String, Integer> uniforms;
 	
-	public AbstractShader(String name, ShaderPart... parts) {
+	public AbstractShader(String name, AbstractShaderPart... parts) {
 		this.name = name;
 
 		this.shaderProgram = GL20.glCreateProgram();
 		this.parts = new HashMap<>();
-		for (ShaderPart sp : parts) {
+		for (AbstractShaderPart sp : parts) {
 			this.parts.put(sp.getType(), sp);
 			GL20.glAttachShader(this.shaderProgram, sp.getSid());
 		}
@@ -123,7 +124,7 @@ public abstract class AbstractShader implements UniqueID, Cleanupable {
 	@Override
 	public void cleanup() {
 		if (this.shaderProgram != -1) {
-			this.parts.values().forEach(ShaderPart::cleanup);
+			this.parts.values().forEach(AbstractShaderPart::cleanup);
 			GL20.glDeleteProgram(this.shaderProgram);
 			this.shaderProgram = -1;
 		}
@@ -134,7 +135,7 @@ public abstract class AbstractShader implements UniqueID, Cleanupable {
 		return this.name;
 	}
 
-	public Map<Integer, ShaderPart> getParts() {
+	public Map<Integer, AbstractShaderPart> getParts() {
 		return this.parts;
 	}
 

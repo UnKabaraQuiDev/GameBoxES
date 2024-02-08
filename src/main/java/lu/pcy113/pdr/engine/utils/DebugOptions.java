@@ -10,11 +10,11 @@ import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.geom.ObjLoader;
 import lu.pcy113.pdr.engine.graph.material.Material;
-import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.material.gizmo.GizmoShader;
 import lu.pcy113.pdr.engine.graph.material.gizmo.GizmoShader.GizmoMaterial;
 import lu.pcy113.pdr.engine.graph.material.wireframe.WireframeMaterial;
 import lu.pcy113.pdr.engine.graph.material.wireframe.WireframeShader;
+import lu.pcy113.pdr.engine.graph.shader.RenderShader;
 import lu.pcy113.pdr.engine.scene.Scene;
 
 public class DebugOptions {
@@ -42,16 +42,16 @@ public class DebugOptions {
 		} else {
 			deb = (GizmoMaterial) cache.loadMaterial(GizmoShader.GizmoMaterial.class);
 		}
-		Shader debShader = deb.getShader();
+		RenderShader debShader = deb.getShader();
 
 		debShader.bind();
 
-		deb.setProperty(Shader.PROJECTION_MATRIX, projectionMatrix);
-		deb.setProperty(Shader.VIEW_MATRIX, viewMatrix);
+		deb.setProperty(RenderShader.PROJECTION_MATRIX, projectionMatrix);
+		deb.setProperty(RenderShader.VIEW_MATRIX, viewMatrix);
 		if (modelMatrix != null)
-			deb.setProperty(Shader.TRANSFORMATION_MATRIX, modelMatrix);
+			deb.setProperty(RenderShader.TRANSFORMATION_MATRIX, modelMatrix);
 		else
-			deb.setProperty(Shader.TRANSFORMATION_MATRIX, new Matrix4f());
+			deb.setProperty(RenderShader.TRANSFORMATION_MATRIX, new Matrix4f());
 		deb.bindProperties(cache, scene, debShader);
 
 		if (GameEngine.DEBUG.ignoreDepth)
@@ -81,12 +81,12 @@ public class DebugOptions {
 			deb = new WireframeMaterial(shader);
 			cache.addMaterial(deb);
 		}
-		Shader debShader = deb.getShader();
+		RenderShader debShader = deb.getShader();
 		debShader.bind();
 
-		deb.setProperty(Shader.PROJECTION_MATRIX, projectionMatrix);
-		deb.setProperty(Shader.VIEW_MATRIX, viewMatrix);
-		deb.setProperty(Shader.TRANSFORMATION_MATRIX, transformationMatrix);
+		deb.setProperty(RenderShader.PROJECTION_MATRIX, projectionMatrix);
+		deb.setProperty(RenderShader.VIEW_MATRIX, viewMatrix);
+		deb.setProperty(RenderShader.TRANSFORMATION_MATRIX, transformationMatrix);
 		deb.setProperty(WireframeShader.COLOR, wireframeColor);
 		deb.bindProperties(cache, scene, debShader);
 
@@ -111,12 +111,12 @@ public class DebugOptions {
 			deb = new WireframeMaterial(shader);
 			cache.addMaterial(deb);
 		}
-		Shader debShader = deb.getShader();
+		RenderShader debShader = deb.getShader();
 		debShader.bind();
 
-		deb.setProperty(Shader.PROJECTION_MATRIX, projectionMatrix);
-		deb.setProperty(Shader.VIEW_MATRIX, viewMatrix);
-		deb.setProperty(Shader.TRANSFORMATION_MATRIX, transformationMatrix);
+		deb.setProperty(RenderShader.PROJECTION_MATRIX, projectionMatrix);
+		deb.setProperty(RenderShader.VIEW_MATRIX, viewMatrix);
+		deb.setProperty(RenderShader.TRANSFORMATION_MATRIX, transformationMatrix);
 		deb.setProperty(WireframeShader.COLOR, wireframeColor);
 		deb.bindProperties(cache, scene, debShader);
 

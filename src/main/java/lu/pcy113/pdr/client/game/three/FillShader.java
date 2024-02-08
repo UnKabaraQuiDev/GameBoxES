@@ -4,16 +4,16 @@ import org.joml.Vector4f;
 
 import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.graph.material.Material;
-import lu.pcy113.pdr.engine.graph.material.Shader;
-import lu.pcy113.pdr.engine.graph.material.ShaderPart;
+import lu.pcy113.pdr.engine.graph.shader.RenderShader;
 import lu.pcy113.pdr.engine.impl.Renderable;
+import lu.pcy113.pdr.engine.impl.shader.AbstractShaderPart;
 
-public class FillShader extends Shader {
+public class FillShader extends RenderShader {
 
 	public static final String COLOR = "color";
 
 	public FillShader() {
-		super(FillShader.class.getName(), new ShaderPart("./resources/shaders/composite/plain.vert"), new ShaderPart("./resources/shaders/composite/fill/fill-color.frag"));
+		super(FillShader.class.getName(), AbstractShaderPart.load("./resources/shaders/composite/plain.vert"), AbstractShaderPart.load("./resources/shaders/composite/fill/fill-color.frag"));
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class FillShader extends Shader {
 		}
 
 		@Override
-		public void bindProperties(CacheManager cache, Renderable parent, Shader shader) {
+		public void bindProperties(CacheManager cache, Renderable parent, RenderShader shader) {
 			super.setProperty(COLOR, color);
 
 			super.bindProperties(cache, parent, shader);

@@ -9,9 +9,9 @@ import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.geom.Gizmo;
-import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.material.gizmo.GizmoShader;
 import lu.pcy113.pdr.engine.graph.material.gizmo.GizmoShader.GizmoMaterial;
+import lu.pcy113.pdr.engine.graph.shader.RenderShader;
 import lu.pcy113.pdr.engine.objs.entity.components.GizmoComponent;
 import lu.pcy113.pdr.engine.scene.Scene;
 import lu.pcy113.pdr.engine.scene.camera.Camera3D;
@@ -39,17 +39,17 @@ public class GizmoRenderer extends Renderer<Scene, GizmoComponent> {
 		} else {
 			material = (GizmoMaterial) cache.loadMaterial(GizmoShader.GizmoMaterial.class);
 		}
-		Shader shader = material.getShader();
+		RenderShader shader = material.getShader();
 
 		shader.bind();
 
 		if (scene != null) {
 			Matrix4f projectionMatrix = scene.getCamera().getProjection().getProjMatrix();
 			Matrix4f viewMatrix = scene.getCamera().getViewMatrix();
-			material.setPropertyIfPresent(Shader.PROJECTION_MATRIX, projectionMatrix);
-			material.setPropertyIfPresent(Shader.VIEW_MATRIX, viewMatrix);
-			material.setPropertyIfPresent(Shader.TRANSFORMATION_MATRIX, new Matrix4f().identity());
-			material.setPropertyIfPresent(Shader.VIEW_POSITION, ((Camera3D) scene.getCamera()).getPosition());
+			material.setPropertyIfPresent(RenderShader.PROJECTION_MATRIX, projectionMatrix);
+			material.setPropertyIfPresent(RenderShader.VIEW_MATRIX, viewMatrix);
+			material.setPropertyIfPresent(RenderShader.TRANSFORMATION_MATRIX, new Matrix4f().identity());
+			material.setPropertyIfPresent(RenderShader.VIEW_POSITION, ((Camera3D) scene.getCamera()).getPosition());
 		}
 
 		material.bindProperties(cache, scene, shader);

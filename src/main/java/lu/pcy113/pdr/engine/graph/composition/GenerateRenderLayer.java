@@ -14,7 +14,7 @@ import lu.pcy113.pdr.engine.cache.attrib.Vec2fAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.Vec3fAttribArray;
 import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.graph.material.Material;
-import lu.pcy113.pdr.engine.graph.material.Shader;
+import lu.pcy113.pdr.engine.graph.shader.RenderShader;
 
 public class GenerateRenderLayer extends RenderLayer<GameEngine, Framebuffer, Mesh> {
 
@@ -37,7 +37,7 @@ public class GenerateRenderLayer extends RenderLayer<GameEngine, Framebuffer, Me
 			GlobalLogger.log(Level.WARNING, "Material is null!");
 			return;
 		}
-		Shader shader = material.getShader();
+		RenderShader shader = material.getShader();
 		if (shader == null) {
 			GlobalLogger.log(Level.WARNING, "Shader is null!");
 			return;

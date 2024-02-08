@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.graph.material.components.MaterialComponent;
+import lu.pcy113.pdr.engine.graph.shader.RenderShader;
 import lu.pcy113.pdr.engine.impl.Renderable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
 
@@ -14,16 +15,16 @@ public class Material implements UniqueID {
 
 	protected final String name;
 	protected Map<String, Object> properties;
-	protected Shader shader;
+	protected RenderShader shader;
 
-	public Material(String name, Shader shader) {
+	public Material(String name, RenderShader shader) {
 		this.name = name;
 		this.properties = new HashMap<>();
 		shader.getUniforms().keySet().forEach(t -> properties.put(t, null));
 		this.shader = shader;
 	}
 
-	public void bindProperties(CacheManager cache, Renderable parent, Shader shader) {
+	public void bindProperties(CacheManager cache, Renderable parent, RenderShader shader) {
 		for (Entry<String, Object> eso : properties.entrySet()) {
 			shader.setUniform(eso.getKey(), eso.getValue());
 		}
@@ -55,11 +56,11 @@ public class Material implements UniqueID {
 		this.properties = properties;
 	}
 
-	public Shader getShader() {
+	public RenderShader getShader() {
 		return shader;
 	}
 
-	public void setShader(Shader shader) {
+	public void setShader(RenderShader shader) {
 		this.shader = shader;
 	}
 

@@ -15,8 +15,8 @@ import lu.pcy113.pdr.engine.geom.instance.InstanceEmitter;
 import lu.pcy113.pdr.engine.graph.composition.Framebuffer;
 import lu.pcy113.pdr.engine.graph.composition.RenderLayer;
 import lu.pcy113.pdr.engine.graph.material.Material;
-import lu.pcy113.pdr.engine.graph.material.Shader;
 import lu.pcy113.pdr.engine.graph.render.Renderer;
+import lu.pcy113.pdr.engine.graph.shader.RenderShader;
 import lu.pcy113.pdr.engine.graph.texture.CubemapTexture;
 import lu.pcy113.pdr.engine.graph.texture.SingleTexture;
 import lu.pcy113.pdr.engine.graph.texture.Texture;
@@ -35,7 +35,7 @@ public class CacheManager implements Cleanupable {
 	protected Map<String, Scene> scenes;
 	protected Map<String, Renderer<?, ?>> renderers;
 	protected Map<String, Material> materials;
-	protected Map<String, Shader> shaders;
+	protected Map<String, RenderShader> shaders;
 	protected Map<String, Texture> textures;
 	protected Map<String, PointLight> pointLights;
 	protected Map<String, Gizmo> gizmos;
@@ -77,7 +77,7 @@ public class CacheManager implements Cleanupable {
 		// materials.values().forEach(Material::cleanup);
 		this.materials.clear();
 		
-		this.shaders.values().forEach(Shader::cleanup);
+		this.shaders.values().forEach(RenderShader::cleanup);
 		this.shaders.clear();
 		
 		this.textures.values().forEach(Texture::cleanup);
@@ -136,7 +136,7 @@ public class CacheManager implements Cleanupable {
 		return this.materials.putIfAbsent(m.getId(), m) == null;
 	}
 	
-	public boolean addShader(Shader m) {
+	public boolean addShader(RenderShader m) {
 		if (this.shaders.containsKey(m.getId()))
 			this.shaders.remove(m.getId()).cleanup();
 		return this.shaders.putIfAbsent(m.getId(), m) == null;
@@ -221,7 +221,7 @@ public class CacheManager implements Cleanupable {
 		return this.materials.get(name);
 	}
 	
-	public Shader getShader(String name) {
+	public RenderShader getShader(String name) {
 		return this.shaders.get(name);
 	}
 	
@@ -297,11 +297,11 @@ public class CacheManager implements Cleanupable {
 		this.materials = materials;
 	}
 	
-	public Map<String, Shader> getShaders() {
+	public Map<String, RenderShader> getShaders() {
 		return this.shaders;
 	}
 	
-	public void setShaders(Map<String, Shader> shaders) {
+	public void setShaders(Map<String, RenderShader> shaders) {
 		this.shaders = shaders;
 	}
 	
@@ -478,7 +478,7 @@ public class CacheManager implements Cleanupable {
 		out.println(Scene.class.getName() + ": " + this.scenes.size() + ": " + this.scenes);
 		out.println(Renderer.class.getName() + ": " + this.renderers.size() + ": " + this.renderers);
 		out.println(Material.class.getName() + ": " + this.materials.size() + ": " + this.materials);
-		out.println(Shader.class.getName() + ": " + this.shaders.size() + ": " + this.shaders);
+		out.println(RenderShader.class.getName() + ": " + this.shaders.size() + ": " + this.shaders);
 		out.println(Texture.class.getName() + ": " + this.textures.size() + ": " + this.textures);
 		out.println(Gizmo.class.getName() + ": " + this.gizmos.size() + ": " + this.gizmos);
 		out.println(GizmoModel.class.getName() + ": " + this.gizmoModels.size() + ": " + this.gizmoModels);

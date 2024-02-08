@@ -10,7 +10,7 @@ import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.graph.material.Material;
-import lu.pcy113.pdr.engine.graph.material.Shader;
+import lu.pcy113.pdr.engine.graph.shader.RenderShader;
 import lu.pcy113.pdr.engine.objs.entity.components.MeshComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.TransformComponent;
 import lu.pcy113.pdr.engine.scene.Scene;
@@ -38,7 +38,7 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 			GlobalLogger.log(Level.WARNING, "Material is null!");
 			return;
 		}
-		Shader shader = material.getShader();
+		RenderShader shader = material.getShader();
 		if (shader == null) {
 			GlobalLogger.log(Level.WARNING, "Shader is null!");
 			return;
@@ -50,8 +50,8 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 		if (scene != null) {
 			projectionMatrix = scene.getCamera().getProjection().getProjMatrix();
 			viewMatrix = scene.getCamera().getViewMatrix();
-			material.setPropertyIfPresent(Shader.PROJECTION_MATRIX, projectionMatrix);
-			material.setPropertyIfPresent(Shader.VIEW_MATRIX, viewMatrix);
+			material.setPropertyIfPresent(RenderShader.PROJECTION_MATRIX, projectionMatrix);
+			material.setPropertyIfPresent(RenderShader.VIEW_MATRIX, viewMatrix);
 		}
 		if (m.getParent().hasComponent(TransformComponent.class)) {
 			TransformComponent transform = (TransformComponent) m.getParent().getComponent(m.getParent().getComponents(TransformComponent.class).get(0));
@@ -59,7 +59,7 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 				transformationMatrix = transform.getTransform().getMatrix();
 			}
 		}
-		material.setPropertyIfPresent(Shader.TRANSFORMATION_MATRIX, transformationMatrix);
+		material.setPropertyIfPresent(RenderShader.TRANSFORMATION_MATRIX, transformationMatrix);
 
 		material.bindProperties(cache, scene, shader);
 

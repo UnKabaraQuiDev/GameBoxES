@@ -1,10 +1,10 @@
 package lu.pcy113.pdr.engine.graph.composition.blur.gaussian;
 
 import lu.pcy113.pdr.engine.graph.composition.PassRenderLayer;
-import lu.pcy113.pdr.engine.graph.material.Shader;
-import lu.pcy113.pdr.engine.graph.material.ShaderPart;
+import lu.pcy113.pdr.engine.graph.shader.RenderShader;
+import lu.pcy113.pdr.engine.impl.shader.AbstractShaderPart;
 
-public class GaussianBlurShader extends Shader {
+public class GaussianBlurShader extends RenderShader {
 
 	public static final String NAME = GaussianBlurShader.class.getName();
 
@@ -16,7 +16,7 @@ public class GaussianBlurShader extends Shader {
 	public static final String HEIGHT = "height";
 
 	public GaussianBlurShader() {
-		super(NAME, new ShaderPart("./resources/shaders/composite/plain.vert"), new ShaderPart("./resources/shaders/composite/blur/gaussian.frag"));
+		super(NAME, AbstractShaderPart.load("./resources/shaders/composite/plain.vert"), AbstractShaderPart.load("./resources/shaders/composite/blur/gaussian.frag"));
 	}
 
 	@Override

@@ -5,11 +5,11 @@ import org.joml.Vector4f;
 
 import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.graph.material.Material;
-import lu.pcy113.pdr.engine.graph.material.Shader;
-import lu.pcy113.pdr.engine.graph.material.ShaderPart;
+import lu.pcy113.pdr.engine.graph.shader.RenderShader;
 import lu.pcy113.pdr.engine.impl.Renderable;
+import lu.pcy113.pdr.engine.impl.shader.AbstractShaderPart;
 
-public class JoystickStateShader extends Shader {
+public class JoystickStateShader extends RenderShader {
 	
 	public static final String NAME = JoystickStateShader.class.getName();
 	
@@ -21,16 +21,16 @@ public class JoystickStateShader extends Shader {
 	
 	public JoystickStateShader() {
 		super(NAME,
-				new ShaderPart("./resources/shaders/ui/joystick.frag"),
-				new ShaderPart("./resources/shaders/ui/plain.vert"));
+				AbstractShaderPart.load("./resources/shaders/ui/joystick.frag"),
+				AbstractShaderPart.load("./resources/shaders/ui/plain.vert"));
 	}
 	
 	@Override
 	public void createUniforms() {
-		createUniform(Shader.PROJECTION_MATRIX);
-		createUniform(Shader.VIEW_MATRIX);
-		createUniform(Shader.TRANSFORMATION_MATRIX);
-		createUniform(Shader.VIEW_POSITION);
+		createUniform(RenderShader.PROJECTION_MATRIX);
+		createUniform(RenderShader.VIEW_MATRIX);
+		createUniform(RenderShader.TRANSFORMATION_MATRIX);
+		createUniform(RenderShader.VIEW_POSITION);
 		
 		createUniform(COLOR);
 		createUniform(RADIUS);
@@ -56,7 +56,7 @@ public class JoystickStateShader extends Shader {
 		}
 
 		@Override
-		public void bindProperties(CacheManager cache, Renderable parent, Shader shader) {
+		public void bindProperties(CacheManager cache, Renderable parent, RenderShader shader) {
 			setProperty(COLOR, color);
 			setProperty(RADIUS, radius);
 			setProperty(POSITION, position);

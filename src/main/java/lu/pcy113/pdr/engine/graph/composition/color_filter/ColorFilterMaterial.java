@@ -4,7 +4,7 @@ import org.joml.Vector4f;
 
 import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.graph.material.Material;
-import lu.pcy113.pdr.engine.graph.material.Shader;
+import lu.pcy113.pdr.engine.graph.shader.RenderShader;
 import lu.pcy113.pdr.engine.impl.Renderable;
 
 public class ColorFilterMaterial extends Material {
@@ -18,7 +18,7 @@ public class ColorFilterMaterial extends Material {
 	}
 
 	@Override
-	public void bindProperties(CacheManager cache, Renderable parent, Shader shader) {
+	public void bindProperties(CacheManager cache, Renderable parent, RenderShader shader) {
 		super.setProperty(ColorFilterShader.MUL, mul);
 		super.setProperty(ColorFilterShader.ADD, add);
 

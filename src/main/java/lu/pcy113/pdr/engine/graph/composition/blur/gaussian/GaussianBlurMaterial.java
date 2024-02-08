@@ -6,7 +6,7 @@ import java.util.logging.Level;
 import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.graph.material.Material;
-import lu.pcy113.pdr.engine.graph.material.Shader;
+import lu.pcy113.pdr.engine.graph.shader.RenderShader;
 import lu.pcy113.pdr.engine.impl.Renderable;
 
 public class GaussianBlurMaterial extends Material {
@@ -45,7 +45,7 @@ public class GaussianBlurMaterial extends Material {
 	}
 
 	@Override
-	public void bindProperties(CacheManager cache, Renderable scene, Shader shader) {
+	public void bindProperties(CacheManager cache, Renderable scene, RenderShader shader) {
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
 				shader.setUniform(GaussianBlurShader.KERNEL + "[" + (y * width + x) + "]", kernel[y * width + x]);
