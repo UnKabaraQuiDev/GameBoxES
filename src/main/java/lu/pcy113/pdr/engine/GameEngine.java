@@ -186,7 +186,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 	private boolean pollEvents() {
 		try {
 			waitingForEvents = true;
-			Thread.sleep(2000);
+			Thread.sleep(POLL_EVENT_TIMEOUT);
 			return Thread.interrupted();
 		} catch (InterruptedException e) {
 			return false;
@@ -203,7 +203,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 		
 		this.targetFps = this.window.getOptions().fps;
 		long lastTime = System.nanoTime(); // nanos
-		float timeUps = 1e9f / this.targetFps;
+		float timeUps = this.targetFps > 0 ? 1e9f / this.targetFps : 0;
 		
 		while(this.shouldRun()) {
 			long now = System.nanoTime();
@@ -217,20 +217,12 @@ public class GameEngine implements Cleanupable, UniqueID {
 				
 				lastTime = now;
 				
-				this.currentFps = (double) 1 / ((double) deltaRender / 1_000_000);
+				this.currentFps = (double) 1 / ((double) deltaRender / 1000_000_000);
 			}
 		}
+		
+		this.window.clearGLContext();
 		this.stop();
-	}
-	
-	private boolean swapBuffers() {
-		try {
-			waitingForSwapBuffer = true;
-			Thread.sleep(BUFFER_SWAP_TIMEOUT);
-			return Thread.interrupted();
-		} catch (InterruptedException e) {
-			return false;
-		}
 	}
 
 	public void start() {
@@ -271,13 +263,6 @@ public class GameEngine implements Cleanupable, UniqueID {
 		}
 		
 		while(running) {
-			System.out.println("Main running: buffers:"+waitingForSwapBuffer+" && events:"+waitingForEvents);
-			if(waitingForSwapBuffer) {
-				this.window.swapBuffers();
-				waitingForSwapBuffer = false;
-				renderThread.interrupt();
-			}
-			
 			if(waitingForEvents) {
 				this.window.pollEvents();
 				waitingForEvents = false;
@@ -292,6 +277,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 			GlobalLogger.severe("Main thread interrupted while joining subthreads");
 		}
 		
+		this.window.takeGlContext();
 		this.cleanup();
 	}
 

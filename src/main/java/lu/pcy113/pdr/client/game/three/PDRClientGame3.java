@@ -211,6 +211,7 @@ public class PDRClientGame3 implements GameLogic {
 		this.ui.getCamera().getProjection().update(1920, 1080);
 		this.scene.getCamera().getProjection().setPerspective(true);
 		this.engine.getWindow().onResize((w, h) -> {
+			System.out.println("resize update: "+w+"x"+h);
 			this.scene.getCamera().getProjection().update(w, h);
 			// this.ui.getCamera().getProjection().update(w, h);
 		});
