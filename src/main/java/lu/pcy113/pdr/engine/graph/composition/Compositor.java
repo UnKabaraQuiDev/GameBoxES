@@ -79,6 +79,7 @@ public class Compositor implements Cleanupable {
 			resolution = new Vector2i(width, height);
 			if(!genTextures())
 				throw new RuntimeException("Could not attach textures to framebuffer");
+			GL40.glViewport(0, 0, width, height);
 		}
 		
 		color0.bind();
