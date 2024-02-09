@@ -58,6 +58,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 	
 	public GameEngine(String name, GameLogic game, WindowOptions options) {
 		this.name = name;
+		game.register(this);
 		this.gameLogic = game;
 		this.windowOptions = options;
 	}
@@ -95,7 +96,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 		}
 	}
 	
-	public void updateRun() {
+	private void updateRun() {
 		if(!running) {
 			try {
 				Thread.sleep(Long.MAX_VALUE); // waiting for renderThread to finish GameLogic#init()
@@ -157,7 +158,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 		}
 	}
 
-	public void renderRun() {
+	private void renderRun() {
 		this.window.takeGlContext();
 		
 		try {
@@ -209,6 +210,9 @@ public class GameEngine implements Cleanupable, UniqueID {
 	}
 
 	public void start() {
+		if(running)
+			throw new IllegalStateException("Already running");
+		
 		this.cache = new SharedCacheManager();
 		
 		this.window = new Window(this.windowOptions);

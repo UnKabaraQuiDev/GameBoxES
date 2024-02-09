@@ -58,11 +58,7 @@ import lu.pcy113.pdr.engine.utils.consts.TextureType;
 import lu.pcy113.pdr.engine.utils.interpolation.Interpolators;
 import lu.pcy113.pdr.engine.utils.transform.Transform3D;
 
-public class PDRClientGame3 implements GameLogic {
-	
-	CacheManager cache;
-	GameEngine engine;
-	Window window;
+public class PDRClientGame3 extends GameLogic {
 	
 	SlotMaterial slotMaterial;
 	FillMaterial backgroundMaterial;
@@ -92,7 +88,6 @@ public class PDRClientGame3 implements GameLogic {
 	
 	@Override
 	public void init(GameEngine e) {
-		engine = e;
 		cache = e.getCache();
 		window = e.getWindow();
 		GameEngine.DEBUG.wireframe = false;
