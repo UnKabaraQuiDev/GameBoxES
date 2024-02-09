@@ -171,15 +171,24 @@ public class GameEngine implements Cleanupable, UniqueID {
 			
 			long deltaUpdate = now - lastTime;
 			if(deltaUpdate > timeUps) {
+				DEBUG.start("u_update_loop");
+				DEBUG.start("u_pollEvents");
 				this.pollEvents();
+				DEBUG.end("u_pollEvents");
+				DEBUG.start("u_input");
 				this.gameLogic.input(deltaUpdate);
+				DEBUG.end("u_input");
 				this.window.clearScroll();
 				
+				DEBUG.start("u_update");
 				this.gameLogic.update(deltaUpdate);
+				DEBUG.end("u_update");
 				
 				lastTime = now;
+				DEBUG.end("u_update_loop");
 			}
 		}
+		
 		this.stop();
 	}
 	
@@ -210,14 +219,23 @@ public class GameEngine implements Cleanupable, UniqueID {
 			
 			long deltaRender = now - lastTime;
 			if(deltaRender > timeUps) {
-				
-				this.window.clear();
+				DEBUG.start("r_render_loop");
+				DEBUG.start("r_clear");
+				//this.window.clear();
+				DEBUG.end("r_clear");
+				DEBUG.start("r_render");
 				this.gameLogic.render(deltaRender);
+				DEBUG.end("r_render");
+				DEBUG.start("r_swap");
 				this.window.swapBuffers();
+				DEBUG.end("r_swap");
 				
 				lastTime = now;
 				
-				this.currentFps = (double) 1 / ((double) deltaRender / 1000_000_000);
+				this.currentFps = (double) 1 / ((double) deltaRender / 1_000_000_000);
+				DEBUG.end("r_render_loop");
+				
+				GlobalLogger.info("FPS: "+this.currentFps+" delta: "+((double) deltaRender/1_000_000)+"ms");
 			}
 		}
 		
@@ -318,6 +336,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 	public void cleanup() {
 		this.cache.cleanup();
 		this.window.cleanup();
+		DEBUG.cleanup();
 	}
 	
 }

@@ -368,7 +368,7 @@ public class PDRClientGame3 implements GameLogic {
 	
 	@Override
 	public void render(float dTime) {
-		compositor.render(cache, engine);
+		//compositor.render(cache, engine);
 		
 		/*TextureRenderer txtRenderer = new TextureRenderer("txtRenderer", cache, new Vector2i(800, 800), 1);
 		txtRenderer.bind();

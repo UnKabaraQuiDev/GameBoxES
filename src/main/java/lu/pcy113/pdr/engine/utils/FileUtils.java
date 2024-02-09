@@ -43,8 +43,11 @@ public final class FileUtils {
 		return list;
 	}
 
-	public static String appendName(String name, String suffix) {
-		return name.replaceAll("(.+)(\\.[^.]+)$", "$1" + suffix + "$2");
+	public static String appendName(String path, String suffix) {
+		return path.replaceAll("(.+)(\\.[^.]+)$", "$1" + suffix + "$2");
+	}
+	public static String changeExtension(String path, String ext) {
+		return path.replaceAll("(.+)(\\.[^.]+)$", "$1." + ext);
 	}
 
 }

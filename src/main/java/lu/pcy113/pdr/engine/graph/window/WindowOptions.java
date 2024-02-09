@@ -9,7 +9,7 @@ public class WindowOptions {
 	public int fps = 60;
 	public int ups = 30;
 	public boolean fullscreen = false;
-	public boolean vsync = true;
+	public boolean vsync = false;
 	public boolean resizable = true;
 	public Vector2i windowSize = new Vector2i(800, 600);
 	public String title = Consts.TITLE;

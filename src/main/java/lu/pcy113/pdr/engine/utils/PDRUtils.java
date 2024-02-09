@@ -34,7 +34,7 @@ public final class PDRUtils {
 					ste = stElements[i + 1];
 					return ste.getClassName() + "#" + ste.getMethodName() + "@" + ste.getLineNumber();
 				}
-
+				
 			}
 		}
 		return null;
@@ -43,7 +43,7 @@ public final class PDRUtils {
 	public static boolean checkGlError(String msg) {
 		int status = GL40.glGetError();
 		
-		if(status == GL40.GL_NO_ERROR)
+		if (status == GL40.GL_NO_ERROR)
 			return true;
 		
 		String caller = getCallerClassName(false);
@@ -83,7 +83,7 @@ public final class PDRUtils {
 			in[i] = start + i;
 		return in;
 	}
-
+	
 	public static int[] intCountingUpTriQuads(int quadCount) {
 		int[] in = new int[quadCount * 6];
 		for (int q = 0; q < quadCount; q++) {
@@ -96,14 +96,14 @@ public final class PDRUtils {
 		}
 		return in;
 	}
-
+	
 	public static int[] intCountingUp(int start, int end, int steps, int count) {
 		int[] in = new int[end - start];
 		for (int i = 0; i < in.length; i++)
 			in[i] = start + steps * (i / count);
 		return in;
 	}
-
+	
 	public static int[] toPrimitiveInt(Integer[] data) {
 		return Arrays.stream(data).map((Integer i) -> (i == null ? 0 : i)).mapToInt(Integer::intValue).toArray();
 	}
@@ -114,66 +114,66 @@ public final class PDRUtils {
 			y[i] = Byte.valueOf((byte) data[i]);
 		return y;
 	}
-
+	
 	public static float[] toPrimitiveFloat(Object[] data) {
 		float[] y = new float[data.length];
 		for (int i = 0; i < data.length; i++)
 			y[i] = Float.valueOf((float) data[i]);
 		return y;
 	}
-
+	
 	/*
 	 * public static int[] intRepeating(int[] is, int size) { int[] in = new
 	 * int[size*is.length]; for(int i = 0; i < is.length; i++) for(int j = 0; j <
 	 * size; j++) in[i*size+j] = is[i]; return in; }
 	 */
-
+	
 	public static float[] floatRepeating(float[] is, int size) {
 		if (size <= 0) {
 			throw new IllegalArgumentException("Size should be greater than 0");
 		}
-
+		
 		int originalLength = is.length;
 		int repeatedLength = originalLength * size;
 		float[] result = new float[repeatedLength];
-
+		
 		for (int i = 0; i < size; i++) {
 			System.arraycopy(is, 0, result, i * originalLength, originalLength);
 		}
-
+		
 		return result;
 	}
-
+	
 	public static Vector2f[] vec2Repeating(Vector2f[] is, int size) {
 		if (size <= 0) {
 			throw new IllegalArgumentException("Size should be greater than 0");
 		}
-
+		
 		int originalLength = is.length;
 		int repeatedLength = originalLength * size;
 		Vector2f[] result = new Vector2f[repeatedLength];
-
+		
 		for (int i = 0; i < size; i++) {
 			System.arraycopy(is, 0, result, i * originalLength, originalLength);
 		}
-
+		
 		return result;
 	}
-
+	
 	public static Matrix4f[] castArrayMat4f(Object[] transforms) {
 		Matrix4f[] t = new Matrix4f[transforms.length];
 		for (int i = 0; i < transforms.length; i++)
 			t[i] = (Matrix4f) transforms[i];
 		return t;
 	}
-
+	
 	public static Matrix3x2f[] castArrayMat3x2f(Object[] transforms) {
 		Matrix3x2f[] t = new Matrix3x2f[transforms.length];
 		for (int i = 0; i < transforms.length; i++)
 			t[i] = (Matrix3x2f) transforms[i];
 		return t;
 	}
-
+	
 	public static byte[] toByteArray(ByteBuffer cb) {
 		int old = cb.position();
 		System.out.println("pos: " + old + " " + cb.remaining());
@@ -183,16 +183,23 @@ public final class PDRUtils {
 		cb.position(old);
 		return c;
 	}
-
+	
 	public static double round(double round, int decimales) {
 		double places = Math.pow(10, decimales);
-		return Math.round(round * places)/places;
+		return Math.round(round * places) / places;
 	}
-
+	
 	public static float applyMinThreshold(float x, float min) {
 		return Math.abs(x) < min ? 0 : x;
 	}
-
+	
+	public static Color randomColor(boolean alpha) {
+		if (alpha)
+			return new Color((int) (Math.random()*255), (int) (Math.random()*255), (int) (Math.random()*255), (int) (Math.random()*255));
+		else
+			return new Color((int) (Math.random()*255), (int) (Math.random()*255), (int) (Math.random()*255));
+	}
+	
 	public static Color clampColor(int red, int green, int blue) {
 		return new Color(org.joml.Math.clamp(0, 255, red), org.joml.Math.clamp(0, 255, green), org.joml.Math.clamp(0, 255, blue));
 	}
@@ -200,16 +207,16 @@ public final class PDRUtils {
 	public static Color clampColor(int red, int green, int blue, int alpha) {
 		return new Color(org.joml.Math.clamp(0, 255, red), org.joml.Math.clamp(0, 255, green), org.joml.Math.clamp(0, 255, blue), org.joml.Math.clamp(0, 255, alpha));
 	}
-
+	
 	public static String fillString(String str, String place, int length) {
 		return (str.length() < length ? repeatString(place, length - str.length()) + str : str);
 	}
-
+	
 	private static String repeatString(String str, int count) {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < count; i++)
 			sb.append(str);
 		return sb.toString();
 	}
-
+	
 }

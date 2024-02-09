@@ -1,9 +1,15 @@
 package lu.pcy113.pdr.engine.utils;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.HashMap;
+
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
 import org.lwjgl.opengl.GL40;
 
+import lu.pcy113.pclib.GlobalLogger;
+import lu.pcy113.pclib.Pair;
 import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.geom.Gizmo;
@@ -15,9 +21,10 @@ import lu.pcy113.pdr.engine.graph.material.gizmo.GizmoShader.GizmoMaterial;
 import lu.pcy113.pdr.engine.graph.material.wireframe.WireframeMaterial;
 import lu.pcy113.pdr.engine.graph.material.wireframe.WireframeShader;
 import lu.pcy113.pdr.engine.graph.shader.RenderShader;
+import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.scene.Scene;
 
-public class DebugOptions {
+public class DebugOptions implements Cleanupable {
 
 	public boolean ignoreDepth = true;
 
@@ -127,6 +134,39 @@ public class DebugOptions {
 
 		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_FILL);
 		GL40.glEnable(GL40.GL_DEPTH_TEST);
+	}
+	
+	private FileWriter eventFileWriter;
+	private HashMap<String, Pair<Long, Long>> statuses = new HashMap<>();
+	
+	public DebugOptions() {
+		try {
+			this.eventFileWriter = new FileWriter(FileUtils.appendName(GlobalLogger.getLogger().getLogFile().getPath(), "-time"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void start(String type) {
+		statuses.put(type, new Pair<Long, Long>(System.currentTimeMillis(), System.nanoTime()));
+	}
+	public void end(String type) {
+		try {
+			Pair<Long, Long> status = statuses.remove(type);
+			eventFileWriter.append("start>"+type+":"+status.getKey()+":"+status.getValue()+"/end>"+System.currentTimeMillis()+":"+System.nanoTime()+"\n");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void cleanup() {
+		try {
+			eventFileWriter.flush();
+			eventFileWriter.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
