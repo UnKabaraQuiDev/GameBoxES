@@ -34,9 +34,6 @@ public class Material implements UniqueID {
 	}
 
 	public void bindProperties(CacheManager cache, Renderable parent, RenderShader shader) {
-		if(cache != null)
-			return;
-		
 		GameEngine.DEBUG.start("r_uniforms_bind_for");
 		for (Entry<String, Object> eso : properties.entrySet()) {
 			GameEngine.DEBUG.start("r_uniforms_bind_single");

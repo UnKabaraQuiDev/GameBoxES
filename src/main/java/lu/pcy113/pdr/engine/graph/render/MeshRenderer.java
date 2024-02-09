@@ -22,9 +22,6 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 		super(Mesh.class);
 	}
 	
-	private Scene previousScene;
-	private Matrix4f projectionMatrix = null, viewMatrix = null;
-	
 	@Override
 	public void render(CacheManager cache, Scene scene, MeshComponent m) {
 		Mesh mesh = m.getMesh(cache);
@@ -60,10 +57,7 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 		
 		GameEngine.DEBUG.start("r_uniforms");
 		GameEngine.DEBUG.start("r_uniforms_scene");
-		if(!Objects.equals(this.previousScene, scene)) {
-			this.previousScene = scene;
-			scene = null;
-		}
+		Matrix4f projectionMatrix = null, viewMatrix = null, transformationMatrix = new Matrix4f().identity();
 		if (scene != null) {
 			projectionMatrix = scene.getCamera().getProjection().getProjMatrix();
 			viewMatrix = scene.getCamera().getViewMatrix();
@@ -73,7 +67,6 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 		GameEngine.DEBUG.end("r_uniforms_scene");
 		
 		GameEngine.DEBUG.start("r_uniforms_transform");
-		Matrix4f transformationMatrix = new Matrix4f().identity();
 		if (m.getParent().hasComponent(TransformComponent.class)) {
 			TransformComponent transform = (TransformComponent) m.getParent().getComponent(m.getParent().getComponents(TransformComponent.class).get(0));
 			if (transform != null) {
