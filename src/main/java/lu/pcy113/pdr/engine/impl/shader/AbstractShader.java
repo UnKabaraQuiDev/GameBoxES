@@ -16,9 +16,11 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL21;
 import org.lwjgl.opengl.GL40;
+import org.lwjgl.system.MemoryStack;
 
 import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pclib.Pair;
+import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
 import lu.pcy113.pdr.engine.utils.Property;
@@ -63,6 +65,7 @@ public abstract class AbstractShader implements UniqueID, Cleanupable {
 	public abstract void createUniforms();
 
 	public void setUniform(String key, Object value) {
+		GameEngine.DEBUG.start("r_uniforms_bind_single_lookup");
 		Pair<Property<Object>, Integer> unif = uniforms.get(key);
 		if(unif == null) {
 			return;
@@ -72,12 +75,17 @@ public abstract class AbstractShader implements UniqueID, Cleanupable {
 		if(!prop.isChanged()) {
 			return;
 		}
+		GameEngine.DEBUG.end("r_uniforms_bind_single_lookup");
+		
+		GameEngine.DEBUG.start("r_uniforms_bind_single_bind");
 		if (value instanceof Integer) {
 			GL20.glUniform1i(unif.getValue(), (int) value);
 		} else if (value instanceof Float) {
 			GL20.glUniform1f(unif.getValue(), (float) value);
 		} else if (value instanceof Matrix4f) {
-			GL20.glUniformMatrix4fv(unif.getValue(), false, ((Matrix4f) value).get(new float[4 * 4]));
+			try (MemoryStack stack = MemoryStack.stackPush()) {
+				GL20.glUniformMatrix4fv(unif.getValue(), false, ((Matrix4f) value).get(stack.mallocFloat(16)));
+			}
 		} else if (value instanceof Vector3f) {
 			GL20.glUniform3f(unif.getValue(), ((Vector3f) value).x, ((Vector3f) value).y, ((Vector3f) value).z);
 		} else if (value instanceof Vector3i) {
@@ -96,10 +104,15 @@ public abstract class AbstractShader implements UniqueID, Cleanupable {
 		} else if (value instanceof Vector2i) {
 			GL20.glUniform2i(unif.getValue(), ((Vector2i) value).x, ((Vector2i) value).y);
 		} else if (value instanceof Matrix3f) {
-			GL20.glUniformMatrix3fv(unif.getValue(), false, ((Matrix3f) value).get(new float[3 * 3]));
+			try (MemoryStack stack = MemoryStack.stackPush()) {
+				GL20.glUniformMatrix3fv(unif.getValue(), false, ((Matrix3f) value).get(stack.mallocFloat(9)));
+			}
 		} else if (value instanceof Matrix3x2f) {
-			GL21.glUniformMatrix3x2fv(unif.getValue(), false, ((Matrix3x2f) value).get(new float[3 * 2]));
+			try (MemoryStack stack = MemoryStack.stackPush()) {
+				GL21.glUniformMatrix3x2fv(unif.getValue(), false, ((Matrix3x2f) value).get(stack.mallocFloat(6)));
+			}
 		}
+		GameEngine.DEBUG.end("r_uniforms_bind_single_bind");
 	}
 	
 	public int getUniformLocation(String name) {

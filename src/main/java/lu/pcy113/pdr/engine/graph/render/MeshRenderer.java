@@ -1,5 +1,6 @@
 package lu.pcy113.pdr.engine.graph.render;
 
+import java.util.Objects;
 import java.util.logging.Level;
 
 import org.joml.Matrix4f;
@@ -20,7 +21,10 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 	public MeshRenderer() {
 		super(Mesh.class);
 	}
-
+	
+	private Scene previousScene;
+	private Matrix4f projectionMatrix = null, viewMatrix = null;
+	
 	@Override
 	public void render(CacheManager cache, Scene scene, MeshComponent m) {
 		Mesh mesh = m.getMesh(cache);
@@ -32,9 +36,12 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 		GameEngine.DEBUG.start("r_mesh");
 		
 		GlobalLogger.log(Level.INFO, "Mesh : " + mesh.getId() + ", vao:" + mesh.getVao() + ", vec:" + mesh.getVertexCount() + ", vbo:" + mesh.getVbo());
-
+		
+		GameEngine.DEBUG.start("r_mesh_bind");
 		mesh.bind();
-
+		GameEngine.DEBUG.end("r_mesh_bind");
+		
+		GameEngine.DEBUG.start("r_mesh_ms_lookup");
 		Material material = mesh.getMaterial();
 		if (material == null) {
 			GlobalLogger.log(Level.WARNING, "Material is null!");
@@ -45,34 +52,49 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 			GlobalLogger.log(Level.WARNING, "Shader is null!");
 			return;
 		}
+		GameEngine.DEBUG.end("r_mesh_ms_lookup");
 
+		GameEngine.DEBUG.start("r_shader_bind");
 		shader.bind();
+		GameEngine.DEBUG.end("r_shader_bind");
 		
 		GameEngine.DEBUG.start("r_uniforms");
-
-		Matrix4f projectionMatrix = null, viewMatrix = null, transformationMatrix = new Matrix4f().identity();
+		GameEngine.DEBUG.start("r_uniforms_scene");
+		if(!Objects.equals(this.previousScene, scene)) {
+			this.previousScene = scene;
+			scene = null;
+		}
 		if (scene != null) {
 			projectionMatrix = scene.getCamera().getProjection().getProjMatrix();
 			viewMatrix = scene.getCamera().getViewMatrix();
-			material.setPropertyIfPresent(RenderShader.PROJECTION_MATRIX, projectionMatrix);
-			material.setPropertyIfPresent(RenderShader.VIEW_MATRIX, viewMatrix);
+			shader.setUniform(RenderShader.PROJECTION_MATRIX, projectionMatrix);
+			shader.setUniform(RenderShader.VIEW_MATRIX, viewMatrix);
 		}
+		GameEngine.DEBUG.end("r_uniforms_scene");
+		
+		GameEngine.DEBUG.start("r_uniforms_transform");
+		Matrix4f transformationMatrix = new Matrix4f().identity();
 		if (m.getParent().hasComponent(TransformComponent.class)) {
 			TransformComponent transform = (TransformComponent) m.getParent().getComponent(m.getParent().getComponents(TransformComponent.class).get(0));
 			if (transform != null) {
 				transformationMatrix = transform.getTransform().getMatrix();
 			}
 		}
-		material.setPropertyIfPresent(RenderShader.TRANSFORMATION_MATRIX, transformationMatrix);
-
-		material.bindProperties(cache, scene, shader);
-
-		if (shader.isTransparent()) {
-			GL40.glEnable(GL40.GL_BLEND);
-			GL40.glBlendFunc(GL40.GL_SRC_ALPHA, GL40.GL_ONE_MINUS_SRC_ALPHA);
-		}
+		// material.setPropertyIfPresent(RenderShader.TRANSFORMATION_MATRIX, transformationMatrix);
+		shader.setUniform(RenderShader.TRANSFORMATION_MATRIX, transformationMatrix);
+		GameEngine.DEBUG.end("r_uniforms_transform");
 		
+		GameEngine.DEBUG.start("r_uniforms_bind");
+		material.bindProperties(cache, scene, shader);
+		GameEngine.DEBUG.end("r_uniforms_bind");
 		GameEngine.DEBUG.end("r_uniforms");
+		
+		GameEngine.DEBUG.start("r_blend");
+		if (shader.isTransparent()) {
+			GL40.glBlendFunc(GL40.GL_SRC_ALPHA, GL40.GL_ONE_MINUS_SRC_ALPHA);
+			GL40.glEnable(GL40.GL_BLEND);
+		}
+		GameEngine.DEBUG.end("r_blend");
 		
 		GameEngine.DEBUG.start("r_draw");
 		GL40.glDrawElements(GL40.GL_TRIANGLES, mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);
@@ -81,7 +103,9 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 		GL40.glDisable(GL40.GL_BLEND);
 
 		// debug only
+		GameEngine.DEBUG.start("r_debug_wf");
 		GameEngine.DEBUG.wireframe(cache, scene, mesh, projectionMatrix, viewMatrix, transformationMatrix);
+		GameEngine.DEBUG.end("r_debug_wf");
 
 		mesh.unbind();
 		

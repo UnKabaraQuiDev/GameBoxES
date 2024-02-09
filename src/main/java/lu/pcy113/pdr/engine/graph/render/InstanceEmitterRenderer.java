@@ -78,10 +78,12 @@ public class InstanceEmitterRenderer extends Renderer<Scene, InstanceEmitterComp
 		
 		material.bindProperties(cache, scene, shader);
 		
+		GameEngine.DEBUG.start("r_blend");
 		if (shader.isTransparent()) {
 			GL40.glEnable(GL40.GL_BLEND);
 			GL40.glBlendFunc(GL40.GL_SRC_ALPHA, GL40.GL_ONE_MINUS_SRC_ALPHA);
 		}
+		GameEngine.DEBUG.end("r_blend");
 		
 		GameEngine.DEBUG.end("r_uniforms");
 		

@@ -6,7 +6,7 @@ import lu.pcy113.pdr.engine.utils.consts.Consts;
 
 public class WindowOptions {
 
-	public int fps = 60;
+	public int fps = 0;
 	public int ups = 30;
 	public boolean fullscreen = false;
 	public boolean vsync = false;

@@ -151,6 +151,9 @@ public class DebugOptions implements Cleanupable {
 		statuses.put(type, new Pair<Long, Long>(System.currentTimeMillis(), System.nanoTime()));
 	}
 	public void end(String type) {
+		/*if(type != null)
+			return;*/
+		
 		try {
 			Pair<Long, Long> status = statuses.remove(type);
 			eventFileWriter.append("start>"+type+":"+status.getKey()+":"+status.getValue()+"/end>"+System.currentTimeMillis()+":"+System.nanoTime()+"\n");

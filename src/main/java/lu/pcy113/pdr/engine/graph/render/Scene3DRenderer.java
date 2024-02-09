@@ -1,5 +1,6 @@
 package lu.pcy113.pdr.engine.graph.render;
 
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
@@ -11,7 +12,6 @@ import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.geom.instance.InstanceEmitter;
-import lu.pcy113.pdr.engine.objs.entity.Component;
 import lu.pcy113.pdr.engine.objs.entity.Entity;
 import lu.pcy113.pdr.engine.objs.entity.components.GizmoComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.InstanceEmitterComponent;
@@ -55,24 +55,26 @@ public class Scene3DRenderer extends Renderer<GameEngine, Scene3D> {
 		GameEngine.DEBUG.end("r_sort");
 		
 		GameEngine.DEBUG.start("r_for");
-		for (Entity e : scene.getEntities().values()) {
+		Collection<Entity> ce = scene.getEntities().values();
+		//for (Entity e : ce) {
+		ce.forEach((e)-> {
 			GameEngine.DEBUG.start("r_for_single");
 			if (!e.isActive()) {
-				continue;
+				return;
 			}
 			
-			Component c = null;
-			if ((c = e.getComponent(MeshComponent.class)) != null) {
-				meshRenderer.render(cache, scene, (MeshComponent) c);
-			} else if ((c = e.getComponent(GizmoComponent.class)) != null) {
-				gizmoRenderer.render(cache, scene, (GizmoComponent) c);
-			} else if ((c = e.getComponent(InstanceEmitterComponent.class)) != null) {
-				instanceEmitterRenderer.render(cache, scene, (InstanceEmitterComponent) c);
-			} else if ((c = e.getComponent(TextEmitterComponent.class)) != null) {
-				textEmitterRenderer.render(cache, scene, (TextEmitterComponent) c);
+			//Component c = null;
+			if (e.hasComponent(MeshComponent.class)) {
+				meshRenderer.render(cache, scene, (MeshComponent) e.getComponent(MeshComponent.class));
+			} else if (e.hasComponent(GizmoComponent.class)) {
+				gizmoRenderer.render(cache, scene, (GizmoComponent) e.getComponent(GizmoComponent.class));
+			} else if (e.hasComponent(InstanceEmitterComponent.class)) {
+				instanceEmitterRenderer.render(cache, scene, (InstanceEmitterComponent) e.getComponent(InstanceEmitterComponent.class));
+			} else if (e.hasComponent(TextEmitterComponent.class)) {
+				textEmitterRenderer.render(cache, scene, (TextEmitterComponent) e.getComponent(TextEmitterComponent.class));
 			}
 			GameEngine.DEBUG.end("r_for_single");
-		}
+		});
 		GameEngine.DEBUG.end("r_for");
 		
 		GameEngine.DEBUG.end("r_scene3d");

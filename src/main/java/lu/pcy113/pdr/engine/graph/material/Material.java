@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
+import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.graph.material.components.MaterialComponent;
 import lu.pcy113.pdr.engine.graph.shader.RenderShader;
@@ -16,6 +17,8 @@ public class Material implements UniqueID {
 	protected final String name;
 	protected Map<String, Object> properties;
 	protected RenderShader shader;
+	
+	//private FloatAttribArray uniforms;
 
 	public Material(String name, RenderShader shader) {
 		this.name = name;
@@ -23,12 +26,24 @@ public class Material implements UniqueID {
 		
 		this.properties = new HashMap<>();
 		shader.getUniforms().keySet().forEach(t -> properties.put(t, null));
+		
+		/*this.uniforms = new FloatAttribArray(name+"#"+hashCode(), -1, 1, new float[16], BufferType.UNIFORM.getGlId(), false);
+		uniforms.bind();
+		uniforms.init();
+		uniforms.unbind();*/
 	}
 
 	public void bindProperties(CacheManager cache, Renderable parent, RenderShader shader) {
+		if(cache != null)
+			return;
+		
+		GameEngine.DEBUG.start("r_uniforms_bind_for");
 		for (Entry<String, Object> eso : properties.entrySet()) {
+			GameEngine.DEBUG.start("r_uniforms_bind_single");
 			shader.setUniform(eso.getKey(), eso.getValue());
+			GameEngine.DEBUG.end("r_uniforms_bind_single");
 		}
+		GameEngine.DEBUG.end("r_uniforms_bind_for");
 	}
 
 	public void setProperty(String name, Object value) {
