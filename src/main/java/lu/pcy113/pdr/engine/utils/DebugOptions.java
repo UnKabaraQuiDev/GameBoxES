@@ -147,15 +147,14 @@ public class DebugOptions implements Cleanupable {
 		}
 	}
 	
-	public void start(String type) {
+	public synchronized void start(String type) {
 		statuses.put(type, new Pair<Long, Long>(System.currentTimeMillis(), System.nanoTime()));
 	}
-	public void end(String type) {
-		/*if(type != null)
-			return;*/
-		
+	public synchronized void end(String type) {
 		try {
 			Pair<Long, Long> status = statuses.remove(type);
+			if(status == null)
+				return;
 			eventFileWriter.append("start>"+type+":"+status.getKey()+":"+status.getValue()+"/end>"+System.currentTimeMillis()+":"+System.nanoTime()+"\n");
 		} catch (IOException e) {
 			e.printStackTrace();

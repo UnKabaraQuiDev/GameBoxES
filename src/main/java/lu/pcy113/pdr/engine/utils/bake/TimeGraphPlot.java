@@ -65,7 +65,7 @@ public class TimeGraphPlot {
 		colorMap.put("u_update", new Color(255, 0, 255));
 		colorMap.put("u_pollEvents", new Color(0, 0, 255));
 		
-		colorMap.put("r_render_loop", new Color(0, 128, 0));
+		colorMap.put("r_render_loop", new Color(0, 128, 255));
 		colorMap.put("r_clear", new Color(128, 0, 0));
 		colorMap.put("r_render", new Color(128, 0, 128));
 		colorMap.put("r_swap", new Color(0, 0, 128));
@@ -147,7 +147,7 @@ public class TimeGraphPlot {
 		
 		g.setStroke(new BasicStroke(1f));
 		for(int i = 0; i < GRAPH_WIDTH/PX_PER_MS_FACTOR; i++) {
-			System.out.println("w: "+(GRAPH_WIDTH/PX_PER_MS_FACTOR)+" i:"+(i*PX_PER_MS_FACTOR));
+			//System.out.println("w: "+(GRAPH_WIDTH/PX_PER_MS_FACTOR)+" i:"+(i*PX_PER_MS_FACTOR));
 			g.drawLine((int) (i*PX_PER_MS_FACTOR), 0, (int) (i*PX_PER_MS_FACTOR), GRAPH_HEIGHT);
 		}
 		
