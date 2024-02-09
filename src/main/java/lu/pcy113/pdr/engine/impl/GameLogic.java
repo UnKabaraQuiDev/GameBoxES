@@ -1,8 +1,9 @@
-package lu.pcy113.pdr.engine.logic;
+package lu.pcy113.pdr.engine.impl;
 
 import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.cache.SharedCacheManager;
 import lu.pcy113.pdr.engine.graph.window.Window;
+import lu.pcy113.pdr.engine.impl.nexttask.NextTask;
 
 public abstract class GameLogic {
 	
@@ -11,7 +12,7 @@ public abstract class GameLogic {
 	protected Window window;
 	
 	public void register(GameEngine e) {
-		if(this.engine != null)
+		if (this.engine != null)
 			throw new IllegalStateException("Already registered");
 		
 		this.engine = e;
@@ -21,21 +22,31 @@ public abstract class GameLogic {
 	}
 	
 	public abstract void init(GameEngine e);
-
+	
 	public abstract void input(float dTime);
-
+	
 	public abstract void update(float dTime);
-
+	
 	public abstract void render(float dTime);
+	
+	protected NextTask createTask(int target) {
+		return engine.createTask(target);
+	}
+	
+	protected boolean pushTask(NextTask nt) {
+		return engine.pushTask(nt);
+	}
 	
 	protected boolean waitForFrameEnd() {
 		return engine.waitForFrameEnd();
 	}
+	
 	protected boolean waitForUpdateEnd() {
 		return engine.waitForUpdateEnd();
 	}
+	
 	protected void stop() {
 		engine.stop();
 	}
-
+	
 }

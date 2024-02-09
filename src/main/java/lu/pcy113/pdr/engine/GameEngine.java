@@ -1,5 +1,7 @@
 package lu.pcy113.pdr.engine;
 
+import java.util.Objects;
+
 import org.joml.Vector3f;
 
 import lu.pcy113.pclib.GlobalLogger;
@@ -8,8 +10,10 @@ import lu.pcy113.pdr.engine.cache.SharedCacheManager;
 import lu.pcy113.pdr.engine.graph.window.Window;
 import lu.pcy113.pdr.engine.graph.window.WindowOptions;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
+import lu.pcy113.pdr.engine.impl.GameLogic;
 import lu.pcy113.pdr.engine.impl.UniqueID;
-import lu.pcy113.pdr.engine.logic.GameLogic;
+import lu.pcy113.pdr.engine.impl.nexttask.NextTask;
+import lu.pcy113.pdr.engine.impl.nexttask.NextTaskEnvironnment;
 import lu.pcy113.pdr.engine.utils.DebugOptions;
 import lu.pcy113.pdr.engine.utils.FileUtils;
 import lu.pcy113.pdr.engine.utils.bake.TimeGraphPlot;
@@ -35,6 +39,10 @@ public class GameEngine implements Cleanupable, UniqueID {
 					WAIT_FRAME_END_TIMEOUT = 500,
 					WAIT_UPDATE_END_TIMEOUT = 500; // ms
 	
+	public static int QUEUE_MAIN = 0,
+					QUEUE_RENDER = 1,
+					QUEUE_UPDATE = 2;
+	
 	public static DebugOptions DEBUG = new DebugOptions();
 	
 	private final String name;
@@ -58,16 +66,13 @@ public class GameEngine implements Cleanupable, UniqueID {
 	private final Object waitForFrameEnd = new Object();
 	private final Object waitForUpdateEnd = new Object();
 	
+	private NextTaskEnvironnment taskEnvironnment = new NextTaskEnvironnment(3);
+	
 	public GameEngine(String name, GameLogic game, WindowOptions options) {
 		this.name = name;
 		game.register(this);
 		this.gameLogic = game;
 		this.windowOptions = options;
-	}
-	
-	private boolean shouldRun() {
-		//System.out.println(Thread.currentThread().getName()+"> should close: "+!this.window.shouldClose()+" && "+this.running+" = "+(!this.window.shouldClose() && this.running));
-		return !this.window.shouldClose() && this.running && updateThread.isAlive() && renderThread.isAlive();
 	}
 	
 	public boolean waitForFrameEnd() {
@@ -146,6 +151,16 @@ public class GameEngine implements Cleanupable, UniqueID {
 						waitForUpdateEnd.notifyAll();
 					}
 				}
+				
+				queue: {
+					if(nextTask()) {
+						DEBUG.start("u_async_task");
+						NextTask nt = pullTask();
+						nt.execute(taskEnvironnment);
+						DEBUG.end("u_async_task");
+					}
+				}
+				
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -207,8 +222,17 @@ public class GameEngine implements Cleanupable, UniqueID {
 					
 					GlobalLogger.info("FPS: "+this.currentFps+" delta: "+((double) deltaRender/1_000_000)+"ms renderLoop: "+((double) (System.nanoTime() - loopStart) / 1_000_000)+"ms");
 				}
+				
+				queue: {
+					if(nextTask()) {
+						DEBUG.start("r_async_task");
+						NextTask nt = pullTask();
+						nt.execute(taskEnvironnment);
+						DEBUG.end("r_async_task");
+					}
+				}
+				
 			}
-			
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -277,9 +301,42 @@ public class GameEngine implements Cleanupable, UniqueID {
 		
 		TimeGraphPlot.main(new String[] {FileUtils.appendName(GlobalLogger.getLogger().getLogFile().getPath(), "-time")});
 	}
-
+	
 	public void stop() {
 		this.running = false;
+	}
+	
+	public NextTask createTask(int target) {
+		return new NextTask(getThreadId(), target);
+	}
+	
+	public int getThreadId() {
+		Thread current = Thread.currentThread();
+		if(Objects.equals(current, renderThread)) {
+			return QUEUE_RENDER;
+		}else if(Objects.equals(current, updateThread)) {
+			return QUEUE_UPDATE;
+		}else if(Objects.equals(current, mainThread)) {
+			return QUEUE_MAIN;
+		}
+		return -1;
+	}
+
+	public boolean pushTask(NextTask task) {
+		return taskEnvironnment.push(task.getTarget(), task);
+	}
+	
+	public boolean nextTask() {
+		return taskEnvironnment.hasNext(getThreadId());
+	}
+	
+	public NextTask pullTask() {
+		return taskEnvironnment.getNext(getThreadId());
+	}
+	
+	private boolean shouldRun() {
+		//System.out.println(Thread.currentThread().getName()+"> should close: "+!this.window.shouldClose()+" && "+this.running+" = "+(!this.window.shouldClose() && this.running));
+		return !this.window.shouldClose() && this.running && updateThread.isAlive() && renderThread.isAlive();
 	}
 	
 	@Override

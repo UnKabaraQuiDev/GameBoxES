@@ -36,8 +36,9 @@ import lu.pcy113.pdr.engine.graph.render.TextEmitterRenderer;
 import lu.pcy113.pdr.engine.graph.shader.RenderShader;
 import lu.pcy113.pdr.engine.graph.texture.CubemapTexture;
 import lu.pcy113.pdr.engine.graph.texture.Texture;
+import lu.pcy113.pdr.engine.impl.GameLogic;
+import lu.pcy113.pdr.engine.impl.nexttask.NextTask;
 import lu.pcy113.pdr.engine.impl.shader.AbstractShaderPart;
-import lu.pcy113.pdr.engine.logic.GameLogic;
 import lu.pcy113.pdr.engine.objs.entity.Entity;
 import lu.pcy113.pdr.engine.objs.entity.components.InstanceEmitterComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.MeshComponent;
@@ -352,6 +353,16 @@ public class PDRClientGame3 extends GameLogic {
 				inst.getBuffers()[0] = hover;
 			}
 		});
+		
+		NextTask nt = createTask(GameEngine.QUEUE_RENDER);
+		nt.exec((status) -> {
+			System.out.println("Hello from real function in: "+Thread.currentThread().getName());
+			return status;
+		}).then((status) -> {
+			System.out.println("Hello from callback function in: "+Thread.currentThread().getName());
+			return status;
+		});
+		pushTask(nt);
 		
 		debugInfo.setText("FPS: " + PDRUtils.round(engine.getCurrentFps(), 3) + "\n").updateText();
 		textEntity.getComponent(TextEmitterComponent.class).getTextEmitter(cache).setText("updated... " + engine.getCurrentFps()).updateText();
