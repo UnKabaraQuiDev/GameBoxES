@@ -363,6 +363,10 @@ public class PDRClientGame3 implements GameLogic {
 		debugInfo.setText("FPS: " + PDRUtils.round(engine.getCurrentFps(), 3) + "\n").updateText();
 		textEntity.getComponent(TextEmitterComponent.class).getTextEmitter(cache).setText("updated... " + engine.getCurrentFps()).updateText();
 		
+		/*long time = System.nanoTime();
+		boolean cc = engine.waitForFrameEnd();
+		System.err.println(Thread.currentThread().getName()+"> WAITED: "+(System.nanoTime()-time)+"ns for "+cc);*/
+		
 		// System.out.println("GX: "+GX+" int: "+backgroundMaterial.getColor());
 	}
 	

@@ -1,9 +1,5 @@
 package lu.pcy113.pdr.engine;
 
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 import org.joml.Vector3f;
 
 import lu.pcy113.pclib.GlobalLogger;
@@ -33,7 +29,9 @@ public class GameEngine implements Cleanupable, UniqueID {
 			BACK = new Vector3f(Y_NEG);
 	
 	public static long POLL_EVENT_TIMEOUT = 500,
-					BUFFER_SWAP_TIMEOUT = 500;
+					BUFFER_SWAP_TIMEOUT = 500,
+					WAIT_FRAME_END_TIMEOUT = 500,
+					WAIT_UPDATE_END_TIMEOUT = 500; // ms
 	
 	public static DebugOptions DEBUG = new DebugOptions();
 	
@@ -45,7 +43,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 	private GameLogic gameLogic;
 	
 	private boolean running = false;
-	private volatile boolean waitingForEvents = false, waitingForSwapBuffer = false;
+	private volatile boolean waitingForEvents = false;
 	
 	public int targetUps, targetFps;
 	private double currentFps;
@@ -55,11 +53,8 @@ public class GameEngine implements Cleanupable, UniqueID {
 	private ThreadGroup threadGroup;
 	private Thread updateThread, renderThread, mainThread;
 	
-	private final Object lock = new Object();
-    private final Lock renderLock = new ReentrantLock();
-    private final Lock updateLock = new ReentrantLock();
-    private final Condition renderFinished = renderLock.newCondition();
-    private final Condition updateFinished = updateLock.newCondition();
+	private final Object waitForFrameEnd = new Object();
+	private final Object waitForUpdateEnd = new Object();
 	
 	public GameEngine(String name, GameLogic game, WindowOptions options) {
 		this.name = name;
@@ -67,88 +62,39 @@ public class GameEngine implements Cleanupable, UniqueID {
 		this.windowOptions = options;
 	}
 	
-	/*@Override
-	public void run() {
-		this.targetFps = this.window.getOptions().fps;
-		
-		this.startTime = System.currentTimeMillis();
-		long initialTime = this.startTime;
-		float timeU = 1000.0f / this.targetUps;
-		float timeR = this.targetFps > 0 ? 1000.0f / this.targetFps : 0;
-		float deltaUpdate = 0;
-		float deltaFps = 0;
-		
-		// DEBUG
-		// time between
-		long delayInput = 0, delayRender = 0, delayUpdate = 0;
-		// time to process
-		long processInput = 0, processRender = 0, processUpdate = 0;
-		
-		long lastUpdate = 0;
-		long lastRender = 0;
-		long lastInput = 0;
-		while (!this.shouldClose()) {
-			this.window.pollEvents();
-			
-			long now = System.currentTimeMillis();
-			deltaUpdate += (now - initialTime) / timeU;
-			deltaFps += (now - initialTime) / timeR;
-			
-			if (this.targetFps <= 0 || deltaFps >= 1) {
-				long start = System.nanoTime();
-				delayInput = now - lastInput;
-				
-				this.gameLogic.input(now - lastInput);
-				this.window.clearScroll();
-				
-				processInput = System.nanoTime() - start;
-				
-				lastInput = now;
-			}
-			
-			if (deltaUpdate >= 1) {
-				long start = System.nanoTime();
-				delayUpdate = now - lastUpdate;
-				
-				this.gameLogic.update(now - lastUpdate);
-				
-				processUpdate = System.nanoTime() - start;
-				
-				lastUpdate = now;
-				deltaUpdate--;
-			}
-			
-			if (this.targetFps <= 0 || deltaFps >= 1) {
-				long start = System.nanoTime();
-				delayRender = now - lastRender;
-				
-				this.window.clear();
-				this.gameLogic.render(now - lastRender);
-				this.window.swapBuffers();
-				
-				processRender = System.nanoTime() - start;
-				
-				lastRender = now;
-				deltaFps--;
-			}
-			
-			initialTime = now;
-			
-			this.currentFps = (double) 1 / ((double) delayRender / 1_000);
-			GlobalLogger.log(Level.INFO, String.format("input duration: %fms; update duration: %fms; render duration: %fms\ninput delay: %dns; update delay: %dns; render delay: %dns\nFrame rate: %ffps",
-					(double) processInput / 1_000_000, (double) processUpdate / 1_000_000, (double) processRender / 1_000_000,
-					delayInput, delayUpdate, delayRender,
-					currentFps));
-		}
-		this.running = !this.window.shouldClose();
-		this.stop();
-	}
-	*/
 	private boolean shouldRun() {
 		//System.out.println(Thread.currentThread().getName()+"> should close: "+!this.window.shouldClose()+" && "+this.running+" = "+(!this.window.shouldClose() && this.running));
-		return !this.window.shouldClose() && this.running;
+		return !this.window.shouldClose() && this.running && updateThread.isAlive() && renderThread.isAlive();
 	}
-
+	
+	public boolean waitForFrameEnd() {
+		if(Thread.currentThread().equals(renderThread))
+			throw new IllegalAccessError(renderThread.getName()+" cannot wait for itself");
+		
+		synchronized (waitForFrameEnd) {
+			try {
+				waitForFrameEnd.wait(WAIT_FRAME_END_TIMEOUT);
+				return true;
+			} catch (InterruptedException e) {
+				return true;
+			}
+		}
+	}
+	
+	public boolean waitForUpdateEnd() {
+		if(Thread.currentThread().equals(updateThread))
+			throw new IllegalAccessError(updateThread.getName()+" cannot wait for itself");
+		
+		synchronized (waitForUpdateEnd) {
+			try {
+				waitForUpdateEnd.wait(WAIT_UPDATE_END_TIMEOUT);
+				return true;
+			} catch (InterruptedException e) {
+				return true;
+			}
+		}
+	}
+	
 	public void updateRun() {
 		if(!running) {
 			try {
@@ -162,31 +108,40 @@ public class GameEngine implements Cleanupable, UniqueID {
 			}
 		}
 		
-		this.targetUps = this.window.getOptions().ups;
-		long lastTime = System.nanoTime(); // nanos
-		float timeUps = 1e9f / this.targetUps;
+		try {
 		
-		while(this.shouldRun()) {
-			long now = System.nanoTime();
+			this.targetUps = this.window.getOptions().ups;
+			long lastTime = System.nanoTime(); // nanos
+			float timeUps = 1e9f / this.targetUps;
 			
-			long deltaUpdate = now - lastTime;
-			if(deltaUpdate > timeUps) {
-				DEBUG.start("u_update_loop");
-				DEBUG.start("u_pollEvents");
-				this.pollEvents();
-				DEBUG.end("u_pollEvents");
-				DEBUG.start("u_input");
-				this.gameLogic.input(deltaUpdate);
-				DEBUG.end("u_input");
-				this.window.clearScroll();
+			while(this.shouldRun()) {
+				long now = System.nanoTime();
 				
-				DEBUG.start("u_update");
-				this.gameLogic.update(deltaUpdate);
-				DEBUG.end("u_update");
-				
-				lastTime = now;
-				DEBUG.end("u_update_loop");
+				long deltaUpdate = now - lastTime;
+				if(deltaUpdate > timeUps) {
+					DEBUG.start("u_update_loop");
+					DEBUG.start("u_pollEvents");
+					this.pollEvents();
+					DEBUG.end("u_pollEvents");
+					DEBUG.start("u_input");
+					this.gameLogic.input(deltaUpdate);
+					DEBUG.end("u_input");
+					this.window.clearScroll();
+					
+					DEBUG.start("u_update");
+					this.gameLogic.update(deltaUpdate);
+					DEBUG.end("u_update");
+					
+					lastTime = now;
+					DEBUG.end("u_update_loop");
+					
+					synchronized (waitForUpdateEnd) {
+						waitForUpdateEnd.notifyAll();
+					}
+				}
 			}
+		}catch(Exception e) {
+			e.printStackTrace();
 		}
 		
 		this.stop();
@@ -205,38 +160,48 @@ public class GameEngine implements Cleanupable, UniqueID {
 	public void renderRun() {
 		this.window.takeGlContext();
 		
-		this.gameLogic.init(this);
-		running = true;
-		updateThread.interrupt();
-		mainThread.interrupt();
+		try {
 		
-		this.targetFps = this.window.getOptions().fps;
-		long lastTime = System.nanoTime(); // nanos
-		float timeUps = this.targetFps > 0 ? 1e9f / this.targetFps : 0;
-		
-		while(this.shouldRun()) {
-			long now = System.nanoTime();
+			this.gameLogic.init(this);
+			running = true;
+			updateThread.interrupt();
+			mainThread.interrupt();
 			
-			long deltaRender = now - lastTime;
-			if(deltaRender > timeUps) {
-				DEBUG.start("r_render_loop");
-				DEBUG.start("r_clear");
-				//this.window.clear();
-				DEBUG.end("r_clear");
-				DEBUG.start("r_render");
-				this.gameLogic.render(deltaRender);
-				DEBUG.end("r_render");
-				DEBUG.start("r_swap");
-				this.window.swapBuffers();
-				DEBUG.end("r_swap");
+			this.targetFps = this.window.getOptions().fps;
+			long lastTime = System.nanoTime(); // nanos
+			float timeUps = this.targetFps > 0 ? 1e9f / this.targetFps : 0;
+			
+			while(this.shouldRun()) {
+				long now = System.nanoTime();
 				
-				lastTime = now;
-				
-				this.currentFps = (double) 1 / ((double) deltaRender / 1_000_000_000);
-				DEBUG.end("r_render_loop");
-				
-				GlobalLogger.info("FPS: "+this.currentFps+" delta: "+((double) deltaRender/1_000_000)+"ms");
+				long deltaRender = now - lastTime;
+				if(deltaRender > timeUps) {
+					DEBUG.start("r_render_loop");
+					DEBUG.start("r_clear");
+					//this.window.clear();
+					DEBUG.end("r_clear");
+					DEBUG.start("r_render");
+					this.gameLogic.render(deltaRender);
+					DEBUG.end("r_render");
+					DEBUG.start("r_swap");
+					this.window.swapBuffers();
+					DEBUG.end("r_swap");
+					
+					lastTime = now;
+					
+					this.currentFps = (double) 1 / ((double) deltaRender / 1_000_000_000);
+					DEBUG.end("r_render_loop");
+					
+					synchronized (waitForFrameEnd) {
+						waitForFrameEnd.notifyAll(); // wake up waiting threads
+					}
+					
+					GlobalLogger.info("FPS: "+this.currentFps+" delta: "+((double) deltaRender/1_000_000)+"ms");
+				}
 			}
+			
+		}catch(Exception e) {
+			e.printStackTrace();
 		}
 		
 		this.window.clearGLContext();
