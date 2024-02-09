@@ -18,15 +18,17 @@ import org.lwjgl.opengl.GL21;
 import org.lwjgl.opengl.GL40;
 
 import lu.pcy113.pclib.GlobalLogger;
+import lu.pcy113.pclib.Pair;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
+import lu.pcy113.pdr.engine.utils.Property;
 
 public abstract class AbstractShader implements UniqueID, Cleanupable {
 	
 	protected final String name;
 	protected int shaderProgram = -1;
 	protected Map<Integer, AbstractShaderPart> parts;
-	protected Map<String, Integer> uniforms;
+	protected Map<String, Pair<Property<Object>, Integer>> uniforms;
 	
 	public AbstractShader(String name, AbstractShaderPart... parts) {
 		this.name = name;
@@ -61,41 +63,51 @@ public abstract class AbstractShader implements UniqueID, Cleanupable {
 	public abstract void createUniforms();
 
 	public void setUniform(String key, Object value) {
+		Pair<Property<Object>, Integer> unif = uniforms.get(key);
+		if(unif == null) {
+			return;
+		}
+		Property<Object> prop = unif.hasKey() ? unif.getKey() : new Property<Object>();
+		prop.setValue(value);
+		if(!prop.isChanged()) {
+			return;
+		}
 		if (value instanceof Integer) {
-			GL20.glUniform1i(this.getUniform(key), (int) value);
+			GL20.glUniform1i(unif.getValue(), (int) value);
 		} else if (value instanceof Float) {
-			GL20.glUniform1f(this.getUniform(key), (float) value);
+			GL20.glUniform1f(unif.getValue(), (float) value);
 		} else if (value instanceof Matrix4f) {
-			GL20.glUniformMatrix4fv(this.getUniform(key), false, ((Matrix4f) value).get(new float[4 * 4]));
+			GL20.glUniformMatrix4fv(unif.getValue(), false, ((Matrix4f) value).get(new float[4 * 4]));
 		} else if (value instanceof Vector3f) {
-			GL20.glUniform3f(this.getUniform(key), ((Vector3f) value).x, ((Vector3f) value).y, ((Vector3f) value).z);
+			GL20.glUniform3f(unif.getValue(), ((Vector3f) value).x, ((Vector3f) value).y, ((Vector3f) value).z);
 		} else if (value instanceof Vector3i) {
-			GL20.glUniform3i(this.getUniform(key), ((Vector3i) value).x, ((Vector3i) value).y, ((Vector3i) value).z);
+			GL20.glUniform3i(unif.getValue(), ((Vector3i) value).x, ((Vector3i) value).y, ((Vector3i) value).z);
 		} else if (value instanceof Vector4f) {
-			GL20.glUniform4f(this.getUniform(key), ((Vector4f) value).x, ((Vector4f) value).y, ((Vector4f) value).z, ((Vector4f) value).w);
+			GL20.glUniform4f(unif.getValue(), ((Vector4f) value).x, ((Vector4f) value).y, ((Vector4f) value).z, ((Vector4f) value).w);
 		} else if (value instanceof Double) {
-			GL40.glUniform1d(this.getUniform(key), (double) value);
+			GL40.glUniform1d(unif.getValue(), (double) value);
 		} else if (value instanceof Character) {
 			// System.out.println("is char: " + value + " > " + ((char) value) + " > " +
 			// (Integer.valueOf((char) value)));
 			assert value instanceof Character : "Trying to set char uniform";
 			this.setUniform(key, Integer.valueOf((char) value));
 		} else if (value instanceof Vector2f) {
-			GL20.glUniform2f(this.getUniform(key), ((Vector2f) value).x, ((Vector2f) value).y);
+			GL20.glUniform2f(unif.getValue(), ((Vector2f) value).x, ((Vector2f) value).y);
 		} else if (value instanceof Vector2i) {
-			GL20.glUniform2i(this.getUniform(key), ((Vector2i) value).x, ((Vector2i) value).y);
+			GL20.glUniform2i(unif.getValue(), ((Vector2i) value).x, ((Vector2i) value).y);
 		} else if (value instanceof Matrix3f) {
-			GL20.glUniformMatrix3fv(this.getUniform(key), false, ((Matrix3f) value).get(new float[3 * 3]));
+			GL20.glUniformMatrix3fv(unif.getValue(), false, ((Matrix3f) value).get(new float[3 * 3]));
 		} else if (value instanceof Matrix3x2f) {
-			GL21.glUniformMatrix3x2fv(this.getUniform(key), false, ((Matrix3x2f) value).get(new float[3 * 2]));
+			GL21.glUniformMatrix3x2fv(unif.getValue(), false, ((Matrix3x2f) value).get(new float[3 * 2]));
 		}
 	}
 	
-	public int getUniform(String name) {
+	public int getUniformLocation(String name) {
 		if (!this.hasUniform(name))
 			if (!this.createUniform(name))
 				return -1;
-		return this.uniforms.get(name);
+		
+		return this.uniforms.get(name).getValue();
 	}
 
 	public boolean hasUniform(String name) {
@@ -104,12 +116,14 @@ public abstract class AbstractShader implements UniqueID, Cleanupable {
 
 	public boolean createUniform(String name) {
 		int loc = GL20.glGetUniformLocation(this.shaderProgram, name);
+		
 		if (loc != -1) {
-			this.uniforms.put(name, loc);
+			this.uniforms.put(name, new Pair<>(new Property<>(), loc));
 			return true;
 		} else {
 			GlobalLogger.log(Level.SEVERE, "Could not get Uniform location for: " + name + " in program " + this.name + " (" + this.shaderProgram + ") (" + GL11.glGetError() + ")");
 		}
+		
 		return false;
 	}
 
@@ -138,9 +152,9 @@ public abstract class AbstractShader implements UniqueID, Cleanupable {
 	public Map<Integer, AbstractShaderPart> getParts() {
 		return this.parts;
 	}
-
-	public Map<String, Integer> getUniforms() {
-		return this.uniforms;
+	
+	public Map<String, Pair<Property<Object>, Integer>> getUniforms() {
+		return uniforms;
 	}
 	
 }

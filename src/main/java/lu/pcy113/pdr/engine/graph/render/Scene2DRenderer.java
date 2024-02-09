@@ -26,12 +26,15 @@ public class Scene2DRenderer extends Renderer<GameEngine, Scene2D> {
 	@Override
 	public void render(CacheManager cache, GameEngine engine, Scene2D scene) {
 		GlobalLogger.log(Level.INFO, "Scene2D : " + scene.getId());
-
+		
+		GameEngine.DEBUG.start("r_scene2d");
+		
 		MeshRenderer meshRenderer = (MeshRenderer) cache.getRenderer(Mesh.NAME);
 		GizmoRenderer gizmoRenderer = (GizmoRenderer) cache.getRenderer(Gizmo.NAME);
 		InstanceEmitterRenderer instanceEmitterRenderer = (InstanceEmitterRenderer) cache.getRenderer(InstanceEmitter.NAME);
 		TextEmitterRenderer textEmitterRenderer = (TextEmitterRenderer) cache.getRenderer(TextEmitter.NAME);
 
+		GameEngine.DEBUG.start("r_for");
 		for (Entity e : scene.getEntities().values()) {
 			if (!e.isActive())
 				continue;
@@ -47,6 +50,9 @@ public class Scene2DRenderer extends Renderer<GameEngine, Scene2D> {
 				textEmitterRenderer.render(cache, scene, (TextEmitterComponent) c);
 			}
 		}
-	};
+		GameEngine.DEBUG.end("r_for");
+		
+		GameEngine.DEBUG.end("r_scene2d");
+	}
 
 }

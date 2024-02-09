@@ -17,7 +17,6 @@ import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.anim.CallbackValueInterpolation;
 import lu.pcy113.pdr.engine.anim.Vec4fCallbackValueInterpolation;
 import lu.pcy113.pdr.engine.audio.AudioMaster;
-import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.cache.attrib.FloatAttribArray;
 import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.geom.ObjLoader;
@@ -37,7 +36,6 @@ import lu.pcy113.pdr.engine.graph.render.TextEmitterRenderer;
 import lu.pcy113.pdr.engine.graph.shader.RenderShader;
 import lu.pcy113.pdr.engine.graph.texture.CubemapTexture;
 import lu.pcy113.pdr.engine.graph.texture.Texture;
-import lu.pcy113.pdr.engine.graph.window.Window;
 import lu.pcy113.pdr.engine.impl.shader.AbstractShaderPart;
 import lu.pcy113.pdr.engine.logic.GameLogic;
 import lu.pcy113.pdr.engine.objs.entity.Entity;
@@ -359,7 +357,7 @@ public class PDRClientGame3 extends GameLogic {
 		textEntity.getComponent(TextEmitterComponent.class).getTextEmitter(cache).setText("updated... " + engine.getCurrentFps()).updateText();
 		
 		/*long time = System.nanoTime();
-		boolean cc = engine.waitForFrameEnd();
+		boolean cc = waitForFrameEnd();
 		System.err.println(Thread.currentThread().getName()+"> WAITED: "+(System.nanoTime()-time)+"ns for "+cc);*/
 		
 		// System.out.println("GX: "+GX+" int: "+backgroundMaterial.getColor());
@@ -367,7 +365,7 @@ public class PDRClientGame3 extends GameLogic {
 	
 	@Override
 	public void render(float dTime) {
-		//compositor.render(cache, engine);
+		compositor.render(cache, engine);
 		
 		/*TextureRenderer txtRenderer = new TextureRenderer("txtRenderer", cache, new Vector2i(800, 800), 1);
 		txtRenderer.bind();

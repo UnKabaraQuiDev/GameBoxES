@@ -21,8 +21,7 @@ import lu.pcy113.pdr.engine.graph.texture.CubemapTexture;
 import lu.pcy113.pdr.engine.graph.texture.SingleTexture;
 import lu.pcy113.pdr.engine.graph.texture.Texture;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
-import lu.pcy113.pdr.engine.objs.GizmoModel;
-import lu.pcy113.pdr.engine.objs.PointLight;
+import lu.pcy113.pdr.engine.objs.lights.PointLight;
 import lu.pcy113.pdr.engine.objs.text.TextEmitter;
 import lu.pcy113.pdr.engine.scene.Scene;
 import lu.pcy113.pdr.engine.utils.consts.TextureFilter;
@@ -39,7 +38,6 @@ public class CacheManager implements Cleanupable {
 	protected Map<String, Texture> textures;
 	protected Map<String, PointLight> pointLights;
 	protected Map<String, Gizmo> gizmos;
-	protected Map<String, GizmoModel> gizmoModels;
 	protected Map<String, RenderLayer> renderLayers;
 	protected Map<String, TextEmitter> textEmitters;
 	protected Map<String, InstanceEmitter> instanceEmitters;
@@ -55,7 +53,6 @@ public class CacheManager implements Cleanupable {
 		this.textures = new HashMap<>();
 		this.pointLights = new HashMap<>();
 		this.gizmos = new HashMap<>();
-		this.gizmoModels = new HashMap<>();
 		this.renderLayers = new HashMap<>();
 		this.textEmitters = new HashMap<>();
 		this.instanceEmitters = new HashMap<>();
@@ -88,9 +85,6 @@ public class CacheManager implements Cleanupable {
 		
 		this.gizmos.values().forEach(Gizmo::cleanup);
 		this.gizmos.clear();
-		
-		// gizmoModels.values().forEach(GizmoModel::cleanup);
-		this.gizmoModels.clear();
 		
 		this.renderLayers.values().forEach(RenderLayer::cleanup);
 		this.renderLayers.clear();
@@ -158,12 +152,6 @@ public class CacheManager implements Cleanupable {
 		if (this.gizmos.containsKey(m.getId()))
 			this.gizmos.remove(m.getId()).cleanup();
 		return this.gizmos.putIfAbsent(m.getId(), m) == null;
-	}
-	
-	public boolean addGizmoModel(GizmoModel m) {
-		if (this.gizmoModels.containsKey(m.getId()))
-			this.gizmoModels.remove(m.getId());
-		return this.gizmoModels.putIfAbsent(m.getId(), m) == null;
 	}
 	
 	public boolean addRenderLayer(RenderLayer m) {
@@ -235,10 +223,6 @@ public class CacheManager implements Cleanupable {
 	
 	public Gizmo getGizmo(String name) {
 		return this.gizmos.get(name);
-	}
-	
-	public GizmoModel getGizmoModel(String name) {
-		return this.gizmoModels.get(name);
 	}
 	
 	public RenderLayer getRenderLayer(String name) {
@@ -319,14 +303,6 @@ public class CacheManager implements Cleanupable {
 	
 	public void setGizmos(Map<String, Gizmo> gizmos) {
 		this.gizmos = gizmos;
-	}
-	
-	public Map<String, GizmoModel> getGizmoModels() {
-		return this.gizmoModels;
-	}
-	
-	public void setGizmoModels(Map<String, GizmoModel> gizmoModels) {
-		this.gizmoModels = gizmoModels;
 	}
 	
 	public Map<String, RenderLayer> getRenderLayers() {
@@ -481,7 +457,6 @@ public class CacheManager implements Cleanupable {
 		out.println(RenderShader.class.getName() + ": " + this.shaders.size() + ": " + this.shaders);
 		out.println(Texture.class.getName() + ": " + this.textures.size() + ": " + this.textures);
 		out.println(Gizmo.class.getName() + ": " + this.gizmos.size() + ": " + this.gizmos);
-		out.println(GizmoModel.class.getName() + ": " + this.gizmoModels.size() + ": " + this.gizmoModels);
 		out.println(RenderLayer.class.getName() + ": " + this.renderLayers.size() + ": " + this.renderLayers);
 		out.println(TextEmitter.class.getName() + ": " + this.textEmitters.size() + ": " + this.textEmitters);
 		out.println(PointLight.class.getName() + ": " + this.pointLights.size() + ": " + this.pointLights);

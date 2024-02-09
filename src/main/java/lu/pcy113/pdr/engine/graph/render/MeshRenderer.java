@@ -28,7 +28,9 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 			GlobalLogger.log(Level.WARNING, "Mesh is null!");
 			return;
 		}
-
+		
+		GameEngine.DEBUG.start("r_mesh");
+		
 		GlobalLogger.log(Level.INFO, "Mesh : " + mesh.getId() + ", vao:" + mesh.getVao() + ", vec:" + mesh.getVertexCount() + ", vbo:" + mesh.getVbo());
 
 		mesh.bind();
@@ -45,6 +47,8 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 		}
 
 		shader.bind();
+		
+		GameEngine.DEBUG.start("r_uniforms");
 
 		Matrix4f projectionMatrix = null, viewMatrix = null, transformationMatrix = new Matrix4f().identity();
 		if (scene != null) {
@@ -67,8 +71,12 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 			GL40.glEnable(GL40.GL_BLEND);
 			GL40.glBlendFunc(GL40.GL_SRC_ALPHA, GL40.GL_ONE_MINUS_SRC_ALPHA);
 		}
-
+		
+		GameEngine.DEBUG.end("r_uniforms");
+		
+		GameEngine.DEBUG.start("r_draw");
 		GL40.glDrawElements(GL40.GL_TRIANGLES, mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);
+		GameEngine.DEBUG.end("r_draw");
 
 		GL40.glDisable(GL40.GL_BLEND);
 
@@ -76,6 +84,8 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 		GameEngine.DEBUG.wireframe(cache, scene, mesh, projectionMatrix, viewMatrix, transformationMatrix);
 
 		mesh.unbind();
+		
+		GameEngine.DEBUG.end("r_mesh");
 
 		GameEngine.DEBUG.gizmos(cache, scene, projectionMatrix, viewMatrix, transformationMatrix);
 	}

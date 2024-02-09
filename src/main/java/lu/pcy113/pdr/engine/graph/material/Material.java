@@ -19,9 +19,10 @@ public class Material implements UniqueID {
 
 	public Material(String name, RenderShader shader) {
 		this.name = name;
+		this.shader = shader;
+		
 		this.properties = new HashMap<>();
 		shader.getUniforms().keySet().forEach(t -> properties.put(t, null));
-		this.shader = shader;
 	}
 
 	public void bindProperties(CacheManager cache, Renderable parent, RenderShader shader) {

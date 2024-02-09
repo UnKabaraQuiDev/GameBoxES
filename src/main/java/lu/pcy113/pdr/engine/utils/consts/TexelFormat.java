@@ -21,6 +21,7 @@ public enum TexelFormat implements GLConstant {
 
 	private TexelFormat(int id, TexelFormat base) {
 		this.glId = id;
+		this.base = base;
 	}
 
 	@Override

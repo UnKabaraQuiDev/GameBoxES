@@ -27,11 +27,13 @@ public class GizmoRenderer extends Renderer<Scene, GizmoComponent> {
 		Gizmo gizmo = gi.getGizmo(cache);
 		if (gizmo == null)
 			return;
-
+		
+		GameEngine.DEBUG.start("r_gizmo");
+		
 		GlobalLogger.log(Level.INFO, "Gizmo : " + gizmo.getId());
 
 		gizmo.bind();
-
+		
 		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_LINE);
 		GizmoMaterial material;
 		if (cache.hasMaterial(GizmoShader.GizmoMaterial.NAME)) {
@@ -42,7 +44,9 @@ public class GizmoRenderer extends Renderer<Scene, GizmoComponent> {
 		RenderShader shader = material.getShader();
 
 		shader.bind();
-
+		
+		GameEngine.DEBUG.start("r_uniforms");
+		
 		if (scene != null) {
 			Matrix4f projectionMatrix = scene.getCamera().getProjection().getProjMatrix();
 			Matrix4f viewMatrix = scene.getCamera().getViewMatrix();
@@ -53,18 +57,25 @@ public class GizmoRenderer extends Renderer<Scene, GizmoComponent> {
 		}
 
 		material.bindProperties(cache, scene, shader);
-
+		
+		GameEngine.DEBUG.end("r_uniforms");
+		
 		if (GameEngine.DEBUG.ignoreDepth)
 			GL40.glDisable(GL40.GL_DEPTH_TEST);
+		
 		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_LINE);
-
 		GL40.glLineWidth(Gizmo.LINE_WIDTH);
+		
+		GameEngine.DEBUG.start("r_draw");
 		GL40.glDrawElements(GL40.GL_LINES, gizmo.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);
+		GameEngine.DEBUG.end("r_draw");
 
 		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_FILL);
 		GL40.glEnable(GL40.GL_DEPTH_TEST);
 
 		gizmo.unbind();
+		
+		GameEngine.DEBUG.end("r_gizmo");
 	}
 
 	@Override

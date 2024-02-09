@@ -60,9 +60,10 @@ public class PassRenderLayer extends RenderLayer<GameEngine, Framebuffer, Mesh> 
 		material.setPropertyIfPresent(SCREEN_WIDTH, engine.getWindow().getWidth());
 		
 		for(Entry<Integer, Texture> attachments : fb.getAttachments().entrySet()) {
-			GlobalLogger.info("Attachment: "+shader.getUniform(attachments.getValue().getId())+" "+material.getProperty(attachments.getValue().getId())+" "+attachments);
-			//material.setProperty(attachments.getValue().getId(), attachments.getValue().getTid());
-			int id = shader.getUniform(attachments.getValue().getId());
+			// GlobalLogger.info("Attachment: "+shader.getUniform(attachments.getValue().getId())+" "+material.getProperty(attachments.getValue().getId())+" "+attachments);
+			// material.setProperty(attachments.getValue().getId(), attachments.getValue().getTid());
+			
+			int id = shader.getUniformLocation(attachments.getValue().getId());
 			if(id != -1) {
 				attachments.getValue().bind(id);
 			}

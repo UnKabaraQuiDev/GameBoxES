@@ -1,4 +1,4 @@
-package lu.pcy113.pdr.engine.objs;
+package lu.pcy113.pdr.engine.objs.lights;
 
 import org.joml.Vector3f;
 

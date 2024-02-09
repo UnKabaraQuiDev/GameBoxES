@@ -16,11 +16,11 @@ public class WireframeShader extends RenderShader {
 	@Override
 	public void createUniforms() {
 		// vert
-		getUniform(RenderShader.PROJECTION_MATRIX);
-		getUniform(RenderShader.VIEW_MATRIX);
-		getUniform(RenderShader.TRANSFORMATION_MATRIX);
+		createUniform(RenderShader.PROJECTION_MATRIX);
+		createUniform(RenderShader.VIEW_MATRIX);
+		createUniform(RenderShader.TRANSFORMATION_MATRIX);
 		// frag
-		getUniform(COLOR);
+		createUniform(COLOR);
 	}
 
 }

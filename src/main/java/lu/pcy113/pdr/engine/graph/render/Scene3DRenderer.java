@@ -36,12 +36,15 @@ public class Scene3DRenderer extends Renderer<GameEngine, Scene3D> {
 	@Override
 	public void render(CacheManager cache, GameEngine ge, Scene3D scene) {
 		GlobalLogger.log(Level.INFO, "Scene3D : " + scene.getId());
-
+		
+		GameEngine.DEBUG.start("r_scene3d");
+		
 		MeshRenderer meshRenderer = (MeshRenderer) cache.getRenderer(Mesh.NAME);
 		GizmoRenderer gizmoRenderer = (GizmoRenderer) cache.getRenderer(Gizmo.NAME);
 		InstanceEmitterRenderer instanceEmitterRenderer = (InstanceEmitterRenderer) cache.getRenderer(InstanceEmitter.NAME);
 		TextEmitterRenderer textEmitterRenderer = (TextEmitterRenderer) cache.getRenderer(TextEmitter.NAME);
 		
+		GameEngine.DEBUG.start("r_sort");
 		LinkedHashMap<String, Entity> sortedMap = scene.getEntities().entrySet()
 				.stream()
 				.sorted(COMPARATOR)
@@ -49,11 +52,15 @@ public class Scene3DRenderer extends Renderer<GameEngine, Scene3D> {
 						(linkedHashMap, entry) -> linkedHashMap.put(entry.getKey(), entry.getValue()),
 						LinkedHashMap::putAll);
 		scene.setEntities(sortedMap);
+		GameEngine.DEBUG.end("r_sort");
 		
+		GameEngine.DEBUG.start("r_for");
 		for (Entity e : scene.getEntities().values()) {
-			if (!e.isActive())
+			GameEngine.DEBUG.start("r_for_single");
+			if (!e.isActive()) {
 				continue;
-
+			}
+			
 			Component c = null;
 			if ((c = e.getComponent(MeshComponent.class)) != null) {
 				meshRenderer.render(cache, scene, (MeshComponent) c);
@@ -64,7 +71,11 @@ public class Scene3DRenderer extends Renderer<GameEngine, Scene3D> {
 			} else if ((c = e.getComponent(TextEmitterComponent.class)) != null) {
 				textEmitterRenderer.render(cache, scene, (TextEmitterComponent) c);
 			}
+			GameEngine.DEBUG.end("r_for_single");
 		}
+		GameEngine.DEBUG.end("r_for");
+		
+		GameEngine.DEBUG.end("r_scene3d");
 	}
 
 	@Override

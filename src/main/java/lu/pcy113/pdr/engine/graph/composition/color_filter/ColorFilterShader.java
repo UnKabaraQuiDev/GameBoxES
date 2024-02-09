@@ -16,8 +16,8 @@ public class ColorFilterShader extends RenderShader {
 
 	@Override
 	public void createUniforms() {
-		getUniform(MUL);
-		getUniform(ADD);
+		createUniform(MUL);
+		createUniform(ADD);
 	}
 
 }

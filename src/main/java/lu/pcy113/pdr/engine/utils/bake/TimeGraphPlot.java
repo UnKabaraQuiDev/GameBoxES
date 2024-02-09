@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.imageio.ImageIO;
 
@@ -148,6 +149,17 @@ public class TimeGraphPlot {
 		for(int i = 0; i < GRAPH_WIDTH/PX_PER_MS_FACTOR; i++) {
 			System.out.println("w: "+(GRAPH_WIDTH/PX_PER_MS_FACTOR)+" i:"+(i*PX_PER_MS_FACTOR));
 			g.drawLine((int) (i*PX_PER_MS_FACTOR), 0, (int) (i*PX_PER_MS_FACTOR), GRAPH_HEIGHT);
+		}
+		
+		int y = 5;
+		for(Entry<String, Color> sc : colorMap.entrySet()) {
+			g.setColor(sc.getValue());
+			g.fillRect(0, y*25, 25, 25);
+			
+			g.setColor(Color.BLACK);
+			g.drawString(sc.getKey(), 30, y*25+15);
+			
+			y++;
 		}
 		
 		g.dispose();

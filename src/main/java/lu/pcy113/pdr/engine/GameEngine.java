@@ -11,6 +11,8 @@ import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
 import lu.pcy113.pdr.engine.logic.GameLogic;
 import lu.pcy113.pdr.engine.utils.DebugOptions;
+import lu.pcy113.pdr.engine.utils.FileUtils;
+import lu.pcy113.pdr.engine.utils.bake.TimeGraphPlot;
 
 public class GameEngine implements Cleanupable, UniqueID {
 	
@@ -74,7 +76,9 @@ public class GameEngine implements Cleanupable, UniqueID {
 		
 		synchronized (waitForFrameEnd) {
 			try {
+				DEBUG.start("u_wait");
 				waitForFrameEnd.wait(WAIT_FRAME_END_TIMEOUT);
+				DEBUG.end("u_wait");
 				return true;
 			} catch (InterruptedException e) {
 				return true;
@@ -88,7 +92,9 @@ public class GameEngine implements Cleanupable, UniqueID {
 		
 		synchronized (waitForUpdateEnd) {
 			try {
+				DEBUG.start("r_wait");
 				waitForUpdateEnd.wait(WAIT_UPDATE_END_TIMEOUT);
+				DEBUG.end("r_wait");
 				return true;
 			} catch (InterruptedException e) {
 				return true;
@@ -177,6 +183,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 				
 				long deltaRender = now - lastTime;
 				if(deltaRender > timeUps) {
+					long loopStart = System.nanoTime();
 					DEBUG.start("r_render_loop");
 					DEBUG.start("r_clear");
 					//this.window.clear();
@@ -191,13 +198,14 @@ public class GameEngine implements Cleanupable, UniqueID {
 					lastTime = now;
 					
 					this.currentFps = (double) 1 / ((double) deltaRender / 1_000_000_000);
+					//this.currentFps = (double) 1 / ((double) (System.nanoTime() - loopStart) / 1_000_000_000);
 					DEBUG.end("r_render_loop");
 					
 					synchronized (waitForFrameEnd) {
 						waitForFrameEnd.notifyAll(); // wake up waiting threads
 					}
 					
-					GlobalLogger.info("FPS: "+this.currentFps+" delta: "+((double) deltaRender/1_000_000)+"ms");
+					GlobalLogger.info("FPS: "+this.currentFps+" delta: "+((double) deltaRender/1_000_000)+"ms renderLoop: "+((double) (System.nanoTime() - loopStart) / 1_000_000)+"ms");
 				}
 			}
 			
@@ -266,6 +274,8 @@ public class GameEngine implements Cleanupable, UniqueID {
 		
 		this.window.takeGlContext();
 		this.cleanup();
+		
+		TimeGraphPlot.main(new String[] {FileUtils.appendName(GlobalLogger.getLogger().getLogFile().getPath(), "-time")});
 	}
 
 	public void stop() {

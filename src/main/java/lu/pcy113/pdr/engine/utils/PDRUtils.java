@@ -40,6 +40,10 @@ public final class PDRUtils {
 		return null;
 	}
 	
+	public static boolean checkGlError() {
+		return checkGlError("");
+	}
+	
 	public static boolean checkGlError(String msg) {
 		int status = GL40.glGetError();
 		
@@ -218,5 +222,5 @@ public final class PDRUtils {
 			sb.append(str);
 		return sb.toString();
 	}
-	
+
 }
