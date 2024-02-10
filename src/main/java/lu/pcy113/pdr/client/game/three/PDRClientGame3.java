@@ -359,6 +359,7 @@ public class PDRClientGame3 extends GameLogic {
 			System.out.println("Hello from real function in: "+Thread.currentThread().getName());
 			return status;
 		}).then((status) -> {
+			waitForFrameStart();
 			System.out.println("Hello from callback function in: "+Thread.currentThread().getName());
 			return status;
 		});

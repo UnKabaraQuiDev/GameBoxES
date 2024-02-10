@@ -45,6 +45,14 @@ public abstract class GameLogic {
 		return engine.waitForUpdateEnd();
 	}
 	
+	protected boolean waitForFrameStart() {
+		return engine.waitForFrameStart();
+	}
+	
+	protected boolean waitForUpdateStart() {
+		return engine.waitForUpdateStart();
+	}
+	
 	protected void stop() {
 		engine.stop();
 	}

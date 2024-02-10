@@ -37,7 +37,9 @@ public class GameEngine implements Cleanupable, UniqueID {
 	public static long POLL_EVENT_TIMEOUT = 500,
 					BUFFER_SWAP_TIMEOUT = 500,
 					WAIT_FRAME_END_TIMEOUT = 500,
-					WAIT_UPDATE_END_TIMEOUT = 500; // ms
+					WAIT_FRAME_START_TIMEOUT = 500,
+					WAIT_UPDATE_END_TIMEOUT = 500,
+					WAIT_UPDATE_START_TIMEOUT = 500; // ms
 	
 	public static int QUEUE_MAIN = 0,
 					QUEUE_RENDER = 1,
@@ -63,8 +65,10 @@ public class GameEngine implements Cleanupable, UniqueID {
 	private ThreadGroup threadGroup;
 	private Thread updateThread, renderThread, mainThread;
 	
-	private final Object waitForFrameEnd = new Object();
-	private final Object waitForUpdateEnd = new Object();
+	private final Object waitForFrameEnd = new Object(),
+						waitForUpdateEnd = new Object(),
+						waitForFrameStart = new Object(),
+						waitForUpdateStart = new Object();
 	
 	private NextTaskEnvironnment taskEnvironnment = new NextTaskEnvironnment(3);
 	
@@ -73,6 +77,22 @@ public class GameEngine implements Cleanupable, UniqueID {
 		game.register(this);
 		this.gameLogic = game;
 		this.windowOptions = options;
+	}
+	
+	public boolean waitForFrameStart() {
+		if(Thread.currentThread().equals(renderThread))
+			throw new IllegalAccessError(renderThread.getName()+" cannot wait for itself");
+		
+		synchronized (waitForFrameStart) {
+			try {
+				DEBUG.start("u_wait");
+				waitForFrameStart.wait(WAIT_FRAME_START_TIMEOUT);
+				DEBUG.end("u_wait");
+				return true;
+			} catch (InterruptedException e) {
+				return true;
+			}
+		}
 	}
 	
 	public boolean waitForFrameEnd() {
@@ -84,6 +104,22 @@ public class GameEngine implements Cleanupable, UniqueID {
 				DEBUG.start("u_wait");
 				waitForFrameEnd.wait(WAIT_FRAME_END_TIMEOUT);
 				DEBUG.end("u_wait");
+				return true;
+			} catch (InterruptedException e) {
+				return true;
+			}
+		}
+	}
+	
+	public boolean waitForUpdateStart() {
+		if(Thread.currentThread().equals(updateThread))
+			throw new IllegalAccessError(updateThread.getName()+" cannot wait for itself");
+		
+		synchronized (waitForUpdateStart) {
+			try {
+				DEBUG.start("r_wait");
+				waitForUpdateStart.wait(WAIT_UPDATE_START_TIMEOUT);
+				DEBUG.end("r_wait");
 				return true;
 			} catch (InterruptedException e) {
 				return true;
@@ -131,6 +167,10 @@ public class GameEngine implements Cleanupable, UniqueID {
 				
 				long deltaUpdate = now - lastTime;
 				if(deltaUpdate > timeUps) {
+					synchronized (waitForUpdateStart) {
+						waitForUpdateStart.notifyAll();
+					}
+					
 					DEBUG.start("u_update_loop");
 					DEBUG.start("u_pollEvents");
 					this.pollEvents();
@@ -198,6 +238,10 @@ public class GameEngine implements Cleanupable, UniqueID {
 				
 				long deltaRender = now - lastTime;
 				if(deltaRender > timeUps) {
+					synchronized (waitForFrameStart) {
+						waitForFrameStart.notifyAll(); // wake up waiting threads
+					}
+					
 					long loopStart = System.nanoTime();
 					DEBUG.start("r_render_loop");
 					DEBUG.start("r_clear");
@@ -213,7 +257,6 @@ public class GameEngine implements Cleanupable, UniqueID {
 					lastTime = now;
 					
 					this.currentFps = (double) 1 / ((double) deltaRender / 1_000_000_000);
-					//this.currentFps = (double) 1 / ((double) (System.nanoTime() - loopStart) / 1_000_000_000);
 					DEBUG.end("r_render_loop");
 					
 					synchronized (waitForFrameEnd) {
