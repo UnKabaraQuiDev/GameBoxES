@@ -59,11 +59,14 @@ public abstract class AttribArray implements Cleanupable {
 
 	public void enable() {
 		GL40.glEnableVertexAttribArray(index);
+		PDRUtils.checkGlError("EnableVertexAttribArray("+index+") ("+name+")");
 		GL40.glVertexAttribDivisor(index, divisor);
+		PDRUtils.checkGlError("VertexAttribDivisor("+index+", "+divisor+") ("+name+")");
 	}
 
 	public void disable() {
 		GL40.glDisableVertexAttribArray(index);
+		PDRUtils.checkGlError("DisableVertexAttribArray("+index+") ("+name+")");
 	}
 
 	public int gen() {
@@ -72,15 +75,18 @@ public abstract class AttribArray implements Cleanupable {
 
 	public void bind() {
 		GL40.glBindBuffer(bufferType, vbo);
+		PDRUtils.checkGlError("BindBuffer("+bufferType+", "+vbo+") ("+name+")");
 	}
 
 	public void unbind() {
 		GL40.glBindBuffer(bufferType, 0);
+		PDRUtils.checkGlError("BindBuffer("+bufferType+", 0) ("+name+")");
 	}
 
 	@Override
 	public void cleanup() {
 		GL40.glDeleteBuffers(vbo);
+		PDRUtils.checkGlError("DeleteBuffers("+vbo+") ("+name+")");
 	}
 
 	public String getName() {

@@ -100,7 +100,7 @@ public abstract class Texture implements Cleanupable, UniqueID {
 	public void cleanup() {
 		if (isValid()) {
 			GL40.glDeleteTextures(tid);
-			PDRUtils.checkGlError("DeleteTextures["+tid+"]");
+			PDRUtils.checkGlError("DeleteTextures["+tid+"] ("+name+")");
 			tid = -1;
 		}
 	}

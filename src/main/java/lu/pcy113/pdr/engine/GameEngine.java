@@ -152,7 +152,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 					return;
 				}
 			} catch (InterruptedException e) {
-				GlobalLogger.severe("Update thread interrupted, continuing");
+				GlobalLogger.info("Update thread interrupted, continuing");
 			}
 		}
 		
@@ -324,7 +324,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 					return;
 				}
 			} catch (InterruptedException e) {
-				GlobalLogger.severe("Main thread interrupted, continuing");
+				GlobalLogger.info("Main thread interrupted, continuing");
 			}
 		}
 		
@@ -350,6 +350,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 	}
 	
 	public void stop() {
+		GlobalLogger.info("Thread: "+Thread.currentThread().getName()+" stopped GameEngine");
 		this.running = false;
 	}
 	

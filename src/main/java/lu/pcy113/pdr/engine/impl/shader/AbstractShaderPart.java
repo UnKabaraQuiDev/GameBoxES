@@ -37,12 +37,16 @@ public abstract class AbstractShaderPart implements UniqueID, Cleanupable {
 		}
 
 		this.sid = GL40.glCreateShader(type);
+		PDRUtils.checkGlError("CreateShader("+type+") ("+file+")");
 		GL40.glShaderSource(sid, FileUtils.readFile(file));
+		PDRUtils.checkGlError("ShaderSource("+sid+") ("+file+")");
 		GL40.glCompileShader(sid);
+		PDRUtils.checkGlError("CompileShader("+sid+") ("+file+")");
 
 		if (GL40.glGetShaderi(sid, GL40.GL_COMPILE_STATUS) == GL40.GL_FALSE) {
 			GlobalLogger.log(Level.SEVERE, file + "> " + GL40.glGetShaderInfoLog(sid, 1024));
 			cleanup();
+			throw new IllegalStateException(file+"("+sid+"): Failed to compile shader!");
 		} else {
 			GlobalLogger.log(Level.INFO, "ShaderPart " + file + " (" + sid + ") (" + type + ") created successfully");
 		}

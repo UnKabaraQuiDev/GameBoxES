@@ -2,9 +2,11 @@ package lu.pcy113.pdr.client.game.three;
 
 import java.util.HashMap;
 
+import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.joml.Vector3i;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWGamepadState;
@@ -16,8 +18,12 @@ import lu.pcy113.pdr.client.game.three.SlotShader.SlotMaterial;
 import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.anim.CallbackValueInterpolation;
 import lu.pcy113.pdr.engine.anim.Vec4fCallbackValueInterpolation;
+import lu.pcy113.pdr.engine.anim.skeletal.Joint;
+import lu.pcy113.pdr.engine.anim.skeletal.MeshSkeletalAnimation;
 import lu.pcy113.pdr.engine.audio.AudioMaster;
 import lu.pcy113.pdr.engine.cache.attrib.FloatAttribArray;
+import lu.pcy113.pdr.engine.cache.attrib.Vec3fAttribArray;
+import lu.pcy113.pdr.engine.cache.attrib.Vec3iAttribArray;
 import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.geom.ObjLoader;
 import lu.pcy113.pdr.engine.geom.instance.InstanceEmitter;
@@ -25,6 +31,7 @@ import lu.pcy113.pdr.engine.graph.composition.Compositor;
 import lu.pcy113.pdr.engine.graph.composition.GenerateRenderLayer;
 import lu.pcy113.pdr.engine.graph.composition.PassRenderLayer;
 import lu.pcy113.pdr.engine.graph.composition.SceneRenderLayer;
+import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.TextureMaterial;
 import lu.pcy113.pdr.engine.graph.material.text.TextShader;
 import lu.pcy113.pdr.engine.graph.material.text.TextShader.TextMaterial;
@@ -42,6 +49,7 @@ import lu.pcy113.pdr.engine.impl.shader.AbstractShaderPart;
 import lu.pcy113.pdr.engine.objs.entity.Entity;
 import lu.pcy113.pdr.engine.objs.entity.components.InstanceEmitterComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.MeshComponent;
+import lu.pcy113.pdr.engine.objs.entity.components.MeshSkeletalAnimationComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.RenderComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.TextEmitterComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.Transform3DComponent;
@@ -109,7 +117,7 @@ public class PDRClientGame3 extends GameLogic {
 		Mesh slotInstMesh = ObjLoader.loadMesh("slotInst", slotInstMaterial, "./resources/models/plane.obj");
 		this.cache.addMesh(slotInstMesh);
 		slotInstancer = cache.loadInstanceEmitter("slotEmitter", slotInstMesh, 3 * 5, new Transform3D(), faa);
-		slotInstancer.updateDirect((inst) -> {
+		slotInstancer.update((inst) -> {
 			((Transform3D) inst.getTransform()).setTranslation(new Vector3f(inst.getIndex() % 3 - 1f, (inst.getIndex() / 3) - 2f, 0f).mul(1.1f));
 			System.out.println("instance: " + inst.getIndex() + " > " + ((Transform3D) inst.getTransform()).getTranslation());
 			((Transform3D) inst.getTransform()).updateMatrix();
@@ -258,8 +266,55 @@ public class PDRClientGame3 extends GameLogic {
 			.setActive(true)
 			.getComponent(Transform3DComponent.class).getTransform().scaleMul(new Vector3f(10)).updateMatrix();
 		
-		/* DUMP */
+		RenderShader skeleShader = new RenderShader("skeleShader",
+				AbstractShaderPart.load("./resources/shaders/animation/skeletal.vert"),
+				AbstractShaderPart.load("./resources/shaders/animation/skeletal_diffuse.frag")) {
+			@Override
+			public void createUniforms() {
+				super.createSceneUniforms();
+				
+				createUniform("jointTransforms");
+				createUniform("diffuseColor");
+			}
+		};
+		cache.addShader(skeleShader);
+		Material skeleMat = new Material("skeleMat", skeleShader);
+		cache.addShader(skeleShader);
 		
+		Mesh skeleMesh = Mesh.newCube("skeleMesh", skeleMat, new Vector3f(1));
+		skeleMesh.addAttribArray(new Vec3fAttribArray("jointWeights", 4, 1, new Vector3f[] {
+				new Vector3f(1, 0, 0),
+				new Vector3f(0, 1, 0),
+				new Vector3f(0, 0, 1),
+				new Vector3f(0, 0, 0),
+				new Vector3f(1, 0, 0),
+				new Vector3f(0, 1, 0),
+				new Vector3f(0, 0, 1),
+				new Vector3f(0, 0, 0)
+		}));
+		skeleMesh.addAttribArray(new Vec3iAttribArray("jointIndices", 3, 1, new Vector3i[] {
+				new Vector3i( 0, -1, -1),
+				new Vector3i( 1, -1, -1),
+				new Vector3i( 1,  1, -1),
+				new Vector3i( 0, -1, -1),
+				new Vector3i( 0, -1, -1),
+				new Vector3i(-1,  2, -1),
+				new Vector3i(-1, -1, -1),
+				new Vector3i(-1, -1, -1)
+		}));
+		cache.addMesh(skeleMesh);
+		skeleMat.setProperty("diffuseColor", new Vector4f(1,1,1,1));
+		Joint root = new Joint(0, "root", new Matrix4f().identity());
+		root.addChild(new Joint(1, "r1", new Matrix4f().identity().translate(1, 1, 1)));
+		root.addChild(new Joint(2, "r2", new Matrix4f().identity().translate(1, 2, 1)));
+		root.addChild(new Joint(3, "r3", new Matrix4f().identity().translate(1, 0, 2)));
+		MeshSkeletalAnimation meshSkeletalAnimation = new MeshSkeletalAnimation(root, 4);
+		scene.addEntity("skelet", new Entity(
+				new MeshComponent(skeleMesh),
+				new Transform3DComponent(),
+				new MeshSkeletalAnimationComponent(meshSkeletalAnimation)));
+		
+		/* DUMP */
 		cache.dump(System.out);
 	}
 	
@@ -348,25 +403,18 @@ public class PDRClientGame3 extends GameLogic {
 		}
 		hover = org.joml.Math.clamp(0, 1, hover);
 		
-		slotInstancer.updatePush((inst) -> {
-			if (inst.getIndex() == 0) {
-				inst.getBuffers()[0] = hover;
-			}
-		});
-		
 		NextTask nt = createTask(GameEngine.QUEUE_RENDER);
 		nt.exec((status) -> {
-			System.out.println("Hello from real function in: "+Thread.currentThread().getName());
-			return status;
-		}).then((status) -> {
-			waitForFrameStart();
-			System.out.println("Hello from callback function in: "+Thread.currentThread().getName());
+			slotInstancer.update((inst) -> {
+				if (inst.getIndex() == 0) {
+					inst.getBuffers()[0] = hover;
+				}
+				debugInfo.setText("FPS: " + PDRUtils.round(engine.getCurrentFps(), 3) + "\n").updateText();
+				textEntity.getComponent(TextEmitterComponent.class).getTextEmitter(cache).setText("updated... " + engine.getCurrentFps()).updateText();
+			});
 			return status;
 		});
 		pushTask(nt);
-		
-		debugInfo.setText("FPS: " + PDRUtils.round(engine.getCurrentFps(), 3) + "\n").updateText();
-		textEntity.getComponent(TextEmitterComponent.class).getTextEmitter(cache).setText("updated... " + engine.getCurrentFps()).updateText();
 		
 		/*long time = System.nanoTime();
 		boolean cc = waitForFrameEnd();

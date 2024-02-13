@@ -23,6 +23,7 @@ import lu.pcy113.pclib.Pair;
 import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
+import lu.pcy113.pdr.engine.utils.PDRUtils;
 import lu.pcy113.pdr.engine.utils.Property;
 
 public abstract class AbstractShader implements UniqueID, Cleanupable {
@@ -36,21 +37,25 @@ public abstract class AbstractShader implements UniqueID, Cleanupable {
 		this.name = name;
 
 		this.shaderProgram = GL20.glCreateProgram();
+		PDRUtils.checkGlError("CreateProgram() ("+name+")");
+		if(this.shaderProgram == -1) {
+			PDRUtils.throwGLError(name+": Failed to create shader program!");
+		}
 		this.parts = new HashMap<>();
 		for (AbstractShaderPart sp : parts) {
 			this.parts.put(sp.getType(), sp);
 			GL20.glAttachShader(this.shaderProgram, sp.getSid());
+			PDRUtils.checkGlError();
 		}
 		GL20.glLinkProgram(this.shaderProgram);
 		
 		if (GL20.glGetProgrami(this.shaderProgram, GL20.GL_LINK_STATUS) == GL11.GL_FALSE) {
 			GlobalLogger.log(Level.SEVERE, name+"("+shaderProgram+"): "+GL20.glGetProgramInfoLog(this.shaderProgram, 1024));
 			this.cleanup();
-			return;
+			throw new IllegalStateException(name+"("+shaderProgram+"): Failed to link shader program!");
 		}else if(!GL40.glIsProgram(shaderProgram)) {
-			GlobalLogger.log(Level.SEVERE, name+"("+shaderProgram+"): Is not a GL Shader Program!");
 			this.cleanup();
-			return;
+			throw new IllegalStateException(name+"("+shaderProgram+"): Is not a GL Shader Program!");
 		}else {
 			GlobalLogger.log(Level.INFO, "ShaderProgram " + name + " (" + shaderProgram + ") created successfully");
 		}
@@ -129,6 +134,7 @@ public abstract class AbstractShader implements UniqueID, Cleanupable {
 
 	public boolean createUniform(String name) {
 		int loc = GL20.glGetUniformLocation(this.shaderProgram, name);
+		PDRUtils.checkGlError();
 		
 		if (loc != -1) {
 			this.uniforms.put(name, new Pair<>(new Property<>(), loc));
@@ -141,18 +147,25 @@ public abstract class AbstractShader implements UniqueID, Cleanupable {
 	}
 
 	public void bind() {
+		if (this.shaderProgram == -1)
+			System.out.println("Shader program is -1");
 		GL20.glUseProgram(this.shaderProgram);
+		PDRUtils.checkGlError("UseProgram("+shaderProgram+") ("+name+")");
 	}
 
 	public void unbind() {
 		GL20.glUseProgram(0);
+		PDRUtils.checkGlError("UseProgram(0) ("+name+")");
 	}
 
 	@Override
 	public void cleanup() {
+		//GlobalLogger.log();
+		
 		if (this.shaderProgram != -1) {
 			this.parts.values().forEach(AbstractShaderPart::cleanup);
 			GL20.glDeleteProgram(this.shaderProgram);
+			PDRUtils.checkGlError("DeleteProgram("+shaderProgram+") ("+name+")");
 			this.shaderProgram = -1;
 		}
 	}

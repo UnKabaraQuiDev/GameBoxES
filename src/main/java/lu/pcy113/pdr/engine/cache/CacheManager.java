@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
+import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pdr.engine.audio.Sound;
 import lu.pcy113.pdr.engine.cache.attrib.AttribArray;
 import lu.pcy113.pdr.engine.exceptions.ShaderInstantiationException;
@@ -62,6 +63,8 @@ public class CacheManager implements Cleanupable {
 	
 	@Override
 	public void cleanup() {
+		GlobalLogger.log();
+		
 		this.meshes.values().forEach(Mesh::cleanup);
 		this.meshes.clear();
 		
@@ -131,8 +134,10 @@ public class CacheManager implements Cleanupable {
 	}
 	
 	public boolean addShader(RenderShader m) {
-		if (this.shaders.containsKey(m.getId()))
+		if (this.shaders.containsKey(m.getId()) && !this.shaders.get(m.getId()).equals(m))
 			this.shaders.remove(m.getId()).cleanup();
+		else
+			return true;
 		return this.shaders.putIfAbsent(m.getId(), m) == null;
 	}
 	

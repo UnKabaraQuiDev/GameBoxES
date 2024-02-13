@@ -89,9 +89,9 @@ public class InstanceEmitterRenderer extends Renderer<Scene, InstanceEmitterComp
 		
 		pe.bind();
 		
-		GameEngine.DEBUG.start("r_compute");
-		pe.updatePull();
-		GameEngine.DEBUG.end("r_compute");
+		// GameEngine.DEBUG.start("r_compute");
+		// pe.updatePull();
+		// GameEngine.DEBUG.end("r_compute");
 		
 		GameEngine.DEBUG.start("r_draw");
 		GL40.glDrawElementsInstanced(GL40.GL_TRIANGLES, mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0, pe.getParticleCount());

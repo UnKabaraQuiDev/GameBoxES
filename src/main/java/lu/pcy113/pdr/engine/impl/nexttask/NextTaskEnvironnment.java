@@ -19,17 +19,17 @@ public class NextTaskEnvironnment {
 	}
 	
 	public NextTask getNext(int id) {
-		System.err.println(id + " get next : " + queues.get(id).peek());
+		// System.err.println(id + " get next : " + queues.get(id).peek());
 		return queues.get(id).poll();
 	}
 	
 	public boolean hasNext(int id) {
-		System.err.println(id + " has next : " + !queues.get(id).isEmpty());
+		// System.err.println(id + " has next : " + !queues.get(id).isEmpty());
 		return !queues.get(id).isEmpty();
 	}
 	
 	public boolean push(int id, NextTask task) {
-		System.err.println(task.getSource() + " pushed task onto " + id);
+		// System.err.println(task.getSource() + " pushed task onto " + id);
 		return queues.get(id).add(task);
 	}
 	
