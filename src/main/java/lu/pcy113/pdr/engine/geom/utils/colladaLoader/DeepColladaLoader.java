@@ -11,8 +11,17 @@ import lu.pcy113.pdr.engine.geom.utils.xmlParser.XmlNode;
 import lu.pcy113.pdr.engine.geom.utils.xmlParser.XmlParser;
 
 public class DeepColladaLoader {
+	
+	public static AnimatedModelData loadColladaModel(File colladaFile) {
+		XmlNode node = XmlParser.loadXmlFile(colladaFile);
 
-	public static AnimatedModelData loadColladaModel(File colladaFile, int maxWeights) {
+		GeometryLoader g = new GeometryLoader(node.getChild("library_geometries"), null);
+		MeshData meshData = g.extractModelData();
+
+		return new AnimatedModelData(meshData, null);
+	}
+	
+	public static AnimatedModelData loadColladaModelArmature(File colladaFile, int maxWeights) {
 		XmlNode node = XmlParser.loadXmlFile(colladaFile);
 
 		SkinLoader skinLoader = new SkinLoader(node.getChild("library_controllers"), maxWeights);

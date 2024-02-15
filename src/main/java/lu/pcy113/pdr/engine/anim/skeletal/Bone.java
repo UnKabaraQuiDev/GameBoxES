@@ -2,8 +2,11 @@ package lu.pcy113.pdr.engine.anim.skeletal;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.joml.Matrix4f;
+
+import lu.pcy113.pdr.engine.utils.PDRUtils;
 
 /**
  * Joint -> Bone
@@ -115,6 +118,15 @@ public class Bone {
 	
 	public int getChildCount() {
 		return children.stream().map(Bone::getChildCount).reduce(0, Integer::sum);
+	}
+	
+	@Override
+	public String toString() {
+		return "Bone{"+name+", "+index+"}";
+	}
+	
+	public String toString(int i) {
+		return PDRUtils.repeatString("\t", i)+toString()+"\n"+children.stream().map(b -> b.toString(i+1)).collect(Collectors.joining());
 	}
 	
 }

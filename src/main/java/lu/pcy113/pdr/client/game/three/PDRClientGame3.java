@@ -22,6 +22,7 @@ import lu.pcy113.pdr.engine.anim.skeletal.Animation;
 import lu.pcy113.pdr.engine.anim.skeletal.ArmatureAnimation;
 import lu.pcy113.pdr.engine.audio.AudioMaster;
 import lu.pcy113.pdr.engine.cache.attrib.FloatAttribArray;
+import lu.pcy113.pdr.engine.cache.attrib.UIntAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.Vec3fAttribArray;
 import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.geom.instance.InstanceEmitter;
@@ -90,6 +91,9 @@ public class PDRClientGame3 extends GameLogic {
 	FloatButtonState leftZButton, rightZButton;
 	BooleanButtonState leftButton, rightButton;
 	FourButtonState dirButtons, xyabButtons;
+	
+	Mesh skeleMesh;
+	Entity skeleEntity;
 	
 	AudioMaster audio;
 	
@@ -273,7 +277,11 @@ public class PDRClientGame3 extends GameLogic {
 			public void createUniforms() {
 				super.createSceneUniforms();
 				
-				createUniform("jointTransforms");
+				createUniform(RenderShader.PROJECTION_MATRIX);
+				createUniform(RenderShader.VIEW_MATRIX);
+				createUniform(RenderShader.TRANSFORMATION_MATRIX);
+				
+				createUniform(ArmatureAnimation.BONE_UNIFORM);
 				createUniform("diffuseColor");
 			}
 		};
@@ -281,50 +289,35 @@ public class PDRClientGame3 extends GameLogic {
 		Material skeleMat = new Material("skeleMat", skeleShader);
 		cache.addShader(skeleShader);
 		
-		/*Mesh skeleMesh = Mesh.newCube("skeleMesh", skeleMat, new Vector3f(1));
-		skeleMesh.addAttribArray(new Vec3fAttribArray("jointWeights", 4, 1, new Vector3f[] {
-				new Vector3f(1, 0, 0),
-				new Vector3f(0, 1, 0),
-				new Vector3f(0, 0, 1),
-				new Vector3f(0, 0, 0),
-				new Vector3f(1, 0, 0),
-				new Vector3f(0, 1, 0),
-				new Vector3f(0, 0, 1),
-				new Vector3f(0, 0, 0)
-		}));
-		skeleMesh.addAttribArray(new Vec3iAttribArray("jointIndices", 3, 1, new Vector3i[] {
-				new Vector3i( 0, -1, -1),
-				new Vector3i( 1, -1, -1),
-				new Vector3i( 1,  1, -1),
-				new Vector3i( 0, -1, -1),
-				new Vector3i( 0, -1, -1),
-				new Vector3i(-1,  2, -1),
-				new Vector3i(-1, -1, -1),
-				new Vector3i(-1, -1, -1)
-		}));
-		cache.addMesh(skeleMesh);
-		skeleMat.setProperty("diffuseColor", new Vector4f(1,1,1,1));
-		ArmatureAnimation armatureAnimation = new ArmatureAnimation(null, new Animator(null));
-		scene.addEntity("skelet", new Entity(
-				new MeshComponent(skeleMesh),
-				new Transform3DComponent(),
-				new ArmatureAnimationComponent(armatureAnimation)));*/
+		
+		// Mesh pdrasset1 = ObjLoader.loadMesh("pdrasset1", skeleMat, "./resources/models/scene_pdrassets_1.obj");
+		// cache.addMesh(pdrasset1);
+		// scene.addEntity("pdrasset", new MeshComponent(pdrasset1), new Transform3DComponent());
+		
+		Mesh model = ObjLoader.loadMesh("model", slotMaterial, "./resources/models/anims/model.obj");
+		cache.addMesh(model);
+		scene.addEntity("model", new MeshComponent(model), new Transform3DComponent());
+		
 		
 		Pair<Mesh, ArmatureAnimation> pmaa = ColladaeLoader.loadMeshArmature("skeleMesh", skeleMat, "./resources/models/anims/model.dae");
-		Mesh skeleMesh = pmaa.getKey();
+		skeleMesh = pmaa.getKey();
+		System.err.println("start data: "+skeleMesh.getVertices().getName()+" = "+Arrays.toString(((Vec3fAttribArray) skeleMesh.getVertices()).getData()));
+		System.err.println("start data: "+skeleMesh.getIndices().getName()+" = "+Arrays.toString(((UIntAttribArray) skeleMesh.getIndices()).getData()));
 		System.err.println("start data: "+skeleMesh.getAttribs()[2].getName()+" = "+Arrays.toString(((Vec3fAttribArray) skeleMesh.getAttribs()[2]).getData()));
 		System.err.println("start data: "+skeleMesh.getAttribs()[3].getName()+" = "+Arrays.toString(((Vec3fAttribArray) skeleMesh.getAttribs()[3]).getData()));
 		ArmatureAnimation armatureAnimation = pmaa.getValue();
+		System.err.println(armatureAnimation.getRootBone().toString(0));
 		cache.addMesh(skeleMesh);
 		Animation animation = ColladaeLoader.loadAnimation("./resources/models/anims/model.dae");
 		armatureAnimation.getAnimator().doAnimation(animation);
 		armatureAnimation.getAnimator().update(0.1f);
 		
-		scene.addEntity("skelet", new Entity(
+		skeleEntity = scene.addEntity("skelet", new Entity(
 				new MeshComponent(skeleMesh),
 				new Transform3DComponent(),
 				new ArmatureAnimationComponent(armatureAnimation)))
-			.setActive(true);
+			.setActive(true)
+			/*.getComponent(Transform3DComponent.class).getTransform().scaleAdd(2, 2, 2).updateMatrix()*/;
 		
 		/* DUMP */
 		cache.dump(System.out);
@@ -427,6 +420,8 @@ public class PDRClientGame3 extends GameLogic {
 			return status;
 		});
 		pushTask(nt);
+		
+		skeleEntity.getComponent(Transform3DComponent.class).getTransform().setScale(new Vector3f(GX*0.1f)).updateMatrix();
 		
 		/*long time = System.nanoTime();
 		boolean cc = waitForFrameEnd();

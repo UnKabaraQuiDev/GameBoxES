@@ -86,7 +86,6 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 			if(msac != null) {
 				ArmatureAnimation msa = msac.getArmatureAnimation();
 				msa.bind(shader);
-				System.out.println("BOUND MSA");
 			}
 		}
 		GameEngine.DEBUG.end("r_uniforms_skelet");

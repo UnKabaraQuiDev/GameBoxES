@@ -15,6 +15,6 @@ uniform vec4 diffuseColor;
 
 void main() {
 
-	fragColor = diffuseColor * vec4(vertex.weights, 1);
+	fragColor = vec4(1); // diffuseColor * vec4(vertex.weights, 1);
 
 }

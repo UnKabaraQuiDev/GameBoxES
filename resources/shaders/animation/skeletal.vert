@@ -31,9 +31,6 @@ void main(void){
 	vec4 totalNormal = vec4(0.0);
 
 	for(int i = 0; i < MAX_WEIGHTS; i++){
-		if(i_jointIndices[i] == -1)
-			continue;
-
 		mat4 jointTransform = jointTransforms[i_jointIndices[i]];
 		vec4 posePosition = jointTransform * vec4(i_pos, 1.0);
 		totalLocalPos += posePosition * i_jointWeights[i];
@@ -42,9 +39,9 @@ void main(void){
 		totalNormal += worldNormal * i_jointWeights[i];
 	}
 
-	gl_Position = projectionMatrix * viewMatrix * transformationMatrix * vec4(i_pos, 1);
+	gl_Position = projectionMatrix * viewMatrix * transformationMatrix * vec4(i_pos, 1.0);
 
-	vertex.worldpos = (transformationMatrix * viewMatrix * totalLocalPos).xyz;
+	vertex.worldpos = gl_Position.xyz;
 	vertex.fragpos = gl_Position.xy;
 	vertex.uv = i_uv;
 	vertex.normal = totalNormal.xyz;

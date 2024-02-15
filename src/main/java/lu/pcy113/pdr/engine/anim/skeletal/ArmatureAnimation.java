@@ -56,7 +56,7 @@ public class ArmatureAnimation {
 		Matrix4f[] jointMatrices = getJointTransforms();
 		for(int i = 0; i < boneCount; i++) {
 			shader.setUniform(BONE_UNIFORM+"["+i+"]", jointMatrices[i]);
-			System.out.println("Uniform: "+BONE_UNIFORM+"["+i+"] = "+jointMatrices[i]);
+			//System.out.println("Uniform: "+BONE_UNIFORM+"["+i+"] = "+jointMatrices[i]);
 		}
 	}
 	

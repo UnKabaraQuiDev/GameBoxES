@@ -7,6 +7,7 @@ import java.util.Map;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
+import org.lwjgl.opengl.GL40;
 
 import lu.pcy113.pclib.Pair;
 import lu.pcy113.pdr.engine.anim.skeletal.Animation;
@@ -31,24 +32,43 @@ import lu.pcy113.pdr.engine.utils.PDRUtils;
 
 public class ColladaeLoader {
 	
+	@Deprecated
+	public static Mesh loadMesh(String name, Material material, String path) {
+		AnimatedModelData amd = DeepColladaLoader.loadColladaModel(new File(path));
+		
+		MeshData ms = amd.getMeshData();
+		
+		Vec3fAttribArray vertices = new Vec3fAttribArray("pos", 0, 1, PDRUtils.floatArrayToVec3f(ms.getNormals()), GL40.GL_ARRAY_BUFFER);
+		UIntAttribArray indices = new UIntAttribArray("ind", -1, 1, ms.getIndices(), GL40.GL_ELEMENT_ARRAY_BUFFER);
+		Vec3fAttribArray normal = new Vec3fAttribArray("norm", 1, 1, PDRUtils.floatArrayToVec3f(ms.getNormals()), GL40.GL_ARRAY_BUFFER);
+		Vec2fAttribArray uv = new Vec2fAttribArray("uv", 2, 1, PDRUtils.floatArrayToVec2f(ms.getTextureCoords()), GL40.GL_ARRAY_BUFFER);
+		Vec3fAttribArray joints = new Vec3fAttribArray("joints", 3, 1, PDRUtils.intArrayToVec3f(ms.getJointIds()), GL40.GL_ARRAY_BUFFER);
+		Vec3fAttribArray weights = new Vec3fAttribArray("weights", 4, 1, PDRUtils.floatArrayToVec3f(ms.getVertexWeights()), GL40.GL_ARRAY_BUFFER);
+		
+		Mesh mesh = new Mesh(name, material, vertices, indices, normal, uv, joints, weights);
+		
+		
+		return mesh;
+	}
+	
 	public static Pair<Mesh, ArmatureAnimation> loadMeshArmature(String name, Material material, String path) {
-		AnimatedModelData amd = DeepColladaLoader.loadColladaModel(new File(path), ArmatureAnimation.MAX_WEIGHTS);
+		AnimatedModelData amd = DeepColladaLoader.loadColladaModelArmature(new File(path), ArmatureAnimation.MAX_WEIGHTS);
 		
 		MeshData ms = amd.getMeshData();
 		SkeletonData sd = amd.getJointsData();
 		
-		Vec3fAttribArray vertices = new Vec3fAttribArray("pos", 0, 1, PDRUtils.floatArrayToVec3f(ms.getNormals()));
-		UIntAttribArray indices = new UIntAttribArray("ind", -1, 1, ms.getIndices());
-		Vec3fAttribArray normal = new Vec3fAttribArray("norm", 1, 1, PDRUtils.floatArrayToVec3f(ms.getNormals()));
-		Vec2fAttribArray uv = new Vec2fAttribArray("uv", 2, 1, PDRUtils.floatArrayToVec2f(ms.getTextureCoords()));
-		Vec3fAttribArray joints = new Vec3fAttribArray("joints", 3, 1, PDRUtils.intArrayToVec3f(ms.getJointIds()));
-		Vec3fAttribArray weights = new Vec3fAttribArray("weights", 4, 1, PDRUtils.floatArrayToVec3f(ms.getVertexWeights()));
+		Vec3fAttribArray vertices = new Vec3fAttribArray("pos", 0, 1, PDRUtils.floatArrayToVec3f(ms.getNormals()), GL40.GL_ARRAY_BUFFER);
+		UIntAttribArray indices = new UIntAttribArray("ind", -1, 1, ms.getIndices(), GL40.GL_ELEMENT_ARRAY_BUFFER);
+		Vec3fAttribArray normal = new Vec3fAttribArray("norm", 1, 1, PDRUtils.floatArrayToVec3f(ms.getNormals()), GL40.GL_ARRAY_BUFFER);
+		Vec2fAttribArray uv = new Vec2fAttribArray("uv", 2, 1, PDRUtils.floatArrayToVec2f(ms.getTextureCoords()), GL40.GL_ARRAY_BUFFER);
+		Vec3fAttribArray joints = new Vec3fAttribArray("joints", 3, 1, PDRUtils.intArrayToVec3f(ms.getJointIds()), GL40.GL_ARRAY_BUFFER);
+		Vec3fAttribArray weights = new Vec3fAttribArray("weights", 4, 1, PDRUtils.floatArrayToVec3f(ms.getVertexWeights()), GL40.GL_ARRAY_BUFFER);
 		
 		Mesh mesh = new Mesh(name, material, vertices, indices, normal, uv, joints, weights);
 		
 		Bone root = createBone(sd.headJoint);
 		
-		ArmatureAnimation anim = new ArmatureAnimation(root, sd.jointCount); // +1 because of root
+		ArmatureAnimation anim = new ArmatureAnimation(root, sd.jointCount);
 		
 		return new Pair<>(mesh, anim);
 	}
