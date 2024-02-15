@@ -133,7 +133,7 @@ public class TimeGraphPlot {
 				startY += height/2;
 			}
 			
-			System.out.println("for name: " + name+", time:"+((endMs - startMs))+"ms, quad: "+startX+" "+startY+" "+width+" "+height+" "+color);
+			// System.out.println("for name: " + name+", time:"+((endMs - startMs))+"ms, quad: "+startX+" "+startY+" "+width+" "+height+" "+color);
 			
 			g.setColor(color);
 			g.fillRect(startX, startY, width, height);

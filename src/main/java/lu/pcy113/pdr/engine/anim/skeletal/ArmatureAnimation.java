@@ -2,12 +2,15 @@ package lu.pcy113.pdr.engine.anim.skeletal;
 
 import org.joml.Matrix4f;
 
+import lu.pcy113.pdr.engine.graph.shader.RenderShader;
+
 /**
  * @author Original author: Karl
  */
 public class ArmatureAnimation {
 	
 	public static final int MAX_WEIGHTS = 3;
+	public static final String BONE_UNIFORM = "jointTransforms";
 	
 	// skeleton
 	private final Bone rootBone;
@@ -49,6 +52,14 @@ public class ArmatureAnimation {
 		return boneCount;
 	}
 	
+	public void bind(RenderShader shader) {
+		Matrix4f[] jointMatrices = getJointTransforms();
+		for(int i = 0; i < boneCount; i++) {
+			shader.setUniform(BONE_UNIFORM+"["+i+"]", jointMatrices[i]);
+			System.out.println("Uniform: "+BONE_UNIFORM+"["+i+"] = "+jointMatrices[i]);
+		}
+	}
+	
 	/**
 	 * Gets an array of the all important model-space transforms of all the joints
 	 * (with the current animation pose applied) in the entity. The joints are
@@ -80,5 +91,5 @@ public class ArmatureAnimation {
 			addJointsToArray(childJoint, jointMatrices);
 		}
 	}
-	
+
 }

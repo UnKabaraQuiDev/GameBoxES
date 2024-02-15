@@ -1,15 +1,16 @@
 package lu.pcy113.pdr.client.game.three;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 import org.joml.Quaternionf;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-import org.joml.Vector3i;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWGamepadState;
 
+import lu.pcy113.pclib.Pair;
 import lu.pcy113.pdr.client.game.three.BoxBlurShader.BoxBlurMaterial;
 import lu.pcy113.pdr.client.game.three.FillShader.FillMaterial;
 import lu.pcy113.pdr.client.game.three.SlotInstanceShader.SlotInstanceMaterial;
@@ -17,14 +18,14 @@ import lu.pcy113.pdr.client.game.three.SlotShader.SlotMaterial;
 import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.anim.CallbackValueInterpolation;
 import lu.pcy113.pdr.engine.anim.Vec4fCallbackValueInterpolation;
-import lu.pcy113.pdr.engine.anim.skeletal.Animator;
+import lu.pcy113.pdr.engine.anim.skeletal.Animation;
 import lu.pcy113.pdr.engine.anim.skeletal.ArmatureAnimation;
 import lu.pcy113.pdr.engine.audio.AudioMaster;
 import lu.pcy113.pdr.engine.cache.attrib.FloatAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.Vec3fAttribArray;
-import lu.pcy113.pdr.engine.cache.attrib.Vec3iAttribArray;
 import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.geom.instance.InstanceEmitter;
+import lu.pcy113.pdr.engine.geom.utils.ColladaeLoader;
 import lu.pcy113.pdr.engine.geom.utils.ObjLoader;
 import lu.pcy113.pdr.engine.graph.composition.Compositor;
 import lu.pcy113.pdr.engine.graph.composition.GenerateRenderLayer;
@@ -128,7 +129,7 @@ public class PDRClientGame3 extends GameLogic {
 		
 		Texture txt1 = cache.loadSingleTexture("txt1", "./resources/textures/fonts/font1row.png", TextureFilter.NEAREST, TextureType.TXT2D);
 		TextMaterial textMaterial = (TextMaterial) cache.loadMaterial(TextShader.TextMaterial.class, txt1);
-		debugInfo = new TextEmitter("debug_infos", textMaterial, 100, "FPS: ", new Vector2f(0.1f));
+		debugInfo = new TextEmitter("debug_infos", textMaterial, 20, "FPS: ", new Vector2f(0.1f));
 		debugInfo.updateText();
 		cache.addTextEmitter(debugInfo);
 		
@@ -280,7 +281,7 @@ public class PDRClientGame3 extends GameLogic {
 		Material skeleMat = new Material("skeleMat", skeleShader);
 		cache.addShader(skeleShader);
 		
-		Mesh skeleMesh = Mesh.newCube("skeleMesh", skeleMat, new Vector3f(1));
+		/*Mesh skeleMesh = Mesh.newCube("skeleMesh", skeleMat, new Vector3f(1));
 		skeleMesh.addAttribArray(new Vec3fAttribArray("jointWeights", 4, 1, new Vector3f[] {
 				new Vector3f(1, 0, 0),
 				new Vector3f(0, 1, 0),
@@ -307,7 +308,23 @@ public class PDRClientGame3 extends GameLogic {
 		scene.addEntity("skelet", new Entity(
 				new MeshComponent(skeleMesh),
 				new Transform3DComponent(),
-				new ArmatureAnimationComponent(armatureAnimation)));
+				new ArmatureAnimationComponent(armatureAnimation)));*/
+		
+		Pair<Mesh, ArmatureAnimation> pmaa = ColladaeLoader.loadMeshArmature("skeleMesh", skeleMat, "./resources/models/anims/model.dae");
+		Mesh skeleMesh = pmaa.getKey();
+		System.err.println("start data: "+skeleMesh.getAttribs()[2].getName()+" = "+Arrays.toString(((Vec3fAttribArray) skeleMesh.getAttribs()[2]).getData()));
+		System.err.println("start data: "+skeleMesh.getAttribs()[3].getName()+" = "+Arrays.toString(((Vec3fAttribArray) skeleMesh.getAttribs()[3]).getData()));
+		ArmatureAnimation armatureAnimation = pmaa.getValue();
+		cache.addMesh(skeleMesh);
+		Animation animation = ColladaeLoader.loadAnimation("./resources/models/anims/model.dae");
+		armatureAnimation.getAnimator().doAnimation(animation);
+		armatureAnimation.getAnimator().update(0.1f);
+		
+		scene.addEntity("skelet", new Entity(
+				new MeshComponent(skeleMesh),
+				new Transform3DComponent(),
+				new ArmatureAnimationComponent(armatureAnimation)))
+			.setActive(true);
 		
 		/* DUMP */
 		cache.dump(System.out);
@@ -405,7 +422,7 @@ public class PDRClientGame3 extends GameLogic {
 					inst.getBuffers()[0] = hover;
 				}
 				debugInfo.setText("FPS: " + PDRUtils.round(engine.getCurrentFps(), 3) + "\n").updateText();
-				textEntity.getComponent(TextEmitterComponent.class).getTextEmitter(cache).setText("updated... " + engine.getCurrentFps()).updateText();
+				textEntity.getComponent(TextEmitterComponent.class).getTextEmitter(cache).setText("updated... " + debugInfo.getText()).updateText();
 			});
 			return status;
 		});

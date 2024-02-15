@@ -233,7 +233,7 @@ public final class PDRUtils {
 
 	public static Vector2f[] floatArrayToVec2f(float[] arr) {
 		return IntStream.range(0, arr.length/2)
-				.mapToObj(i -> new Vector2f(arr[i*3+0], arr[i*3+1]))
+				.mapToObj(i -> new Vector2f(arr[i*2+0], arr[i*2+1]))
 				.toArray(Vector2f[]::new);
 	}
 

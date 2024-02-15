@@ -77,7 +77,6 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 				transformationMatrix = transform.getTransform().getMatrix();
 			}
 		}
-		// material.setPropertyIfPresent(RenderShader.TRANSFORMATION_MATRIX, transformationMatrix);
 		shader.setUniform(RenderShader.TRANSFORMATION_MATRIX, transformationMatrix);
 		GameEngine.DEBUG.end("r_uniforms_transform");
 		
@@ -86,8 +85,8 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 			ArmatureAnimationComponent msac = (ArmatureAnimationComponent) e.getComponent(e.getComponents(ArmatureAnimationComponent.class).get(0));
 			if(msac != null) {
 				ArmatureAnimation msa = msac.getArmatureAnimation();
-				// TODO
-				// msa.bind(shader);
+				msa.bind(shader);
+				System.out.println("BOUND MSA");
 			}
 		}
 		GameEngine.DEBUG.end("r_uniforms_skelet");

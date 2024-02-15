@@ -95,13 +95,15 @@ public class InstanceEmitter implements Renderable, Cleanupable, UniqueID {
 			}
 		}
 		
-		GlobalLogger.log(Level.INFO, "update transforms... " + AttribArray.update(this.instancesTransforms, transforms));
+		if(!AttribArray.update(this.instancesTransforms, transforms))
+			GlobalLogger.log(Level.WARNING, "Could not update transforms");
+		
 		for (int c = 0; c < this.instancesAttribs.length; c++) {
 			// System.out.println(Arrays.deepToString(atts));
 			if (!AttribArray.update(this.instancesAttribs[c], atts[c]))
 				GlobalLogger.log(Level.WARNING, "Failed to update attrib array: " + this.instancesAttribs[c].getName());
-			else
-				GlobalLogger.log(Level.INFO, "Updated attrib array: " + this.instancesAttribs[c].getName());
+			/*else
+				GlobalLogger.log(Level.INFO, "Updated attrib array: " + this.instancesAttribs[c].getName());*/
 		}
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
 	}
@@ -109,14 +111,16 @@ public class InstanceEmitter implements Renderable, Cleanupable, UniqueID {
 	public void updateDirect(Matrix4f[] transforms, Object[][] atts) {
 		if (transforms.length != this.count || atts.length != this.instancesAttribs.length)
 			throw new IllegalArgumentException();
-
-		GlobalLogger.log(Level.INFO, "update transforms... " + AttribArray.update(this.instancesTransforms, transforms));
+		
+		if(!AttribArray.update(this.instancesTransforms, transforms))
+			GlobalLogger.log(Level.WARNING, "Could not update transforms");
+		
 		for (int c = 0; c < this.instancesAttribs.length; c++) {
-			GlobalLogger.log(Level.FINEST, Arrays.toString(atts[c]));
+			// GlobalLogger.log(Level.FINEST, Arrays.toString(atts[c]));
 			if (!AttribArray.update(this.instancesAttribs[c], atts[c]))
 				GlobalLogger.log(Level.WARNING, "Failed to update attrib array: " + this.instancesAttribs[c].getName() + " (" + this.instancesAttribs[c].getIndex() + ")");
-			else
-				GlobalLogger.log(Level.INFO, "Updated attrib array: " + this.instancesAttribs[c].getName());
+			/*else
+				GlobalLogger.log(Level.INFO, "Updated attrib array: " + this.instancesAttribs[c].getName());*/
 		}
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
 	}
