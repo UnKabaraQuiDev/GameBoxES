@@ -2,6 +2,9 @@ package lu.pcy113.pdr.engine.anim.skeletal;
 
 import org.joml.Matrix4f;
 
+/**
+ * @author Original author: Karl
+ */
 public class ArmatureAnimation {
 	
 	public static final int MAX_WEIGHTS = 3;

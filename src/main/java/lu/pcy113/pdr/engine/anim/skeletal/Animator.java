@@ -115,11 +115,11 @@ public class Animator {
 	 */
 	private void applyPoseToJoints(Map<String, Matrix4f> currentPose, Bone Bone, Matrix4f parentTransform) {
 		Matrix4f currentLocalTransform = currentPose.get(Bone.name);
-		Matrix4f currentTransform = Matrix4f.mul(parentTransform, currentLocalTransform, null);
+		Matrix4f currentTransform = parentTransform.mul(currentLocalTransform, new Matrix4f());
 		for (Bone childJoint : Bone.children) {
 			applyPoseToJoints(currentPose, childJoint, currentTransform);
 		}
-		Matrix4f.mul(currentTransform, Bone.getInverseBindTransform(), currentTransform);
+		currentTransform.mul(Bone.getInverseBindTransform());
 		Bone.setAnimationTransform(currentTransform);
 	}
 	
@@ -179,9 +179,9 @@ public class Animator {
 	private Map<String, Matrix4f> interpolatePoses(KeyFrame previousFrame, KeyFrame nextFrame, float progression) {
 		Map<String, Matrix4f> currentPose = new HashMap<String, Matrix4f>();
 		for (String jointName : previousFrame.getJointKeyFrames().keySet()) {
-			JointTransform previousTransform = previousFrame.getJointKeyFrames().get(jointName);
-			JointTransform nextTransform = nextFrame.getJointKeyFrames().get(jointName);
-			JointTransform currentTransform = JointTransform.interpolate(previousTransform, nextTransform, progression);
+			BoneTransform previousTransform = previousFrame.getJointKeyFrames().get(jointName);
+			BoneTransform nextTransform = nextFrame.getJointKeyFrames().get(jointName);
+			BoneTransform currentTransform = BoneTransform.interpolate(previousTransform, nextTransform, progression);
 			currentPose.put(jointName, currentTransform.getLocalTransform());
 		}
 		return currentPose;
