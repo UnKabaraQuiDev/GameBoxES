@@ -2,7 +2,6 @@ package lu.pcy113.pdr.engine.cache.attrib;
 
 import org.lwjgl.opengl.GL40;
 import org.lwjgl.opengl.GL45;
-import org.lwjgl.system.MemoryStack;
 
 public class FloatAttribArray extends AttribArray {
 

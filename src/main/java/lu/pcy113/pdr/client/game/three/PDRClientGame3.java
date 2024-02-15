@@ -2,7 +2,6 @@ package lu.pcy113.pdr.client.game.three;
 
 import java.util.HashMap;
 
-import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -18,15 +17,15 @@ import lu.pcy113.pdr.client.game.three.SlotShader.SlotMaterial;
 import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.anim.CallbackValueInterpolation;
 import lu.pcy113.pdr.engine.anim.Vec4fCallbackValueInterpolation;
-import lu.pcy113.pdr.engine.anim.skeletal.Joint;
-import lu.pcy113.pdr.engine.anim.skeletal.MeshSkeletalAnimation;
+import lu.pcy113.pdr.engine.anim.skeletal.Animator;
+import lu.pcy113.pdr.engine.anim.skeletal.ArmatureAnimation;
 import lu.pcy113.pdr.engine.audio.AudioMaster;
 import lu.pcy113.pdr.engine.cache.attrib.FloatAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.Vec3fAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.Vec3iAttribArray;
 import lu.pcy113.pdr.engine.geom.Mesh;
-import lu.pcy113.pdr.engine.geom.ObjLoader;
 import lu.pcy113.pdr.engine.geom.instance.InstanceEmitter;
+import lu.pcy113.pdr.engine.geom.utils.ObjLoader;
 import lu.pcy113.pdr.engine.graph.composition.Compositor;
 import lu.pcy113.pdr.engine.graph.composition.GenerateRenderLayer;
 import lu.pcy113.pdr.engine.graph.composition.PassRenderLayer;
@@ -47,9 +46,9 @@ import lu.pcy113.pdr.engine.impl.GameLogic;
 import lu.pcy113.pdr.engine.impl.nexttask.NextTask;
 import lu.pcy113.pdr.engine.impl.shader.AbstractShaderPart;
 import lu.pcy113.pdr.engine.objs.entity.Entity;
+import lu.pcy113.pdr.engine.objs.entity.components.ArmatureAnimationComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.InstanceEmitterComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.MeshComponent;
-import lu.pcy113.pdr.engine.objs.entity.components.MeshSkeletalAnimationComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.RenderComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.TextEmitterComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.Transform3DComponent;
@@ -304,15 +303,11 @@ public class PDRClientGame3 extends GameLogic {
 		}));
 		cache.addMesh(skeleMesh);
 		skeleMat.setProperty("diffuseColor", new Vector4f(1,1,1,1));
-		Joint root = new Joint(0, "root", new Matrix4f().identity());
-		root.addChild(new Joint(1, "r1", new Matrix4f().identity().translate(1, 1, 1)));
-		root.addChild(new Joint(2, "r2", new Matrix4f().identity().translate(1, 2, 1)));
-		root.addChild(new Joint(3, "r3", new Matrix4f().identity().translate(1, 0, 2)));
-		MeshSkeletalAnimation meshSkeletalAnimation = new MeshSkeletalAnimation(root, 4);
+		ArmatureAnimation armatureAnimation = new ArmatureAnimation(null, new Animator(null));
 		scene.addEntity("skelet", new Entity(
 				new MeshComponent(skeleMesh),
 				new Transform3DComponent(),
-				new MeshSkeletalAnimationComponent(meshSkeletalAnimation)));
+				new ArmatureAnimationComponent(armatureAnimation)));
 		
 		/* DUMP */
 		cache.dump(System.out);

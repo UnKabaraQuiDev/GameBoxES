@@ -7,14 +7,14 @@ import org.lwjgl.opengl.GL40;
 
 import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pdr.engine.GameEngine;
-import lu.pcy113.pdr.engine.anim.skeletal.MeshSkeletalAnimation;
+import lu.pcy113.pdr.engine.anim.skeletal.ArmatureAnimation;
 import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.shader.RenderShader;
 import lu.pcy113.pdr.engine.objs.entity.Entity;
+import lu.pcy113.pdr.engine.objs.entity.components.ArmatureAnimationComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.MeshComponent;
-import lu.pcy113.pdr.engine.objs.entity.components.MeshSkeletalAnimationComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.TransformComponent;
 import lu.pcy113.pdr.engine.scene.Scene;
 
@@ -82,11 +82,12 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 		GameEngine.DEBUG.end("r_uniforms_transform");
 		
 		GameEngine.DEBUG.start("r_uniforms_skelet");
-		if(e.hasComponent(MeshSkeletalAnimationComponent.class)) {
-			MeshSkeletalAnimationComponent msac = (MeshSkeletalAnimationComponent) e.getComponent(e.getComponents(MeshSkeletalAnimationComponent.class).get(0));
+		if(e.hasComponent(ArmatureAnimationComponent.class)) {
+			ArmatureAnimationComponent msac = (ArmatureAnimationComponent) e.getComponent(e.getComponents(ArmatureAnimationComponent.class).get(0));
 			if(msac != null) {
-				MeshSkeletalAnimation msa = msac.getMeshSkeletalAnimation();
-				msa.bind(shader);
+				ArmatureAnimation msa = msac.getArmatureAnimation();
+				// TODO
+				// msa.bind(shader);
 			}
 		}
 		GameEngine.DEBUG.end("r_uniforms_skelet");
@@ -120,9 +121,9 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 
 		GameEngine.DEBUG.gizmos(cache, scene, projectionMatrix, viewMatrix, transformationMatrix);
 		
-		if(e.hasComponent(MeshSkeletalAnimationComponent.class)) {
+		/*if(e.hasComponent(MeshSkeletalAnimationComponent.class)) {
 			GameEngine.DEBUG.bonesWireframe(cache, scene, ((MeshSkeletalAnimationComponent) e.getComponent(MeshSkeletalAnimationComponent.class)).getMeshSkeletalAnimation(), projectionMatrix, viewMatrix, transformationMatrix);
-		}
+		}*/
 	}
 
 	@Override

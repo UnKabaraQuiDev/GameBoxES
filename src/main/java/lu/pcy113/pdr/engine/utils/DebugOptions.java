@@ -5,19 +5,16 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import org.joml.Matrix4f;
-import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.opengl.GL40;
 
 import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pclib.Pair;
 import lu.pcy113.pdr.engine.GameEngine;
-import lu.pcy113.pdr.engine.anim.skeletal.Joint;
-import lu.pcy113.pdr.engine.anim.skeletal.MeshSkeletalAnimation;
 import lu.pcy113.pdr.engine.cache.CacheManager;
 import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.geom.Mesh;
-import lu.pcy113.pdr.engine.geom.ObjLoader;
+import lu.pcy113.pdr.engine.geom.utils.ObjLoader;
 import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.graph.material.gizmo.GizmoShader;
 import lu.pcy113.pdr.engine.graph.material.gizmo.GizmoShader.GizmoMaterial;
@@ -109,7 +106,7 @@ public class DebugOptions implements Cleanupable {
 		GL40.glEnable(GL40.GL_DEPTH_TEST);
 	}
 	
-	public void bonesWireframe(CacheManager cache, Scene scene, MeshSkeletalAnimation msa, Matrix4f projectionMatrix, Matrix4f viewMatrix, Matrix4f transformationMatrix) {
+	/*public void bonesWireframe(CacheManager cache, Scene scene, MeshSkeletalAnimation msa, Matrix4f projectionMatrix, Matrix4f viewMatrix, Matrix4f transformationMatrix) {
 		if (!bones)
 			return;
 		
@@ -160,7 +157,7 @@ public class DebugOptions implements Cleanupable {
 		 GL40.glVertex3f(start.x, start.y, start.z);
 		 GL40.glVertex3f(end.x, end.y, end.z);
 		 GL40.glEnd();
-	}
+	}*/
 
 	public void pointWireframe(CacheManager cache, Scene scene, Mesh mesh, Matrix4f projectionMatrix, Matrix4f viewMatrix, Matrix4f transformationMatrix) {
 		if (!wireframe)

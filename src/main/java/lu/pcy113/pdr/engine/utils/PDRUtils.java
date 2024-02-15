@@ -3,10 +3,12 @@ package lu.pcy113.pdr.engine.utils;
 import java.awt.Color;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
 import org.joml.Matrix3x2f;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
+import org.joml.Vector3f;
 import org.lwjgl.opengl.GL40;
 import org.lwjgl.opengl.GL45;
 
@@ -221,6 +223,24 @@ public final class PDRUtils {
 		for (int i = 0; i < count; i++)
 			sb.append(str);
 		return sb.toString();
+	}
+
+	public static Vector3f[] floatArrayToVec3f(float[] arr) {
+		return IntStream.range(0, arr.length/3)
+						.mapToObj(i -> new Vector3f(arr[i*3+0], arr[i*3+1], arr[i*3+2]))
+						.toArray(Vector3f[]::new);
+	}
+
+	public static Vector2f[] floatArrayToVec2f(float[] arr) {
+		return IntStream.range(0, arr.length/2)
+				.mapToObj(i -> new Vector2f(arr[i*3+0], arr[i*3+1]))
+				.toArray(Vector2f[]::new);
+	}
+
+	public static Vector3f[] intArrayToVec3f(int[] arr) {
+		return IntStream.range(0, arr.length/3)
+				.mapToObj(i -> new Vector3f(arr[i*3+0], arr[i*3+1], arr[i*3+2]))
+				.toArray(Vector3f[]::new);
 	}
 
 }
