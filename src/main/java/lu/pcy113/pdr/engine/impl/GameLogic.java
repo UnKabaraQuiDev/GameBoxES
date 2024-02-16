@@ -15,6 +15,8 @@ public abstract class GameLogic {
 		if (this.engine != null)
 			throw new IllegalStateException("Already registered");
 		
+		System.out.println("registered");
+		
 		this.engine = e;
 		
 		this.cache = e.getCache();

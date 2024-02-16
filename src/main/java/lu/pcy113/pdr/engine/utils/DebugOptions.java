@@ -49,7 +49,7 @@ public class DebugOptions implements Cleanupable {
 		} else {
 			deb = (GizmoMaterial) cache.loadMaterial(GizmoShader.GizmoMaterial.class);
 		}
-		RenderShader debShader = deb.getShader();
+		RenderShader debShader = deb.getRenderShader();
 
 		debShader.bind();
 
@@ -84,11 +84,11 @@ public class DebugOptions implements Cleanupable {
 		Material deb = cache.getMaterial(WireframeMaterial.NAME);
 		if (deb == null) {
 			WireframeShader shader = new WireframeShader();
-			cache.addShader(shader);
+			cache.addRenderShader(shader);
 			deb = new WireframeMaterial(shader);
 			cache.addMaterial(deb);
 		}
-		RenderShader debShader = deb.getShader();
+		RenderShader debShader = deb.getRenderShader();
 		debShader.bind();
 
 		deb.setPropertyIfPresent(RenderShader.PROJECTION_MATRIX, projectionMatrix);
@@ -114,11 +114,11 @@ public class DebugOptions implements Cleanupable {
 		Material deb = cache.getMaterial(WireframeMaterial.NAME);
 		if (deb == null) {
 			WireframeShader shader = new WireframeShader();
-			cache.addShader(shader);
+			cache.addRenderShader(shader);
 			deb = new WireframeMaterial(shader);
 			cache.addMaterial(deb);
 		}
-		RenderShader debShader = deb.getShader();
+		RenderShader debShader = deb.getRenderShader();
 		debShader.bind();
 
 		deb.setPropertyIfPresent(RenderShader.PROJECTION_MATRIX, projectionMatrix);
@@ -167,11 +167,11 @@ public class DebugOptions implements Cleanupable {
 		Material deb = cache.getMaterial(WireframeMaterial.NAME);
 		if (deb == null) {
 			WireframeShader shader = new WireframeShader();
-			cache.addShader(shader);
+			cache.addRenderShader(shader);
 			deb = new WireframeMaterial(shader);
 			cache.addMaterial(deb);
 		}
-		RenderShader debShader = deb.getShader();
+		RenderShader debShader = deb.getRenderShader();
 		debShader.bind();
 
 		deb.setPropertyIfPresent(RenderShader.PROJECTION_MATRIX, projectionMatrix);

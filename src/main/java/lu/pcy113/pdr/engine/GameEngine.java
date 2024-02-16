@@ -74,7 +74,6 @@ public class GameEngine implements Cleanupable, UniqueID {
 	
 	public GameEngine(String name, GameLogic game, WindowOptions options) {
 		this.name = name;
-		game.register(this);
 		this.gameLogic = game;
 		this.windowOptions = options;
 	}
@@ -223,7 +222,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 		this.window.takeGlContext();
 		
 		try {
-		
+			this.gameLogic.register(this);
 			this.gameLogic.init(this);
 			running = true;
 			updateThread.interrupt();

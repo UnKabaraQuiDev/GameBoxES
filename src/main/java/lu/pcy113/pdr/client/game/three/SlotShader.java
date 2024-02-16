@@ -13,7 +13,9 @@ public class SlotShader extends RenderShader {
 	public static final String TEXTURE = "txt1";
 
 	public SlotShader() {
-		super(SlotShader.class.getName(), true, AbstractShaderPart.load("./resources/shaders/ui/plain.vert"), AbstractShaderPart.load("./resources/shaders/ui/txt1.frag"));
+		super(SlotShader.class.getName(), true,
+				AbstractShaderPart.load("./resources/shaders/ui/plain.vert"),
+				AbstractShaderPart.load("./resources/shaders/ui/txt1.frag"));
 	}
 
 	@Override

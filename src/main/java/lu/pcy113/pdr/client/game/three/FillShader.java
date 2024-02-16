@@ -9,24 +9,35 @@ import lu.pcy113.pdr.engine.impl.Renderable;
 import lu.pcy113.pdr.engine.impl.shader.AbstractShaderPart;
 
 public class FillShader extends RenderShader {
-
+	
+	public static final String NAME = FillShader.class.getName();
+	
 	public static final String COLOR = "color";
 
 	public FillShader() {
-		super(FillShader.class.getName(), AbstractShaderPart.load("./resources/shaders/composite/plain.vert"), AbstractShaderPart.load("./resources/shaders/composite/fill/fill-color.frag"));
+		super(NAME,
+				AbstractShaderPart.load("./resources/shaders/composite/plain.vert"),
+				AbstractShaderPart.load("./resources/shaders/composite/fill/fill-color.frag"));
 	}
 
 	@Override
 	public void createUniforms() {
+		super.createSceneUniforms();
+		
 		createUniform(COLOR);
 	}
 
 	public static class FillMaterial extends Material {
-
+		
+		public static final String NAME = FillMaterial.class.getName();
+		
 		private Vector4f color;
 
 		public FillMaterial() {
-			super(FillMaterial.class.getName(), new FillShader());
+			super(NAME, new FillShader());
+		}
+		public FillMaterial(FillShader shader) {
+			super(NAME, shader);
 		}
 
 		@Override

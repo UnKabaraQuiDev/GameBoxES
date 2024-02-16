@@ -17,8 +17,8 @@ public class BooleanButtonState extends Entity {
 	private BooleanButtonStateMaterial material;
 	
 	public BooleanButtonState(CacheManager cache, Vector3f pos) {
-		if(cache.hasShader(BooleanButtonStateShader.NAME)) {
-			BooleanButtonStateShader shader = (BooleanButtonStateShader) cache.getShader(BooleanButtonStateShader.NAME);
+		if(cache.hasRenderShader(BooleanButtonStateShader.NAME)) {
+			BooleanButtonStateShader shader = (BooleanButtonStateShader) cache.getRenderShader(BooleanButtonStateShader.NAME);
 			this.material = (BooleanButtonStateMaterial) new BooleanButtonStateMaterial(shader);
 			cache.addMaterial(material);
 		}else

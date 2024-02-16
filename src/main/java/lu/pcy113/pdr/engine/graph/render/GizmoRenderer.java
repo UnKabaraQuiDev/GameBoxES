@@ -41,7 +41,7 @@ public class GizmoRenderer extends Renderer<Scene, GizmoComponent> {
 		} else {
 			material = (GizmoMaterial) cache.loadMaterial(GizmoShader.GizmoMaterial.class);
 		}
-		RenderShader shader = material.getShader();
+		RenderShader shader = material.getRenderShader();
 
 		shader.bind();
 		

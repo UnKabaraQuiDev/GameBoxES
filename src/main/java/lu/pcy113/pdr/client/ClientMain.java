@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.logging.Level;
 
 import lu.pcy113.pclib.GlobalLogger;
-import lu.pcy113.pdr.client.game.three.PDRClientGame3;
+import lu.pcy113.pdr.client.game.four.PDRClientGame4;
 import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.graph.window.WindowOptions;
 import lu.pcy113.pdr.engine.utils.FileUtils;
@@ -35,7 +35,7 @@ public class ClientMain {
 
 			WindowOptions options = new WindowOptions();
 			options.fullscreen = false;
-			GameEngine engine = new GameEngine("PDRClientGame3", new PDRClientGame3(), options);
+			GameEngine engine = new GameEngine("PDRClientGame4", new PDRClientGame4(), options);
 			engine.start();
 
 		} catch (Exception e) {

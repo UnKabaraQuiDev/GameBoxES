@@ -73,7 +73,7 @@ public class Material implements UniqueID {
 		this.properties = properties;
 	}
 
-	public RenderShader getShader() {
+	public RenderShader getRenderShader() {
 		return shader;
 	}
 
@@ -106,6 +106,11 @@ public class Material implements UniqueID {
 
 	public void setComponents(Map<Class<? extends MaterialComponent>, MaterialComponent> components) {
 		this.components = components;
+	}
+	
+	@Override
+	public String toString() {
+		return "{"+name+"->"+shader.getId()+"}";
 	}
 
 }

@@ -17,8 +17,8 @@ public class FourButtonState extends Entity {
 	private FourButtonStateMaterial material;
 	
 	public FourButtonState(CacheManager cache, Vector3f pos) {
-		if(cache.hasShader(FourButtonStateShader.NAME)) {
-			FourButtonStateShader shader = (FourButtonStateShader) cache.getShader(FourButtonStateShader.NAME);
+		if(cache.hasRenderShader(FourButtonStateShader.NAME)) {
+			FourButtonStateShader shader = (FourButtonStateShader) cache.getRenderShader(FourButtonStateShader.NAME);
 			this.material = (FourButtonStateMaterial) new FourButtonStateMaterial(shader);
 			cache.addMaterial(material);
 		}else

@@ -89,8 +89,6 @@ public class Compositor implements Cleanupable {
 			return;
 		}
 		
-		GL40.glClearColor(background.x, background.y, background.z, background.w);
-		GL40.glClear(GL40.GL_COLOR_BUFFER_BIT | GL40.GL_DEPTH_BUFFER_BIT);
 		GL40.glEnable(GL40.GL_DEPTH_TEST);
 		
 		for (String l : layers) {
@@ -137,6 +135,11 @@ public class Compositor implements Cleanupable {
 		
 		if(passes.isEmpty())
 			GL40.glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL40.GL_COLOR_BUFFER_BIT, GL40.GL_NEAREST);
+		
+		framebuffer.bind();
+		
+		GL40.glClearColor(background.x, background.y, background.z, background.w);
+		GL40.glClear(GL40.GL_COLOR_BUFFER_BIT | GL40.GL_DEPTH_BUFFER_BIT);
 	}
 	
 	public void addRenderLayer(int i, RenderLayer id) {

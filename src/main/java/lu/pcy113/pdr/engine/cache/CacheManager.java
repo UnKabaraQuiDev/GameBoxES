@@ -35,7 +35,7 @@ public class CacheManager implements Cleanupable {
 	protected Map<String, Scene> scenes;
 	protected Map<String, Renderer<?, ?>> renderers;
 	protected Map<String, Material> materials;
-	protected Map<String, RenderShader> shaders;
+	protected Map<String, RenderShader> renderShaders;
 	protected Map<String, Texture> textures;
 	protected Map<String, PointLight> pointLights;
 	protected Map<String, Gizmo> gizmos;
@@ -50,7 +50,7 @@ public class CacheManager implements Cleanupable {
 		this.scenes = new HashMap<>();
 		this.renderers = new HashMap<>();
 		this.materials = new HashMap<>();
-		this.shaders = new HashMap<>();
+		this.renderShaders = new HashMap<>();
 		this.textures = new HashMap<>();
 		this.pointLights = new HashMap<>();
 		this.gizmos = new HashMap<>();
@@ -77,8 +77,8 @@ public class CacheManager implements Cleanupable {
 		// materials.values().forEach(Material::cleanup);
 		this.materials.clear();
 		
-		this.shaders.values().forEach(RenderShader::cleanup);
-		this.shaders.clear();
+		this.renderShaders.values().forEach(RenderShader::cleanup);
+		this.renderShaders.clear();
 		
 		this.textures.values().forEach(Texture::cleanup);
 		this.textures.clear();
@@ -133,12 +133,10 @@ public class CacheManager implements Cleanupable {
 		return this.materials.putIfAbsent(m.getId(), m) == null;
 	}
 	
-	public boolean addShader(RenderShader m) {
-		if (this.shaders.containsKey(m.getId()) && !this.shaders.get(m.getId()).equals(m))
-			this.shaders.remove(m.getId()).cleanup();
-		else
-			return true;
-		return this.shaders.putIfAbsent(m.getId(), m) == null;
+	public boolean addRenderShader(RenderShader m) {
+		if (this.renderShaders.containsKey(m.getId()) && !this.renderShaders.get(m.getId()).equals(m))
+			this.renderShaders.remove(m.getId()).cleanup();
+		return this.renderShaders.putIfAbsent(m.getId(), m) == null;
 	}
 	
 	public boolean addTexture(Texture m) {
@@ -214,8 +212,8 @@ public class CacheManager implements Cleanupable {
 		return this.materials.get(name);
 	}
 	
-	public RenderShader getShader(String name) {
-		return this.shaders.get(name);
+	public RenderShader getRenderShader(String name) {
+		return this.renderShaders.get(name);
 	}
 	
 	public Texture getTexture(String name) {
@@ -286,12 +284,12 @@ public class CacheManager implements Cleanupable {
 		this.materials = materials;
 	}
 	
-	public Map<String, RenderShader> getShaders() {
-		return this.shaders;
+	public Map<String, RenderShader> getRenderShaders() {
+		return this.renderShaders;
 	}
 	
-	public void setShaders(Map<String, RenderShader> shaders) {
-		this.shaders = shaders;
+	public void setRenderShaders(Map<String, RenderShader> shaders) {
+		this.renderShaders = shaders;
 	}
 	
 	public Map<String, Texture> getTextures() {
@@ -362,8 +360,8 @@ public class CacheManager implements Cleanupable {
 	 * CONTAIN
 	 */
 	
-	public boolean hasShader(String name) {
-		return shaders.containsKey(name);
+	public boolean hasRenderShader(String name) {
+		return renderShaders.containsKey(name);
 	}
 	
 	public boolean hasMaterial(String name) {
@@ -400,7 +398,7 @@ public class CacheManager implements Cleanupable {
 			Material mat = clazz.getConstructor(types).newInstance(args);
 			
 			addMaterial(mat);
-			addShader(mat.getShader());
+			addRenderShader(mat.getRenderShader());
 			
 			return mat;
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
@@ -431,7 +429,14 @@ public class CacheManager implements Cleanupable {
 	}
 	
 	public Mesh loadMesh(String name, Material material, String path) {
-		Mesh mesh = ObjLoader.loadMesh(name, material, path);
+		Mesh mesh = null;
+		
+		if(path.endsWith("obj"))
+			mesh = ObjLoader.loadMesh(name, material, path);
+		
+		if(mesh == null)
+			throw new RuntimeException("Could not load mesh.");
+		
 		addMesh(mesh);
 		return mesh;
 	}
@@ -459,7 +464,7 @@ public class CacheManager implements Cleanupable {
 		out.println(Scene.class.getName() + ": " + this.scenes.size() + ": " + this.scenes);
 		out.println(Renderer.class.getName() + ": " + this.renderers.size() + ": " + this.renderers);
 		out.println(Material.class.getName() + ": " + this.materials.size() + ": " + this.materials);
-		out.println(RenderShader.class.getName() + ": " + this.shaders.size() + ": " + this.shaders);
+		out.println(RenderShader.class.getName() + ": " + this.renderShaders.size() + ": " + this.renderShaders);
 		out.println(Texture.class.getName() + ": " + this.textures.size() + ": " + this.textures);
 		out.println(Gizmo.class.getName() + ": " + this.gizmos.size() + ": " + this.gizmos);
 		out.println(RenderLayer.class.getName() + ": " + this.renderLayers.size() + ": " + this.renderLayers);

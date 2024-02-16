@@ -50,7 +50,7 @@ public class TextEmitterRenderer extends Renderer<Scene, TextEmitterComponent> {
 			GlobalLogger.log(Level.WARNING, "Material is null!");
 			return;
 		}
-		RenderShader shader = material.getShader();
+		RenderShader shader = material.getRenderShader();
 		if (shader == null) {
 			GlobalLogger.log(Level.WARNING, "Shader is null!");
 			return;

@@ -17,8 +17,8 @@ public class JoystickState extends Entity {
 	private JoystickStateMaterial material;
 	
 	public JoystickState(CacheManager cache, Vector3f pos) {
-		if(cache.hasShader(JoystickStateShader.NAME)) {
-			JoystickStateShader shader = (JoystickStateShader) cache.getShader(JoystickStateShader.NAME);
+		if(cache.hasRenderShader(JoystickStateShader.NAME)) {
+			JoystickStateShader shader = (JoystickStateShader) cache.getRenderShader(JoystickStateShader.NAME);
 			this.material = (JoystickStateMaterial) new JoystickStateMaterial(shader);
 			cache.addMaterial(material);
 		}else

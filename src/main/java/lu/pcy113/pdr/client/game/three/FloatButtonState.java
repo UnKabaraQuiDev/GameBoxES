@@ -17,8 +17,8 @@ public class FloatButtonState extends Entity {
 	private FloatButtonStateMaterial material;
 	
 	public FloatButtonState(CacheManager cache, Vector3f pos) {
-		if(cache.hasShader(FloatButtonStateShader.NAME)) {
-			FloatButtonStateShader shader = (FloatButtonStateShader) cache.getShader(FloatButtonStateShader.NAME);
+		if(cache.hasRenderShader(FloatButtonStateShader.NAME)) {
+			FloatButtonStateShader shader = (FloatButtonStateShader) cache.getRenderShader(FloatButtonStateShader.NAME);
 			this.material = (FloatButtonStateMaterial) new FloatButtonStateMaterial(shader);
 			cache.addMaterial(material);
 		}else

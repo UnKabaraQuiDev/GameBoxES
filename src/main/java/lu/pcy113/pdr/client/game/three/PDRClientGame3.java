@@ -111,10 +111,6 @@ public class PDRClientGame3 extends GameLogic {
 		Mesh slotMesh = ObjLoader.loadMesh("slot", slotMaterial, "./resources/models/plane.obj");
 		this.cache.addMesh(slotMesh);
 		
-		this.backgroundMaterial = (FillMaterial) cache.loadMaterial(FillShader.FillMaterial.class);
-		GenerateRenderLayer genLayer = new GenerateRenderLayer("gen", this.backgroundMaterial);
-		this.cache.addRenderLayer(genLayer);
-		
 		
 		FloatAttribArray faa = new FloatAttribArray("hover", 7, 1, new float[3 * 5], false, 1);
 		slotInstMaterial = (SlotInstanceMaterial) cache.loadMaterial(SlotInstanceShader.SlotInstanceMaterial.class, slotTexture);
@@ -187,6 +183,9 @@ public class PDRClientGame3 extends GameLogic {
 		this.cache.addRenderer(new InstanceEmitterRenderer());
 		this.cache.addRenderer(new TextEmitterRenderer());
 		
+		this.backgroundMaterial = (FillMaterial) cache.loadMaterial(FillShader.FillMaterial.class);
+		GenerateRenderLayer genLayer = new GenerateRenderLayer("gen", this.backgroundMaterial);
+		this.cache.addRenderLayer(genLayer);
 		
 		SceneRenderLayer sceneRender = new SceneRenderLayer("scene", this.scene);
 		this.cache.addRenderLayer(sceneRender);
@@ -195,7 +194,7 @@ public class PDRClientGame3 extends GameLogic {
 		this.cache.addRenderLayer(uiRender);
 		
 		BoxBlurMaterial boxBlurMaterial = (BoxBlurMaterial) cache.loadMaterial(BoxBlurShader.BoxBlurMaterial.class);
-		//cache.addShader(boxBlurMaterial.getShader());
+		//cache.addRenderShader(boxBlurMaterial.getRenderShader());
 		PassRenderLayer boxBlurPass = new PassRenderLayer("boxBlurPass", boxBlurMaterial);
 		cache.addRenderLayer(boxBlurPass);
 		
@@ -257,7 +256,7 @@ public class PDRClientGame3 extends GameLogic {
 				createUniform(skyboxUniform);
 			}
 		};
-		cache.addShader(shader);
+		cache.addRenderShader(shader);
 		TextureMaterial material = new TextureMaterial("skybox", shader, new HashMap<String, Texture>(1) {
 			{
 				put("skybox", cmtxt);
@@ -285,9 +284,9 @@ public class PDRClientGame3 extends GameLogic {
 				createUniform("diffuseColor");
 			}
 		};
-		cache.addShader(skeleShader);
+		cache.addRenderShader(skeleShader);
 		Material skeleMat = new Material("skeleMat", skeleShader);
-		cache.addShader(skeleShader);
+		cache.addRenderShader(skeleShader);
 		
 		
 		// Mesh pdrasset1 = ObjLoader.loadMesh("pdrasset1", skeleMat, "./resources/models/scene_pdrassets_1.obj");

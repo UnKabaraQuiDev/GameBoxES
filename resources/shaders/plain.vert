@@ -14,6 +14,7 @@ out struct per_vertex {
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 transformationMatrix;
+uniform vec3 viewPos;
 
 void main() {
 	vec4 worldPosition = transformationMatrix * vec4(i_pos, 1.0);
