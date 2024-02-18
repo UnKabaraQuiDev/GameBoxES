@@ -73,10 +73,10 @@ public class Window implements Cleanupable {
 		GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 0);
 		GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_PROFILE, GLFW.GLFW_OPENGL_CORE_PROFILE);
 		GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_FORWARD_COMPAT, GLFW.GLFW_TRUE);
-		/*
-		 * GLFW.glfwWindowHint(GLFW.GLFW_SAMPLES, 4);
-		 * GL40.glEnable(GL40.GL_MULTISAMPLE);
-		 */
+		if(options.windowMultisample > 1) {
+			GL40.glEnable(GL40.GL_MULTISAMPLE);
+			GLFW.glfwWindowHint(GLFW.GLFW_SAMPLES, options.windowMultisample);
+		}
 		GL40.glEnable(GL40.GL_DEPTH_TEST);
 
 		updateOptions();
