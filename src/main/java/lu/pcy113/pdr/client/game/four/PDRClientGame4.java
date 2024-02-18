@@ -71,6 +71,11 @@ public class PDRClientGame4 extends GameLogic {
 		cache.addRenderer(new InstanceEmitterRenderer());
 		cache.addRenderer(new TextEmitterRenderer());
 		
+		/* 
+		 * TODO: Compute shaders
+		 * TODO: Compositor + Compute shader
+		 */
+		
 		
 		this.backgroundMaterial = (FillMaterial) cache.loadMaterial(FillShader.FillMaterial.class);
 		this.backgroundMaterialInterpolation = new CallbackValueInterpolation<FillMaterial, Vector4f>(
