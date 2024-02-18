@@ -333,6 +333,15 @@ public class GameEngine implements Cleanupable, UniqueID {
 				waitingForEvents = false;
 				updateThread.interrupt();
 			}
+			
+			queue: {
+				if(nextTask()) {
+					DEBUG.start("m_async_task");
+					NextTask nt = pullTask();
+					nt.execute(taskEnvironnment);
+					DEBUG.end("m_async_task");
+				}
+			}
 		}
 		
 		try {

@@ -143,6 +143,8 @@ public class PDRClientGame4 extends GameLogic {
 		cache.dump(System.out);
 	}
 	
+	private boolean previousF = false;
+	
 	@Override
 	public void input(float dTime) {
 		System.out.println(camera.getPosition());
@@ -152,9 +154,8 @@ public class PDRClientGame4 extends GameLogic {
 				(window.isKeyPressed(GLFW.GLFW_KEY_Z) ? 0.1f : 0) - (window.isKeyPressed(GLFW.GLFW_KEY_S) ? 0.1f : 0));
 		camera.updateMatrix();
 		
-		if(window.isKeyPressed(GLFW.GLFW_KEY_F)) {
-			System.err.println("screenshot");
-			
+		if(window.isKeyPressed(GLFW.GLFW_KEY_F) && !previousF) {
+			previousF = true;
 			NextTask nt = createTask(GameEngine.QUEUE_RENDER);
 			nt.exec((s) -> {
 				Framebuffer fb = compositor.getFramebuffer();
@@ -165,6 +166,7 @@ public class PDRClientGame4 extends GameLogic {
 				img.free();
 				return success ? 1 : 0;
 			}).then((s) -> {
+				previousF = false;
 				return 1;
 			});
 			pushTask(nt);
