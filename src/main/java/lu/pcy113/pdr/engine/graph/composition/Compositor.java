@@ -160,5 +160,9 @@ public class Compositor implements Cleanupable {
 		if (color0 != null)
 			color0.cleanup();
 	}
+	
+	public Framebuffer getFramebuffer() {
+		return framebuffer;
+	}
 
 }

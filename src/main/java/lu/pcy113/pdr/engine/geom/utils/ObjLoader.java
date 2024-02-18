@@ -22,7 +22,7 @@ import lu.pcy113.pdr.engine.utils.FileUtils;
 public final class ObjLoader {
 	
 	public static Gizmo loadGizmo(String name, String path) {
-		String[] lines = FileUtils.readFile(path).split("\n");
+		String[] lines = FileUtils.readStringFile(path).split("\n");
 		
 		List<Vector3f> vertices = new ArrayList<>();
 		/*
@@ -97,7 +97,7 @@ public final class ObjLoader {
 	}
 	
 	public static Mesh loadMesh(String name, Material material, String path) {
-		String[] lines = FileUtils.readFile(path).split("\n");
+		String[] lines = FileUtils.readStringFile(path).split("\n");
 		
 		List<Vector3f> vertices = new ArrayList<>();
 		List<Vector3f> normals = new ArrayList<>();

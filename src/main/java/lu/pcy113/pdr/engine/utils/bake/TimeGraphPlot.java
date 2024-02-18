@@ -32,7 +32,7 @@ public class TimeGraphPlot {
 		}
 		String filePath = args[0];
 		
-		List<String> dataList = Arrays.asList(FileUtils.readFile(filePath).split("\n"));
+		List<String> dataList = Arrays.asList(FileUtils.readStringFile(filePath).split("\n"));
 		
 		double firstStartNano = Long.MAX_VALUE, firstStartMs = Long.MAX_VALUE;
 		firstDatas: {

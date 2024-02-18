@@ -5,10 +5,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import org.lwjgl.opengl.GL40;
-import org.lwjgl.stb.STBImage;
 import org.lwjgl.system.MemoryUtil;
 
+import lu.pcy113.pdr.engine.utils.FileUtils;
 import lu.pcy113.pdr.engine.utils.PDRUtils;
+import lu.pcy113.pdr.engine.utils.MemImage;
 import lu.pcy113.pdr.engine.utils.consts.TexelInternalFormat;
 import lu.pcy113.pdr.engine.utils.consts.TextureType;
 
@@ -83,10 +84,10 @@ public class SingleTexture extends Texture {
 			PDRUtils.throwGLError("Invalid sample count: "+super.sampleCount+" for "+super.txtType+", min is 1");
 		}
 		
-		System.out.println("info: "+super.internalFormat+" does not support "+super.sampleCount+" samples, max are Depth:"+MAX_DEPTH_TEXTURE_SAMPLES+", Color:"+MAX_COLOR_TEXTURE_SAMPLES+", Integer:"+MAX_INTEGER_SAMPLES);
-		System.out.println("info: "+"Invalid texture size: "+width+"x"+height+"x"+depth+", max is "+MAX_TEXTURE_SIZE);
-		System.out.println("info: "+"Invalid sample count: "+super.sampleCount+" for "+super.txtType);
-		System.out.println("info: isms: "+TextureType.isMultisampled(super.txtType));
+//		System.out.println("info: "+super.internalFormat+" does not support "+super.sampleCount+" samples, max are Depth:"+MAX_DEPTH_TEXTURE_SAMPLES+", Color:"+MAX_COLOR_TEXTURE_SAMPLES+", Integer:"+MAX_INTEGER_SAMPLES);
+//		System.out.println("info: "+"Invalid texture size: "+width+"x"+height+"x"+depth+", max is "+MAX_TEXTURE_SIZE);
+//		System.out.println("info: "+"Invalid sample count: "+super.sampleCount+" for "+super.txtType);
+//		System.out.println("info: isms: "+TextureType.isMultisampled(super.txtType));
 		
 		return true;
 	}
@@ -111,18 +112,14 @@ public class SingleTexture extends Texture {
 	
 	// FILE BUFFER LOAD
 	private void generateFileBufferTexture() {
-		int[] w = new int[1];
-		int[] h = new int[1];
-		int[] c = new int[1];
-		
 		if(!Files.exists(Paths.get(path)))
 			throw new RuntimeException("File '"+path+"' not found");
 		
-		ByteBuffer buffer = STBImage.stbi_load(path, w, h, c, 4);
+		MemImage image = FileUtils.STBILoad(path);
 		
-		int wi = w[0];
-		int he = h[0];
-		int channels = c[0];
+		int wi = image.getWidth();
+		int he = image.getHeight();
+		int channels = image.getChannels();
 		
 		format = getFormatByChannels(channels);
 		internalFormat = getInternalFormatByChannels(channels);
@@ -142,7 +139,7 @@ public class SingleTexture extends Texture {
 		
 		generateBufferTexture();
 		
-		STBImage.stbi_image_free(buffer);
+		FileUtils.STBIFree(buffer);
 	}
 	
 	// BUFFER LOAD 
@@ -164,8 +161,7 @@ public class SingleTexture extends Texture {
 		applyWrap();
 		
 		if(generateMipmaps) {
-			GL40.glGenerateMipmap(txtType.getGlId());
-			PDRUtils.checkGlError("GenerateMipmap["+txtType+"]");
+			genMipMaps();
 		}
 		
 		unbind();
@@ -196,6 +192,27 @@ public class SingleTexture extends Texture {
 		}
 		
 		unbind();
+	}
+	
+	public MemImage getStoredImage() {
+		/*int width = GL40.glGetTexLevelParameteri(GL40.GL_TEXTURE_2D, 0, GL40. GL_TEXTURE_WIDTH);
+		int height = GL40.glGetTexLevelParameteri(GL40.GL_TEXTURE_2D, 0, GL40. GL_TEXTURE_HEIGHT);
+		int internalFormat = GL40.glGetTexLevelParameteri(GL40.GL_TEXTURE_2D, 0, GL40.GL_TEXTURE_INTERNAL_FORMAT);
+		int channels = Texture.getChannelsByInternalFormat(internalFormat);
+		int internalType = GL40.glGetTexLevelParameteriv(GL40.GL_TEXTURE_2D, 0, GL40.GL_TEXTURE_COMPONENTS);*/
+		
+		bind();
+		
+		int channelCount = getChannelsByFormat(format.getGlId());
+		ByteBuffer buffer = MemoryUtil.memAlloc(width * height * channelCount); // BufferUtils.createByteBuffer(width * height * channelCount);
+		//GL40.glBindBuffer(GL40.GL_PIXEL_PACK_BUFFER, 0);
+		//GL40.glBindFramebuffer(GL40.GL_READ_FRAMEBUFFER_BINDING, 0);
+		GL40.glReadPixels(0, 0, width, height, format.getGlId(), dataType.getGlId(), buffer);
+		PDRUtils.checkGlError("glReadPixels(0, 0, "+width+", "+height+", "+internalFormat+", "+dataType+")");
+		
+		unbind();
+		
+		return new MemImage(width, height, channelCount, buffer, false, true);
 	}
 	
 	public void setSize(int width) {

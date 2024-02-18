@@ -9,7 +9,7 @@ import lu.pcy113.pdr.engine.utils.FileUtils;
 public final class FDicLoader {
 
 	public static FDicFile load(File fdicFile) {
-		String[] lines = FileUtils.readFile(fdicFile.getAbsolutePath()).replaceAll("\\ŧ", " ").split("\n+");
+		String[] lines = FileUtils.readStringFile(fdicFile.getAbsolutePath()).replaceAll("\\ŧ", " ").split("\n+");
 		/*for(int l = 0; l < lines.length; l++) {
 			System.out.println("-- "+lines[l]);
 		}*/

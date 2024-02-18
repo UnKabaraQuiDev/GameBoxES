@@ -38,10 +38,10 @@ public class Framebuffer implements UniqueID, Cleanupable {
 		} else if(TextureType.TXT2D.equals(txtType) || TextureType.TXT2DMS.equals(txtType)) {
 			GL40.glFramebufferTexture2D(GL40.GL_FRAMEBUFFER, attach.getGlId()+offset, txtType.getGlId(), texture.getTid(), 0);
 		} else if(TextureType.TXT3D.equals(txtType)) {
+			// TODO
 			assert true : "TODO: Not implemented yet";
 			//GL40.glFramebufferTexture3D(GL40.GL_FRAMEBUFFER, attach.getGlId()+offset, texture.getTextureType().getGlId(), texture.getTid(), 0);
 		}
-			
 		
 		this.attachments.put(attach.getGlId()+offset, texture);
 		return PDRUtils.checkGlError("FrameBufferTexture["+attach+"+"+offset+"]["+name+"]="+texture.getId());
@@ -77,6 +77,10 @@ public class Framebuffer implements UniqueID, Cleanupable {
 	public void unbind(int target) {
 		GL40.glBindFramebuffer(target, 0);
 		PDRUtils.checkGlError("BindFrameBuffer["+target+"]["+name+"]="+fbo);
+	}
+	
+	public Texture getAttachmedTexture(FrameBufferAttachment attach, int offset) {
+		return attachments.get(attach.getGlId()+offset);
 	}
 	
 	@Override

@@ -76,6 +76,11 @@ public abstract class Texture implements Cleanupable, UniqueID {
 		PDRUtils.checkGlError("BindTexture["+txtType+"]=0");
 	}
 	
+	public void genMipMaps() {
+		GL40.glGenerateMipmap(txtType.getGlId());
+		PDRUtils.checkGlError("GenerateMipmap["+txtType+"]");
+	}
+	
 	public void applyFilter() {
 		if(!isMultisampled()) {
 			GL40.glTexParameteri(txtType.getGlId(), TextureParameter.MIN_FILTER.getGlId(), minFilter.getGlId());
@@ -267,6 +272,32 @@ public abstract class Texture implements Cleanupable, UniqueID {
 			return TexelInternalFormat.RGBA;
 		}
 		return null;
+	}
+
+	public static int getChannelsByInternalFormat(int format) {
+		if(format == TexelInternalFormat.RED.getGlId()) {
+			return 1;
+		}else if(format == TexelInternalFormat.RG.getGlId()) {
+			return 2;
+		}else if(format == TexelInternalFormat.RGB.getGlId()) {
+			return 3;
+		}else if(format == TexelInternalFormat.RGBA.getGlId()) {
+			return 4;
+		}
+		return -1;
+	}
+	
+	public static int getChannelsByFormat(int format) {
+		if(format == TexelFormat.RED.getGlId()) {
+			return 1;
+		}else if(format == TexelFormat.RG.getGlId()) {
+			return 2;
+		}else if(format == TexelFormat.RGB.getGlId()) {
+			return 3;
+		}else if(format == TexelFormat.RGBA.getGlId()) {
+			return 4;
+		}
+		return -1;
 	}
 	
 }

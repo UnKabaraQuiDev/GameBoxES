@@ -38,7 +38,7 @@ public abstract class AbstractShaderPart implements UniqueID, Cleanupable {
 
 		this.sid = GL40.glCreateShader(type);
 		PDRUtils.checkGlError("CreateShader("+type+") ("+file+")");
-		GL40.glShaderSource(sid, FileUtils.readFile(file));
+		GL40.glShaderSource(sid, FileUtils.readStringFile(file));
 		PDRUtils.checkGlError("ShaderSource("+sid+") ("+file+")");
 		GL40.glCompileShader(sid);
 		PDRUtils.checkGlError("CompileShader("+sid+") ("+file+")");

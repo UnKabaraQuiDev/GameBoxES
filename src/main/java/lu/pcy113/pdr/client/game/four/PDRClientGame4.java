@@ -3,6 +3,7 @@ package lu.pcy113.pdr.client.game.four;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.opengl.GL40;
 
 import lu.pcy113.pdr.client.game.four.PlainShader.PlainMaterial;
 import lu.pcy113.pdr.client.game.three.BoxBlurShader;
@@ -13,6 +14,7 @@ import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.anim.CallbackValueInterpolation;
 import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.graph.composition.Compositor;
+import lu.pcy113.pdr.engine.graph.composition.Framebuffer;
 import lu.pcy113.pdr.engine.graph.composition.GenerateRenderLayer;
 import lu.pcy113.pdr.engine.graph.composition.PassRenderLayer;
 import lu.pcy113.pdr.engine.graph.composition.SceneRenderLayer;
@@ -21,7 +23,9 @@ import lu.pcy113.pdr.engine.graph.render.MeshRenderer;
 import lu.pcy113.pdr.engine.graph.render.Scene2DRenderer;
 import lu.pcy113.pdr.engine.graph.render.Scene3DRenderer;
 import lu.pcy113.pdr.engine.graph.render.TextEmitterRenderer;
+import lu.pcy113.pdr.engine.graph.texture.SingleTexture;
 import lu.pcy113.pdr.engine.impl.GameLogic;
+import lu.pcy113.pdr.engine.impl.nexttask.NextTask;
 import lu.pcy113.pdr.engine.objs.entity.Entity;
 import lu.pcy113.pdr.engine.objs.entity.components.MeshComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.Transform3DComponent;
@@ -30,6 +34,9 @@ import lu.pcy113.pdr.engine.scene.Scene3D;
 import lu.pcy113.pdr.engine.scene.camera.Camera;
 import lu.pcy113.pdr.engine.scene.camera.Camera3D;
 import lu.pcy113.pdr.engine.scene.camera.Projection;
+import lu.pcy113.pdr.engine.utils.FileUtils;
+import lu.pcy113.pdr.engine.utils.MemImage;
+import lu.pcy113.pdr.engine.utils.consts.FrameBufferAttachment;
 import lu.pcy113.pdr.engine.utils.interpolation.Interpolators;
 
 public class PDRClientGame4 extends GameLogic {
@@ -144,6 +151,24 @@ public class PDRClientGame4 extends GameLogic {
 				(window.isKeyPressed(GLFW.GLFW_KEY_R) ? 0.1f : 0) - (window.isKeyPressed(GLFW.GLFW_KEY_F) ? 0.1f : 0),
 				(window.isKeyPressed(GLFW.GLFW_KEY_Z) ? 0.1f : 0) - (window.isKeyPressed(GLFW.GLFW_KEY_S) ? 0.1f : 0));
 		camera.updateMatrix();
+		
+		if(window.isKeyPressed(GLFW.GLFW_KEY_F)) {
+			System.err.println("screenshot");
+			
+			NextTask nt = createTask(GameEngine.QUEUE_RENDER);
+			nt.exec((s) -> {
+				Framebuffer fb = compositor.getFramebuffer();
+				fb.unbind();
+				SingleTexture color0 = (SingleTexture) fb.getAttachmedTexture(FrameBufferAttachment.COLOR_FIRST, 0);
+				MemImage img = color0.getStoredImage();
+				boolean success = FileUtils.STBISaveIncremental("./logs/screenshot.png", img);
+				img.free();
+				return success ? 1 : 0;
+			}).then((s) -> {
+				return 1;
+			});
+			pushTask(nt);
+		}
 	}
 	
 	@Override

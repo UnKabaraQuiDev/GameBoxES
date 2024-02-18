@@ -28,6 +28,7 @@ public class NextTask {
 		this.state = this.function.run(state);
 		
 		if(this.callback != null) {
+			this.callback.state = this.state;
 			env.push(this.source, this.callback);
 		}
 	}
