@@ -417,8 +417,8 @@ public class PDRClientGame3 extends GameLogic {
 				textEntity.getComponent(TextEmitterComponent.class).getTextEmitter(cache).setText("updated... " + debugInfo.getText()).updateText();
 			});
 			return status;
-		});
-		pushTask(nt);
+		}).push();
+		//pushTask(nt);
 		
 		skeleEntity.getComponent(Transform3DComponent.class).getTransform().setScale(new Vector3f(GX*0.1f)).updateMatrix();
 		

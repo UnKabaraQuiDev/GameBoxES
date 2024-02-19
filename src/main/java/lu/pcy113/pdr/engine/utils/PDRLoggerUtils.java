@@ -76,7 +76,7 @@ public final class PDRLoggerUtils {
 	}
 
 	private static void logC(String string) {
-		GlobalLogger.log(count+++". "+string);
+		GlobalLogger.log(count++ +". "+string);
 	}
 	
 }

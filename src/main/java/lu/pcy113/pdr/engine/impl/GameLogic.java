@@ -35,9 +35,9 @@ public abstract class GameLogic {
 		return engine.createTask(target);
 	}
 	
-	protected boolean pushTask(NextTask nt) {
+	/*protected boolean pushTask(NextTask nt) {
 		return engine.pushTask(nt);
-	}
+	}*/
 	
 	protected boolean waitForFrameEnd() {
 		return engine.waitForFrameEnd();

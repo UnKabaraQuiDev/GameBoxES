@@ -363,7 +363,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 	}
 	
 	public NextTask createTask(int target) {
-		return new NextTask(getThreadId(), target);
+		return new NextTask(getThreadId(), target, taskEnvironnment);
 	}
 	
 	public int getThreadId() {
@@ -378,9 +378,9 @@ public class GameEngine implements Cleanupable, UniqueID {
 		return -1;
 	}
 
-	public boolean pushTask(NextTask task) {
+	/*public boolean pushTask(NextTask task) {
 		return taskEnvironnment.push(task.getTarget(), task);
-	}
+	}*/
 	
 	public boolean nextTask() {
 		return taskEnvironnment.hasNext(getThreadId());

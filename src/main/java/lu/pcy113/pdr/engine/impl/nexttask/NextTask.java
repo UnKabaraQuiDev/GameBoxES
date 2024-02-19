@@ -7,11 +7,13 @@ public class NextTask {
 	private NextTaskFunction function;
 	private NextTask callback;
 	
+	private final NextTaskEnvironnment env;
 	private final int source, target;
 	
-	public NextTask(int source, int target) {
+	public NextTask(int source, int target, NextTaskEnvironnment env) {
 		this.source = source;
 		this.target = target;
+		this.env = env;
 	}
 	
 	public NextTask exec(NextTaskFunction function) {
@@ -20,8 +22,15 @@ public class NextTask {
 	}
 	
 	public NextTask then(NextTaskFunction callback) {
-		this.callback = new NextTask(target, source).exec(callback);
+		this.callback = new NextTask(target, source, env).exec(callback);
 		return this;
+	}
+	
+	public boolean push() {
+		return push(env);
+	}
+	public boolean push(NextTaskEnvironnment env) {
+		return env.push(target, this);
 	}
 	
 	public void execute(NextTaskEnvironnment env) {

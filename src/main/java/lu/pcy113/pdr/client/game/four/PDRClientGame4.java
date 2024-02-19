@@ -156,20 +156,21 @@ public class PDRClientGame4 extends GameLogic {
 		
 		if(window.isKeyPressed(GLFW.GLFW_KEY_F) && !previousF) {
 			previousF = true;
-			NextTask nt = createTask(GameEngine.QUEUE_RENDER);
-			nt.exec((s) -> {
-				Framebuffer fb = compositor.getFramebuffer();
-				fb.unbind();
-				SingleTexture color0 = (SingleTexture) fb.getAttachmedTexture(FrameBufferAttachment.COLOR_FIRST, 0);
-				MemImage img = color0.getStoredImage();
-				boolean success = FileUtils.STBISaveIncremental("./logs/screenshot.png", img);
-				img.free();
-				return success ? 1 : 0;
-			}).then((s) -> {
-				previousF = false;
-				return 1;
-			});
-			pushTask(nt);
+			createTask(GameEngine.QUEUE_RENDER)
+				.exec((s) -> {
+					System.err.println("Thread: "+Thread.currentThread().getName());
+					Framebuffer fb = compositor.getFramebuffer();
+					fb.unbind();
+					SingleTexture color0 = (SingleTexture) fb.getAttachmedTexture(FrameBufferAttachment.COLOR_FIRST, 0);
+					MemImage img = color0.getStoredImage();
+					boolean success = FileUtils.STBISaveIncremental("./logs/screenshot.png", img);
+					img.free();
+					return success ? 1 : 0;
+				}).then((s) -> {
+					previousF = false;
+					return 1;
+				}).push();
+			//pushTask(nt);
 		}
 	}
 	
