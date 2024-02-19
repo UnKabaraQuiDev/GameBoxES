@@ -147,7 +147,7 @@ public class PDRClientGame4 extends GameLogic {
 	
 	@Override
 	public void input(float dTime) {
-		System.out.println(camera.getPosition());
+		// System.out.println(camera.getPosition());
 		camera.getPosition().add(
 				(window.isKeyPressed(GLFW.GLFW_KEY_Q) ? 0.1f : 0) - (window.isKeyPressed(GLFW.GLFW_KEY_D) ? 0.1f : 0),
 				(window.isKeyPressed(GLFW.GLFW_KEY_R) ? 0.1f : 0) - (window.isKeyPressed(GLFW.GLFW_KEY_F) ? 0.1f : 0),
@@ -158,7 +158,7 @@ public class PDRClientGame4 extends GameLogic {
 			previousF = true;
 			createTask(GameEngine.QUEUE_RENDER)
 				.exec((s) -> {
-					System.err.println("Thread: "+Thread.currentThread().getName());
+					// System.err.println("Thread: "+Thread.currentThread().getName());
 					Framebuffer fb = compositor.getFramebuffer();
 					fb.unbind();
 					SingleTexture color0 = (SingleTexture) fb.getAttachmedTexture(FrameBufferAttachment.COLOR_FIRST, 0);
