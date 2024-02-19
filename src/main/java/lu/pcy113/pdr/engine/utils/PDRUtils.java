@@ -242,5 +242,17 @@ public final class PDRUtils {
 				.mapToObj(i -> new Vector3f(arr[i*3+0], arr[i*3+1], arr[i*3+2]))
 				.toArray(Vector3f[]::new);
 	}
+	
+	public static int[] castInt(Object[] arr) {
+		return Arrays.stream(arr).mapToInt(s -> (int) s).toArray();
+	}
+	
+	public static int[] castInt(Integer[] arr) {
+		return Arrays.stream(arr).mapToInt(Integer::valueOf).toArray();
+	}
+
+	public static Object[] toObjectArrya(int[] data) {
+		return Arrays.stream(data).mapToObj(Integer::valueOf).toArray();
+	}
 
 }

@@ -3,7 +3,6 @@ package lu.pcy113.pdr.client.game.four;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.opengl.GL40;
 
 import lu.pcy113.pdr.client.game.four.PlainShader.PlainMaterial;
 import lu.pcy113.pdr.client.game.three.BoxBlurShader;
@@ -25,7 +24,6 @@ import lu.pcy113.pdr.engine.graph.render.Scene3DRenderer;
 import lu.pcy113.pdr.engine.graph.render.TextEmitterRenderer;
 import lu.pcy113.pdr.engine.graph.texture.SingleTexture;
 import lu.pcy113.pdr.engine.impl.GameLogic;
-import lu.pcy113.pdr.engine.impl.nexttask.NextTask;
 import lu.pcy113.pdr.engine.objs.entity.Entity;
 import lu.pcy113.pdr.engine.objs.entity.components.MeshComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.Transform3DComponent;
