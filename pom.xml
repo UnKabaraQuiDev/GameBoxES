@@ -184,7 +184,7 @@
 					</execution>
 					
 					<!-- Add a source directory for packets4j project -->
-					<!--<execution>
+					<execution>
 						<id>add-source-packets4j</id>
 						<phase>generate-sources</phase>
 						<goals>
@@ -195,10 +195,10 @@
 								<source>${project.basedir}/../packets4j/src</source>
 							</sources>
 						</configuration>
-					</execution>-->
+					</execution>
 	
 					<!-- Add a source directory for JByteCodec project -->
-					<!--<execution>
+					<execution>
 						<id>add-source-jbytecodec</id>
 						<phase>generate-sources</phase>
 						<goals>
@@ -209,7 +209,7 @@
 								<source>${project.basedir}/../JByteCodec/src</source>
 							</sources>
 						</configuration>
-					</execution>-->
+					</execution>
 	
 					<!-- Add a source directory for PDRUtils project -->
 					<execution>

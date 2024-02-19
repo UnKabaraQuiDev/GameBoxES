@@ -198,6 +198,7 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 				new Vec2fAttribArray("uv", 2, 1, new Vector2f[] { new Vector2f(0, 0), new Vector2f(1, 0), new Vector2f(1, 1), new Vector2f(0, 1), }));
 		return mesh;
 	}
+	
 	public static Mesh newCube(String name, Material material2, Vector3f size) {
 		Mesh mesh = new Mesh(name, material2,
 				new Vec3fAttribArray("pos", 0, 1,

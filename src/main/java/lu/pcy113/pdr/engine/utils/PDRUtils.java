@@ -251,8 +251,33 @@ public final class PDRUtils {
 		return Arrays.stream(arr).mapToInt(Integer::valueOf).toArray();
 	}
 
-	public static Object[] toObjectArrya(int[] data) {
+	public static Object[] toObjectArray(int[] data) {
 		return Arrays.stream(data).mapToObj(Integer::valueOf).toArray();
+	}
+
+	public static ByteBuffer intArrayToByteBuffer(int[] data) {
+		ByteBuffer buffer = ByteBuffer.allocate(data.length * Integer.BYTES);
+		for (int i = 0; i < data.length; i++) {
+			buffer.putInt(data[i]);
+		}
+		return (ByteBuffer) buffer.flip();
+	}
+	
+	public static IntStream intToBytes(int value) {
+		return IntStream.of(
+				(value >> 24) & 0xFF,
+				(value >> 16) & 0xFF,
+				(value >> 8) & 0xFF,
+				value & 0xFF
+		);
+	}
+
+	public static int[] byteBufferToIntArray(ByteBuffer bData, int length) {
+		int[] data = new int[length];
+		for(int i = 0; i < length; i++) {
+			data[i] = bData.getInt();
+		}
+		return data;
 	}
 
 }

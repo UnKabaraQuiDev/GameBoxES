@@ -2,7 +2,7 @@ package lu.pcy113.pdr.engine.utils.codec.encoder;
 
 import java.nio.ByteBuffer;
 
-import lu.pcy113.jb.codec.encoder.ArrayEncoder;
+import lu.pcy113.jb.codec.CodecManager;
 import lu.pcy113.jb.codec.encoder.DefaultObjectEncoder;
 import lu.pcy113.jb.codec.encoder.StringEncoder;
 import lu.pcy113.pdr.engine.cache.attrib.UIntAttribArray;
@@ -10,7 +10,7 @@ import lu.pcy113.pdr.engine.utils.PDRUtils;
 import lu.pcy113.pdr.engine.utils.codec.decoder.UIntAttribArrayDecoder;
 
 /**
- * STRING name ; INT index ; INT dataSize ; INT bufferType ; BOOL _static ; INT divisor ; ARRAY data ; INT END
+ * STRING name ; INT index ; INT dataSize ; INT bufferType ; BOOL _static ; INT divisor ; INT arrayLength ; INT[] data ; INT END
  */
 public class UIntAttribArrayEncoder extends DefaultObjectEncoder<UIntAttribArray> {
 	
@@ -32,7 +32,7 @@ public class UIntAttribArrayEncoder extends DefaultObjectEncoder<UIntAttribArray
 		
 		// String name, int index, int dataSize, int bufferType, boolean iStatic, int divisor
 		
-		int bufferLength = name.length()+ 4*Integer.BYTES +1 +4*data.length;
+		int bufferLength = estimateSize(head, obj);
 		
 		ByteBuffer bb = ByteBuffer.allocate(bufferLength);
 		
@@ -46,13 +46,24 @@ public class UIntAttribArrayEncoder extends DefaultObjectEncoder<UIntAttribArray
 		bb.putInt(bufferType);
 		bb.put((byte) (_static ? 1 : 0));
 		bb.putInt(divisor);
+		bb.putInt(data.length);
 		
-		ByteBuffer bbData = ((ArrayEncoder) cm.getEncoderByClass(Object[].class)).encode(false, PDRUtils.toObjectArrya(data));
-		bb.put(bbData);
+		// IntBuffer bbData = ByteBuffer.allocate(data.length*Integer.BYTES).asIntBuffer();
+		// bbData.put(data);
+		// ((ArrayEncoder) cm.getEncoderByClass(Object[].class)).encode(false, PDRUtils.toObjectArrya(data));
+		bb.put(PDRUtils.intArrayToByteBuffer(data));
 		
 		bb.putShort(UIntAttribArrayDecoder.END);
 		
 		return (ByteBuffer) bb.flip();
+	}
+	
+	@Override
+	public int estimateSize(boolean head, UIntAttribArray obj) {
+		return (head ? CodecManager.HEAD_SIZE : 0) 
+				+obj.getName().length()*Character.BYTES
+				+4*Integer.BYTES +1
+				+Integer.BYTES*obj.getData().length;
 	}
 	
 }
