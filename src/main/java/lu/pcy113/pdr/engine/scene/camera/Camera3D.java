@@ -16,26 +16,20 @@ public class Camera3D extends Camera {
 		super(proj);
 		this.position = position;
 		this.rotation = rot;
+		
+		viewMatrix.setLookAt(
+				position, // Camera position
+				new Vector3f(0.0f, 0.0f, 0.0f), // Look at position
+				GameEngine.UP  // Up vector
+		);
 	}
-
+	
 	public Camera3D lookAt(Vector3f from, Vector3f to) {
-		// Calculate the forward direction (Z-axis) of the camera
-		Vector3f forward = new Vector3f(to).sub(from).normalize();
-		// Calculate the up direction (Y-axis) of the camera
-		Vector3f up = new Vector3f(GameEngine.UP); // Assuming Y is the up direction
-		// Calculate the right direction (X-axis) of the camera
-		Vector3f right = new Vector3f(up).cross(forward).normalize();
-		// Recalculate the up direction to ensure it's orthogonal to the forward and
-		// right directions
-		up.set(forward).cross(right).normalize();
-		// Create a rotation matrix that represents the camera's orientation
-		Matrix4f viewMatrix = new Matrix4f().lookAt(from, to, up);
-		// Convert the rotation matrix to a quaternion
-		rotation.set(viewMatrix.getNormalizedRotation(new Quaternionf()));
-		// Update the camera's position
-		position.set(from);
-
-		updateMatrix();
+		viewMatrix.setLookAt(
+				from, // Camera position
+				to, // Look at position
+				GameEngine.UP  // Up vector
+		);
 
 		return this;
 	}

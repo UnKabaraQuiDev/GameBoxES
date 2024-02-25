@@ -92,7 +92,9 @@ public final class ObjLoader {
 		 * "Indices " + Arrays.toString(indicesArr));
 		 */
 		
-		return new Gizmo(name, new Vec3fAttribArray("pos", 0, 1, verticesArr, GL40.GL_ARRAY_BUFFER), new UIntAttribArray("ind", -1, 1, indicesArr, GL40.GL_ELEMENT_ARRAY_BUFFER),
+		return new Gizmo(name,
+				new Vec3fAttribArray("pos", 0, 1, verticesArr, GL40.GL_ARRAY_BUFFER),
+				new UIntAttribArray("ind", -1, 1, indicesArr, GL40.GL_ELEMENT_ARRAY_BUFFER),
 				new Vec4fAttribArray("col", 1, 1, colorArr, GL40.GL_ARRAY_BUFFER));
 	}
 	
