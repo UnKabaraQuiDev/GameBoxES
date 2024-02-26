@@ -27,12 +27,12 @@ public class GameEngine implements Cleanupable, UniqueID {
 			Z_POS = new Vector3f(0, 0, 1),
 			Z_NEG = new Vector3f(0, 0, -1);
 	
-	public static Vector3f UP = new Vector3f(Z_POS),
+	public static Vector3f UP = new Vector3f(Y_POS),
 			DOWN = new Vector3f(Z_NEG),
 			LEFT = new Vector3f(X_NEG),
 			RIGHT = new Vector3f(X_POS),
-			FORWARD = new Vector3f(Y_POS),
-			BACK = new Vector3f(Y_NEG);
+			FORWARD = new Vector3f(Z_POS),
+			BACK = new Vector3f(X_POS);
 	
 	public static long POLL_EVENT_TIMEOUT = 500,
 					BUFFER_SWAP_TIMEOUT = 500,

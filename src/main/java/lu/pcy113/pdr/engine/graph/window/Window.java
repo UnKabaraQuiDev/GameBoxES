@@ -6,8 +6,10 @@ import java.util.function.BiConsumer;
 import java.util.logging.Level;
 
 import org.joml.Vector2d;
+import org.joml.Vector2f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWFramebufferSizeCallback;
 import org.lwjgl.glfw.GLFWGamepadState;
@@ -43,6 +45,8 @@ public class Window implements Cleanupable {
 	private GLFWErrorCallback errorCallback;
 	private Vector2d scroll = new Vector2d();
 	private GLFWScrollCallback scrollCallback;
+	private Vector2f cursorPos = new Vector2f();
+	private GLFWCursorPosCallback cursorPosCallback;
 
 	private int width, height;
 
@@ -70,7 +74,7 @@ public class Window implements Cleanupable {
 		GLFW.glfwDefaultWindowHints();
 		GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);
 		GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 4);
-		GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 0);
+		GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 1);
 		GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_PROFILE, GLFW.GLFW_OPENGL_CORE_PROFILE);
 		GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_FORWARD_COMPAT, GLFW.GLFW_TRUE);
 		if(options.windowMultisample > 1) {
@@ -83,12 +87,18 @@ public class Window implements Cleanupable {
 
 		keyCallback = GLFWKeyCallback.create((window, key, scancode, action, mods) -> callback_key(window, key, scancode, action, mods));
 		GLFW.glfwSetKeyCallback(handle, keyCallback);
+		
 		joystickCallback = GLFWJoystickCallback.create((jid, event) -> callback_joystick(jid, event));
 		GLFW.glfwSetJoystickCallback(joystickCallback);
+		
 		frameBufferCallback = GLFWFramebufferSizeCallback.create((window, width, height) -> callback_frameBuffer(window, width, height));
 		GLFW.glfwSetFramebufferSizeCallback(handle, frameBufferCallback);
+		
 		scrollCallback = GLFWScrollCallback.create((window, sx, sy) -> callback_scroll(window, sx, sy));
 		GLFW.glfwSetScrollCallback(handle, scrollCallback);
+		
+		cursorPosCallback = GLFWCursorPosCallback.create((window, sx, sy) -> callback_cursor_pos(window, sx, sy));
+		GLFW.glfwSetCursorPosCallback(handle,cursorPosCallback);
 
 		gamepadState = GLFWGamepadState.create();
 
@@ -104,8 +114,12 @@ public class Window implements Cleanupable {
 		GL.setCapabilities(this.capabilities);
 	}
 	
+	private void callback_cursor_pos(long window, double sx, double sy) {
+		cursorPos.set(sx, sy);
+	}
+	
 	private void callback_scroll(long window, double sx, double sy) {
-		System.err.println("scroll: " + sx + ", " + sy + " handle" + window);
+		//System.err.println("scroll: " + sx + ", " + sy + " handle" + window);
 		if (window != handle)
 			return;
 		scroll.add(sx, sy);
@@ -170,6 +184,14 @@ public class Window implements Cleanupable {
 		byte[] bb = new byte[fb.remaining() - 1];
 		fb.get(bb);
 		return bb[hat];
+	}
+	
+	public boolean isMouseButtonPressed(int mbid) {
+		return GLFW.glfwGetMouseButton(handle, mbid) == GLFW.GLFW_PRESS;
+	}
+	
+	public Vector2f getMousePos() {
+		return cursorPos;
 	}
 
 	public boolean getJoystickHat(int jid, int hat, byte state) {

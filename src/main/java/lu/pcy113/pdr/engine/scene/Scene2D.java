@@ -19,7 +19,7 @@ public class Scene2D extends Scene {
 	public Scene2D(String name, Camera cam) {
 		super(name, cam);
 	}
-
+	
 	@Override
 	public void cleanup() {
 		super.cleanup();
