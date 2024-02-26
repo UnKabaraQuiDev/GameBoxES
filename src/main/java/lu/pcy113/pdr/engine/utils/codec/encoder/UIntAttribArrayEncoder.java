@@ -31,8 +31,17 @@ public class UIntAttribArrayEncoder extends DefaultObjectEncoder<UIntAttribArray
 		int[] data = obj.getData();
 		
 		// String name, int index, int dataSize, int bufferType, boolean iStatic, int divisor
+		// int: index, dataSize, bufferType, divisor, dataLength = 6
 		
 		int bufferLength = estimateSize(head, obj);
+		System.out.println("alloc size: "+bufferLength);
+		System.out.println("name : "+obj.getName());
+		System.out.println("index; "+obj.getIndex());
+		System.out.println("dataSize: "+obj.getDataSize());
+		System.out.println("bufferType: "+obj.getBufferType());
+		System.out.println("static: "+obj.isStatic());
+		System.out.println("divisor: "+obj.getDivisor());
+		System.out.println("data: "+data.length);
 		
 		ByteBuffer bb = ByteBuffer.allocate(bufferLength);
 		
@@ -51,7 +60,8 @@ public class UIntAttribArrayEncoder extends DefaultObjectEncoder<UIntAttribArray
 		// IntBuffer bbData = ByteBuffer.allocate(data.length*Integer.BYTES).asIntBuffer();
 		// bbData.put(data);
 		// ((ArrayEncoder) cm.getEncoderByClass(Object[].class)).encode(false, PDRUtils.toObjectArrya(data));
-		bb.put(PDRUtils.intArrayToByteBuffer(data));
+		ByteBuffer byteArray = PDRUtils.intArrayToByteBuffer(data);
+		bb.put(byteArray);
 		
 		bb.putShort(UIntAttribArrayDecoder.END);
 		
@@ -61,8 +71,8 @@ public class UIntAttribArrayEncoder extends DefaultObjectEncoder<UIntAttribArray
 	@Override
 	public int estimateSize(boolean head, UIntAttribArray obj) {
 		return (head ? CodecManager.HEAD_SIZE : 0) 
-				+obj.getName().length()*Character.BYTES
-				+4*Integer.BYTES +1
+				+cm.estimateSize(false, obj.getName())
+				+5*Integer.BYTES +1
 				+Integer.BYTES*obj.getData().length;
 	}
 	

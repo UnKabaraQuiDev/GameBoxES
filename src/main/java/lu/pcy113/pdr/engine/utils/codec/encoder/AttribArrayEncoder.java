@@ -15,10 +15,15 @@ public class AttribArrayEncoder extends DefaultObjectEncoder<AttribArray> {
 	@Override
 	public ByteBuffer encode(boolean head, AttribArray obj) {
 		if(obj instanceof UIntAttribArray) {
-			return ((UIntAttribArrayEncoder) cm.getEncoderByClass(UIntAttribArray.class)).encode(head, (UIntAttribArray) obj);
+			return ((UIntAttribArrayEncoder) cm.getEncoderByClass(UIntAttribArray.class)).encode(true, (UIntAttribArray) obj);
 		}
 		
 		return null;
+	}
+	
+	@Override
+	public boolean confirmClassType(Class<?> clazz) {
+		return AttribArray.class.isInstance(clazz);
 	}
 	
 }

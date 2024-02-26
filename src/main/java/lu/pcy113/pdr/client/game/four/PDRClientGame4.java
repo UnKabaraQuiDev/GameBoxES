@@ -4,6 +4,8 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 
+import lu.pcy113.jb.codec.CodecManager;
+import lu.pcy113.jb.utils.ArrayUtils;
 import lu.pcy113.pdr.client.game.four.PlainShader.PlainMaterial;
 import lu.pcy113.pdr.client.game.three.BoxBlurShader;
 import lu.pcy113.pdr.client.game.three.BoxBlurShader.BoxBlurMaterial;
@@ -34,6 +36,9 @@ import lu.pcy113.pdr.engine.scene.camera.Camera3D;
 import lu.pcy113.pdr.engine.scene.camera.Projection;
 import lu.pcy113.pdr.engine.utils.FileUtils;
 import lu.pcy113.pdr.engine.utils.MemImage;
+import lu.pcy113.pdr.engine.utils.codec.encoder.AttribArrayEncoder;
+import lu.pcy113.pdr.engine.utils.codec.encoder.MeshEncoder;
+import lu.pcy113.pdr.engine.utils.codec.encoder.UIntAttribArrayEncoder;
 import lu.pcy113.pdr.engine.utils.consts.FrameBufferAttachment;
 import lu.pcy113.pdr.engine.utils.interpolation.Interpolators;
 
@@ -139,6 +144,14 @@ public class PDRClientGame4 extends GameLogic {
 		
 		
 		cache.dump(System.out);
+		
+		// exporting meshes as bin format
+		CodecManager cm = CodecManager.base();
+		cm.register(new MeshEncoder(), (short) 0x22);
+		cm.register(new AttribArrayEncoder(), (short) 0x23);
+		cm.register(new UIntAttribArrayEncoder(), (short) 0x24);
+		
+		System.out.println(ArrayUtils.byteBufferToHexString(cm.encode(true, cube)));
 	}
 	
 	private boolean previousF = false;
