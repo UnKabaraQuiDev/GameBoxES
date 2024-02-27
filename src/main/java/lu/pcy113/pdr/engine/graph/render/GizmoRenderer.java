@@ -58,7 +58,7 @@ public class GizmoRenderer extends Renderer<Scene, GizmoComponent> {
 			viewMatrix = scene.getCamera().getViewMatrix();
 			shader.setUniform(RenderShader.PROJECTION_MATRIX, projectionMatrix);
 			shader.setUniform(RenderShader.VIEW_MATRIX, viewMatrix);
-			shader.setUniform(RenderShader.VIEW_POSITION, scene.getCamera().getViewMatrix().getTranslation(new Vector3f())); // Not sure
+			//shader.setUniform(RenderShader.VIEW_POSITION, scene.getCamera().getViewMatrix().getTranslation(new Vector3f())); // Not sure
 		}
 		GameEngine.DEBUG.end("r_uniforms_scene");
 		

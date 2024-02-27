@@ -58,7 +58,7 @@ public class DebugOptions implements Cleanupable {
 		if (modelMatrix != null)
 			deb.setPropertyIfPresent(RenderShader.TRANSFORMATION_MATRIX, modelMatrix);
 		else
-			deb.setPropertyIfPresent(RenderShader.TRANSFORMATION_MATRIX, new Matrix4f());
+			deb.setPropertyIfPresent(RenderShader.TRANSFORMATION_MATRIX, new Matrix4f().identity());
 		deb.bindProperties(cache, scene, debShader);
 
 		if (GameEngine.DEBUG.ignoreDepth)
@@ -93,7 +93,10 @@ public class DebugOptions implements Cleanupable {
 
 		deb.setPropertyIfPresent(RenderShader.PROJECTION_MATRIX, projectionMatrix);
 		deb.setPropertyIfPresent(RenderShader.VIEW_MATRIX, viewMatrix);
-		deb.setPropertyIfPresent(RenderShader.TRANSFORMATION_MATRIX, transformationMatrix);
+		if(transformationMatrix != null)
+			deb.setPropertyIfPresent(RenderShader.TRANSFORMATION_MATRIX, transformationMatrix);
+		else
+			deb.setPropertyIfPresent(RenderShader.TRANSFORMATION_MATRIX, new Matrix4f().identity());
 		deb.setPropertyIfPresent(WireframeShader.COLOR, wireframeColor);
 		deb.bindProperties(cache, scene, debShader);
 

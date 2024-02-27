@@ -86,7 +86,7 @@ public class PDRClientGame4 extends GameLogic {
 		
 		Gizmo axis = ObjLoader.loadGizmo("grid_xyz", "./resources/models/gizmos/grid_xyz.obj");
 		cache.addGizmo(axis);
-		scene.addEntity("grid_xyz", new GizmoComponent(axis), new Transform3DComponent());
+		scene.addEntity("grid_xyz", new GizmoComponent(axis));
 		
 		Gizmo cone = ObjLoader.loadGizmo("cone", "./resources/models/gizmos/Ycone.obj");
 		cache.addGizmo(cone);
@@ -210,20 +210,20 @@ public class PDRClientGame4 extends GameLogic {
 				
 				System.err.println(ray);
 				
-				rayEntity.getComponent(Transform3DComponent.class).getTransform()
+				/*rayEntity.getComponent(Transform3DComponent.class).getTransform()
 						.setTranslation(ray.getOrigin())
 						//.setScale(ray.getLength())
 						.setRotation(eulerQuaternion)
-				.updateMatrix();
+				.updateMatrix();*/
 				
 				System.err.println(camera.getPosition());
-				System.err.println(ray.getOrigin() + " : " + ray.getDir());
+				System.err.println(ray.getOrigin() + " -> " + ray.getDir());
 				
 				Vector3f pos = ((Camera3D) scene.getCamera()).projectPlane(ray, GameEngine.RIGHT, GameEngine.UP);
 				
 				System.err.println(pos);
 				
-				defaultCube.getComponent(Transform3DComponent.class).getTransform().setTranslation(pos).updateMatrix();
+				//defaultCube.getComponent(Transform3DComponent.class).getTransform().setTranslation(pos).updateMatrix();
 				
 				return 1;
 			}).push();
