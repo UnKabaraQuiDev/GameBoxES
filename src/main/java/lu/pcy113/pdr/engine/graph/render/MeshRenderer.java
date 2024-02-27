@@ -72,7 +72,7 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 		
 		GameEngine.DEBUG.start("r_uniforms_transform");
 		if (e.hasComponent(TransformComponent.class)) {
-			TransformComponent transform = (TransformComponent) m.getParent().getComponent(m.getParent().getComponents(TransformComponent.class).get(0));
+			TransformComponent transform = (TransformComponent) e.getComponent(e.getComponents(TransformComponent.class).get(0));
 			if (transform != null) {
 				transformationMatrix = transform.getTransform().getMatrix();
 			}

@@ -17,6 +17,10 @@ public class ClientMain {
 	/*
 	 * TODO: Add other font files x95
 	 * V: Add antialiasing to framebuffer renderlayer
+	 * TODO: AttribArray resize
+	 * TODO: utils.codec.*
+	 * TODO: Compute shaders
+	 * TODO: Compositor + Compute shader
 	 */
 	
 	public static void main(String[] args) throws FileNotFoundException, IOException {
