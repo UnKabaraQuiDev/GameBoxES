@@ -55,7 +55,11 @@ public class Material implements UniqueID {
 		if (properties.containsKey(name))
 			properties.put(name, value);
 	}
-
+	
+	public boolean hasProperty(String name) {
+		return properties.containsKey(name);
+	}
+	
 	public Object getProperty(String name) {
 		return properties.get(name);
 	}
