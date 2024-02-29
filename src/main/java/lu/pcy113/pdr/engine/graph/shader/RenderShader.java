@@ -20,13 +20,17 @@ public abstract class RenderShader extends AbstractShader {
 		super(name, parts);
 		this.transparent = transparent;
 	}
-	
+
 	public void createSceneUniforms() {
 		// verts
-		createUniform(PROJECTION_MATRIX);
-		createUniform(VIEW_MATRIX);
-		createUniform(TRANSFORMATION_MATRIX);
-		createUniform(VIEW_POSITION);
+		createUniform(
+				PROJECTION_MATRIX);
+		createUniform(
+				VIEW_MATRIX);
+		createUniform(
+				TRANSFORMATION_MATRIX);
+		createUniform(
+				VIEW_POSITION);
 	}
 
 	public boolean isTransparent() {

@@ -27,17 +27,24 @@ public class TextEmitterRenderer extends Renderer<Scene, TextEmitterComponent> {
 
 	@Override
 	public void render(CacheManager cache, Scene scene, TextEmitterComponent tec) {
-		TextEmitter te = tec.getTextEmitter(cache);
+		TextEmitter te = tec.getTextEmitter(
+				cache);
 		if (te == null) {
-			GlobalLogger.log(Level.WARNING, "TextEmitter is null!");
+			GlobalLogger.log(
+					Level.WARNING,
+					"TextEmitter is null!");
 			return;
 		}
 
-		GlobalLogger.log(Level.INFO, "TextEmitter : " + te.getId());
+		GlobalLogger.log(
+				Level.INFO,
+				"TextEmitter : " + te.getId());
 
 		InstanceEmitter pe = te.getInstances();
 		if (pe == null) {
-			GlobalLogger.log(Level.WARNING, "InstanceEmitter is null!");
+			GlobalLogger.log(
+					Level.WARNING,
+					"InstanceEmitter is null!");
 			return;
 		}
 
@@ -47,12 +54,16 @@ public class TextEmitterRenderer extends Renderer<Scene, TextEmitterComponent> {
 
 		Material material = mesh.getMaterial();
 		if (material == null) {
-			GlobalLogger.log(Level.WARNING, "Material is null!");
+			GlobalLogger.log(
+					Level.WARNING,
+					"Material is null!");
 			return;
 		}
 		RenderShader shader = material.getRenderShader();
 		if (shader == null) {
-			GlobalLogger.log(Level.WARNING, "Shader is null!");
+			GlobalLogger.log(
+					Level.WARNING,
+					"Shader is null!");
 			return;
 		}
 
@@ -62,37 +73,63 @@ public class TextEmitterRenderer extends Renderer<Scene, TextEmitterComponent> {
 		if (scene != null) {
 			projectionMatrix = scene.getCamera().getProjection().getProjMatrix();
 			viewMatrix = scene.getCamera().getViewMatrix();
-			material.setPropertyIfPresent(RenderShader.PROJECTION_MATRIX, projectionMatrix);
-			material.setPropertyIfPresent(RenderShader.VIEW_MATRIX, viewMatrix);
+			material.setPropertyIfPresent(
+					RenderShader.PROJECTION_MATRIX,
+					projectionMatrix);
+			material.setPropertyIfPresent(
+					RenderShader.VIEW_MATRIX,
+					viewMatrix);
 		}
-		if (tec.getParent().hasComponent(TransformComponent.class)) {
-			TransformComponent transform = (TransformComponent) tec.getParent().getComponent(tec.getParent().getComponents(TransformComponent.class).get(0));
+		if (tec.getParent().hasComponent(
+				TransformComponent.class)) {
+			TransformComponent transform = (TransformComponent) tec.getParent().getComponent(
+					tec.getParent().getComponents(
+							TransformComponent.class).get(
+									0));
 			if (transform != null) {
 				transformationMatrix = transform.getTransform().getMatrix();
 			}
 		}
-		material.setPropertyIfPresent(RenderShader.TRANSFORMATION_MATRIX, transformationMatrix);
+		material.setPropertyIfPresent(
+				RenderShader.TRANSFORMATION_MATRIX,
+				transformationMatrix);
 
 		if (scene instanceof Scene3D) {
-			PointLightSurfaceComponent plsc = tec.getParent().getComponent(PointLightSurfaceComponent.class);
+			PointLightSurfaceComponent plsc = tec.getParent().getComponent(
+					PointLightSurfaceComponent.class);
 			if (plsc != null)
-				plsc.bindLights(cache, ((Scene3D) scene).getLights(), material);
+				plsc.bindLights(
+						cache,
+						((Scene3D) scene).getLights(),
+						material);
 		}
 
-		material.bindProperties(cache, scene, shader);
+		material.bindProperties(
+				cache,
+				scene,
+				shader);
 
 		if (shader.isTransparent()) {
-			GL40.glEnable(GL40.GL_BLEND);
-			GL40.glBlendFunc(GL40.GL_SRC_ALPHA, GL40.GL_ONE_MINUS_SRC_ALPHA);
+			GL40.glEnable(
+					GL40.GL_BLEND);
+			GL40.glBlendFunc(
+					GL40.GL_SRC_ALPHA,
+					GL40.GL_ONE_MINUS_SRC_ALPHA);
 		}
 
 		pe.bind();
-		
+
 		// pe.updatePull();
 
-		GL40.glDrawElementsInstanced(GL40.GL_TRIANGLES, mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0, pe.getParticleCount());
+		GL40.glDrawElementsInstanced(
+				GL40.GL_TRIANGLES,
+				mesh.getIndicesCount(),
+				GL40.GL_UNSIGNED_INT,
+				0,
+				pe.getParticleCount());
 
-		GL40.glDisable(GL40.GL_BLEND);
+		GL40.glDisable(
+				GL40.GL_BLEND);
 
 		// debug only
 		// GameEngine.DEBUG.wireframe(cache, scene, mesh, projectionMatrix, viewMatrix,
@@ -100,7 +137,12 @@ public class TextEmitterRenderer extends Renderer<Scene, TextEmitterComponent> {
 
 		mesh.unbind();
 
-		GameEngine.DEBUG.gizmos(cache, scene, projectionMatrix, viewMatrix, transformationMatrix);
+		GameEngine.DEBUG.gizmos(
+				cache,
+				scene,
+				projectionMatrix,
+				viewMatrix,
+				transformationMatrix);
 	}
 
 }

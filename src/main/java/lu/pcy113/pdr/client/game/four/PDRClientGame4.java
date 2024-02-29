@@ -360,8 +360,8 @@ public class PDRClientGame4 extends GameLogic {
 		if (window.isKeyPressed(
 				GLFW.GLFW_KEY_T) && !previousF) {
 			previousF = true;
-			createTask(GameEngine.QUEUE_RENDER)
-					.exec(
+			createTask(
+					GameEngine.QUEUE_RENDER).exec(
 							(s) -> {
 								System.err.println(
 										"M Thread exec: " + Thread.currentThread().getName());

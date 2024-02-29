@@ -14,16 +14,16 @@ import lu.pcy113.pdr.engine.utils.PDRUtils;
  * @author Original author: Karl
  */
 public class Bone {
-	
+
 	public final int index;// ID
 	public final String name;
 	public final List<Bone> children = new ArrayList<Bone>();
-	
+
 	private Matrix4f animatedTransform = new Matrix4f();
-	
+
 	private final Matrix4f localBindTransform;
 	private Matrix4f inverseBindTransform = new Matrix4f();
-	
+
 	/**
 	 * @param index              - the joint's index (ID).
 	 * @param name               - the name of the joint. This is how the joint is
@@ -38,7 +38,7 @@ public class Bone {
 		this.name = name;
 		this.localBindTransform = bindLocalTransform;
 	}
-	
+
 	/**
 	 * Adds a child joint to this joint. Used during the creation of the joint
 	 * hierarchy. Joints can have multiple children, which is why they are stored in
@@ -47,9 +47,10 @@ public class Bone {
 	 * @param child - the new child joint of this joint.
 	 */
 	public void addChild(Bone child) {
-		this.children.add(child);
+		this.children.add(
+				child);
 	}
-	
+
 	/**
 	 * The animated transform is the transform that gets loaded up to the shader and
 	 * is used to deform the vertices of the "skin". It represents the
@@ -65,7 +66,7 @@ public class Bone {
 	public Matrix4f getAnimatedTransform() {
 		return animatedTransform;
 	}
-	
+
 	/**
 	 * This method allows those all important "joint transforms" (as I referred to
 	 * them in the tutorial) to be set by the animator. This is used to put the
@@ -76,7 +77,7 @@ public class Bone {
 	public void setAnimationTransform(Matrix4f animationTransform) {
 		this.animatedTransform = animationTransform;
 	}
-	
+
 	/**
 	 * This returns the inverted model-space bind transform. The bind transform is
 	 * the original model-space transform of the joint (when no animation is
@@ -89,7 +90,7 @@ public class Bone {
 	public Matrix4f getInverseBindTransform() {
 		return inverseBindTransform;
 	}
-	
+
 	/**
 	 * This is called during set-up, after the joints hierarchy has been created.
 	 * This calculates the model-space bind transform of this joint like so: </br>
@@ -109,24 +110,38 @@ public class Bone {
 	 */
 	protected void calcInverseBindTransform(Matrix4f parentBindTransform) {
 		Matrix4f bindTransform = new Matrix4f();
-		parentBindTransform.mul(localBindTransform, bindTransform);
-		bindTransform.invert(inverseBindTransform);
+		parentBindTransform.mul(
+				localBindTransform,
+				bindTransform);
+		bindTransform.invert(
+				inverseBindTransform);
 		for (Bone child : children) {
-			child.calcInverseBindTransform(bindTransform);
+			child.calcInverseBindTransform(
+					bindTransform);
 		}
 	}
-	
+
 	public int getChildCount() {
-		return children.stream().map(Bone::getChildCount).reduce(0, Integer::sum);
+		return children.stream().map(
+				Bone::getChildCount).reduce(
+						0,
+						Integer::sum);
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Bone{"+name+", "+index+"}";
+		return "Bone{" + name + ", " + index + "}";
 	}
-	
+
 	public String toString(int i) {
-		return PDRUtils.repeatString("\t", i)+toString()+"\n"+children.stream().map(b -> b.toString(i+1)).collect(Collectors.joining());
+		return PDRUtils.repeatString(
+				"\t",
+				i) + toString() + "\n"
+				+ children.stream().map(
+						b -> b.toString(
+								i + 1))
+						.collect(
+								Collectors.joining());
 	}
-	
+
 }

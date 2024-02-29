@@ -6,19 +6,19 @@ import java.util.Map;
 import org.joml.Matrix4f;
 
 public class Animator {
-	
+
 	private final ArmatureAnimation armature;
-	
+
 	private Animation currentAnimation;
 	private float animationTime = 0;
-	
+
 	/**
 	 * @param entity - the entity which will by animated by this animator.
 	 */
 	public Animator(ArmatureAnimation armature) {
 		this.armature = armature;
 	}
-	
+
 	/**
 	 * Indicates that the entity should carry out the given animation. Resets the
 	 * animation time so that the new animation starts from the beginning.
@@ -29,7 +29,7 @@ public class Animator {
 		this.animationTime = 0;
 		this.currentAnimation = animation;
 	}
-	
+
 	/**
 	 * This method should be called each frame to update the animation currently
 	 * being played. This increases the animation time (and loops it back to zero if
@@ -41,11 +41,15 @@ public class Animator {
 		if (currentAnimation == null) {
 			return;
 		}
-		increaseAnimationTime(deltaTime);
+		increaseAnimationTime(
+				deltaTime);
 		Map<String, Matrix4f> currentPose = calculateCurrentAnimationPose();
-		applyPoseToJoints(currentPose, armature.getRootBone(), new Matrix4f());
+		applyPoseToJoints(
+				currentPose,
+				armature.getRootBone(),
+				new Matrix4f());
 	}
-	
+
 	/**
 	 * Increases the current animation time which allows the animation to progress.
 	 * If the current animation has reached the end then the timer is reset, causing
@@ -57,7 +61,7 @@ public class Animator {
 			this.animationTime %= currentAnimation.getLength();
 		}
 	}
-	
+
 	/**
 	 * This method returns the current animation pose of the entity. It returns the
 	 * desired local-space transforms for all the joints in a map, indexed by the
@@ -79,10 +83,15 @@ public class Animator {
 	 */
 	private Map<String, Matrix4f> calculateCurrentAnimationPose() {
 		KeyFrame[] frames = getPreviousAndNextFrames();
-		float progression = calculateProgression(frames[0], frames[1]);
-		return interpolatePoses(frames[0], frames[1], progression);
+		float progression = calculateProgression(
+				frames[0],
+				frames[1]);
+		return interpolatePoses(
+				frames[0],
+				frames[1],
+				progression);
 	}
-	
+
 	/**
 	 * This is the method where the animator calculates and sets those all-
 	 * important "Bone transforms" that I talked about so much in the tutorial.
@@ -108,21 +117,29 @@ public class Animator {
 	 * @param currentPose     - a map of the local-space transforms for all the
 	 *                        joints for the desired pose. The map is indexed by the
 	 *                        name of the Bone which the transform corresponds to.
-	 * @param Bone           - the current Bone which the pose should be applied
+	 * @param Bone            - the current Bone which the pose should be applied
 	 *                        to.
 	 * @param parentTransform - the desired model-space transform of the parent
 	 *                        Bone for the pose.
 	 */
 	private void applyPoseToJoints(Map<String, Matrix4f> currentPose, Bone Bone, Matrix4f parentTransform) {
-		Matrix4f currentLocalTransform = currentPose.get(Bone.name);
-		Matrix4f currentTransform = parentTransform.mul(currentLocalTransform, new Matrix4f());
+		Matrix4f currentLocalTransform = currentPose.get(
+				Bone.name);
+		Matrix4f currentTransform = parentTransform.mul(
+				currentLocalTransform,
+				new Matrix4f());
 		for (Bone childJoint : Bone.children) {
-			applyPoseToJoints(currentPose, childJoint, currentTransform);
+			applyPoseToJoints(
+					currentPose,
+					childJoint,
+					currentTransform);
 		}
-		currentTransform.mul(Bone.getInverseBindTransform());
-		Bone.setAnimationTransform(currentTransform);
+		currentTransform.mul(
+				Bone.getInverseBindTransform());
+		Bone.setAnimationTransform(
+				currentTransform);
 	}
-	
+
 	/**
 	 * Finds the previous keyframe in the animation and the next keyframe in the
 	 * animation, and returns them in an array of length 2. If there is no previous
@@ -147,7 +164,7 @@ public class Animator {
 		}
 		return new KeyFrame[] { previousFrame, nextFrame };
 	}
-	
+
 	/**
 	 * Calculates how far between the previous and next keyframe the current
 	 * animation time is, and returns it as a value between 0 and 1.
@@ -162,7 +179,7 @@ public class Animator {
 		float currentTime = animationTime - previousFrame.getTimeStamp();
 		return currentTime / totalTime;
 	}
-	
+
 	/**
 	 * Calculates all the local-space Bone transforms for the desired current pose
 	 * by interpolating between the transforms at the previous and next keyframes.
@@ -179,12 +196,19 @@ public class Animator {
 	private Map<String, Matrix4f> interpolatePoses(KeyFrame previousFrame, KeyFrame nextFrame, float progression) {
 		Map<String, Matrix4f> currentPose = new HashMap<String, Matrix4f>();
 		for (String jointName : previousFrame.getJointKeyFrames().keySet()) {
-			BoneTransform previousTransform = previousFrame.getJointKeyFrames().get(jointName);
-			BoneTransform nextTransform = nextFrame.getJointKeyFrames().get(jointName);
-			BoneTransform currentTransform = BoneTransform.interpolate(previousTransform, nextTransform, progression);
-			currentPose.put(jointName, currentTransform.getLocalTransform());
+			BoneTransform previousTransform = previousFrame.getJointKeyFrames().get(
+					jointName);
+			BoneTransform nextTransform = nextFrame.getJointKeyFrames().get(
+					jointName);
+			BoneTransform currentTransform = BoneTransform.interpolate(
+					previousTransform,
+					nextTransform,
+					progression);
+			currentPose.put(
+					jointName,
+					currentTransform.getLocalTransform());
 		}
 		return currentPose;
 	}
-	
+
 }

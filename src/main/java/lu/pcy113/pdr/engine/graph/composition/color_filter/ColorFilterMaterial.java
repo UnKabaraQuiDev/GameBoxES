@@ -19,10 +19,17 @@ public class ColorFilterMaterial extends Material {
 
 	@Override
 	public void bindProperties(CacheManager cache, Renderable parent, RenderShader shader) {
-		super.setProperty(ColorFilterShader.MUL, mul);
-		super.setProperty(ColorFilterShader.ADD, add);
+		super.setProperty(
+				ColorFilterShader.MUL,
+				mul);
+		super.setProperty(
+				ColorFilterShader.ADD,
+				add);
 
-		super.bindProperties(cache, parent, shader);
+		super.bindProperties(
+				cache,
+				parent,
+				shader);
 	}
 
 	public Vector4f getMul() {

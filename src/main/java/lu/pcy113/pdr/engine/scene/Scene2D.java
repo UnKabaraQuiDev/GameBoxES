@@ -19,7 +19,7 @@ public class Scene2D extends Scene {
 	public Scene2D(String name, Camera cam) {
 		super(name, cam);
 	}
-	
+
 	@Override
 	public void cleanup() {
 		super.cleanup();
@@ -34,12 +34,15 @@ public class Scene2D extends Scene {
 	}
 
 	public Entity addEntity(String str, Entity entity) {
-		this.entities.put(str, entity);
+		this.entities.put(
+				str,
+				entity);
 		return entity;
 	}
 
 	public Entity getEntity(String str) {
-		return this.entities.get(str);
+		return this.entities.get(
+				str);
 	}
 
 }

@@ -18,8 +18,50 @@ import lu.pcy113.pdr.engine.graph.shader.RenderShader;
 
 public class GenerateRenderLayer extends RenderLayer<GameEngine, Framebuffer, Mesh> {
 
-	private static Mesh SCREEN = new Mesh("GEN_SCREEN", null, new Vec3fAttribArray("pos", 0, 1, new Vector3f[] { new Vector3f(-1, 1, 0), new Vector3f(1, 1, 0), new Vector3f(1, -1, 0), new Vector3f(-1, -1, 0) }),
-			new UIntAttribArray("ind", -1, 1, new int[] { 0, 1, 3, 1, 2, 3 }), new Vec2fAttribArray("uv", 1, 1, new Vector2f[] { new Vector2f(-1, 1), new Vector2f(1, 1), new Vector2f(1, -1), new Vector2f(-1, -1) }));
+	private static Mesh SCREEN = new Mesh(
+			"GEN_SCREEN",
+			null,
+			new Vec3fAttribArray(
+					"pos",
+					0,
+					1,
+					new Vector3f[] { new Vector3f(
+							-1,
+							1,
+							0),
+							new Vector3f(
+									1,
+									1,
+									0),
+							new Vector3f(
+									1,
+									-1,
+									0),
+							new Vector3f(
+									-1,
+									-1,
+									0) }),
+			new UIntAttribArray(
+					"ind",
+					-1,
+					1,
+					new int[] { 0, 1, 3, 1, 2, 3 }),
+			new Vec2fAttribArray(
+					"uv",
+					1,
+					1,
+					new Vector2f[] { new Vector2f(
+							-1,
+							1),
+							new Vector2f(
+									1,
+									1),
+							new Vector2f(
+									1,
+									-1),
+							new Vector2f(
+									-1,
+									-1) }));
 
 	protected Material material;
 
@@ -34,24 +76,37 @@ public class GenerateRenderLayer extends RenderLayer<GameEngine, Framebuffer, Me
 
 		Material material = this.material;
 		if (material == null) {
-			GlobalLogger.log(Level.WARNING, "Material is null!");
+			GlobalLogger.log(
+					Level.WARNING,
+					"Material is null!");
 			return;
 		}
 		RenderShader shader = material.getRenderShader();
 		if (shader == null) {
-			GlobalLogger.log(Level.WARNING, "Shader is null!");
+			GlobalLogger.log(
+					Level.WARNING,
+					"Shader is null!");
 			return;
 		}
 
 		shader.bind();
 
-		material.bindProperties(cache, this, shader);
+		material.bindProperties(
+				cache,
+				this,
+				shader);
 
-		GL40.glDepthMask(false);
+		GL40.glDepthMask(
+				false);
 
-		GL40.glDrawElements(GL40.GL_TRIANGLES, target.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);
+		GL40.glDrawElements(
+				GL40.GL_TRIANGLES,
+				target.getIndicesCount(),
+				GL40.GL_UNSIGNED_INT,
+				0);
 
-		GL40.glDepthMask(true);
+		GL40.glDepthMask(
+				true);
 
 		target.unbind();
 	}

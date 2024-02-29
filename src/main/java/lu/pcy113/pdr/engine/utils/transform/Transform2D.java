@@ -12,7 +12,10 @@ public class Transform2D extends Transform {
 	protected Vector2f scale;
 
 	public Transform2D() {
-		this(new Vector2f(0), 0, new Vector2f(1));
+		this(new Vector2f(
+				0), 0,
+				new Vector2f(
+						1));
 	}
 
 	public Transform2D(Vector2f trans, float rot, Vector2f scale) {
@@ -24,19 +27,26 @@ public class Transform2D extends Transform {
 	}
 
 	public Transform2D translateAdd(Vector2f v) {
-		translation.add(v);
+		translation.add(
+				v);
 		return this;
 	}
 
 	public Transform2D translateAdd(float x, float y) {
-		translation.add(x, y);
+		translation.add(
+				x,
+				y);
 		return this;
 	}
 
 	public Transform2D translateMul(Vector2f center, float x, float y) {
-		translation.add(center.negate());
-		translation.mul(x, y);
-		translation.add(center);
+		translation.add(
+				center.negate());
+		translation.mul(
+				x,
+				y);
+		translation.add(
+				center);
 		return this;
 	}
 
@@ -44,34 +54,50 @@ public class Transform2D extends Transform {
 	 * degrees
 	 */
 	public Transform2D rotate(float q) {
-		rotation += Math.toRadians(q);
+		rotation += Math.toRadians(
+				q);
 		rotation %= Math.PI * 2;
 		return this;
 	}
 
 	public Transform2D scaleAdd(Vector2f v) {
-		scale.add(v);
+		scale.add(
+				v);
 		return this;
 	}
 
 	public Transform2D scaleAdd(float x, float y) {
-		scale.add(x, y);
+		scale.add(
+				x,
+				y);
 		return this;
 	}
 
 	public Transform2D scaleMul(Vector2f v) {
-		scale.mul(v);
+		scale.mul(
+				v);
 		return this;
 	}
 
 	public Transform2D scaleMul(float x, float y) {
-		scale.mul(x, y);
+		scale.mul(
+				x,
+				y);
 		return this;
 	}
 
 	@Override
 	public Matrix4f updateMatrix() {
-		return new Matrix4f().identity().translate(translation.x, translation.y, 0f).rotate(rotation, GameEngine.UP).scale(scale.x, scale.y, 1f);
+		return new Matrix4f().identity().translate(
+				translation.x,
+				translation.y,
+				0f).rotate(
+						rotation,
+						GameEngine.UP)
+				.scale(
+						scale.x,
+						scale.y,
+						1f);
 	}
 
 	public Vector2f getTranslation() {
@@ -103,7 +129,10 @@ public class Transform2D extends Transform {
 
 	@Override
 	public Transform clone() {
-		return new Transform2D(translation, rotation, scale);
+		return new Transform2D(
+				translation,
+				rotation,
+				scale);
 	}
 
 	@Override

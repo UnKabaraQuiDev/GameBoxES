@@ -40,19 +40,27 @@ public class Scene3D extends Scene {
 		/*
 		 * if(this.entities.containsKey(str)) this.entities.remove(str);
 		 */
-		this.entities.put(str, entity);
-		if (entity.hasComponent(LightComponent.class)) {
-			this.lightEmittors.add(str);
+		this.entities.put(
+				str,
+				entity);
+		if (entity.hasComponent(
+				LightComponent.class)) {
+			this.lightEmittors.add(
+					str);
 		}
 		return entity;
 	}
-	
+
 	public Entity addEntity(String str, Component... components) {
-		return addEntity(str, new Entity(components));
+		return addEntity(
+				str,
+				new Entity(
+						components));
 	}
 
 	public Entity getEntity(String str) {
-		return this.entities.get(str);
+		return this.entities.get(
+				str);
 	}
 
 	public List<String> getLightEmittors() {
@@ -64,7 +72,12 @@ public class Scene3D extends Scene {
 	}
 
 	public List<LightComponent> getLights() {
-		return getLightEmittors().stream().map((String e) -> (PointLightComponent) entities.get(e).getComponent(PointLightComponent.class)).collect(Collectors.toList())
+		return getLightEmittors().stream().map(
+				(String e) -> (PointLightComponent) entities.get(
+						e).getComponent(
+								PointLightComponent.class))
+				.collect(
+						Collectors.toList())
 		/*
 		 * .addAll(getLightEmittors() .stream() .map((String e) -> (LightComponent)
 		 * entities.get(e).getComponent(LightComponent.class))

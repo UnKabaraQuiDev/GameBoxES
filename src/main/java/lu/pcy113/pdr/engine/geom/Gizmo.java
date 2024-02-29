@@ -60,18 +60,27 @@ public class Gizmo implements UniqueID, Cleanupable, Renderable {
 
 		this.vao = GL40.glGenVertexArrays();
 		bind();
-		storeElementArray(indices);
-		vertices.setIndex(0);
-		storeAttribArray(vertices);
-		color.setIndex(1);
-		storeAttribArray(color);
+		storeElementArray(
+				indices);
+		vertices.setIndex(
+				0);
+		storeAttribArray(
+				vertices);
+		color.setIndex(
+				1);
+		storeAttribArray(
+				color);
 		unbind();
 
-		GlobalLogger.log(Level.INFO, "Gizmo " + name + ": " + vao + " & " + vbo);
+		GlobalLogger.log(
+				Level.INFO,
+				"Gizmo " + name + ": " + vao + " & " + vbo);
 	}
 
 	protected void storeAttribArray(AttribArray data) {
-		this.vbo.put(data.getIndex(), data.gen());
+		this.vbo.put(
+				data.getIndex(),
+				data.gen());
 		data.bind();
 		data.init();
 		data.enable();
@@ -79,24 +88,30 @@ public class Gizmo implements UniqueID, Cleanupable, Renderable {
 	}
 
 	private void storeElementArray(UIntAttribArray indices) {
-		indices.setBufferType(GL40.GL_ELEMENT_ARRAY_BUFFER);
-		this.vbo.put(indices.getIndex(), indices.gen());
+		indices.setBufferType(
+				GL40.GL_ELEMENT_ARRAY_BUFFER);
+		this.vbo.put(
+				indices.getIndex(),
+				indices.gen());
 		indices.bind();
 		indices.init();
 	}
 
 	public void bind() {
-		GL40.glBindVertexArray(vao);
+		GL40.glBindVertexArray(
+				vao);
 	}
 
 	public void unbind() {
-		GL40.glBindVertexArray(0);
+		GL40.glBindVertexArray(
+				0);
 	}
 
 	@Override
 	public void cleanup() {
 		if (vao != -1) {
-			GL40.glDeleteVertexArrays(vao);
+			GL40.glDeleteVertexArrays(
+					vao);
 			vertices.cleanup();
 			indices.cleanup();
 			vao = -1;

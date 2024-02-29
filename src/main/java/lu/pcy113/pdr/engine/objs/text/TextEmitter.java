@@ -37,36 +37,64 @@ public class TextEmitter implements Cleanupable, UniqueID {
 		this.charSize = size;
 
 		Integer[] chars = new Integer[bufferSize];
-		Arrays.fill(chars, 0);
-		updateTextContent(new Matrix4f[bufferSize], chars);
-		//GlobalLogger.log(Level.FINEST, "SET: " + Arrays.toString(chars));
+		Arrays.fill(
+				chars,
+				0);
+		updateTextContent(
+				new Matrix4f[bufferSize],
+				chars);
+		// GlobalLogger.log(Level.FINEST, "SET: " + Arrays.toString(chars));
 
-		this.charBuffer = new UIntAttribArray("char", 7, 1, PDRUtils.toPrimitiveInt(chars), false, 1);
-		//GlobalLogger.log(Level.FINEST, Arrays.toString(charBuffer.getData()));
-		this.quad = Mesh.newQuad(name, material, size);
+		this.charBuffer = new UIntAttribArray(
+				"char",
+				7,
+				1,
+				PDRUtils.toPrimitiveInt(
+						chars),
+				false,
+				1);
+		// GlobalLogger.log(Level.FINEST, Arrays.toString(charBuffer.getData()));
+		this.quad = Mesh.newQuad(
+				name,
+				material,
+				size);
 
-		this.instances = new InstanceEmitter(name, quad, bufferSize, new Transform2D(), charBuffer);
+		this.instances = new InstanceEmitter(
+				name,
+				quad,
+				bufferSize,
+				new Transform2D(),
+				charBuffer);
 	}
 
 	public boolean updateText() {
 		if (charBuffer.getLength() < text.length())
-			throw new RuntimeException("Char buffer too small to hold text.");
+			throw new RuntimeException(
+					"Char buffer too small to hold text.");
 
 		TextMaterial material = (TextMaterial) quad.getMaterial();
 
-		material.setProperty(TextShader.TXT_LENGTH, text.length());
+		material.setProperty(
+				TextShader.TXT_LENGTH,
+				text.length());
 
 		Matrix4f[] transforms = new Matrix4f[instances.getParticleCount()];
 		Integer[] chars = new Integer[instances.getParticleCount()];
-		Arrays.fill(chars, 0);
+		Arrays.fill(
+				chars,
+				0);
 
-		updateTextContent(transforms, chars);
+		updateTextContent(
+				transforms,
+				chars);
 
-		//GlobalLogger.log(Level.FINEST, Arrays.deepToString(transforms));
+		// GlobalLogger.log(Level.FINEST, Arrays.deepToString(transforms));
 
-		instances.updateDirect(transforms, new Object[][] { chars });
+		instances.updateDirect(
+				transforms,
+				new Object[][] { chars });
 
-		//GlobalLogger.log(Level.FINEST, Arrays.toString(charBuffer.getData()));
+		// GlobalLogger.log(Level.FINEST, Arrays.toString(charBuffer.getData()));
 
 		return true;
 	}
@@ -76,7 +104,8 @@ public class TextEmitter implements Cleanupable, UniqueID {
 		int character = 0;
 
 		for (int i = 0; i < text.length(); i++) {
-			char currentChar = text.charAt(i);
+			char currentChar = text.charAt(
+					i);
 
 			if (currentChar == '\n') {
 				line++;
@@ -88,11 +117,14 @@ public class TextEmitter implements Cleanupable, UniqueID {
 			} else {
 				character++;
 				chars[i] = (int) currentChar;
-				
+
 				float translationX = character * charSize.x; // Adjust as needed
 				float translationY = line * charSize.y; // Adjust as needed
 
-				transforms[i] = new Matrix4f().identity().translate(translationX, translationY, 0);
+				transforms[i] = new Matrix4f().identity().translate(
+						translationX,
+						translationY,
+						0);
 			}
 		}
 	}

@@ -22,16 +22,25 @@ public class ClientMain {
 	 * TODO: Compute shaders
 	 * TODO: Compositor + Compute shader
 	 */
-	
+
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 
-		System.out.println(Arrays.toString(new File("./config/").list()));
+		System.out.println(
+				Arrays.toString(
+						new File(
+								"./config/").list()));
 
-		System.out.println(FileUtils.recursiveTree("./resources"));
+		System.out.println(
+				FileUtils.recursiveTree(
+						"./resources"));
 
-		GlobalLogger.init(new File("./config/logs.properties"));
+		GlobalLogger.init(
+				new File(
+						"./config/logs.properties"));
 
-		GlobalLogger.log(Level.INFO, "Starting...");
+		GlobalLogger.log(
+				Level.INFO,
+				"Starting...");
 
 		long start = System.currentTimeMillis();
 
@@ -39,15 +48,21 @@ public class ClientMain {
 
 			WindowOptions options = new WindowOptions();
 			options.fullscreen = false;
-			GameEngine engine = new GameEngine("PDRClientGame4", new PDRClientGame4(), options);
+			GameEngine engine = new GameEngine(
+					"PDRClientGame4",
+					new PDRClientGame4(),
+					options);
 			engine.start();
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.exit(-1);
+			System.exit(
+					-1);
 		}
 
-		GlobalLogger.log(Level.INFO, "Stopped after " + (System.currentTimeMillis() - start) + "ms");
+		GlobalLogger.log(
+				Level.INFO,
+				"Stopped after " + (System.currentTimeMillis() - start) + "ms");
 
 	}
 

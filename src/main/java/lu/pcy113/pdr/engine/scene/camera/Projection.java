@@ -46,11 +46,21 @@ public class Projection {
 	}
 
 	public Matrix4f perspectiveUpdateMatrix(int width, int height) {
-		return projMatrix.setPerspective(fov, (float) width / height, near, far);
+		return projMatrix.setPerspective(
+				fov,
+				(float) width / height,
+				near,
+				far);
 	}
 
 	public Matrix4f orthographicUpdateMatrix(int width, int height) {
-		return projMatrix.setOrtho(left * width / size, right * width / size, top * height / size, bottom * height / size, near, far);
+		return projMatrix.setOrtho(
+				left * width / size,
+				right * width / size,
+				top * height / size,
+				bottom * height / size,
+				near,
+				far);
 		// return projMatrix.setOrthoSymmetric(width / size, height / size, near, far);
 	}
 
@@ -58,14 +68,20 @@ public class Projection {
 		this.width = w;
 		this.height = h;
 		if (perspective) {
-			return perspectiveUpdateMatrix(w, h);
+			return perspectiveUpdateMatrix(
+					w,
+					h);
 		} else {
-			return orthographicUpdateMatrix(w, h);
+			return orthographicUpdateMatrix(
+					w,
+					h);
 		}
 	}
 
 	public void update() {
-		update(width, height);
+		update(
+				width,
+				height);
 	}
 
 	public Matrix4f getProjMatrix() {

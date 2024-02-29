@@ -8,16 +8,16 @@ import lu.pcy113.pdr.engine.graph.shader.RenderShader;
  * @author Original author: Karl
  */
 public class ArmatureAnimation {
-	
+
 	public static final int MAX_WEIGHTS = 3;
 	public static final String BONE_UNIFORM = "jointTransforms";
-	
+
 	// skeleton
 	private final Bone rootBone;
 	private final int boneCount;
-	
+
 	private final Animator animator;
-	
+
 	/**
 	 * Creates a new entity capable of animation. The inverse bind transform for all
 	 * joints is calculated in this constructor. The bind transform is simply the
@@ -33,33 +33,39 @@ public class ArmatureAnimation {
 	 *                   "skeleton" of the entity.
 	 * @param jointCount - the number of joints in the joint hierarchy (skeleton)
 	 *                   for this entity.
-	 * 					
+	 * 
 	 */
 	public ArmatureAnimation(Bone rootJoint, int jointCount) {
 		this.rootBone = rootJoint;
 		this.boneCount = jointCount;
-		this.animator = new Animator(this);
-		rootJoint.calcInverseBindTransform(new Matrix4f());
+		this.animator = new Animator(
+				this);
+		rootJoint.calcInverseBindTransform(
+				new Matrix4f());
 	}
-	
+
 	public Bone getRootBone() {
 		return rootBone;
 	}
+
 	public Animator getAnimator() {
 		return animator;
 	}
+
 	public int getBoneCount() {
 		return boneCount;
 	}
-	
+
 	public void bind(RenderShader shader) {
 		Matrix4f[] jointMatrices = getJointTransforms();
-		for(int i = 0; i < boneCount; i++) {
-			shader.setUniform(BONE_UNIFORM+"["+i+"]", jointMatrices[i]);
-			//System.out.println("Uniform: "+BONE_UNIFORM+"["+i+"] = "+jointMatrices[i]);
+		for (int i = 0; i < boneCount; i++) {
+			shader.setUniform(
+					BONE_UNIFORM + "[" + i + "]",
+					jointMatrices[i]);
+			// System.out.println("Uniform: "+BONE_UNIFORM+"["+i+"] = "+jointMatrices[i]);
 		}
 	}
-	
+
 	/**
 	 * Gets an array of the all important model-space transforms of all the joints
 	 * (with the current animation pose applied) in the entity. The joints are
@@ -71,10 +77,12 @@ public class ArmatureAnimation {
 	 */
 	public Matrix4f[] getJointTransforms() {
 		Matrix4f[] jointMatrices = new Matrix4f[boneCount];
-		addJointsToArray(rootBone, jointMatrices);
+		addJointsToArray(
+				rootBone,
+				jointMatrices);
 		return jointMatrices;
 	}
-	
+
 	/**
 	 * This adds the current model-space transform of a joint (and all of its
 	 * descendants) into an array of transforms. The joint's transform is added into
@@ -88,7 +96,9 @@ public class ArmatureAnimation {
 	private void addJointsToArray(Bone headJoint, Matrix4f[] jointMatrices) {
 		jointMatrices[headJoint.index] = headJoint.getAnimatedTransform();
 		for (Bone childJoint : headJoint.children) {
-			addJointsToArray(childJoint, jointMatrices);
+			addJointsToArray(
+					childJoint,
+					jointMatrices);
 		}
 	}
 

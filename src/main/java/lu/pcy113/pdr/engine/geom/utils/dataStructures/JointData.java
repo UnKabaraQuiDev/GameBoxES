@@ -27,7 +27,8 @@ public class JointData {
 	}
 
 	public void addChild(JointData child) {
-		children.add(child);
+		children.add(
+				child);
 	}
 
 }

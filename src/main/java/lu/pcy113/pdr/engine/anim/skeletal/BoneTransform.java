@@ -26,14 +26,14 @@ public class BoneTransform {
 	/**
 	 * 
 	 * @param position
-	 *            - the position of the joint relative to the parent joint
-	 *            (bone-space) at a certain keyframe. For example, if this joint
-	 *            is at (5, 12, 0) in the model's coordinate system, and the
-	 *            parent of this joint is at (2, 8, 0), then the position of
-	 *            this joint relative to the parent is (3, 4, 0).
+	 *                 - the position of the joint relative to the parent joint
+	 *                 (bone-space) at a certain keyframe. For example, if this joint
+	 *                 is at (5, 12, 0) in the model's coordinate system, and the
+	 *                 parent of this joint is at (2, 8, 0), then the position of
+	 *                 this joint relative to the parent is (3, 4, 0).
 	 * @param rotation
-	 *            - the rotation of the joint relative to the parent joint
-	 *            (bone-space) at a certain keyframe.
+	 *                 - the rotation of the joint relative to the parent joint
+	 *                 (bone-space) at a certain keyframe.
 	 */
 	public BoneTransform(Vector3f position, Quaternionf rotation) {
 		this.position = position;
@@ -52,7 +52,9 @@ public class BoneTransform {
 	 *         instance, just in matrix form.
 	 */
 	protected Matrix4f getLocalTransform() {
-		return new Matrix4f().translationRotate(position, rotation);
+		return new Matrix4f().translationRotate(
+				position,
+				rotation);
 	}
 
 	/**
@@ -65,21 +67,29 @@ public class BoneTransform {
 	 * interpolate between Euler rotations.
 	 * 
 	 * @param frameA
-	 *            - the previous transform
+	 *                    - the previous transform
 	 * @param frameB
-	 *            - the next transform
+	 *                    - the next transform
 	 * @param progression
-	 *            - a number between 0 and 1 indicating how far between the two
-	 *            transforms to interpolate. A progression value of 0 would
-	 *            return a transform equal to "frameA", a value of 1 would
-	 *            return a transform equal to "frameB". Everything else gives a
-	 *            transform somewhere in-between the two.
+	 *                    - a number between 0 and 1 indicating how far between the two
+	 *                    transforms to interpolate. A progression value of 0 would
+	 *                    return a transform equal to "frameA", a value of 1 would
+	 *                    return a transform equal to "frameB". Everything else gives a
+	 *                    transform somewhere in-between the two.
 	 * @return
 	 */
 	protected static BoneTransform interpolate(BoneTransform frameA, BoneTransform frameB, float progression) {
-		Vector3f pos = interpolate(frameA.position, frameB.position, progression);
-		Quaternionf rot = frameA.rotation.slerp(frameB.rotation, progression, new Quaternionf());
-		return new BoneTransform(pos, rot);
+		Vector3f pos = interpolate(
+				frameA.position,
+				frameB.position,
+				progression);
+		Quaternionf rot = frameA.rotation.slerp(
+				frameB.rotation,
+				progression,
+				new Quaternionf());
+		return new BoneTransform(
+				pos,
+				rot);
 	}
 
 	/**
@@ -87,19 +97,22 @@ public class BoneTransform {
 	 * value.
 	 * 
 	 * @param start
-	 *            - the start translation.
+	 *                    - the start translation.
 	 * @param end
-	 *            - the end translation.
+	 *                    - the end translation.
 	 * @param progression
-	 *            - a value between 0 and 1 indicating how far to interpolate
-	 *            between the two translations.
+	 *                    - a value between 0 and 1 indicating how far to interpolate
+	 *                    between the two translations.
 	 * @return
 	 */
 	private static Vector3f interpolate(Vector3f start, Vector3f end, float progression) {
 		float x = start.x + (end.x - start.x) * progression;
 		float y = start.y + (end.y - start.y) * progression;
 		float z = start.z + (end.z - start.z) * progression;
-		return new Vector3f(x, y, z);
+		return new Vector3f(
+				x,
+				y,
+				z);
 	}
 
 }

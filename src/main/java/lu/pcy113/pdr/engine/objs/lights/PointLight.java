@@ -35,13 +35,25 @@ public class PointLight implements UniqueID {
 
 		// mat.setProperty(ind+POSITION, position);
 
-		mat.setProperty(ind + CONSTANT, constant);
-		mat.setProperty(ind + LINEAR, linear);
-		mat.setProperty(ind + QUADRATIC, quadratic);
+		mat.setProperty(
+				ind + CONSTANT,
+				constant);
+		mat.setProperty(
+				ind + LINEAR,
+				linear);
+		mat.setProperty(
+				ind + QUADRATIC,
+				quadratic);
 
-		mat.setProperty(ind + AMBIENT_COLOR, ambient);
-		mat.setProperty(ind + DIFFUSE_COLOR, diffuse);
-		mat.setProperty(ind + SPECULAR_COLOR, specular);
+		mat.setProperty(
+				ind + AMBIENT_COLOR,
+				ambient);
+		mat.setProperty(
+				ind + DIFFUSE_COLOR,
+				diffuse);
+		mat.setProperty(
+				ind + SPECULAR_COLOR,
+				specular);
 	}
 
 	@Override

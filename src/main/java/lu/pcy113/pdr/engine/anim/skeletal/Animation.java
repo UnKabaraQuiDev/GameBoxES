@@ -1,16 +1,16 @@
 package lu.pcy113.pdr.engine.anim.skeletal;
 
 public class Animation {
-	
-	private final float length;//in seconds
+
+	private final float length;// in seconds
 	private final KeyFrame[] keyFrames;
 
 	/**
 	 * @param lengthInSeconds
-	 *            - the total length of the animation in seconds.
+	 *                        - the total length of the animation in seconds.
 	 * @param frames
-	 *            - all the keyframes for the animation, ordered by time of
-	 *            appearance in the animation.
+	 *                        - all the keyframes for the animation, ordered by time of
+	 *                        appearance in the animation.
 	 */
 	public Animation(float lengthInSeconds, KeyFrame[] frames) {
 		this.keyFrames = frames;
@@ -32,5 +32,5 @@ public class Animation {
 	public KeyFrame[] getKeyFrames() {
 		return keyFrames;
 	}
-	
+
 }

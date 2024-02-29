@@ -26,7 +26,8 @@ public class GizmoComponent extends Component implements Renderable {
 	}
 
 	public Gizmo getGizmo(CacheManager cache) {
-		return cache.getGizmo(this.gizmoId);
+		return cache.getGizmo(
+				this.gizmoId);
 	}
 
 	public void setGizmo(Gizmo gizmo) {
