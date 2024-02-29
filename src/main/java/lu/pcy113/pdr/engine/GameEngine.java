@@ -153,6 +153,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 					return;
 				}
 			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
 				GlobalLogger.info("Update thread interrupted, continuing");
 			}
 		}
@@ -197,7 +198,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 					if(nextTask()) {
 						DEBUG.start("u_async_task");
 						NextTask nt = pullTask();
-						nt.execute(taskEnvironnment);
+						nt.execute();
 						DEBUG.end("u_async_task");
 					}
 				}
@@ -275,7 +276,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 					if(nextTask()) {
 						DEBUG.start("r_async_task");
 						NextTask nt = pullTask();
-						nt.execute(taskEnvironnment);
+						nt.execute();
 						DEBUG.end("r_async_task");
 					}
 				}
@@ -326,6 +327,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 				}
 			} catch (InterruptedException e) {
 				GlobalLogger.info("Main thread interrupted, continuing");
+				Thread.currentThread().interrupt();
 			}
 		}
 		
@@ -340,7 +342,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 				if(nextTask()) {
 					DEBUG.start("m_async_task");
 					NextTask nt = pullTask();
-					nt.execute(taskEnvironnment);
+					nt.execute();
 					DEBUG.end("m_async_task");
 				}
 			}
@@ -365,7 +367,11 @@ public class GameEngine implements Cleanupable, UniqueID {
 	}
 	
 	public NextTask createTask(int target) {
-		return new NextTask(getThreadId(), target, taskEnvironnment);
+		return new NextTask(getThreadId(), target, taskEnvironnment, taskEnvironnment);
+	}
+	
+	public NextTask createTask(int from, int target) {
+		return new NextTask(from, target, taskEnvironnment, taskEnvironnment);
 	}
 	
 	public int getThreadId() {
@@ -426,11 +432,15 @@ public class GameEngine implements Cleanupable, UniqueID {
 		return audioMaster;
 	}
 	
+	public NextTaskEnvironnment getTaskEnvironnment() {
+		return taskEnvironnment;
+	}
+	
 	@Override
 	public void cleanup() {
 		this.cache.cleanup();
 		this.window.cleanup();
 		DEBUG.cleanup();
 	}
-	
+
 }

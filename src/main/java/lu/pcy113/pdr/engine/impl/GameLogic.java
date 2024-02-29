@@ -4,6 +4,7 @@ import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.cache.SharedCacheManager;
 import lu.pcy113.pdr.engine.graph.window.Window;
 import lu.pcy113.pdr.engine.impl.nexttask.NextTask;
+import lu.pcy113.pdr.engine.impl.nexttask.NextTaskEnvironnment;
 
 public abstract class GameLogic {
 	
@@ -14,8 +15,6 @@ public abstract class GameLogic {
 	public void register(GameEngine e) {
 		if (this.engine != null)
 			throw new IllegalStateException("Already registered");
-		
-		System.out.println("registered");
 		
 		this.engine = e;
 		
@@ -33,6 +32,14 @@ public abstract class GameLogic {
 	
 	protected NextTask createTask(int target) {
 		return engine.createTask(target);
+	}
+	
+	protected NextTask createTask(int from, int target) {
+		return engine.createTask(from, target);
+	}
+	
+	protected NextTaskEnvironnment getTaskEnvironnment() {
+		return engine.getTaskEnvironnment();
 	}
 	
 	/*protected boolean pushTask(NextTask nt) {
