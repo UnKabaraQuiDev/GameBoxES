@@ -12,8 +12,11 @@ import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.graph.material.gizmo.GizmoShader;
 import lu.pcy113.pdr.engine.graph.material.gizmo.GizmoShader.GizmoMaterial;
 import lu.pcy113.pdr.engine.graph.shader.RenderShader;
+import lu.pcy113.pdr.engine.objs.entity.Entity;
 import lu.pcy113.pdr.engine.objs.entity.components.GizmoComponent;
+import lu.pcy113.pdr.engine.objs.entity.components.TransformComponent;
 import lu.pcy113.pdr.engine.scene.Scene;
+import lu.pcy113.pdr.engine.scene.camera.Camera;
 import lu.pcy113.pdr.engine.scene.camera.Camera3D;
 
 public class GizmoRenderer extends Renderer<Scene, GizmoComponent> {
@@ -24,6 +27,8 @@ public class GizmoRenderer extends Renderer<Scene, GizmoComponent> {
 
 	@Override
 	public void render(CacheManager cache, Scene scene, GizmoComponent gi) {
+		Entity e = gi.getParent();
+		
 		Gizmo gizmo = gi.getGizmo(cache);
 		if (gizmo == null)
 			return;
@@ -47,14 +52,31 @@ public class GizmoRenderer extends Renderer<Scene, GizmoComponent> {
 		
 		GameEngine.DEBUG.start("r_uniforms");
 		
+		GameEngine.DEBUG.start("r_uniforms_scene");
+		Matrix4f projectionMatrix = null, viewMatrix = null, transformationMatrix = new Matrix4f().identity();
 		if (scene != null) {
-			Matrix4f projectionMatrix = scene.getCamera().getProjection().getProjMatrix();
-			Matrix4f viewMatrix = scene.getCamera().getViewMatrix();
-			material.setPropertyIfPresent(RenderShader.PROJECTION_MATRIX, projectionMatrix);
-			material.setPropertyIfPresent(RenderShader.VIEW_MATRIX, viewMatrix);
-			material.setPropertyIfPresent(RenderShader.TRANSFORMATION_MATRIX, new Matrix4f().identity());
-			material.setPropertyIfPresent(RenderShader.VIEW_POSITION, ((Camera3D) scene.getCamera()).getPosition());
+			Camera camera = scene.getCamera();
+			projectionMatrix = camera.getProjection().getProjMatrix();
+			viewMatrix = camera.getViewMatrix();
+			shader.setUniform(RenderShader.PROJECTION_MATRIX, projectionMatrix);
+			shader.setUniform(RenderShader.VIEW_MATRIX, viewMatrix);
+			if(camera instanceof Camera3D) {
+				material.setPropertyIfPresent(RenderShader.VIEW_POSITION, ((Camera3D) camera).getPosition());
+			}
 		}
+		GameEngine.DEBUG.end("r_uniforms_scene");
+		
+		GameEngine.DEBUG.start("r_uniforms_transform");
+		if (material.hasProperty(RenderShader.TRANSFORMATION_MATRIX)) {
+			if (e.hasComponent(TransformComponent.class)) {
+				TransformComponent transform = (TransformComponent) e.getComponent(e.getComponents(TransformComponent.class).get(0));
+				if (transform != null) {
+					transformationMatrix = transform.getTransform().getMatrix();
+				}
+			}
+			material.setProperty(RenderShader.TRANSFORMATION_MATRIX, transformationMatrix);
+		}
+		GameEngine.DEBUG.end("r_uniforms_transform");
 
 		material.bindProperties(cache, scene, shader);
 		

@@ -169,7 +169,7 @@ public class PDRClientGame4 extends GameLogic {
 				(window.isKeyPressed(GLFW.GLFW_KEY_Z) ? 0.1f : 0) - (window.isKeyPressed(GLFW.GLFW_KEY_S) ? 0.1f : 0));
 		camera.updateMatrix();
 
-		if (window.isKeyPressed(GLFW.GLFW_KEY_F) && !previousF) {
+		if (window.isKeyPressed(GLFW.GLFW_KEY_M) && !previousF) {
 			previousF = true;
 			createTask(GameEngine.QUEUE_RENDER).exec((s) -> {
 				System.err.println("Thread: " + Thread.currentThread().getName());

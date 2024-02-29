@@ -17,6 +17,8 @@ import lu.pcy113.pdr.engine.objs.entity.components.ArmatureAnimationComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.MeshComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.TransformComponent;
 import lu.pcy113.pdr.engine.scene.Scene;
+import lu.pcy113.pdr.engine.scene.camera.Camera;
+import lu.pcy113.pdr.engine.scene.camera.Camera3D;
 
 public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 
@@ -63,21 +65,27 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 		GameEngine.DEBUG.start("r_uniforms_scene");
 		Matrix4f projectionMatrix = null, viewMatrix = null, transformationMatrix = new Matrix4f().identity();
 		if (scene != null) {
-			projectionMatrix = scene.getCamera().getProjection().getProjMatrix();
-			viewMatrix = scene.getCamera().getViewMatrix();
+			Camera camera = scene.getCamera();
+			projectionMatrix = camera.getProjection().getProjMatrix();
+			viewMatrix = camera.getViewMatrix();
 			shader.setUniform(RenderShader.PROJECTION_MATRIX, projectionMatrix);
 			shader.setUniform(RenderShader.VIEW_MATRIX, viewMatrix);
+			if(camera instanceof Camera3D) {
+				material.setPropertyIfPresent(RenderShader.VIEW_POSITION, ((Camera3D) camera).getPosition());
+			}
 		}
 		GameEngine.DEBUG.end("r_uniforms_scene");
 		
 		GameEngine.DEBUG.start("r_uniforms_transform");
-		if (e.hasComponent(TransformComponent.class)) {
-			TransformComponent transform = (TransformComponent) m.getParent().getComponent(m.getParent().getComponents(TransformComponent.class).get(0));
-			if (transform != null) {
-				transformationMatrix = transform.getTransform().getMatrix();
+		if (material.hasProperty(RenderShader.TRANSFORMATION_MATRIX)) {
+			if (e.hasComponent(TransformComponent.class)) {
+				TransformComponent transform = (TransformComponent) e.getComponent(e.getComponents(TransformComponent.class).get(0));
+				if (transform != null) {
+					transformationMatrix = transform.getTransform().getMatrix();
+				}
 			}
+			material.setProperty(RenderShader.TRANSFORMATION_MATRIX, transformationMatrix);
 		}
-		shader.setUniform(RenderShader.TRANSFORMATION_MATRIX, transformationMatrix);
 		GameEngine.DEBUG.end("r_uniforms_transform");
 		
 		GameEngine.DEBUG.start("r_uniforms_skelet");
