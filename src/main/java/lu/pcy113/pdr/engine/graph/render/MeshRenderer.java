@@ -83,8 +83,8 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 				if (transform != null) {
 					transformationMatrix = transform.getTransform().getMatrix();
 				}
-			}
 			material.setProperty(RenderShader.TRANSFORMATION_MATRIX, transformationMatrix);
+			}
 		}
 		GameEngine.DEBUG.end("r_uniforms_transform");
 		

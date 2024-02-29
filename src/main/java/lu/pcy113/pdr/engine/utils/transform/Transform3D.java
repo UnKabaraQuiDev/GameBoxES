@@ -129,6 +129,11 @@ public class Transform3D extends Transform {
 		this.scale = scale;
 		return this;
 	}
+	
+	public Transform3D setScale(float length) {
+		this.scale.set(length);
+		return this;
+	}
 
 	@Override
 	public Transform clone() {

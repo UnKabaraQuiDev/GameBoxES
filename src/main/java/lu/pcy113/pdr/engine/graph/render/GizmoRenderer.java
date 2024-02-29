@@ -3,6 +3,7 @@ package lu.pcy113.pdr.engine.graph.render;
 import java.util.logging.Level;
 
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.lwjgl.opengl.GL40;
 
 import lu.pcy113.pclib.GlobalLogger;
@@ -51,7 +52,6 @@ public class GizmoRenderer extends Renderer<Scene, GizmoComponent> {
 		shader.bind();
 		
 		GameEngine.DEBUG.start("r_uniforms");
-		
 		GameEngine.DEBUG.start("r_uniforms_scene");
 		Matrix4f projectionMatrix = null, viewMatrix = null, transformationMatrix = new Matrix4f().identity();
 		if (scene != null) {
@@ -77,7 +77,7 @@ public class GizmoRenderer extends Renderer<Scene, GizmoComponent> {
 			material.setProperty(RenderShader.TRANSFORMATION_MATRIX, transformationMatrix);
 		}
 		GameEngine.DEBUG.end("r_uniforms_transform");
-
+		
 		material.bindProperties(cache, scene, shader);
 		
 		GameEngine.DEBUG.end("r_uniforms");

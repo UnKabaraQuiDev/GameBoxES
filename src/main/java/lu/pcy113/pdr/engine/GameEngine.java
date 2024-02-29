@@ -25,7 +25,9 @@ public class GameEngine implements Cleanupable, UniqueID {
 			Y_POS = new Vector3f(0, 1, 0),
 			Y_NEG = new Vector3f(0, -1, 0),
 			Z_POS = new Vector3f(0, 0, 1),
-			Z_NEG = new Vector3f(0, 0, -1);
+			Z_NEG = new Vector3f(0, 0, -1),
+			
+			ZERO = new Vector3f(0, 0, 0);
 	
 	public static Vector3f UP = new Vector3f(Y_POS),
 			DOWN = new Vector3f(Z_NEG),
