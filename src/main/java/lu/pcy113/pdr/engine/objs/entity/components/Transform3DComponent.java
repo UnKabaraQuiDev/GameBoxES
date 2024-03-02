@@ -29,6 +29,13 @@ public class Transform3DComponent extends TransformComponent {
 				scale));
 	}
 
+	public Transform3DComponent(Vector3f trans, Quaternionf rot) {
+		this(new Transform3D(
+			trans,
+			rot
+		));
+	}
+
 	@Override
 	public Transform3D getTransform() {
 		return this.transform;

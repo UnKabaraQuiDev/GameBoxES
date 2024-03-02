@@ -106,15 +106,17 @@ public class PDRClientGame4 extends GameLogic {
 		cache.addGizmo(cone);
 		scene.addEntity("cone", new GizmoComponent(cone), new Transform3DComponent());
 
+		Gizmo Xhill = ObjLoader.loadGizmo("cone", "./resources/models/gizmos/Xhill.obj");
+		cache.addGizmo(Xhill);
+		scene.addEntity("Xhill", new GizmoComponent(Xhill), new Transform3DComponent());
+
 		Texture txt1 = cache.loadSingleTexture("txt1", "./resources/textures/fonts/font1row.png", TextureFilter.NEAREST, TextureType.TXT2D);
 		TextMaterial textMaterial = (TextMaterial) cache.loadMaterial(TextShader.TextMaterial.class, txt1);
 		debugInfo = new TextEmitter("debugFps", textMaterial, 32, "FPS: ", new Vector2f(0.1f));
 		debugInfo.updateText();
 		cache.addTextEmitter(debugInfo);
-		
-		debugFps = scene.addEntity("debugFps",
-				new TextEmitterComponent(debugInfo),
-				new Transform3DComponent(new Vector3f(-6.1f, -3.3f, 0)));
+
+		debugFps = scene.addEntity("debugFps", new TextEmitterComponent(debugInfo), new Transform3DComponent(new Vector3f(-6.1f, -3.3f, 0), new Quaternionf().rotateZ((float) Math.toRadians(180f))));
 
 		cache.addRenderer(new Scene3DRenderer());
 		cache.addRenderer(new Scene2DRenderer());
@@ -158,7 +160,7 @@ public class PDRClientGame4 extends GameLogic {
 		camera = (Camera3D) this.scene.getCamera();
 		camera.getProjection().setPerspective(true);
 		camera.getProjection().setFov((float) Math.toRadians(70));
-		//camera.getProjection().update();
+		// camera.getProjection().update();
 
 		cameraUi = (Camera3D) this.ui.getCamera();
 		cameraUi.setProjection(new Projection(0.01f, 100f, -0.5f, 0.5f, 0.5f, -0.5f));
@@ -278,14 +280,15 @@ public class PDRClientGame4 extends GameLogic {
 	@Override
 	public void update(float dTime) {
 		backgroundMaterialInterpolation.add(0.01f).mod();
-		//defaultCube.getComponent(Transform3DComponent.class).getTransform().rotate(0.1f, -0.1f, 0.05f).updateMatrix();
+		// defaultCube.getComponent(Transform3DComponent.class).getTransform().rotate(0.1f,
+		// -0.1f, 0.05f).updateMatrix();
 	}
 
 	@Override
 	public void render(float dTime) {
-		debugInfo.setText("FPS: "+PDRUtils.round(engine.getCurrentFps(), 2)+"\nNL");
+		debugInfo.setText("FPS: " + PDRUtils.round(engine.getCurrentFps(), 2) + "\nNL");
 		debugInfo.updateText();
-		
+
 		compositor.render(cache, engine);
 		// GL40.glClear(GL40.GL_DEPTH_BUFFER_BIT | GL40.GL_COLOR_BUFFER_BIT);
 		// ((Scene3DRenderer) cache.getRenderer(Scene3D.NAME)).render(cache, engine,

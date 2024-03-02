@@ -87,15 +87,17 @@ public class TextEmitter implements Cleanupable, UniqueID {
 
 	}
 
+	// TODO
 	private void updateTextContentRight(Matrix4f[] transforms, Integer[] chars) {
 		int line = 0;
 		int character = 0;
 
-		Vector2f[] poss = new Vector2f[transforms.length];
+		Vector2f[] poss = new Vector2f[chars.length];
 
 		float maxX = 0;
 
-		for (int i = 0; i < text.length(); i++) {
+		int i = 0;
+		for (; i < text.length();) {
 			char currentChar = text.charAt(i);
 
 			if (currentChar == '\n') {
@@ -115,11 +117,17 @@ public class TextEmitter implements Cleanupable, UniqueID {
 				poss[i] = new Vector2f(translationX, translationY);
 
 				maxX = Math.max(maxX, translationX);
+
+				i++;
 			}
 		}
 
-		for (int i = 0; i < transforms.length; i++) {
-			transforms[i] = new Matrix4f().identity().translate(maxX - poss[i].x, poss[i].y, 0);
+		System.out.println("text:" + text + " count: " + i);
+		System.out.println(Arrays.toString(poss));
+		for (int j = 0; j < i; j++) {
+			System.out.println("Text lenght: " + text.length() + " index: " + j + " poss: " + poss[i]);
+
+			transforms[j] = new Matrix4f().identity().translate(maxX - poss[j].x, poss[j].y, 0);
 		}
 	}
 
