@@ -3,6 +3,7 @@ package lu.pcy113.pdr.engine.scene;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import lu.pcy113.pdr.engine.objs.entity.Component;
 import lu.pcy113.pdr.engine.objs.entity.Entity;
 import lu.pcy113.pdr.engine.scene.camera.Camera;
 
@@ -34,15 +35,16 @@ public class Scene2D extends Scene {
 	}
 
 	public Entity addEntity(String str, Entity entity) {
-		this.entities.put(
-				str,
-				entity);
+		this.entities.put(str, entity);
 		return entity;
+	}
+	
+	public Entity addEntity(String str, Component... components) {
+		return addEntity(str, new Entity(components));
 	}
 
 	public Entity getEntity(String str) {
-		return this.entities.get(
-				str);
+		return this.entities.get(str);
 	}
 
 }

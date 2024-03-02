@@ -13,6 +13,7 @@ import lu.pcy113.pdr.engine.graph.material.text.TextShader.TextMaterial;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
 import lu.pcy113.pdr.engine.utils.PDRUtils;
+import lu.pcy113.pdr.engine.utils.consts.Alignment;
 import lu.pcy113.pdr.engine.utils.transform.Transform2D;
 
 public class TextEmitter implements Cleanupable, UniqueID {
@@ -30,6 +31,10 @@ public class TextEmitter implements Cleanupable, UniqueID {
 	private InstanceEmitter instances;
 	private Mesh quad;
 
+	private Alignment alignment = Alignment.LEFT;
+	private boolean justify = false, boxed = false;
+	private Vector2f boxSize;
+
 	public TextEmitter(String name, TextMaterial material, int bufferSize, CharSequence text, Vector2f size) {
 		this.name = name;
 
@@ -37,62 +42,34 @@ public class TextEmitter implements Cleanupable, UniqueID {
 		this.charSize = size;
 
 		Integer[] chars = new Integer[bufferSize];
-		Arrays.fill(
-				chars,
-				0);
-		updateTextContent(
-				new Matrix4f[bufferSize],
-				chars);
+		Arrays.fill(chars, 0);
+		updateTextContent(new Matrix4f[bufferSize], chars);
 		// GlobalLogger.log(Level.FINEST, "SET: " + Arrays.toString(chars));
 
-		this.charBuffer = new UIntAttribArray(
-				"char",
-				7,
-				1,
-				PDRUtils.toPrimitiveInt(
-						chars),
-				false,
-				1);
+		this.charBuffer = new UIntAttribArray("char", 7, 1, PDRUtils.toPrimitiveInt(chars), false, 1);
 		// GlobalLogger.log(Level.FINEST, Arrays.toString(charBuffer.getData()));
-		this.quad = Mesh.newQuad(
-				name,
-				material,
-				size);
+		this.quad = Mesh.newQuad(name, material, size);
 
-		this.instances = new InstanceEmitter(
-				name,
-				quad,
-				bufferSize,
-				new Transform2D(),
-				charBuffer);
+		this.instances = new InstanceEmitter(name, quad, bufferSize, new Transform2D(), charBuffer);
 	}
 
 	public boolean updateText() {
 		if (charBuffer.getLength() < text.length())
-			throw new RuntimeException(
-					"Char buffer too small to hold text.");
+			throw new RuntimeException("Char buffer too small to hold text.");
 
 		TextMaterial material = (TextMaterial) quad.getMaterial();
 
-		material.setProperty(
-				TextShader.TXT_LENGTH,
-				text.length());
+		material.setProperty(TextShader.TXT_LENGTH, text.length());
 
 		Matrix4f[] transforms = new Matrix4f[instances.getParticleCount()];
 		Integer[] chars = new Integer[instances.getParticleCount()];
-		Arrays.fill(
-				chars,
-				0);
+		Arrays.fill(chars, 0);
 
-		updateTextContent(
-				transforms,
-				chars);
+		updateTextContent(transforms, chars);
 
 		// GlobalLogger.log(Level.FINEST, Arrays.deepToString(transforms));
 
-		instances.updateDirect(
-				transforms,
-				new Object[][] { chars });
+		instances.updateDirect(transforms, new Object[][] { chars });
 
 		// GlobalLogger.log(Level.FINEST, Arrays.toString(charBuffer.getData()));
 
@@ -100,12 +77,58 @@ public class TextEmitter implements Cleanupable, UniqueID {
 	}
 
 	private void updateTextContent(Matrix4f[] transforms, Integer[] chars) {
+		if (Alignment.LEFT.equals(alignment)) {
+			updateTextContentLeft(transforms, chars);
+		} else if (Alignment.RIGHT.equals(alignment)) {
+			updateTextContentRight(transforms, chars);
+		} else if (Alignment.CENTER.equals(alignment)) {
+			// updateTextContentCenter(transforms, chars);
+		}
+
+	}
+
+	private void updateTextContentRight(Matrix4f[] transforms, Integer[] chars) {
+		int line = 0;
+		int character = 0;
+
+		Vector2f[] poss = new Vector2f[transforms.length];
+
+		float maxX = 0;
+
+		for (int i = 0; i < text.length(); i++) {
+			char currentChar = text.charAt(i);
+
+			if (currentChar == '\n') {
+				line++;
+				character = 0; // Reset character count for a new line
+			} else if (currentChar == '\t') {
+				character += 4; // Move 4 characters forward for a tab
+			} else if (currentChar == ' ') {
+				character++;
+			} else {
+				character++;
+				chars[i] = (int) currentChar;
+
+				float translationX = character * charSize.x; // Adjust as needed
+				float translationY = -line * charSize.y; // Adjust as needed
+
+				poss[i] = new Vector2f(translationX, translationY);
+
+				maxX = Math.max(maxX, translationX);
+			}
+		}
+
+		for (int i = 0; i < transforms.length; i++) {
+			transforms[i] = new Matrix4f().identity().translate(maxX - poss[i].x, poss[i].y, 0);
+		}
+	}
+
+	private void updateTextContentLeft(Matrix4f[] transforms, Integer[] chars) {
 		int line = 0;
 		int character = 0;
 
 		for (int i = 0; i < text.length(); i++) {
-			char currentChar = text.charAt(
-					i);
+			char currentChar = text.charAt(i);
 
 			if (currentChar == '\n') {
 				line++;
@@ -121,10 +144,7 @@ public class TextEmitter implements Cleanupable, UniqueID {
 				float translationX = character * charSize.x; // Adjust as needed
 				float translationY = line * charSize.y; // Adjust as needed
 
-				transforms[i] = new Matrix4f().identity().translate(
-						translationX,
-						translationY,
-						0);
+				transforms[i] = new Matrix4f().identity().translate(translationX, translationY, 0);
 			}
 		}
 	}
