@@ -1,17 +1,8 @@
 package lu.pcy113.pdr.engine.scene.camera;
 
-import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
-
-import org.joml.Matrix2dc;
-import org.joml.Matrix2fc;
-import org.joml.Matrix3x2fc;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
-import org.joml.Vector2d;
 import org.joml.Vector2f;
-import org.joml.Vector2fc;
-import org.joml.Vector2i;
 import org.joml.Vector3f;
 
 import lu.pcy113.pdr.engine.GameEngine;
@@ -51,7 +42,7 @@ public abstract class Camera {
 		// in = in.mul(new Vector2f(1, -1), new Vector2f());
 
 		projView.unprojectRay(
-				in,
+				new Vector2f(in.x, viewport[3]-in.y),
 				viewport,
 				origin,
 				dir);

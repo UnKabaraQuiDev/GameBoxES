@@ -238,7 +238,9 @@ public class PDRClientGame4 extends GameLogic {
 		}
 
 		if (window.isMouseButtonPressed(GLFW.GLFW_MOUSE_BUTTON_LEFT)) {
-
+			
+			System.out.println("click");
+			
 			int[] viewport = new int[4];
 			createTask(GameEngine.QUEUE_RENDER).exec((s) -> {
 				GL41.glGetIntegerv(GL41.GL_VIEWPORT, viewport);
@@ -270,7 +272,7 @@ public class PDRClientGame4 extends GameLogic {
 
 				System.err.println(pos);
 
-				// defaultCube.getComponent(Transform3DComponent.class).getTransform().setTranslation(pos).updateMatrix();
+				defaultCube.getComponent(Transform3DComponent.class).getTransform().setTranslation(pos).updateMatrix();
 
 				return 1;
 			}).push();
