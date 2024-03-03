@@ -1,7 +1,6 @@
 package lu.pcy113.pdr.engine.objs.text;
 
 import java.util.Arrays;
-import java.util.stream.IntStream;
 
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
@@ -32,7 +31,7 @@ public class TextEmitter implements Cleanupable, UniqueID {
 	private InstanceEmitter instances;
 	private Mesh quad;
 
-	private Alignment alignment = Alignment.RIGHT;
+	private Alignment alignment = Alignment.ABSOLUTE_CENTER;
 	private boolean justify = false, boxed = false;
 	private Vector2f boxSize;
 
@@ -80,19 +79,24 @@ public class TextEmitter implements Cleanupable, UniqueID {
 	private void updateTextContent(Matrix4f[] transforms, Integer[] chars) {
 		if (Alignment.LEFT.equals(alignment)) {
 			updateTextContentLeft(transforms, chars);
+		} else if (Alignment.ABSOLUTE_LEFT.equals(alignment)) { // same as LEFT
+			updateTextContentLeft(transforms, chars);
 		} else if (Alignment.RIGHT.equals(alignment)) {
 			updateTextContentRight(transforms, chars);
-		} else if (Alignment.CENTER.equals(alignment)) {
-			// updateTextContentCenter(transforms, chars);
+		} else if(Alignment.ABSOLUTE_RIGHT.equals(alignment)) {
+			updateTextContentAbsRight(transforms, chars);
+		} else  if (Alignment.CENTER.equals(alignment)) {
+			updateTextContentCenter(transforms, chars);
+		} else  if (Alignment.ABSOLUTE_CENTER.equals(alignment)) {
+			updateTextContentAbsCenter(transforms, chars);
 		}
 
 	}
 
-	private void updateTextContentRight(Matrix4f[] transforms, Integer[] chars) {
+	private void updateTextContentAbsCenter(Matrix4f[] transforms, Integer[] chars) {
 		final int[] widthCount = computeWidthCounts();
 		final int widthMax = Arrays.stream(widthCount).max().getAsInt();
-		System.err.println("max chars: "+Arrays.toString(widthCount)+" '"+text+"'");
-		
+
 		int line = 0;
 		int character = 0;
 
@@ -110,18 +114,104 @@ public class TextEmitter implements Cleanupable, UniqueID {
 			} else {
 				character++;
 				chars[charIndex] = (int) currentChar;
-				
-				/*
-				 * 0 1 2 3 | 4
-				 * 0 1 2   | 3
-				 * 
-				 * 0 1 2 3
-				 *   0 1 2
-				 *   1 2 3
-				 * 
-				 */
-				
+
+				float translationX = (character - widthCount[line] / 2) * charSize.x;
+				float translationY = line * charSize.y;
+
+				transforms[charIndex] = new Matrix4f().identity().translate(translationX, translationY, 0);
+
+				charIndex++;
+			}
+		}
+	}
+	
+	private void updateTextContentCenter(Matrix4f[] transforms, Integer[] chars) {
+		final int[] widthCount = computeWidthCounts();
+		final int widthMax = Arrays.stream(widthCount).max().getAsInt();
+
+		int line = 0;
+		int character = 0;
+
+		int charIndex = 0;
+		for (int i = 0; i < text.length(); i++) {
+			char currentChar = text.charAt(i);
+
+			if (currentChar == '\n') {
+				line++;
+				character = 0;
+			} else if (currentChar == '\t') {
+				character += TAB_SIZE;
+			} else if (currentChar == ' ') {
+				character++;
+			} else {
+				character++;
+				chars[charIndex] = (int) currentChar;
+
+				float translationX = (((widthMax - widthCount[line]) / 2) + character) * charSize.x;
+				float translationY = line * charSize.y;
+
+				transforms[charIndex] = new Matrix4f().identity().translate(translationX, translationY, 0);
+
+				charIndex++;
+			}
+		}
+	}
+
+	private void updateTextContentRight(Matrix4f[] transforms, Integer[] chars) {
+		final int[] widthCount = computeWidthCounts();
+		final int widthMax = Arrays.stream(widthCount).max().getAsInt();
+
+		int line = 0;
+		int character = 0;
+
+		int charIndex = 0;
+		for (int i = 0; i < text.length(); i++) {
+			char currentChar = text.charAt(i);
+
+			if (currentChar == '\n') {
+				line++;
+				character = 0;
+			} else if (currentChar == '\t') {
+				character += TAB_SIZE;
+			} else if (currentChar == ' ') {
+				character++;
+			} else {
+				character++;
+				chars[charIndex] = (int) currentChar;
+
 				float translationX = ((widthMax - widthCount[line]) + character) * charSize.x;
+				float translationY = line * charSize.y;
+
+				transforms[charIndex] = new Matrix4f().identity().translate(translationX, translationY, 0);
+
+				charIndex++;
+			}
+		}
+	}
+
+	private void updateTextContentAbsRight(Matrix4f[] transforms, Integer[] chars) {
+		final int[] widthCount = computeWidthCounts();
+		final int widthMax = Arrays.stream(widthCount).max().getAsInt();
+
+		int line = 0;
+		int character = 0;
+
+		int charIndex = 0;
+		for (int i = 0; i < text.length(); i++) {
+			char currentChar = text.charAt(i);
+
+			if (currentChar == '\n') {
+				line++;
+				character = 0;
+			} else if (currentChar == '\t') {
+				character += TAB_SIZE;
+			} else if (currentChar == ' ') {
+				character++;
+			} else {
+				character++;
+				chars[charIndex] = (int) currentChar;
+
+				float translationX = (character - widthCount[line]) * charSize.x;
 				float translationY = line * charSize.y;
 
 				transforms[charIndex] = new Matrix4f().identity().translate(translationX, translationY, 0);
@@ -162,25 +252,25 @@ public class TextEmitter implements Cleanupable, UniqueID {
 
 	public int computeWidthCount() {
 		int max = Integer.MIN_VALUE;
-		
-		for(String s : text.split("\n")) {
+
+		for (String s : text.split("\n")) {
 			max = Math.max(max, s.length());
 		}
-		
+
 		return max;
 	}
-	
+
 	public int[] computeWidthCounts() {
 		String[] lines = text.split("\n");
 		int[] max = new int[lines.length];
-		
-		for(int i = 0; i < lines.length; i++) {
+
+		for (int i = 0; i < lines.length; i++) {
 			max[i] = lines[i].length();
 		}
-		
+
 		return max;
 	}
-	
+
 	public int getLineCount() {
 		return text.length() - text.replace("\n", "").length();
 	}
