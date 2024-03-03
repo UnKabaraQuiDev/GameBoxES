@@ -289,6 +289,8 @@ public class PDRClientGame4 extends GameLogic {
 	@Override
 	public void render(float dTime) {
 		debugInfo.setText("FPS: " + PDRUtils.round(engine.getCurrentFps(), 2) + "\nNL");
+		debugInfo.setBoxed(true);
+		debugInfo.setBoxSize(new Vector2f(1+(float) Math.sin(backgroundMaterialInterpolation.getProgress()), 1));
 		debugInfo.updateText();
 
 		compositor.render(cache, engine);

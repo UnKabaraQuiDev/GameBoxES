@@ -31,7 +31,7 @@ public class TextEmitter implements Cleanupable, UniqueID {
 	private InstanceEmitter instances;
 	private Mesh quad;
 
-	private Alignment alignment = Alignment.ABSOLUTE_CENTER;
+	private Alignment alignment = Alignment.CENTER;
 	private boolean justify = false, boxed = false;
 	private Vector2f boxSize;
 
@@ -83,11 +83,11 @@ public class TextEmitter implements Cleanupable, UniqueID {
 			updateTextContentLeft(transforms, chars);
 		} else if (Alignment.RIGHT.equals(alignment)) {
 			updateTextContentRight(transforms, chars);
-		} else if(Alignment.ABSOLUTE_RIGHT.equals(alignment)) {
+		} else if (Alignment.ABSOLUTE_RIGHT.equals(alignment)) {
 			updateTextContentAbsRight(transforms, chars);
-		} else  if (Alignment.CENTER.equals(alignment)) {
+		} else if (Alignment.CENTER.equals(alignment)) {
 			updateTextContentCenter(transforms, chars);
-		} else  if (Alignment.ABSOLUTE_CENTER.equals(alignment)) {
+		} else if (Alignment.ABSOLUTE_CENTER.equals(alignment)) {
 			updateTextContentAbsCenter(transforms, chars);
 		}
 
@@ -95,7 +95,7 @@ public class TextEmitter implements Cleanupable, UniqueID {
 
 	private void updateTextContentAbsCenter(Matrix4f[] transforms, Integer[] chars) {
 		final int[] widthCount = computeWidthCounts();
-		final int widthMax = Arrays.stream(widthCount).max().getAsInt();
+		final int widthMax = boxed ? (int) (boxSize.x / charSize.x) : Arrays.stream(widthCount).max().getAsInt();
 
 		int line = 0;
 		int character = 0;
@@ -124,10 +124,10 @@ public class TextEmitter implements Cleanupable, UniqueID {
 			}
 		}
 	}
-	
+
 	private void updateTextContentCenter(Matrix4f[] transforms, Integer[] chars) {
 		final int[] widthCount = computeWidthCounts();
-		final int widthMax = Arrays.stream(widthCount).max().getAsInt();
+		final float widthMax = boxed ? boxSize.x : Arrays.stream(widthCount).max().getAsInt() * charSize.x;
 
 		int line = 0;
 		int character = 0;
@@ -147,7 +147,9 @@ public class TextEmitter implements Cleanupable, UniqueID {
 				character++;
 				chars[charIndex] = (int) currentChar;
 
-				float translationX = (((widthMax - widthCount[line]) / 2) + character) * charSize.x;
+				float translationX = (character - widthCount[line]/2) * charSize.x + widthMax/2;
+				// character * charSize.x + ((widthMax - widthCount[line]*charSize.x) / 2);
+				// c * z +((m-b*x)/2)
 				float translationY = line * charSize.y;
 
 				transforms[charIndex] = new Matrix4f().identity().translate(translationX, translationY, 0);
@@ -286,6 +288,38 @@ public class TextEmitter implements Cleanupable, UniqueID {
 
 	public InstanceEmitter getInstances() {
 		return instances;
+	}
+
+	public Alignment getAlignment() {
+		return alignment;
+	}
+
+	public void setAlignment(Alignment alignment) {
+		this.alignment = alignment;
+	}
+
+	public boolean isJustify() {
+		return justify;
+	}
+
+	public void setJustify(boolean justify) {
+		this.justify = justify;
+	}
+
+	public boolean isBoxed() {
+		return boxed;
+	}
+
+	public void setBoxed(boolean boxed) {
+		this.boxed = boxed;
+	}
+
+	public Vector2f getBoxSize() {
+		return boxSize;
+	}
+
+	public void setBoxSize(Vector2f boxSize) {
+		this.boxSize = boxSize;
 	}
 
 	@Override
