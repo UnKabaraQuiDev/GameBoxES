@@ -116,7 +116,7 @@ public class PDRClientGame4 extends GameLogic {
 		debugInfo.updateText();
 		cache.addTextEmitter(debugInfo);
 
-		debugFps = scene.addEntity("debugFps", new TextEmitterComponent(debugInfo), new Transform3DComponent(new Vector3f(-6.1f, -3.3f, 0), new Quaternionf().rotateZ((float) Math.toRadians(180f))));
+		debugFps = scene.addEntity("debugFps", new TextEmitterComponent(debugInfo), new Transform3DComponent(new Vector3f(1f, 1f, 0), new Quaternionf().rotateZ((float) Math.toRadians(180f))));
 
 		cache.addRenderer(new Scene3DRenderer());
 		cache.addRenderer(new Scene2DRenderer());

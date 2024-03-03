@@ -8,7 +8,9 @@ import java.util.stream.IntStream;
 import org.joml.Matrix3x2f;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
+import org.joml.Vector2fc;
 import org.joml.Vector3f;
+import org.joml.Vector3fc;
 import org.lwjgl.opengl.GL40;
 import org.lwjgl.opengl.GL45;
 
@@ -402,6 +404,14 @@ public final class PDRUtils {
 			data[i] = bData.getInt();
 		}
 		return data;
+	}
+
+	public static Vector2f getCoordinates(Vector2f in, int[] viewport) {
+		return new Vector2f(in.x, viewport[3]-in.y);
+	}
+
+	public static Vector3f getCoordinates(Vector3f in, int[] viewport) {
+		return new Vector3f(in.x, viewport[3]-in.y, in.z);
 	}
 
 }

@@ -1,6 +1,7 @@
 package lu.pcy113.pdr.engine.objs.text;
 
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
@@ -20,22 +21,22 @@ public class TextEmitter implements Cleanupable, UniqueID {
 
 	public static final String NAME = TextEmitter.class.getName();
 
-	public static float TAB_SIZE = 4;
+	public static int TAB_SIZE = 4;
 
 	private final String name;
 
 	private Vector2f charSize;
-	private CharSequence text;
+	private String text;
 
 	private UIntAttribArray charBuffer;
 	private InstanceEmitter instances;
 	private Mesh quad;
 
-	private Alignment alignment = Alignment.LEFT;
+	private Alignment alignment = Alignment.RIGHT;
 	private boolean justify = false, boxed = false;
 	private Vector2f boxSize;
 
-	public TextEmitter(String name, TextMaterial material, int bufferSize, CharSequence text, Vector2f size) {
+	public TextEmitter(String name, TextMaterial material, int bufferSize, String text, Vector2f size) {
 		this.name = name;
 
 		this.text = text;
@@ -87,47 +88,46 @@ public class TextEmitter implements Cleanupable, UniqueID {
 
 	}
 
-	// TODO
 	private void updateTextContentRight(Matrix4f[] transforms, Integer[] chars) {
+		final int[] widthCount = computeWidthCounts();
+		final int widthMax = Arrays.stream(widthCount).max().getAsInt();
+		System.err.println("max chars: "+Arrays.toString(widthCount)+" '"+text+"'");
+		
 		int line = 0;
 		int character = 0;
 
-		Vector2f[] poss = new Vector2f[chars.length];
-
-		float maxX = 0;
-
-		int i = 0;
-		for (; i < text.length();) {
+		int charIndex = 0;
+		for (int i = 0; i < text.length(); i++) {
 			char currentChar = text.charAt(i);
 
 			if (currentChar == '\n') {
 				line++;
-				character = 0; // Reset character count for a new line
+				character = 0;
 			} else if (currentChar == '\t') {
-				character += 4; // Move 4 characters forward for a tab
+				character += TAB_SIZE;
 			} else if (currentChar == ' ') {
 				character++;
 			} else {
 				character++;
-				chars[i] = (int) currentChar;
+				chars[charIndex] = (int) currentChar;
+				
+				/*
+				 * 0 1 2 3 | 4
+				 * 0 1 2   | 3
+				 * 
+				 * 0 1 2 3
+				 *   0 1 2
+				 *   1 2 3
+				 * 
+				 */
+				
+				float translationX = ((widthMax - widthCount[line]) + character) * charSize.x;
+				float translationY = line * charSize.y;
 
-				float translationX = character * charSize.x; // Adjust as needed
-				float translationY = -line * charSize.y; // Adjust as needed
+				transforms[charIndex] = new Matrix4f().identity().translate(translationX, translationY, 0);
 
-				poss[i] = new Vector2f(translationX, translationY);
-
-				maxX = Math.max(maxX, translationX);
-
-				i++;
+				charIndex++;
 			}
-		}
-
-		System.out.println("text:" + text + " count: " + i);
-		System.out.println(Arrays.toString(poss));
-		for (int j = 0; j < i; j++) {
-			System.out.println("Text lenght: " + text.length() + " index: " + j + " poss: " + poss[i]);
-
-			transforms[j] = new Matrix4f().identity().translate(maxX - poss[j].x, poss[j].y, 0);
 		}
 	}
 
@@ -135,6 +135,7 @@ public class TextEmitter implements Cleanupable, UniqueID {
 		int line = 0;
 		int character = 0;
 
+		int charIndex = 0;
 		for (int i = 0; i < text.length(); i++) {
 			char currentChar = text.charAt(i);
 
@@ -142,26 +143,53 @@ public class TextEmitter implements Cleanupable, UniqueID {
 				line++;
 				character = 0; // Reset character count for a new line
 			} else if (currentChar == '\t') {
-				character += 4; // Move 4 characters forward for a tab
+				character += TAB_SIZE; // Move 4 characters forward for a tab
 			} else if (currentChar == ' ') {
 				character++;
 			} else {
 				character++;
-				chars[i] = (int) currentChar;
+				chars[charIndex] = (int) currentChar;
 
 				float translationX = character * charSize.x; // Adjust as needed
 				float translationY = line * charSize.y; // Adjust as needed
 
-				transforms[i] = new Matrix4f().identity().translate(translationX, translationY, 0);
+				transforms[charIndex] = new Matrix4f().identity().translate(translationX, translationY, 0);
+
+				charIndex++;
 			}
 		}
 	}
 
-	public CharSequence getText() {
+	public int computeWidthCount() {
+		int max = Integer.MIN_VALUE;
+		
+		for(String s : text.split("\n")) {
+			max = Math.max(max, s.length());
+		}
+		
+		return max;
+	}
+	
+	public int[] computeWidthCounts() {
+		String[] lines = text.split("\n");
+		int[] max = new int[lines.length];
+		
+		for(int i = 0; i < lines.length; i++) {
+			max[i] = lines[i].length();
+		}
+		
+		return max;
+	}
+	
+	public int getLineCount() {
+		return text.length() - text.replace("\n", "").length();
+	}
+
+	public String getText() {
 		return text;
 	}
 
-	public TextEmitter setText(CharSequence text) {
+	public TextEmitter setText(String text) {
 		this.text = text;
 		return this;
 	}
