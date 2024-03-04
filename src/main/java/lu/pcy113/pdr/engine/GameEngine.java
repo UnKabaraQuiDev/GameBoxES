@@ -222,10 +222,6 @@ public class GameEngine implements Cleanupable, UniqueID {
 			while (this.shouldRun()) {
 				long now = System.nanoTime();
 
-				/*
-				 * TODO: BATCH FOR SHADER
-				 */
-
 				long deltaRender = now - lastTime;
 				if (deltaRender > timeUps) {
 					synchronized (waitForFrameStart) {
