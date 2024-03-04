@@ -268,7 +268,7 @@ public class PDRClientGame4 extends GameLogic {
 				System.err.println(camera.getPosition());
 				System.err.println(ray.getOrigin() + " -> " + ray.getDir());
 
-				Vector3f pos = ((Camera3D) scene.getCamera()).projectPlane(ray, GameEngine.RIGHT, GameEngine.UP);
+				Vector3f pos = ((Camera3D) scene.getCamera()).projectPlane(ray, GameEngine.FORWARD, GameEngine.RIGHT);
 
 				System.err.println(pos);
 

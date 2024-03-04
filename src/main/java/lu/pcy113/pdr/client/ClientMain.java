@@ -36,6 +36,8 @@ public class ClientMain {
 
 			WindowOptions options = new WindowOptions();
 			options.fullscreen = false;
+			options.vsync = true;
+			options.fps = 60;
 			GameEngine engine = new GameEngine("PDRClientGame4", new PDRClientGame4(), options);
 			engine.start();
 
