@@ -3,6 +3,9 @@ package lu.pcy113.pdr.engine.geom;
 import java.util.HashMap;
 import java.util.logging.Level;
 
+import org.joml.Vector2f;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.opengl.GL40;
 
 import lu.pcy113.pclib.GlobalLogger;
@@ -60,27 +63,18 @@ public class Gizmo implements UniqueID, Cleanupable, Renderable {
 
 		this.vao = GL40.glGenVertexArrays();
 		bind();
-		storeElementArray(
-				indices);
-		vertices.setIndex(
-				0);
-		storeAttribArray(
-				vertices);
-		color.setIndex(
-				1);
-		storeAttribArray(
-				color);
+		storeElementArray(indices);
+		vertices.setIndex(0);
+		storeAttribArray(vertices);
+		color.setIndex(1);
+		storeAttribArray(color);
 		unbind();
 
-		GlobalLogger.log(
-				Level.INFO,
-				"Gizmo " + name + ": " + vao + " & " + vbo);
+		GlobalLogger.log(Level.INFO, "Gizmo " + name + ": " + vao + " & " + vbo);
 	}
 
 	protected void storeAttribArray(AttribArray data) {
-		this.vbo.put(
-				data.getIndex(),
-				data.gen());
+		this.vbo.put(data.getIndex(), data.gen());
 		data.bind();
 		data.init();
 		data.enable();
@@ -88,30 +82,24 @@ public class Gizmo implements UniqueID, Cleanupable, Renderable {
 	}
 
 	private void storeElementArray(UIntAttribArray indices) {
-		indices.setBufferType(
-				GL40.GL_ELEMENT_ARRAY_BUFFER);
-		this.vbo.put(
-				indices.getIndex(),
-				indices.gen());
+		indices.setBufferType(GL40.GL_ELEMENT_ARRAY_BUFFER);
+		this.vbo.put(indices.getIndex(), indices.gen());
 		indices.bind();
 		indices.init();
 	}
 
 	public void bind() {
-		GL40.glBindVertexArray(
-				vao);
+		GL40.glBindVertexArray(vao);
 	}
 
 	public void unbind() {
-		GL40.glBindVertexArray(
-				0);
+		GL40.glBindVertexArray(0);
 	}
 
 	@Override
 	public void cleanup() {
 		if (vao != -1) {
-			GL40.glDeleteVertexArrays(
-					vao);
+			GL40.glDeleteVertexArrays(vao);
 			vertices.cleanup();
 			indices.cleanup();
 			vao = -1;
@@ -153,6 +141,15 @@ public class Gizmo implements UniqueID, Cleanupable, Renderable {
 
 	public int getIndicesCount() {
 		return indicesCount;
+	}
+
+	public static Gizmo newRect(String name, Vector2f scale, Vector4f textBoxColor) {
+		return new Gizmo(name,
+				new Vec3fAttribArray("pos", 0, 1,
+						new Vector3f[] { new Vector3f(0, 0, 0), new Vector3f(scale.x, 0, 0),
+								new Vector3f(scale.x, scale.y, 0), new Vector3f(0, scale.y, 0) }),
+				new UIntAttribArray("ind", -1, 1, new int[] { 0, 1, 1, 2, 2, 3, 3, 0 }), new Vec4fAttribArray("color",
+						1, 1, new Vector4f[] { textBoxColor, textBoxColor, textBoxColor, textBoxColor }));
 	}
 
 }

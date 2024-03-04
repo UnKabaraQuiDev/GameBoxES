@@ -116,7 +116,7 @@ public class TextEmitter implements Cleanupable, UniqueID {
 				chars[charIndex] = (int) currentChar;
 
 				float translationX = (character - widthCount[line] / 2) * charSize.x;
-				float translationY = line * charSize.y;
+				float translationY = line * charSize.y+charSize.y/2;
 
 				transforms[charIndex] = new Matrix4f().identity().translate(translationX, translationY, 0);
 
@@ -150,7 +150,7 @@ public class TextEmitter implements Cleanupable, UniqueID {
 				float translationX = (character - widthCount[line]/2) * charSize.x + widthMax/2;
 				// character * charSize.x + ((widthMax - widthCount[line]*charSize.x) / 2);
 				// c * z +((m-b*x)/2)
-				float translationY = line * charSize.y;
+				float translationY = line * charSize.y+charSize.y/2;
 
 				transforms[charIndex] = new Matrix4f().identity().translate(translationX, translationY, 0);
 
@@ -182,7 +182,7 @@ public class TextEmitter implements Cleanupable, UniqueID {
 				chars[charIndex] = (int) currentChar;
 
 				float translationX = ((widthMax - widthCount[line]) + character) * charSize.x;
-				float translationY = line * charSize.y;
+				float translationY = line * charSize.y+charSize.y/2;
 
 				transforms[charIndex] = new Matrix4f().identity().translate(translationX, translationY, 0);
 
@@ -214,7 +214,7 @@ public class TextEmitter implements Cleanupable, UniqueID {
 				chars[charIndex] = (int) currentChar;
 
 				float translationX = (character - widthCount[line]) * charSize.x;
-				float translationY = line * charSize.y;
+				float translationY = line * charSize.y+charSize.y/2;
 
 				transforms[charIndex] = new Matrix4f().identity().translate(translationX, translationY, 0);
 
@@ -233,17 +233,17 @@ public class TextEmitter implements Cleanupable, UniqueID {
 
 			if (currentChar == '\n') {
 				line++;
-				character = 0; // Reset character count for a new line
+				character = 0;
 			} else if (currentChar == '\t') {
-				character += TAB_SIZE; // Move 4 characters forward for a tab
+				character += TAB_SIZE;
 			} else if (currentChar == ' ') {
 				character++;
 			} else {
 				character++;
 				chars[charIndex] = (int) currentChar;
 
-				float translationX = character * charSize.x; // Adjust as needed
-				float translationY = line * charSize.y; // Adjust as needed
+				float translationX = character * charSize.x;
+				float translationY = line * charSize.y+charSize.y/2;
 
 				transforms[charIndex] = new Matrix4f().identity().translate(translationX, translationY, 0);
 

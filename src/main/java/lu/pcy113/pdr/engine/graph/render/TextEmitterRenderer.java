@@ -117,6 +117,7 @@ public class TextEmitterRenderer extends Renderer<Scene, TextEmitterComponent> {
 		mesh.unbind();
 
 		GameEngine.DEBUG.gizmos(cache, scene, projectionMatrix, viewMatrix, transformationMatrix);
+		GameEngine.DEBUG.boundingRect(cache, scene, projectionMatrix, viewMatrix, transformationMatrix, te.getBoxSize());
 	}
 
 }
