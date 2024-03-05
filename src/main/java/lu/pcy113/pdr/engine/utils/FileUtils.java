@@ -18,59 +18,36 @@ public final class FileUtils {
 	public static final String TEXTURES = "textures/";
 
 	public static MemImage STBILoad(String filePath) {
-		return STBILoadRGBA(
-				filePath);
+		return STBILoadRGBA(filePath);
 	}
 
 	public static MemImage STBILoadRGBA(String filePath) {
-		return STBILoad(
-				filePath,
-				4);
+		return STBILoad(filePath, 4);
 	}
 
 	public static MemImage STBILoadRGB(String filePath) {
-		return STBILoad(
-				filePath,
-				3);
+		return STBILoad(filePath, 3);
 	}
 
 	public static MemImage STBILoad(String filePath, int desiredChannels) {
 		int[] w = new int[1], h = new int[1], c = new int[1];
 
-		ByteBuffer buffer = STBImage.stbi_load(
-				filePath,
-				w,
-				h,
-				c,
-				desiredChannels);
+		ByteBuffer buffer = STBImage.stbi_load(filePath, w, h, c, desiredChannels);
 
-		return new MemImage(
-				w[0],
-				h[0],
-				c[0],
-				buffer,
-				true,
-				false);
+		return new MemImage(w[0], h[0], c[0], buffer, true, false);
 	}
 
 	public static boolean STBISaveIncremental(String filePath, MemImage image) {
-		filePath = FileUtils.getIncrement(
-				filePath);
-		return STBISave(
-				filePath,
-				image);
+		filePath = FileUtils.getIncrement(filePath);
+		return STBISave(filePath, image);
 	}
 
 	public static String getIncrement(String filePath) {
-		String woExt = removeExtension(
-				filePath);
-		String ext = getExtension(
-				filePath);
+		String woExt = removeExtension(filePath);
+		String ext = getExtension(filePath);
 
 		int index = 1;
-		while (Files.exists(
-				Paths.get(
-						woExt + "-" + index + "." + ext))) {
+		while (Files.exists(Paths.get(woExt + "-" + index + "." + ext))) {
 			index++;
 		}
 
@@ -78,39 +55,24 @@ public final class FileUtils {
 	}
 
 	public static boolean STBISave(String filePath, MemImage image) {
-		STBImageWrite.stbi_flip_vertically_on_write(
-				image.isFromOGL());
-		return STBImageWrite.stbi_write_png(
-				filePath,
-				image.getWidth(),
-				image.getHeight(),
-				image.getChannels(),
-				image.getBuffer(),
-				0);
+		STBImageWrite.stbi_flip_vertically_on_write(image.isFromOGL());
+		return STBImageWrite.stbi_write_png(filePath, image.getWidth(), image.getHeight(), image.getChannels(),
+				image.getBuffer(), 0);
 	}
 
 	public static void STBIFree(ByteBuffer buffer) {
-		STBImage.stbi_image_free(
-				buffer);
+		STBImage.stbi_image_free(buffer);
 	}
 
 	public static String readStringFile(String filePath) {
 		String str;
-		if (!Files.exists(
-				Paths.get(
-						filePath))) {
-			throw new RuntimeException(
-					"File [" + filePath + "] does not exist");
+		if (!Files.exists(Paths.get(filePath))) {
+			throw new RuntimeException("File [" + filePath + "] does not exist");
 		}
 		try {
-			str = new String(
-					Files.readAllBytes(
-							Paths.get(
-									filePath)));
+			str = new String(Files.readAllBytes(Paths.get(filePath)));
 		} catch (IOException excp) {
-			throw new RuntimeException(
-					"Error reading file [" + filePath + "]",
-					excp);
+			throw new RuntimeException("Error reading file [" + filePath + "]", excp);
 		}
 		return str;
 	}
@@ -118,16 +80,14 @@ public final class FileUtils {
 	public static String recursiveTree(String path) throws IOException {
 		String list = "";
 		// list all the files in the 'path' directory and add them to the string 'list'
-		File directory = new File(
-				path);
+		File directory = new File(path);
 		File[] files = directory.listFiles();
 		if (files != null) {
 			for (File file : files) {
 				if (file.isFile()) {
 					list += file + "\n";
 				} else {
-					list += recursiveTree(
-							file.getCanonicalPath());
+					list += recursiveTree(file.getCanonicalPath());
 				}
 			}
 		}
@@ -135,27 +95,19 @@ public final class FileUtils {
 	}
 
 	public static String appendName(String path, String suffix) {
-		return path.replaceAll(
-				"(.+)(\\.[^.]+)$",
-				"$1" + suffix + "$2");
+		return path.replaceAll("(.+)(\\.[^.]+)$", "$1" + suffix + "$2");
 	}
 
 	public static String changeExtension(String path, String ext) {
-		return path.replaceAll(
-				"(.+)(\\.[^.]+)$",
-				"$1." + ext);
+		return path.replaceAll("(.+)(\\.[^.]+)$", "$1." + ext);
 	}
 
 	public static String removeExtension(String path) {
-		return path.replaceAll(
-				"(.+)(\\.[^.]+)$",
-				"$1");
+		return path.replaceAll("(.+)(\\.[^.]+)$", "$1");
 	}
 
 	public static String getExtension(String path) {
-		return path.replaceAll(
-				"(.+\\.)([^.]+)$",
-				"$2");
+		return path.replaceAll("(.+\\.)([^.]+)$", "$2");
 	}
 
 }
