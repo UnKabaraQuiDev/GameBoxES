@@ -177,7 +177,7 @@ public class SingleTexture extends Texture {
 		} else if (TextureType.TXT3D.equals(txtType)) {
 			GL40.glTexImage3D(txtType.getGlId(), 0, internalFormat.getGlId(), width, height, depth, 0, format.getGlId(), dataType.getGlId(), MemoryUtil.NULL);
 		} else if (TextureType.TXT2DMS.equals(txtType) || TextureType.ARRAY2DMS.equals(txtType)) {
-			System.out.println("inputs: " + txtType + " " + super.sampleCount + " " + internalFormat + " " + width + " " + height + " " + super.fixedSampleLocation);
+			//System.out.println("inputs: " + txtType + " " + super.sampleCount + " " + internalFormat + " " + width + " " + height + " " + super.fixedSampleLocation);
 			GL40.glTexImage2DMultisample(txtType.getGlId(), super.sampleCount, internalFormat.getGlId(), width, height, super.fixedSampleLocation);
 		}
 		PDRUtils.checkGlError("TexImage_" + txtType + "_" + (TextureType.isMultisampled(txtType) ? "MS(" + sampleCount + ")" : ""));
