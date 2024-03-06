@@ -11,13 +11,18 @@ public class ColorFilterShader extends RenderShader {
 	public static final String ADD = "add";
 
 	public ColorFilterShader() {
-		super(NAME, AbstractShaderPart.load("./resources/shaders/composite/plain.vert"), AbstractShaderPart.load("./resources/shaders/composite/color/filter.frag"));
+		super(NAME, AbstractShaderPart.load(
+				"./resources/shaders/composite/plain.vert"),
+				AbstractShaderPart.load(
+						"./resources/shaders/composite/color/filter.frag"));
 	}
 
 	@Override
 	public void createUniforms() {
-		getUniform(MUL);
-		getUniform(ADD);
+		createUniform(
+				MUL);
+		createUniform(
+				ADD);
 	}
 
 }

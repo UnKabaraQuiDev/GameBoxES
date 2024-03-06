@@ -4,12 +4,9 @@ public class FDicGlyph {
 
 	private char character;
 
-	private float width, height, hBearingX, hBearingY, hAdvance, vBearingX, vBearingY, vAdvance, tCoordX, tCoordY,
-			tWidth, tHeight;
+	private float width, height, hBearingX, hBearingY, hAdvance, vBearingX, vBearingY, vAdvance, tCoordX, tCoordY, tWidth, tHeight;
 
-	public FDicGlyph(char character, float width, float height, float hBearingX, float hBearingY, float hAdvance,
-			float vBearingX, float vBearingY, float vAdvance, float tCoordX, float tCoordY, float tWidth,
-			float tHeight) {
+	public FDicGlyph(char character, float width, float height, float hBearingX, float hBearingY, float hAdvance, float vBearingX, float vBearingY, float vAdvance, float tCoordX, float tCoordY, float tWidth, float tHeight) {
 		this.character = character;
 		this.width = width;
 		this.height = height;
@@ -79,10 +76,8 @@ public class FDicGlyph {
 
 	@Override
 	public String toString() {
-		return "{char: " + character + ", width: " + width + ", height: " + height + ", hBearingX: " + hBearingX
-				+ ", hBearingY: " + hBearingY + ", hAdvance: " + hAdvance + ", vBearingX: " + vBearingX
-				+ ", vBearingY: " + vBearingY + ", vAdvance: " + vAdvance + ", tCoordX: " + tCoordX + ", tCoordY: "
-				+ tCoordY + ", tWidth: " + tWidth + ", tHeight: " + tHeight + "}";
+		return "{char: " + character + ", width: " + width + ", height: " + height + ", hBearingX: " + hBearingX + ", hBearingY: " + hBearingY + ", hAdvance: " + hAdvance + ", vBearingX: " + vBearingX + ", vBearingY: " + vBearingY + ", vAdvance: "
+				+ vAdvance + ", tCoordX: " + tCoordX + ", tCoordY: " + tCoordY + ", tWidth: " + tWidth + ", tHeight: " + tHeight + "}";
 	}
 
 }

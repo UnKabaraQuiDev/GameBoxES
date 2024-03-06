@@ -20,21 +20,30 @@ public class SceneRenderLayer extends RenderLayer<GameEngine, Framebuffer, Scene
 	public void render(CacheManager cache, GameEngine parent, Framebuffer fb) {
 		Renderer<GameEngine, Scene> renderer = null;
 		if (this.target instanceof Scene3D) {
-			renderer = (Renderer<GameEngine, Scene>) cache.getRenderer(Scene3D.NAME);
+			renderer = (Renderer<GameEngine, Scene>) cache.getRenderer(
+					Scene3D.NAME);
 			if (renderer == null) {
-				GlobalLogger.log(Level.SEVERE, "No renderer found for: " + Scene3D.NAME);
+				GlobalLogger.log(
+						Level.SEVERE,
+						"No renderer found for: " + Scene3D.NAME);
 				return;
 			}
 		} else if (this.target instanceof Scene2D) {
-			renderer = (Renderer<GameEngine, Scene>) cache.getRenderer(Scene2D.NAME);
+			renderer = (Renderer<GameEngine, Scene>) cache.getRenderer(
+					Scene2D.NAME);
 			if (renderer == null) {
-				GlobalLogger.log(Level.SEVERE, "No renderer found for: " + Scene2D.NAME);
+				GlobalLogger.log(
+						Level.SEVERE,
+						"No renderer found for: " + Scene2D.NAME);
 				return;
 			}
 		}
 
 		if (renderer != null)
-			renderer.render(cache, parent, this.target);
+			renderer.render(
+					cache,
+					parent,
+					this.target);
 	}
 
 }

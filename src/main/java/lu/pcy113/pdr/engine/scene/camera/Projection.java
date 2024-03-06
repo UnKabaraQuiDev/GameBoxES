@@ -46,7 +46,7 @@ public class Projection {
 	}
 
 	public Matrix4f perspectiveUpdateMatrix(int width, int height) {
-		return projMatrix.setPerspective(fov, (float) width / height, near, far);
+		return projMatrix.perspective(fov, (float) width / height, near, far);
 	}
 
 	public Matrix4f orthographicUpdateMatrix(int width, int height) {

@@ -20,7 +20,8 @@ public class GaussianBlurMaterial extends Material {
 		super(NAME, shader);
 
 		if (width % 2 == 0 || height % 2 == 0)
-			throw new RuntimeException("Kernel width/height cannot be even");
+			throw new RuntimeException(
+					"Kernel width/height cannot be even");
 
 		this.width = width;
 		this.height = height;
@@ -30,7 +31,13 @@ public class GaussianBlurMaterial extends Material {
 		generateKernel();
 
 		for (int y = 0; y < height; y++) {
-			GlobalLogger.log(Level.INFO, Arrays.toString(Arrays.copyOfRange(kernel, y * width, (y + 1) * width)));
+			GlobalLogger.log(
+					Level.INFO,
+					Arrays.toString(
+							Arrays.copyOfRange(
+									kernel,
+									y * width,
+									(y + 1) * width)));
 		}
 	}
 
@@ -39,7 +46,11 @@ public class GaussianBlurMaterial extends Material {
 		double halfHeight = height / 2;
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
-				kernel[y * width + x] = (float) (((halfWidth - Math.abs(x - halfWidth)) / halfWidth) * ((halfHeight - Math.abs(y - halfHeight)) / halfHeight));
+				kernel[y * width + x] = (float) (((halfWidth - Math.abs(
+						x - halfWidth)) / halfWidth) * ((halfHeight
+								- Math.abs(
+										y - halfHeight))
+								/ halfHeight));
 			}
 		}
 	}
@@ -48,11 +59,16 @@ public class GaussianBlurMaterial extends Material {
 	public void bindProperties(CacheManager cache, Renderable scene, RenderShader shader) {
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
-				shader.setUniform(GaussianBlurShader.KERNEL + "[" + (y * width + x) + "]", kernel[y * width + x]);
+				shader.setUniform(
+						GaussianBlurShader.KERNEL + "[" + (y * width + x) + "]",
+						kernel[y * width + x]);
 			}
 		}
 
-		super.bindProperties(cache, scene, shader);
+		super.bindProperties(
+				cache,
+				scene,
+				shader);
 	}
 
 }

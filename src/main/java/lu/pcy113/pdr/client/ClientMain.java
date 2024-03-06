@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.logging.Level;
 
 import lu.pcy113.pclib.GlobalLogger;
-import lu.pcy113.pdr.client.game.three.PDRClientGame3;
+import lu.pcy113.pdr.client.game.four.PDRClientGame4;
 import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.graph.window.WindowOptions;
 import lu.pcy113.pdr.engine.utils.FileUtils;
@@ -15,10 +15,14 @@ import lu.pcy113.pdr.engine.utils.FileUtils;
 public class ClientMain {
 
 	/*
-	 * TODO: Add other font files x95
-	 * TODO: Add antialiasing to framebuffer renderlayer
+	 * TODO: Add other font files x95 V: Add antialiasing to framebuffer renderlayer
+	 * TODO: AttribArray resize
+	 * TODO: utils.codec.*
+	 * TODO: Compute shaders
+	 * TODO: Compositor + Compute shader
+	 * TODO: BATCH FOR SHADER
 	 */
-	
+
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 
 		System.out.println(Arrays.toString(new File("./config/").list()));
@@ -35,7 +39,9 @@ public class ClientMain {
 
 			WindowOptions options = new WindowOptions();
 			options.fullscreen = false;
-			GameEngine engine = new GameEngine(new PDRClientGame3(), options);
+			options.vsync = true;
+			options.fps = 60;
+			GameEngine engine = new GameEngine("PDRClientGame4", new PDRClientGame4(), options);
 			engine.start();
 
 		} catch (Exception e) {

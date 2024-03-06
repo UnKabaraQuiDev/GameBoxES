@@ -58,12 +58,22 @@ public abstract class AttribArray implements Cleanupable {
 	public abstract Object get(int i);
 
 	public void enable() {
-		GL40.glEnableVertexAttribArray(index);
-		GL40.glVertexAttribDivisor(index, divisor);
+		GL40.glEnableVertexAttribArray(
+				index);
+		PDRUtils.checkGlError(
+				"EnableVertexAttribArray(" + index + ") (" + name + ")");
+		GL40.glVertexAttribDivisor(
+				index,
+				divisor);
+		PDRUtils.checkGlError(
+				"VertexAttribDivisor(" + index + ", " + divisor + ") (" + name + ")");
 	}
 
 	public void disable() {
-		GL40.glDisableVertexAttribArray(index);
+		GL40.glDisableVertexAttribArray(
+				index);
+		PDRUtils.checkGlError(
+				"DisableVertexAttribArray(" + index + ") (" + name + ")");
 	}
 
 	public int gen() {
@@ -71,16 +81,27 @@ public abstract class AttribArray implements Cleanupable {
 	}
 
 	public void bind() {
-		GL40.glBindBuffer(bufferType, vbo);
+		GL40.glBindBuffer(
+				bufferType,
+				vbo);
+		PDRUtils.checkGlError(
+				"BindBuffer(" + bufferType + ", " + vbo + ") (" + name + ")");
 	}
 
 	public void unbind() {
-		GL40.glBindBuffer(bufferType, 0);
+		GL40.glBindBuffer(
+				bufferType,
+				0);
+		PDRUtils.checkGlError(
+				"BindBuffer(" + bufferType + ", 0) (" + name + ")");
 	}
 
 	@Override
 	public void cleanup() {
-		GL40.glDeleteBuffers(vbo);
+		GL40.glDeleteBuffers(
+				vbo);
+		PDRUtils.checkGlError(
+				"DeleteBuffers(" + vbo + ") (" + name + ")");
 	}
 
 	public String getName() {
@@ -135,19 +156,31 @@ public abstract class AttribArray implements Cleanupable {
 	public static <T> boolean update(AttribArray arr, T[] data) {
 		arr.bind();
 		if (arr instanceof IntAttribArray)
-			return ((IntAttribArray) arr).update(PDRUtils.toPrimitiveInt((Integer[]) data));
+			return ((IntAttribArray) arr).update(
+					PDRUtils.toPrimitiveInt(
+							(Integer[]) data));
 		else if (arr instanceof UIntAttribArray)
-			return ((UIntAttribArray) arr).update(PDRUtils.toPrimitiveInt((Integer[]) data));
+			return ((UIntAttribArray) arr).update(
+					PDRUtils.toPrimitiveInt(
+							(Integer[]) data));
 		else if (arr instanceof FloatAttribArray)
-			return ((FloatAttribArray) arr).update(PDRUtils.toPrimitiveFloat(data));
+			return ((FloatAttribArray) arr).update(
+					PDRUtils.toPrimitiveFloat(
+							data));
 		else if (arr instanceof Mat4fAttribArray)
-			return ((Mat4fAttribArray) arr).update(PDRUtils.castArrayMat4f(data));
+			return ((Mat4fAttribArray) arr).update(
+					PDRUtils.castArrayMat4f(
+							data));
 		else if (arr instanceof Vec4fAttribArray)
-			return ((Vec4fAttribArray) arr).update((Vector4f[]) data);
+			return ((Vec4fAttribArray) arr).update(
+					(Vector4f[]) data);
 		else if (arr instanceof Vec3fAttribArray)
-			return ((Vec3fAttribArray) arr).update((Vector3f[]) data);
+			return ((Vec3fAttribArray) arr).update(
+					(Vector3f[]) data);
 		else if (arr instanceof Mat3x2fAttribArray)
-			return ((Mat3x2fAttribArray) arr).update(PDRUtils.castArrayMat3x2f(data));
+			return ((Mat3x2fAttribArray) arr).update(
+					PDRUtils.castArrayMat3x2f(
+							data));
 		return false;
 	}
 

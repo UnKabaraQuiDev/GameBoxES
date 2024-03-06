@@ -43,7 +43,10 @@ public class Mat3x2fAttribArray extends AttribArray {
 
 	@Override
 	public void init() {
-		GL40.glBufferData(bufferType, toFlatArray(), iStatic ? GL40.GL_STATIC_DRAW : GL40.GL_DYNAMIC_DRAW);
+		GL40.glBufferData(
+				bufferType,
+				toFlatArray(),
+				iStatic ? GL40.GL_STATIC_DRAW : GL40.GL_DYNAMIC_DRAW);
 	}
 
 	public boolean update(Matrix3x2f[] nPos) {
@@ -52,22 +55,38 @@ public class Mat3x2fAttribArray extends AttribArray {
 		}
 		data = nPos;
 
-		GL40.glBufferSubData(GL40.GL_ARRAY_BUFFER, 0, toFlatArray());
+		GL40.glBufferSubData(
+				GL40.GL_ARRAY_BUFFER,
+				0,
+				toFlatArray());
 		return GL40.glGetError() == GL40.GL_NO_ERROR;
 	}
 
 	@Override
 	public void enable() {
 		for (int i = 0; i < 3; i++) {
-			GL40.glEnableVertexAttribArray(index + i);
-			GL40.glVertexAttribPointer(index + i, 2, GL40.GL_FLOAT, false, 6 * 3, i * 2 * 4);
-			GL40.glVertexAttribDivisor(index + i, divisor);
+			GL40.glEnableVertexAttribArray(
+					index + i);
+			GL40.glVertexAttribPointer(
+					index + i,
+					2,
+					GL40.GL_FLOAT,
+					false,
+					6 * 3,
+					i * 2 * 4);
+			GL40.glVertexAttribDivisor(
+					index + i,
+					divisor);
 		}
 	}
 
 	public FloatBuffer toFlatFloatBuffer() {
-		FloatBuffer fb = BufferUtils.createFloatBuffer(data.length * 3 * 2);
-		Arrays.stream(data).forEach(m -> m.get(fb));
+		FloatBuffer fb = BufferUtils.createFloatBuffer(
+				data.length * 3 * 2);
+		Arrays.stream(
+				data).forEach(
+						m -> m.get(
+								fb));
 		fb.flip();
 		return fb;
 	}
@@ -81,14 +100,26 @@ public class Mat3x2fAttribArray extends AttribArray {
 		float[] flatArray = new float[data.length * 6];
 		for (int i = 0; i < data.length; i++) {
 			float[] dat = new float[3 * 2];
-			data[i].get(dat);
-			System.arraycopy(dat, 0, flatArray, i * 6, 6);
+			data[i].get(
+					dat);
+			System.arraycopy(
+					dat,
+					0,
+					flatArray,
+					i * 6,
+					6);
 		}
 		return flatArray;
 	}
 
 	public FloatAttribArray toFloatAttribArray() {
-		return new FloatAttribArray(name, index, dataSize * 3 * 2, toFlatArray(), bufferType, iStatic);
+		return new FloatAttribArray(
+				name,
+				index,
+				dataSize * 3 * 2,
+				toFlatArray(),
+				bufferType,
+				iStatic);
 	}
 
 	@Override

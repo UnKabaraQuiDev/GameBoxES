@@ -10,5 +10,5 @@ public abstract class ComputeShader extends AbstractShader {
 	public ComputeShader(String name, Vector3i batchSize, Vector3i execSize, ComputeShaderPart part) {
 		super(name, part);
 	}
-	
+
 }

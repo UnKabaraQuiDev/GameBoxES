@@ -9,17 +9,24 @@ public class GizmoShader extends RenderShader {
 	public static final String NAME = GizmoShader.class.getName();
 
 	public GizmoShader() {
-		super(NAME, AbstractShaderPart.load("./resources/shaders/gizmo/gizmo.vert"), AbstractShaderPart.load("./resources/shaders/gizmo/gizmo.frag"));
+		super(NAME, AbstractShaderPart.load(
+				"./resources/shaders/gizmo/gizmo.vert"),
+				AbstractShaderPart.load(
+						"./resources/shaders/gizmo/gizmo.frag"));
 	}
 
 	@Override
 	public void createUniforms() {
 		// vert
-		getUniform(RenderShader.PROJECTION_MATRIX);
-		getUniform(RenderShader.VIEW_MATRIX);
-		getUniform(RenderShader.TRANSFORMATION_MATRIX);
+		createUniform(
+				RenderShader.PROJECTION_MATRIX);
+		createUniform(
+				RenderShader.VIEW_MATRIX);
+		createUniform(
+				RenderShader.TRANSFORMATION_MATRIX);
 		// frag
-		getUniform(RenderShader.VIEW_POSITION);
+		createUniform(
+				RenderShader.VIEW_POSITION);
 	}
 
 	public static class GizmoMaterial extends Material {

@@ -7,14 +7,20 @@ public enum Interpolators implements Interpolator {
 	LINEAR {
 		@Override
 		public float evaluate(float x) {
-			return Math.clamp(0, 1, x);
+			return Math.clamp(
+					0,
+					1,
+					x);
 		}
 	},
 
 	QUAD_IN {
 		@Override
 		public float evaluate(float x) {
-			x = Math.clamp(0, 1, x);
+			x = Math.clamp(
+					0,
+					1,
+					x);
 			return x * x;
 		}
 	},
@@ -22,7 +28,10 @@ public enum Interpolators implements Interpolator {
 	QUAD_OUT {
 		@Override
 		public float evaluate(float x) {
-			x = Math.clamp(0, 1, x);
+			x = Math.clamp(
+					0,
+					1,
+					x);
 			return 1 - (1 - x) * (1 - x);
 		}
 	},
@@ -30,7 +39,10 @@ public enum Interpolators implements Interpolator {
 	QUAD_IN_OUT {
 		@Override
 		public float evaluate(float x) {
-			x = Math.clamp(0, 1, x);
+			x = Math.clamp(
+					0,
+					1,
+					x);
 			return x < 0.5 ? 2 * x * x : 1 - 2 * (1 - x) * (1 - x);
 		}
 	},
@@ -38,7 +50,10 @@ public enum Interpolators implements Interpolator {
 	CUBIC_IN {
 		@Override
 		public float evaluate(float x) {
-			x = Math.clamp(0, 1, x);
+			x = Math.clamp(
+					0,
+					1,
+					x);
 			return x * x * x;
 		}
 	},
@@ -46,7 +61,10 @@ public enum Interpolators implements Interpolator {
 	CUBIC_OUT {
 		@Override
 		public float evaluate(float x) {
-			x = Math.clamp(0, 1, x);
+			x = Math.clamp(
+					0,
+					1,
+					x);
 			return 1 - (1 - x) * (1 - x) * (1 - x);
 		}
 	},
@@ -54,7 +72,10 @@ public enum Interpolators implements Interpolator {
 	CUBIC_IN_OUT {
 		@Override
 		public float evaluate(float x) {
-			x = Math.clamp(0, 1, x);
+			x = Math.clamp(
+					0,
+					1,
+					x);
 			return x < 0.5 ? 4 * x * x * x : 1 - 4 * (1 - x) * (1 - x) * (1 - x);
 		}
 	},
@@ -62,29 +83,44 @@ public enum Interpolators implements Interpolator {
 	SINE_IN_OUT {
 		@Override
 		public float evaluate(float x) {
-			x = Math.clamp(0, 1, x);
-			return (float) (-0.5 * (Math.cos(Math.PI * x) - 1));
+			x = Math.clamp(
+					0,
+					1,
+					x);
+			return (float) (-0.5 * (Math.cos(
+					Math.PI * x) - 1));
 		}
 	},
 	SINE_OUT {
 		@Override
 		public float evaluate(float x) {
-			x = Math.clamp(0, 1, x);
-			return (float) (Math.sin((x * Math.PI) / 2));
+			x = Math.clamp(
+					0,
+					1,
+					x);
+			return (float) (Math.sin(
+					(x * Math.PI) / 2));
 		}
 	},
 	SINE_IN {
 		@Override
 		public float evaluate(float x) {
-			x = Math.clamp(0, 1, x);
-			return (float) (1 - Math.cos((x * Math.PI) / 2));
+			x = Math.clamp(
+					0,
+					1,
+					x);
+			return (float) (1 - Math.cos(
+					(x * Math.PI) / 2));
 		}
 	},
 
 	QUART_IN {
 		@Override
 		public float evaluate(float x) {
-			x = Math.clamp(0, 1, x);
+			x = Math.clamp(
+					0,
+					1,
+					x);
 			return x * x * x * x;
 		}
 	},
@@ -92,7 +128,10 @@ public enum Interpolators implements Interpolator {
 	QUART_OUT {
 		@Override
 		public float evaluate(float x) {
-			x = Math.clamp(0, 1, x);
+			x = Math.clamp(
+					0,
+					1,
+					x);
 			return 1 - (1 - x) * (1 - x) * (1 - x) * (1 - x);
 		}
 	},
@@ -100,7 +139,10 @@ public enum Interpolators implements Interpolator {
 	QUART_IN_OUT {
 		@Override
 		public float evaluate(float x) {
-			x = Math.clamp(0, 1, x);
+			x = Math.clamp(
+					0,
+					1,
+					x);
 			return x < 0.5 ? 8 * x * x * x * x : 1 - 8 * (1 - x) * (1 - x) * (1 - x) * (1 - x);
 		}
 	},
@@ -108,7 +150,10 @@ public enum Interpolators implements Interpolator {
 	QUINT_IN {
 		@Override
 		public float evaluate(float x) {
-			x = Math.clamp(0, 1, x);
+			x = Math.clamp(
+					0,
+					1,
+					x);
 			return x * x * x * x * x;
 		}
 	},
@@ -116,7 +161,10 @@ public enum Interpolators implements Interpolator {
 	QUINT_OUT {
 		@Override
 		public float evaluate(float x) {
-			x = Math.clamp(0, 1, x);
+			x = Math.clamp(
+					0,
+					1,
+					x);
 			return 1 - (1 - x) * (1 - x) * (1 - x) * (1 - x) * (1 - x);
 		}
 	},
@@ -124,7 +172,10 @@ public enum Interpolators implements Interpolator {
 	QUINT_IN_OUT {
 		@Override
 		public float evaluate(float x) {
-			x = Math.clamp(0, 1, x);
+			x = Math.clamp(
+					0,
+					1,
+					x);
 			return x < 0.5 ? 16 * x * x * x * x * x : 1 - 16 * (1 - x) * (1 - x) * (1 - x) * (1 - x) * (1 - x);
 		}
 	},
@@ -132,27 +183,44 @@ public enum Interpolators implements Interpolator {
 	EXPO_IN {
 		@Override
 		public float evaluate(float x) {
-			x = Math.clamp(0, 1, x);
-			return (float) java.lang.Math.pow(2, 10 * (x - 1));
+			x = Math.clamp(
+					0,
+					1,
+					x);
+			return (float) java.lang.Math.pow(
+					2,
+					10 * (x - 1));
 		}
 	},
 
 	EXPO_OUT {
 		@Override
 		public float evaluate(float x) {
-			x = Math.clamp(0, 1, x);
-			return 1 - (float) java.lang.Math.pow(2, -10 * x);
+			x = Math.clamp(
+					0,
+					1,
+					x);
+			return 1 - (float) java.lang.Math.pow(
+					2,
+					-10 * x);
 		}
 	},
 
 	EXPO_IN_OUT {
 		@Override
 		public float evaluate(float x) {
-			x = Math.clamp(0, 1, x);
+			x = Math.clamp(
+					0,
+					1,
+					x);
 			if (x < 0.5) {
-				return (float) (0.5 * java.lang.Math.pow(2, 10 * (2 * x - 1)));
+				return (float) (0.5 * java.lang.Math.pow(
+						2,
+						10 * (2 * x - 1)));
 			} else {
-				return (float) (-0.5 * java.lang.Math.pow(2, -10 * (2 * x - 1)) + 1);
+				return (float) (-0.5 * java.lang.Math.pow(
+						2,
+						-10 * (2 * x - 1)) + 1);
 			}
 		}
 	},
@@ -160,27 +228,40 @@ public enum Interpolators implements Interpolator {
 	CIRC_IN {
 		@Override
 		public float evaluate(float x) {
-			x = Math.clamp(0, 1, x);
-			return 1 - Math.sqrt(1 - x * x);
+			x = Math.clamp(
+					0,
+					1,
+					x);
+			return 1 - Math.sqrt(
+					1 - x * x);
 		}
 	},
 
 	CIRC_OUT {
 		@Override
 		public float evaluate(float x) {
-			x = Math.clamp(0, 1, x);
-			return Math.sqrt(1 - (x - 1) * (x - 1));
+			x = Math.clamp(
+					0,
+					1,
+					x);
+			return Math.sqrt(
+					1 - (x - 1) * (x - 1));
 		}
 	},
 
 	CIRC_IN_OUT {
 		@Override
 		public float evaluate(float x) {
-			x = Math.clamp(0, 1, x);
+			x = Math.clamp(
+					0,
+					1,
+					x);
 			if (x < 0.5) {
-				return (float) (0.5 * (1 - Math.sqrt(1 - 4 * x * x)));
+				return (float) (0.5 * (1 - Math.sqrt(
+						1 - 4 * x * x)));
 			} else {
-				return (float) (0.5 * (Math.sqrt(1 - (2 * x - 2) * (2 * x - 2)) + 1));
+				return (float) (0.5 * (Math.sqrt(
+						1 - (2 * x - 2) * (2 * x - 2)) + 1));
 			}
 		}
 	},
@@ -188,15 +269,22 @@ public enum Interpolators implements Interpolator {
 	BOUNCE_IN {
 		@Override
 		public float evaluate(float x) {
-			x = Math.clamp(0, 1, x);
-			return 1 - BOUNCE_OUT.evaluate(1 - x);
+			x = Math.clamp(
+					0,
+					1,
+					x);
+			return 1 - BOUNCE_OUT.evaluate(
+					1 - x);
 		}
 	},
 
 	BOUNCE_OUT {
 		@Override
 		public float evaluate(float x) {
-			x = Math.clamp(0, 1, x);
+			x = Math.clamp(
+					0,
+					1,
+					x);
 			if (x < 1 / 2.75) {
 				return 7.5625f * x * x;
 			} else if (x < 2 / 2.75) {
@@ -215,11 +303,16 @@ public enum Interpolators implements Interpolator {
 	BOUNCE_IN_OUT {
 		@Override
 		public float evaluate(float x) {
-			x = Math.clamp(0, 1, x);
+			x = Math.clamp(
+					0,
+					1,
+					x);
 			if (x < 0.5f) {
-				return 0.5f * BOUNCE_IN.evaluate(x * 2);
+				return 0.5f * BOUNCE_IN.evaluate(
+						x * 2);
 			} else {
-				return 0.5f * BOUNCE_OUT.evaluate(x * 2 - 1) + 0.5f;
+				return 0.5f * BOUNCE_OUT.evaluate(
+						x * 2 - 1) + 0.5f;
 			}
 		}
 	},
@@ -227,7 +320,10 @@ public enum Interpolators implements Interpolator {
 	BACK_IN {
 		@Override
 		public float evaluate(float x) {
-			x = Math.clamp(0, 1, x);
+			x = Math.clamp(
+					0,
+					1,
+					x);
 			float s = 1.70158f;
 			return x * x * ((s + 1) * x - s);
 		}
@@ -236,7 +332,10 @@ public enum Interpolators implements Interpolator {
 	BACK_OUT {
 		@Override
 		public float evaluate(float x) {
-			x = Math.clamp(0, 1, x);
+			x = Math.clamp(
+					0,
+					1,
+					x);
 			float s = 1.70158f;
 			x -= 1;
 			return x * x * ((s + 1) * x + s) + 1;
@@ -246,7 +345,10 @@ public enum Interpolators implements Interpolator {
 	BACK_IN_OUT {
 		@Override
 		public float evaluate(float x) {
-			x = Math.clamp(0, 1, x);
+			x = Math.clamp(
+					0,
+					1,
+					x);
 			float s = 1.70158f;
 			x *= 2;
 			if (x < 1) {

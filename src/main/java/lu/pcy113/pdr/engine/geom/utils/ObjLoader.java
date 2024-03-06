@@ -1,4 +1,4 @@
-package lu.pcy113.pdr.engine.geom;
+package lu.pcy113.pdr.engine.geom.utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,13 +14,17 @@ import lu.pcy113.pdr.engine.cache.attrib.UIntAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.Vec2fAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.Vec3fAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.Vec4fAttribArray;
+import lu.pcy113.pdr.engine.geom.Gizmo;
+import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.graph.material.Material;
 import lu.pcy113.pdr.engine.utils.FileUtils;
 
 public final class ObjLoader {
 
 	public static Gizmo loadGizmo(String name, String path) {
-		String[] lines = FileUtils.readFile(path).split("\n");
+		String[] lines = FileUtils.readStringFile(
+				path).split(
+						"\n");
 
 		List<Vector3f> vertices = new ArrayList<>();
 		/*
@@ -33,16 +37,38 @@ public final class ObjLoader {
 		int li = 0;
 		while (li < lines.length) {
 			String line = lines[li++];
-			String[] tokens = line.split("\\s+");
+			String[] tokens = line.split(
+					"\\s+");
 
 			switch (tokens[0]) {
 			case "v":
-				vertices.add(new Vector3f(Float.parseFloat(tokens[1]), Float.parseFloat(tokens[2]), Float.parseFloat(tokens[3])));
+				vertices.add(
+						new Vector3f(
+								Float.parseFloat(
+										tokens[1]),
+								Float.parseFloat(
+										tokens[2]),
+								Float.parseFloat(
+										tokens[3])));
 				if (tokens.length > 4)
-					colors.add(new Vector4f(Float.parseFloat(tokens[4]), Float.parseFloat(tokens[5]), Float.parseFloat(tokens[6]), tokens.length > 7 ? Float.parseFloat(tokens[7]) : 1));
+					colors.add(
+							new Vector4f(
+									Float.parseFloat(
+											tokens[4]),
+									Float.parseFloat(
+											tokens[5]),
+									Float.parseFloat(
+											tokens[6]),
+									tokens.length > 7 ? Float.parseFloat(
+											tokens[7]) : 1));
 				break;
 			case "l":
-				edges.add(new Vector2i(Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2])));
+				edges.add(
+						new Vector2i(
+								Integer.parseInt(
+										tokens[1]),
+								Integer.parseInt(
+										tokens[2])));
 				break;
 			}
 		}
@@ -56,7 +82,8 @@ public final class ObjLoader {
 		Vector4f[] colorArr = new Vector4f[vertices.size()];
 
 		for (int i = 0; i < vertices.size(); i++) {
-			Vector3f pos = vertices.get(i);
+			Vector3f pos = vertices.get(
+					i);
 
 			/*
 			 * verticesArr[i*3+0] = pos.x; verticesArr[i*3+1] = pos.y; verticesArr[i*3+2] =
@@ -65,7 +92,8 @@ public final class ObjLoader {
 			verticesArr[i] = pos;
 
 			if (colors != null) {
-				Vector4f col = colors.get(i);
+				Vector4f col = colors.get(
+						i);
 				/*
 				 * colorArr[i*4+0] = col.x; colorArr[i*4+1] = col.y; colorArr[i*4+2] = col.z;
 				 * colorArr[i*4+3] = col.w;
@@ -78,10 +106,13 @@ public final class ObjLoader {
 			int i1 = edge.x;
 			int i2 = edge.y;
 
-			indices.add(i1 - 1);
-			indices.add(i2 - 1);
+			indices.add(
+					i1 - 1);
+			indices.add(
+					i2 - 1);
 		}
-		int[] indicesArr = indices.stream().mapToInt((v) -> v).toArray();
+		int[] indicesArr = indices.stream().mapToInt(
+				(v) -> v).toArray();
 
 		/*
 		 * GlobalLogger.log(Level.INFO, "Loaded " + name); GlobalLogger.log(Level.INFO,
@@ -90,11 +121,32 @@ public final class ObjLoader {
 		 * "Indices " + Arrays.toString(indicesArr));
 		 */
 
-		return new Gizmo(name, new Vec3fAttribArray("pos", 0, 1, verticesArr, GL40.GL_ARRAY_BUFFER), new UIntAttribArray("ind", -1, 1, indicesArr, GL40.GL_ELEMENT_ARRAY_BUFFER), new Vec4fAttribArray("col", 1, 1, colorArr, GL40.GL_ARRAY_BUFFER));
+		return new Gizmo(
+				name,
+				new Vec3fAttribArray(
+						"pos",
+						0,
+						1,
+						verticesArr,
+						GL40.GL_ARRAY_BUFFER),
+				new UIntAttribArray(
+						"ind",
+						-1,
+						1,
+						indicesArr,
+						GL40.GL_ELEMENT_ARRAY_BUFFER),
+				new Vec4fAttribArray(
+						"col",
+						1,
+						1,
+						colorArr,
+						GL40.GL_ARRAY_BUFFER));
 	}
 
 	public static Mesh loadMesh(String name, Material material, String path) {
-		String[] lines = FileUtils.readFile(path).split("\n");
+		String[] lines = FileUtils.readStringFile(
+				path).split(
+						"\n");
 
 		List<Vector3f> vertices = new ArrayList<>();
 		List<Vector3f> normals = new ArrayList<>();
@@ -104,22 +156,48 @@ public final class ObjLoader {
 		int li = 0;
 		while (li < lines.length) {
 			String line = lines[li++];
-			String[] tokens = line.split("\\s+");
+			String[] tokens = line.split(
+					"\\s+");
 
 			switch (tokens[0]) {
 			case "v":
-				vertices.add(new Vector3f(Float.parseFloat(tokens[1]), Float.parseFloat(tokens[2]), Float.parseFloat(tokens[3])));
+				vertices.add(
+						new Vector3f(
+								Float.parseFloat(
+										tokens[1]),
+								Float.parseFloat(
+										tokens[2]),
+								Float.parseFloat(
+										tokens[3])));
 				break;
 			case "vt":
-				uvs.add(new Vector2f(Float.parseFloat(tokens[1]), Float.parseFloat(tokens[2])));
+				uvs.add(
+						new Vector2f(
+								Float.parseFloat(
+										tokens[1]),
+								Float.parseFloat(
+										tokens[2])));
 				break;
 			case "vn":
-				normals.add(new Vector3f(Float.parseFloat(tokens[1]), Float.parseFloat(tokens[2]), Float.parseFloat(tokens[3])));
+				normals.add(
+						new Vector3f(
+								Float.parseFloat(
+										tokens[1]),
+								Float.parseFloat(
+										tokens[2]),
+								Float.parseFloat(
+										tokens[3])));
 				break;
 			case "f":
-				processFace(tokens[1], faces);
-				processFace(tokens[2], faces);
-				processFace(tokens[3], faces);
+				processFace(
+						tokens[1],
+						faces);
+				processFace(
+						tokens[2],
+						faces);
+				processFace(
+						tokens[3],
+						faces);
 				break;
 			}
 		}
@@ -143,10 +221,12 @@ public final class ObjLoader {
 			int tex = face.y;
 			int nor = face.z;
 
-			indices.add(pos);
+			indices.add(
+					pos);
 
 			if (tex >= 0) {
-				Vector2f v = uvs.get(tex);
+				Vector2f v = uvs.get(
+						tex);
 				/*
 				 * uvsArr[pos*2+0] = v.x; uvsArr[pos*2+1] = 1-v.y;
 				 */
@@ -154,7 +234,8 @@ public final class ObjLoader {
 			}
 
 			if (nor >= 0) {
-				Vector3f v = normals.get(nor);
+				Vector3f v = normals.get(
+						nor);
 				/*
 				 * normalsArr[pos*3+0] = v.x; normalsArr[pos*3+1] = v.y; normalsArr[pos*3+2] =
 				 * v.z;
@@ -163,26 +244,61 @@ public final class ObjLoader {
 			}
 		}
 
-		int[] indicesArr = indices.stream().mapToInt((v) -> v).toArray();
+		int[] indicesArr = indices.stream().mapToInt(
+				(v) -> v).toArray();
 
-		Vec3fAttribArray pos = new Vec3fAttribArray("pos", 0, 1, verticesArr, GL40.GL_ARRAY_BUFFER);
-		UIntAttribArray ind = new UIntAttribArray("ind", -1, 1, indicesArr, GL40.GL_ELEMENT_ARRAY_BUFFER);
-		Vec3fAttribArray norm = new Vec3fAttribArray("norm", 1, 1, normalsArr, GL40.GL_ARRAY_BUFFER);
-		Vec2fAttribArray uv = new Vec2fAttribArray("uv", 2, 1, uvsArr, GL40.GL_ARRAY_BUFFER);
+		Vec3fAttribArray pos = new Vec3fAttribArray(
+				"pos",
+				0,
+				1,
+				verticesArr,
+				GL40.GL_ARRAY_BUFFER);
+		UIntAttribArray ind = new UIntAttribArray(
+				"ind",
+				-1,
+				1,
+				indicesArr,
+				GL40.GL_ELEMENT_ARRAY_BUFFER);
+		Vec3fAttribArray norm = new Vec3fAttribArray(
+				"norm",
+				1,
+				1,
+				normalsArr,
+				GL40.GL_ARRAY_BUFFER);
+		Vec2fAttribArray uv = new Vec2fAttribArray(
+				"uv",
+				2,
+				1,
+				uvsArr,
+				GL40.GL_ARRAY_BUFFER);
 
-		return new Mesh(name, material, pos, ind, norm, uv);
+		return new Mesh(
+				name,
+				material,
+				pos,
+				ind,
+				norm,
+				uv);
 	}
 
 	private static void processFace(String token, List<Vector3i> faces) {
-		String[] tokens = token.split("/");
+		String[] tokens = token.split(
+				"/");
 		int len = tokens.length;
 		int pos = -1, coords = -1, normals = -1;
-		pos = Integer.parseInt(tokens[0]) - 1;
+		pos = Integer.parseInt(
+				tokens[0]) - 1;
 		if (len > 1)
-			coords = Integer.parseInt(tokens[1]) - 1;
+			coords = Integer.parseInt(
+					tokens[1]) - 1;
 		if (len > 2)
-			normals = Integer.parseInt(tokens[2]) - 1;
-		faces.add(new Vector3i(pos, coords, normals));
+			normals = Integer.parseInt(
+					tokens[2]) - 1;
+		faces.add(
+				new Vector3i(
+						pos,
+						coords,
+						normals));
 	}
 
 }

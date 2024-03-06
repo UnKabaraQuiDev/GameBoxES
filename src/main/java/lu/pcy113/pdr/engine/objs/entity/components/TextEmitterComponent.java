@@ -26,7 +26,8 @@ public class TextEmitterComponent extends Component implements Renderable {
 	}
 
 	public TextEmitter getTextEmitter(CacheManager cache) {
-		return cache.getTextEmitter(this.textEmitterId);
+		return cache.getTextEmitter(
+				this.textEmitterId);
 	}
 
 	public void setTextEmitter(TextEmitter textEmitter) {

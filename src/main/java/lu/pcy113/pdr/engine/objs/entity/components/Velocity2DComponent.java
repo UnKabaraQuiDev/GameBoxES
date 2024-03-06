@@ -9,7 +9,8 @@ public class Velocity2DComponent extends VelocityComponent {
 	private Vector2f velocity;
 
 	public Velocity2DComponent() {
-		this(new Vector2f(0));
+		this(new Vector2f(
+				0));
 	}
 
 	public Velocity2DComponent(Vector2f velocity) {
@@ -21,11 +22,13 @@ public class Velocity2DComponent extends VelocityComponent {
 		if (e == null)
 			return;
 
-		Transform2DComponent t2De = e.getComponent(Transform2DComponent.class);
+		Transform2DComponent t2De = e.getComponent(
+				Transform2DComponent.class);
 		if (t2De == null)
 			return;
 
-		t2De.getTransform().getTranslation().add(this.velocity);
+		t2De.getTransform().getTranslation().add(
+				this.velocity);
 	}
 
 	public Vector2f getVelocity() {

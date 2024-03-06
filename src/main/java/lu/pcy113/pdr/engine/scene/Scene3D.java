@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import lu.pcy113.pdr.engine.objs.entity.Component;
 import lu.pcy113.pdr.engine.objs.entity.Entity;
 import lu.pcy113.pdr.engine.objs.entity.components.LightComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.PointLightComponent;
@@ -44,6 +45,10 @@ public class Scene3D extends Scene {
 			this.lightEmittors.add(str);
 		}
 		return entity;
+	}
+
+	public Entity addEntity(String str, Component... components) {
+		return addEntity(str, new Entity(components));
 	}
 
 	public Entity getEntity(String str) {

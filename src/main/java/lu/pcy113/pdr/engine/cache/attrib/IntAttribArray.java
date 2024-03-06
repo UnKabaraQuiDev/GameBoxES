@@ -33,9 +33,18 @@ public class IntAttribArray extends AttribArray {
 
 	@Override
 	public void init() {
-		GL40.glBufferData(bufferType, data, iStatic ? GL40.GL_STATIC_DRAW : GL40.GL_DYNAMIC_DRAW);
+		GL40.glBufferData(
+				bufferType,
+				data,
+				iStatic ? GL40.GL_STATIC_DRAW : GL40.GL_DYNAMIC_DRAW);
 		if (bufferType != GL40.GL_ELEMENT_ARRAY_BUFFER)
-			GL40.glVertexAttribPointer(index, dataSize, GL40.GL_INT, false, 0, 0);
+			GL40.glVertexAttribPointer(
+					index,
+					dataSize,
+					GL40.GL_INT,
+					false,
+					0,
+					0);
 	}
 
 	@Override
@@ -56,8 +65,11 @@ public class IntAttribArray extends AttribArray {
 			return false;
 		data = nPos;
 
-		GL40.glBufferSubData(bufferType, 0, data);
-		
+		GL40.glBufferSubData(
+				bufferType,
+				0,
+				data);
+
 		return GL40.glGetError() == GL40.GL_NO_ERROR;
 	}
 

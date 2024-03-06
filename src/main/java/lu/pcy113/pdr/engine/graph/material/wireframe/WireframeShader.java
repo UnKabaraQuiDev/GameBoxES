@@ -10,17 +10,24 @@ public class WireframeShader extends RenderShader {
 	public static final String COLOR = "color";
 
 	public WireframeShader() {
-		super(NAME, AbstractShaderPart.load("./resources/shaders/debug/debug.vert"), AbstractShaderPart.load("./resources/shaders/debug/debug.frag"));
+		super(NAME, AbstractShaderPart.load(
+				"./resources/shaders/debug/debug.vert"),
+				AbstractShaderPart.load(
+						"./resources/shaders/debug/debug.frag"));
 	}
 
 	@Override
 	public void createUniforms() {
 		// vert
-		getUniform(RenderShader.PROJECTION_MATRIX);
-		getUniform(RenderShader.VIEW_MATRIX);
-		getUniform(RenderShader.TRANSFORMATION_MATRIX);
+		createUniform(
+				RenderShader.PROJECTION_MATRIX);
+		createUniform(
+				RenderShader.VIEW_MATRIX);
+		createUniform(
+				RenderShader.TRANSFORMATION_MATRIX);
 		// frag
-		getUniform(COLOR);
+		createUniform(
+				COLOR);
 	}
 
 }

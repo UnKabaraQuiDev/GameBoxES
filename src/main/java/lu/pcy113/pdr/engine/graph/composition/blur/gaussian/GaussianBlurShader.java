@@ -16,7 +16,10 @@ public class GaussianBlurShader extends RenderShader {
 	public static final String HEIGHT = "height";
 
 	public GaussianBlurShader() {
-		super(NAME, AbstractShaderPart.load("./resources/shaders/composite/plain.vert"), AbstractShaderPart.load("./resources/shaders/composite/blur/gaussian.frag"));
+		super(NAME, AbstractShaderPart.load(
+				"./resources/shaders/composite/plain.vert"),
+				AbstractShaderPart.load(
+						"./resources/shaders/composite/blur/gaussian.frag"));
 	}
 
 	@Override
@@ -24,13 +27,20 @@ public class GaussianBlurShader extends RenderShader {
 		// frag
 		// None
 		// vert
-		getUniform(TEXTURE);
-		getUniform(DEPTH);
-		getUniform(KERNEL);
-		getUniform(WIDTH);
-		getUniform(HEIGHT);
-		getUniform(PassRenderLayer.SCREEN_WIDTH);
-		getUniform(PassRenderLayer.SCREEN_HEIGHT);
+		createUniform(
+				TEXTURE);
+		createUniform(
+				DEPTH);
+		createUniform(
+				KERNEL);
+		createUniform(
+				WIDTH);
+		createUniform(
+				HEIGHT);
+		createUniform(
+				PassRenderLayer.SCREEN_WIDTH);
+		createUniform(
+				PassRenderLayer.SCREEN_HEIGHT);
 	}
 
 }

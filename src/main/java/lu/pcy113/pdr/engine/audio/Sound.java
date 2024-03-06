@@ -15,18 +15,26 @@ public class Sound implements UniqueID, Cleanupable {
 	public Sound(String name, ByteBuffer buffer, int format, int sampleRate) {
 		this.name = name;
 
-		sbo = createBuffer(buffer, format, sampleRate);
+		sbo = createBuffer(
+				buffer,
+				format,
+				sampleRate);
 	}
 
 	private int createBuffer(ByteBuffer buffer, int format, int sampleRate) {
 		int sbo = AL10.alGenBuffers();
-		AL10.alBufferData(sbo, format, buffer, sampleRate);
+		AL10.alBufferData(
+				sbo,
+				format,
+				buffer,
+				sampleRate);
 		return sbo;
 	}
 
 	@Override
 	public void cleanup() {
-		AL10.alDeleteBuffers(sbo);
+		AL10.alDeleteBuffers(
+				sbo);
 	}
 
 	@Override

@@ -43,7 +43,10 @@ public class Mat4fAttribArray extends AttribArray implements MultiAttribArray {
 
 	@Override
 	public void init() {
-		GL40.glBufferData(bufferType, toFloatArray(), iStatic ? GL40.GL_STATIC_DRAW : GL40.GL_DYNAMIC_DRAW);
+		GL40.glBufferData(
+				bufferType,
+				toFloatArray(),
+				iStatic ? GL40.GL_STATIC_DRAW : GL40.GL_DYNAMIC_DRAW);
 	}
 
 	public boolean update(Matrix4f[] nPos) {
@@ -52,22 +55,38 @@ public class Mat4fAttribArray extends AttribArray implements MultiAttribArray {
 		}
 		data = nPos;
 
-		GL40.glBufferSubData(GL40.GL_ARRAY_BUFFER, 0, toFloatArray());
+		GL40.glBufferSubData(
+				GL40.GL_ARRAY_BUFFER,
+				0,
+				toFloatArray());
 		return GL40.glGetError() == GL40.GL_NO_ERROR;
 	}
 
 	@Override
 	public void enable() {
 		for (int i = 0; i < 4; i++) {
-			GL40.glEnableVertexAttribArray(index + i);
-			GL40.glVertexAttribPointer(index + i, 4, GL40.GL_FLOAT, false, 16 * 4, i * 4 * 4);
-			GL40.glVertexAttribDivisor(index + i, divisor);
+			GL40.glEnableVertexAttribArray(
+					index + i);
+			GL40.glVertexAttribPointer(
+					index + i,
+					4,
+					GL40.GL_FLOAT,
+					false,
+					16 * 4,
+					i * 4 * 4);
+			GL40.glVertexAttribDivisor(
+					index + i,
+					divisor);
 		}
 	}
 
 	public FloatBuffer toFlatFloatBuffer() {
-		FloatBuffer fb = BufferUtils.createFloatBuffer(data.length * 16);
-		Arrays.stream(data).forEach(m -> m.get(fb));
+		FloatBuffer fb = BufferUtils.createFloatBuffer(
+				data.length * 16);
+		Arrays.stream(
+				data).forEach(
+						m -> m.get(
+								fb));
 		fb.flip();
 		return fb;
 	}
@@ -77,14 +96,26 @@ public class Mat4fAttribArray extends AttribArray implements MultiAttribArray {
 		for (int i = 0; i < data.length; i++) {
 			float[] dat = new float[16];
 			if (data[i] != null)
-				data[i].get(dat);
-			System.arraycopy(dat, 0, flatArray, i * 16, 16);
+				data[i].get(
+						dat);
+			System.arraycopy(
+					dat,
+					0,
+					flatArray,
+					i * 16,
+					16);
 		}
 		return flatArray;
 	}
 
 	public FloatAttribArray toFloatAttribArray() {
-		return new FloatAttribArray(name, index, dataSize * 16, toFloatArray(), bufferType, iStatic);
+		return new FloatAttribArray(
+				name,
+				index,
+				dataSize * 16,
+				toFloatArray(),
+				bufferType,
+				iStatic);
 	}
 
 	@Override

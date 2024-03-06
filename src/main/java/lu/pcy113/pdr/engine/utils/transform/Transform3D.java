@@ -20,12 +20,16 @@ public class Transform3D extends Transform {
 		this.scale = scale;
 
 		super.matrix = new Matrix4f();
-		
+
 		updateMatrix();
 	}
 
 	public Transform3D(Vector3f trans) {
 		this(trans, new Quaternionf().identity(), new Vector3f(1));
+	}
+
+	public Transform3D(Vector3f trans, Quaternionf rot) {
+		this(trans, rot, new Vector3f(1));
 	}
 
 	public Transform3D translateAdd(Vector3f v) {
@@ -127,6 +131,11 @@ public class Transform3D extends Transform {
 
 	public Transform3D setScale(Vector3f scale) {
 		this.scale = scale;
+		return this;
+	}
+
+	public Transform3D setScale(float length) {
+		this.scale.set(length);
 		return this;
 	}
 
