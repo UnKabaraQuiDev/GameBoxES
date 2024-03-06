@@ -107,7 +107,7 @@ public class Compositor implements Cleanupable {
 				height)) {
 			// keep same texture
 		} else {
-			resolution = new Vector2i(
+      resolution = new Vector2i(
 					width,
 					height);
 			if (!genTextures())
