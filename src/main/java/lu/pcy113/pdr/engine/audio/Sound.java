@@ -2,11 +2,11 @@ package lu.pcy113.pdr.engine.audio;
 
 import java.nio.ShortBuffer;
 
-import org.lwjgl.openal.AL;
 import org.lwjgl.openal.AL11;
-import org.lwjgl.openal.AL11;
-import org.lwjgl.stb.STBVorbisInfo;
+import org.lwjgl.stb.STBVorbis;
+import org.lwjgl.system.libc.LibCStdlib;
 
+import lu.pcy113.pclib.Triplet;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
 import lu.pcy113.pdr.engine.utils.FileUtils;
@@ -32,22 +32,26 @@ public class Sound implements UniqueID, Cleanupable {
 	}
 
 	private void loadVorbis(String file, boolean looping) {
-		System.out.println("loading: "+file);
-		
-		System.out.println("Thread: "+Thread.currentThread().getName());
 		sbo = AL11.alGenBuffers();
 		PDRUtils.checkAlError("GenBuffers");
 
 		abo = AL11.alGenSources();
 		PDRUtils.checkAlError("GenSources");
 		
-		try (STBVorbisInfo info = STBVorbisInfo.malloc()) {
-			ShortBuffer pcm = SoundLoaderUtils.readVorbis("./resources/audio/subnautica_bz_stranger_pings.ogg", 32 * 1024, info);
+		Triplet<ShortBuffer, Integer, Integer> vorbis_channels_sampleRate = SoundLoaderUtils.readVorbis("./resources/audio/subnautica_bz_stranger_pings.ogg");
+		
+		// copy to buffer
+		AL11.alBufferData(
+				abo,
+				vorbis_channels_sampleRate.getSecond() == 1 ? AL11.AL_FORMAT_MONO16 : AL11.AL_FORMAT_STEREO16,
+				vorbis_channels_sampleRate.getFirst(),
+				vorbis_channels_sampleRate.getThird());
+		PDRUtils.checkAlError("BufferData("+abo+")");
 
-			// copy to buffer
-			AL11.alBufferData(abo, info.channels() == 1 ? AL11.AL_FORMAT_MONO16 : AL11.AL_FORMAT_STEREO16, pcm, info.sample_rate());
-			PDRUtils.checkAlError("BufferData");
-		}
+		// free mem
+		LibCStdlib.free(vorbis_channels_sampleRate.getFirst());
+		//vorbis_channels_sampleRate.getFirst().clear();
+		//vorbis_channels_sampleRate = null;
 		
 		// set up source input
 		AL11.alSourcei(sbo, AL11.AL_BUFFER, abo);
@@ -55,16 +59,12 @@ public class Sound implements UniqueID, Cleanupable {
 	}
 	
 	public void play() {
-		System.out.println("is playing: "+isPlaying());
-		
-		if(!isPlaying())
+		if(isPlaying())
 			return;
 		
 		// play source
 		AL11.alSourcePlay(sbo);
 		PDRUtils.checkAlError("SourcePlay("+sbo+")");
-		
-		System.out.println("is playing: "+isPlaying());
 	}
 
 	/**

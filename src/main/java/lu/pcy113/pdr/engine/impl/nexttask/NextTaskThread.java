@@ -8,7 +8,14 @@ public class NextTaskThread extends Thread {
 	private final NextTaskEnvironnment env;
 
 	private boolean running = true, sleeping = false;
+	
+	public NextTaskThread(int id, ThreadGroup threadGroup, String name, NextTaskEnvironnment env) {
+		super(threadGroup, name);
 
+		this.id = id;
+		this.env = env;
+	}
+	
 	public NextTaskThread(int id, ThreadGroup threadGroup, NextTaskEnvironnment env) {
 		super(threadGroup, threadGroup.getName() + "-" + id);
 
@@ -20,23 +27,19 @@ public class NextTaskThread extends Thread {
 	public void run() {
 		while (running) {
 			exec: {
-				if (env.hasNext(
-						id)) {
-					NextTask nt = env.getNext(
-							id);
+				if (env.hasNext(id)) {
+					NextTask nt = env.getNext(id);
 					nt.execute();
 				}
 			}
 
-			if (env.hasNext(
-					id))
+			if (env.hasNext(id))
 				continue;
 
 			waiting: {
 				try {
 					sleeping = true;
-					Thread.sleep(
-							MAX_SLEEP);
+					Thread.sleep(MAX_SLEEP);
 					if (!Thread.interrupted()) {
 						// do nothing
 					}
@@ -47,9 +50,7 @@ public class NextTaskThread extends Thread {
 			}
 
 			/*
-			 * if(!running) {
-			 * this.interrupt(); // restore state
-			 * } // else do nothing
+			 * if(!running) { this.interrupt(); // restore state } // else do nothing
 			 */
 		}
 	}

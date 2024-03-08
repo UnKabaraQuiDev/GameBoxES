@@ -28,43 +28,30 @@ public class NextTask {
 	}
 
 	public NextTask then(NextTaskFunction callback) {
-		return thenTask(
-				new NextTask(
-						target,
-						source,
-						targetEnv,
-						sourceEnv).exec(
-								callback));
+		return thenTask(new NextTask(target, source, targetEnv, sourceEnv).exec(callback));
 	}
 
 	public boolean push() {
-		return push(
-				targetEnv);
+		return push(targetEnv);
 	}
 
 	public boolean push(NextTaskEnvironnment env) {
 		if (env instanceof NextTaskWorker)
-			return ((NextTaskWorker) env).push(
-					this);
+			return ((NextTaskWorker) env).push(this);
 
-		return env.push(
-				target,
-				this);
+		return env.push(target, this);
 	}
 
 	public void execute() {
-		this.execute(
-				sourceEnv);
+		this.execute(sourceEnv);
 	}
 
 	public void execute(NextTaskEnvironnment callbackTo) {
-		this.state = this.function.run(
-				state);
+		this.state = this.function.run(state);
 
 		if (this.callback != null) {
 			this.callback.state = this.state;
-			this.callback.push(
-					callbackTo);
+			this.callback.push(callbackTo);
 		}
 	}
 

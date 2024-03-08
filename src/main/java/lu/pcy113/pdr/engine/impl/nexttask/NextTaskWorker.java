@@ -5,20 +5,15 @@ import lu.pcy113.pdr.engine.impl.UniqueID;
 public class NextTaskWorker extends NextTaskEnvironnment implements UniqueID {
 
 	private ThreadGroup threadGroup;
-	private NextTaskThread[] threads;
 
 	public NextTaskWorker(String name, int workerCount) {
 		super(workerCount);
 
-		this.threads = new NextTaskThread[workerCount];
-		this.threadGroup = new ThreadGroup(
-				name);
+		super.threads = new NextTaskThread[workerCount];
+		this.threadGroup = new ThreadGroup(name);
 		for (int i = 0; i < workerCount; i++) {
-			NextTaskThread th = new NextTaskThread(
-					i,
-					this.threadGroup,
-					this);
-			this.threads[i] = th;
+			NextTaskThread th = new NextTaskThread(i, this.threadGroup, this);
+			super.threads[i] = th;
 			th.start();
 		}
 	}
@@ -26,11 +21,9 @@ public class NextTaskWorker extends NextTaskEnvironnment implements UniqueID {
 	public boolean push(NextTask task) {
 		int ntth = super.getShortestQueueId();
 
-		boolean bb = super.push(
-				ntth,
-				task);
+		boolean bb = super.push(ntth, task);
 
-		this.threads[ntth].wakeUp();
+		((NextTaskThread) super.threads[ntth]).wakeUp();
 
 		return bb;
 	}
@@ -47,7 +40,7 @@ public class NextTaskWorker extends NextTaskEnvironnment implements UniqueID {
 	 */
 	public void shutdown() throws InterruptedException {
 		for (int i = 0; i < threads.length; i++) {
-			this.threads[i].shutdown();
+			((NextTaskThread) this.threads[i]).shutdown();
 		}
 		for (int i = 0; i < threads.length; i++) {
 			this.threads[i].join();

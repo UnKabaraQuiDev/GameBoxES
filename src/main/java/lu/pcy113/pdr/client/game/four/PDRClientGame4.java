@@ -201,9 +201,16 @@ public class PDRClientGame4 extends GameLogic {
 
 		worker.closeInput();
 		
-		Sound sound = new Sound("bz", "./resources/audio/subnautica_bz_stranger_pings.ogg", false);
-		sound.play();
-	
+		
+		createTask(GameEngine.QUEUE_AUDIO)
+		.exec((s) -> {
+			Sound sound = new Sound("bz", "./resources/audio/subnautica_bz_stranger_pings.ogg", false);
+			sound.play();
+			sound.play();
+			
+			return 1;
+		}).push();
+		
 		
 		// exporting meshes as bin format
 		/*

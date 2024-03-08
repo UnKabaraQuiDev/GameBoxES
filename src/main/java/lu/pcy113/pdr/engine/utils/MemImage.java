@@ -22,12 +22,10 @@ public class MemImage {
 
 	public void free() {
 		if (fromStbi && buffer != null) {
-			STBImage.stbi_image_free(
-					buffer);
+			STBImage.stbi_image_free(buffer);
 			buffer = null;
 		} else if (fromOGL && buffer != null) {
-			MemoryUtil.memFree(
-					buffer);
+			MemoryUtil.memFree(buffer);
 			buffer = null;
 		}
 	}

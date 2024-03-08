@@ -1,52 +1,51 @@
 package lu.pcy113.pdr.engine.audio;
 
-import static lu.pcy113.pdr.engine.utils.bake.openal.IOUtil.ioResourceToByteBuffer;
-import static org.lwjgl.openal.AL10.AL_BUFFER;
-import static org.lwjgl.openal.AL10.AL_FORMAT_MONO16;
-import static org.lwjgl.openal.AL10.AL_FORMAT_STEREO16;
-import static org.lwjgl.openal.AL10.AL_SOURCE_STATE;
-import static org.lwjgl.openal.AL10.AL_STOPPED;
-import static org.lwjgl.openal.EXTThreadLocalContext.alcSetThreadContext;
-import static org.lwjgl.stb.STBVorbis.stb_vorbis_close;
-import static org.lwjgl.stb.STBVorbis.stb_vorbis_get_info;
-import static org.lwjgl.stb.STBVorbis.stb_vorbis_get_samples_short_interleaved;
-import static org.lwjgl.stb.STBVorbis.stb_vorbis_open_memory;
-import static org.lwjgl.stb.STBVorbis.stb_vorbis_stream_length_in_samples;
-import static org.lwjgl.system.MemoryUtil.NULL;
-
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
-import java.nio.ShortBuffer;
 import java.util.List;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL;
-import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.ALC;
 import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.ALC11;
 import org.lwjgl.openal.ALCCapabilities;
 import org.lwjgl.openal.ALCapabilities;
 import org.lwjgl.openal.ALUtil;
-import org.lwjgl.stb.STBVorbisInfo;
+import org.lwjgl.openal.EXTThreadLocalContext;
 import org.lwjgl.system.MemoryUtil;
 
 import lu.pcy113.pclib.GlobalLogger;
+import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
+import lu.pcy113.pdr.engine.impl.nexttask.NextTaskThread;
 import lu.pcy113.pdr.engine.utils.PDRLoggerUtils;
 import lu.pcy113.pdr.engine.utils.PDRUtils;
 
-public class AudioMaster implements Cleanupable {
+public class AudioMaster extends NextTaskThread implements Cleanupable {
 
 	// https://github.com/LWJGL/lwjgl3/blob/master/modules/samples/src/test/java/org/lwjgl/demo/openal/ALCDemo.java
-
+	
 	private boolean useTLC = false;
 	private long device, alContext;
 	private ALCCapabilities deviceCapabilities;;
 	private ALCapabilities capabilities;
 
-	public AudioMaster() {
+	public AudioMaster(GameEngine e, ThreadGroup tg, String tn) {
+		super(e.QUEUE_AUDIO, tg, tn, e.getTaskEnvironnment());
+		
+		start();
+		
+		//testPlayback();
+	}
+	
+	@Override
+	public void run() {
+		setup();
+		
+		super.run();
+	}
+	
+	private void setup() {
 		device = ALC10.alcOpenDevice((ByteBuffer) null);
 		if (device == MemoryUtil.NULL) {
 			throw new RuntimeException("Could not open ALC device");
@@ -66,10 +65,10 @@ public class AudioMaster implements Cleanupable {
 		alContext = ALC10.alcCreateContext(device, (IntBuffer) null);
 		PDRUtils.checkAlcError(device);
 
-		useTLC = deviceCapabilities.ALC_EXT_thread_local_context && alcSetThreadContext(alContext);
+		useTLC = deviceCapabilities.ALC_EXT_thread_local_context && EXTThreadLocalContext.alcSetThreadContext(alContext);
 		if (!useTLC) {
 			if (!ALC11.alcMakeContextCurrent(alContext)) {
-				throw new RuntimeException("Coult not set context as thread context.");
+				throw new RuntimeException("Could not set context as thread context.");
 			}
 		}
 		PDRUtils.checkAlcError(device);
@@ -83,9 +82,16 @@ public class AudioMaster implements Cleanupable {
 		GlobalLogger.info("ALC_STEREO_SOURCES: " + alcGetInteger(device, ALC11.ALC_STEREO_SOURCES));
 		
 		System.out.println("Thread: "+Thread.currentThread().getName()+" al cap: "+AL.getCapabilities());
-		
-		//testPlayback();
 	}
+	
+	/*public void clearALContext() {
+		GLFW.glfwMakeContextCurrent(MemoryUtil.NULL);
+	}
+
+	public void takeAlContext() {
+		GLFW.glfwMakeContextCurrent(handle);
+		AL.setCapabilities(this.capabilities);
+	}*/
 	
 	/*private void testPlayback() {
 		// generate buffers and sources
