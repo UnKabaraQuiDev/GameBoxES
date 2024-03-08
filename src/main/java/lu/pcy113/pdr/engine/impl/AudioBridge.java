@@ -44,6 +44,18 @@ public class AudioBridge {
 		}).push();
 	}
 	
+	public void replay(Sound sound) {
+		if(sound == null)
+			return;
+		
+		engine.createTask(engine.QUEUE_AUDIO)
+		.exec((s) -> {
+			sound.replay();
+			
+			return 1;
+		}).push();
+	}
+	
 	public boolean load(String name, String file, boolean looping, NextTaskFunction<Sound, Void> func) {
 		return load(name, file, looping, engine.getCache(), func);
 	}
@@ -63,10 +75,14 @@ public class AudioBridge {
 		NextTask<Void, Sound, Void> nt = engine.createTask(engine.QUEUE_AUDIO);
 		
 		nt.exec((Void s) -> {
-			Sound sound = new Sound(name, file, looping);
-			cache.addSound(sound);
-			
-			return sound;
+			try {
+				Sound sound = new Sound(name, file, looping);
+				cache.addSound(sound);
+				
+				return sound;
+			}catch(Exception e) {
+				return null;
+			}
 		});
 		
 		if(func != null) {

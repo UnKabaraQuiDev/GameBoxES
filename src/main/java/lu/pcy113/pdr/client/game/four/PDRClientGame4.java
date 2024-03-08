@@ -210,6 +210,11 @@ public class PDRClientGame4 extends GameLogic {
 			return null;
 		});
 		
+		audioBridge.load("buzz", "./resources/audio/wrong_buzz.ogg", false, (sound) -> {
+			audioBridge.play(sound);
+			return null;
+		});
+		
 		/*createTask(GameEngine.QUEUE_AUDIO)
 		.exec((s) -> {
 			Sound sound = new Sound("bz", "./resources/audio/subnautica_bz_stranger_pings.ogg", false);
@@ -260,6 +265,8 @@ public class PDRClientGame4 extends GameLogic {
 		if (window.isMouseButtonPressed(GLFW.GLFW_MOUSE_BUTTON_LEFT)) {
 
 			System.out.println("click");
+			
+			audioBridge.replay(cache.getSound("buzz"));
 
 			int[] viewport = new int[4];
 			createTask(GameEngine.QUEUE_RENDER).exec((s) -> {

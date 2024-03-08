@@ -38,7 +38,7 @@ public class Sound implements UniqueID, Cleanupable {
 		abo = AL11.alGenSources();
 		PDRUtils.checkAlError("GenSources");
 		
-		Triplet<ShortBuffer, Integer, Integer> vorbis_channels_sampleRate = SoundLoaderUtils.readVorbis("./resources/audio/subnautica_bz_stranger_pings.ogg");
+		Triplet<ShortBuffer, Integer, Integer> vorbis_channels_sampleRate = SoundLoaderUtils.readVorbis(file);
 		
 		// copy to buffer
 		AL11.alBufferData(
@@ -56,6 +56,8 @@ public class Sound implements UniqueID, Cleanupable {
 		// set up source input
 		AL11.alSourcei(sbo, AL11.AL_BUFFER, abo);
 		PDRUtils.checkAlError("SourceI["+sbo+"].BUFFER = "+abo);
+		
+		setLooping(looping);
 	}
 	
 	public void play() {
@@ -79,6 +81,11 @@ public class Sound implements UniqueID, Cleanupable {
 		PDRUtils.checkAlError();
 		
 		return wasPlaying;
+	}
+	
+	public void replay() {
+		stop();
+		play();
 	}
 	
 	public boolean isPlaying() {
