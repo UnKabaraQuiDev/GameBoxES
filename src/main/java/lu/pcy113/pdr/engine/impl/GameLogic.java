@@ -14,8 +14,7 @@ public abstract class GameLogic {
 
 	public void register(GameEngine e) {
 		if (this.engine != null)
-			throw new IllegalStateException(
-					"Already registered");
+			throw new IllegalStateException("Already registered");
 
 		this.engine = e;
 
@@ -31,15 +30,12 @@ public abstract class GameLogic {
 
 	public abstract void render(float dTime);
 
-	protected NextTask createTask(int target) {
-		return engine.createTask(
-				target);
+	protected <I, B, C> NextTask<I, B, C> createTask(int target) {
+		return engine.<I, B, C>createTask(target);
 	}
 
-	protected NextTask createTask(int from, int target) {
-		return engine.createTask(
-				from,
-				target);
+	protected <I, B, C> NextTask<I, B, C> createTask(int from, int target) {
+		return engine.<I, B, C>createTask(from, target);
 	}
 
 	protected NextTaskEnvironnment getTaskEnvironnment() {
@@ -47,9 +43,7 @@ public abstract class GameLogic {
 	}
 
 	/*
-	 * protected boolean pushTask(NextTask nt) {
-	 * return engine.pushTask(nt);
-	 * }
+	 * protected boolean pushTask(NextTask nt) { return engine.pushTask(nt); }
 	 */
 
 	protected boolean waitForFrameEnd() {

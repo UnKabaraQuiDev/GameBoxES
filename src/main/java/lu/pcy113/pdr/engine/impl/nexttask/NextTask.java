@@ -1,11 +1,11 @@
 package lu.pcy113.pdr.engine.impl.nexttask;
 
-public class NextTask {
+public class NextTask<I, B, C> {
 
-	private int state = -1;
+	private Object state;
 
-	private NextTaskFunction function;
-	private NextTask callback;
+	private NextTaskFunction<I, B> function;
+	private NextTask<B, C, ?> callback;
 
 	private final NextTaskEnvironnment sourceEnv, targetEnv;
 	private final int source, target;
@@ -17,18 +17,18 @@ public class NextTask {
 		this.targetEnv = targetEnv;
 	}
 
-	public NextTask exec(NextTaskFunction function) {
+	public NextTask<I, B, C> exec(NextTaskFunction<I, B> function) {
 		this.function = function;
 		return this;
 	}
 
-	public NextTask thenTask(NextTask nt) {
+	public NextTask<I, B, C> thenTask(NextTask<B, C, ?> nt) {
 		this.callback = nt;
 		return this;
 	}
 
-	public NextTask then(NextTaskFunction callback) {
-		return thenTask(new NextTask(target, source, targetEnv, sourceEnv).exec(callback));
+	public <D> NextTask<I, B, C> then(NextTaskFunction<B, C> callback) {
+		return thenTask(new NextTask<B, C, D>(target, source, targetEnv, sourceEnv).exec(callback));
 	}
 
 	public boolean push() {
@@ -47,7 +47,7 @@ public class NextTask {
 	}
 
 	public void execute(NextTaskEnvironnment callbackTo) {
-		this.state = this.function.run(state);
+		this.state = this.function.run((I) state);
 
 		if (this.callback != null) {
 			this.callback.state = this.state;
@@ -55,7 +55,7 @@ public class NextTask {
 		}
 	}
 
-	public int getState() {
+	public Object getState() {
 		return state;
 	}
 

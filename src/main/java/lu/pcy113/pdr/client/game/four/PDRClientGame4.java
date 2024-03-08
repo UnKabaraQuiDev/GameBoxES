@@ -14,7 +14,6 @@ import lu.pcy113.pdr.client.game.three.FillShader;
 import lu.pcy113.pdr.client.game.three.FillShader.FillMaterial;
 import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.anim.CallbackValueInterpolation;
-import lu.pcy113.pdr.engine.audio.Sound;
 import lu.pcy113.pdr.engine.cache.attrib.UIntAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.Vec3fAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.Vec4fAttribArray;
@@ -36,6 +35,7 @@ import lu.pcy113.pdr.engine.graph.render.Scene3DRenderer;
 import lu.pcy113.pdr.engine.graph.render.TextEmitterRenderer;
 import lu.pcy113.pdr.engine.graph.texture.SingleTexture;
 import lu.pcy113.pdr.engine.graph.texture.Texture;
+import lu.pcy113.pdr.engine.impl.AudioBridge;
 import lu.pcy113.pdr.engine.impl.GameLogic;
 import lu.pcy113.pdr.engine.impl.nexttask.NextTask;
 import lu.pcy113.pdr.engine.impl.nexttask.NextTaskWorker;
@@ -75,11 +75,15 @@ public class PDRClientGame4 extends GameLogic {
 	Compositor compositor;
 
 	NextTaskWorker worker;
+	
+	AudioBridge audioBridge;
 
 	@Override
 	public void init(GameEngine e) {
 		System.err.println("Cache: " + cache);
-
+		
+		audioBridge = new AudioBridge(engine);
+		
 		GameEngine.DEBUG.wireframe = true;
 		GameEngine.DEBUG.wireframeColor = new Vector4f(1f, 0.2f, 0.2f, 0.2f);
 		GameEngine.DEBUG.gizmos = true;
@@ -182,11 +186,11 @@ public class PDRClientGame4 extends GameLogic {
 
 		worker = new NextTaskWorker("worker", 2);
 
-		NextTask nt = new NextTask(GameEngine.QUEUE_RENDER, -1, super.getTaskEnvironnment(), worker);
-		nt.exec((s) -> {
+		NextTask<Void, Void, Void> nt = new NextTask<>(GameEngine.QUEUE_RENDER, -1, super.getTaskEnvironnment(), worker);
+		nt.exec((Void s) -> {
 			System.err.println("SYSOUT Thread exec: " + Thread.currentThread().getName());
-			return 0;
-		}).then((s) -> {
+			return null;
+		}).then((Void s) -> {
 			System.err.println("SYSOUT Thread callback: " + Thread.currentThread().getName());
 			worker.block();
 			System.err.println("SYSOUT Thread callback: blocked " + Thread.currentThread().getName() + " " + worker.isBlocking());
@@ -196,20 +200,24 @@ public class PDRClientGame4 extends GameLogic {
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
 			}
-			return 0;
+			return null;
 		}).push();
 
 		worker.closeInput();
 		
+		audioBridge.load("bz", "./resources/audio/subnautica_bz_stranger_pings.ogg", false, (sound) -> {
+			audioBridge.play(sound);
+			return null;
+		});
 		
-		createTask(GameEngine.QUEUE_AUDIO)
+		/*createTask(GameEngine.QUEUE_AUDIO)
 		.exec((s) -> {
 			Sound sound = new Sound("bz", "./resources/audio/subnautica_bz_stranger_pings.ogg", false);
 			sound.play();
 			sound.play();
 			
 			return 1;
-		}).push();
+		}).push();*/
 		
 		
 		// exporting meshes as bin format
@@ -260,7 +268,7 @@ public class PDRClientGame4 extends GameLogic {
 
 				return 1;
 			}).then((s) -> {
-				if (s == 0)
+				if ((int) s == 0)
 					return 0;
 
 				Ray ray = camera.projectRay(window.getMousePos(), viewport);

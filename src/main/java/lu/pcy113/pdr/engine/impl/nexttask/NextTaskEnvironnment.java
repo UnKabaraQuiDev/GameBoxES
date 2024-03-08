@@ -30,7 +30,7 @@ public class NextTaskEnvironnment {
 		return queues.get(id);
 	}
 
-	public NextTask getNext(int id) {
+	public <I, B, C> NextTask<I, B, C> getNext(int id) {
 		if (blocking)
 			return null;
 

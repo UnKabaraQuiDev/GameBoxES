@@ -1,8 +1,8 @@
 package lu.pcy113.pdr.engine.impl.nexttask;
 
 @FunctionalInterface
-public interface NextTaskFunction {
+public interface NextTaskFunction<I, B> {
 
-	int run(int state);
+	B run(I state);
 
 }

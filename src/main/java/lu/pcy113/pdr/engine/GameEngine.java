@@ -275,20 +275,20 @@ public class GameEngine implements Cleanupable, UniqueID {
 		this.window.runCallbacks();
 		this.window.clearGLContext();
 		// this.running = true;
-		
+
 		taskEnvironnment = new NextTaskEnvironnment(4);
-		
+
 		this.threadGroup = new ThreadGroup(getClass().getName() + "#" + name);
 
 		this.mainThread = Thread.currentThread();
 		this.updateThread = new Thread(threadGroup, this::updateRun, threadGroup.getName() + ":update");
 		this.renderThread = new Thread(threadGroup, this::renderRun, threadGroup.getName() + ":render");
-		
+
 		this.audioMaster = new AudioMaster(this, this.threadGroup, threadGroup.getName() + ":audio");
 		this.audioThread = this.audioMaster;
-		
-		taskEnvironnment.setThreads(new Thread[] {mainThread, renderThread, updateThread, audioThread});
-		
+
+		taskEnvironnment.setThreads(new Thread[] { mainThread, renderThread, updateThread, audioThread });
+
 		this.updateThread.start();
 		this.renderThread.start();
 
@@ -346,12 +346,12 @@ public class GameEngine implements Cleanupable, UniqueID {
 		this.running = false;
 	}
 
-	public NextTask createTask(int target) {
-		return new NextTask(getThreadId(), target, taskEnvironnment, taskEnvironnment);
+	public <I, B, C> NextTask<I, B, C> createTask(int target) {
+		return new NextTask<I, B, C>(getThreadId(), target, taskEnvironnment, taskEnvironnment);
 	}
 
-	public NextTask createTask(int from, int target) {
-		return new NextTask(from, target, taskEnvironnment, taskEnvironnment);
+	public <I, B, C> NextTask<I, B, C> createTask(int from, int target) {
+		return new NextTask<I, B, C>(from, target, taskEnvironnment, taskEnvironnment);
 	}
 
 	public int getThreadId() {
@@ -366,23 +366,15 @@ public class GameEngine implements Cleanupable, UniqueID {
 		return -1;
 	}
 
-	/*
-	 * public boolean pushTask(NextTask task) { return
-	 * taskEnvironnment.push(task.getTarget(), task); }
-	 */
-
 	public boolean nextTask() {
 		return taskEnvironnment.hasNext(getThreadId());
 	}
 
-	public NextTask pullTask() {
+	public <I, B, C> NextTask<I, B, C> pullTask() {
 		return taskEnvironnment.getNext(getThreadId());
 	}
 
 	private boolean shouldRun() {
-		// System.out.println(Thread.currentThread().getName()+"> should close:
-		// "+!this.window.shouldClose()+" &&
-		// "+this.running+" = "+(!this.window.shouldClose() && this.running));
 		return !this.window.shouldClose() && this.running && updateThread.isAlive() && renderThread.isAlive();
 	}
 
