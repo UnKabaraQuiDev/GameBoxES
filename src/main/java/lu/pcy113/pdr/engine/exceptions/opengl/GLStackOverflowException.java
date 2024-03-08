@@ -1,4 +1,4 @@
-package lu.pcy113.pdr.engine.exceptions;
+package lu.pcy113.pdr.engine.exceptions.opengl;
 
 public class GLStackOverflowException extends GLRuntimeException {
 

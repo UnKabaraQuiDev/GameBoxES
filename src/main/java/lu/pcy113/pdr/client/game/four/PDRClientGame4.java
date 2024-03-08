@@ -14,6 +14,7 @@ import lu.pcy113.pdr.client.game.three.FillShader;
 import lu.pcy113.pdr.client.game.three.FillShader.FillMaterial;
 import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.anim.CallbackValueInterpolation;
+import lu.pcy113.pdr.engine.audio.Sound;
 import lu.pcy113.pdr.engine.cache.attrib.UIntAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.Vec3fAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.Vec4fAttribArray;
@@ -199,7 +200,11 @@ public class PDRClientGame4 extends GameLogic {
 		}).push();
 
 		worker.closeInput();
-
+		
+		Sound sound = new Sound("bz", "./resources/audio/subnautica_bz_stranger_pings.ogg", false);
+		sound.play();
+	
+		
 		// exporting meshes as bin format
 		/*
 		 * CodecManager cm = CodecManager.base(); cm.register(new MeshEncoder(), (short)
@@ -238,9 +243,9 @@ public class PDRClientGame4 extends GameLogic {
 		}
 
 		if (window.isMouseButtonPressed(GLFW.GLFW_MOUSE_BUTTON_LEFT)) {
-			
+
 			System.out.println("click");
-			
+
 			int[] viewport = new int[4];
 			createTask(GameEngine.QUEUE_RENDER).exec((s) -> {
 				GL41.glGetIntegerv(GL41.GL_VIEWPORT, viewport);
@@ -290,7 +295,7 @@ public class PDRClientGame4 extends GameLogic {
 	public void render(float dTime) {
 		debugInfo.setText("FPS: " + PDRUtils.round(engine.getCurrentFps(), 2) + "\nNL");
 		debugInfo.setBoxed(true);
-		debugInfo.setBoxSize(new Vector2f(1+(float) Math.sin(backgroundMaterialInterpolation.getProgress()), 1));
+		debugInfo.setBoxSize(new Vector2f(1 + (float) Math.sin(backgroundMaterialInterpolation.getProgress()), 1));
 		debugInfo.updateText();
 
 		compositor.render(cache, engine);

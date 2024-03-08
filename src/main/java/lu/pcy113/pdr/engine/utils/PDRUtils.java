@@ -8,22 +8,30 @@ import java.util.stream.IntStream;
 import org.joml.Matrix3x2f;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
-import org.joml.Vector2fc;
 import org.joml.Vector3f;
-import org.joml.Vector3fc;
+import org.lwjgl.openal.AL11;
+import org.lwjgl.openal.ALC11;
 import org.lwjgl.opengl.GL40;
 import org.lwjgl.opengl.GL45;
 
-import lu.pcy113.pdr.engine.exceptions.GLContextLost;
-import lu.pcy113.pdr.engine.exceptions.GLInvalidEnumException;
-import lu.pcy113.pdr.engine.exceptions.GLInvalidFrameBufferOperation;
-import lu.pcy113.pdr.engine.exceptions.GLInvalidIndexException;
-import lu.pcy113.pdr.engine.exceptions.GLInvalidOperationException;
-import lu.pcy113.pdr.engine.exceptions.GLInvalidValueException;
-import lu.pcy113.pdr.engine.exceptions.GLOutOfMemoryException;
-import lu.pcy113.pdr.engine.exceptions.GLRuntimeException;
-import lu.pcy113.pdr.engine.exceptions.GLStackOverflowException;
-import lu.pcy113.pdr.engine.exceptions.GLStackUnderflowException;
+import lu.pcy113.pdr.engine.exceptions.openal.ALInvalidContextException;
+import lu.pcy113.pdr.engine.exceptions.openal.ALInvalidDeviceException;
+import lu.pcy113.pdr.engine.exceptions.openal.ALInvalidEnumException;
+import lu.pcy113.pdr.engine.exceptions.openal.ALInvalidNameException;
+import lu.pcy113.pdr.engine.exceptions.openal.ALInvalidOperationException;
+import lu.pcy113.pdr.engine.exceptions.openal.ALInvalidValueException;
+import lu.pcy113.pdr.engine.exceptions.openal.ALOutOfMemoryException;
+import lu.pcy113.pdr.engine.exceptions.openal.ALRuntimeException;
+import lu.pcy113.pdr.engine.exceptions.opengl.GLContextLost;
+import lu.pcy113.pdr.engine.exceptions.opengl.GLInvalidEnumException;
+import lu.pcy113.pdr.engine.exceptions.opengl.GLInvalidFrameBufferOperationException;
+import lu.pcy113.pdr.engine.exceptions.opengl.GLInvalidIndexException;
+import lu.pcy113.pdr.engine.exceptions.opengl.GLInvalidOperationException;
+import lu.pcy113.pdr.engine.exceptions.opengl.GLInvalidValueException;
+import lu.pcy113.pdr.engine.exceptions.opengl.GLOutOfMemoryException;
+import lu.pcy113.pdr.engine.exceptions.opengl.GLRuntimeException;
+import lu.pcy113.pdr.engine.exceptions.opengl.GLStackOverflowException;
+import lu.pcy113.pdr.engine.exceptions.opengl.GLStackUnderflowException;
 
 public final class PDRUtils {
 
@@ -31,8 +39,7 @@ public final class PDRUtils {
 		StackTraceElement[] stElements = Thread.currentThread().getStackTrace();
 		for (int i = 1; i < stElements.length; i++) {
 			StackTraceElement ste = stElements[i];
-			if (!PDRUtils.class.getName().equals(
-					ste.getClassName())) {
+			if (!PDRUtils.class.getName().equals(ste.getClassName())) {
 				if (!parent)
 					return ste.getClassName() + "#" + ste.getMethodName() + "@" + ste.getLineNumber();
 				else {
@@ -44,10 +51,48 @@ public final class PDRUtils {
 		}
 		return null;
 	}
+	
+	public static boolean checkAlError() {
+		return checkAlError("");
+	}
+	
+	public static boolean checkAlError(String msg) throws ALRuntimeException {
+		int status = AL11.alGetError();
 
+		if (status == AL11.AL_NO_ERROR)
+			return true;
+
+		String caller = getCallerClassName(false);
+		
+		switch (status) {
+		/*case AL11.AL_INVALID_DEVICE:
+			throw new ALInvalidDeviceException(caller, status, msg);*/
+		case AL11.AL_INVALID_OPERATION:
+			throw new ALInvalidOperationException(caller, status, msg);
+		/*case AL11.AL_INVALID_CONTEXT:
+			throw new ALInvalidContextException(caller, status, msg);*/
+		case AL11.AL_INVALID_NAME:
+			throw new ALInvalidNameException(caller, status, msg);
+		case AL11.AL_INVALID_ENUM:
+			throw new ALInvalidEnumException(caller, status, msg);
+		case AL11.AL_INVALID_VALUE:
+			throw new ALInvalidValueException(caller, status, msg);
+		case AL11.AL_OUT_OF_MEMORY:
+			throw new ALOutOfMemoryException(caller, status, msg);
+		default:
+			return true;
+		}
+	}
+
+	public static boolean checkAlcError(long device) {
+		boolean b;
+		if(b = ALC11.alcGetError(device) != ALC11.ALC_NO_ERROR)
+			throw new RuntimeException("Al error triggered: "+AL11.alGetError());
+		return b;
+	}
+	
 	public static boolean checkGlError() {
-		return checkGlError(
-				"");
+		return checkGlError("");
 	}
 
 	public static boolean checkGlError(String msg) {
@@ -56,55 +101,27 @@ public final class PDRUtils {
 		if (status == GL40.GL_NO_ERROR)
 			return true;
 
-		String caller = getCallerClassName(
-				false);
+		String caller = getCallerClassName(false);
 
 		switch (status) {
 		case GL40.GL_INVALID_OPERATION:
-			throw new GLInvalidOperationException(
-					caller,
-					status,
-					msg);
+			throw new GLInvalidOperationException(caller, status, msg);
 		case GL40.GL_INVALID_INDEX:
-			throw new GLInvalidIndexException(
-					caller,
-					status,
-					msg);
+			throw new GLInvalidIndexException(caller, status, msg);
 		case GL40.GL_INVALID_ENUM:
-			throw new GLInvalidEnumException(
-					caller,
-					status,
-					msg);
+			throw new GLInvalidEnumException(caller, status, msg);
 		case GL40.GL_INVALID_VALUE:
-			throw new GLInvalidValueException(
-					caller,
-					status,
-					msg);
+			throw new GLInvalidValueException(caller, status, msg);
 		case GL40.GL_INVALID_FRAMEBUFFER_OPERATION:
-			throw new GLInvalidFrameBufferOperation(
-					caller,
-					status,
-					msg);
+			throw new GLInvalidFrameBufferOperationException(caller, status, msg);
 		case GL40.GL_STACK_OVERFLOW:
-			throw new GLStackOverflowException(
-					caller,
-					status,
-					msg);
+			throw new GLStackOverflowException(caller, status, msg);
 		case GL40.GL_STACK_UNDERFLOW:
-			throw new GLStackUnderflowException(
-					caller,
-					status,
-					msg);
+			throw new GLStackUnderflowException(caller, status, msg);
 		case GL40.GL_OUT_OF_MEMORY:
-			throw new GLOutOfMemoryException(
-					caller,
-					status,
-					msg);
+			throw new GLOutOfMemoryException(caller, status, msg);
 		case GL45.GL_CONTEXT_LOST:
-			throw new GLContextLost(
-					caller,
-					status,
-					msg);
+			throw new GLContextLost(caller, status, msg);
 		// case GL45.GL_TABLE_TOO_LARGE:
 		default:
 			return true;
@@ -112,8 +129,7 @@ public final class PDRUtils {
 	}
 
 	public static void throwGLError(String string) {
-		throw new GLRuntimeException(
-				string);
+		throw new GLRuntimeException(string);
 	}
 
 	public static int[] intCountingUp(int start, int end) {
@@ -144,27 +160,20 @@ public final class PDRUtils {
 	}
 
 	public static int[] toPrimitiveInt(Integer[] data) {
-		return Arrays.stream(
-				data).map(
-						(Integer i) -> (i == null ? 0 : i))
-				.mapToInt(
-						Integer::intValue)
-				.toArray();
+		return Arrays.stream(data).map((Integer i) -> (i == null ? 0 : i)).mapToInt(Integer::intValue).toArray();
 	}
 
 	public static byte[] toPrimitiveByte(Byte[] data) {
 		byte[] y = new byte[data.length];
 		for (int i = 0; i < data.length; i++)
-			y[i] = Byte.valueOf(
-					(byte) data[i]);
+			y[i] = Byte.valueOf((byte) data[i]);
 		return y;
 	}
 
 	public static float[] toPrimitiveFloat(Object[] data) {
 		float[] y = new float[data.length];
 		for (int i = 0; i < data.length; i++)
-			y[i] = Float.valueOf(
-					(float) data[i]);
+			y[i] = Float.valueOf((float) data[i]);
 		return y;
 	}
 
@@ -176,8 +185,7 @@ public final class PDRUtils {
 
 	public static float[] floatRepeating(float[] is, int size) {
 		if (size <= 0) {
-			throw new IllegalArgumentException(
-					"Size should be greater than 0");
+			throw new IllegalArgumentException("Size should be greater than 0");
 		}
 
 		int originalLength = is.length;
@@ -185,12 +193,7 @@ public final class PDRUtils {
 		float[] result = new float[repeatedLength];
 
 		for (int i = 0; i < size; i++) {
-			System.arraycopy(
-					is,
-					0,
-					result,
-					i * originalLength,
-					originalLength);
+			System.arraycopy(is, 0, result, i * originalLength, originalLength);
 		}
 
 		return result;
@@ -198,8 +201,7 @@ public final class PDRUtils {
 
 	public static Vector2f[] vec2Repeating(Vector2f[] is, int size) {
 		if (size <= 0) {
-			throw new IllegalArgumentException(
-					"Size should be greater than 0");
+			throw new IllegalArgumentException("Size should be greater than 0");
 		}
 
 		int originalLength = is.length;
@@ -207,12 +209,7 @@ public final class PDRUtils {
 		Vector2f[] result = new Vector2f[repeatedLength];
 
 		for (int i = 0; i < size; i++) {
-			System.arraycopy(
-					is,
-					0,
-					result,
-					i * originalLength,
-					originalLength);
+			System.arraycopy(is, 0, result, i * originalLength, originalLength);
 		}
 
 		return result;
@@ -234,168 +231,83 @@ public final class PDRUtils {
 
 	public static byte[] toByteArray(ByteBuffer cb) {
 		int old = cb.position();
-		System.out.println(
-				"pos: " + old + " " + cb.remaining());
+		System.out.println("pos: " + old + " " + cb.remaining());
 		byte[] c = new byte[cb.remaining()];
-		cb.get(
-				c);
-		System.out.println(
-				"cont: " + Arrays.toString(
-						c));
-		cb.position(
-				old);
+		cb.get(c);
+		System.out.println("cont: " + Arrays.toString(c));
+		cb.position(old);
 		return c;
 	}
 
 	public static double round(double round, int decimales) {
-		double places = Math.pow(
-				10,
-				decimales);
-		return Math.round(
-				round * places) / places;
+		double places = Math.pow(10, decimales);
+		return Math.round(round * places) / places;
 	}
 
 	public static float applyMinThreshold(float x, float min) {
-		return Math.abs(
-				x) < min ? 0 : x;
+		return Math.abs(x) < min ? 0 : x;
 	}
 
 	public static Color randomColor(boolean alpha) {
 		if (alpha)
-			return new Color(
-					(int) (Math.random() * 255),
-					(int) (Math.random() * 255),
-					(int) (Math.random() * 255),
-					(int) (Math.random() * 255));
+			return new Color((int) (Math.random() * 255), (int) (Math.random() * 255), (int) (Math.random() * 255), (int) (Math.random() * 255));
 		else
-			return new Color(
-					(int) (Math.random() * 255),
-					(int) (Math.random() * 255),
-					(int) (Math.random() * 255));
+			return new Color((int) (Math.random() * 255), (int) (Math.random() * 255), (int) (Math.random() * 255));
 	}
 
 	public static Color clampColor(int red, int green, int blue) {
-		return new Color(
-				org.joml.Math.clamp(
-						0,
-						255,
-						red),
-				org.joml.Math.clamp(
-						0,
-						255,
-						green),
-				org.joml.Math.clamp(
-						0,
-						255,
-						blue));
+		return new Color(org.joml.Math.clamp(0, 255, red), org.joml.Math.clamp(0, 255, green), org.joml.Math.clamp(0, 255, blue));
 	}
 
 	public static Color clampColor(int red, int green, int blue, int alpha) {
-		return new Color(
-				org.joml.Math.clamp(
-						0,
-						255,
-						red),
-				org.joml.Math.clamp(
-						0,
-						255,
-						green),
-				org.joml.Math.clamp(
-						0,
-						255,
-						blue),
-				org.joml.Math.clamp(
-						0,
-						255,
-						alpha));
+		return new Color(org.joml.Math.clamp(0, 255, red), org.joml.Math.clamp(0, 255, green), org.joml.Math.clamp(0, 255, blue), org.joml.Math.clamp(0, 255, alpha));
 	}
 
 	public static String fillString(String str, String place, int length) {
-		return (str.length() < length ? repeatString(
-				place,
-				length - str.length()) + str : str);
+		return (str.length() < length ? repeatString(place, length - str.length()) + str : str);
 	}
 
 	public static String repeatString(String str, int count) {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < count; i++)
-			sb.append(
-					str);
+			sb.append(str);
 		return sb.toString();
 	}
 
 	public static Vector3f[] floatArrayToVec3f(float[] arr) {
-		return IntStream.range(
-				0,
-				arr.length / 3).mapToObj(
-						i -> new Vector3f(
-								arr[i * 3 + 0],
-								arr[i * 3 + 1],
-								arr[i * 3 + 2]))
-				.toArray(
-						Vector3f[]::new);
+		return IntStream.range(0, arr.length / 3).mapToObj(i -> new Vector3f(arr[i * 3 + 0], arr[i * 3 + 1], arr[i * 3 + 2])).toArray(Vector3f[]::new);
 	}
 
 	public static Vector2f[] floatArrayToVec2f(float[] arr) {
-		return IntStream.range(
-				0,
-				arr.length / 2).mapToObj(
-						i -> new Vector2f(
-								arr[i * 2 + 0],
-								arr[i * 2 + 1]))
-				.toArray(
-						Vector2f[]::new);
+		return IntStream.range(0, arr.length / 2).mapToObj(i -> new Vector2f(arr[i * 2 + 0], arr[i * 2 + 1])).toArray(Vector2f[]::new);
 	}
 
 	public static Vector3f[] intArrayToVec3f(int[] arr) {
-		return IntStream.range(
-				0,
-				arr.length / 3).mapToObj(
-						i -> new Vector3f(
-								arr[i * 3 + 0],
-								arr[i * 3 + 1],
-								arr[i * 3 + 2]))
-				.toArray(
-						Vector3f[]::new);
+		return IntStream.range(0, arr.length / 3).mapToObj(i -> new Vector3f(arr[i * 3 + 0], arr[i * 3 + 1], arr[i * 3 + 2])).toArray(Vector3f[]::new);
 	}
 
 	public static int[] castInt(Object[] arr) {
-		return Arrays.stream(
-				arr).mapToInt(
-						s -> (int) s)
-				.toArray();
+		return Arrays.stream(arr).mapToInt(s -> (int) s).toArray();
 	}
 
 	public static int[] castInt(Integer[] arr) {
-		return Arrays.stream(
-				arr).mapToInt(
-						Integer::valueOf)
-				.toArray();
+		return Arrays.stream(arr).mapToInt(Integer::valueOf).toArray();
 	}
 
 	public static Object[] toObjectArray(int[] data) {
-		return Arrays.stream(
-				data).mapToObj(
-						Integer::valueOf)
-				.toArray();
+		return Arrays.stream(data).mapToObj(Integer::valueOf).toArray();
 	}
 
 	public static ByteBuffer intArrayToByteBuffer(int[] data) {
-		ByteBuffer buffer = ByteBuffer.allocate(
-				data.length * Integer.BYTES);
+		ByteBuffer buffer = ByteBuffer.allocate(data.length * Integer.BYTES);
 		for (int i = 0; i < data.length; i++) {
-			buffer.putInt(
-					data[i]);
+			buffer.putInt(data[i]);
 		}
 		return (ByteBuffer) buffer.flip();
 	}
 
 	public static IntStream intToBytes(int value) {
-		return IntStream.of(
-				(value >> 24) & 0xFF,
-				(value >> 16) & 0xFF,
-				(value >> 8) & 0xFF,
-				value & 0xFF);
+		return IntStream.of((value >> 24) & 0xFF, (value >> 16) & 0xFF, (value >> 8) & 0xFF, value & 0xFF);
 	}
 
 	public static int[] byteBufferToIntArray(ByteBuffer bData, int length) {
@@ -407,11 +319,11 @@ public final class PDRUtils {
 	}
 
 	public static Vector2f getCoordinates(Vector2f in, int[] viewport) {
-		return new Vector2f(in.x, viewport[3]-in.y);
+		return new Vector2f(in.x, viewport[3] - in.y);
 	}
 
 	public static Vector3f getCoordinates(Vector3f in, int[] viewport) {
-		return new Vector3f(in.x, viewport[3]-in.y, in.z);
+		return new Vector3f(in.x, viewport[3] - in.y, in.z);
 	}
 
 }

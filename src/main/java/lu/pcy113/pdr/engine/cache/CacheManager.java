@@ -8,7 +8,7 @@ import java.util.Map;
 import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pdr.engine.audio.Sound;
 import lu.pcy113.pdr.engine.cache.attrib.AttribArray;
-import lu.pcy113.pdr.engine.exceptions.ShaderInstantiationException;
+import lu.pcy113.pdr.engine.exceptions.opengl.ShaderInstantiationException;
 import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.geom.instance.InstanceEmitter;

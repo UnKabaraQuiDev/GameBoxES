@@ -20,16 +20,11 @@ import lu.pcy113.pdr.engine.utils.bake.TimeGraphPlot;
 
 public class GameEngine implements Cleanupable, UniqueID {
 
-	public static Vector3f X_POS = new Vector3f(1, 0, 0), X_NEG = new Vector3f(-1, 0, 0), Y_POS = new Vector3f(0, 1, 0),
-			Y_NEG = new Vector3f(0, -1, 0), Z_POS = new Vector3f(0, 0, 1), Z_NEG = new Vector3f(0, 0, -1),
+	public static Vector3f X_POS = new Vector3f(1, 0, 0), X_NEG = new Vector3f(-1, 0, 0), Y_POS = new Vector3f(0, 1, 0), Y_NEG = new Vector3f(0, -1, 0), Z_POS = new Vector3f(0, 0, 1), Z_NEG = new Vector3f(0, 0, -1), ZERO = new Vector3f(0, 0, 0);
 
-			ZERO = new Vector3f(0, 0, 0);
+	public static Vector3f UP = new Vector3f(Y_POS), DOWN = new Vector3f(Z_NEG), LEFT = new Vector3f(X_NEG), RIGHT = new Vector3f(X_POS), FORWARD = new Vector3f(Z_POS), BACK = new Vector3f(X_POS);
 
-	public static Vector3f UP = new Vector3f(Y_POS), DOWN = new Vector3f(Z_NEG), LEFT = new Vector3f(X_NEG),
-			RIGHT = new Vector3f(X_POS), FORWARD = new Vector3f(Z_POS), BACK = new Vector3f(X_POS);
-
-	public static long POLL_EVENT_TIMEOUT = 500, BUFFER_SWAP_TIMEOUT = 500, WAIT_FRAME_END_TIMEOUT = 500,
-			WAIT_FRAME_START_TIMEOUT = 500, WAIT_UPDATE_END_TIMEOUT = 500, WAIT_UPDATE_START_TIMEOUT = 500; // ms
+	public static long POLL_EVENT_TIMEOUT = 500, BUFFER_SWAP_TIMEOUT = 500, WAIT_FRAME_END_TIMEOUT = 500, WAIT_FRAME_START_TIMEOUT = 500, WAIT_UPDATE_END_TIMEOUT = 500, WAIT_UPDATE_START_TIMEOUT = 500; // ms
 
 	public static int QUEUE_MAIN = 0, QUEUE_RENDER = 1, QUEUE_UPDATE = 2;
 
@@ -53,8 +48,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 	private ThreadGroup threadGroup;
 	private Thread updateThread, renderThread, mainThread;
 
-	private final Object waitForFrameEnd = new Object(), waitForUpdateEnd = new Object(),
-			waitForFrameStart = new Object(), waitForUpdateStart = new Object();
+	private final Object waitForFrameEnd = new Object(), waitForUpdateEnd = new Object(), waitForFrameStart = new Object(), waitForUpdateStart = new Object();
 
 	private NextTaskEnvironnment taskEnvironnment = new NextTaskEnvironnment(3);
 
@@ -249,8 +243,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 						waitForFrameEnd.notifyAll(); // wake up waiting threads
 					}
 
-					GlobalLogger.info("FPS: " + this.currentFps + " delta: " + ((double) deltaRender / 1_000_000)
-							+ "ms renderLoop: " + ((double) (System.nanoTime() - loopStart) / 1_000_000) + "ms");
+					GlobalLogger.info("FPS: " + this.currentFps + " delta: " + ((double) deltaRender / 1_000_000) + "ms renderLoop: " + ((double) (System.nanoTime() - loopStart) / 1_000_000) + "ms");
 				}
 
 				queue: {
@@ -339,8 +332,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 		this.window.takeGlContext();
 		this.cleanup();
 
-		TimeGraphPlot
-				.main(new String[] { FileUtils.appendName(GlobalLogger.getLogger().getLogFile().getPath(), "-time") });
+		TimeGraphPlot.main(new String[] { FileUtils.appendName(GlobalLogger.getLogger().getLogFile().getPath(), "-time") });
 	}
 
 	public void stop() {
@@ -423,6 +415,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 
 	@Override
 	public void cleanup() {
+		this.audioMaster.cleanup();
 		this.cache.cleanup();
 		this.window.cleanup();
 		DEBUG.cleanup();

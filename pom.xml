@@ -1,21 +1,23 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>lu.pcy113</groupId>
 	<artifactId>pdr.client</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>PDRClient</name> 
-	
+	<name>PDRClient</name>
+
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		
+
 		<lwjgl.version>3.3.2</lwjgl.version>
 		<steamworks4j-server.version>1.9.0</steamworks4j-server.version>
 		<steamworks4j.version>1.9.0</steamworks4j.version>
 		<joml.version>1.10.5</joml.version>
 		<lwjgl.natives>natives-linux</lwjgl.natives>
 	</properties>
-	
+
 	<profiles>
 		<!-- Profile for Windows -->
 		<profile>
@@ -29,7 +31,7 @@
 				<lwjgl.natives>natives-windows</lwjgl.natives>
 			</properties>
 		</profile>
-	
+
 		<!-- Profile for Linux -->
 		<profile>
 			<id>linux</id>
@@ -38,10 +40,9 @@
 					<family>unix</family>
 				</os>
 			</activation>
-			<!-- No need to specify lwjgl.natives for Linux, as it's already set as the default -->
 		</profile>
 	</profiles>
-	
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -53,7 +54,7 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.lwjgl</groupId>
@@ -99,7 +100,7 @@
 			<artifactId>lwjgl-openal</artifactId>
 			<classifier>${lwjgl.natives}</classifier>
 		</dependency>
-			<dependency>
+		<dependency>
 			<groupId>org.lwjgl</groupId>
 			<artifactId>lwjgl-freetype</artifactId>
 		</dependency>
@@ -118,28 +119,28 @@
 			<artifactId>lwjgl-stb</artifactId>
 			<classifier>${lwjgl.natives}</classifier>
 		</dependency>
-			<dependency>
+		<dependency>
 			<groupId>com.code-disaster.steamworks4j</groupId>
 			<artifactId>steamworks4j-server</artifactId>
 			<version>${steamworks4j-server.version}</version>
 		</dependency>
-			<dependency>
+		<dependency>
 			<groupId>com.code-disaster.steamworks4j</groupId>
 			<artifactId>steamworks4j</artifactId>
 			<version>${steamworks4j.version}</version>
 		</dependency>
-			<dependency>
+		<dependency>
 			<groupId>org.joml</groupId>
 			<artifactId>joml</artifactId>
 			<version>${joml.version}</version>
 		</dependency>
-		
+
 		<!--<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>1.18.28</version>
 		</dependency>-->
-		
+
 		<!--<dependency>
 			<groupId>lu.pcy113</groupId>
 			<artifactId>jbcodec</artifactId>
@@ -152,9 +153,9 @@
 			<scope>system</scope>
 			<systemPath>${project.baseDir}/libs/packets4j-release_0.2.jar</systemPath>
 		</dependency>-->
-		
+
 	</dependencies>
-	
+
 	<build>
 		<!--<resources>
 			<resource>
@@ -163,7 +164,7 @@
 		</resources>-->
 		<!--<sourceDirectory>src</sourceDirectory>-->
 		<plugins>
-			
+
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
@@ -182,7 +183,7 @@
 							</sources>
 						</configuration>
 					</execution>
-					
+
 					<!-- Add a source directory for packets4j project -->
 					<execution>
 						<id>add-source-packets4j</id>
@@ -196,7 +197,7 @@
 							</sources>
 						</configuration>
 					</execution>
-	
+
 					<!-- Add a source directory for JByteCodec project -->
 					<execution>
 						<id>add-source-jbytecodec</id>
@@ -210,7 +211,7 @@
 							</sources>
 						</configuration>
 					</execution>
-	
+
 					<!-- Add a source directory for PDRUtils project -->
 					<execution>
 						<id>add-source-pdrutils</id>
@@ -226,7 +227,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -241,25 +242,25 @@
 					</archive>
 				</configuration>
 			</plugin>
-			
-			 <plugin>
+
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
 				<version>3.6.0</version>
 				<executions>
-				  <execution>
-					<id>copy-dependencies</id>
-					<phase>package</phase>
-					<goals>
-						<goal>copy-dependencies</goal>
-					</goals>
-					<configuration>
-						<outputDirectory>${project.build.directory}/libs/</outputDirectory>
-					</configuration>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/libs/</outputDirectory>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
-			
+
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>3.0.2</version>
@@ -296,7 +297,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -306,7 +307,7 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
@@ -316,9 +317,9 @@
 					<arguments>
 						<argument>-cp</argument>
 						<classpath />
-						<!--<argument>-javaagent:libs/lwjglx-debug-1.0.0.jar</argument>
+						<argument>-javaagent:libs/lwjglx-debug-1.0.0.jar</argument>
 						<argument>-Dorg.lwjglx.TRACE</argument>
-						<argument>-Dorg.lwjglx.OUTPUT=./logs/trace.log</argument>-->
+						<argument>-Dorg.lwjglx.OUTPUT=./logs/trace.log</argument>
 						<argument>lu.pcy113.pdr.client.ClientMain</argument>
 					</arguments>
 					<!--<mainClass>lu.pcy113.pdr.client.ClientMain</mainClass>-->
@@ -327,5 +328,5 @@
 			</plugin>
 		</plugins>
 	</build>
-	
+
 </project>
