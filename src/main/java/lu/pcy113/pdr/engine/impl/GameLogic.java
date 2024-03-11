@@ -1,6 +1,7 @@
 package lu.pcy113.pdr.engine.impl;
 
 import lu.pcy113.pdr.engine.GameEngine;
+import lu.pcy113.pdr.engine.audio.AudioMaster;
 import lu.pcy113.pdr.engine.cache.SharedCacheManager;
 import lu.pcy113.pdr.engine.graph.window.Window;
 import lu.pcy113.pdr.engine.impl.nexttask.NextTask;
@@ -11,15 +12,18 @@ public abstract class GameLogic {
 	protected GameEngine engine;
 	protected SharedCacheManager cache;
 	protected Window window;
+	protected AudioMaster audio;
 
 	public void register(GameEngine e) {
-		if (this.engine != null)
-			throw new IllegalStateException("Already registered");
+		/*if (this.engine != null)
+			throw new IllegalStateException("Already registered");*/
 
 		this.engine = e;
 
 		this.cache = e.getCache();
 		this.window = e.getWindow();
+		
+		this.audio = e.getAudioMaster();
 	}
 
 	public abstract void init(GameEngine e);

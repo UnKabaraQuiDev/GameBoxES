@@ -5,7 +5,9 @@ import java.nio.IntBuffer;
 import java.util.List;
 import java.util.Objects;
 
+import org.joml.Vector3f;
 import org.lwjgl.openal.AL;
+import org.lwjgl.openal.AL11;
 import org.lwjgl.openal.ALC;
 import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.ALC11;
@@ -76,6 +78,56 @@ public class AudioMaster implements Cleanupable {
 		GlobalLogger.info("ALC_STEREO_SOURCES: " + alcGetInteger(device, ALC11.ALC_STEREO_SOURCES));
 		
 		System.out.println("Thread: "+Thread.currentThread().getName()+" al cap: "+AL.getCapabilities());
+	}
+	
+	public AudioMaster setDistanceModel(int model) {
+		AL11.alDistanceModel(model);
+		PDRUtils.checkAlError("DistanceModel()="+model);
+		return this;
+	}
+	
+	public AudioMaster setPosition(Vector3f pos) {
+		System.err.println("sound cam pos: " + pos);
+		AL11.alListener3f(AL11.AL_POSITION, pos.x, pos.y, pos.z);
+		PDRUtils.checkAlError("Listener3f().POSITION=" + pos);
+		return this;
+	}
+	
+	public AudioMaster setVelocity(Vector3f vel) {
+		AL11.alListener3f(AL11.AL_VELOCITY, vel.x, vel.y, vel.z);
+		PDRUtils.checkAlError("Listener3f().VELOCITY=" + vel);
+		return this;
+	}
+	
+	public AudioMaster setVolume(float gain) {
+		AL11.alListenerf(AL11.AL_GAIN, gain);
+		PDRUtils.checkAlError("Listenerf().GAIN=" + gain);
+		return this;
+	}
+	
+	public AudioMaster setOrientation(Vector3f orientation, Vector3f up) {
+		float[] orientationArr = { orientation.x, orientation.y, orientation.z, up.x, up.y, up.z };
+		AL11.alListenerfv(AL11.AL_ORIENTATION, orientationArr);
+		PDRUtils.checkAlError("Listenerfv().ORIENTATION=(" + orientation+", " + up+")");
+		return this;
+	}
+	
+	public AudioMaster setDopplerFactor(float factor) {
+		AL11.alDopplerFactor(factor);
+		PDRUtils.checkAlError("DopplerFactor()=" + factor);
+		return this;
+	}
+	
+	public AudioMaster setDopplerVelocity(float factor) {
+		AL11.alDopplerVelocity(factor);
+		PDRUtils.checkAlError("DopplerVelocity()=" + factor);
+		return this;
+	}
+	
+	public AudioMaster setSpeedOfSound(float speed) {
+		AL11.alSpeedOfSound(speed);
+		PDRUtils.checkAlError("SpeedOfSound()=" + speed);
+		return this;
 	}
 	
 	public boolean checkAccess() {

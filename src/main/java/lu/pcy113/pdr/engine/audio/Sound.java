@@ -56,69 +56,92 @@ public class Sound implements UniqueID, Cleanupable {
 	public Sound setVolume(float volume) {
 		volume = Math.clamp(0, 1, volume);
 		AL11.alSourcef(sbo, AL11.AL_GAIN, volume);
-		PDRUtils.checkAlError("alSourcef[" + sbo + "].GAIN=" + volume);
+		PDRUtils.checkAlError("Sourcef[" + sbo + "].GAIN=" + volume);
 		return this;
 	}
 
 	public Sound setPosition(Vector3f vec) {
+		System.err.println("sound func pos: " + vec+" finite: "+vec.isFinite());
+		
+		if(!vec.isFinite())
+			return this;
+		
 		AL11.alSource3f(sbo, AL11.AL_POSITION, vec.x, vec.y, vec.z);
-		PDRUtils.checkAlError("alSource3f[" + sbo + "].POSITION=" + vec);
+		PDRUtils.checkAlError("Source3f[" + sbo + "].POSITION=" + vec);
 		return this;
 	}
 
 	public Sound setVelocity(Vector3f vec) {
 		AL11.alSource3f(sbo, AL11.AL_VELOCITY, vec.x, vec.y, vec.z);
-		PDRUtils.checkAlError("alSource3f[" + sbo + "].VELOCITY=" + vec);
+		PDRUtils.checkAlError("Source3f[" + sbo + "].VELOCITY=" + vec);
 		return this;
 	}
 
 	public Sound setDirection(Vector3f vec) {
 		AL11.alSource3f(sbo, AL11.AL_DIRECTION, vec.x, vec.y, vec.z);
-		PDRUtils.checkAlError("alSource3f[" + sbo + "].DIRECTION=" + vec);
+		PDRUtils.checkAlError("Source3f[" + sbo + "].DIRECTION=" + vec);
 		return this;
 	}
 
 	public Sound setPitch(float pitch) {
 		AL11.alSourcef(sbo, AL11.AL_PITCH, pitch);
-		PDRUtils.checkAlError("alSourcef[" + sbo + "].PITCH=" + pitch);
+		PDRUtils.checkAlError("Sourcef[" + sbo + "].PITCH=" + pitch);
 		return this;
 	}
 
 	public Sound setReferenceDistance(float distance) {
 		AL11.alSourcef(sbo, AL11.AL_REFERENCE_DISTANCE, distance);
-		PDRUtils.checkAlError("alSourcef[" + sbo + "].REFERENCE_DISTANCE=" + distance);
+		PDRUtils.checkAlError("Sourcef[" + sbo + "].REFERENCE_DISTANCE=" + distance);
 		return this;
 	}
 
 	public Sound setLooping(boolean looping) {
 		AL11.alSourcei(sbo, AL11.AL_LOOPING, looping ? AL11.AL_TRUE : AL11.AL_FALSE);
-		PDRUtils.checkAlError("alSourcei[" + sbo + "].LOOPING=" + looping);
+		PDRUtils.checkAlError("Sourcei[" + sbo + "].LOOPING=" + looping);
 		return this;
 	}
 	
 	public Sound setMaxDistance(float distance) {
 		AL11.alSourcef(sbo, AL11.AL_MAX_DISTANCE, distance);
-		PDRUtils.checkAlError("alSourcef[" + sbo + "].MAX_DISTANCE=" + distance);
+		PDRUtils.checkAlError("Sourcef[" + sbo + "].MAX_DISTANCE=" + distance);
 		return this;
 	}
 	
 	public Sound setConeInnerAngle(float angle) {
 		AL11.alSourcef(sbo, AL11.AL_CONE_INNER_ANGLE, angle);
-		PDRUtils.checkAlError("alSourcef[" + sbo + "].CONE_INNER_ANGLE=" + angle);
+		PDRUtils.checkAlError("Sourcef[" + sbo + "].CONE_INNER_ANGLE=" + angle);
 		return this;
 	}
 	
 	public Sound setConeOuterAngle(float angle) {
 		AL11.alSourcef(sbo, AL11.AL_CONE_OUTER_ANGLE, angle);
-		PDRUtils.checkAlError("alSourcef[" + sbo + "].CONE_OUTER_ANGLE=" + angle);
+		PDRUtils.checkAlError("Sourcef[" + sbo + "].CONE_OUTER_ANGLE=" + angle);
 		return this;
 	}
 	
 	public Sound setConeOuterGain(float gain) {
 		AL11.alSourcef(sbo, AL11.AL_CONE_OUTER_GAIN, gain);
-		PDRUtils.checkAlError("alSourcef[" + sbo + "].CONE_OUTER_GAIN=" + gain);
+		PDRUtils.checkAlError("Sourcef[" + sbo + "].CONE_OUTER_GAIN=" + gain);
 		return this;
 	}
+	
+	public Sound setRolloffFactor(float factor) {
+		AL11.alSourcef(sbo, AL11.AL_ROLLOFF_FACTOR, factor);
+		PDRUtils.checkAlError("Sourcef[" + sbo + "].ROLLOFF_FACTOR=" + factor);
+		return this;
+	}
+	
+	/*public Sound setSourceType(int type) {
+		AL11.alSourcei(sbo, AL11.AL_SOURCE_TYPE, type);
+		PDRUtils.checkAlError("Sourcei[" + sbo + "].SOURCE_TYPE=" + type);
+		return this;
+	}*/
+	
+	/*public Sound setSourceState(int state) {
+		AL11.alSourcei(sbo, AL11.AL_SOURCE_STATE, state);
+		PDRUtils.checkAlError("Sourcei[" + sbo + "].SOURCE_STATE=" + state);
+		return this;
+	}*/
 
 	public void play() {
 		if (isPlaying())
@@ -185,7 +208,7 @@ public class Sound implements UniqueID, Cleanupable {
 		AL11.alGetSource3f(sbo, AL11.AL_DIRECTION, x, y, z);
 		return new Vector3f(x[0], y[0], z[0]);
 	}
-
+	
 	@Override
 	public void cleanup() {
 		AL11.alDeleteBuffers(abo);

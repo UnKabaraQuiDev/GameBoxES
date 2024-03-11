@@ -138,7 +138,8 @@ public class GameEngine implements Cleanupable, UniqueID {
 		
 		init: {
 			this.audioMaster = new AudioMaster();
-		
+			gameLogic.register(this);
+			
 			gameLogic.updateInit();
 		}
 
