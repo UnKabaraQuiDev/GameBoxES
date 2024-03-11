@@ -303,6 +303,10 @@ public class Window implements Cleanupable {
 			scrollCallback.free();
 			scrollCallback = null;
 		}
+		if (cursorPosCallback != null) {
+			cursorPosCallback.free();
+			cursorPosCallback = null;
+		}
 		if (handle != -1) {
 			GLFW.glfwDestroyWindow(handle);
 			GLFW.glfwTerminate();
@@ -310,6 +314,7 @@ public class Window implements Cleanupable {
 		}
 		if (GL.getCapabilities() != null) {
 			GL.setCapabilities(null);
+			MemoryUtil.memFree(capabilities.getAddressBuffer());
 		}
 	}
 

@@ -65,54 +65,43 @@ public class CacheManager implements Cleanupable {
 	public void cleanup() {
 		GlobalLogger.log();
 
-		this.meshes.values().forEach(
-				Mesh::cleanup);
+		this.meshes.values().forEach(Mesh::cleanup);
 		this.meshes.clear();
 
-		this.scenes.values().forEach(
-				Scene::cleanup);
+		this.scenes.values().forEach(Scene::cleanup);
 		this.scenes.clear();
 
-		this.renderers.values().forEach(
-				Renderer::cleanup);
+		this.renderers.values().forEach(Renderer::cleanup);
 		this.renderers.clear();
 
 		// materials.values().forEach(Material::cleanup);
 		this.materials.clear();
 
-		this.renderShaders.values().forEach(
-				RenderShader::cleanup);
+		this.renderShaders.values().forEach(RenderShader::cleanup);
 		this.renderShaders.clear();
 
-		this.textures.values().forEach(
-				Texture::cleanup);
+		this.textures.values().forEach(Texture::cleanup);
 		this.textures.clear();
 
 		// pointLights.values().forEach(PointLight::cleanup);
 		this.pointLights.clear();
 
-		this.gizmos.values().forEach(
-				Gizmo::cleanup);
+		this.gizmos.values().forEach(Gizmo::cleanup);
 		this.gizmos.clear();
 
-		this.renderLayers.values().forEach(
-				RenderLayer::cleanup);
+		this.renderLayers.values().forEach(RenderLayer::cleanup);
 		this.renderLayers.clear();
 
-		textEmitters.values().forEach(
-				TextEmitter::cleanup);
+		textEmitters.values().forEach(TextEmitter::cleanup);
 		this.textEmitters.clear();
 
-		this.instanceEmitters.values().forEach(
-				InstanceEmitter::cleanup);
+		this.instanceEmitters.values().forEach(InstanceEmitter::cleanup);
 		this.instanceEmitters.clear();
 
-		this.sounds.values().forEach(
-				Sound::cleanup);
+		this.sounds.values().forEach(Sound::cleanup);
 		this.sounds.clear();
 
-		this.framebuffers.values().forEach(
-				Framebuffer::cleanup);
+		this.framebuffers.values().forEach(Framebuffer::cleanup);
 		this.framebuffers.clear();
 	}
 
@@ -121,136 +110,127 @@ public class CacheManager implements Cleanupable {
 	 */
 
 	public boolean addMesh(Mesh m) {
-		if (this.meshes.containsKey(
-				m.getId()))
-			this.meshes.remove(
-					m.getId()).cleanup();
-		return this.meshes.putIfAbsent(
-				m.getId(),
-				m) == null;
+		if (m == null)
+			return false;
+		if (this.meshes.containsKey(m.getId()) && !this.meshes.get(m.getId()).equals(m))
+			this.meshes.remove(m.getId()).cleanup();
+		return this.meshes.putIfAbsent(m.getId(), m) == null;
 	}
 
+	/*private boolean add(Map<String, UniqueID> map, UniqueID m) {
+		if (m == null)
+			return false;
+
+		if (map.containsKey(m.getId()) && !map.get(m.getId()).equals(m))
+			map.remove(m.getId());
+
+		return map.putIfAbsent(m.getId(), (UniqueID) m) == null;
+	}
+
+	private boolean addCleanup(Map<String, UniqueID> map, UniqueID m) {
+		if (m == null)
+			return false;
+
+		if (map.containsKey(m.getId()) && !map.get(m.getId()).equals(m))
+			((Cleanupable) map.remove(m.getId())).cleanup();
+
+		return map.putIfAbsent(m.getId(), (UniqueID) m) == null;
+	}*/
+
 	public boolean addScene(Scene m) {
-		if (this.scenes.containsKey(
-				m.getId()))
-			this.scenes.remove(
-					m.getId()).cleanup();
-		return this.scenes.putIfAbsent(
-				m.getId(),
-				m) == null;
+		if (m == null)
+			return false;
+		if (this.scenes.containsKey(m.getId()) && !this.scenes.get(m.getId()).equals(m))
+			this.scenes.remove(m.getId()).cleanup();
+		return this.scenes.putIfAbsent(m.getId(), m) == null;
 	}
 
 	public boolean addRenderer(Renderer<?, ?> m) {
-		if (this.renderers.containsKey(
-				m.getId()))
-			this.renderers.remove(
-					m.getId()).cleanup();
-		return this.renderers.putIfAbsent(
-				m.getId(),
-				m) == null;
+		if (m == null)
+			return false;
+		if (this.renderers.containsKey(m.getId()) && !this.renderers.get(m.getId()).equals(m))
+			this.renderers.remove(m.getId()).cleanup();
+		return this.renderers.putIfAbsent(m.getId(), m) == null;
 	}
 
 	public boolean addMaterial(Material m) {
-		if (this.materials.containsKey(
-				m.getId()))
-			this.materials.remove(
-					m.getId());
-		return this.materials.putIfAbsent(
-				m.getId(),
-				m) == null;
+		if (m == null)
+			return false;
+		if (this.materials.containsKey(m.getId()) && !this.materials.get(m.getId()).equals(m))
+			this.materials.remove(m.getId());
+		return this.materials.putIfAbsent(m.getId(), m) == null;
 	}
 
 	public boolean addRenderShader(RenderShader m) {
-		if (this.renderShaders.containsKey(
-				m.getId())
-				&& !this.renderShaders.get(
-						m.getId()).equals(
-								m))
-			this.renderShaders.remove(
-					m.getId()).cleanup();
-		return this.renderShaders.putIfAbsent(
-				m.getId(),
-				m) == null;
+		if (m == null)
+			return false;
+		if (this.renderShaders.containsKey(m.getId()) && !this.renderShaders.get(m.getId()).equals(m))
+			this.renderShaders.remove(m.getId()).cleanup();
+		return this.renderShaders.putIfAbsent(m.getId(), m) == null;
 	}
 
 	public boolean addTexture(Texture m) {
-		if (this.textures.containsKey(
-				m.getId()))
-			this.textures.remove(
-					m.getId()).cleanup();
-		return this.textures.putIfAbsent(
-				m.getId(),
-				m) == null;
+		if (m == null)
+			return false;
+		if (this.textures.containsKey(m.getId()) && !this.textures.get(m.getId()).equals(m))
+			this.textures.remove(m.getId()).cleanup();
+		return this.textures.putIfAbsent(m.getId(), m) == null;
 	}
 
 	public boolean addPointLight(PointLight m) {
-		if (this.pointLights.containsKey(
-				m.getId()))
-			this.pointLights.remove(
-					m.getId());
-		return this.pointLights.putIfAbsent(
-				m.getId(),
-				m) == null;
+		if (m == null)
+			return false;
+		if (this.pointLights.containsKey(m.getId()) && !this.pointLights.get(m.getId()).equals(m))
+			this.pointLights.remove(m.getId());
+		return this.pointLights.putIfAbsent(m.getId(), m) == null;
 	}
 
 	public boolean addGizmo(Gizmo m) {
-		if (this.gizmos.containsKey(
-				m.getId()))
-			this.gizmos.remove(
-					m.getId()).cleanup();
-		return this.gizmos.putIfAbsent(
-				m.getId(),
-				m) == null;
+		if (m == null)
+			return false;
+		if (this.gizmos.containsKey(m.getId()) && !this.gizmos.get(m.getId()).equals(m))
+			this.gizmos.remove(m.getId()).cleanup();
+		return this.gizmos.putIfAbsent(m.getId(), m) == null;
 	}
 
 	public boolean addRenderLayer(RenderLayer m) {
-		if (this.renderLayers.containsKey(
-				m.getId()))
-			this.renderLayers.remove(
-					m.getId()).cleanup();
-		return this.renderLayers.putIfAbsent(
-				m.getId(),
-				m) == null;
+		if (m == null)
+			return false;
+		if (this.renderLayers.containsKey(m.getId()) && !this.renderLayers.get(m.getId()).equals(m))
+			this.renderLayers.remove(m.getId()).cleanup();
+		return this.renderLayers.putIfAbsent(m.getId(), m) == null;
 	}
 
 	public boolean addTextEmitter(TextEmitter m) {
-		if (this.textEmitters.containsKey(
-				m.getId()))
-			this.textEmitters.remove(
-					m.getId()).cleanup();
-		return this.textEmitters.putIfAbsent(
-				m.getId(),
-				m) == null;
+		if (m == null)
+			return false;
+		if (this.textEmitters.containsKey(m.getId()) && !this.textEmitters.get(m.getId()).equals(m))
+			this.textEmitters.remove(m.getId()).cleanup();
+		return this.textEmitters.putIfAbsent(m.getId(), m) == null;
 	}
 
 	public boolean addInstanceEmitter(InstanceEmitter m) {
-		if (this.instanceEmitters.containsKey(
-				m.getId()))
-			this.instanceEmitters.remove(
-					m.getId()).cleanup();
-		return this.instanceEmitters.putIfAbsent(
-				m.getId(),
-				m) == null;
+		if (m == null)
+			return false;
+		if (this.instanceEmitters.containsKey(m.getId()) && !this.instanceEmitters.get(m.getId()).equals(m))
+			this.instanceEmitters.remove(m.getId()).cleanup();
+		return this.instanceEmitters.putIfAbsent(m.getId(), m) == null;
 	}
 
 	public boolean addSound(Sound m) {
-		if (this.sounds.containsKey(
-				m.getId()))
-			this.sounds.remove(
-					m.getId()).cleanup();
-		return this.sounds.putIfAbsent(
-				m.getId(),
-				m) == null;
+		if (m == null)
+			return false;
+		if (this.sounds.containsKey(m.getId()) && !this.sounds.get(m.getId()).equals(m))
+			this.sounds.remove(m.getId()).cleanup();
+		return this.sounds.putIfAbsent(m.getId(), m) == null;
 	}
 
 	public boolean addFramebuffer(Framebuffer m) {
-		if (this.framebuffers.containsKey(
-				m.getId()))
-			this.framebuffers.remove(
-					m.getId()).cleanup();
-		return this.framebuffers.putIfAbsent(
-				m.getId(),
-				m) == null;
+		if (m == null)
+			return false;
+		if (this.framebuffers.containsKey(m.getId()) && !this.framebuffers.get(m.getId()).equals(m))
+			this.framebuffers.remove(m.getId()).cleanup();
+		return this.framebuffers.putIfAbsent(m.getId(), m) == null;
 	}
 
 	/*
@@ -258,8 +238,7 @@ public class CacheManager implements Cleanupable {
 	 */
 
 	public Mesh getMesh(String name) {
-		return this.meshes.get(
-				name);
+		return this.meshes.get(name);
 	}
 
 	public Renderer<?, ?> getRenderer(String name) {
@@ -267,63 +246,51 @@ public class CacheManager implements Cleanupable {
 		 * if (name != null && !renderers.containsKey(name))
 		 * GlobalLogger.log("No renderer found for: " + name);
 		 */
-		return this.renderers.get(
-				name);
+		return this.renderers.get(name);
 	}
 
 	public Scene getScene(String name) {
-		return this.scenes.get(
-				name);
+		return this.scenes.get(name);
 	}
 
 	public Material getMaterial(String name) {
-		return this.materials.get(
-				name);
+		return this.materials.get(name);
 	}
 
 	public RenderShader getRenderShader(String name) {
-		return this.renderShaders.get(
-				name);
+		return this.renderShaders.get(name);
 	}
 
 	public Texture getTexture(String name) {
-		return this.textures.get(
-				name);
+		return this.textures.get(name);
 	}
 
 	public PointLight getPointLight(String name) {
-		return this.pointLights.get(
-				name);
+		return this.pointLights.get(name);
 	}
 
 	public Gizmo getGizmo(String name) {
-		return this.gizmos.get(
-				name);
+		return this.gizmos.get(name);
 	}
 
 	public RenderLayer getRenderLayer(String name) {
-		return this.renderLayers.get(
-				name);
+		return this.renderLayers.get(name);
 	}
 
 	public TextEmitter getTextEmitter(String name) {
-		return this.textEmitters.get(
-				name);
+		return this.textEmitters.get(name);
 	}
 
 	public InstanceEmitter getInstanceEmitter(String name) {
-		return this.instanceEmitters.get(
-				name);
+		return this.instanceEmitters.get(name);
 	}
 
 	public Sound getSound(String name) {
-		return this.sounds.get(
-				name);
+		return this.sounds.get(name);
 	}
 
 	public Framebuffer getFramebuffer(String name) {
-		return this.framebuffers.get(
-				name);
+		return this.framebuffers.get(name);
 	}
 
 	/*
@@ -439,23 +406,19 @@ public class CacheManager implements Cleanupable {
 	 */
 
 	public boolean hasRenderShader(String name) {
-		return renderShaders.containsKey(
-				name);
+		return renderShaders.containsKey(name);
 	}
 
 	public boolean hasMaterial(String name) {
-		return materials.containsKey(
-				name);
+		return materials.containsKey(name);
 	}
 
 	public boolean hasMesh(String name) {
-		return meshes.containsKey(
-				name);
+		return meshes.containsKey(name);
 	}
 
 	public boolean hasFramebuffer(String name) {
-		return framebuffers.containsKey(
-				name);
+		return framebuffers.containsKey(name);
 	}
 
 	/*
@@ -463,15 +426,10 @@ public class CacheManager implements Cleanupable {
 	 */
 
 	public <T extends Material> Material loadOrGetMaterial(String name, Class<T> clazz, Object... args) {
-		if (materials.containsKey(
-				name)) {
-			return materials.get(
-					name);
+		if (materials.containsKey(name)) {
+			return materials.get(name);
 		} else {
-			return loadMaterial(
-					clazz,
-					name,
-					args);
+			return loadMaterial(clazz, name, args);
 		}
 	}
 
@@ -482,93 +440,69 @@ public class CacheManager implements Cleanupable {
 				types[i] = args[i].getClass();
 			}
 
-			Material mat = clazz.getConstructor(
-					types).newInstance(
-							args);
+			Material mat = clazz.getConstructor(types).newInstance(args);
 
-			addMaterial(
-					mat);
-			addRenderShader(
-					mat.getRenderShader());
+			addMaterial(mat);
+			addRenderShader(mat.getRenderShader());
 
 			return mat;
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			throw new ShaderInstantiationException(
-					e);
+			throw new ShaderInstantiationException(e);
 		}
 	}
 
 	public Texture loadSingleTexture(String string, String path) {
-		Texture texture = new SingleTexture(
-				string,
-				path);
+		Texture texture = new SingleTexture(string, path);
 		texture.setup();
-		addTexture(
-				texture);
+		addTexture(texture);
 		return texture;
 	}
 
 	public Texture loadSingleTexture(String string, String path, TextureFilter filter, TextureType type) {
-		Texture texture = new SingleTexture(
-				string,
-				path);
-		texture.setFilters(
-				filter);
-		texture.setTextureType(
-				type);
+		Texture texture = new SingleTexture(string, path);
+		texture.setFilters(filter);
+		texture.setTextureType(type);
 		texture.setup();
-		addTexture(
-				texture);
+		addTexture(texture);
 		return texture;
 	}
 
 	public InstanceEmitter loadInstanceEmitter(String name, Mesh mesh, int count, Transform baseTransform, AttribArray... attribArrays) {
-		InstanceEmitter instanceEmitter = new InstanceEmitter(
-				name,
-				mesh,
-				count,
-				baseTransform,
-				attribArrays);
-		addInstanceEmitter(
-				instanceEmitter);
+		InstanceEmitter instanceEmitter = new InstanceEmitter(name, mesh, count, baseTransform, attribArrays);
+		addInstanceEmitter(instanceEmitter);
 		return instanceEmitter;
 	}
 
 	public Mesh loadMesh(String name, Material material, String path) {
 		Mesh mesh = null;
 
-		if (path.endsWith(
-				"obj"))
-			mesh = ObjLoader.loadMesh(
-					name,
-					material,
-					path);
+		if (path.endsWith("obj"))
+			mesh = ObjLoader.loadMesh(name, material, path);
 
 		if (mesh == null)
-			throw new RuntimeException(
-					"Could not load mesh.");
+			throw new RuntimeException("Could not load mesh.");
 
-		addMesh(
-				mesh);
+		addMesh(mesh);
 		return mesh;
 	}
 
 	public CubemapTexture loadCubemapTexture(String name, String path) {
-		CubemapTexture txt = new CubemapTexture(
-				name,
-				path);
+		CubemapTexture txt = new CubemapTexture(name, path);
 		txt.setup();
-		addTexture(
-				txt);
+		addTexture(txt);
 		return txt;
 	}
 
 	public Framebuffer loadFramebuffer(String name) {
-		Framebuffer fb = new Framebuffer(
-				name);
-		addFramebuffer(
-				fb);
+		Framebuffer fb = new Framebuffer(name);
+		addFramebuffer(fb);
 		return fb;
+	}
+
+	public Sound loadSound(String name, String file) {
+		Sound sound = new Sound(name, file);
+		addSound(sound);
+		return sound;
 	}
 
 	/*
@@ -576,30 +510,18 @@ public class CacheManager implements Cleanupable {
 	 */
 
 	public void dump(PrintStream out) {
-		out.println(
-				"== DUMP:" + this.getClass().getName() + ":start ==");
-		out.println(
-				Mesh.class.getName() + ": " + this.meshes.size() + ": " + this.meshes);
-		out.println(
-				Scene.class.getName() + ": " + this.scenes.size() + ": " + this.scenes);
-		out.println(
-				Renderer.class.getName() + ": " + this.renderers.size() + ": " + this.renderers);
-		out.println(
-				Material.class.getName() + ": " + this.materials.size() + ": " + this.materials);
-		out.println(
-				RenderShader.class.getName() + ": " + this.renderShaders.size() + ": " + this.renderShaders);
-		out.println(
-				Texture.class.getName() + ": " + this.textures.size() + ": " + this.textures);
-		out.println(
-				Gizmo.class.getName() + ": " + this.gizmos.size() + ": " + this.gizmos);
-		out.println(
-				RenderLayer.class.getName() + ": " + this.renderLayers.size() + ": " + this.renderLayers);
-		out.println(
-				TextEmitter.class.getName() + ": " + this.textEmitters.size() + ": " + this.textEmitters);
-		out.println(
-				PointLight.class.getName() + ": " + this.pointLights.size() + ": " + this.pointLights);
-		out.println(
-				"== DUMP:" + this.getClass().getName() + ":end ==");
+		out.println("== DUMP:" + this.getClass().getName() + ":start ==");
+		out.println(Mesh.class.getName() + ": " + this.meshes.size() + ": " + this.meshes);
+		out.println(Scene.class.getName() + ": " + this.scenes.size() + ": " + this.scenes);
+		out.println(Renderer.class.getName() + ": " + this.renderers.size() + ": " + this.renderers);
+		out.println(Material.class.getName() + ": " + this.materials.size() + ": " + this.materials);
+		out.println(RenderShader.class.getName() + ": " + this.renderShaders.size() + ": " + this.renderShaders);
+		out.println(Texture.class.getName() + ": " + this.textures.size() + ": " + this.textures);
+		out.println(Gizmo.class.getName() + ": " + this.gizmos.size() + ": " + this.gizmos);
+		out.println(RenderLayer.class.getName() + ": " + this.renderLayers.size() + ": " + this.renderLayers);
+		out.println(TextEmitter.class.getName() + ": " + this.textEmitters.size() + ": " + this.textEmitters);
+		out.println(PointLight.class.getName() + ": " + this.pointLights.size() + ": " + this.pointLights);
+		out.println("== DUMP:" + this.getClass().getName() + ":end ==");
 	}
 
 }

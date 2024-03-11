@@ -23,7 +23,9 @@ public abstract class GameLogic {
 	}
 
 	public abstract void init(GameEngine e);
-
+	
+	public void updateInit() {}
+	
 	public abstract void input(float dTime);
 
 	public abstract void update(float dTime);

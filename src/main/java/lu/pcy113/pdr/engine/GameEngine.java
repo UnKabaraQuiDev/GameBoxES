@@ -26,7 +26,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 
 	public static long POLL_EVENT_TIMEOUT = 500, BUFFER_SWAP_TIMEOUT = 500, WAIT_FRAME_END_TIMEOUT = 500, WAIT_FRAME_START_TIMEOUT = 500, WAIT_UPDATE_END_TIMEOUT = 500, WAIT_UPDATE_START_TIMEOUT = 500; // ms
 
-	public static int QUEUE_MAIN = 0, QUEUE_RENDER = 1, QUEUE_UPDATE = 2, QUEUE_AUDIO = 3;
+	public static int QUEUE_MAIN = 0, QUEUE_RENDER = 1, QUEUE_UPDATE = 2;
 
 	public static DebugOptions DEBUG = new DebugOptions();
 
@@ -46,7 +46,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 	private SharedCacheManager cache;
 
 	private ThreadGroup threadGroup;
-	private Thread updateThread, renderThread, mainThread, audioThread;
+	private Thread updateThread, renderThread, mainThread;
 
 	private final Object waitForFrameEnd = new Object(), waitForUpdateEnd = new Object(), waitForFrameStart = new Object(), waitForUpdateStart = new Object();
 
@@ -134,6 +134,12 @@ public class GameEngine implements Cleanupable, UniqueID {
 				Thread.currentThread().interrupt();
 				GlobalLogger.info("Update thread interrupted, continuing");
 			}
+		}
+		
+		init: {
+			this.audioMaster = new AudioMaster();
+		
+			gameLogic.updateInit();
 		}
 
 		try {
@@ -276,7 +282,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 		this.window.clearGLContext();
 		// this.running = true;
 
-		taskEnvironnment = new NextTaskEnvironnment(4);
+		taskEnvironnment = new NextTaskEnvironnment(3);
 
 		this.threadGroup = new ThreadGroup(getClass().getName() + "#" + name);
 
@@ -284,10 +290,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 		this.updateThread = new Thread(threadGroup, this::updateRun, threadGroup.getName() + ":update");
 		this.renderThread = new Thread(threadGroup, this::renderRun, threadGroup.getName() + ":render");
 
-		this.audioMaster = new AudioMaster(this, this.threadGroup, threadGroup.getName() + ":audio");
-		this.audioThread = this.audioMaster;
-
-		taskEnvironnment.setThreads(new Thread[] { mainThread, renderThread, updateThread, audioThread });
+		taskEnvironnment.setThreads(new Thread[] { mainThread, renderThread, updateThread });
 
 		this.updateThread.start();
 		this.renderThread.start();

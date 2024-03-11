@@ -3,6 +3,7 @@ package lu.pcy113.pdr.engine.audio;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.List;
+import java.util.Objects;
 
 import org.lwjgl.openal.AL;
 import org.lwjgl.openal.ALC;
@@ -15,34 +16,27 @@ import org.lwjgl.openal.EXTThreadLocalContext;
 import org.lwjgl.system.MemoryUtil;
 
 import lu.pcy113.pclib.GlobalLogger;
-import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
-import lu.pcy113.pdr.engine.impl.nexttask.NextTaskThread;
 import lu.pcy113.pdr.engine.utils.PDRLoggerUtils;
 import lu.pcy113.pdr.engine.utils.PDRUtils;
 
-public class AudioMaster extends NextTaskThread implements Cleanupable {
+public class AudioMaster implements Cleanupable {
 
 	// https://github.com/LWJGL/lwjgl3/blob/master/modules/samples/src/test/java/org/lwjgl/demo/openal/ALCDemo.java
+	
+	private Thread thread;
 	
 	private boolean useTLC = false;
 	private long device, alContext;
 	private ALCCapabilities deviceCapabilities;;
 	private ALCapabilities capabilities;
 
-	public AudioMaster(GameEngine e, ThreadGroup tg, String tn) {
-		super(e.QUEUE_AUDIO, tg, tn, e.getTaskEnvironnment());
+	public AudioMaster() {
+		this.thread = Thread.currentThread();
 		
-		start();
-		
-		//testPlayback();
-	}
-	
-	@Override
-	public void run() {
 		setup();
 		
-		super.run();
+		//testPlayback();
 	}
 	
 	private void setup() {
@@ -82,6 +76,10 @@ public class AudioMaster extends NextTaskThread implements Cleanupable {
 		GlobalLogger.info("ALC_STEREO_SOURCES: " + alcGetInteger(device, ALC11.ALC_STEREO_SOURCES));
 		
 		System.out.println("Thread: "+Thread.currentThread().getName()+" al cap: "+AL.getCapabilities());
+	}
+	
+	public boolean checkAccess() {
+		return Objects.equals(Thread.currentThread(), thread);
 	}
 	
 	/*public void clearALContext() {

@@ -35,7 +35,6 @@ import lu.pcy113.pdr.engine.graph.render.Scene3DRenderer;
 import lu.pcy113.pdr.engine.graph.render.TextEmitterRenderer;
 import lu.pcy113.pdr.engine.graph.texture.SingleTexture;
 import lu.pcy113.pdr.engine.graph.texture.Texture;
-import lu.pcy113.pdr.engine.impl.AudioBridge;
 import lu.pcy113.pdr.engine.impl.GameLogic;
 import lu.pcy113.pdr.engine.impl.nexttask.NextTask;
 import lu.pcy113.pdr.engine.impl.nexttask.NextTaskWorker;
@@ -76,13 +75,9 @@ public class PDRClientGame4 extends GameLogic {
 
 	NextTaskWorker worker;
 	
-	AudioBridge audioBridge;
-
 	@Override
 	public void init(GameEngine e) {
 		System.err.println("Cache: " + cache);
-		
-		audioBridge = new AudioBridge(engine);
 		
 		GameEngine.DEBUG.wireframe = true;
 		GameEngine.DEBUG.wireframeColor = new Vector4f(1f, 0.2f, 0.2f, 0.2f);
@@ -205,16 +200,6 @@ public class PDRClientGame4 extends GameLogic {
 
 		worker.closeInput();
 		
-		audioBridge.load("bz", "./resources/audio/subnautica_bz_stranger_pings.ogg", false, (sound) -> {
-			audioBridge.play(sound);
-			return null;
-		});
-		
-		audioBridge.load("buzz", "./resources/audio/wrong_buzz.ogg", false, (sound) -> {
-			audioBridge.play(sound);
-			return null;
-		});
-		
 		/*createTask(GameEngine.QUEUE_AUDIO)
 		.exec((s) -> {
 			Sound sound = new Sound("bz", "./resources/audio/subnautica_bz_stranger_pings.ogg", false);
@@ -234,7 +219,13 @@ public class PDRClientGame4 extends GameLogic {
 		 * System.out.println(ArrayUtils.byteBufferToHexString(cm.encode(true, cube)));
 		 */
 	}
-
+	
+	@Override
+	public void updateInit() {
+		cache.loadSound("bz", "./resources/audio/subnautica_bz_stranger_pings.ogg").setPitch(3f).play();
+		cache.loadSound("buzz", "./resources/audio/wrong_buzz.ogg").setVolume(0.1f).play();
+	}
+	
 	private boolean previousF = false;
 
 	@Override
@@ -266,8 +257,9 @@ public class PDRClientGame4 extends GameLogic {
 
 			System.out.println("click");
 			
-			audioBridge.replay(cache.getSound("buzz"));
-
+			//audioBridge.replay(cache.getSound("buzz"));
+			cache.getSound("buzz").replay();
+			
 			int[] viewport = new int[4];
 			createTask(GameEngine.QUEUE_RENDER).exec((s) -> {
 				GL41.glGetIntegerv(GL41.GL_VIEWPORT, viewport);
