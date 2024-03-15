@@ -7,6 +7,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.openal.AL11;
 import org.lwjgl.opengl.GL41;
 
 import lu.pcy113.pdr.client.game.four.PlainShader.PlainMaterial;
@@ -37,13 +38,13 @@ import lu.pcy113.pdr.engine.graph.render.Scene3DRenderer;
 import lu.pcy113.pdr.engine.graph.render.TextEmitterRenderer;
 import lu.pcy113.pdr.engine.graph.texture.SingleTexture;
 import lu.pcy113.pdr.engine.graph.texture.Texture;
-import lu.pcy113.pdr.engine.impl.AudioBridge;
 import lu.pcy113.pdr.engine.impl.GameLogic;
 import lu.pcy113.pdr.engine.impl.nexttask.NextTask;
 import lu.pcy113.pdr.engine.impl.nexttask.NextTaskWorker;
 import lu.pcy113.pdr.engine.objs.entity.Entity;
 import lu.pcy113.pdr.engine.objs.entity.components.GizmoComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.MeshComponent;
+import lu.pcy113.pdr.engine.objs.entity.components.Sound3DComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.TextEmitterComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.Transform3DComponent;
 import lu.pcy113.pdr.engine.objs.text.TextEmitter;
@@ -80,14 +81,10 @@ public class PDRClientGame4 extends GameLogic {
 	NextTaskWorker worker;
 
 	AudioBridge audioBridge;
-	
-	ShaderManager sm;
 
 	@Override
 	public void init(GameEngine e) {
 		System.err.println("Cache: " + cache);
-
-		audioBridge = new AudioBridge(engine);
 
 		GameEngine.DEBUG.wireframe = true;
 		GameEngine.DEBUG.wireframeColor = new Vector4f(1f, 0.2f, 0.2f, 0.2f);
@@ -219,16 +216,6 @@ public class PDRClientGame4 extends GameLogic {
 
 		worker.closeInput();
 
-		audioBridge.load("bz", "./resources/audio/subnautica_bz_stranger_pings.ogg", false, (sound) -> {
-			audioBridge.play(sound);
-			return null;
-		});
-
-		audioBridge.load("buzz", "./resources/audio/wrong_buzz.ogg", false, (sound) -> {
-			audioBridge.play(sound);
-			return null;
-		});
-
 		/*
 		 * createTask(GameEngine.QUEUE_AUDIO) .exec((s) -> { Sound sound = new
 		 * Sound("bz", "./resources/audio/subnautica_bz_stranger_pings.ogg", false);
@@ -247,6 +234,28 @@ public class PDRClientGame4 extends GameLogic {
 		 */
 	}
 
+	@Override
+	public void updateInit() {
+		cache.loadSound("bz", "./resources/audio/subnautica_bz_stranger_pings.ogg")
+				.setLooping(true)
+				.setReferenceDistance(3f)
+				.setMaxDistance(10)
+				//.setPitch(1.5f)
+				.setRolloffFactor(2);
+				//.play();
+		cache.loadSound("buzz", "./resources/audio/wrong_buzz.ogg")
+				.setLooping(true)
+				.setReferenceDistance(3f)
+				.setMaxDistance(10)
+				//.setPitch(1.5f)
+				.setRolloffFactor(2)
+				.setVolume(0.1f)
+				.play();
+		
+		defaultCube.addComponent(new Sound3DComponent(cache.getSound("buzz")));
+		audio.setDistanceModel(AL11.AL_INVERSE_DISTANCE);
+	}
+
 	private boolean previousF = false;
 
 	@Override
@@ -256,6 +265,8 @@ public class PDRClientGame4 extends GameLogic {
 				(window.isKeyPressed(GLFW.GLFW_KEY_Z) ? 0.1f : 0) - (window.isKeyPressed(GLFW.GLFW_KEY_S) ? 0.1f : 0));
 		camera.updateMatrix();
 
+		//audio.setPosition(camera.getPosition());
+		
 		if (window.isKeyPressed(GLFW.GLFW_KEY_T) && !previousF) {
 			previousF = true;
 			createTask(GameEngine.QUEUE_RENDER).exec((s) -> {
@@ -278,7 +289,9 @@ public class PDRClientGame4 extends GameLogic {
 
 			System.out.println("click");
 
-			audioBridge.replay(cache.getSound("buzz"));
+			// audioBridge.replay(cache.getSound("buzz"));
+			cache.getSound("buzz").replay();
+
 
 			int[] viewport = new int[4];
 			createTask(GameEngine.QUEUE_RENDER).exec((s) -> {
@@ -296,7 +309,7 @@ public class PDRClientGame4 extends GameLogic {
 				direction.normalize();
 				Quaternionf eulerQuaternion = new Quaternionf().rotationTo(new Vector3f(1, 0, 0), direction);
 
-				System.err.println(ray);
+				//System.err.println(ray);
 
 				/*
 				 * rayEntity.getComponent(Transform3DComponent.class).getTransform()
@@ -304,18 +317,29 @@ public class PDRClientGame4 extends GameLogic {
 				 * .setRotation(eulerQuaternion) .updateMatrix();
 				 */
 
-				System.err.println(camera.getPosition());
-				System.err.println(ray.getOrigin() + " -> " + ray.getDir());
+				//System.err.println(camera.getPosition());
+				//System.err.println(ray.getOrigin() + " -> " + ray.getDir());
 
 				Vector3f pos = ((Camera3D) scene.getCamera()).projectPlane(ray, GameEngine.FORWARD, GameEngine.RIGHT);
 
-				System.err.println(pos);
+				//System.err.println(pos);
 
 				defaultCube.getComponent(Transform3DComponent.class).getTransform().setTranslation(pos).updateMatrix();
+
+				defaultCube.getComponent(Sound3DComponent.class).update();
+				
+				System.err.println("sound dist: "+camera.getPosition().distance(defaultCube.getComponent(Transform3DComponent.class).getTransform().getTranslation()));
 
 				return 1;
 			}).push();
 		}
+		
+		defaultCube.getComponent(Transform3DComponent.class).getTransform().getTranslation().add(0, 0, 0.1f);
+		defaultCube.getComponent(Transform3DComponent.class).getTransform().updateMatrix();
+		
+		cache.getSound("buzz").setPosition(defaultCube.getComponent(Transform3DComponent.class).getTransform().getTranslation());
+		
+		System.err.println("sound dist: "+camera.getPosition().distance(defaultCube.getComponent(Transform3DComponent.class).getTransform().getTranslation()));
 	}
 
 	@Override
