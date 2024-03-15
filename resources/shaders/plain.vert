@@ -20,6 +20,8 @@ void main() {
 	vec4 worldPosition = transformationMatrix * vec4(i_pos, 1.0);
 	gl_Position = projectionMatrix * viewMatrix * worldPosition;
 
+
+
 	vertex.frag = i_pos.xy;
 	vertex.uv = i_uv;
 	vertex.normal = i_norm;

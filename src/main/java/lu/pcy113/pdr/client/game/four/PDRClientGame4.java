@@ -97,6 +97,7 @@ public class PDRClientGame4 extends GameLogic {
 		rayEntity = scene.addEntity("ray", new GizmoComponent(ray), new Transform3DComponent());
 
 		PlainMaterial cubeMat = (PlainMaterial) cache.loadMaterial(PlainShader.PlainMaterial.class);
+		FileUtils.monitorShader(cubeMat.getRenderShader(), "./resources/shaders/plain.vert", "./resources/shaders/plain.frag");
 		cubeMat.setColor(new Vector4f(1));
 		Mesh cube = Mesh.newCube("cube", cubeMat, new Vector3f(1)); // cache.loadMesh("cube", cubeMat,
 																	// "./resources/models/cube2.obj");

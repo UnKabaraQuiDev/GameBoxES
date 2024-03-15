@@ -4,18 +4,14 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.file.FileSystems;
-import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
 
 import org.lwjgl.stb.STBImage;
 import org.lwjgl.stb.STBImageWrite;
@@ -39,61 +35,58 @@ public final class FileUtils {
 		}
 	}
 
-	public static void startMonitor(Path directory) throws IOException {
-		WatchService watchService = FileSystems.getDefault().newWatchService();
-		Thread thread = new Thread(() -> {
-			try {
-				registerAll(watchService, directory);
-				processEvents(watchService);
-			} catch (IOException | InterruptedException e) {
-				e.printStackTrace();
-			}
-		});
+	static {
+		startShaderWatchService();
+		System.err.println("file started");
 	}
 
-	private static void registerAll(WatchService watchService, final Path start) throws IOException {
-		Files.walkFileTree(start, new SimpleFileVisitor<Path>() {
-			@Override
-			public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-				dir.register(watchService, StandardWatchEventKinds.ENTRY_MODIFY);
-				return FileVisitResult.CONTINUE;
-			}
-		});
-	}
+	public static void startShaderWatchService() {
+		Path directory = Paths.get(RESOURCES + SHADERS);
 
-	private static void processEvents(WatchService watchService)
-			throws InterruptedException {
-		while (true) {
-			WatchKey key;
-			try {
-				key = watchService.poll(10, TimeUnit.MILLISECONDS);
-			} catch (InterruptedException e) {
-				return;
-			}
+		try {
+			// Create a WatchService
+			WatchService watchService = FileSystems.getDefault().newWatchService();
 
-			if (key == null) {
-				continue;
-			}
+			// Register the directory with the WatchService for file modification events
+			directory.register(watchService, StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_CREATE);
 
-			for (WatchEvent<?> event : key.pollEvents()) {
-				WatchEvent.Kind<?> kind = event.kind();
+			// Start a new thread to wait for file change events
+			Thread thread = new Thread(() -> {
+				while (true) {
+					try {
+						// Wait for a key to be available
+						WatchKey key = watchService.take();
 
-				if (kind == StandardWatchEventKinds.OVERFLOW) {
-					continue;
+						// Process all events in the key
+						for (WatchEvent<?> event : key.pollEvents()) {
+							// Handle file modification event
+							if (event.kind() == StandardWatchEventKinds.ENTRY_CREATE) {
+								// Execute your callback function here
+								WatchEvent<Path> ev = (WatchEvent<Path>) event;
+								Path filename = ev.context();
+								Path child = directory.resolve(filename);
+								System.err.println("File modified: " + filename + " and " + child);
+								
+								if(shaders.containsKey(child.toString())) {
+									System.err.println("Recompiling shader: " + child);
+									shaders.get(child.toString()).recompile();
+								}
+							}
+						}
+
+						// Reset the key
+						key.reset();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				}
-				if (kind != StandardWatchEventKinds.ENTRY_MODIFY) {
-					continue;
-				}
+			});
 
-				@SuppressWarnings("unchecked")
-				WatchEvent<Path> ev = (WatchEvent<Path>) event;
-				Path filename = ev.context();
-				System.out.println("file changed: " + filename);
-			}
+			// Start the thread
+			thread.start();
 
-			if (!key.reset()) {
-				break;
-			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
