@@ -26,21 +26,15 @@ public class InstanceEmitterRenderer extends Renderer<Scene, InstanceEmitterComp
 
 	@Override
 	public void render(CacheManager cache, Scene scene, InstanceEmitterComponent pec) {
-		InstanceEmitter pe = pec.getInstanceEmitter(
-				cache);
+		InstanceEmitter pe = pec.getInstanceEmitter(cache);
 		if (pe == null) {
-			GlobalLogger.log(
-					Level.WARNING,
-					"InstanceEmitter is null!");
+			GlobalLogger.log(Level.WARNING, "InstanceEmitter is null!");
 			return;
 		}
 
-		GameEngine.DEBUG.start(
-				"r_inst");
+		GameEngine.DEBUG.start("r_inst");
 
-		GlobalLogger.log(
-				Level.INFO,
-				"InstanceEmitter : " + pe.getId());
+		GlobalLogger.log(Level.INFO, "InstanceEmitter : " + pe.getId());
 
 		Mesh mesh = pe.getParticleMesh();
 		if (mesh == null)
@@ -48,98 +42,65 @@ public class InstanceEmitterRenderer extends Renderer<Scene, InstanceEmitterComp
 
 		Material material = mesh.getMaterial();
 		if (material == null) {
-			GlobalLogger.log(
-					Level.WARNING,
-					"Material is null!");
+			GlobalLogger.log(Level.WARNING, "Material is null!");
 			return;
 		}
 		RenderShader shader = material.getRenderShader();
 		if (shader == null) {
-			GlobalLogger.log(
-					Level.WARNING,
-					"Shader is null!");
+			GlobalLogger.log(Level.WARNING, "Shader is null!");
 			return;
 		}
 
 		shader.bind();
 
-		GameEngine.DEBUG.start(
-				"r_uniforms");
+		GameEngine.DEBUG.start("r_uniforms");
 
 		Matrix4f projectionMatrix = null, viewMatrix = null, transformationMatrix = new Matrix4f().identity();
 		if (scene != null) {
 			projectionMatrix = scene.getCamera().getProjection().getProjMatrix();
 			viewMatrix = scene.getCamera().getViewMatrix();
-			material.setPropertyIfPresent(
-					RenderShader.PROJECTION_MATRIX,
-					projectionMatrix);
-			material.setPropertyIfPresent(
-					RenderShader.VIEW_MATRIX,
-					viewMatrix);
+			material.setPropertyIfPresent(RenderShader.PROJECTION_MATRIX, projectionMatrix);
+			material.setPropertyIfPresent(RenderShader.VIEW_MATRIX, viewMatrix);
 		}
-		if (pec.getParent().hasComponent(
-				TransformComponent.class)) {
-			TransformComponent transform = (TransformComponent) pec.getParent().getComponent(
-					pec.getParent().getComponents(
-							TransformComponent.class).get(
-									0));
+		if (pec.getParent().hasComponent(TransformComponent.class)) {
+			TransformComponent transform = (TransformComponent) pec.getParent()
+					.getComponent(pec.getParent().getComponents(TransformComponent.class).get(0));
 			if (transform != null) {
 				transformationMatrix = transform.getTransform().getMatrix();
 			}
 		}
-		material.setPropertyIfPresent(
-				RenderShader.TRANSFORMATION_MATRIX,
-				transformationMatrix);
+		material.setPropertyIfPresent(RenderShader.TRANSFORMATION_MATRIX, transformationMatrix);
 
 		if (scene instanceof Scene3D) {
-			PointLightSurfaceComponent plsc = pec.getParent().getComponent(
-					PointLightSurfaceComponent.class);
+			PointLightSurfaceComponent plsc = pec.getParent().getComponent(PointLightSurfaceComponent.class);
 			if (plsc != null)
-				plsc.bindLights(
-						cache,
-						((Scene3D) scene).getLights(),
-						material);
+				plsc.bindLights(cache, ((Scene3D) scene).getLights(), material);
 		}
 
-		material.bindProperties(
-				cache,
-				scene,
-				shader);
+		material.bindProperties(cache, scene, shader);
 
-		GameEngine.DEBUG.start(
-				"r_blend");
+		GameEngine.DEBUG.start("r_blend");
 		if (shader.isTransparent()) {
-			GL40.glEnable(
-					GL40.GL_BLEND);
-			GL40.glBlendFunc(
-					GL40.GL_SRC_ALPHA,
-					GL40.GL_ONE_MINUS_SRC_ALPHA);
+			GL40.glEnable(GL40.GL_BLEND);
+			GL40.glBlendFunc(GL40.GL_SRC_ALPHA, GL40.GL_ONE_MINUS_SRC_ALPHA);
 		}
-		GameEngine.DEBUG.end(
-				"r_blend");
+		GameEngine.DEBUG.end("r_blend");
 
-		GameEngine.DEBUG.end(
-				"r_uniforms");
+		GameEngine.DEBUG.end("r_uniforms");
 
 		pe.bind();
 
 		// GameEngine.DEBUG.start("r_compute");
 		// pe.updatePull();
 		// GameEngine.DEBUG.end("r_compute");
+		
+		GL40.glPolygonMode(shader.getFaceMode().getGlId(), shader.getRenderType().getGlId());
+		
+		GameEngine.DEBUG.start("r_draw");
+		GL40.glDrawElementsInstanced(shader.getBeginMode().getGlId(), mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0, pe.getParticleCount());
+		GameEngine.DEBUG.end("r_draw");
 
-		GameEngine.DEBUG.start(
-				"r_draw");
-		GL40.glDrawElementsInstanced(
-				GL40.GL_TRIANGLES,
-				mesh.getIndicesCount(),
-				GL40.GL_UNSIGNED_INT,
-				0,
-				pe.getParticleCount());
-		GameEngine.DEBUG.end(
-				"r_draw");
-
-		GL40.glDisable(
-				GL40.GL_BLEND);
+		GL40.glDisable(GL40.GL_BLEND);
 
 		// debug only
 		// GameEngine.DEBUG.wireframe(cache, scene, mesh, projectionMatrix, viewMatrix,
@@ -147,15 +108,9 @@ public class InstanceEmitterRenderer extends Renderer<Scene, InstanceEmitterComp
 
 		mesh.unbind();
 
-		GameEngine.DEBUG.end(
-				"r_inst");
+		GameEngine.DEBUG.end("r_inst");
 
-		GameEngine.DEBUG.gizmos(
-				cache,
-				scene,
-				projectionMatrix,
-				viewMatrix,
-				transformationMatrix);
+		GameEngine.DEBUG.gizmos(cache, scene, projectionMatrix, viewMatrix, transformationMatrix);
 	}
 
 	@Override

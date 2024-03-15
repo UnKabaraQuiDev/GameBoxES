@@ -109,9 +109,11 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 			GL40.glEnable(GL40.GL_BLEND);
 		}
 		GameEngine.DEBUG.end("r_blend");
-
+		
+		GL40.glPolygonMode(shader.getFaceMode().getGlId(), shader.getRenderType().getGlId());
+		
 		GameEngine.DEBUG.start("r_draw");
-		GL40.glDrawElements(GL40.GL_TRIANGLES, mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);
+		GL40.glDrawElements(shader.getBeginMode().getGlId(), mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);
 		GameEngine.DEBUG.end("r_draw");
 
 		GL40.glDisable(GL40.GL_BLEND);

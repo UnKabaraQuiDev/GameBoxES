@@ -1,13 +1,23 @@
-package lu.pcy113.pdr.engine.utils;
+package lu.pcy113.pdr.engine.utils.file;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardWatchEventKinds;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
+import java.util.HashMap;
 
 import org.lwjgl.stb.STBImage;
 import org.lwjgl.stb.STBImageWrite;
+
+import lu.pcy113.pdr.engine.impl.shader.AbstractShader;
+import lu.pcy113.pdr.engine.utils.MemImage;
 
 public final class FileUtils {
 

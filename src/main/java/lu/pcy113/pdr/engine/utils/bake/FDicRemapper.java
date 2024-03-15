@@ -7,7 +7,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import lu.pcy113.pdr.engine.utils.FileUtils;
+import lu.pcy113.pdr.engine.utils.file.FileUtils;
 import lu.pcy113.pdr.engine.utils.text.fdic.FDicFile;
 import lu.pcy113.pdr.engine.utils.text.fdic.FDicGlyph;
 import lu.pcy113.pdr.engine.utils.text.fdic.FDicLoader;

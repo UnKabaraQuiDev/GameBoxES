@@ -1,5 +1,7 @@
 package lu.pcy113.pdr.client.game.four;
 
+import java.io.IOException;
+
 import org.joml.Quaternionf;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -51,13 +53,14 @@ import lu.pcy113.pdr.engine.scene.Scene3D;
 import lu.pcy113.pdr.engine.scene.camera.Camera;
 import lu.pcy113.pdr.engine.scene.camera.Camera3D;
 import lu.pcy113.pdr.engine.scene.camera.Projection;
-import lu.pcy113.pdr.engine.utils.FileUtils;
 import lu.pcy113.pdr.engine.utils.MemImage;
 import lu.pcy113.pdr.engine.utils.PDRUtils;
 import lu.pcy113.pdr.engine.utils.Ray;
 import lu.pcy113.pdr.engine.utils.consts.FrameBufferAttachment;
 import lu.pcy113.pdr.engine.utils.consts.TextureFilter;
 import lu.pcy113.pdr.engine.utils.consts.TextureType;
+import lu.pcy113.pdr.engine.utils.file.FileUtils;
+import lu.pcy113.pdr.engine.utils.file.ShaderManager;
 import lu.pcy113.pdr.engine.utils.interpolation.Interpolators;
 
 public class PDRClientGame4 extends GameLogic {
@@ -77,6 +80,8 @@ public class PDRClientGame4 extends GameLogic {
 
 	NextTaskWorker worker;
 
+	AudioBridge audioBridge;
+
 	@Override
 	public void init(GameEngine e) {
 		System.err.println("Cache: " + cache);
@@ -84,6 +89,12 @@ public class PDRClientGame4 extends GameLogic {
 		GameEngine.DEBUG.wireframe = true;
 		GameEngine.DEBUG.wireframeColor = new Vector4f(1f, 0.2f, 0.2f, 0.2f);
 		GameEngine.DEBUG.gizmos = true;
+
+		try {
+			sm = new ShaderManager(cache, FileUtils.RESOURCES + FileUtils.SHADERS);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 
 		ui = new Scene2D("ui", Camera.orthographicCamera3D());
 		scene = new Scene3D("main");
@@ -94,6 +105,7 @@ public class PDRClientGame4 extends GameLogic {
 		rayEntity = scene.addEntity("ray", new GizmoComponent(ray), new Transform3DComponent());
 
 		PlainMaterial cubeMat = (PlainMaterial) cache.loadMaterial(PlainShader.PlainMaterial.class);
+		sm.monitorShader(cubeMat.getRenderShader()/* , "./resources/shaders/plain.vert", "./resources/shaders/plain.frag" */);
 		cubeMat.setColor(new Vector4f(1));
 		Mesh cube = Mesh.newCube("cube", cubeMat, new Vector3f(1)); // cache.loadMesh("cube", cubeMat,
 																	// "./resources/models/cube2.obj");
@@ -114,6 +126,7 @@ public class PDRClientGame4 extends GameLogic {
 
 		Texture txt1 = cache.loadSingleTexture("txt1", "./resources/textures/fonts/font1row.png", TextureFilter.NEAREST, TextureType.TXT2D);
 		TextMaterial textMaterial = (TextMaterial) cache.loadMaterial(TextShader.TextMaterial.class, txt1);
+		sm.monitorShader(textMaterial.getRenderShader());
 		debugInfo = new TextEmitter("debugFps", textMaterial, 32, "FPS: ", new Vector2f(0.1f));
 		debugInfo.updateText();
 		cache.addTextEmitter(debugInfo);
@@ -149,6 +162,7 @@ public class PDRClientGame4 extends GameLogic {
 		cache.addRenderLayer(uiRender);
 
 		BoxBlurMaterial boxBlurMaterial = (BoxBlurMaterial) cache.loadMaterial(BoxBlurShader.BoxBlurMaterial.class);
+		sm.monitorShader(boxBlurMaterial.getRenderShader());
 		// cache.addRenderShader(boxBlurMaterial.getRenderShader());
 		PassRenderLayer boxBlurPass = new PassRenderLayer("boxBlurPass", boxBlurMaterial);
 		cache.addRenderLayer(boxBlurPass);
@@ -278,6 +292,7 @@ public class PDRClientGame4 extends GameLogic {
 			// audioBridge.replay(cache.getSound("buzz"));
 			cache.getSound("buzz").replay();
 
+
 			int[] viewport = new int[4];
 			createTask(GameEngine.QUEUE_RENDER).exec((s) -> {
 				GL41.glGetIntegerv(GL41.GL_VIEWPORT, viewport);
@@ -342,6 +357,9 @@ public class PDRClientGame4 extends GameLogic {
 		debugInfo.updateText();
 
 		compositor.render(cache, engine);
+
+		System.err.println("managing file events");
+		sm.manageEvents();
 		// GL40.glClear(GL40.GL_DEPTH_BUFFER_BIT | GL40.GL_COLOR_BUFFER_BIT);
 		// ((Scene3DRenderer) cache.getRenderer(Scene3D.NAME)).render(cache, engine,
 		// scene);

@@ -15,8 +15,8 @@ import lu.pcy113.pdr.engine.impl.UniqueID;
 import lu.pcy113.pdr.engine.impl.nexttask.NextTask;
 import lu.pcy113.pdr.engine.impl.nexttask.NextTaskEnvironnment;
 import lu.pcy113.pdr.engine.utils.DebugOptions;
-import lu.pcy113.pdr.engine.utils.FileUtils;
 import lu.pcy113.pdr.engine.utils.bake.TimeGraphPlot;
+import lu.pcy113.pdr.engine.utils.file.FileUtils;
 
 public class GameEngine implements Cleanupable, UniqueID {
 

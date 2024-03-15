@@ -12,8 +12,8 @@ import lu.pcy113.pdr.engine.graph.shader.part.GeometryShaderPart;
 import lu.pcy113.pdr.engine.graph.shader.part.VertexShaderPart;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
-import lu.pcy113.pdr.engine.utils.FileUtils;
 import lu.pcy113.pdr.engine.utils.PDRUtils;
+import lu.pcy113.pdr.engine.utils.file.FileUtils;
 
 public abstract class AbstractShaderPart implements UniqueID, Cleanupable {
 
@@ -31,74 +31,63 @@ public abstract class AbstractShaderPart implements UniqueID, Cleanupable {
 		this.type = type;
 
 		if (type == -1) {
-			PDRUtils.throwGLError(
-					"Unknown shader type: " + file);
+			PDRUtils.throwGLError("Unknown shader type: " + file);
 			this.sid = -1;
 			return;
 		}
 
-		this.sid = GL40.glCreateShader(
-				type);
-		PDRUtils.checkGlError(
-				"CreateShader(" + type + ") (" + file + ")");
-		GL40.glShaderSource(
-				sid,
-				FileUtils.readStringFile(
-						file));
-		PDRUtils.checkGlError(
-				"ShaderSource(" + sid + ") (" + file + ")");
-		GL40.glCompileShader(
-				sid);
-		PDRUtils.checkGlError(
-				"CompileShader(" + sid + ") (" + file + ")");
+		this.sid = GL40.glCreateShader(type);
+		PDRUtils.checkGlError("CreateShader(" + type + ") (" + file + ")");
+		GL40.glShaderSource(sid, FileUtils.readStringFile(file));
+		PDRUtils.checkGlError("ShaderSource(" + sid + ") (" + file + ")");
+		GL40.glCompileShader(sid);
+		PDRUtils.checkGlError("CompileShader(" + sid + ") (" + file + ")");
 
-		if (GL40.glGetShaderi(
-				sid,
-				GL40.GL_COMPILE_STATUS) == GL40.GL_FALSE) {
-			GlobalLogger.log(
-					Level.SEVERE,
-					file + "> " + GL40.glGetShaderInfoLog(
-							sid,
-							1024));
+		if (GL40.glGetShaderi(sid, GL40.GL_COMPILE_STATUS) == GL40.GL_FALSE) {
+			GlobalLogger.log(Level.SEVERE, file + "> " + GL40.glGetShaderInfoLog(sid, 1024));
 			cleanup();
-			throw new IllegalStateException(
-					file + "(" + sid + "): Failed to compile shader!");
+			throw new IllegalStateException(file + "(" + sid + "): Failed to compile shader!");
 		} else {
-			GlobalLogger.log(
-					Level.INFO,
-					"ShaderPart " + file + " (" + sid + ") (" + type + ") created successfully");
+			GlobalLogger.log(Level.INFO, "ShaderPart " + file + " (" + sid + ") (" + type + ") created successfully");
 		}
 	}
-
+	
 	public static AbstractShaderPart load(String file) {
-		int type = shaderType(
-				file.substring(
-						file.lastIndexOf(
-								".") + 1));
+		int type = shaderType(file.substring(file.lastIndexOf(".") + 1));
 		switch (type) {
 		case VERTEX:
-			return new VertexShaderPart(
-					file);
+			return new VertexShaderPart(file);
 		case GEOMETRY:
-			return new GeometryShaderPart(
-					file);
+			return new GeometryShaderPart(file);
 		case FRAGMENT:
-			return new FragmentShaderPart(
-					file);
+			return new FragmentShaderPart(file);
 		case COMPUTE:
-			return new ComputeShaderPart(
-					file);
+			return new ComputeShaderPart(file);
 		default:
-			PDRUtils.throwGLError(
-					"Unknown shader part type: " + file);
+			PDRUtils.throwGLError("Unknown shader part type: " + file);
 			return null;
+		}
+	}
+	
+	public boolean recompile() {
+		GL40.glShaderSource(sid, FileUtils.readStringFile(file));
+		PDRUtils.checkGlError("ShaderSource(" + sid + ") (" + file + ")");
+		GL40.glCompileShader(sid);
+		PDRUtils.checkGlError("CompileShader(" + sid + ") (" + file + ")");
+
+		if (GL40.glGetShaderi(sid, GL40.GL_COMPILE_STATUS) == GL40.GL_FALSE) {
+			GlobalLogger.log(Level.SEVERE, file + "> " + GL40.glGetShaderInfoLog(sid, 1024));
+			//throw new IllegalStateException(file + "(" + sid + "): Failed to recompile shader!");
+			return false;
+		} else {
+			GlobalLogger.log(Level.INFO, "ShaderPart " + file + " (" + sid + ") (" + type + ") recompiled successfully");
+			return true;
 		}
 	}
 
 	@Override
 	public void cleanup() {
-		GL40.glDeleteShader(
-				sid);
+		GL40.glDeleteShader(sid);
 	}
 
 	@Override
@@ -129,8 +118,7 @@ public abstract class AbstractShaderPart implements UniqueID, Cleanupable {
 		case "comp":
 			return COMPUTE;
 		}
-		PDRUtils.throwGLError(
-				"Unknown shader type: " + type);
+		PDRUtils.throwGLError("Unknown shader type: " + type);
 		return -1;
 	}
 

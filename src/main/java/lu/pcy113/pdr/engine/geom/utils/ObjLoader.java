@@ -17,7 +17,7 @@ import lu.pcy113.pdr.engine.cache.attrib.Vec4fAttribArray;
 import lu.pcy113.pdr.engine.geom.Gizmo;
 import lu.pcy113.pdr.engine.geom.Mesh;
 import lu.pcy113.pdr.engine.graph.material.Material;
-import lu.pcy113.pdr.engine.utils.FileUtils;
+import lu.pcy113.pdr.engine.utils.file.FileUtils;
 
 public final class ObjLoader {
 

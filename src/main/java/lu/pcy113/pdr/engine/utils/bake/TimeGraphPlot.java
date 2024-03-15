@@ -15,8 +15,8 @@ import java.util.Map.Entry;
 
 import javax.imageio.ImageIO;
 
-import lu.pcy113.pdr.engine.utils.FileUtils;
 import lu.pcy113.pdr.engine.utils.PDRUtils;
+import lu.pcy113.pdr.engine.utils.file.FileUtils;
 
 public class TimeGraphPlot {
 
