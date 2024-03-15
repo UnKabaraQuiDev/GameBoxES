@@ -80,7 +80,7 @@ public class PDRClientGame4 extends GameLogic {
 
 	NextTaskWorker worker;
 
-	AudioBridge audioBridge;
+	ShaderManager sm;
 
 	@Override
 	public void init(GameEngine e) {
