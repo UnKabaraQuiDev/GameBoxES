@@ -69,16 +69,18 @@ public abstract class AbstractShader implements UniqueID, Cleanupable {
 		this.unbind();
 	}
 
-	public void recompile() {
+	public boolean recompile() {
 		for (AbstractShaderPart part : parts.values()) {
-			part.recompile();
+			if(!part.recompile())
+				return false;
 		}
-		for (AbstractShaderPart sp : parts.values()) {
+		/*for (AbstractShaderPart sp : parts.values()) {
 			GL20.glAttachShader(this.shaderProgram, sp.getSid());
 			PDRUtils.checkGlError("AttachShader("+this.shaderProgram+")");
-		}
+		}*/
 		GL20.glLinkProgram(this.shaderProgram);
 		PDRUtils.checkGlError("LinkProgram("+this.shaderProgram+")");
+		return true;
 	}
 	
 	public abstract void createUniforms();

@@ -27,69 +27,6 @@ public final class FileUtils {
 	public static final String MODELS = "models/";
 	public static final String TEXTURES = "textures/";
 
-	private static HashMap<String, AbstractShader> shaders = new HashMap<>();
-
-	public static void monitorShader(AbstractShader shader, String... files) {
-		for (String file : files) {
-			shaders.put(file, shader);
-		}
-	}
-
-	static {
-		startShaderWatchService();
-		System.err.println("file started");
-	}
-
-	public static void startShaderWatchService() {
-		Path directory = Paths.get(RESOURCES + SHADERS);
-
-		try {
-			// Create a WatchService
-			WatchService watchService = FileSystems.getDefault().newWatchService();
-
-			// Register the directory with the WatchService for file modification events
-			directory.register(watchService, StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_CREATE);
-
-			// Start a new thread to wait for file change events
-			Thread thread = new Thread(() -> {
-				while (true) {
-					try {
-						// Wait for a key to be available
-						WatchKey key = watchService.take();
-
-						// Process all events in the key
-						for (WatchEvent<?> event : key.pollEvents()) {
-							// Handle file modification event
-							if (event.kind() == StandardWatchEventKinds.ENTRY_CREATE) {
-								// Execute your callback function here
-								WatchEvent<Path> ev = (WatchEvent<Path>) event;
-								Path filename = ev.context();
-								Path child = directory.resolve(filename);
-								System.err.println("File modified: " + filename + " and " + child);
-								
-								if(shaders.containsKey(child.toString())) {
-									System.err.println("Recompiling shader: " + child);
-									shaders.get(child.toString()).recompile();
-								}
-							}
-						}
-
-						// Reset the key
-						key.reset();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			});
-
-			// Start the thread
-			thread.start();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
 	public static MemImage STBILoad(String filePath) {
 		return STBILoadRGBA(filePath);
 	}

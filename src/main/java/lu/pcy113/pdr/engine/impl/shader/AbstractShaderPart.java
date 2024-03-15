@@ -69,7 +69,7 @@ public abstract class AbstractShaderPart implements UniqueID, Cleanupable {
 		}
 	}
 	
-	public void recompile() {
+	public boolean recompile() {
 		GL40.glShaderSource(sid, FileUtils.readStringFile(file));
 		PDRUtils.checkGlError("ShaderSource(" + sid + ") (" + file + ")");
 		GL40.glCompileShader(sid);
@@ -77,9 +77,11 @@ public abstract class AbstractShaderPart implements UniqueID, Cleanupable {
 
 		if (GL40.glGetShaderi(sid, GL40.GL_COMPILE_STATUS) == GL40.GL_FALSE) {
 			GlobalLogger.log(Level.SEVERE, file + "> " + GL40.glGetShaderInfoLog(sid, 1024));
-			throw new IllegalStateException(file + "(" + sid + "): Failed to compile shader!");
+			//throw new IllegalStateException(file + "(" + sid + "): Failed to recompile shader!");
+			return false;
 		} else {
-			GlobalLogger.log(Level.INFO, "ShaderPart " + file + " (" + sid + ") (" + type + ") created successfully");
+			GlobalLogger.log(Level.INFO, "ShaderPart " + file + " (" + sid + ") (" + type + ") recompiled successfully");
+			return true;
 		}
 	}
 
