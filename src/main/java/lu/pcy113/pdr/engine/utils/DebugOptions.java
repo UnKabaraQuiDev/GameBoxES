@@ -25,6 +25,7 @@ import lu.pcy113.pdr.engine.graph.material.wireframe.WireframeShader;
 import lu.pcy113.pdr.engine.graph.shader.RenderShader;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.scene.Scene;
+import lu.pcy113.pdr.engine.utils.file.FileUtils;
 
 public class DebugOptions implements Cleanupable {
 

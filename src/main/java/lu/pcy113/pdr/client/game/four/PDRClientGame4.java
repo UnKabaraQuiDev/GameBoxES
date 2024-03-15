@@ -50,13 +50,13 @@ import lu.pcy113.pdr.engine.scene.Scene3D;
 import lu.pcy113.pdr.engine.scene.camera.Camera;
 import lu.pcy113.pdr.engine.scene.camera.Camera3D;
 import lu.pcy113.pdr.engine.scene.camera.Projection;
-import lu.pcy113.pdr.engine.utils.FileUtils;
 import lu.pcy113.pdr.engine.utils.MemImage;
 import lu.pcy113.pdr.engine.utils.PDRUtils;
 import lu.pcy113.pdr.engine.utils.Ray;
 import lu.pcy113.pdr.engine.utils.consts.FrameBufferAttachment;
 import lu.pcy113.pdr.engine.utils.consts.TextureFilter;
 import lu.pcy113.pdr.engine.utils.consts.TextureType;
+import lu.pcy113.pdr.engine.utils.file.FileUtils;
 import lu.pcy113.pdr.engine.utils.interpolation.Interpolators;
 
 public class PDRClientGame4 extends GameLogic {

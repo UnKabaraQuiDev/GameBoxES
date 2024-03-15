@@ -9,8 +9,8 @@ import org.lwjgl.system.libc.LibCStdlib;
 import lu.pcy113.pclib.Triplet;
 import lu.pcy113.pdr.engine.impl.Cleanupable;
 import lu.pcy113.pdr.engine.impl.UniqueID;
-import lu.pcy113.pdr.engine.utils.FileUtils;
 import lu.pcy113.pdr.engine.utils.PDRUtils;
+import lu.pcy113.pdr.engine.utils.file.FileUtils;
 
 public class Sound implements UniqueID, Cleanupable {
 

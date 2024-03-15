@@ -1,13 +1,27 @@
-package lu.pcy113.pdr.engine.utils;
+package lu.pcy113.pdr.engine.utils.file;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.file.FileSystems;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardWatchEventKinds;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 import org.lwjgl.stb.STBImage;
 import org.lwjgl.stb.STBImageWrite;
+
+import lu.pcy113.pdr.engine.impl.shader.AbstractShader;
+import lu.pcy113.pdr.engine.utils.MemImage;
 
 public final class FileUtils {
 
@@ -16,6 +30,72 @@ public final class FileUtils {
 	public static final String SHADERS = "shaders/";
 	public static final String MODELS = "models/";
 	public static final String TEXTURES = "textures/";
+
+	private static HashMap<String, AbstractShader> shaders = new HashMap<>();
+
+	public static void monitorShader(AbstractShader shader, String... files) {
+		for (String file : files) {
+			shaders.put(file, shader);
+		}
+	}
+
+	public static void startMonitor(Path directory) throws IOException {
+		WatchService watchService = FileSystems.getDefault().newWatchService();
+		Thread thread = new Thread(() -> {
+			try {
+				registerAll(watchService, directory);
+				processEvents(watchService);
+			} catch (IOException | InterruptedException e) {
+				e.printStackTrace();
+			}
+		});
+	}
+
+	private static void registerAll(WatchService watchService, final Path start) throws IOException {
+		Files.walkFileTree(start, new SimpleFileVisitor<Path>() {
+			@Override
+			public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+				dir.register(watchService, StandardWatchEventKinds.ENTRY_MODIFY);
+				return FileVisitResult.CONTINUE;
+			}
+		});
+	}
+
+	private static void processEvents(WatchService watchService)
+			throws InterruptedException {
+		while (true) {
+			WatchKey key;
+			try {
+				key = watchService.poll(10, TimeUnit.MILLISECONDS);
+			} catch (InterruptedException e) {
+				return;
+			}
+
+			if (key == null) {
+				continue;
+			}
+
+			for (WatchEvent<?> event : key.pollEvents()) {
+				WatchEvent.Kind<?> kind = event.kind();
+
+				if (kind == StandardWatchEventKinds.OVERFLOW) {
+					continue;
+				}
+				if (kind != StandardWatchEventKinds.ENTRY_MODIFY) {
+					continue;
+				}
+
+				@SuppressWarnings("unchecked")
+				WatchEvent<Path> ev = (WatchEvent<Path>) event;
+				Path filename = ev.context();
+				System.out.println("file changed: " + filename);
+			}
+
+			if (!key.reset()) {
+				break;
+			}
+		}
+	}
 
 	public static MemImage STBILoad(String filePath) {
 		return STBILoadRGBA(filePath);

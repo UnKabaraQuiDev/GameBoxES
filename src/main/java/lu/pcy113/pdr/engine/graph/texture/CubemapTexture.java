@@ -9,9 +9,9 @@ import org.lwjgl.opengl.GL40;
 import org.lwjgl.stb.STBImage;
 
 import lu.pcy113.pclib.GlobalLogger;
-import lu.pcy113.pdr.engine.utils.FileUtils;
 import lu.pcy113.pdr.engine.utils.PDRUtils;
 import lu.pcy113.pdr.engine.utils.consts.TextureType;
+import lu.pcy113.pdr.engine.utils.file.FileUtils;
 
 public class CubemapTexture extends Texture {
 

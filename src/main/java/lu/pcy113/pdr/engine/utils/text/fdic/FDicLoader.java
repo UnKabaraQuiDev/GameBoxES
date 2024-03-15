@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import lu.pcy113.pdr.engine.utils.FileUtils;
+import lu.pcy113.pdr.engine.utils.file.FileUtils;
 
 public final class FDicLoader {
 

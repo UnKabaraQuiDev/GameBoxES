@@ -7,11 +7,11 @@ import java.nio.file.Paths;
 import org.lwjgl.opengl.GL40;
 import org.lwjgl.system.MemoryUtil;
 
-import lu.pcy113.pdr.engine.utils.FileUtils;
 import lu.pcy113.pdr.engine.utils.PDRUtils;
 import lu.pcy113.pdr.engine.utils.MemImage;
 import lu.pcy113.pdr.engine.utils.consts.TexelInternalFormat;
 import lu.pcy113.pdr.engine.utils.consts.TextureType;
+import lu.pcy113.pdr.engine.utils.file.FileUtils;
 
 public class SingleTexture extends Texture {
 

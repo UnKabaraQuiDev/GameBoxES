@@ -10,7 +10,7 @@ import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pdr.client.game.four.PDRClientGame4;
 import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.graph.window.WindowOptions;
-import lu.pcy113.pdr.engine.utils.FileUtils;
+import lu.pcy113.pdr.engine.utils.file.FileUtils;
 
 public class ClientMain {
 
