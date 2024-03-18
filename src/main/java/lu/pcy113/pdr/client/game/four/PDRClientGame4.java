@@ -10,6 +10,7 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.openal.AL11;
 import org.lwjgl.opengl.GL41;
 
+import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pdr.client.game.four.PlainShader.PlainMaterial;
 import lu.pcy113.pdr.client.game.three.BoxBlurShader;
 import lu.pcy113.pdr.client.game.three.BoxBlurShader.BoxBlurMaterial;
@@ -89,6 +90,8 @@ public class PDRClientGame4 extends GameLogic {
 		GameEngine.DEBUG.wireframe = true;
 		GameEngine.DEBUG.wireframeColor = new Vector4f(1f, 0.2f, 0.2f, 0.2f);
 		GameEngine.DEBUG.gizmos = true;
+		
+		//GlobalLogger.getLogger().setForwardContent(false);
 
 		try {
 			sm = new ShaderManager(cache, FileUtils.RESOURCES + FileUtils.SHADERS);
@@ -216,50 +219,39 @@ public class PDRClientGame4 extends GameLogic {
 
 		worker.closeInput();
 
-		/*
-		 * createTask(GameEngine.QUEUE_AUDIO) .exec((s) -> { Sound sound = new
-		 * Sound("bz", "./resources/audio/subnautica_bz_stranger_pings.ogg", false);
-		 * sound.play(); sound.play();
-		 * 
-		 * return 1; }).push();
-		 */
-
-		// exporting meshes as bin format
-		/*
-		 * CodecManager cm = CodecManager.base(); cm.register(new MeshEncoder(), (short)
-		 * 0x22); cm.register(new AttribArrayEncoder(), (short) 0x23); cm.register(new
-		 * UIntAttribArrayEncoder(), (short) 0x24);
-		 * 
-		 * System.out.println(ArrayUtils.byteBufferToHexString(cm.encode(true, cube)));
-		 */
 	}
 
 	@Override
 	public void updateInit() {
 		cache.loadSound("bz", "./resources/audio/subnautica_bz_stranger_pings.ogg")
 				.setLooping(true)
-				.setReferenceDistance(3f)
-				.setMaxDistance(10)
-				//.setPitch(1.5f)
-				.setRolloffFactor(2);
-				//.play();
-		cache.loadSound("buzz", "./resources/audio/wrong_buzz.ogg")
+				.setRolloffFactor(2)
+				.play();
+		cache.loadSound("buzz", "./resources/audio/wrong_buzz.ogg", false)
 				.setLooping(true)
 				.setReferenceDistance(3f)
 				.setMaxDistance(10)
 				//.setPitch(1.5f)
-				.setRolloffFactor(2)
+				.setRolloffFactor(1f)
 				.setVolume(0.1f)
 				.play();
+		
+		
+		audio.setVolume(0.5f);
+		audio.setVelocity(GameEngine.ZERO);
+		audio.setOrientation(new Vector3f(0, 0, 1), GameEngine.UP);
 		
 		defaultCube.addComponent(new Sound3DComponent(cache.getSound("buzz")));
 		audio.setDistanceModel(AL11.AL_INVERSE_DISTANCE);
 	}
 
 	private boolean previousF = false;
+	private float gx = 0;
 
 	@Override
 	public void input(float dTime) {
+		gx += 0.01f;
+		
 		// System.out.println(camera.getPosition());
 		camera.getPosition().add((window.isKeyPressed(GLFW.GLFW_KEY_Q) ? 0.1f : 0) - (window.isKeyPressed(GLFW.GLFW_KEY_D) ? 0.1f : 0), (window.isKeyPressed(GLFW.GLFW_KEY_R) ? 0.1f : 0) - (window.isKeyPressed(GLFW.GLFW_KEY_F) ? 0.1f : 0),
 				(window.isKeyPressed(GLFW.GLFW_KEY_Z) ? 0.1f : 0) - (window.isKeyPressed(GLFW.GLFW_KEY_S) ? 0.1f : 0));
@@ -328,18 +320,14 @@ public class PDRClientGame4 extends GameLogic {
 
 				defaultCube.getComponent(Sound3DComponent.class).update();
 				
-				System.err.println("sound dist: "+camera.getPosition().distance(defaultCube.getComponent(Transform3DComponent.class).getTransform().getTranslation()));
-
 				return 1;
 			}).push();
 		}
 		
-		defaultCube.getComponent(Transform3DComponent.class).getTransform().getTranslation().add(0, 0, 0.1f);
+		defaultCube.getComponent(Transform3DComponent.class).getTransform().getTranslation().set(Math.sin(gx), 0, Math.cos(gx));
 		defaultCube.getComponent(Transform3DComponent.class).getTransform().updateMatrix();
 		
 		cache.getSound("buzz").setPosition(defaultCube.getComponent(Transform3DComponent.class).getTransform().getTranslation());
-		
-		System.err.println("sound dist: "+camera.getPosition().distance(defaultCube.getComponent(Transform3DComponent.class).getTransform().getTranslation()));
 	}
 
 	@Override
@@ -358,7 +346,7 @@ public class PDRClientGame4 extends GameLogic {
 
 		compositor.render(cache, engine);
 
-		System.err.println("managing file events");
+		//System.err.println("managing file events");
 		sm.manageEvents();
 		// GL40.glClear(GL40.GL_DEPTH_BUFFER_BIT | GL40.GL_COLOR_BUFFER_BIT);
 		// ((Scene3DRenderer) cache.getRenderer(Scene3D.NAME)).render(cache, engine,

@@ -104,6 +104,11 @@ public class CacheManager implements Cleanupable {
 		this.framebuffers.values().forEach(Framebuffer::cleanup);
 		this.framebuffers.clear();
 	}
+	
+	public void cleanupSounds() {
+		this.sounds.values().forEach(Sound::cleanup);
+		this.sounds.clear();
+	}
 
 	/*
 	 * ADD
@@ -500,7 +505,11 @@ public class CacheManager implements Cleanupable {
 	}
 
 	public Sound loadSound(String name, String file) {
-		Sound sound = new Sound(name, file);
+		return loadSound(name, file, true);
+	}
+	
+	public Sound loadSound(String name, String file, boolean stereo) {
+		Sound sound = new Sound(name, file, stereo);
 		addSound(sound);
 		return sound;
 	}

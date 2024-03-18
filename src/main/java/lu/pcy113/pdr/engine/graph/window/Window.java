@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import org.joml.Vector2d;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
+import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWErrorCallback;
@@ -67,7 +68,7 @@ public class Window implements Cleanupable {
 
 		handle = GLFW.glfwCreateWindow(options.windowSize.x, options.windowSize.y, options.title, MemoryUtil.NULL, MemoryUtil.NULL);
 
-		takeGlContext();
+		takeGLContext();
 		if ((this.capabilities = GL.createCapabilities()) == null)
 			throw new RuntimeException("Failed to create OpenGL context");
 
@@ -109,7 +110,7 @@ public class Window implements Cleanupable {
 		GLFW.glfwMakeContextCurrent(MemoryUtil.NULL);
 	}
 
-	public void takeGlContext() {
+	public void takeGLContext() {
 		GLFW.glfwMakeContextCurrent(handle);
 		GL.setCapabilities(this.capabilities);
 	}
@@ -283,7 +284,7 @@ public class Window implements Cleanupable {
 
 	@Override
 	public void cleanup() {
-		if (keyCallback != null) {
+		/*if (keyCallback != null) {
 			keyCallback.free();
 			keyCallback = null;
 		}
@@ -306,15 +307,16 @@ public class Window implements Cleanupable {
 		if (cursorPosCallback != null) {
 			cursorPosCallback.free();
 			cursorPosCallback = null;
-		}
+		}*/
 		if (handle != -1) {
+			Callbacks.glfwFreeCallbacks(handle);
 			GLFW.glfwDestroyWindow(handle);
 			GLFW.glfwTerminate();
 			handle = -1;
 		}
 		if (GL.getCapabilities() != null) {
 			GL.setCapabilities(null);
-			MemoryUtil.memFree(capabilities.getAddressBuffer());
+			// MemoryUtil.memFree(capabilities.getAddressBuffer());
 		}
 	}
 

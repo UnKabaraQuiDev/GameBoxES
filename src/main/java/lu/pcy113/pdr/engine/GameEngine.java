@@ -135,11 +135,11 @@ public class GameEngine implements Cleanupable, UniqueID {
 				GlobalLogger.info("Update thread interrupted, continuing");
 			}
 		}
-		
+
 		init: {
 			this.audioMaster = new AudioMaster();
 			gameLogic.register(this);
-			
+
 			gameLogic.updateInit();
 		}
 
@@ -193,7 +193,8 @@ public class GameEngine implements Cleanupable, UniqueID {
 			e.printStackTrace();
 		}
 
-		this.stop();
+		this.cleanup();
+		// this.stop();
 	}
 
 	private boolean pollEvents() {
@@ -207,7 +208,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 	}
 
 	private void renderRun() {
-		this.window.takeGlContext();
+		this.window.takeGLContext();
 
 		try {
 			this.gameLogic.register(this);
@@ -251,6 +252,11 @@ public class GameEngine implements Cleanupable, UniqueID {
 					}
 
 					GlobalLogger.info("FPS: " + this.currentFps + " delta: " + ((double) deltaRender / 1_000_000) + "ms renderLoop: " + ((double) (System.nanoTime() - loopStart) / 1_000_000) + "ms");
+				}
+
+				if (this.window.shouldClose()) {
+					running = false;
+					break;
 				}
 
 				queue: {
@@ -332,20 +338,25 @@ public class GameEngine implements Cleanupable, UniqueID {
 			}
 		}
 
+		Thread.interrupted();
 		try {
 			this.updateThread.join();
 			this.renderThread.join();
 		} catch (InterruptedException e) {
+			//String interruptingThreadName = e.getStackTrace()[0].getThreadName();
+			//System.out.println("Interrupted by thread: " + interruptingThreadName);
 			GlobalLogger.severe("Main thread interrupted while joining subthreads");
 		}
 
-		this.window.takeGlContext();
+		this.window.takeGLContext();
 		this.cleanup();
 
 		TimeGraphPlot.main(new String[] { FileUtils.appendName(GlobalLogger.getLogger().getLogFile().getPath(), "-time") });
 	}
 
 	public void stop() {
+		GlobalLogger.getLogger().setForwardContent(true);
+		GlobalLogger.log();
 		GlobalLogger.info("Thread: " + Thread.currentThread().getName() + " stopped GameEngine");
 		this.running = false;
 	}
@@ -379,7 +390,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 	}
 
 	private boolean shouldRun() {
-		return !this.window.shouldClose() && this.running && updateThread.isAlive() && renderThread.isAlive();
+		return this.running && updateThread.isAlive() && renderThread.isAlive();
 	}
 
 	@Override
@@ -417,10 +428,15 @@ public class GameEngine implements Cleanupable, UniqueID {
 
 	@Override
 	public void cleanup() {
-		this.audioMaster.cleanup();
-		this.cache.cleanup();
-		this.window.cleanup();
-		DEBUG.cleanup();
+		if (getThreadId() == QUEUE_UPDATE) {
+			this.cache.cleanupSounds();
+			this.audioMaster.cleanup();
+		}else if(getThreadId() == QUEUE_MAIN) {
+			this.cache.cleanup();
+			this.window.cleanup();
+			
+			DEBUG.cleanup();
+		}
 	}
 
 }
