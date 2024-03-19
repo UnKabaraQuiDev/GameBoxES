@@ -111,7 +111,7 @@ public class PDRClientGame4 extends GameLogic {
 		sm.monitorShader(cubeMat.getRenderShader()/* , "./resources/shaders/plain.vert", "./resources/shaders/plain.frag" */);
 		cubeMat.setColor(new Vector4f(1));
 		Mesh cube = Mesh.newCube("cube", cubeMat, new Vector3f(1)); // cache.loadMesh("cube", cubeMat,
-																	// "./resources/models/cube2.obj");
+		cube.createDrawBuffer();
 		cache.addMesh(cube);
 		defaultCube = scene.addEntity("defaultCube", new MeshComponent(cube), new Transform3DComponent());
 
