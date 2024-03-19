@@ -10,7 +10,6 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.openal.AL11;
 import org.lwjgl.opengl.GL41;
 
-import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pdr.client.game.four.PlainShader.PlainMaterial;
 import lu.pcy113.pdr.client.game.three.BoxBlurShader;
 import lu.pcy113.pdr.client.game.three.BoxBlurShader.BoxBlurMaterial;
@@ -111,7 +110,7 @@ public class PDRClientGame4 extends GameLogic {
 		sm.monitorShader(cubeMat.getRenderShader()/* , "./resources/shaders/plain.vert", "./resources/shaders/plain.frag" */);
 		cubeMat.setColor(new Vector4f(1));
 		Mesh cube = Mesh.newCube("cube", cubeMat, new Vector3f(1)); // cache.loadMesh("cube", cubeMat,
-																	// "./resources/models/cube2.obj");
+		cube.createDrawBuffer();
 		cache.addMesh(cube);
 		defaultCube = scene.addEntity("defaultCube", new MeshComponent(cube), new Transform3DComponent());
 
@@ -131,6 +130,10 @@ public class PDRClientGame4 extends GameLogic {
 		TextMaterial textMaterial = (TextMaterial) cache.loadMaterial(TextShader.TextMaterial.class, txt1);
 		sm.monitorShader(textMaterial.getRenderShader());
 		debugInfo = new TextEmitter("debugFps", textMaterial, 32, "FPS: ", new Vector2f(0.1f));
+		debugInfo.getMesh().createDrawBuffer();
+		debugInfo.getMesh().getDrawBuffer().bind();
+		debugInfo.getMesh().getDrawBuffer().setInstancesCount(32);
+		debugInfo.getMesh().getDrawBuffer().unbind();
 		debugInfo.updateText();
 		cache.addTextEmitter(debugInfo);
 

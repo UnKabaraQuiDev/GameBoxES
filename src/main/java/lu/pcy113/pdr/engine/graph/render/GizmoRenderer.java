@@ -3,7 +3,6 @@ package lu.pcy113.pdr.engine.graph.render;
 import java.util.logging.Level;
 
 import org.joml.Matrix4f;
-import org.joml.Vector3f;
 import org.lwjgl.opengl.GL40;
 
 import lu.pcy113.pclib.GlobalLogger;

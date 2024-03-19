@@ -4,6 +4,7 @@ import java.util.logging.Level;
 
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL40;
+import org.lwjgl.opengl.GL46;
 
 import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pdr.engine.GameEngine;
@@ -106,7 +107,12 @@ public class TextEmitterRenderer extends Renderer<Scene, TextEmitterComponent> {
 
 		// pe.updatePull();
 
-		GL40.glDrawElementsInstanced(GL40.GL_TRIANGLES, mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0, pe.getParticleCount());
+		if(mesh.hasDrawBuffer()) {
+			mesh.getDrawBuffer().bind();
+			GL46.glDrawElementsIndirect(shader.getBeginMode().getGlId(), GL40.GL_UNSIGNED_INT, 0);
+		}else {
+			GL40.glDrawElementsInstanced(shader.getBeginMode().getGlId(), mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0, pe.getParticleCount());
+		}
 
 		GL40.glDisable(GL40.GL_BLEND);
 
