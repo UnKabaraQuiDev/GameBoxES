@@ -143,7 +143,7 @@ public class Mat4fAttribArray extends AttribArray implements MultiAttribArray {
 
 	@Override
 	public String toString() {
-		return getVbo() + "|" + getMaxIndex() + "-" + getMaxIndex() + ") " + getName() + ": " + getLength() + "/" + getDataSize() + "=" + getDataCount();
+		return getBufferIndex() + "|" + getMaxIndex() + "-" + getMaxIndex() + ") " + getName() + ": " + getLength() + "/" + getDataSize() + "=" + getDataCount();
 	}
 
 }

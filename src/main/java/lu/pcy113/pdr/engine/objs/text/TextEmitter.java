@@ -321,7 +321,11 @@ public class TextEmitter implements Cleanupable, UniqueID {
 	public void setBoxSize(Vector2f boxSize) {
 		this.boxSize = boxSize;
 	}
-
+	
+	public Mesh getMesh() {
+		return quad;
+	}
+	
 	@Override
 	public void cleanup() {
 		instances.cleanup();

@@ -7,12 +7,10 @@ import java.util.logging.Level;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL40;
-import org.lwjgl.opengl.GL46;
 
 import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pdr.engine.cache.attrib.AttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.DrawBuffer;
-import lu.pcy113.pdr.engine.cache.attrib.IntAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.MultiAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.UIntAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.Vec2fAttribArray;
@@ -99,7 +97,7 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 		if (data instanceof MultiAttribArray) {
 			MultiAttribArray ma = (MultiAttribArray) data;
 			for (int a = ma.getMinIndex() + 1; a <= ma.getMaxIndex(); a++) {
-				vbo.put(a, data.getVbo());
+				vbo.put(a, data.getBufferIndex());
 			}
 		}
 	}
@@ -116,7 +114,7 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 		if (data instanceof MultiAttribArray) {
 			MultiAttribArray ma = (MultiAttribArray) data;
 			for (int a = ma.getMinIndex() + 1; a <= ma.getMaxIndex(); a++) {
-				vbo.put(a, data.getVbo());
+				vbo.put(a, data.getBufferIndex());
 			}
 		}
 
@@ -194,7 +192,7 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 		return indicesCount;
 	}
 	
-	public IntAttribArray getDrawBuffer() {
+	public DrawBuffer getDrawBuffer() {
 		return drawBuffer;
 	}
 	

@@ -34,7 +34,9 @@ public class DrawBuffer extends IntAttribArray {
 	}
 	
 	public void set(int primitiveCount, int instancesCount, int vertexStart, int vertexOffset, int instanceOffset) {
+		bind();
 		update(new int[] {primitiveCount, instancesCount, vertexStart, vertexOffset, instanceOffset});
+		unbind();
 	}
 	
 }

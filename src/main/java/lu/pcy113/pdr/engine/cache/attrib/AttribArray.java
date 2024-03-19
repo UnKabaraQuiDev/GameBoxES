@@ -9,7 +9,7 @@ import lu.pcy113.pdr.engine.utils.PDRUtils;
 
 public abstract class AttribArray implements Cleanupable {
 
-	protected int vbo;
+	protected int bufferIndex;
 	protected boolean iStatic = true;;
 
 	protected int bufferType;
@@ -70,12 +70,12 @@ public abstract class AttribArray implements Cleanupable {
 	}
 
 	public int gen() {
-		return (vbo = GL40.glGenBuffers());
+		return (bufferIndex = GL40.glGenBuffers());
 	}
 
 	public void bind() {
-		GL40.glBindBuffer(bufferType, vbo);
-		PDRUtils.checkGlError("BindBuffer(" + bufferType + ", " + vbo + ") (" + name + ")");
+		GL40.glBindBuffer(bufferType, bufferIndex);
+		PDRUtils.checkGlError("BindBuffer(" + bufferType + ", " + bufferIndex + ") (" + name + ")");
 	}
 
 	public void unbind() {
@@ -85,8 +85,8 @@ public abstract class AttribArray implements Cleanupable {
 
 	@Override
 	public void cleanup() {
-		GL40.glDeleteBuffers(vbo);
-		PDRUtils.checkGlError("DeleteBuffers(" + vbo + ") (" + name + ")");
+		GL40.glDeleteBuffers(bufferIndex);
+		PDRUtils.checkGlError("DeleteBuffers(" + bufferIndex + ") (" + name + ")");
 	}
 
 	public String getName() {
@@ -117,12 +117,12 @@ public abstract class AttribArray implements Cleanupable {
 		this.bufferType = bufferType;
 	}
 
-	public void setVbo(int vbo) {
-		this.vbo = vbo;
-	}
+	/*public void setVbo(int bufferIndex) {
+		this.bufferIndex = bufferIndex;
+	}*/
 
-	public int getVbo() {
-		return vbo;
+	public int getBufferIndex() {
+		return bufferIndex;
 	}
 
 	public boolean isStatic() {
@@ -135,7 +135,7 @@ public abstract class AttribArray implements Cleanupable {
 
 	@Override
 	public String toString() {
-		return getVbo() + "|" + getIndex() + ") " + getName() + ": " + getLength() + "/" + getDataSize() + "=" + getDataCount();
+		return getBufferIndex() + "|" + getIndex() + ") " + getName() + ": " + getLength() + "/" + getDataSize() + "=" + getDataCount();
 	}
 
 	public static <T> boolean update(AttribArray arr, T[] data) {
