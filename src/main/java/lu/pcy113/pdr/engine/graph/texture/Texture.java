@@ -15,23 +15,19 @@ import lu.pcy113.pdr.engine.utils.consts.TextureWrap;
 
 public abstract class Texture implements Cleanupable, UniqueID {
 
-	public static final int MAX_DEPTH_TEXTURE_SAMPLES = GL40.glGetInteger(
-			GL40.GL_MAX_DEPTH_TEXTURE_SAMPLES);
-	public static final int MAX_COLOR_TEXTURE_SAMPLES = GL40.glGetInteger(
-			GL40.GL_MAX_COLOR_TEXTURE_SAMPLES);
-	public static final int MAX_INTEGER_SAMPLES = GL40.glGetInteger(
-			GL40.GL_MAX_INTEGER_SAMPLES);
-	public static final int MAX_TEXTURE_LOD_BIAS = GL40.glGetInteger(
-			GL40.GL_MAX_TEXTURE_LOD_BIAS);
-	public static final int MAX_TEXTURE_SIZE = GL40.glGetInteger(
-			GL40.GL_MAX_TEXTURE_SIZE);
+	public static final int MAX_DEPTH_TEXTURE_SAMPLES = GL40.glGetInteger(GL40.GL_MAX_DEPTH_TEXTURE_SAMPLES);
+	public static final int MAX_COLOR_TEXTURE_SAMPLES = GL40.glGetInteger(GL40.GL_MAX_COLOR_TEXTURE_SAMPLES);
+	public static final int MAX_INTEGER_SAMPLES = GL40.glGetInteger(GL40.GL_MAX_INTEGER_SAMPLES);
+	public static final int MAX_TEXTURE_LOD_BIAS = GL40.glGetInteger(GL40.GL_MAX_TEXTURE_LOD_BIAS);
+	public static final int MAX_TEXTURE_SIZE = GL40.glGetInteger(GL40.GL_MAX_TEXTURE_SIZE);
 
 	protected final String path;
 	protected final String name;
 	protected int tid = -1;
 	protected TextureFilter minFilter = TextureFilter.LINEAR, magFilter = TextureFilter.LINEAR;
 	protected TextureType txtType = TextureType.TXT2D;
-	protected TextureWrap hWrap = TextureWrap.CLAMP_TO_EDGE, vWrap = TextureWrap.CLAMP_TO_EDGE, dWrap = TextureWrap.CLAMP_TO_EDGE;
+	protected TextureWrap hWrap = TextureWrap.CLAMP_TO_EDGE, vWrap = TextureWrap.CLAMP_TO_EDGE,
+			dWrap = TextureWrap.CLAMP_TO_EDGE;
 	protected DataType dataType = DataType.UBYTE;
 	protected TexelFormat format = TexelFormat.RGB;
 	protected TexelInternalFormat internalFormat = TexelInternalFormat.RGB;
@@ -51,102 +47,67 @@ public abstract class Texture implements Cleanupable, UniqueID {
 
 	protected int gen() {
 		this.tid = GL40.glGenTextures();
-		PDRUtils.checkGlError(
-				"GenTextures");
+		PDRUtils.checkGlError("GenTextures");
 		return tid;
 	}
 
 	public void active(int i) {
 		if (i > 31)
 			return;
-		GL40.glActiveTexture(
-				GL40.GL_TEXTURE0 + i);
-		PDRUtils.checkGlError(
-				"ActiveTexture[" + (GL40.GL_TEXTURE0 + i) + "]");
+		GL40.glActiveTexture(GL40.GL_TEXTURE0 + i);
+		PDRUtils.checkGlError("ActiveTexture[" + (GL40.GL_TEXTURE0 + i) + "]");
 	}
 
 	public void bind(int i) {
-		active(
-				i);
+		active(i);
 		bind();
 	}
 
 	public void bind() {
-		GL40.glBindTexture(
-				txtType.getGlId(),
-				tid);
-		PDRUtils.checkGlError(
-				"BindTexture[" + txtType + "]=" + tid);
+		GL40.glBindTexture(txtType.getGlId(), tid);
+		PDRUtils.checkGlError("BindTexture[" + txtType + "]=" + tid);
 	}
 
 	public void unbind(int i) {
-		active(
-				i);
+		active(i);
 		unbind();
 	}
 
 	public void unbind() {
-		GL40.glBindTexture(
-				txtType.getGlId(),
-				0);
-		PDRUtils.checkGlError(
-				"BindTexture[" + txtType + "]=0");
+		GL40.glBindTexture(txtType.getGlId(), 0);
+		PDRUtils.checkGlError("BindTexture[" + txtType + "]=0");
 	}
 
 	public void genMipMaps() {
-		GL40.glGenerateMipmap(
-				txtType.getGlId());
-		PDRUtils.checkGlError(
-				"GenerateMipmap[" + txtType + "]");
+		GL40.glGenerateMipmap(txtType.getGlId());
+		PDRUtils.checkGlError("GenerateMipmap[" + txtType + "]");
 	}
 
 	public void applyFilter() {
 		if (!isMultisampled()) {
-			GL40.glTexParameteri(
-					txtType.getGlId(),
-					TextureParameter.MIN_FILTER.getGlId(),
-					minFilter.getGlId());
-			PDRUtils.checkGlError(
-					"TexParameter[" + txtType + "].MinFilter=" + minFilter);
-			GL40.glTexParameteri(
-					txtType.getGlId(),
-					TextureParameter.MAG_FILTER.getGlId(),
-					magFilter.getGlId());
-			PDRUtils.checkGlError(
-					"TexParameter[" + txtType + "].MagFilter=" + magFilter);
+			GL40.glTexParameteri(txtType.getGlId(), TextureParameter.MIN_FILTER.getGlId(), minFilter.getGlId());
+			PDRUtils.checkGlError("TexParameter[" + txtType + "].MinFilter=" + minFilter);
+			GL40.glTexParameteri(txtType.getGlId(), TextureParameter.MAG_FILTER.getGlId(), magFilter.getGlId());
+			PDRUtils.checkGlError("TexParameter[" + txtType + "].MagFilter=" + magFilter);
 		}
 	}
 
 	public void applyWrap() {
 		if (!isMultisampled()) {
-			GL40.glTexParameteri(
-					txtType.getGlId(),
-					TextureParameter.WRAP_HORIZONTAL.getGlId(),
-					hWrap.getGlId());
-			PDRUtils.checkGlError(
-					"TexParameter[" + txtType + "].WrapHorizontal=" + hWrap);
-			GL40.glTexParameteri(
-					txtType.getGlId(),
-					TextureParameter.WRAP_VERTICAL.getGlId(),
-					vWrap.getGlId());
-			PDRUtils.checkGlError(
-					"TexParameter[" + txtType + "].WrapVertical=" + vWrap);
-			GL40.glTexParameteri(
-					txtType.getGlId(),
-					TextureParameter.WRAP_DEPTH.getGlId(),
-					dWrap.getGlId());
-			PDRUtils.checkGlError(
-					"TexParameter[" + txtType + "].WrapDepth=" + dWrap);
+			GL40.glTexParameteri(txtType.getGlId(), TextureParameter.WRAP_HORIZONTAL.getGlId(), hWrap.getGlId());
+			PDRUtils.checkGlError("TexParameter[" + txtType + "].WrapHorizontal=" + hWrap);
+			GL40.glTexParameteri(txtType.getGlId(), TextureParameter.WRAP_VERTICAL.getGlId(), vWrap.getGlId());
+			PDRUtils.checkGlError("TexParameter[" + txtType + "].WrapVertical=" + vWrap);
+			GL40.glTexParameteri(txtType.getGlId(), TextureParameter.WRAP_DEPTH.getGlId(), dWrap.getGlId());
+			PDRUtils.checkGlError("TexParameter[" + txtType + "].WrapDepth=" + dWrap);
 		}
 	}
 
 	@Override
 	public void cleanup() {
 		if (isValid()) {
-			GL40.glDeleteTextures(
-					tid);
-			PDRUtils.checkGlError(
-					"DeleteTextures[" + tid + "] (" + name + ")");
+			GL40.glDeleteTextures(tid);
+			PDRUtils.checkGlError("DeleteTextures[" + tid + "] (" + name + ")");
 			tid = -1;
 		}
 	}
@@ -271,13 +232,11 @@ public abstract class Texture implements Cleanupable, UniqueID {
 	}
 
 	public boolean isMultisampled() {
-		return TextureType.isMultisampled(
-				txtType);
+		return TextureType.isMultisampled(txtType);
 	}
 
 	public boolean isArray() {
-		return TextureType.isArray(
-				txtType);
+		return TextureType.isArray(txtType);
 	}
 
 	public int getSampleCount() {
@@ -290,7 +249,8 @@ public abstract class Texture implements Cleanupable, UniqueID {
 
 	@Override
 	public String toString() {
-		return "{tid: " + tid + ", name: " + name + ", valid: " + isValid() + ", type: " + txtType + ", format: " + format + ", internalFormat: " + internalFormat + ", dataType: " + dataType + "}";
+		return "{tid: " + tid + ", name: " + name + ", valid: " + isValid() + ", type: " + txtType + ", format: "
+				+ format + ", internalFormat: " + internalFormat + ", dataType: " + dataType + "}";
 	}
 
 	public static TexelFormat getFormatByChannels(int channels) {

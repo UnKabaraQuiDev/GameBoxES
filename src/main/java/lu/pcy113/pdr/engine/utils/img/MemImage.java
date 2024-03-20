@@ -1,4 +1,4 @@
-package lu.pcy113.pdr.engine.utils;
+package lu.pcy113.pdr.engine.utils.img;
 
 import java.nio.ByteBuffer;
 
@@ -9,33 +9,32 @@ public class MemImage {
 
 	private int width, height, channels;
 	private ByteBuffer buffer;
-	private boolean fromStbi, fromOGL;
+	private MemImageOrigin origin;
 
-	public MemImage(int width, int height, int channels, ByteBuffer buffer, boolean fromStbi, boolean fromOGL) {
+	public MemImage(int width, int height, int channels, ByteBuffer buffer, MemImageOrigin origin) {
 		this.width = width;
 		this.height = height;
 		this.channels = channels;
 		this.buffer = buffer;
-		this.fromStbi = fromStbi;
-		this.fromOGL = fromOGL;
+		this.origin = origin;
 	}
 
 	public void free() {
-		if (fromStbi && buffer != null) {
+		if (MemImageOrigin.STBI.equals(origin) && buffer != null) {
 			STBImage.stbi_image_free(buffer);
 			buffer = null;
-		} else if (fromOGL && buffer != null) {
+		} else if (MemImageOrigin.OPENGL.equals(origin) && buffer != null) {
 			MemoryUtil.memFree(buffer);
 			buffer = null;
 		}
 	}
 
 	public boolean isFromOGL() {
-		return fromOGL;
+		return MemImageOrigin.OPENGL.equals(origin);
 	}
 
 	public boolean isFromStbi() {
-		return fromStbi;
+		return MemImageOrigin.STBI.equals(origin);
 	}
 
 	public int getWidth() {

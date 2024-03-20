@@ -17,7 +17,8 @@ import org.lwjgl.stb.STBImage;
 import org.lwjgl.stb.STBImageWrite;
 
 import lu.pcy113.pdr.engine.impl.shader.AbstractShader;
-import lu.pcy113.pdr.engine.utils.MemImage;
+import lu.pcy113.pdr.engine.utils.img.MemImage;
+import lu.pcy113.pdr.engine.utils.img.MemImageOrigin;
 
 public final class FileUtils {
 
@@ -44,7 +45,7 @@ public final class FileUtils {
 
 		ByteBuffer buffer = STBImage.stbi_load(filePath, w, h, c, desiredChannels);
 
-		return new MemImage(w[0], h[0], c[0], buffer, true, false);
+		return new MemImage(w[0], h[0], c[0], buffer, MemImageOrigin.STBI);
 	}
 
 	public static boolean STBISaveIncremental(String filePath, MemImage image) {
