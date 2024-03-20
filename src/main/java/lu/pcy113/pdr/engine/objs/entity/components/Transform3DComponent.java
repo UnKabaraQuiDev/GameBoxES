@@ -14,8 +14,7 @@ public class Transform3DComponent extends TransformComponent {
 	}
 
 	public Transform3DComponent(Vector3f trans) {
-		this(new Transform3D(
-				trans));
+		this(new Transform3D(trans));
 	}
 
 	public Transform3DComponent(Transform3D transform) {
@@ -23,17 +22,15 @@ public class Transform3DComponent extends TransformComponent {
 	}
 
 	public Transform3DComponent(Vector3f trans, Quaternionf rot, Vector3f scale) {
-		this(new Transform3D(
-				trans,
-				rot,
-				scale));
+		this(new Transform3D(trans, rot, scale));
 	}
 
 	public Transform3DComponent(Vector3f trans, Quaternionf rot) {
-		this(new Transform3D(
-			trans,
-			rot
-		));
+		this(new Transform3D(trans, rot));
+	}
+
+	public Transform3DComponent(Quaternionf rot) {
+		this(new Transform3D(rot));
 	}
 
 	@Override

@@ -13,34 +13,24 @@ public class SlotShader extends RenderShader {
 	public static final String TEXTURE = "txt1";
 
 	public SlotShader() {
-		super(SlotShader.class.getName(), true, AbstractShaderPart.load(
-				"./resources/shaders/ui/plain.vert"),
-				AbstractShaderPart.load(
-						"./resources/shaders/ui/txt1.frag"));
+		super(SlotShader.class.getName(), true, AbstractShaderPart.load("./resources/shaders/ui/plain.vert"), AbstractShaderPart.load("./resources/shaders/ui/txt1.frag"));
 	}
 
 	@Override
 	public void createUniforms() {
-		createUniform(
-				RenderShader.PROJECTION_MATRIX);
-		createUniform(
-				RenderShader.TRANSFORMATION_MATRIX);
-		createUniform(
-				RenderShader.VIEW_MATRIX);
+		createUniform(RenderShader.PROJECTION_MATRIX);
+		createUniform(RenderShader.TRANSFORMATION_MATRIX);
+		createUniform(RenderShader.VIEW_MATRIX);
 
-		createUniform(
-				TEXTURE);
+		createUniform(TEXTURE);
 	}
 
 	public static class SlotMaterial extends TextureMaterial {
 
 		public SlotMaterial(SingleTexture texture) {
-			super(SlotMaterial.class.getName(), new SlotShader(), new HashMap<String, Texture>(
-					1) {
+			super(SlotMaterial.class.getName(), new SlotShader(), new HashMap<String, Texture>(1) {
 				{
-					put(
-							TEXTURE,
-							texture);
+					put(TEXTURE, texture);
 				}
 			});
 		}

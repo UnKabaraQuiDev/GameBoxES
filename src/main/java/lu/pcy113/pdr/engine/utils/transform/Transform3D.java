@@ -32,6 +32,10 @@ public class Transform3D extends Transform {
 		this(trans, rot, new Vector3f(1));
 	}
 
+	public Transform3D(Quaternionf rot) {
+		this(new Vector3f(0), rot, new Vector3f(1));
+	}
+
 	public Transform3D translateAdd(Vector3f v) {
 		translation.add(v);
 		return this;

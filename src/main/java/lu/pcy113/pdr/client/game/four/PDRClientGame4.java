@@ -10,11 +10,14 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.openal.AL11;
 import org.lwjgl.opengl.GL41;
 
+import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pdr.client.game.four.PlainShader.PlainMaterial;
 import lu.pcy113.pdr.client.game.three.BoxBlurShader;
 import lu.pcy113.pdr.client.game.three.BoxBlurShader.BoxBlurMaterial;
 import lu.pcy113.pdr.client.game.three.FillShader;
 import lu.pcy113.pdr.client.game.three.FillShader.FillMaterial;
+import lu.pcy113.pdr.client.game.three.SlotShader;
+import lu.pcy113.pdr.client.game.three.SlotShader.SlotMaterial;
 import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.anim.CallbackValueInterpolation;
 import lu.pcy113.pdr.engine.cache.attrib.UIntAttribArray;
@@ -47,6 +50,8 @@ import lu.pcy113.pdr.engine.objs.entity.components.MeshComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.Sound3DComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.TextEmitterComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.Transform3DComponent;
+import lu.pcy113.pdr.engine.objs.entity.components.UIComponent;
+import lu.pcy113.pdr.engine.objs.entity.components.UIComponentRectangle;
 import lu.pcy113.pdr.engine.objs.text.TextEmitter;
 import lu.pcy113.pdr.engine.scene.Scene2D;
 import lu.pcy113.pdr.engine.scene.Scene3D;
@@ -62,6 +67,7 @@ import lu.pcy113.pdr.engine.utils.file.FileUtils;
 import lu.pcy113.pdr.engine.utils.file.ShaderManager;
 import lu.pcy113.pdr.engine.utils.img.MemImage;
 import lu.pcy113.pdr.engine.utils.interpolation.Interpolators;
+import lu.pcy113.pdr.engine.utils.transform.Transform3D;
 
 public class PDRClientGame4 extends GameLogic {
 
@@ -74,7 +80,8 @@ public class PDRClientGame4 extends GameLogic {
 
 	TextEmitter debugInfo;
 
-	Entity defaultCube, rayEntity, debugFps;
+	Entity defaultCube, rayEntity, debugFps, slotUiEntity;
+	CallbackValueInterpolation<Transform3D, Vector3f> uiComponentInterpolation;
 
 	Compositor compositor;
 
@@ -89,8 +96,8 @@ public class PDRClientGame4 extends GameLogic {
 		GameEngine.DEBUG.wireframe = true;
 		GameEngine.DEBUG.wireframeColor = new Vector4f(1f, 0.2f, 0.2f, 0.2f);
 		GameEngine.DEBUG.gizmos = true;
-		
-		//GlobalLogger.getLogger().setForwardContent(false);
+
+		GlobalLogger.getLogger().setForwardContent(false);
 
 		try {
 			sm = new ShaderManager(cache, FileUtils.RESOURCES + FileUtils.SHADERS);
@@ -139,6 +146,13 @@ public class PDRClientGame4 extends GameLogic {
 
 		debugFps = scene.addEntity("debugFps", new TextEmitterComponent(debugInfo), new Transform3DComponent(new Vector3f(1f, 1f, 0), new Quaternionf().rotateZ((float) Math.toRadians(180f))));
 
+		Texture slotTexture = cache.loadSingleTexture("single_slot", "./resources/textures/ui/single_slot.png");
+		SlotMaterial slotMaterial = (SlotMaterial) cache.loadMaterial(SlotShader.SlotMaterial.class, slotTexture);
+		Mesh slotMesh = ObjLoader.loadMesh("slot", slotMaterial, "./resources/models/plane.obj");
+		// slotMesh.createDrawBuffer();
+		this.cache.addMesh(slotMesh);
+		slotUiEntity = ui.addEntity("slotUi", new MeshComponent(slotMesh), new Transform3DComponent(new Quaternionf().rotateAxis((float) Math.toRadians(90), 0, 1, 0)), new UIComponentRectangle(new Vector2f(1, 1), true, Transform3DComponent.class));
+
 		cache.addRenderer(new Scene3DRenderer());
 		cache.addRenderer(new Scene2DRenderer());
 		cache.addRenderer(new MeshRenderer());
@@ -176,7 +190,7 @@ public class PDRClientGame4 extends GameLogic {
 		this.compositor = new Compositor();
 		this.compositor.addRenderLayer(0, genLayer);
 		this.compositor.addRenderLayer(1, sceneRender);
-		// this.compositor.addRenderLayer(1, uiRender);
+		this.compositor.addRenderLayer(2, uiRender);
 		// this.compositor.addPassLayer(0, boxBlurPass);
 
 		camera = (Camera3D) this.scene.getCamera();
@@ -186,7 +200,8 @@ public class PDRClientGame4 extends GameLogic {
 
 		cameraUi = (Camera3D) this.ui.getCamera();
 		cameraUi.setProjection(new Projection(0.01f, 100f, -0.5f, 0.5f, 0.5f, -0.5f));
-		cameraUi.setPosition(new Vector3f(0, 0, -1f));
+		cameraUi.setPosition(new Vector3f(-1, 0, 0));
+		cameraUi.lookAt(new Vector3f(-5, 0, 0), new Vector3f(-1, 0, 0));
 		cameraUi.updateMatrix();
 
 		this.ui.getCamera().getProjection().update(1920, 1080);
@@ -226,24 +241,26 @@ public class PDRClientGame4 extends GameLogic {
 
 	@Override
 	public void updateInit() {
-		cache.loadSound("bz", "./resources/audio/subnautica_bz_stranger_pings.ogg")
-				.setLooping(true)
-				.setRolloffFactor(2)
-				.play();
-		cache.loadSound("buzz", "./resources/audio/wrong_buzz.ogg", false)
-				.setLooping(true)
-				.setReferenceDistance(3f)
-				.setMaxDistance(10)
-				//.setPitch(1.5f)
-				.setRolloffFactor(1f)
-				.setVolume(0.1f)
-				.play();
-		
-		
+		cache.loadSound("bz", "./resources/audio/subnautica_bz_stranger_pings.ogg").setLooping(true).setRolloffFactor(2).play();
+		cache.loadSound("buzz", "./resources/audio/wrong_buzz.ogg", false).setLooping(true).setReferenceDistance(3f).setMaxDistance(10).setRolloffFactor(1f).setVolume(0.1f).play();
+
 		audio.setVolume(0.5f);
 		audio.setVelocity(GameEngine.ZERO);
 		audio.setOrientation(new Vector3f(0, 0, 1), GameEngine.UP);
 		
+		uiComponentInterpolation = new CallbackValueInterpolation<Transform3D, Vector3f>(slotUiEntity.getComponent(Transform3DComponent.class).getTransform(), new Vector3f(1), new Vector3f(1.1f), Interpolators.LINEAR) {
+			@Override
+			public Vector3f evaluate(float pro) {
+				return start.lerp(end, pro, new Vector3f());
+			}
+
+			@Override
+			public void callback(Transform3D object, Vector3f value) {
+				object.setScale(value).updateMatrix();
+			}
+
+		};
+
 		defaultCube.addComponent(new Sound3DComponent(cache.getSound("buzz")));
 		audio.setDistanceModel(AL11.AL_INVERSE_DISTANCE);
 	}
@@ -254,14 +271,14 @@ public class PDRClientGame4 extends GameLogic {
 	@Override
 	public void input(float dTime) {
 		gx += 0.01f;
-		
+
 		// System.out.println(camera.getPosition());
 		camera.getPosition().add((window.isKeyPressed(GLFW.GLFW_KEY_Q) ? 0.1f : 0) - (window.isKeyPressed(GLFW.GLFW_KEY_D) ? 0.1f : 0), (window.isKeyPressed(GLFW.GLFW_KEY_R) ? 0.1f : 0) - (window.isKeyPressed(GLFW.GLFW_KEY_F) ? 0.1f : 0),
 				(window.isKeyPressed(GLFW.GLFW_KEY_Z) ? 0.1f : 0) - (window.isKeyPressed(GLFW.GLFW_KEY_S) ? 0.1f : 0));
 		camera.updateMatrix();
 
-		//audio.setPosition(camera.getPosition());
-		
+		// audio.setPosition(camera.getPosition());
+
 		if (window.isKeyPressed(GLFW.GLFW_KEY_T) && !previousF) {
 			previousF = true;
 			createTask(GameEngine.QUEUE_RENDER).exec((s) -> {
@@ -281,61 +298,123 @@ public class PDRClientGame4 extends GameLogic {
 		}
 
 		if (window.isMouseButtonPressed(GLFW.GLFW_MOUSE_BUTTON_LEFT)) {
-
-			System.out.println("click");
-
-			// audioBridge.replay(cache.getSound("buzz"));
-			cache.getSound("buzz").replay();
-
-
-			int[] viewport = new int[4];
-			createTask(GameEngine.QUEUE_RENDER).exec((s) -> {
-				GL41.glGetIntegerv(GL41.GL_VIEWPORT, viewport);
-				PDRUtils.checkGlError("GetIntegerV(GL_VIEWPORT)");
-
-				return 1;
-			}).then((s) -> {
-				if ((int) s == 0)
-					return 0;
-
-				Ray ray = camera.projectRay(window.getMousePos(), viewport);
-
-				Vector3f direction = ray.getDir().get(new Vector3f());
-				direction.normalize();
-				Quaternionf eulerQuaternion = new Quaternionf().rotationTo(new Vector3f(1, 0, 0), direction);
-
-				//System.err.println(ray);
-
-				/*
-				 * rayEntity.getComponent(Transform3DComponent.class).getTransform()
-				 * .setTranslation(ray.getOrigin()) //.setScale(ray.getLength())
-				 * .setRotation(eulerQuaternion) .updateMatrix();
-				 */
-
-				//System.err.println(camera.getPosition());
-				//System.err.println(ray.getOrigin() + " -> " + ray.getDir());
-
-				Vector3f pos = ((Camera3D) scene.getCamera()).projectPlane(ray, GameEngine.FORWARD, GameEngine.RIGHT);
-
-				//System.err.println(pos);
-
-				defaultCube.getComponent(Transform3DComponent.class).getTransform().setTranslation(pos).updateMatrix();
-
-				defaultCube.getComponent(Sound3DComponent.class).update();
-				
-				return 1;
-			}).push();
+			moveCube();
 		}
-		
+
+		manageUi();
+
+		// slotUiEntity.getComponent(Transform3DComponent.class).getTransform().getRotation().rotateXYZ((float)
+		// Math.toRadians(1), 0, 0);
+		slotUiEntity.getComponent(Transform3DComponent.class).getTransform().updateMatrix();
+
 		defaultCube.getComponent(Transform3DComponent.class).getTransform().getTranslation().set(Math.sin(gx), 0, Math.cos(gx));
 		defaultCube.getComponent(Transform3DComponent.class).getTransform().updateMatrix();
-		
+
 		cache.getSound("buzz").setPosition(defaultCube.getComponent(Transform3DComponent.class).getTransform().getTranslation());
+	}
+
+	float hover = 0;
+
+	private void manageUi() {
+		int[] viewport = new int[4];
+		createTask(GameEngine.QUEUE_RENDER).exec((s) -> {
+			GL41.glGetIntegerv(GL41.GL_VIEWPORT, viewport);
+			PDRUtils.checkGlError("GetIntegerV(GL_VIEWPORT)");
+
+			return 1;
+		}).then((s) -> {
+			if ((int) s == 0)
+				return 0;
+
+			Vector3f pos1 = this.cameraUi.projectPoint(new Vector3f(window.getMousePos().x, window.getMousePos().y, 0), viewport);
+			Vector2f pos = new Vector2f(pos1.y, pos1.z);
+
+			// System.err.println("hitpoint for: "+new Vector3f(window.getMousePos().y,
+			// window.getMousePos().x, 0)+" = "+pos1+" -> "+pos);
+
+			for (Entity e : ui.getEntities().values()) {
+
+				if (!e.equals(slotUiEntity))
+					continue;
+
+				if (!e.hasComponent(UIComponent.class))
+					continue;
+
+				UIComponent uiComponent = (UIComponent) e.getComponent(e.getComponents(UIComponent.class).get(0));
+				if (uiComponent instanceof UIComponentRectangle) {
+
+					if (((UIComponentRectangle) uiComponent).contains(pos)) {
+						uiComponentInterpolation.setInterpolator(Interpolators.CIRC_OUT);
+						uiComponentInterpolation.add(0.4f).clamp().exec();
+					}else {
+						uiComponentInterpolation.setInterpolator(Interpolators.CIRC_IN);
+						uiComponentInterpolation.add(-0.15f).clamp().exec();
+					}
+					
+					/*if (((UIComponentRectangle) uiComponent).contains(pos)) {
+						hover += 0.4f;
+						hover = org.joml.Math.clamp(0, 1, hover);
+						e.getComponent(Transform3DComponent.class).getTransform().setScale(new Vector3f(1).lerp(new Vector3f(1.1f), Interpolators.CIRC_OUT.evaluate(hover), new Vector3f())).updateMatrix();
+					} else {
+						hover -= 0.15f;
+						hover = org.joml.Math.clamp(0, 1, hover);
+						e.getComponent(Transform3DComponent.class).getTransform().setScale(new Vector3f(1).lerp(new Vector3f(1.1f), Interpolators.CIRC_IN.evaluate(hover), new Vector3f())).updateMatrix();
+					}*/
+				}
+			}
+
+			return 1;
+		}).push();
+	}
+
+	private void moveCube() {
+		System.out.println("click");
+
+		// audioBridge.replay(cache.getSound("buzz"));
+		cache.getSound("buzz").replay();
+
+		int[] viewport = new int[4];
+		createTask(GameEngine.QUEUE_RENDER).exec((s) -> {
+			GL41.glGetIntegerv(GL41.GL_VIEWPORT, viewport);
+			PDRUtils.checkGlError("GetIntegerV(GL_VIEWPORT)");
+
+			return 1;
+		}).then((s) -> {
+			if ((int) s == 0)
+				return 0;
+
+			Ray ray = camera.projectRay(window.getMousePos(), viewport);
+
+			Vector3f direction = ray.getDir().get(new Vector3f());
+			direction.normalize();
+			Quaternionf eulerQuaternion = new Quaternionf().rotationTo(new Vector3f(1, 0, 0), direction);
+
+			// System.err.println(ray);
+
+			/*
+			 * rayEntity.getComponent(Transform3DComponent.class).getTransform()
+			 * .setTranslation(ray.getOrigin()) //.setScale(ray.getLength())
+			 * .setRotation(eulerQuaternion) .updateMatrix();
+			 */
+
+			// System.err.println(camera.getPosition());
+			// System.err.println(ray.getOrigin() + " -> " + ray.getDir());
+
+			Vector3f pos = ((Camera3D) scene.getCamera()).projectPlane(ray, GameEngine.FORWARD, GameEngine.RIGHT);
+
+			// System.err.println(pos);
+
+			defaultCube.getComponent(Transform3DComponent.class).getTransform().setTranslation(pos).updateMatrix();
+
+			defaultCube.getComponent(Sound3DComponent.class).update();
+
+			return 1;
+		}).push();
 	}
 
 	@Override
 	public void update(float dTime) {
-		backgroundMaterialInterpolation.add(0.01f).mod();
+		backgroundMaterialInterpolation.add(0.01f).mod().exec();
 		// defaultCube.getComponent(Transform3DComponent.class).getTransform().rotate(0.1f,
 		// -0.1f, 0.05f).updateMatrix();
 	}
@@ -349,7 +428,7 @@ public class PDRClientGame4 extends GameLogic {
 
 		compositor.render(cache, engine);
 
-		//System.err.println("managing file events");
+		// System.err.println("managing file events");
 		sm.manageEvents();
 		// GL40.glClear(GL40.GL_DEPTH_BUFFER_BIT | GL40.GL_COLOR_BUFFER_BIT);
 		// ((Scene3DRenderer) cache.getRenderer(Scene3D.NAME)).render(cache, engine,

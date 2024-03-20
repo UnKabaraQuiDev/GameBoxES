@@ -18,23 +18,20 @@ public abstract class CallbackValueInterpolation<T, D> {
 		this.interpolator = interpolator;
 	}
 
-	public CallbackValueInterpolation<T, D> set(float x) {
+	public synchronized CallbackValueInterpolation<T, D> set(float x) {
 		this.progress = x;
-		this.callback(
-				this.object,
-				this.evaluate(
-						this.interpolator.evaluate(
-								this.progress)));
+		// this.callback(this.object, this.evaluate(this.interpolator.evaluate(this.progress)));
 		return this;
 	}
 
-	public CallbackValueInterpolation<T, D> add(float x) {
+	public synchronized CallbackValueInterpolation<T, D> add(float x) {
 		this.progress += x;
-		this.callback(
-				this.object,
-				this.evaluate(
-						this.interpolator.evaluate(
-								this.progress)));
+		// this.callback(this.object, this.evaluate(this.interpolator.evaluate(this.progress)));
+		return this;
+	}
+	
+	public CallbackValueInterpolation<T, D> exec() {
+		this.callback(this.object, this.evaluate(this.interpolator.evaluate(this.progress)));
 		return this;
 	}
 
@@ -42,15 +39,12 @@ public abstract class CallbackValueInterpolation<T, D> {
 
 	public abstract void callback(T object, D value);
 
-	public CallbackValueInterpolation<T, D> clamp() {
-		this.progress = Math.clamp(
-				0,
-				1,
-				progress);
+	public synchronized CallbackValueInterpolation<T, D> clamp() {
+		this.progress = Math.clamp(0, 1, progress);
 		return this;
 	}
 
-	public CallbackValueInterpolation<T, D> mod() {
+	public synchronized CallbackValueInterpolation<T, D> mod() {
 		this.progress %= 1;
 		return this;
 	}
