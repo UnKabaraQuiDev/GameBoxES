@@ -7,7 +7,7 @@ import org.joml.Vector3f;
 
 import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.utils.PDRUtils;
-import lu.pcy113.pdr.engine.utils.Ray;
+import lu.pcy113.pdr.engine.utils.geo.Ray;
 
 public abstract class Camera {
 

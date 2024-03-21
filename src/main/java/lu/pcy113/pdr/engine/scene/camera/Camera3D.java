@@ -17,19 +17,18 @@ public class Camera3D extends Camera {
 		this.position = position;
 		this.rotation = rot;
 
-		viewMatrix.setLookAt(
-				position, // Camera position
+		viewMatrix.setLookAt(position, // Camera position
 				new Vector3f(0.0f, 0.0f, 0.0f), // Look at position
 				GameEngine.UP // Up vector
 		);
 	}
 
 	public Camera3D lookAt(Vector3f from, Vector3f to) {
-		viewMatrix.setLookAt(
-				from, // Camera position
+		viewMatrix.setLookAt(from, // Camera position
 				to, // Look at position
 				GameEngine.UP // Up vector
 		);
+		// updateMatrix();
 
 		return this;
 	}
@@ -68,6 +67,26 @@ public class Camera3D extends Camera {
 	public Camera3D setPosition(Vector3f position) {
 		this.position = position;
 		return this;
+	}
+
+	public Camera3D loadRotation() {
+		return loadRotation(viewMatrix);
+	}
+
+	public Camera3D loadRotation(Matrix4f matrix) {
+		// matrix.positiveZ(new Vector3f()).negate()
+		// Matrix4f rotationMatrix = new Matrix4f(matrix).invert().transpose3x3();
+		// rotation.setFromUnnormalized(rotationMatrix);
+		return setRotation(matrix.getUnnormalizedRotation(new Quaternionf()));
+		// return this;
+	}
+
+	public Camera3D loadPosition() {
+		return loadPosition(viewMatrix);
+	}
+
+	public Camera3D loadPosition(Matrix4f matrix) {
+		return setPosition(matrix.getTranslation(new Vector3f()));
 	}
 
 	public Quaternionf getRotation() {

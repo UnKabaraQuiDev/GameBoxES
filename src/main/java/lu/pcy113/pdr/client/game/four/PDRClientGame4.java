@@ -2,6 +2,7 @@ package lu.pcy113.pdr.client.game.four;
 
 import java.io.IOException;
 
+import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -59,12 +60,13 @@ import lu.pcy113.pdr.engine.scene.camera.Camera;
 import lu.pcy113.pdr.engine.scene.camera.Camera3D;
 import lu.pcy113.pdr.engine.scene.camera.Projection;
 import lu.pcy113.pdr.engine.utils.PDRUtils;
-import lu.pcy113.pdr.engine.utils.Ray;
 import lu.pcy113.pdr.engine.utils.consts.FrameBufferAttachment;
 import lu.pcy113.pdr.engine.utils.consts.TextureFilter;
 import lu.pcy113.pdr.engine.utils.consts.TextureType;
 import lu.pcy113.pdr.engine.utils.file.FileUtils;
 import lu.pcy113.pdr.engine.utils.file.ShaderManager;
+import lu.pcy113.pdr.engine.utils.geo.GeoPlane;
+import lu.pcy113.pdr.engine.utils.geo.Ray;
 import lu.pcy113.pdr.engine.utils.img.MemImage;
 import lu.pcy113.pdr.engine.utils.interpolation.Interpolators;
 import lu.pcy113.pdr.engine.utils.transform.Transform3D;
@@ -247,7 +249,7 @@ public class PDRClientGame4 extends GameLogic {
 		audio.setVolume(0.5f);
 		audio.setVelocity(GameEngine.ZERO);
 		audio.setOrientation(new Vector3f(0, 0, 1), GameEngine.UP);
-		
+
 		uiComponentInterpolation = new CallbackValueInterpolation<Transform3D, Vector3f>(slotUiEntity.getComponent(Transform3DComponent.class).getTransform(), new Vector3f(1), new Vector3f(1.1f), Interpolators.LINEAR) {
 			@Override
 			public Vector3f evaluate(float pro) {
@@ -327,7 +329,10 @@ public class PDRClientGame4 extends GameLogic {
 				return 0;
 
 			Vector3f pos1 = this.cameraUi.projectPoint(new Vector3f(window.getMousePos().x, window.getMousePos().y, 0), viewport);
-			Vector2f pos = new Vector2f(pos1.y, pos1.z);
+			((Camera3D) ui.getCamera()).loadPosition().loadRotation();
+			System.err.println(GeoPlane.getByNormal(((Camera3D) ui.getCamera()).getRotation().getEulerAnglesXYZ(new Vector3f())) + " plane");
+			Vector2f pos = GeoPlane.getByNormal(((Camera3D) ui.getCamera()).getRotation().getEulerAnglesXYZ(new Vector3f())).projectToPlane(pos1);
+			// new Vector2f(pos1.y, pos1.z);
 
 			// System.err.println("hitpoint for: "+new Vector3f(window.getMousePos().y,
 			// window.getMousePos().x, 0)+" = "+pos1+" -> "+pos);
@@ -346,20 +351,22 @@ public class PDRClientGame4 extends GameLogic {
 					if (((UIComponentRectangle) uiComponent).contains(pos)) {
 						uiComponentInterpolation.setInterpolator(Interpolators.CIRC_OUT);
 						uiComponentInterpolation.add(0.4f).clamp().exec();
-					}else {
+					} else {
 						uiComponentInterpolation.setInterpolator(Interpolators.CIRC_IN);
 						uiComponentInterpolation.add(-0.15f).clamp().exec();
 					}
-					
-					/*if (((UIComponentRectangle) uiComponent).contains(pos)) {
-						hover += 0.4f;
-						hover = org.joml.Math.clamp(0, 1, hover);
-						e.getComponent(Transform3DComponent.class).getTransform().setScale(new Vector3f(1).lerp(new Vector3f(1.1f), Interpolators.CIRC_OUT.evaluate(hover), new Vector3f())).updateMatrix();
-					} else {
-						hover -= 0.15f;
-						hover = org.joml.Math.clamp(0, 1, hover);
-						e.getComponent(Transform3DComponent.class).getTransform().setScale(new Vector3f(1).lerp(new Vector3f(1.1f), Interpolators.CIRC_IN.evaluate(hover), new Vector3f())).updateMatrix();
-					}*/
+
+					/*
+					 * if (((UIComponentRectangle) uiComponent).contains(pos)) { hover += 0.4f;
+					 * hover = org.joml.Math.clamp(0, 1, hover);
+					 * e.getComponent(Transform3DComponent.class).getTransform().setScale(new
+					 * Vector3f(1).lerp(new Vector3f(1.1f), Interpolators.CIRC_OUT.evaluate(hover),
+					 * new Vector3f())).updateMatrix(); } else { hover -= 0.15f; hover =
+					 * org.joml.Math.clamp(0, 1, hover);
+					 * e.getComponent(Transform3DComponent.class).getTransform().setScale(new
+					 * Vector3f(1).lerp(new Vector3f(1.1f), Interpolators.CIRC_IN.evaluate(hover),
+					 * new Vector3f())).updateMatrix(); }
+					 */
 				}
 			}
 
