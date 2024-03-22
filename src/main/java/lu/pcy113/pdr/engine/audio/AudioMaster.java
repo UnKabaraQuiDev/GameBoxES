@@ -54,9 +54,9 @@ public class AudioMaster implements Cleanupable {
 			throw new RuntimeException("Could not open OpenAL device: OpenALC10 not supported");
 		}
 
-		GlobalLogger.info("Audio Output Devices: " + getDevices());
+		GlobalLogger.info("Audio Output Devices: " + getDeviceNames());
 		GlobalLogger.info("Default Audio Output Device: " + getDefaultDevice());
-		GlobalLogger.info("Audio Output Device: " + getDevice());
+		GlobalLogger.info("Audio Output Device: " + getDeviceName());
 
 		alContext = ALC10.alcCreateContext(device, (IntBuffer) null);
 		PDRUtils.checkAlcError(device);
@@ -134,104 +134,56 @@ public class AudioMaster implements Cleanupable {
 		return Objects.equals(Thread.currentThread(), thread);
 	}
 	
-	/*public void clearALContext() {
-		GLFW.glfwMakeContextCurrent(MemoryUtil.NULL);
+	public void checkAccessThrow() {
+		if(!checkAccess()) {
+			throw new IllegalAccessError(Thread.currentThread().getName()+" cannot access the audio context in "+getThreadName());
+		}
 	}
-
-	public void takeAlContext() {
-		GLFW.glfwMakeContextCurrent(handle);
-		AL.setCapabilities(this.capabilities);
-	}*/
 	
-	/*private void testPlayback() {
-		// generate buffers and sources
-		int buffer = AL10.alGenBuffers();
-		PDRUtils.checkAlError();
-
-		int source = AL10.alGenSources();
-		PDRUtils.checkAlError();
-
-		try (STBVorbisInfo info = STBVorbisInfo.malloc()) {
-			ShortBuffer pcm = readVorbis("./resources/audio/subnautica_bz_stranger_pings.ogg", 32 * 1024, info);
-
-			// copy to buffer
-			AL10.alBufferData(buffer, info.channels() == 1 ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16, pcm, info.sample_rate());
-			PDRUtils.checkAlError();
-		}
-
-		// set up source input
-		AL10.alSourcei(source, AL_BUFFER, buffer);
-		PDRUtils.checkAlError();
-
-		// play source
-		AL10.alSourcePlay(source);
-		PDRUtils.checkAlError();
-
-		// wait
-		System.out.println("Waiting for sound to complete...");
-		/*while (true) {
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException ignored) {
-				break;
-			}
-			if (AL10.alGetSourcei(source, AL_SOURCE_STATE) == AL_STOPPED) {
-				break;
-			}
-			System.out.print(".");
-		}
-
-		// stop source 0
-		AL10.alSourceStop(source);
-		PDRUtils.checkAlError();
-
-		// delete buffers and sources
-		AL10.alDeleteSources(source);
-		PDRUtils.checkAlError();
-
-		AL10.alDeleteBuffers(buffer);
-		PDRUtils.checkAlError();*/
-	//}
+	public boolean alcGetBool(int param) {
+		return alcGetBool(device, param);
+	}
 	
-	private boolean alcGetBool(long device, int param) {
+	public boolean alcGetBool(long device, int param) {
 		return ALC11.alcGetInteger(device, param) == ALC11.ALC_TRUE;
 	}
 
-	private int alcGetInteger(long device, int param) {
+	public int alcGetInteger(long device, int param) {
 		return ALC11.alcGetInteger(device, param);
 	}
 
 	public String alcGetString(int param, String str) {
-		return alcNullError(ALC11.alcGetString(MemoryUtil.NULL, param), str);
+		return PDRUtils.alcNullError(ALC11.alcGetString(MemoryUtil.NULL, param), str);
 	}
 
 	public String alcGetString(long addr, int param, String str) {
-		return alcNullError(ALC11.alcGetString(addr, param), str);
+		return PDRUtils.alcNullError(ALC11.alcGetString(addr, param), str);
 	}
 
 	public String getDefaultDevice() {
-		return alcNullError(alcGetString(ALC11.ALC_DEFAULT_DEVICE_SPECIFIER, "Could not get default device."), "Default device is null");
+		return PDRUtils.alcNullError(alcGetString(ALC11.ALC_DEFAULT_DEVICE_SPECIFIER, "Could not get default device."), "Default device is null");
 	}
 
-	public String getDevice() {
+	public String getDeviceName() {
 		return alcGetString(ALC11.ALC_DEVICE_SPECIFIER, "Could not get device.");
 	}
 
-	public List<String> getDevices() {
-		return alcNullError(ALUtil.getStringList(MemoryUtil.NULL, ALC11.ALC_ALL_DEVICES_SPECIFIER), "Could not get devices.");
+	public List<String> getDeviceNames() {
+		return PDRUtils.alcNullError(ALUtil.getStringList(MemoryUtil.NULL, ALC11.ALC_ALL_DEVICES_SPECIFIER), "Could not get devices.");
+	}
+	
+	public long getDevice() {
+		return device;
 	}
 
-	private <T> T alcNullError(T obj, String string) {
-		alcError(obj == null, string);
-		return obj;
+	public Thread getThread() {
+		return thread;
 	}
-
-	private void alcError(boolean b, String string) {
-		if (b) {
-			throw new RuntimeException(string);
-		}
+	
+	public String getThreadName() {
+		return thread == null ? null : thread.getName();
 	}
-
+	
 	@Override
 	public void cleanup() {
 		ALC11.alcMakeContextCurrent(MemoryUtil.NULL);

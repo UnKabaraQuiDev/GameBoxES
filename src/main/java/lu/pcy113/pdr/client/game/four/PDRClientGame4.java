@@ -2,7 +2,6 @@ package lu.pcy113.pdr.client.game.four;
 
 import java.io.IOException;
 
-import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -21,6 +20,8 @@ import lu.pcy113.pdr.client.game.three.SlotShader;
 import lu.pcy113.pdr.client.game.three.SlotShader.SlotMaterial;
 import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.anim.CallbackValueInterpolation;
+import lu.pcy113.pdr.engine.audio.ALSource;
+import lu.pcy113.pdr.engine.audio.ALSourcePool;
 import lu.pcy113.pdr.engine.cache.attrib.UIntAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.Vec3fAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.Vec4fAttribArray;
@@ -46,9 +47,9 @@ import lu.pcy113.pdr.engine.impl.GameLogic;
 import lu.pcy113.pdr.engine.impl.nexttask.NextTask;
 import lu.pcy113.pdr.engine.impl.nexttask.NextTaskWorker;
 import lu.pcy113.pdr.engine.objs.entity.Entity;
+import lu.pcy113.pdr.engine.objs.entity.components.ALSource3DComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.GizmoComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.MeshComponent;
-import lu.pcy113.pdr.engine.objs.entity.components.Sound3DComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.TextEmitterComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.Transform3DComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.UIComponent;
@@ -241,10 +242,15 @@ public class PDRClientGame4 extends GameLogic {
 
 	}
 
+	private ALSourcePool audioPool;
+	private ALSource source2;
+	
 	@Override
 	public void updateInit() {
-		cache.loadSound("bz", "./resources/audio/subnautica_bz_stranger_pings.ogg").setLooping(true).setRolloffFactor(2).play();
-		cache.loadSound("buzz", "./resources/audio/wrong_buzz.ogg", false).setLooping(true).setReferenceDistance(3f).setMaxDistance(10).setRolloffFactor(1f).setVolume(0.1f).play();
+		audioPool = new ALSourcePool(audio, 50);
+
+		//ALSource source1 = audioPool.getFreeSource().setLooping(true).setRolloffFactor(2).play(cache.loadSound("bz", "./resources/audio/subnautica_bz_stranger_pings.ogg"));
+		source2 = audioPool.getFreeSource().setVolume(0.2f).setLooping(true).appendQueue(cache.loadSound("buzz", "./resources/audio/wrong_buzz.ogg", false)).play();
 
 		audio.setVolume(0.5f);
 		audio.setVelocity(GameEngine.ZERO);
@@ -263,7 +269,7 @@ public class PDRClientGame4 extends GameLogic {
 
 		};
 
-		defaultCube.addComponent(new Sound3DComponent(cache.getSound("buzz")));
+		defaultCube.addComponent(new ALSource3DComponent(source2));
 		audio.setDistanceModel(AL11.AL_INVERSE_DISTANCE);
 	}
 
@@ -279,7 +285,7 @@ public class PDRClientGame4 extends GameLogic {
 				(window.isKeyPressed(GLFW.GLFW_KEY_Z) ? 0.1f : 0) - (window.isKeyPressed(GLFW.GLFW_KEY_S) ? 0.1f : 0));
 		camera.updateMatrix();
 
-		// audio.setPosition(camera.getPosition());
+		audio.setPosition(camera.getPosition());
 
 		if (window.isKeyPressed(GLFW.GLFW_KEY_T) && !previousF) {
 			previousF = true;
@@ -311,8 +317,12 @@ public class PDRClientGame4 extends GameLogic {
 
 		defaultCube.getComponent(Transform3DComponent.class).getTransform().getTranslation().set(Math.sin(gx), 0, Math.cos(gx));
 		defaultCube.getComponent(Transform3DComponent.class).getTransform().updateMatrix();
-
-		cache.getSound("buzz").setPosition(defaultCube.getComponent(Transform3DComponent.class).getTransform().getTranslation());
+		
+		defaultCube.getComponent(ALSource3DComponent.class).update();
+		
+		source2.setPosition(defaultCube.getComponent(Transform3DComponent.class).getTransform().getTranslation());
+		
+		// cache.getSound("buzz").setPosition(defaultCube.getComponent(Transform3DComponent.class).getTransform().getTranslation());
 	}
 
 	float hover = 0;
@@ -378,7 +388,7 @@ public class PDRClientGame4 extends GameLogic {
 		System.out.println("click");
 
 		// audioBridge.replay(cache.getSound("buzz"));
-		cache.getSound("buzz").replay();
+		// cache.getSound("buzz").replay();
 
 		int[] viewport = new int[4];
 		createTask(GameEngine.QUEUE_RENDER).exec((s) -> {
@@ -413,7 +423,7 @@ public class PDRClientGame4 extends GameLogic {
 
 			defaultCube.getComponent(Transform3DComponent.class).getTransform().setTranslation(pos).updateMatrix();
 
-			defaultCube.getComponent(Sound3DComponent.class).update();
+			defaultCube.getComponent(ALSource3DComponent.class).update();
 
 			return 1;
 		}).push();

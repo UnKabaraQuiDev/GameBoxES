@@ -425,6 +425,10 @@ public class CacheManager implements Cleanupable {
 	public boolean hasFramebuffer(String name) {
 		return framebuffers.containsKey(name);
 	}
+	
+	public boolean hasSound(String name) {
+		return sounds.containsKey(name);
+	}
 
 	/*
 	 * LOADER
@@ -509,6 +513,8 @@ public class CacheManager implements Cleanupable {
 	}
 	
 	public Sound loadSound(String name, String file, boolean stereo) {
+		if(hasSound(name)) 
+			return getSound(name);
 		Sound sound = new Sound(name, file, stereo);
 		addSound(sound);
 		return sound;

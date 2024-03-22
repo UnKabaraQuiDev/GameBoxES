@@ -14,8 +14,6 @@ import org.lwjgl.openal.ALC11;
 import org.lwjgl.opengl.GL40;
 import org.lwjgl.opengl.GL45;
 
-import lu.pcy113.pdr.engine.exceptions.openal.ALInvalidContextException;
-import lu.pcy113.pdr.engine.exceptions.openal.ALInvalidDeviceException;
 import lu.pcy113.pdr.engine.exceptions.openal.ALInvalidEnumException;
 import lu.pcy113.pdr.engine.exceptions.openal.ALInvalidNameException;
 import lu.pcy113.pdr.engine.exceptions.openal.ALInvalidOperationException;
@@ -51,11 +49,22 @@ public final class PDRUtils {
 		}
 		return null;
 	}
-	
+
+	public static <T> T alcNullError(T obj, String string) {
+		PDRUtils.alcError(obj == null, string);
+		return obj;
+	}
+
+	public static void alcError(boolean b, String string) {
+		if (b) {
+			throw new ALRuntimeException(string);
+		}
+	}
+
 	public static boolean checkAlError() {
 		return checkAlError("");
 	}
-	
+
 	public static boolean checkAlError(String msg) throws ALRuntimeException {
 		int status = AL11.alGetError();
 
@@ -63,14 +72,18 @@ public final class PDRUtils {
 			return true;
 
 		String caller = getCallerClassName(false);
-		
+
 		switch (status) {
-		/*case AL11.AL_INVALID_DEVICE:
-			throw new ALInvalidDeviceException(caller, status, msg);*/
+		/*
+		 * case AL11.AL_INVALID_DEVICE: throw new ALInvalidDeviceException(caller,
+		 * status, msg);
+		 */
 		case AL11.AL_INVALID_OPERATION:
 			throw new ALInvalidOperationException(caller, status, msg);
-		/*case AL11.AL_INVALID_CONTEXT:
-			throw new ALInvalidContextException(caller, status, msg);*/
+		/*
+		 * case AL11.AL_INVALID_CONTEXT: throw new ALInvalidContextException(caller,
+		 * status, msg);
+		 */
 		case AL11.AL_INVALID_NAME:
 			throw new ALInvalidNameException(caller, status, msg);
 		case AL11.AL_INVALID_ENUM:
@@ -86,11 +99,11 @@ public final class PDRUtils {
 
 	public static boolean checkAlcError(long device) {
 		boolean b;
-		if(b = ALC11.alcGetError(device) != ALC11.ALC_NO_ERROR)
-			throw new RuntimeException("Al error triggered: "+AL11.alGetError());
+		if (b = ALC11.alcGetError(device) != ALC11.ALC_NO_ERROR)
+			throw new RuntimeException("Al error triggered: " + AL11.alGetError());
 		return b;
 	}
-	
+
 	public static boolean checkGlError() {
 		return checkGlError("");
 	}

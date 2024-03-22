@@ -2,16 +2,16 @@ package lu.pcy113.pdr.engine.objs.entity.components;
 
 import org.joml.Vector3f;
 
-import lu.pcy113.pdr.engine.audio.Sound;
+import lu.pcy113.pdr.engine.audio.ALSource;
 import lu.pcy113.pdr.engine.objs.entity.Component;
 import lu.pcy113.pdr.engine.utils.transform.Transform3D;
 
-public class Sound3DComponent extends Component {
+public class ALSource3DComponent extends Component {
 
-	private Sound sound;
+	private ALSource source;
 
-	public Sound3DComponent(Sound sound) {
-		this.sound = sound;
+	public ALSource3DComponent(ALSource source) {
+		this.source = source;
 	}
 
 	public void update() {
@@ -28,19 +28,19 @@ public class Sound3DComponent extends Component {
 			return;
 
 		Transform3D transform = super.getParent().getComponent(Transform3DComponent.class).getTransform();
-		
-		sound.setPosition(transform.getTranslation());
+
+		source.setPosition(transform.getTranslation());
 		System.err.println("sound position: " + transform.getTranslation());
-		sound.setDirection(new Vector3f(0, 0, 1).rotate(transform.getRotation()));
+		source.setDirection(new Vector3f(0, 0, 1).rotate(transform.getRotation()));
 		System.err.println("sound direction: " + new Vector3f(0, 0, 1).rotate(transform.getRotation()));
 	}
 
-	public Sound getSound() {
-		return sound;
+	public ALSource getSource() {
+		return source;
 	}
 
-	public void setSound(Sound sound) {
-		this.sound = sound;
+	public void setSource(ALSource source) {
+		this.source = source;
 	}
 
 }
