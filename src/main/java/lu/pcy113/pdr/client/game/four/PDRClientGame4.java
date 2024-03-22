@@ -256,7 +256,7 @@ public class PDRClientGame4 extends GameLogic {
 		audio.setVelocity(GameEngine.ZERO);
 		audio.setOrientation(new Vector3f(0, 0, 1), GameEngine.UP);
 
-		uiComponentInterpolation = new CallbackValueInterpolation<Transform3D, Vector3f>(slotUiEntity.getComponent(Transform3DComponent.class).getTransform(), new Vector3f(1), new Vector3f(1.1f), Interpolators.LINEAR) {
+		uiComponentInterpolation = new CallbackValueInterpolation<Transform3D, Vector3f>(slotUiEntity.getComponent(Transform3DComponent.class).getTransform(), new Vector3f(1), new Vector3f(2f), Interpolators.LINEAR) {
 			@Override
 			public Vector3f evaluate(float pro) {
 				return start.lerp(end, pro, new Vector3f());
@@ -340,8 +340,8 @@ public class PDRClientGame4 extends GameLogic {
 
 			Vector3f pos1 = this.cameraUi.projectPoint(new Vector3f(window.getMousePos().x, window.getMousePos().y, 0), viewport);
 			((Camera3D) ui.getCamera()).loadPosition().loadRotation();
-			System.err.println(GeoPlane.getByNormal(((Camera3D) ui.getCamera()).getRotation().getEulerAnglesXYZ(new Vector3f())) + " plane");
-			Vector2f pos = GeoPlane.getByNormal(((Camera3D) ui.getCamera()).getRotation().getEulerAnglesXYZ(new Vector3f())).projectToPlane(pos1);
+			System.err.println(GeoPlane.YZ + " plane");
+			Vector2f pos = GeoPlane.YZ.projectToPlane(pos1);
 			// new Vector2f(pos1.y, pos1.z);
 
 			// System.err.println("hitpoint for: "+new Vector3f(window.getMousePos().y,
@@ -359,11 +359,11 @@ public class PDRClientGame4 extends GameLogic {
 				if (uiComponent instanceof UIComponentRectangle) {
 
 					if (((UIComponentRectangle) uiComponent).contains(pos)) {
-						uiComponentInterpolation.setInterpolator(Interpolators.CIRC_OUT);
-						uiComponentInterpolation.add(0.4f).clamp().exec();
+						uiComponentInterpolation.setInterpolator(Interpolators.BACK_OUT);
+						uiComponentInterpolation.add(0.1f).clamp().exec();
 					} else {
-						uiComponentInterpolation.setInterpolator(Interpolators.CIRC_IN);
-						uiComponentInterpolation.add(-0.15f).clamp().exec();
+						uiComponentInterpolation.setInterpolator(Interpolators.BOUNCE_IN);
+						uiComponentInterpolation.add(-0.05f).clamp().exec();
 					}
 
 					/*
