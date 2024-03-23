@@ -284,30 +284,15 @@ public class Window implements Cleanupable {
 
 	@Override
 	public void cleanup() {
-		/*if (keyCallback != null) {
-			keyCallback.free();
-			keyCallback = null;
-		}
-		if (joystickCallback != null) {
-			joystickCallback.free();
-			joystickCallback = null;
-		}
-		if (frameBufferCallback != null) {
-			frameBufferCallback.free();
-			frameBufferCallback = null;
-		}
-		if (errorCallback != null) {
-			errorCallback.free();
-			errorCallback = null;
-		}
-		if (scrollCallback != null) {
-			scrollCallback.free();
-			scrollCallback = null;
-		}
-		if (cursorPosCallback != null) {
-			cursorPosCallback.free();
-			cursorPosCallback = null;
-		}*/
+		/*
+		 * if (keyCallback != null) { keyCallback.free(); keyCallback = null; } if
+		 * (joystickCallback != null) { joystickCallback.free(); joystickCallback =
+		 * null; } if (frameBufferCallback != null) { frameBufferCallback.free();
+		 * frameBufferCallback = null; } if (errorCallback != null) {
+		 * errorCallback.free(); errorCallback = null; } if (scrollCallback != null) {
+		 * scrollCallback.free(); scrollCallback = null; } if (cursorPosCallback !=
+		 * null) { cursorPosCallback.free(); cursorPosCallback = null; }
+		 */
 		if (handle != -1) {
 			Callbacks.glfwFreeCallbacks(handle);
 			GLFW.glfwDestroyWindow(handle);

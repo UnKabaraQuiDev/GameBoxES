@@ -10,23 +10,16 @@ public class BoxBlurShader extends RenderShader {
 	public static final String NAME = BoxBlurShader.class.getName();
 
 	public BoxBlurShader() {
-		super(NAME, AbstractShaderPart.load(
-				"./resources/shaders/composite/plain.vert"),
-				AbstractShaderPart.load(
-						"./resources/shaders/composite/blur/box.frag"));
+		super(NAME, AbstractShaderPart.load("./resources/shaders/composite/plain.vert"), AbstractShaderPart.load("./resources/shaders/composite/blur/box.frag"));
 	}
 
 	@Override
 	public void createUniforms() {
-		createUniform(
-				PassRenderLayer.SCREEN_HEIGHT);
-		createUniform(
-				PassRenderLayer.SCREEN_WIDTH);
+		createUniform(PassRenderLayer.SCREEN_HEIGHT);
+		createUniform(PassRenderLayer.SCREEN_WIDTH);
 
-		createUniform(
-				"color");
-		createUniform(
-				"depth");
+		createUniform("color");
+		createUniform("depth");
 	}
 
 	public static class BoxBlurMaterial extends Material {

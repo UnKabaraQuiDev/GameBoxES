@@ -15,18 +15,14 @@ public class FillShader extends RenderShader {
 	public static final String COLOR = "color";
 
 	public FillShader() {
-		super(NAME, AbstractShaderPart.load(
-				"./resources/shaders/composite/plain.vert"),
-				AbstractShaderPart.load(
-						"./resources/shaders/composite/fill/fill-color.frag"));
+		super(NAME, AbstractShaderPart.load("./resources/shaders/composite/plain.vert"), AbstractShaderPart.load("./resources/shaders/composite/fill/fill-color.frag"));
 	}
 
 	@Override
 	public void createUniforms() {
 		super.createSceneUniforms();
 
-		createUniform(
-				COLOR);
+		createUniform(COLOR);
 	}
 
 	public static class FillMaterial extends Material {
@@ -45,14 +41,9 @@ public class FillShader extends RenderShader {
 
 		@Override
 		public void bindProperties(CacheManager cache, Renderable parent, RenderShader shader) {
-			super.setProperty(
-					COLOR,
-					color);
+			super.setProperty(COLOR, color);
 
-			super.bindProperties(
-					cache,
-					parent,
-					shader);
+			super.bindProperties(cache, parent, shader);
 		}
 
 		public Vector4f getColor() {

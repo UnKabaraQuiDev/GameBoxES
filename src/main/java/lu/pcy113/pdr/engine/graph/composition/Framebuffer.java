@@ -30,105 +30,69 @@ public class Framebuffer implements UniqueID, Cleanupable {
 	public boolean attachTexture(FrameBufferAttachment attach, int offset, SingleTexture texture) {
 		TextureType txtType = texture.getTextureType();
 		if (txtType == null) {
-			throw new IllegalStateException(
-					"TextureType is null");
+			throw new IllegalStateException("TextureType is null");
 		}
 
-		if (TextureType.TXT1D.equals(
-				txtType)) {
-			GL40.glFramebufferTexture1D(
-					GL40.GL_FRAMEBUFFER,
-					attach.getGlId() + offset,
-					txtType.getGlId(),
-					texture.getTid(),
-					0);
-		} else if (TextureType.TXT2D.equals(
-				txtType)
-				|| TextureType.TXT2DMS.equals(
-						txtType)) {
-			GL40.glFramebufferTexture2D(
-					GL40.GL_FRAMEBUFFER,
-					attach.getGlId() + offset,
-					txtType.getGlId(),
-					texture.getTid(),
-					0);
-		} else if (TextureType.TXT3D.equals(
-				txtType)) {
+		if (TextureType.TXT1D.equals(txtType)) {
+			GL40.glFramebufferTexture1D(GL40.GL_FRAMEBUFFER, attach.getGlId() + offset, txtType.getGlId(), texture.getTid(), 0);
+		} else if (TextureType.TXT2D.equals(txtType) || TextureType.TXT2DMS.equals(txtType)) {
+			GL40.glFramebufferTexture2D(GL40.GL_FRAMEBUFFER, attach.getGlId() + offset, txtType.getGlId(), texture.getTid(), 0);
+		} else if (TextureType.TXT3D.equals(txtType)) {
 			// TODO
 			assert true : "TODO: Not implemented yet";
-			// GL40.glFramebufferTexture3D(GL40.GL_FRAMEBUFFER, attach.getGlId()+offset, texture.getTextureType().getGlId(),
+			// GL40.glFramebufferTexture3D(GL40.GL_FRAMEBUFFER, attach.getGlId()+offset,
+			// texture.getTextureType().getGlId(),
 			// texture.getTid(), 0);
 		}
 
-		this.attachments.put(
-				attach.getGlId() + offset,
-				texture);
-		return PDRUtils.checkGlError(
-				"FrameBufferTexture[" + attach + "+" + offset + "][" + name + "]=" + texture.getId());
+		this.attachments.put(attach.getGlId() + offset, texture);
+		return PDRUtils.checkGlError("FrameBufferTexture[" + attach + "+" + offset + "][" + name + "]=" + texture.getId());
 	}
 
 	public boolean clearAttachments() {
 		for (Entry<Integer, Texture> it : attachments.entrySet()) {
-			GL40.glFramebufferTexture(
-					GL40.GL_FRAMEBUFFER,
-					it.getKey(),
-					0,
-					0);
+			GL40.glFramebufferTexture(GL40.GL_FRAMEBUFFER, it.getKey(), 0, 0);
 
-			PDRUtils.checkGlError(
-					"FrameBufferTexture[" + it.getKey() + "][" + name + "]=0");
+			PDRUtils.checkGlError("FrameBufferTexture[" + it.getKey() + "][" + name + "]=0");
 		}
 		return true;
 	}
 
 	public boolean isComplete() {
-		return GL40.glCheckFramebufferStatus(
-				GL40.GL_FRAMEBUFFER) == GL40.GL_FRAMEBUFFER_COMPLETE;
+		return GL40.glCheckFramebufferStatus(GL40.GL_FRAMEBUFFER) == GL40.GL_FRAMEBUFFER_COMPLETE;
 	}
 
 	public int getError() {
-		return GL40.glCheckFramebufferStatus(
-				GL40.GL_FRAMEBUFFER);
+		return GL40.glCheckFramebufferStatus(GL40.GL_FRAMEBUFFER);
 	}
 
 	public void bind() {
-		bind(
-				GL40.GL_FRAMEBUFFER);
+		bind(GL40.GL_FRAMEBUFFER);
 	}
 
 	public void bind(int target) {
-		GL40.glBindFramebuffer(
-				target,
-				fbo);
-		PDRUtils.checkGlError(
-				"BindFrameBuffer[" + target + "][" + name + "]=" + fbo);
+		GL40.glBindFramebuffer(target, fbo);
+		PDRUtils.checkGlError("BindFrameBuffer[" + target + "][" + name + "]=" + fbo);
 	}
 
 	public void unbind() {
-		unbind(
-				GL40.GL_FRAMEBUFFER);
+		unbind(GL40.GL_FRAMEBUFFER);
 	}
 
 	public void unbind(int target) {
-		GL40.glBindFramebuffer(
-				target,
-				0);
-		PDRUtils.checkGlError(
-				"BindFrameBuffer[" + target + "][" + name + "]=" + fbo);
+		GL40.glBindFramebuffer(target, 0);
+		PDRUtils.checkGlError("BindFrameBuffer[" + target + "][" + name + "]=" + fbo);
 	}
 
 	public Texture getAttachmedTexture(FrameBufferAttachment attach, int offset) {
-		return attachments.get(
-				attach.getGlId() + offset);
+		return attachments.get(attach.getGlId() + offset);
 	}
 
 	@Override
 	public void cleanup() {
 		if (fbo != -1) {
-			GL40.glDeleteFramebuffers(
-					fbo);
-			PDRUtils.checkGlError(
-					"DeleteFrameBuffer[" + fbo + "]");
+			GL40.glDeleteFramebuffers(fbo);
+			PDRUtils.checkGlError("DeleteFrameBuffer[" + fbo + "]");
 		}
 	}
 

@@ -16,10 +16,7 @@ public class Vertex {
 	private int index;
 	private float length;
 	private List<Vector3f> tangents = new ArrayList<Vector3f>();
-	private Vector3f averagedTangent = new Vector3f(
-			0,
-			0,
-			0);
+	private Vector3f averagedTangent = new Vector3f(0, 0, 0);
 
 	private VertexSkinData weightsData;
 
@@ -35,8 +32,7 @@ public class Vertex {
 	}
 
 	public void addTangent(Vector3f tangent) {
-		tangents.add(
-				tangent);
+		tangents.add(tangent);
 	}
 
 	public void averageTangents() {
@@ -44,8 +40,7 @@ public class Vertex {
 			return;
 		}
 		for (Vector3f tangent : tangents) {
-			averagedTangent.add(
-					tangent);
+			averagedTangent.add(tangent);
 		}
 		averagedTangent.normalize();
 	}

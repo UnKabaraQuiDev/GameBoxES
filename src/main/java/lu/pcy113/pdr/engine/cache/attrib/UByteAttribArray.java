@@ -12,44 +12,32 @@ public class UByteAttribArray extends AttribArray {
 	public UByteAttribArray(String name, int index, int dataSize, byte[] data) {
 		super(name, index, dataSize);
 		this.data = data;
-		this.bbuffer = ByteBuffer.wrap(
-				data);
+		this.bbuffer = ByteBuffer.wrap(data);
 	}
 
 	public UByteAttribArray(String name, int index, int dataSize, byte[] data, int bufferType) {
 		super(name, index, dataSize, bufferType);
 		this.data = data;
-		this.bbuffer = ByteBuffer.wrap(
-				data);
+		this.bbuffer = ByteBuffer.wrap(data);
 	}
 
 	public UByteAttribArray(String name, int index, int dataSize, byte[] data, int bufferType, boolean s) {
 		super(name, index, dataSize, bufferType, s);
 		this.data = data;
-		this.bbuffer = ByteBuffer.wrap(
-				data);
+		this.bbuffer = ByteBuffer.wrap(data);
 	}
 
 	public UByteAttribArray(String name, int index, int dataSize, byte[] data, boolean _static, int divisor) {
 		super(name, index, dataSize, _static, divisor);
 		this.data = data;
-		this.bbuffer = ByteBuffer.wrap(
-				data);
+		this.bbuffer = ByteBuffer.wrap(data);
 	}
 
 	@Override
 	public void init() {
-		GL40.glBufferData(
-				bufferType,
-				bbuffer,
-				iStatic ? GL40.GL_STATIC_DRAW : GL40.GL_DYNAMIC_DRAW);
+		GL40.glBufferData(bufferType, bbuffer, iStatic ? GL40.GL_STATIC_DRAW : GL40.GL_DYNAMIC_DRAW);
 		if (bufferType != GL40.GL_ELEMENT_ARRAY_BUFFER)
-			GL40.glVertexAttribIPointer(
-					index,
-					dataSize,
-					GL40.GL_UNSIGNED_BYTE,
-					0,
-					0);
+			GL40.glVertexAttribIPointer(index, dataSize, GL40.GL_UNSIGNED_BYTE, 0, 0);
 	}
 
 	@Override
@@ -70,15 +58,10 @@ public class UByteAttribArray extends AttribArray {
 			return;
 		data = nPos;
 
-		bbuffer.position(
-				0);
-		bbuffer.put(
-				data);
+		bbuffer.position(0);
+		bbuffer.put(data);
 
-		GL40.glBufferSubData(
-				GL40.GL_ARRAY_BUFFER,
-				0,
-				bbuffer);
+		GL40.glBufferSubData(GL40.GL_ARRAY_BUFFER, 0, bbuffer);
 	}
 
 }

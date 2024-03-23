@@ -9,16 +9,9 @@ import lu.pcy113.pdr.engine.utils.file.FileUtils;
 public final class FDicLoader {
 
 	public static FDicFile load(File fdicFile) {
-		String[] lines = FileUtils.readStringFile(
-				fdicFile.getAbsolutePath()).replaceAll(
-						"\\ŧ",
-						" ")
-				.split(
-						"\n+");
+		String[] lines = FileUtils.readStringFile(fdicFile.getAbsolutePath()).replaceAll("\\ŧ", " ").split("\n+");
 		/*
-		 * for(int l = 0; l < lines.length; l++) {
-		 * System.out.println("-- "+lines[l]);
-		 * }
+		 * for(int l = 0; l < lines.length; l++) { System.out.println("-- "+lines[l]); }
 		 */
 
 		float spreadInTexture = 0, spreadInFontMetrics = 0;
@@ -32,35 +25,28 @@ public final class FDicLoader {
 			if (line.isEmpty())
 				continue;
 
-			if (line.startsWith(
-					"#"))
+			if (line.startsWith("#"))
 				continue;
 
-			if (line.equals(
-					"SPREAD IN TEXTURE")) {
+			if (line.equals("SPREAD IN TEXTURE")) {
 				line = lines[++l];
-				spreadInTexture = Float.valueOf(
-						line.trim());
+				spreadInTexture = Float.valueOf(line.trim());
 				continue;
 			}
 
-			if (line.equals(
-					"SPREAD IN FONT METRICS")) {
+			if (line.equals("SPREAD IN FONT METRICS")) {
 				line = lines[++l];
-				spreadInFontMetrics = Float.valueOf(
-						line.trim());
+				spreadInFontMetrics = Float.valueOf(line.trim());
 				continue;
 			}
 
-			if (line.equals(
-					"GLYPHS")) {
+			if (line.equals("GLYPHS")) {
 				glyphs = true;
 				kernings = false;
 				continue;
 			}
 
-			if (line.equals(
-					"KERNINGS")) {
+			if (line.equals("KERNINGS")) {
 				kernings = true;
 				glyphs = false;
 				continue;
@@ -68,64 +54,30 @@ public final class FDicLoader {
 
 			if (glyphs) {
 				// System.out.println(line);
-				String[] tokens = line.split(
-						" ");
+				String[] tokens = line.split(" ");
 				// System.out.println(Arrays.toString(tokens));
 
-				int id = Integer.valueOf(
-						tokens[0].trim());
-				float width = Float.valueOf(
-						tokens[1].trim());
-				float height = Float.valueOf(
-						tokens[2].trim());
-				float hBearingX = Float.valueOf(
-						tokens[3].trim());
-				float hBearingY = Float.valueOf(
-						tokens[4].trim());
-				float hAdvance = Float.valueOf(
-						tokens[5].trim());
-				float vBearingX = Float.valueOf(
-						tokens[6].trim());
-				float vBearingY = Float.valueOf(
-						tokens[7].trim());
-				float vAdvance = Float.valueOf(
-						tokens[8].trim());
-				float tCoordX = Float.valueOf(
-						tokens[9].trim());
-				float tCoordY = Float.valueOf(
-						tokens[10].trim());
-				float tWidth = Float.valueOf(
-						tokens[11].trim());
-				float tHeight = Float.valueOf(
-						tokens[12].trim());
+				int id = Integer.valueOf(tokens[0].trim());
+				float width = Float.valueOf(tokens[1].trim());
+				float height = Float.valueOf(tokens[2].trim());
+				float hBearingX = Float.valueOf(tokens[3].trim());
+				float hBearingY = Float.valueOf(tokens[4].trim());
+				float hAdvance = Float.valueOf(tokens[5].trim());
+				float vBearingX = Float.valueOf(tokens[6].trim());
+				float vBearingY = Float.valueOf(tokens[7].trim());
+				float vAdvance = Float.valueOf(tokens[8].trim());
+				float tCoordX = Float.valueOf(tokens[9].trim());
+				float tCoordY = Float.valueOf(tokens[10].trim());
+				float tWidth = Float.valueOf(tokens[11].trim());
+				float tHeight = Float.valueOf(tokens[12].trim());
 
-				glyphMap.put(
-						Character.valueOf(
-								(char) id),
-						new FDicGlyph(
-								(char) id,
-								width,
-								height,
-								hBearingX,
-								hBearingY,
-								hAdvance,
-								vBearingX,
-								vBearingY,
-								vAdvance,
-								tCoordX,
-								tCoordY,
-								tWidth,
-								tHeight));
+				glyphMap.put(Character.valueOf((char) id), new FDicGlyph((char) id, width, height, hBearingX, hBearingY, hAdvance, vBearingX, vBearingY, vAdvance, tCoordX, tCoordY, tWidth, tHeight));
 
 				continue;
 			}
 		}
 
-		FDicFile fDic = new FDicFile(
-				fdicFile,
-				spreadInTexture,
-				spreadInFontMetrics,
-				glyphMap);
+		FDicFile fDic = new FDicFile(fdicFile, spreadInTexture, spreadInFontMetrics, glyphMap);
 
 		return fDic;
 	}

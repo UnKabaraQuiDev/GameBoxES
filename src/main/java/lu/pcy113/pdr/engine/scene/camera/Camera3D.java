@@ -25,23 +25,25 @@ public class Camera3D extends Camera {
 	public Camera3D lookAt(Vector3f from, Vector3f to) {
 		Vector3f forward = new Vector3f(to).sub(from).normalize();
 		Vector3f right = forward.cross(up, new Vector3f()).normalize();
-		
+
 		// Recalculate up vector
 		Vector3f up = right.cross(forward, new Vector3f()).normalize();
-		
+
 		// Construct rotation quaternion
-		//rotation = new Quaternionf().rotationTo(GameEngine.Y_POS, up).rotateTo(forward, GameEngine.Z_POS);
+		// rotation = new Quaternionf().rotationTo(GameEngine.Y_POS,
+		// up).rotateTo(forward, GameEngine.Z_POS);
 		rotation.identity().lookAlong(forward, up);
 
 		// Construct translation vector
 		position = new Vector3f(from);
 
 		// Construct transformation matrix
-		/*Matrix4f result = new Matrix4f().identity();
-		result.rotation(rotation);
-		result.setTranslation(position);
-
-		viewMatrix = result;*/
+		/*
+		 * Matrix4f result = new Matrix4f().identity(); result.rotation(rotation);
+		 * result.setTranslation(position);
+		 * 
+		 * viewMatrix = result;
+		 */
 
 		return this;
 	}
@@ -69,7 +71,7 @@ public class Camera3D extends Camera {
 	public Camera3D loadRotation() {
 		return loadRotation(viewMatrix);
 	}
-	
+
 	@Deprecated
 	public Camera3D loadRotation(Matrix4f matrix) {
 		return setRotation(matrix.getUnnormalizedRotation(new Quaternionf()));

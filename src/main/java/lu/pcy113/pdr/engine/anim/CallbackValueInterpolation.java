@@ -29,7 +29,7 @@ public abstract class CallbackValueInterpolation<T, D> {
 		this.progress += x;
 		return this;
 	}
-	
+
 	public CallbackValueInterpolation<T, D> exec() {
 		this.callback(this.object, this.evaluate(this.interpolator.evaluate(this.progress)));
 		return this;

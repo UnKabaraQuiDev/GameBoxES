@@ -10,8 +10,8 @@ import lu.pcy113.pdr.engine.utils.PDRUtils;
 import lu.pcy113.pdr.engine.utils.codec.decoder.UIntAttribArrayDecoder;
 
 /**
- * STRING name ; INT index ; INT dataSize ; INT bufferType ; BOOL _static ; INT divisor ; INT arrayLength ; INT[] data ;
- * INT END
+ * STRING name ; INT index ; INT dataSize ; INT bufferType ; BOOL _static ; INT
+ * divisor ; INT arrayLength ; INT[] data ; INT END
  */
 public class UIntAttribArrayEncoder extends DefaultObjectEncoder<UIntAttribArray> {
 
@@ -31,73 +31,50 @@ public class UIntAttribArrayEncoder extends DefaultObjectEncoder<UIntAttribArray
 		// int length = obj.getLength();
 		int[] data = obj.getData();
 
-		// String name, int index, int dataSize, int bufferType, boolean iStatic, int divisor
+		// String name, int index, int dataSize, int bufferType, boolean iStatic, int
+		// divisor
 		// int: index, dataSize, bufferType, divisor, dataLength = 6
 
-		int bufferLength = estimateSize(
-				head,
-				obj);
-		System.out.println(
-				"alloc size: " + bufferLength);
-		System.out.println(
-				"name : " + obj.getName());
-		System.out.println(
-				"index; " + obj.getIndex());
-		System.out.println(
-				"dataSize: " + obj.getDataSize());
-		System.out.println(
-				"bufferType: " + obj.getBufferType());
-		System.out.println(
-				"static: " + obj.isStatic());
-		System.out.println(
-				"divisor: " + obj.getDivisor());
-		System.out.println(
-				"data: " + data.length);
+		int bufferLength = estimateSize(head, obj);
+		System.out.println("alloc size: " + bufferLength);
+		System.out.println("name : " + obj.getName());
+		System.out.println("index; " + obj.getIndex());
+		System.out.println("dataSize: " + obj.getDataSize());
+		System.out.println("bufferType: " + obj.getBufferType());
+		System.out.println("static: " + obj.isStatic());
+		System.out.println("divisor: " + obj.getDivisor());
+		System.out.println("data: " + data.length);
 
-		ByteBuffer bb = ByteBuffer.allocate(
-				bufferLength);
+		ByteBuffer bb = ByteBuffer.allocate(bufferLength);
 
-		ByteBuffer bbName = ((StringEncoder) cm.getEncoderByClass(
-				String.class)).encode(
-						false,
-						name);
-		bb.put(
-				bbName);
+		ByteBuffer bbName = ((StringEncoder) cm.getEncoderByClass(String.class)).encode(false, name);
+		bb.put(bbName);
 		bbName.clear();
 		bbName = null;
 
-		bb.putInt(
-				index);
-		bb.putInt(
-				dataSize);
-		bb.putInt(
-				bufferType);
-		bb.put(
-				(byte) (_static ? 1 : 0));
-		bb.putInt(
-				divisor);
-		bb.putInt(
-				data.length);
+		bb.putInt(index);
+		bb.putInt(dataSize);
+		bb.putInt(bufferType);
+		bb.put((byte) (_static ? 1 : 0));
+		bb.putInt(divisor);
+		bb.putInt(data.length);
 
-		// IntBuffer bbData = ByteBuffer.allocate(data.length*Integer.BYTES).asIntBuffer();
+		// IntBuffer bbData =
+		// ByteBuffer.allocate(data.length*Integer.BYTES).asIntBuffer();
 		// bbData.put(data);
-		// ((ArrayEncoder) cm.getEncoderByClass(Object[].class)).encode(false, PDRUtils.toObjectArrya(data));
-		ByteBuffer byteArray = PDRUtils.intArrayToByteBuffer(
-				data);
-		bb.put(
-				byteArray);
+		// ((ArrayEncoder) cm.getEncoderByClass(Object[].class)).encode(false,
+		// PDRUtils.toObjectArrya(data));
+		ByteBuffer byteArray = PDRUtils.intArrayToByteBuffer(data);
+		bb.put(byteArray);
 
-		bb.putShort(
-				UIntAttribArrayDecoder.END);
+		bb.putShort(UIntAttribArrayDecoder.END);
 
 		return (ByteBuffer) bb.flip();
 	}
 
 	@Override
 	public int estimateSize(boolean head, UIntAttribArray obj) {
-		return (head ? CodecManager.HEAD_SIZE : 0) + cm.estimateSize(
-				false,
-				obj.getName()) + 5 * Integer.BYTES + 1 + Integer.BYTES * obj.getData().length;
+		return (head ? CodecManager.HEAD_SIZE : 0) + cm.estimateSize(false, obj.getName()) + 5 * Integer.BYTES + 1 + Integer.BYTES * obj.getData().length;
 	}
 
 }

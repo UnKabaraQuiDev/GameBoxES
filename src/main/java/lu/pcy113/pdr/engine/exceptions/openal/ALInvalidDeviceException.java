@@ -9,5 +9,5 @@ public class ALInvalidDeviceException extends ALRuntimeException {
 	public ALInvalidDeviceException(String str) {
 		super(str);
 	}
-	
+
 }

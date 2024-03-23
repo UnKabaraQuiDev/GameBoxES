@@ -343,8 +343,8 @@ public class GameEngine implements Cleanupable, UniqueID {
 			this.updateThread.join();
 			this.renderThread.join();
 		} catch (InterruptedException e) {
-			//String interruptingThreadName = e.getStackTrace()[0].getThreadName();
-			//System.out.println("Interrupted by thread: " + interruptingThreadName);
+			// String interruptingThreadName = e.getStackTrace()[0].getThreadName();
+			// System.out.println("Interrupted by thread: " + interruptingThreadName);
 			GlobalLogger.severe("Main thread interrupted while joining subthreads");
 		}
 
@@ -431,10 +431,10 @@ public class GameEngine implements Cleanupable, UniqueID {
 		if (getThreadId() == QUEUE_UPDATE) {
 			this.cache.cleanupSounds();
 			this.audioMaster.cleanup();
-		}else if(getThreadId() == QUEUE_MAIN) {
+		} else if (getThreadId() == QUEUE_MAIN) {
 			this.cache.cleanup();
 			this.window.cleanup();
-			
+
 			DEBUG.cleanup();
 		}
 	}

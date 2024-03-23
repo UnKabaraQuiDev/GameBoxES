@@ -26,8 +26,7 @@ public class MeshComponent extends Component implements Renderable {
 	}
 
 	public Mesh getMesh(CacheManager cache) {
-		return cache.getMesh(
-				this.meshId);
+		return cache.getMesh(this.meshId);
 	}
 
 	public void setMesh(Mesh mesh) {

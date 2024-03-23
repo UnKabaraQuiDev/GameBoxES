@@ -34,8 +34,7 @@ public class DebugOptions implements Cleanupable {
 	public boolean gizmos = true;
 	public Gizmo gizmoXYZ, gizmoRect;
 
-	public void gizmos(CacheManager cache, Scene scene, Matrix4f projectionMatrix, Matrix4f viewMatrix,
-			Object modelMatrix) {
+	public void gizmos(CacheManager cache, Scene scene, Matrix4f projectionMatrix, Matrix4f viewMatrix, Object modelMatrix) {
 		if (!gizmos)
 			return;
 
@@ -80,8 +79,7 @@ public class DebugOptions implements Cleanupable {
 	public boolean wireframe = true, bones = true;
 	public Vector4f wireframeColor = new Vector4f(1, 0, 0, 1), bonesColor = new Vector4f(0, 1, 0, 1), textBoxColor = new Vector4f(1, 0, 1, 1);
 
-	public void wireframe(CacheManager cache, Scene scene, Mesh mesh, Matrix4f projectionMatrix, Matrix4f viewMatrix,
-			Matrix4f transformationMatrix) {
+	public void wireframe(CacheManager cache, Scene scene, Mesh mesh, Matrix4f projectionMatrix, Matrix4f viewMatrix, Matrix4f transformationMatrix) {
 		if (!wireframe)
 			return;
 
@@ -114,8 +112,7 @@ public class DebugOptions implements Cleanupable {
 		GL40.glEnable(GL40.GL_DEPTH_TEST);
 	}
 
-	public void pointWireframe(CacheManager cache, Scene scene, Mesh mesh, Matrix4f projectionMatrix,
-			Matrix4f viewMatrix, Matrix4f transformationMatrix) {
+	public void pointWireframe(CacheManager cache, Scene scene, Mesh mesh, Matrix4f projectionMatrix, Matrix4f viewMatrix, Matrix4f transformationMatrix) {
 		if (!wireframe)
 			return;
 
@@ -144,18 +141,17 @@ public class DebugOptions implements Cleanupable {
 		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_FILL);
 		GL40.glEnable(GL40.GL_DEPTH_TEST);
 	}
-	
-	public void boundingRect(CacheManager cache, Scene scene, Matrix4f projectionMatrix, Matrix4f viewMatrix,
-			Matrix4f modelMatrix, Vector2f boxSize) {
+
+	public void boundingRect(CacheManager cache, Scene scene, Matrix4f projectionMatrix, Matrix4f viewMatrix, Matrix4f modelMatrix, Vector2f boxSize) {
 		if (!gizmos)
 			return;
 
 		if (gizmoRect == null) {
 			gizmoRect = Gizmo.newRect("rect", new Vector2f(1), textBoxColor);
 		}
-		
+
 		gizmoRect.bind();
-		
+
 		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_LINE);
 
 		GizmoMaterial deb;
@@ -193,8 +189,7 @@ public class DebugOptions implements Cleanupable {
 
 	public DebugOptions() {
 		try {
-			this.eventFileWriter = new FileWriter(
-					FileUtils.appendName(GlobalLogger.getLogger().getLogFile().getPath(), "-time"));
+			this.eventFileWriter = new FileWriter(FileUtils.appendName(GlobalLogger.getLogger().getLogFile().getPath(), "-time"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -209,8 +204,7 @@ public class DebugOptions implements Cleanupable {
 			Pair<Long, Long> status = statuses.remove(type);
 			if (status == null)
 				return;
-			eventFileWriter.append("start>" + type + ":" + status.getKey() + ":" + status.getValue() + "/end>"
-					+ System.currentTimeMillis() + ":" + System.nanoTime() + "\n");
+			eventFileWriter.append("start>" + type + ":" + status.getKey() + ":" + status.getValue() + "/end>" + System.currentTimeMillis() + ":" + System.nanoTime() + "\n");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

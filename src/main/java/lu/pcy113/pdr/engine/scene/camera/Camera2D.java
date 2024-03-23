@@ -16,8 +16,7 @@ public class Camera2D extends Camera {
 	}
 
 	public void roll(float z) {
-		rotation.rotateLocalZ(
-				z);
+		rotation.rotateLocalZ(z);
 	}
 
 	public Vector2f getPosition() {
@@ -40,12 +39,8 @@ public class Camera2D extends Camera {
 
 	public Matrix4f updateMatrix() {
 		viewMatrix.identity();
-		viewMatrix.rotate(
-				rotation);
-		viewMatrix.translate(
-				-position.x,
-				-position.y,
-				0);
+		viewMatrix.rotate(rotation);
+		viewMatrix.translate(-position.x, -position.y, 0);
 		return viewMatrix;
 	}
 

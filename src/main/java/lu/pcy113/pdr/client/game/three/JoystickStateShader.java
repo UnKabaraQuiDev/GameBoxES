@@ -20,33 +20,21 @@ public class JoystickStateShader extends RenderShader {
 	public static final String BUTTON = "button";
 
 	public JoystickStateShader() {
-		super(NAME, AbstractShaderPart.load(
-				"./resources/shaders/ui/joystick.frag"),
-				AbstractShaderPart.load(
-						"./resources/shaders/ui/plain.vert"));
+		super(NAME, AbstractShaderPart.load("./resources/shaders/ui/joystick.frag"), AbstractShaderPart.load("./resources/shaders/ui/plain.vert"));
 	}
 
 	@Override
 	public void createUniforms() {
-		createUniform(
-				RenderShader.PROJECTION_MATRIX);
-		createUniform(
-				RenderShader.VIEW_MATRIX);
-		createUniform(
-				RenderShader.TRANSFORMATION_MATRIX);
-		createUniform(
-				RenderShader.VIEW_POSITION);
+		createUniform(RenderShader.PROJECTION_MATRIX);
+		createUniform(RenderShader.VIEW_MATRIX);
+		createUniform(RenderShader.TRANSFORMATION_MATRIX);
+		createUniform(RenderShader.VIEW_POSITION);
 
-		createUniform(
-				COLOR);
-		createUniform(
-				RADIUS);
-		createUniform(
-				POSITION);
-		createUniform(
-				THRESHOLD);
-		createUniform(
-				BUTTON);
+		createUniform(COLOR);
+		createUniform(RADIUS);
+		createUniform(POSITION);
+		createUniform(THRESHOLD);
+		createUniform(BUTTON);
 	}
 
 	public static class JoystickStateMaterial extends Material {
@@ -67,26 +55,13 @@ public class JoystickStateShader extends RenderShader {
 
 		@Override
 		public void bindProperties(CacheManager cache, Renderable parent, RenderShader shader) {
-			setProperty(
-					COLOR,
-					color);
-			setProperty(
-					RADIUS,
-					radius);
-			setProperty(
-					POSITION,
-					position);
-			setProperty(
-					THRESHOLD,
-					threshold);
-			setProperty(
-					BUTTON,
-					button);
+			setProperty(COLOR, color);
+			setProperty(RADIUS, radius);
+			setProperty(POSITION, position);
+			setProperty(THRESHOLD, threshold);
+			setProperty(BUTTON, button);
 
-			super.bindProperties(
-					cache,
-					parent,
-					shader);
+			super.bindProperties(cache, parent, shader);
 		}
 
 		public void setColor(Vector4f color) {

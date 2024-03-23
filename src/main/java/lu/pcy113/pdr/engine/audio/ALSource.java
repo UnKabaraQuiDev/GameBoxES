@@ -28,10 +28,10 @@ public class ALSource implements Cleanupable {
 	}
 
 	public ALSource play(ALBuffer buffer) {
-		if(buffer == null) {
+		if (buffer == null) {
 			return this;
 		}
-		
+
 		AL11.alSourcei(sourceId, AL11.AL_BUFFER, buffer.getBufferId());
 		PDRUtils.checkAlError("SourceI(" + sourceId + ", BUFFER, " + buffer.getBufferId() + ")");
 		AL11.alSourcePlay(sourceId);
@@ -40,15 +40,15 @@ public class ALSource implements Cleanupable {
 		pool.update(this);
 		return this;
 	}
-	
+
 	public ALSource play(Sound bz) {
-		if(bz.hasBuffer()) {
+		if (bz.hasBuffer()) {
 			return play(bz.getBuffer());
-		}else {
+		} else {
 			return this;
 		}
 	}
-	
+
 	public ALSource play() {
 		AL11.alSourcePlay(sourceId);
 		PDRUtils.checkAlError("SourcePlay(" + sourceId + ")");
@@ -68,7 +68,7 @@ public class ALSource implements Cleanupable {
 		PDRUtils.checkAlError("SourceQueueBuffers(" + sourceId + ", " + buffer.getBufferId() + ")");
 		return this;
 	}
-	
+
 	public ALSource appendQueue(Sound sound) {
 		return appendQueue(sound.getBuffer());
 	}
@@ -93,15 +93,15 @@ public class ALSource implements Cleanupable {
 	}
 
 	public ALSource setDirection(Vector3f direction) {
-		if(!direction.isFinite())
+		if (!direction.isFinite())
 			return this;
 		AL11.alSource3f(sourceId, AL11.AL_DIRECTION, direction.x, direction.y, direction.z);
 		PDRUtils.checkAlError("Source3f[" + sourceId + "].DIRECTION=" + direction);
 		return this;
 	}
-	
+
 	public ALSource setPosition(Vector3f position) {
-		if(!position.isFinite())
+		if (!position.isFinite())
 			return this;
 		AL11.alSource3f(sourceId, AL11.AL_POSITION, position.x, position.y, position.z);
 		PDRUtils.checkAlError("Source3f[" + sourceId + "].POSITION=" + position);
@@ -109,7 +109,7 @@ public class ALSource implements Cleanupable {
 	}
 
 	public ALSource setVelocity(Vector3f velocity) {
-		if(!velocity.isFinite())
+		if (!velocity.isFinite())
 			return this;
 		AL11.alSource3f(sourceId, AL11.AL_VELOCITY, velocity.x, velocity.y, velocity.z);
 		PDRUtils.checkAlError("Source3f[" + sourceId + "].VELOCITY=" + velocity);

@@ -14,36 +14,22 @@ public class GLWrapper {
 	private HashMap<Integer, Integer> bound = new HashMap<>();
 
 	public boolean bindTexture(TextureType tt, int id) {
-		if (this.bound.containsKey(
-				tt.getGlId())
-				&& this.bound.get(
-						tt.getGlId()) == id) {
+		if (this.bound.containsKey(tt.getGlId()) && this.bound.get(tt.getGlId()) == id) {
 			return true;
 		}
 
-		GL40.glBindTexture(
-				tt.getGlId(),
-				id);
-		this.bound.put(
-				tt.getGlId(),
-				id);
+		GL40.glBindTexture(tt.getGlId(), id);
+		this.bound.put(tt.getGlId(), id);
 		return PDRUtils.checkGlError();
 	}
 
 	public boolean bindBuffer(BufferType tt, int id) {
-		if (this.bound.containsKey(
-				tt.getGlId())
-				&& this.bound.get(
-						tt.getGlId()) == id) {
+		if (this.bound.containsKey(tt.getGlId()) && this.bound.get(tt.getGlId()) == id) {
 			return true;
 		}
 
-		GL40.glBindBuffer(
-				tt.getGlId(),
-				id);
-		this.bound.put(
-				tt.getGlId(),
-				id);
+		GL40.glBindBuffer(tt.getGlId(), id);
+		this.bound.put(tt.getGlId(), id);
 		return PDRUtils.checkGlError();
 	}
 

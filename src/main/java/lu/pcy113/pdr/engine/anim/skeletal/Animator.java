@@ -41,13 +41,9 @@ public class Animator {
 		if (currentAnimation == null) {
 			return;
 		}
-		increaseAnimationTime(
-				deltaTime);
+		increaseAnimationTime(deltaTime);
 		Map<String, Matrix4f> currentPose = calculateCurrentAnimationPose();
-		applyPoseToJoints(
-				currentPose,
-				armature.getRootBone(),
-				new Matrix4f());
+		applyPoseToJoints(currentPose, armature.getRootBone(), new Matrix4f());
 	}
 
 	/**
@@ -78,18 +74,13 @@ public class Animator {
 	 * keyframes.
 	 * 
 	 * @return The current pose as a map of the desired local-space transforms for
-	 *         all the joints. The transforms are indexed by the name ID of the
-	 *         Bone that they should be applied to.
+	 * all the joints. The transforms are indexed by the name ID of the Bone that
+	 * they should be applied to.
 	 */
 	private Map<String, Matrix4f> calculateCurrentAnimationPose() {
 		KeyFrame[] frames = getPreviousAndNextFrames();
-		float progression = calculateProgression(
-				frames[0],
-				frames[1]);
-		return interpolatePoses(
-				frames[0],
-				frames[1],
-				progression);
+		float progression = calculateProgression(frames[0], frames[1]);
+		return interpolatePoses(frames[0], frames[1], progression);
 	}
 
 	/**
@@ -101,43 +92,34 @@ public class Animator {
 	 * current Bone, before applying it to the Bone. Before applying the
 	 * transformations it needs to be converted from local-space to model-space (so
 	 * that they are relative to the model's origin, rather than relative to the
-	 * parent Bone). This can be done by multiplying the local-transform of the
-	 * Bone with the model-space transform of the parent Bone.
+	 * parent Bone). This can be done by multiplying the local-transform of the Bone
+	 * with the model-space transform of the parent Bone.
 	 * 
 	 * The same thing is then done to all the child joints.
 	 * 
 	 * Finally the inverse of the Bone's bind transform is multiplied with the
 	 * model-space transform of the Bone. This basically "subtracts" the Bone's
 	 * original bind (no animation applied) transform from the desired pose
-	 * transform. The result of this is then the transform required to move the
-	 * Bone from its original model-space transform to it's desired model-space
-	 * posed transform. This is the transform that needs to be loaded up to the
-	 * vertex shader and used to transform the vertices into the current pose.
+	 * transform. The result of this is then the transform required to move the Bone
+	 * from its original model-space transform to it's desired model-space posed
+	 * transform. This is the transform that needs to be loaded up to the vertex
+	 * shader and used to transform the vertices into the current pose.
 	 * 
-	 * @param currentPose     - a map of the local-space transforms for all the
-	 *                        joints for the desired pose. The map is indexed by the
-	 *                        name of the Bone which the transform corresponds to.
-	 * @param Bone            - the current Bone which the pose should be applied
-	 *                        to.
-	 * @param parentTransform - the desired model-space transform of the parent
-	 *                        Bone for the pose.
+	 * @param currentPose - a map of the local-space transforms for all the joints
+	 * for the desired pose. The map is indexed by the name of the Bone which the
+	 * transform corresponds to.
+	 * @param Bone - the current Bone which the pose should be applied to.
+	 * @param parentTransform - the desired model-space transform of the parent Bone
+	 * for the pose.
 	 */
 	private void applyPoseToJoints(Map<String, Matrix4f> currentPose, Bone Bone, Matrix4f parentTransform) {
-		Matrix4f currentLocalTransform = currentPose.get(
-				Bone.name);
-		Matrix4f currentTransform = parentTransform.mul(
-				currentLocalTransform,
-				new Matrix4f());
+		Matrix4f currentLocalTransform = currentPose.get(Bone.name);
+		Matrix4f currentTransform = parentTransform.mul(currentLocalTransform, new Matrix4f());
 		for (Bone childJoint : Bone.children) {
-			applyPoseToJoints(
-					currentPose,
-					childJoint,
-					currentTransform);
+			applyPoseToJoints(currentPose, childJoint, currentTransform);
 		}
-		currentTransform.mul(
-				Bone.getInverseBindTransform());
-		Bone.setAnimationTransform(
-				currentTransform);
+		currentTransform.mul(Bone.getInverseBindTransform());
+		Bone.setAnimationTransform(currentTransform);
 	}
 
 	/**
@@ -149,7 +131,7 @@ public class Animator {
 	 * next keyframe.
 	 * 
 	 * @return The previous and next keyframes, in an array which therefore will
-	 *         always have a length of 2.
+	 * always have a length of 2.
 	 */
 	private KeyFrame[] getPreviousAndNextFrames() {
 		KeyFrame[] allFrames = currentAnimation.getKeyFrames();
@@ -170,9 +152,9 @@ public class Animator {
 	 * animation time is, and returns it as a value between 0 and 1.
 	 * 
 	 * @param previousFrame - the previous keyframe in the animation.
-	 * @param nextFrame     - the next keyframe in the animation.
+	 * @param nextFrame - the next keyframe in the animation.
 	 * @return A number between 0 and 1 indicating how far between the two keyframes
-	 *         the current animation time is.
+	 * the current animation time is.
 	 */
 	private float calculateProgression(KeyFrame previousFrame, KeyFrame nextFrame) {
 		float totalTime = nextFrame.getTimeStamp() - previousFrame.getTimeStamp();
@@ -185,28 +167,20 @@ public class Animator {
 	 * by interpolating between the transforms at the previous and next keyframes.
 	 * 
 	 * @param previousFrame - the previous keyframe in the animation.
-	 * @param nextFrame     - the next keyframe in the animation.
-	 * @param progression   - a number between 0 and 1 indicating how far between
-	 *                      the previous and next keyframes the current animation
-	 *                      time is.
+	 * @param nextFrame - the next keyframe in the animation.
+	 * @param progression - a number between 0 and 1 indicating how far between the
+	 * previous and next keyframes the current animation time is.
 	 * @return The local-space transforms for all the joints for the desired current
-	 *         pose. They are returned in a map, indexed by the name of the Bone to
-	 *         which they should be applied.
+	 * pose. They are returned in a map, indexed by the name of the Bone to which
+	 * they should be applied.
 	 */
 	private Map<String, Matrix4f> interpolatePoses(KeyFrame previousFrame, KeyFrame nextFrame, float progression) {
 		Map<String, Matrix4f> currentPose = new HashMap<String, Matrix4f>();
 		for (String jointName : previousFrame.getJointKeyFrames().keySet()) {
-			BoneTransform previousTransform = previousFrame.getJointKeyFrames().get(
-					jointName);
-			BoneTransform nextTransform = nextFrame.getJointKeyFrames().get(
-					jointName);
-			BoneTransform currentTransform = BoneTransform.interpolate(
-					previousTransform,
-					nextTransform,
-					progression);
-			currentPose.put(
-					jointName,
-					currentTransform.getLocalTransform());
+			BoneTransform previousTransform = previousFrame.getJointKeyFrames().get(jointName);
+			BoneTransform nextTransform = nextFrame.getJointKeyFrames().get(jointName);
+			BoneTransform currentTransform = BoneTransform.interpolate(previousTransform, nextTransform, progression);
+			currentPose.put(jointName, currentTransform.getLocalTransform());
 		}
 		return currentPose;
 	}

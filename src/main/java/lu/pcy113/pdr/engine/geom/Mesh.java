@@ -35,7 +35,7 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 	protected AttribArray[] attribs;
 
 	protected int vertexCount, indicesCount;
-	
+
 	protected DrawBuffer drawBuffer;
 
 	/**
@@ -68,19 +68,20 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 		}
 
 		unbind();
-		
+
 		GlobalLogger.log(Level.INFO, "Mesh " + name + ": " + vao + " & " + vbo + "; v:" + vertexCount);
 	}
-	
+
 	public void createDrawBuffer() {
 		drawBuffer = new DrawBuffer(indicesCount, 1, 0, 0, 0);
-		//drawBuffer = new IntAttribArray("draw", -2, 1, new int[] {indicesCount, 1, 4, 0, 0}, GL46.GL_DRAW_INDIRECT_BUFFER, false);
+		// drawBuffer = new IntAttribArray("draw", -2, 1, new int[] {indicesCount, 1, 4,
+		// 0, 0}, GL46.GL_DRAW_INDIRECT_BUFFER, false);
 		drawBuffer.gen();
 		drawBuffer.bind();
 		drawBuffer.init();
 		drawBuffer.unbind();
 	}
-	
+
 	/*
 	 * public Mesh(String name2, String material2, Vec3fAttribArray pos,
 	 * UIntAttribArray ind, Vec3fAttribArray norm, Vec2fAttribArray uv) {
@@ -191,15 +192,15 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 	public int getIndicesCount() {
 		return indicesCount;
 	}
-	
+
 	public DrawBuffer getDrawBuffer() {
 		return drawBuffer;
 	}
-	
+
 	public boolean hasDrawBuffer() {
 		return drawBuffer != null;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "{" + name + " | VAO: " + vao + " | VBO: " + vbo + " | V: " + vertexCount + "/" + indicesCount + " | Attribs: " + Arrays.toString(attribs) + "}";

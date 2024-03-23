@@ -58,8 +58,7 @@ public enum TexelInternalFormat implements GLConstant {
 	public static boolean isStencil(TexelInternalFormat format) {
 		if (format == null)
 			return false;
-		if (format.equals(
-				DEPTH_STENCIL))
+		if (format.equals(DEPTH_STENCIL))
 			return true;
 		return false;
 	}
@@ -67,10 +66,7 @@ public enum TexelInternalFormat implements GLConstant {
 	public static boolean isColor(TexelInternalFormat format) {
 		if (format == null)
 			return false;
-		if (format.equals(
-				DEPTH_COMPONENT)
-				|| format.equals(
-						DEPTH_STENCIL))
+		if (format.equals(DEPTH_COMPONENT) || format.equals(DEPTH_STENCIL))
 			return false;
 		return true;
 	}
@@ -78,12 +74,7 @@ public enum TexelInternalFormat implements GLConstant {
 	public static boolean isDepth(TexelInternalFormat format) {
 		if (format == null)
 			return false;
-		if (format.isBase() ? format.equals(
-				DEPTH_COMPONENT)
-				: format.getBase().equals(
-						DEPTH_COMPONENT)
-						|| format.equals(
-								DEPTH_STENCIL))
+		if (format.isBase() ? format.equals(DEPTH_COMPONENT) : format.getBase().equals(DEPTH_COMPONENT) || format.equals(DEPTH_STENCIL))
 			return true;
 		return false;
 	}
@@ -91,8 +82,7 @@ public enum TexelInternalFormat implements GLConstant {
 	public static boolean isInteger(TexelInternalFormat format) {
 		if (format == null)
 			return false;
-		if (format.name().endsWith(
-				"I"))
+		if (format.name().endsWith("I"))
 			return true;
 		return false;
 	}

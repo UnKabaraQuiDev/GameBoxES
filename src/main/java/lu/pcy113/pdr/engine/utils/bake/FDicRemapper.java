@@ -76,12 +76,13 @@ public final class FDicRemapper {
 		int subimageHeight = (int) (glyph.getHeight() * 32);
 		int subImageX2 = (int) ((glyph.gettCoordX() + glyph.getWidth()) * imageRes + dic.getTextureSpread());
 		int subImageY2 = (int) (glyph.gettCoordY() * imageRes - dic.getTextureSpread());
-		
+
 		// Create a subimage representing the glyph
-		//BufferedImage glyphImage = input.getSubimage(subimageX, subimageY, subimageWidth, subimageHeight);
-		output.drawImage(input, x, y, x+charRes, y+charRes, subimageX, subimageY, subImageX2, subImageY2, null);
+		// BufferedImage glyphImage = input.getSubimage(subimageX, subimageY,
+		// subimageWidth, subimageHeight);
+		output.drawImage(input, x, y, x + charRes, y + charRes, subimageX, subimageY, subImageX2, subImageY2, null);
 		// Draw the subimage onto the output graphics
-		//output.drawImage(glyphImage, x, y, charRes, charRes, null);
+		// output.drawImage(glyphImage, x, y, charRes, charRes, null);
 	}
 
 }

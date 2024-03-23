@@ -14,20 +14,20 @@ public final class SoundLoaderUtils {
 		IntBuffer channels = MemoryUtil.memAllocInt(1);
 		IntBuffer sampleRate = MemoryUtil.memAllocInt(1);
 		ShortBuffer vorbis = STBVorbis.stb_vorbis_decode_filename(file, channels, sampleRate);
-		
+
 		if (vorbis == null) {
 			MemoryUtil.memFree(channels);
 			MemoryUtil.memFree(sampleRate);
-			
-			throw new RuntimeException("Failed to open Ogg Vorbis file. ("+file+") ");
+
+			throw new RuntimeException("Failed to open Ogg Vorbis file. (" + file + ") ");
 		}
-		
+
 		int ch = channels.get();
 		int sr = sampleRate.get();
-		
+
 		MemoryUtil.memFree(channels);
 		MemoryUtil.memFree(sampleRate);
-		
+
 		return new Triplet<ShortBuffer, Integer, Integer>(vorbis, ch, sr);
 	}
 

@@ -15,25 +15,17 @@ public class FourButtonStateShader extends RenderShader {
 	public static final String BUTTONS = "buttons";
 
 	public FourButtonStateShader() {
-		super(NAME, AbstractShaderPart.load(
-				"./resources/shaders/ui/four_button.frag"),
-				AbstractShaderPart.load(
-						"./resources/shaders/ui/plain.vert"));
+		super(NAME, AbstractShaderPart.load("./resources/shaders/ui/four_button.frag"), AbstractShaderPart.load("./resources/shaders/ui/plain.vert"));
 	}
 
 	@Override
 	public void createUniforms() {
-		createUniform(
-				RenderShader.PROJECTION_MATRIX);
-		createUniform(
-				RenderShader.VIEW_MATRIX);
-		createUniform(
-				RenderShader.TRANSFORMATION_MATRIX);
-		createUniform(
-				RenderShader.VIEW_POSITION);
+		createUniform(RenderShader.PROJECTION_MATRIX);
+		createUniform(RenderShader.VIEW_MATRIX);
+		createUniform(RenderShader.TRANSFORMATION_MATRIX);
+		createUniform(RenderShader.VIEW_POSITION);
 
-		createUniform(
-				BUTTONS);
+		createUniform(BUTTONS);
 	}
 
 	public static class FourButtonStateMaterial extends Material {
@@ -52,14 +44,9 @@ public class FourButtonStateShader extends RenderShader {
 
 		@Override
 		public void bindProperties(CacheManager cache, Renderable parent, RenderShader shader) {
-			setProperty(
-					BUTTONS,
-					buttons);
+			setProperty(BUTTONS, buttons);
 
-			super.bindProperties(
-					cache,
-					parent,
-					shader);
+			super.bindProperties(cache, parent, shader);
 		}
 
 		public void setButtons(Vector4f buttons) {

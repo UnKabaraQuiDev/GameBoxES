@@ -26,8 +26,7 @@ public class InstanceEmitterComponent extends Component implements Renderable {
 	}
 
 	public InstanceEmitter getInstanceEmitter(CacheManager cache) {
-		return cache.getInstanceEmitter(
-				this.instanceEmitterId);
+		return cache.getInstanceEmitter(this.instanceEmitterId);
 	}
 
 	public void setInstanceEmitter(InstanceEmitter instanceEmitter) {

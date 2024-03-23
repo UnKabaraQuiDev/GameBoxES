@@ -9,5 +9,5 @@ public class ALOutOfMemoryException extends ALRuntimeException {
 	public ALOutOfMemoryException(String str) {
 		super(str);
 	}
-	
+
 }

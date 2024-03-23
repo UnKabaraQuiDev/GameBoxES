@@ -116,7 +116,7 @@ public class TextEmitter implements Cleanupable, UniqueID {
 				chars[charIndex] = (int) currentChar;
 
 				float translationX = (character - widthCount[line] / 2) * charSize.x;
-				float translationY = line * charSize.y+charSize.y/2;
+				float translationY = line * charSize.y + charSize.y / 2;
 
 				transforms[charIndex] = new Matrix4f().identity().translate(translationX, translationY, 0);
 
@@ -147,10 +147,10 @@ public class TextEmitter implements Cleanupable, UniqueID {
 				character++;
 				chars[charIndex] = (int) currentChar;
 
-				float translationX = (character - widthCount[line]/2) * charSize.x + widthMax/2;
+				float translationX = (character - widthCount[line] / 2) * charSize.x + widthMax / 2;
 				// character * charSize.x + ((widthMax - widthCount[line]*charSize.x) / 2);
 				// c * z +((m-b*x)/2)
-				float translationY = line * charSize.y+charSize.y/2;
+				float translationY = line * charSize.y + charSize.y / 2;
 
 				transforms[charIndex] = new Matrix4f().identity().translate(translationX, translationY, 0);
 
@@ -182,7 +182,7 @@ public class TextEmitter implements Cleanupable, UniqueID {
 				chars[charIndex] = (int) currentChar;
 
 				float translationX = ((widthMax - widthCount[line]) + character) * charSize.x;
-				float translationY = line * charSize.y+charSize.y/2;
+				float translationY = line * charSize.y + charSize.y / 2;
 
 				transforms[charIndex] = new Matrix4f().identity().translate(translationX, translationY, 0);
 
@@ -214,7 +214,7 @@ public class TextEmitter implements Cleanupable, UniqueID {
 				chars[charIndex] = (int) currentChar;
 
 				float translationX = (character - widthCount[line]) * charSize.x;
-				float translationY = line * charSize.y+charSize.y/2;
+				float translationY = line * charSize.y + charSize.y / 2;
 
 				transforms[charIndex] = new Matrix4f().identity().translate(translationX, translationY, 0);
 
@@ -243,7 +243,7 @@ public class TextEmitter implements Cleanupable, UniqueID {
 				chars[charIndex] = (int) currentChar;
 
 				float translationX = character * charSize.x;
-				float translationY = line * charSize.y+charSize.y/2;
+				float translationY = line * charSize.y + charSize.y / 2;
 
 				transforms[charIndex] = new Matrix4f().identity().translate(translationX, translationY, 0);
 
@@ -321,11 +321,11 @@ public class TextEmitter implements Cleanupable, UniqueID {
 	public void setBoxSize(Vector2f boxSize) {
 		this.boxSize = boxSize;
 	}
-	
+
 	public Mesh getMesh() {
 		return quad;
 	}
-	
+
 	@Override
 	public void cleanup() {
 		instances.cleanup();

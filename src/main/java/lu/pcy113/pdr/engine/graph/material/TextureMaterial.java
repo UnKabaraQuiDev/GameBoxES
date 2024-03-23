@@ -20,30 +20,22 @@ public class TextureMaterial extends Material {
 		this.textures = textures;
 		int i = 0;
 		for (Entry<String, Texture> txt : textures.entrySet()) {
-			properties.put(
-					txt.getKey(),
-					i++);
+			properties.put(txt.getKey(), i++);
 		}
 	}
 
 	@Override
 	public void bindProperties(CacheManager cache, Renderable scene, RenderShader shader) {
-		super.bindProperties(
-				cache,
-				scene,
-				shader);
+		super.bindProperties(cache, scene, shader);
 
 		int i = 0;
 		for (Entry<String, Texture> txt : textures.entrySet()) {
 			Texture texture = txt.getValue();
 			if (texture == null) {
-				GlobalLogger.log(
-						Level.WARNING,
-						"Could not find texture: " + txt.getKey());
+				GlobalLogger.log(Level.WARNING, "Could not find texture: " + txt.getKey());
 				continue;
 			}
-			texture.bind(
-					i++);
+			texture.bind(i++);
 		}
 	}
 

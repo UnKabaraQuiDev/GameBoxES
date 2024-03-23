@@ -67,8 +67,7 @@ public class GizmoRenderer extends Renderer<Scene, GizmoComponent> {
 		GameEngine.DEBUG.start("r_uniforms_transform");
 		if (material.hasProperty(RenderShader.TRANSFORMATION_MATRIX)) {
 			if (e.hasComponent(TransformComponent.class)) {
-				TransformComponent transform = (TransformComponent) e
-						.getComponent(e.getComponents(TransformComponent.class).get(0));
+				TransformComponent transform = (TransformComponent) e.getComponent(e.getComponents(TransformComponent.class).get(0));
 				if (transform != null) {
 					transformationMatrix = transform.getTransform().getMatrix();
 				}

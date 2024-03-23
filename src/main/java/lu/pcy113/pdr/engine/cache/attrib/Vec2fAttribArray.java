@@ -26,18 +26,9 @@ public class Vec2fAttribArray extends AttribArray {
 
 	@Override
 	public void init() {
-		GL40.glBufferData(
-				bufferType,
-				toFlatArray(),
-				iStatic ? GL40.GL_STATIC_DRAW : GL40.GL_DYNAMIC_DRAW);
+		GL40.glBufferData(bufferType, toFlatArray(), iStatic ? GL40.GL_STATIC_DRAW : GL40.GL_DYNAMIC_DRAW);
 		if (bufferType != GL40.GL_ELEMENT_ARRAY_BUFFER)
-			GL40.glVertexAttribPointer(
-					index,
-					dataSize * 2,
-					GL40.GL_FLOAT,
-					false,
-					0,
-					0);
+			GL40.glVertexAttribPointer(index, dataSize * 2, GL40.GL_FLOAT, false, 0, 0);
 	}
 
 	public boolean update(Vector2f[] nPos) {
@@ -45,10 +36,7 @@ public class Vec2fAttribArray extends AttribArray {
 			return false;
 		data = nPos;
 
-		GL40.glBufferSubData(
-				GL40.GL_ARRAY_BUFFER,
-				0,
-				toFlatArray());
+		GL40.glBufferSubData(GL40.GL_ARRAY_BUFFER, 0, toFlatArray());
 		return GL40.glGetError() == GL40.GL_NO_ERROR;
 	}
 
@@ -61,27 +49,14 @@ public class Vec2fAttribArray extends AttribArray {
 				dat[0] = cdata.x;
 				dat[1] = cdata.y;
 			} else
-				Arrays.fill(
-						dat,
-						0);
-			System.arraycopy(
-					dat,
-					0,
-					flatArray,
-					i * 2,
-					2);
+				Arrays.fill(dat, 0);
+			System.arraycopy(dat, 0, flatArray, i * 2, 2);
 		}
 		return flatArray;
 	}
 
 	public FloatAttribArray toFloatAttribArray() {
-		return new FloatAttribArray(
-				name,
-				index,
-				dataSize * 2,
-				toFlatArray(),
-				bufferType,
-				iStatic);
+		return new FloatAttribArray(name, index, dataSize * 2, toFlatArray(), bufferType, iStatic);
 	}
 
 	@Override

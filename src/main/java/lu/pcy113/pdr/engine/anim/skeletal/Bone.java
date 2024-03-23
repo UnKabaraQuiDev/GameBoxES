@@ -25,13 +25,12 @@ public class Bone {
 	private Matrix4f inverseBindTransform = new Matrix4f();
 
 	/**
-	 * @param index              - the joint's index (ID).
-	 * @param name               - the name of the joint. This is how the joint is
-	 *                           named in the collada file, and so is used to
-	 *                           identify which joint a joint transform in an
-	 *                           animation keyframe refers to.
+	 * @param index - the joint's index (ID).
+	 * @param name - the name of the joint. This is how the joint is named in the
+	 * collada file, and so is used to identify which joint a joint transform in an
+	 * animation keyframe refers to.
 	 * @param bindLocalTransform - the bone-space transform of the joint in the bind
-	 *                           position.
+	 * position.
 	 */
 	public Bone(int index, String name, Matrix4f bindLocalTransform) {
 		this.index = index;
@@ -47,8 +46,7 @@ public class Bone {
 	 * @param child - the new child joint of this joint.
 	 */
 	public void addChild(Bone child) {
-		this.children.add(
-				child);
+		this.children.add(child);
 	}
 
 	/**
@@ -61,7 +59,7 @@ public class Bone {
 	 * of the joint.
 	 * 
 	 * @return The transformation matrix of the joint which is used to deform
-	 *         associated vertices of the skin in the shaders.
+	 * associated vertices of the skin in the shaders.
 	 */
 	public Matrix4f getAnimatedTransform() {
 		return animatedTransform;
@@ -106,26 +104,19 @@ public class Bone {
 	 * calculate and store their inverse bind-pose transform.
 	 * 
 	 * @param parentBindTransform - the model-space bind transform of the parent
-	 *                            joint.
+	 * joint.
 	 */
 	protected void calcInverseBindTransform(Matrix4f parentBindTransform) {
 		Matrix4f bindTransform = new Matrix4f();
-		parentBindTransform.mul(
-				localBindTransform,
-				bindTransform);
-		bindTransform.invert(
-				inverseBindTransform);
+		parentBindTransform.mul(localBindTransform, bindTransform);
+		bindTransform.invert(inverseBindTransform);
 		for (Bone child : children) {
-			child.calcInverseBindTransform(
-					bindTransform);
+			child.calcInverseBindTransform(bindTransform);
 		}
 	}
 
 	public int getChildCount() {
-		return children.stream().map(
-				Bone::getChildCount).reduce(
-						0,
-						Integer::sum);
+		return children.stream().map(Bone::getChildCount).reduce(0, Integer::sum);
 	}
 
 	@Override
@@ -134,14 +125,7 @@ public class Bone {
 	}
 
 	public String toString(int i) {
-		return PDRUtils.repeatString(
-				"\t",
-				i) + toString() + "\n"
-				+ children.stream().map(
-						b -> b.toString(
-								i + 1))
-						.collect(
-								Collectors.joining());
+		return PDRUtils.repeatString("\t", i) + toString() + "\n" + children.stream().map(b -> b.toString(i + 1)).collect(Collectors.joining());
 	}
 
 }

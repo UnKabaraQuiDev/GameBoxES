@@ -71,7 +71,7 @@ public enum GeoPlane {
 	}
 
 	public static GeoPlane getByNormal(Quaternionf rotation) {
-		
+
 		return getByNormal(MathUtils.vec3fromQuatf(rotation));
 	}
 

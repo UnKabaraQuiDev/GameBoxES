@@ -26,8 +26,7 @@ public abstract class Texture implements Cleanupable, UniqueID {
 	protected int tid = -1;
 	protected TextureFilter minFilter = TextureFilter.LINEAR, magFilter = TextureFilter.LINEAR;
 	protected TextureType txtType = TextureType.TXT2D;
-	protected TextureWrap hWrap = TextureWrap.CLAMP_TO_EDGE, vWrap = TextureWrap.CLAMP_TO_EDGE,
-			dWrap = TextureWrap.CLAMP_TO_EDGE;
+	protected TextureWrap hWrap = TextureWrap.CLAMP_TO_EDGE, vWrap = TextureWrap.CLAMP_TO_EDGE, dWrap = TextureWrap.CLAMP_TO_EDGE;
 	protected DataType dataType = DataType.UBYTE;
 	protected TexelFormat format = TexelFormat.RGB;
 	protected TexelInternalFormat internalFormat = TexelInternalFormat.RGB;
@@ -249,8 +248,7 @@ public abstract class Texture implements Cleanupable, UniqueID {
 
 	@Override
 	public String toString() {
-		return "{tid: " + tid + ", name: " + name + ", valid: " + isValid() + ", type: " + txtType + ", format: "
-				+ format + ", internalFormat: " + internalFormat + ", dataType: " + dataType + "}";
+		return "{tid: " + tid + ", name: " + name + ", valid: " + isValid() + ", type: " + txtType + ", format: " + format + ", internalFormat: " + internalFormat + ", dataType: " + dataType + "}";
 	}
 
 	public static TexelFormat getFormatByChannels(int channels) {

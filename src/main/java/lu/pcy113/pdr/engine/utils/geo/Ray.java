@@ -28,21 +28,15 @@ public class Ray {
 	}
 
 	public Vector3f getEndPoint(float length) {
-		return origin.add(
-				dir.mul(
-						length,
-						new Vector3f()),
-				new Vector3f());
+		return origin.add(dir.mul(length, new Vector3f()), new Vector3f());
 	}
 
 	public Vector3f getEndPoint() {
-		return getEndPoint(
-				getLength());
+		return getEndPoint(getLength());
 	}
 
 	public float getLength() {
-		return dir.distance(
-				origin);
+		return dir.distance(origin);
 	}
 
 	@Override

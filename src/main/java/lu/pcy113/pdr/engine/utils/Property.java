@@ -19,9 +19,7 @@ public class Property<T> {
 	}
 
 	public void setValue(T value) {
-		if (Objects.equals(
-				this.value,
-				value))
+		if (Objects.equals(this.value, value))
 			return;
 
 		this.value = value;

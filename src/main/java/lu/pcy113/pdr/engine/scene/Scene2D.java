@@ -38,7 +38,7 @@ public class Scene2D extends Scene {
 		this.entities.put(str, entity);
 		return entity;
 	}
-	
+
 	public Entity addEntity(String str, Component... components) {
 		return addEntity(str, new Entity(components));
 	}

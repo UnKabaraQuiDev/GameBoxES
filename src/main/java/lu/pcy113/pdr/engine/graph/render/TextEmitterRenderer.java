@@ -32,7 +32,7 @@ public class TextEmitterRenderer extends Renderer<Scene, TextEmitterComponent> {
 	@Override
 	public void render(CacheManager cache, Scene scene, TextEmitterComponent tec) {
 		Entity e = tec.getParent();
-		
+
 		TextEmitter te = tec.getTextEmitter(cache);
 		if (te == null) {
 			GlobalLogger.log(Level.WARNING, "TextEmitter is null!");
@@ -107,10 +107,10 @@ public class TextEmitterRenderer extends Renderer<Scene, TextEmitterComponent> {
 
 		// pe.updatePull();
 
-		if(mesh.hasDrawBuffer()) {
+		if (mesh.hasDrawBuffer()) {
 			mesh.getDrawBuffer().bind();
 			GL46.glDrawElementsIndirect(shader.getBeginMode().getGlId(), GL40.GL_UNSIGNED_INT, 0);
-		}else {
+		} else {
 			GL40.glDrawElementsInstanced(shader.getBeginMode().getGlId(), mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0, pe.getParticleCount());
 		}
 

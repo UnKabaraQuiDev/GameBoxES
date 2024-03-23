@@ -20,39 +20,39 @@ public class ALBuffer implements Cleanupable {
 		}
 		return this;
 	}
-	
+
 	public int getBufferId() {
 		return bufferId;
 	}
 
 	public void setData(short[] data, int format, int sampleRate) {
 		AL11.alBufferData(bufferId, format, data, sampleRate);
-		PDRUtils.checkAlError("BufferData("+bufferId+", "+format+", "+sampleRate+", short["+data.length+"])");
+		PDRUtils.checkAlError("BufferData(" + bufferId + ", " + format + ", " + sampleRate + ", short[" + data.length + "])");
 	}
 
 	public void setData(int[] data, int format, int sampleRate) {
 		AL11.alBufferData(bufferId, format, data, sampleRate);
-		PDRUtils.checkAlError("BufferData("+bufferId+", "+format+", "+sampleRate+", int["+data.length+"])");
+		PDRUtils.checkAlError("BufferData(" + bufferId + ", " + format + ", " + sampleRate + ", int[" + data.length + "])");
 	}
 
 	public void setData(float[] data, int format, int sampleRate) {
 		AL11.alBufferData(bufferId, format, data, sampleRate);
-		PDRUtils.checkAlError("BufferData("+bufferId+", "+format+", "+sampleRate+", float["+data.length+"])");
+		PDRUtils.checkAlError("BufferData(" + bufferId + ", " + format + ", " + sampleRate + ", float[" + data.length + "])");
 	}
-	
+
 	public void setData(ShortBuffer data, int format, int sampleRate) {
 		AL11.alBufferData(bufferId, format, data, sampleRate);
-		PDRUtils.checkAlError("BufferData("+bufferId+", "+format+", "+sampleRate+", short["+data.capacity()+"])");
+		PDRUtils.checkAlError("BufferData(" + bufferId + ", " + format + ", " + sampleRate + ", short[" + data.capacity() + "])");
 	}
 
 	public void setData(IntBuffer data, int format, int sampleRate) {
 		AL11.alBufferData(bufferId, format, data, sampleRate);
-		PDRUtils.checkAlError("BufferData("+bufferId+", "+format+", "+sampleRate+", int["+data.capacity()+"])");
+		PDRUtils.checkAlError("BufferData(" + bufferId + ", " + format + ", " + sampleRate + ", int[" + data.capacity() + "])");
 	}
 
 	public void setData(FloatBuffer data, int format, int sampleRate) {
 		AL11.alBufferData(bufferId, format, data, sampleRate);
-		PDRUtils.checkAlError("BufferData("+bufferId+", "+format+", "+sampleRate+", float["+data.capacity()+"])");
+		PDRUtils.checkAlError("BufferData(" + bufferId + ", " + format + ", " + sampleRate + ", float[" + data.capacity() + "])");
 	}
 
 	@Override

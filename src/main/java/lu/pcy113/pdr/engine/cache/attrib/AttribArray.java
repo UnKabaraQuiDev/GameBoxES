@@ -117,9 +117,9 @@ public abstract class AttribArray implements Cleanupable {
 		this.bufferType = bufferType;
 	}
 
-	/*public void setVbo(int bufferIndex) {
-		this.bufferIndex = bufferIndex;
-	}*/
+	/*
+	 * public void setVbo(int bufferIndex) { this.bufferIndex = bufferIndex; }
+	 */
 
 	public int getBufferIndex() {
 		return bufferIndex;

@@ -16,27 +16,18 @@ public class BooleanButtonStateShader extends RenderShader {
 	public static final String VALUE = "value";
 
 	public BooleanButtonStateShader() {
-		super(NAME, AbstractShaderPart.load(
-				"./resources/shaders/ui/boolean_button.frag"),
-				AbstractShaderPart.load(
-						"./resources/shaders/ui/plain.vert"));
+		super(NAME, AbstractShaderPart.load("./resources/shaders/ui/boolean_button.frag"), AbstractShaderPart.load("./resources/shaders/ui/plain.vert"));
 	}
 
 	@Override
 	public void createUniforms() {
-		createUniform(
-				RenderShader.PROJECTION_MATRIX);
-		createUniform(
-				RenderShader.VIEW_MATRIX);
-		createUniform(
-				RenderShader.TRANSFORMATION_MATRIX);
-		createUniform(
-				RenderShader.VIEW_POSITION);
+		createUniform(RenderShader.PROJECTION_MATRIX);
+		createUniform(RenderShader.VIEW_MATRIX);
+		createUniform(RenderShader.TRANSFORMATION_MATRIX);
+		createUniform(RenderShader.VIEW_POSITION);
 
-		createUniform(
-				COLOR);
-		createUniform(
-				VALUE);
+		createUniform(COLOR);
+		createUniform(VALUE);
 	}
 
 	public static class BooleanButtonStateMaterial extends Material {
@@ -56,17 +47,10 @@ public class BooleanButtonStateShader extends RenderShader {
 
 		@Override
 		public void bindProperties(CacheManager cache, Renderable parent, RenderShader shader) {
-			setProperty(
-					COLOR,
-					color);
-			setProperty(
-					VALUE,
-					value);
+			setProperty(COLOR, color);
+			setProperty(VALUE, value);
 
-			super.bindProperties(
-					cache,
-					parent,
-					shader);
+			super.bindProperties(cache, parent, shader);
 		}
 
 		public void setValue(float value) {

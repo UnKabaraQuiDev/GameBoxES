@@ -104,7 +104,7 @@ public class CacheManager implements Cleanupable {
 		this.framebuffers.values().forEach(Framebuffer::cleanup);
 		this.framebuffers.clear();
 	}
-	
+
 	public void cleanupSounds() {
 		this.sounds.values().forEach(Sound::cleanup);
 		this.sounds.clear();
@@ -122,25 +122,23 @@ public class CacheManager implements Cleanupable {
 		return this.meshes.putIfAbsent(m.getId(), m) == null;
 	}
 
-	/*private boolean add(Map<String, UniqueID> map, UniqueID m) {
-		if (m == null)
-			return false;
-
-		if (map.containsKey(m.getId()) && !map.get(m.getId()).equals(m))
-			map.remove(m.getId());
-
-		return map.putIfAbsent(m.getId(), (UniqueID) m) == null;
-	}
-
-	private boolean addCleanup(Map<String, UniqueID> map, UniqueID m) {
-		if (m == null)
-			return false;
-
-		if (map.containsKey(m.getId()) && !map.get(m.getId()).equals(m))
-			((Cleanupable) map.remove(m.getId())).cleanup();
-
-		return map.putIfAbsent(m.getId(), (UniqueID) m) == null;
-	}*/
+	/*
+	 * private boolean add(Map<String, UniqueID> map, UniqueID m) { if (m == null)
+	 * return false;
+	 * 
+	 * if (map.containsKey(m.getId()) && !map.get(m.getId()).equals(m))
+	 * map.remove(m.getId());
+	 * 
+	 * return map.putIfAbsent(m.getId(), (UniqueID) m) == null; }
+	 * 
+	 * private boolean addCleanup(Map<String, UniqueID> map, UniqueID m) { if (m ==
+	 * null) return false;
+	 * 
+	 * if (map.containsKey(m.getId()) && !map.get(m.getId()).equals(m))
+	 * ((Cleanupable) map.remove(m.getId())).cleanup();
+	 * 
+	 * return map.putIfAbsent(m.getId(), (UniqueID) m) == null; }
+	 */
 
 	public boolean addScene(Scene m) {
 		if (m == null)
@@ -425,7 +423,7 @@ public class CacheManager implements Cleanupable {
 	public boolean hasFramebuffer(String name) {
 		return framebuffers.containsKey(name);
 	}
-	
+
 	public boolean hasSound(String name) {
 		return sounds.containsKey(name);
 	}
@@ -511,9 +509,9 @@ public class CacheManager implements Cleanupable {
 	public Sound loadSound(String name, String file) {
 		return loadSound(name, file, true);
 	}
-	
+
 	public Sound loadSound(String name, String file, boolean stereo) {
-		if(hasSound(name)) 
+		if (hasSound(name))
 			return getSound(name);
 		Sound sound = new Sound(name, file, stereo);
 		addSound(sound);

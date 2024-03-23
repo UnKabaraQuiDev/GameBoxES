@@ -12,10 +12,7 @@ public abstract class Vec3fCallbackValueInterpolation<T> extends CallbackValueIn
 
 	@Override
 	public Vector3f evaluate(float progress) {
-		return new Vector3f(
-				start).lerp(
-						end,
-						progress);
+		return new Vector3f(start).lerp(end, progress);
 	}
 
 }

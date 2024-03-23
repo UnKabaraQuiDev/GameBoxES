@@ -109,14 +109,14 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 			GL40.glEnable(GL40.GL_BLEND);
 		}
 		GameEngine.DEBUG.end("r_blend");
-		
+
 		GL40.glPolygonMode(shader.getFaceMode().getGlId(), shader.getRenderType().getGlId());
-		
+
 		GameEngine.DEBUG.start("r_draw");
-		if(mesh.hasDrawBuffer()) {
+		if (mesh.hasDrawBuffer()) {
 			mesh.getDrawBuffer().bind();
 			GL40.glDrawElementsIndirect(shader.getBeginMode().getGlId(), GL40.GL_UNSIGNED_INT, 0);
-		}else {
+		} else {
 			GL40.glDrawElements(shader.getBeginMode().getGlId(), mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);
 		}
 		GameEngine.DEBUG.end("r_draw");

@@ -17,45 +17,27 @@ public class BooleanButtonState extends Entity {
 	private BooleanButtonStateMaterial material;
 
 	public BooleanButtonState(CacheManager cache, Vector3f pos) {
-		if (cache.hasRenderShader(
-				BooleanButtonStateShader.NAME)) {
-			BooleanButtonStateShader shader = (BooleanButtonStateShader) cache.getRenderShader(
-					BooleanButtonStateShader.NAME);
-			this.material = (BooleanButtonStateMaterial) new BooleanButtonStateMaterial(
-					shader);
-			cache.addMaterial(
-					material);
+		if (cache.hasRenderShader(BooleanButtonStateShader.NAME)) {
+			BooleanButtonStateShader shader = (BooleanButtonStateShader) cache.getRenderShader(BooleanButtonStateShader.NAME);
+			this.material = (BooleanButtonStateMaterial) new BooleanButtonStateMaterial(shader);
+			cache.addMaterial(material);
 		} else
-			this.material = (BooleanButtonStateMaterial) cache.loadMaterial(
-					BooleanButtonStateMaterial.class);
-		this.mesh = Mesh.newQuad(
-				"float_button_state-" + hashCode(),
-				material,
-				new Vector2f(
-						0.5f,
-						0.2f));
-		cache.addMesh(
-				mesh);
+			this.material = (BooleanButtonStateMaterial) cache.loadMaterial(BooleanButtonStateMaterial.class);
+		this.mesh = Mesh.newQuad("float_button_state-" + hashCode(), material, new Vector2f(0.5f, 0.2f));
+		cache.addMesh(mesh);
 
-		super.addComponent(
-				new MeshComponent(
-						mesh));
-		super.addComponent(
-				new Transform3DComponent(
-						pos));
+		super.addComponent(new MeshComponent(mesh));
+		super.addComponent(new Transform3DComponent(pos));
 
-		material.setValue(
-				0);
+		material.setValue(0);
 	}
 
 	public void setValue(float value) {
-		material.setValue(
-				value);
+		material.setValue(value);
 	}
 
 	public void setColor(Vector4f color) {
-		material.setColor(
-				color);
+		material.setColor(color);
 	}
 
 	public Mesh getMesh() {

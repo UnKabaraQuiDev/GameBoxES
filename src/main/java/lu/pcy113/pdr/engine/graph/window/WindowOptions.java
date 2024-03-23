@@ -11,9 +11,7 @@ public class WindowOptions {
 	public boolean fullscreen = false;
 	public boolean vsync = true;
 	public boolean resizable = true;
-	public Vector2i windowSize = new Vector2i(
-			800,
-			600);
+	public Vector2i windowSize = new Vector2i(800, 600);
 	public String title = Consts.TITLE;
 	public int windowMultisample = 4;
 

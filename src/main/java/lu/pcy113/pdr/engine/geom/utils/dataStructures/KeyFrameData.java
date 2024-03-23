@@ -13,8 +13,7 @@ public class KeyFrameData {
 	}
 
 	public void addJointTransform(JointTransformData transform) {
-		jointTransforms.add(
-				transform);
+		jointTransforms.add(transform);
 	}
 
 }

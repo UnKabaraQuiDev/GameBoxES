@@ -25,10 +25,10 @@ public enum Interpolators implements Interpolator {
 			x = Math.clamp(0, 1, x);
 			return 1 - (1 - x) * (1 - x);
 		}
-		
+
 		@Override
 		public float inverse(float y) {
-			return (float) (1 - java.lang.Math.sqrt(1-y));
+			return (float) (1 - java.lang.Math.sqrt(1 - y));
 		}
 	},
 
@@ -263,19 +263,19 @@ public enum Interpolators implements Interpolator {
 	};
 
 	public static float findClosestX(float closest, Interpolator interpolator, float interval, float _default) {
-		
+
 		float x = interpolator.inverse(closest);
-		if(x != -1 && Float.isFinite(x)) {
+		if (x != -1 && Float.isFinite(x)) {
 			return x;
 		}
-		
+
 		float closestFound = Float.MAX_VALUE;
 		float closestFoundX = -1;
-		
-		for(float j = 1; j >= 0; j -= interval) {
+
+		for (float j = 1; j >= 0; j -= interval) {
 			float y = interpolator.evaluate(j);
-			if(Math.abs(closest-y) < closestFound) {
-				closestFound = Math.abs(closest-y);
+			if (Math.abs(closest - y) < closestFound) {
+				closestFound = Math.abs(closest - y);
 				closestFoundX = j;
 			}
 		}

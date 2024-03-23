@@ -45,14 +45,13 @@ public abstract class AbstractShader implements UniqueID, Cleanupable {
 		for (AbstractShaderPart sp : parts) {
 			this.parts.put(sp.getType(), sp);
 			GL20.glAttachShader(this.shaderProgram, sp.getSid());
-			PDRUtils.checkGlError("AttachShader("+this.shaderProgram+")");
+			PDRUtils.checkGlError("AttachShader(" + this.shaderProgram + ")");
 		}
 		GL20.glLinkProgram(this.shaderProgram);
-		PDRUtils.checkGlError("LinkProgram("+this.shaderProgram+")");
+		PDRUtils.checkGlError("LinkProgram(" + this.shaderProgram + ")");
 
 		if (GL20.glGetProgrami(this.shaderProgram, GL20.GL_LINK_STATUS) == GL11.GL_FALSE) {
-			GlobalLogger.log(Level.SEVERE,
-					name + "(" + shaderProgram + "): " + GL20.glGetProgramInfoLog(this.shaderProgram, 1024));
+			GlobalLogger.log(Level.SEVERE, name + "(" + shaderProgram + "): " + GL20.glGetProgramInfoLog(this.shaderProgram, 1024));
 			this.cleanup();
 			throw new IllegalStateException(name + "(" + shaderProgram + "): Failed to link shader program!");
 		} else if (!GL40.glIsProgram(shaderProgram)) {
@@ -71,18 +70,19 @@ public abstract class AbstractShader implements UniqueID, Cleanupable {
 
 	public boolean recompile() {
 		for (AbstractShaderPart part : parts.values()) {
-			if(!part.recompile())
+			if (!part.recompile())
 				return false;
 		}
-		/*for (AbstractShaderPart sp : parts.values()) {
-			GL20.glAttachShader(this.shaderProgram, sp.getSid());
-			PDRUtils.checkGlError("AttachShader("+this.shaderProgram+")");
-		}*/
+		/*
+		 * for (AbstractShaderPart sp : parts.values()) {
+		 * GL20.glAttachShader(this.shaderProgram, sp.getSid());
+		 * PDRUtils.checkGlError("AttachShader("+this.shaderProgram+")"); }
+		 */
 		GL20.glLinkProgram(this.shaderProgram);
-		PDRUtils.checkGlError("LinkProgram("+this.shaderProgram+")");
+		PDRUtils.checkGlError("LinkProgram(" + this.shaderProgram + ")");
 		return true;
 	}
-	
+
 	public abstract void createUniforms();
 
 	public void setUniform(String key, Object value) {
@@ -112,8 +112,7 @@ public abstract class AbstractShader implements UniqueID, Cleanupable {
 		} else if (value instanceof Vector3i) {
 			GL20.glUniform3i(unif.getValue(), ((Vector3i) value).x, ((Vector3i) value).y, ((Vector3i) value).z);
 		} else if (value instanceof Vector4f) {
-			GL20.glUniform4f(unif.getValue(), ((Vector4f) value).x, ((Vector4f) value).y, ((Vector4f) value).z,
-					((Vector4f) value).w);
+			GL20.glUniform4f(unif.getValue(), ((Vector4f) value).x, ((Vector4f) value).y, ((Vector4f) value).z, ((Vector4f) value).w);
 		} else if (value instanceof Double) {
 			GL40.glUniform1d(unif.getValue(), (double) value);
 		} else if (value instanceof Character) {
@@ -157,8 +156,7 @@ public abstract class AbstractShader implements UniqueID, Cleanupable {
 			this.uniforms.put(name, new Pair<>(new Property<>(), loc));
 			return true;
 		} else {
-			GlobalLogger.log(Level.SEVERE, "Could not get Uniform location for: " + name + " in program " + this.name
-					+ " (" + this.shaderProgram + ") (" + GL11.glGetError() + ")");
+			GlobalLogger.log(Level.SEVERE, "Could not get Uniform location for: " + name + " in program " + this.name + " (" + this.shaderProgram + ") (" + GL11.glGetError() + ")");
 		}
 
 		return false;

@@ -94,8 +94,8 @@ public class PDRClientGame4 extends GameLogic {
 
 	ShaderManager sm;
 
-	// Trigger Maven recompile 
-	
+	// Trigger Maven recompile
+
 	@Override
 	public void init(GameEngine e) {
 		System.err.println("Cache: " + cache);
@@ -206,7 +206,8 @@ public class PDRClientGame4 extends GameLogic {
 		// camera.getProjection().update();
 
 		cameraUi = (Camera3D) this.ui.getCamera();
-		//cameraUi.setProjection(new Projection(0.01f, 100f, -0.5f, 0.5f, 0.5f, -0.5f));
+		// cameraUi.setProjection(new Projection(0.01f, 100f, -0.5f, 0.5f, 0.5f,
+		// -0.5f));
 		cameraUi.setPosition(new Vector3f(-1, 0, 0));
 		cameraUi.lookAt(new Vector3f(-5, 0, 0), new Vector3f(-1, 0, 0));
 		cameraUi.updateMatrix();
@@ -214,7 +215,7 @@ public class PDRClientGame4 extends GameLogic {
 		this.ui.getCamera().getProjection().update(1920, 1080);
 		((Camera3D) this.scene.getCamera()).lookAt(new Vector3f(-5, 0, 0), new Vector3f(0, 0, 0));
 		this.scene.getCamera().getProjection().setPerspective(true);
-		//this.scene.getCamera().getProjection().update(1920, 1080);
+		// this.scene.getCamera().getProjection().update(1920, 1080);
 		engine.getWindow().onResize((w, h) -> {
 			System.out.println("resize update: " + w + "x" + h);
 			this.scene.getCamera().getProjection().update(w, h);
@@ -249,7 +250,7 @@ public class PDRClientGame4 extends GameLogic {
 
 	private ALSourcePool audioPool;
 	private ALSource source2;
-	
+
 	@Override
 	public void updateInit() {
 		audioPool = new ALSourcePool(audio, 50);
@@ -310,17 +311,17 @@ public class PDRClientGame4 extends GameLogic {
 
 		defaultCube.getComponent(Transform3DComponent.class).getTransform().getTranslation().set(Math.sin(gx), 0, Math.cos(gx));
 		defaultCube.getComponent(Transform3DComponent.class).getTransform().updateMatrix();
-		
+
 		defaultCube.getComponent(ALSource3DComponent.class).update();
-		
+
 		source2.setPosition(defaultCube.getComponent(Transform3DComponent.class).getTransform().getTranslation());
-		
+
 		// cache.getSound("buzz").setPosition(defaultCube.getComponent(Transform3DComponent.class).getTransform().getTranslation());
 	}
 
 	float hover = 0;
 	boolean needReverse = false;
-	
+
 	private void manageUi() {
 		int[] viewport = new int[4];
 		createTask(GameEngine.QUEUE_RENDER).exec((s) -> {
@@ -350,9 +351,9 @@ public class PDRClientGame4 extends GameLogic {
 				UIComponent uiComponent = (UIComponent) e.getComponent(e.getComponents(UIComponent.class).get(0));
 				if (uiComponent instanceof UIComponentRectangle) {
 
-					if(uiComponent.contains(pos)) {
+					if (uiComponent.contains(pos)) {
 						((UIComponentRectangle) uiComponent).hover(pos);
-					}else if(((UIComponentRectangle) uiComponent).needsAttention()) {
+					} else if (((UIComponentRectangle) uiComponent).needsAttention()) {
 						((UIComponentRectangle) uiComponent).attention(pos);
 					}
 				}
@@ -403,7 +404,8 @@ public class PDRClientGame4 extends GameLogic {
 		debugInfo.setText("FPS: " + PDRUtils.round(engine.getCurrentFps(), 2) + "\nNL");
 		debugInfo.setBoxed(true);
 		debugInfo.setBoxSize(new Vector2f(1 + (float) Math.sin(backgroundMaterialInterpolation.get()), 1));
-		//ui.getCamera().getProjection().setSize(Math.lerp(100f, 500f, Math.sin(backgroundMaterialInterpolation.get()*(float) Math.PI))).update();
+		// ui.getCamera().getProjection().setSize(Math.lerp(100f, 500f,
+		// Math.sin(backgroundMaterialInterpolation.get()*(float) Math.PI))).update();
 		debugInfo.updateText();
 
 		compositor.render(cache, engine);

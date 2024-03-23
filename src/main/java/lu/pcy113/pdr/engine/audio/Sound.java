@@ -37,7 +37,7 @@ public class Sound implements UniqueID, Cleanupable {
 
 		boolean stereoBuffer = vorbis_channels_sampleRate.getSecond() == 2;
 		boolean monoBuffer = vorbis_channels_sampleRate.getSecond() == 1;
-		
+
 		if (!stereo && !monoBuffer) {
 			ShortBuffer preBuffer = vorbis_channels_sampleRate.getFirst();
 			vorbis_channels_sampleRate.setFirst(bufferToMonoAvg(preBuffer, vorbis_channels_sampleRate.getSecond()));
@@ -51,7 +51,7 @@ public class Sound implements UniqueID, Cleanupable {
 		// free mem
 		if (!stereo && !monoBuffer) {
 			MemoryUtil.memFree(vorbis_channels_sampleRate.getFirst());
-		}else {
+		} else {
 			LibCStdlib.free(vorbis_channels_sampleRate.getFirst());
 		}
 		// vorbis_channels_sampleRate.getFirst().clear();

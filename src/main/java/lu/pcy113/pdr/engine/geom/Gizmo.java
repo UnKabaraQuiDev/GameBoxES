@@ -144,12 +144,8 @@ public class Gizmo implements UniqueID, Cleanupable, Renderable {
 	}
 
 	public static Gizmo newRect(String name, Vector2f scale, Vector4f textBoxColor) {
-		return new Gizmo(name,
-				new Vec3fAttribArray("pos", 0, 1,
-						new Vector3f[] { new Vector3f(0, 0, 0), new Vector3f(scale.x, 0, 0),
-								new Vector3f(scale.x, scale.y, 0), new Vector3f(0, scale.y, 0) }),
-				new UIntAttribArray("ind", -1, 1, new int[] { 0, 1, 1, 2, 2, 3, 3, 0 }), new Vec4fAttribArray("color",
-						1, 1, new Vector4f[] { textBoxColor, textBoxColor, textBoxColor, textBoxColor }));
+		return new Gizmo(name, new Vec3fAttribArray("pos", 0, 1, new Vector3f[] { new Vector3f(0, 0, 0), new Vector3f(scale.x, 0, 0), new Vector3f(scale.x, scale.y, 0), new Vector3f(0, scale.y, 0) }),
+				new UIntAttribArray("ind", -1, 1, new int[] { 0, 1, 1, 2, 2, 3, 3, 0 }), new Vec4fAttribArray("color", 1, 1, new Vector4f[] { textBoxColor, textBoxColor, textBoxColor, textBoxColor }));
 	}
 
 }

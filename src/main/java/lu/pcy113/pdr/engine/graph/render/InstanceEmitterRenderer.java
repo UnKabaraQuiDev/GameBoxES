@@ -64,8 +64,7 @@ public class InstanceEmitterRenderer extends Renderer<Scene, InstanceEmitterComp
 			material.setPropertyIfPresent(RenderShader.VIEW_MATRIX, viewMatrix);
 		}
 		if (pec.getParent().hasComponent(TransformComponent.class)) {
-			TransformComponent transform = (TransformComponent) pec.getParent()
-					.getComponent(pec.getParent().getComponents(TransformComponent.class).get(0));
+			TransformComponent transform = (TransformComponent) pec.getParent().getComponent(pec.getParent().getComponents(TransformComponent.class).get(0));
 			if (transform != null) {
 				transformationMatrix = transform.getTransform().getMatrix();
 			}
@@ -94,14 +93,14 @@ public class InstanceEmitterRenderer extends Renderer<Scene, InstanceEmitterComp
 		// GameEngine.DEBUG.start("r_compute");
 		// pe.updatePull();
 		// GameEngine.DEBUG.end("r_compute");
-		
+
 		GL40.glPolygonMode(shader.getFaceMode().getGlId(), shader.getRenderType().getGlId());
-		
+
 		GameEngine.DEBUG.start("r_draw");
-		if(mesh.hasDrawBuffer()) {
+		if (mesh.hasDrawBuffer()) {
 			mesh.getDrawBuffer().bind();
 			GL46.glDrawElementsIndirect(shader.getBeginMode().getGlId(), GL40.GL_UNSIGNED_INT, 0);
-		}else {
+		} else {
 			GL40.glDrawElementsInstanced(shader.getBeginMode().getGlId(), mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0, pe.getParticleCount());
 		}
 		GameEngine.DEBUG.end("r_draw");

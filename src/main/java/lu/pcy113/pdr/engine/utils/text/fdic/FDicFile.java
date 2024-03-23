@@ -18,8 +18,7 @@ public class FDicFile {
 	}
 
 	public FDicGlyph getGlyph(char c) {
-		return glyphs.get(
-				c);
+		return glyphs.get(c);
 	}
 
 	public File getFile() {

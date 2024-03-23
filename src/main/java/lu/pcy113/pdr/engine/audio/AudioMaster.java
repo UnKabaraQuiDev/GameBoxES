@@ -25,9 +25,9 @@ import lu.pcy113.pdr.engine.utils.PDRUtils;
 public class AudioMaster implements Cleanupable {
 
 	// https://github.com/LWJGL/lwjgl3/blob/master/modules/samples/src/test/java/org/lwjgl/demo/openal/ALCDemo.java
-	
+
 	private Thread thread;
-	
+
 	private boolean useTLC = false;
 	private long device, alContext;
 	private ALCCapabilities deviceCapabilities;;
@@ -35,13 +35,13 @@ public class AudioMaster implements Cleanupable {
 
 	public AudioMaster() {
 		setup();
-		
-		//testPlayback();
+
+		// testPlayback();
 	}
-	
+
 	private void setup() {
 		this.thread = Thread.currentThread();
-		
+
 		device = ALC10.alcOpenDevice((ByteBuffer) null);
 		if (device == MemoryUtil.NULL) {
 			throw new RuntimeException("Could not open ALC device");
@@ -71,79 +71,80 @@ public class AudioMaster implements Cleanupable {
 
 		capabilities = AL.createCapabilities(deviceCapabilities, MemoryUtil::memCallocPointer);
 
-		GlobalLogger.info("ALC_FREQUENCY: " + alcGetInteger(device, ALC11.ALC_FREQUENCY)+"Hz");
-		GlobalLogger.info("ALC_REFRESH: " + alcGetInteger(device, ALC11.ALC_REFRESH)+"Hz");
+		GlobalLogger.info("ALC_FREQUENCY: " + alcGetInteger(device, ALC11.ALC_FREQUENCY) + "Hz");
+		GlobalLogger.info("ALC_REFRESH: " + alcGetInteger(device, ALC11.ALC_REFRESH) + "Hz");
 		GlobalLogger.info("ALC_SYNC: " + alcGetBool(device, ALC11.ALC_SYNC));
 		GlobalLogger.info("ALC_MONO_SOURCES: " + alcGetInteger(device, ALC11.ALC_MONO_SOURCES));
 		GlobalLogger.info("ALC_STEREO_SOURCES: " + alcGetInteger(device, ALC11.ALC_STEREO_SOURCES));
-		
-		//System.out.println("Thread: "+Thread.currentThread().getName()+" al cap: "+AL.getCapabilities());
+
+		// System.out.println("Thread: "+Thread.currentThread().getName()+" al cap:
+		// "+AL.getCapabilities());
 	}
-	
+
 	public AudioMaster setDistanceModel(int model) {
 		AL11.alDistanceModel(model);
-		PDRUtils.checkAlError("DistanceModel()="+model);
+		PDRUtils.checkAlError("DistanceModel()=" + model);
 		return this;
 	}
-	
+
 	public AudioMaster setPosition(Vector3f pos) {
-		//System.err.println("sound cam pos: " + pos);
+		// System.err.println("sound cam pos: " + pos);
 		AL11.alListener3f(AL11.AL_POSITION, pos.x, pos.y, pos.z);
 		PDRUtils.checkAlError("Listener3f().POSITION=" + pos);
 		return this;
 	}
-	
+
 	public AudioMaster setVelocity(Vector3f vel) {
 		AL11.alListener3f(AL11.AL_VELOCITY, vel.x, vel.y, vel.z);
 		PDRUtils.checkAlError("Listener3f().VELOCITY=" + vel);
 		return this;
 	}
-	
+
 	public AudioMaster setVolume(float gain) {
 		AL11.alListenerf(AL11.AL_GAIN, gain);
 		PDRUtils.checkAlError("Listenerf().GAIN=" + gain);
 		return this;
 	}
-	
+
 	public AudioMaster setOrientation(Vector3f orientation, Vector3f up) {
 		float[] orientationArr = { orientation.x, orientation.y, orientation.z, up.x, up.y, up.z };
 		AL11.alListenerfv(AL11.AL_ORIENTATION, orientationArr);
-		PDRUtils.checkAlError("Listenerfv().ORIENTATION=(" + orientation+", " + up+")");
+		PDRUtils.checkAlError("Listenerfv().ORIENTATION=(" + orientation + ", " + up + ")");
 		return this;
 	}
-	
+
 	public AudioMaster setDopplerFactor(float factor) {
 		AL11.alDopplerFactor(factor);
 		PDRUtils.checkAlError("DopplerFactor()=" + factor);
 		return this;
 	}
-	
+
 	public AudioMaster setDopplerVelocity(float factor) {
 		AL11.alDopplerVelocity(factor);
 		PDRUtils.checkAlError("DopplerVelocity()=" + factor);
 		return this;
 	}
-	
+
 	public AudioMaster setSpeedOfSound(float speed) {
 		AL11.alSpeedOfSound(speed);
 		PDRUtils.checkAlError("SpeedOfSound()=" + speed);
 		return this;
 	}
-	
+
 	public boolean checkAccess() {
 		return Objects.equals(Thread.currentThread(), thread);
 	}
-	
+
 	public void checkAccessThrow() {
-		if(!checkAccess()) {
-			throw new IllegalAccessError(Thread.currentThread().getName()+" cannot access the audio context in "+getThreadName());
+		if (!checkAccess()) {
+			throw new IllegalAccessError(Thread.currentThread().getName() + " cannot access the audio context in " + getThreadName());
 		}
 	}
-	
+
 	public boolean alcGetBool(int param) {
 		return alcGetBool(device, param);
 	}
-	
+
 	public boolean alcGetBool(long device, int param) {
 		return ALC11.alcGetInteger(device, param) == ALC11.ALC_TRUE;
 	}
@@ -171,7 +172,7 @@ public class AudioMaster implements Cleanupable {
 	public List<String> getDeviceNames() {
 		return PDRUtils.alcNullError(ALUtil.getStringList(MemoryUtil.NULL, ALC11.ALC_ALL_DEVICES_SPECIFIER), "Could not get devices.");
 	}
-	
+
 	public long getDevice() {
 		return device;
 	}
@@ -179,11 +180,11 @@ public class AudioMaster implements Cleanupable {
 	public Thread getThread() {
 		return thread;
 	}
-	
+
 	public String getThreadName() {
 		return thread == null ? null : thread.getName();
 	}
-	
+
 	@Override
 	public void cleanup() {
 		ALC11.alcMakeContextCurrent(MemoryUtil.NULL);

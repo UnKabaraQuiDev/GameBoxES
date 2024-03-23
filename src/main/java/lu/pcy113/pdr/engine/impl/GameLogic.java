@@ -15,21 +15,24 @@ public abstract class GameLogic {
 	protected AudioMaster audio;
 
 	public void register(GameEngine e) {
-		/*if (this.engine != null)
-			throw new IllegalStateException("Already registered");*/
+		/*
+		 * if (this.engine != null) throw new
+		 * IllegalStateException("Already registered");
+		 */
 
 		this.engine = e;
 
 		this.cache = e.getCache();
 		this.window = e.getWindow();
-		
+
 		this.audio = e.getAudioMaster();
 	}
 
 	public abstract void init(GameEngine e);
-	
-	public void updateInit() {}
-	
+
+	public void updateInit() {
+	}
+
 	public abstract void input(float dTime);
 
 	public abstract void update(float dTime);

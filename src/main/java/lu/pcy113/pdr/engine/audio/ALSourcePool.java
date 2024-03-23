@@ -33,11 +33,11 @@ public class ALSourcePool {
 				this.usedSources.add(source);
 			}
 		}
-		
-		if(sourceCount >= maxSources) {
+
+		if (sourceCount >= maxSources) {
 			return null;
 		}
-		
+
 		// If no free source found, create a new one
 		ALSource newSource = new ALSource(this);
 		newSource.gen();
@@ -53,12 +53,12 @@ public class ALSourcePool {
 				newSource.gen();
 				availableSources.add(newSource);
 				sourceCount++;
-			}catch(ALRuntimeException e) {
+			} catch (ALRuntimeException e) {
 				e.printStackTrace();
 				return i;
 			}
-			
-			if(sourceCount <= maxSources) {
+
+			if (sourceCount <= maxSources) {
 				continue;
 			}
 		}

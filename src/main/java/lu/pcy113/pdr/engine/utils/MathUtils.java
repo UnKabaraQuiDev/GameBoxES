@@ -12,7 +12,7 @@ public final class MathUtils {
 	}
 
 	public static boolean compare(float a, float b, float epsilon) {
-		return Math.abs(a-b) <= epsilon;
+		return Math.abs(a - b) <= epsilon;
 	}
 
 	public static Vector3f vec3fromQuatf(Quaternionf rotation) {

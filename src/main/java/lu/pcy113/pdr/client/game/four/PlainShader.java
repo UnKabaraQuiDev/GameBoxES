@@ -15,18 +15,14 @@ public class PlainShader extends RenderShader {
 	public static final String COLOR = "color";
 
 	public PlainShader() {
-		super(NAME, AbstractShaderPart.load(
-				"./resources/shaders/plain.vert"),
-				AbstractShaderPart.load(
-						"./resources/shaders/plain.frag"));
+		super(NAME, AbstractShaderPart.load("./resources/shaders/plain.vert"), AbstractShaderPart.load("./resources/shaders/plain.frag"));
 	}
 
 	@Override
 	public void createUniforms() {
 		super.createSceneUniforms();
 
-		super.createUniform(
-				COLOR);
+		super.createUniform(COLOR);
 	}
 
 	public static class PlainMaterial extends Material {
@@ -45,14 +41,9 @@ public class PlainShader extends RenderShader {
 
 		@Override
 		public void bindProperties(CacheManager cache, Renderable parent, RenderShader shader) {
-			setProperty(
-					COLOR,
-					color);
+			setProperty(COLOR, color);
 
-			super.bindProperties(
-					cache,
-					parent,
-					shader);
+			super.bindProperties(cache, parent, shader);
 		}
 
 		public void setColor(Vector4f color) {

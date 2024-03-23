@@ -1,8 +1,8 @@
 package lu.pcy113.pdr.engine.geom.utils.dataStructures;
 
 /**
- * Contains the extracted data for an animated model, which includes the mesh data, and skeleton (joints heirarchy)
- * data.
+ * Contains the extracted data for an animated model, which includes the mesh
+ * data, and skeleton (joints heirarchy) data.
  * 
  * @author Karl
  *

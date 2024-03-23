@@ -57,7 +57,7 @@ public class Compositor implements Cleanupable {
 
 		if (!framebuffer.attachTexture(FrameBufferAttachment.DEPTH, 0, depth))
 			return false;
-		
+
 		if (!framebuffer.attachTexture(FrameBufferAttachment.COLOR_FIRST, 0, color0))
 			return false;
 
@@ -66,7 +66,7 @@ public class Compositor implements Cleanupable {
 
 	public void render(CacheManager cache, GameEngine engine) {
 		if (framebuffer == null) {
-			framebuffer = cache.loadFramebuffer(this.getClass().getName()+"#"+hashCode());
+			framebuffer = cache.loadFramebuffer(this.getClass().getName() + "#" + hashCode());
 		}
 
 		framebuffer.bind();

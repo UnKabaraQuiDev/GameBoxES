@@ -8,14 +8,14 @@ public class NextTaskThread extends Thread {
 	private final NextTaskEnvironnment env;
 
 	private boolean running = true, sleeping = false;
-	
+
 	public NextTaskThread(int id, ThreadGroup threadGroup, String name, NextTaskEnvironnment env) {
 		super(threadGroup, name);
 
 		this.id = id;
 		this.env = env;
 	}
-	
+
 	public NextTaskThread(int id, ThreadGroup threadGroup, NextTaskEnvironnment env) {
 		super(threadGroup, threadGroup.getName() + "-" + id);
 

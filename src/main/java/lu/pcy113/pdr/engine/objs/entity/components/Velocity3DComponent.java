@@ -9,8 +9,7 @@ public class Velocity3DComponent extends VelocityComponent {
 	private Vector3f velocity;
 
 	public Velocity3DComponent() {
-		this(new Vector3f(
-				0));
+		this(new Vector3f(0));
 	}
 
 	public Velocity3DComponent(Vector3f velocity) {
@@ -22,13 +21,11 @@ public class Velocity3DComponent extends VelocityComponent {
 		if (e == null)
 			return;
 
-		Transform3DComponent t3de = e.getComponent(
-				Transform3DComponent.class);
+		Transform3DComponent t3de = e.getComponent(Transform3DComponent.class);
 		if (t3de == null)
 			return;
 
-		t3de.getTransform().getTranslation().add(
-				this.velocity);
+		t3de.getTransform().getTranslation().add(this.velocity);
 	}
 
 	public Vector3f getVelocity() {

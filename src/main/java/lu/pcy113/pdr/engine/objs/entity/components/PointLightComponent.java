@@ -24,8 +24,7 @@ public class PointLightComponent extends LightComponent {
 	}
 
 	public PointLight getPointLight(CacheManager cache) {
-		return cache.getPointLight(
-				this.pointLightId);
+		return cache.getPointLight(this.pointLightId);
 	}
 
 	public void setPointLight(PointLight pointLight) {

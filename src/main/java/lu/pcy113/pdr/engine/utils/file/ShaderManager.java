@@ -33,7 +33,8 @@ public class ShaderManager {
 
 		try {
 			watchService = FileSystems.getDefault().newWatchService();
-			//root.register(watchService, StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_CREATE);
+			// root.register(watchService, StandardWatchEventKinds.ENTRY_MODIFY,
+			// StandardWatchEventKinds.ENTRY_CREATE);
 			Files.walkFileTree(root, new SimpleFileVisitor<Path>() {
 				@Override
 				public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {

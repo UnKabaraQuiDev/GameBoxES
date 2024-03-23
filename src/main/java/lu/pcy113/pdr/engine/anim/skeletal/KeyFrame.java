@@ -8,13 +8,10 @@ public class KeyFrame {
 	private final Map<String, BoneTransform> pose;
 
 	/**
-	 * @param timeStamp
-	 *                       - the time (in seconds) that this keyframe occurs during the
-	 *                       animation.
-	 * @param jointKeyFrames
-	 *                       - the local-space transforms for all the joints at this
-	 *                       keyframe, indexed by the name of the joint that they should be
-	 *                       applied to.
+	 * @param timeStamp - the time (in seconds) that this keyframe occurs during the
+	 * animation.
+	 * @param jointKeyFrames - the local-space transforms for all the joints at this
+	 * keyframe, indexed by the name of the joint that they should be applied to.
 	 */
 	public KeyFrame(float timeStamp, Map<String, BoneTransform> jointKeyFrames) {
 		this.timeStamp = timeStamp;
@@ -29,10 +26,9 @@ public class KeyFrame {
 	}
 
 	/**
-	 * @return The desired bone-space transforms of all the joints at this
-	 *         keyframe, of the animation, indexed by the name of the joint that
-	 *         they correspond to. This basically represents the "pose" at this
-	 *         keyframe.
+	 * @return The desired bone-space transforms of all the joints at this keyframe,
+	 * of the animation, indexed by the name of the joint that they correspond to.
+	 * This basically represents the "pose" at this keyframe.
 	 */
 	protected Map<String, BoneTransform> getJointKeyFrames() {
 		return pose;

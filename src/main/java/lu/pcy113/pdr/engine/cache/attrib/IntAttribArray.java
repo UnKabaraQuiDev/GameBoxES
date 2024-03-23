@@ -39,10 +39,10 @@ public class IntAttribArray extends AttribArray {
 	@Override
 	public void init() {
 		GL40.glBufferData(bufferType, data, iStatic ? GL40.GL_STATIC_DRAW : GL40.GL_DYNAMIC_DRAW);
-		PDRUtils.checkGlError("BufferData("+bufferType+", "+Arrays.toString(data)+", "+iStatic+")");
+		PDRUtils.checkGlError("BufferData(" + bufferType + ", " + Arrays.toString(data) + ", " + iStatic + ")");
 		if (bufferType != GL40.GL_ELEMENT_ARRAY_BUFFER && bufferType != GL46.GL_UNIFORM_BUFFER && bufferType != GL46.GL_DRAW_INDIRECT_BUFFER) {
 			GL40.glVertexAttribPointer(index, dataSize, GL40.GL_INT, false, 0, 0);
-			PDRUtils.checkGlError("VertexAttribPointer("+index+", "+dataSize+", INT, FALSE, 0, 0)");
+			PDRUtils.checkGlError("VertexAttribPointer(" + index + ", " + dataSize + ", INT, FALSE, 0, 0)");
 		}
 	}
 
@@ -58,11 +58,11 @@ public class IntAttribArray extends AttribArray {
 	public Integer get(int i) {
 		return data[i];
 	}
-	
+
 	public boolean update() {
 		return update(data);
 	}
-	
+
 	public boolean update(int[] nPos) {
 		if (!iStatic && nPos.length != data.length)
 			return false;
