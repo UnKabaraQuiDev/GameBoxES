@@ -24,16 +24,18 @@ jobs:
 
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           token: ${{ secrets.MY_REPO_PAT }}
           submodules: true
           fetch-depth: 0
 
       - name: Setup Java JDK 8
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v4
         with:
           java-version: '8'
+          distribution: 'temurin'
+          cache: maven
 
       - name: Pre-download dependencies with Maven
         run: mvn -U -B -ntp dependency:go-offline
