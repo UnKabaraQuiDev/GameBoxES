@@ -2,6 +2,8 @@ package lu.pcy113.pdr.engine.utils.interpolation;
 
 import org.joml.Math;
 
+import lu.pcy113.pdr.engine.utils.MathUtils;
+
 public enum Interpolators implements Interpolator, InverseInterpolator {
 
 	LINEAR {
@@ -24,6 +26,11 @@ public enum Interpolators implements Interpolator, InverseInterpolator {
 		public float evaluate(float x) {
 			x = Math.clamp(0, 1, x);
 			return 1 - (1 - x) * (1 - x);
+		}
+		
+		@Override
+		public float inverse(float y) {
+			return (float) (1 - java.lang.Math.sqrt(y - 1));
 		}
 	},
 
@@ -118,11 +125,6 @@ public enum Interpolators implements Interpolator, InverseInterpolator {
 		public float evaluate(float x) {
 			x = Math.clamp(0, 1, x);
 			return 1 - (1 - x) * (1 - x) * (1 - x) * (1 - x) * (1 - x);
-		}
-
-		@Override
-		public float inverse(float y) {
-			return (float) (1 - java.lang.Math.sqrt(y - 1));
 		}
 	},
 
@@ -261,5 +263,15 @@ public enum Interpolators implements Interpolator, InverseInterpolator {
 			}
 		}
 	};
+
+	public static float findClosestX(float closest, Interpolators interpolator, float interval, float _default) {
+		for(float j = 1; j >= 0; j -= interval) {
+			float y = interpolator.evaluate(j);
+			if(MathUtils.compare(y, closest, 0.05f)) {
+				return y;
+			}
+		}
+		return _default;
+	}
 
 }

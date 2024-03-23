@@ -2,6 +2,7 @@ package lu.pcy113.pdr.client.game.four;
 
 import java.io.IOException;
 
+import org.joml.Math;
 import org.joml.Quaternionf;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -60,6 +61,7 @@ import lu.pcy113.pdr.engine.scene.Scene3D;
 import lu.pcy113.pdr.engine.scene.camera.Camera;
 import lu.pcy113.pdr.engine.scene.camera.Camera3D;
 import lu.pcy113.pdr.engine.scene.camera.Projection;
+import lu.pcy113.pdr.engine.utils.MathUtils;
 import lu.pcy113.pdr.engine.utils.PDRUtils;
 import lu.pcy113.pdr.engine.utils.consts.FrameBufferAttachment;
 import lu.pcy113.pdr.engine.utils.consts.TextureFilter;
@@ -84,7 +86,6 @@ public class PDRClientGame4 extends GameLogic {
 	TextEmitter debugInfo;
 
 	Entity defaultCube, rayEntity, debugFps, slotUiEntity;
-	CallbackValueInterpolation<Transform3D, Vector3f> uiComponentInterpolation;
 
 	Compositor compositor;
 
@@ -258,19 +259,6 @@ public class PDRClientGame4 extends GameLogic {
 		audio.setVelocity(GameEngine.ZERO);
 		audio.setOrientation(new Vector3f(0, 0, 1), GameEngine.UP);
 
-		uiComponentInterpolation = new CallbackValueInterpolation<Transform3D, Vector3f>(slotUiEntity.getComponent(Transform3DComponent.class).getTransform(), new Vector3f(1), new Vector3f(2f), Interpolators.LINEAR) {
-			@Override
-			public Vector3f evaluate(float pro) {
-				return start.lerp(end, pro, new Vector3f());
-			}
-
-			@Override
-			public void callback(Transform3D object, Vector3f value) {
-				object.setScale(value).updateMatrix();
-			}
-
-		};
-
 		defaultCube.addComponent(new ALSource3DComponent(source2));
 		audio.setDistanceModel(AL11.AL_INVERSE_DISTANCE);
 	}
@@ -328,7 +316,8 @@ public class PDRClientGame4 extends GameLogic {
 	}
 
 	float hover = 0;
-
+	boolean needReverse = false;
+	
 	private void manageUi() {
 		int[] viewport = new int[4];
 		createTask(GameEngine.QUEUE_RENDER).exec((s) -> {
@@ -358,14 +347,12 @@ public class PDRClientGame4 extends GameLogic {
 				UIComponent uiComponent = (UIComponent) e.getComponent(e.getComponents(UIComponent.class).get(0));
 				if (uiComponent instanceof UIComponentRectangle) {
 
-					if (((UIComponentRectangle) uiComponent).contains(pos)) {
-						uiComponentInterpolation.setInterpolator(Interpolators.BACK_OUT);
-						uiComponentInterpolation.add(0.1f).clamp().exec();
-					} else {
-						uiComponentInterpolation.setInterpolator(Interpolators.QUAD_OUT);
-						uiComponentInterpolation.add(-0.15f).clamp().exec();
+					if(uiComponent.contains(pos)) {
+						((UIComponentRectangle) uiComponent).hover(pos);
+					}else if(((UIComponentRectangle) uiComponent).needsAttention()) {
+						((UIComponentRectangle) uiComponent).attention(pos);
 					}
-
+					
 					/*
 					 * if (((UIComponentRectangle) uiComponent).contains(pos)) { hover += 0.4f;
 					 * hover = org.joml.Math.clamp(0, 1, hover);
