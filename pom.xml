@@ -193,7 +193,7 @@
 						</goals>
 						<configuration>
 							<sources>
-								<source>${project.basedir}/../packets4j/src</source>
+								<source>${project.basedir}/packets4j/src</source>
 							</sources>
 						</configuration>
 					</execution>
@@ -207,7 +207,7 @@
 						</goals>
 						<configuration>
 							<sources>
-								<source>${project.basedir}/../JByteCodec/src</source>
+								<source>${project.basedir}/JByteCodec/src</source>
 							</sources>
 						</configuration>
 					</execution>
@@ -221,7 +221,7 @@
 						</goals>
 						<configuration>
 							<sources>
-								<source>${project.basedir}/../PDRUtils/src</source>
+								<source>${project.basedir}/PDRUtils/src</source>
 							</sources>
 						</configuration>
 					</execution>
