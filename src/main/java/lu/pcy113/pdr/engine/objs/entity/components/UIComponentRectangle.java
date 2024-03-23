@@ -60,7 +60,7 @@ public class UIComponentRectangle extends UIComponent {
 		if(!attached)
 			return attached;
 		
-		interpolator = new CallbackValueInterpolation<Transform3D, Vector3f>(parent.getComponent(Transform3DComponent.class).getTransform(), new Vector3f(1), new Vector3f(2f), Interpolators.LINEAR) {
+		interpolator = new CallbackValueInterpolation<Transform3D, Vector3f>(parent.getComponent(Transform3DComponent.class).getTransform(), new Vector3f(1), new Vector3f(1.1f), Interpolators.LINEAR) {
 			@Override
 			public Vector3f evaluate(float pro) {
 				return start.lerp(end, pro, new Vector3f());
@@ -80,12 +80,12 @@ public class UIComponentRectangle extends UIComponent {
 	private Interpolator outIntepolation = Interpolators.QUAD_OUT,
 			inInterpolation = Interpolators.BACK_OUT;
 	
-	private float inSpeed = 0.01f, outSpeed = 0.01f;
+	private float inSpeed = 0.18f, outSpeed = 0.25f;
 	
 	@Override
 	public void hover(Vector2f pos) {
 		if(isReverse == true) {
-			interpolator.progress = Interpolators.findClosestX(interpolator.getInterpolator().evaluate(interpolator.progress), inInterpolation, 0.025f, 0);
+			interpolator.set(Interpolators.findClosestX(interpolator.getInterpolator().evaluate(interpolator.progress), inInterpolation, 0.025f, 0));
 			isReverse = false;
 		}
 		interpolator.setInterpolator(inInterpolation);
@@ -98,7 +98,7 @@ public class UIComponentRectangle extends UIComponent {
 	
 	public void attention(Vector2f pos) {
 		if(isReverse == false) {
-			interpolator.progress = Interpolators.findClosestX(interpolator.getInterpolator().evaluate(interpolator.progress), outIntepolation, 0.025f, 1);
+			interpolator.set(Interpolators.findClosestX(interpolator.getInterpolator().evaluate(interpolator.progress), outIntepolation, 0.025f, 1));
 			isReverse = true;
 		}
 		interpolator.setInterpolator(Interpolators.QUAD_OUT);
