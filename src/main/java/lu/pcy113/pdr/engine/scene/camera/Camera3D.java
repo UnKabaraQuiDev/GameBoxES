@@ -4,6 +4,7 @@ import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
+import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pdr.engine.GameEngine;
 
 public class Camera3D extends Camera {
@@ -11,24 +12,37 @@ public class Camera3D extends Camera {
 	protected Vector3f position;
 	// protected float pitch = 0, yaw = 0, roll = 0;
 	protected Quaternionf rotation;
+	protected Vector3f up = GameEngine.UP;
 
 	public Camera3D(Vector3f position, Quaternionf rot, Projection proj) {
 		super(proj);
 		this.position = position;
 		this.rotation = rot;
 
-		viewMatrix.setLookAt(position, // Camera position
-				new Vector3f(0.0f, 0.0f, 0.0f), // Look at position
-				GameEngine.UP // Up vector
-		);
+		lookAt(position, new Vector3f(0));
+		updateMatrix();
 	}
 
 	public Camera3D lookAt(Vector3f from, Vector3f to) {
-		viewMatrix.setLookAt(from, // Camera position
-				to, // Look at position
-				GameEngine.UP // Up vector
-		);
-		// updateMatrix();
+		Vector3f forward = new Vector3f(to).sub(from).normalize();
+		Vector3f right = forward.cross(up, new Vector3f()).normalize();
+		
+		// Recalculate up vector
+		Vector3f up = right.cross(forward, new Vector3f()).normalize();
+		
+		// Construct rotation quaternion
+		//rotation = new Quaternionf().rotationTo(GameEngine.Y_POS, up).rotateTo(forward, GameEngine.Z_POS);
+		rotation.identity().lookAlong(forward, up);
+
+		// Construct translation vector
+		position = new Vector3f(from);
+
+		// Construct transformation matrix
+		/*Matrix4f result = new Matrix4f().identity();
+		result.rotation(rotation);
+		result.setTranslation(position);
+
+		viewMatrix = result;*/
 
 		return this;
 	}
@@ -43,23 +57,6 @@ public class Camera3D extends Camera {
 		return this;
 	}
 
-	public Camera3D move(float ax, float ay, float bx, float by, float moveSpeed, float rotationSpeed) {
-		// Move the camera based on the local camera axis
-		Vector3f movement = new Vector3f(ax * moveSpeed, 0, -ay * moveSpeed);
-		movement.rotate(rotation);
-
-		// Update the camera's position
-		position.add(movement);
-
-		// Rotate the camera based on bx and by
-		Quaternionf rotationChange = new Quaternionf().rotateYXZ(bx * rotationSpeed, by * rotationSpeed, 0);
-
-		// Update the camera's rotation
-		rotation.mul(rotationChange);
-
-		return this;
-	}
-
 	public Vector3f getPosition() {
 		return position;
 	}
@@ -69,10 +66,12 @@ public class Camera3D extends Camera {
 		return this;
 	}
 
+	@Deprecated
 	public Camera3D loadRotation() {
 		return loadRotation(viewMatrix);
 	}
-
+	
+	@Deprecated
 	public Camera3D loadRotation(Matrix4f matrix) {
 		// matrix.positiveZ(new Vector3f()).negate()
 		// Matrix4f rotationMatrix = new Matrix4f(matrix).invert().transpose3x3();
@@ -81,10 +80,12 @@ public class Camera3D extends Camera {
 		// return this;
 	}
 
+	@Deprecated
 	public Camera3D loadPosition() {
 		return loadPosition(viewMatrix);
 	}
 
+	@Deprecated
 	public Camera3D loadPosition(Matrix4f matrix) {
 		return setPosition(matrix.getTranslation(new Vector3f()));
 	}

@@ -126,7 +126,7 @@ public class PDRClientGame4 extends GameLogic {
 
 		Gizmo axis = ObjLoader.loadGizmo("grid_xyz", "./resources/models/gizmos/grid_xyz.obj");
 		cache.addGizmo(axis);
-		scene.addEntity("grid_xyz", new GizmoComponent(axis));
+		scene.addEntity("grid_xyz", new GizmoComponent(axis), new Transform3DComponent(new Transform3D(new Vector3f(0), new Quaternionf(), new Vector3f(10))));
 
 		Gizmo cone = ObjLoader.loadGizmo("cone", "./resources/models/gizmos/Ycone.obj");
 		cache.addGizmo(cone);
@@ -339,9 +339,7 @@ public class PDRClientGame4 extends GameLogic {
 				return 0;
 
 			Vector3f pos1 = this.cameraUi.projectPoint(new Vector3f(window.getMousePos().x, window.getMousePos().y, 0), viewport);
-			((Camera3D) ui.getCamera()).loadPosition().loadRotation();
-			System.err.println(GeoPlane.YZ + " plane");
-			Vector2f pos = GeoPlane.YZ.projectToPlane(pos1);
+			Vector2f pos = GeoPlane.getByNormal(camera.getRotation()).projectToPlane(pos1);
 			// new Vector2f(pos1.y, pos1.z);
 
 			// System.err.println("hitpoint for: "+new Vector3f(window.getMousePos().y,

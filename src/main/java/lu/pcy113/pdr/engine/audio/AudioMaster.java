@@ -34,14 +34,14 @@ public class AudioMaster implements Cleanupable {
 	private ALCapabilities capabilities;
 
 	public AudioMaster() {
-		this.thread = Thread.currentThread();
-		
 		setup();
 		
 		//testPlayback();
 	}
 	
 	private void setup() {
+		this.thread = Thread.currentThread();
+		
 		device = ALC10.alcOpenDevice((ByteBuffer) null);
 		if (device == MemoryUtil.NULL) {
 			throw new RuntimeException("Could not open ALC device");
@@ -77,7 +77,7 @@ public class AudioMaster implements Cleanupable {
 		GlobalLogger.info("ALC_MONO_SOURCES: " + alcGetInteger(device, ALC11.ALC_MONO_SOURCES));
 		GlobalLogger.info("ALC_STEREO_SOURCES: " + alcGetInteger(device, ALC11.ALC_STEREO_SOURCES));
 		
-		System.out.println("Thread: "+Thread.currentThread().getName()+" al cap: "+AL.getCapabilities());
+		//System.out.println("Thread: "+Thread.currentThread().getName()+" al cap: "+AL.getCapabilities());
 	}
 	
 	public AudioMaster setDistanceModel(int model) {
@@ -87,7 +87,7 @@ public class AudioMaster implements Cleanupable {
 	}
 	
 	public AudioMaster setPosition(Vector3f pos) {
-		System.err.println("sound cam pos: " + pos);
+		//System.err.println("sound cam pos: " + pos);
 		AL11.alListener3f(AL11.AL_POSITION, pos.x, pos.y, pos.z);
 		PDRUtils.checkAlError("Listener3f().POSITION=" + pos);
 		return this;

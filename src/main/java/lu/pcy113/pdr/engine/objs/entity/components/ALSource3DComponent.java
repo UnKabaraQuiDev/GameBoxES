@@ -30,9 +30,9 @@ public class ALSource3DComponent extends Component {
 		Transform3D transform = super.getParent().getComponent(Transform3DComponent.class).getTransform();
 
 		source.setPosition(transform.getTranslation());
-		System.err.println("sound position: " + transform.getTranslation());
+		//System.err.println("sound position: " + transform.getTranslation());
 		source.setDirection(new Vector3f(0, 0, 1).rotate(transform.getRotation()));
-		System.err.println("sound direction: " + new Vector3f(0, 0, 1).rotate(transform.getRotation()));
+		//System.err.println("sound direction: " + new Vector3f(0, 0, 1).rotate(transform.getRotation()));
 	}
 
 	public ALSource getSource() {

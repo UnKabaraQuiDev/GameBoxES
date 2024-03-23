@@ -1,9 +1,11 @@
 package lu.pcy113.pdr.engine.utils.geo;
 
+import org.joml.Quaternionf;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.system.MathUtil;
 
+import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.utils.MathUtils;
 
 public enum GeoPlane {
@@ -26,30 +28,29 @@ public enum GeoPlane {
 		} else if (y == 0 && z == 0) {
 			return YZ;
 		}
-		
+
 		return null;
 	}
 
 	public static GeoPlane getByNormal(Vector3f normal) {
 		normal = normal.normalize(new Vector3f());
-		System.err.println("normal: " + normal);
 
 		float x = Math.abs(normal.x);
 		float y = Math.abs(normal.y);
 		float z = Math.abs(normal.z);
-		
+
 		x = MathUtils.snap(x, 1);
 		y = MathUtils.snap(y, 1);
 		z = MathUtils.snap(z, 1);
 
-		if(x == 1 && y == 0 && z == 0) {
+		if (x == 1 && y == 0 && z == 0) {
 			return YZ;
-		}else if(y == 1 && x == 0 && z == 0) {
+		} else if (y == 1 && x == 0 && z == 0) {
 			return XZ;
-		}else if(z == 1 && x == 0 && y == 0) {
+		} else if (z == 1 && x == 0 && y == 0) {
 			return XY;
 		}
-		
+
 		return null;
 	}
 
@@ -58,6 +59,7 @@ public enum GeoPlane {
 	}
 
 	public static Vector2f projectToPlane(Vector3f pos, GeoPlane plane) {
+		System.out.println("plane: "+plane);
 		switch (plane) {
 		case XY:
 			return new Vector2f(pos.x, pos.y);
@@ -68,6 +70,10 @@ public enum GeoPlane {
 		default:
 			throw new IllegalArgumentException("Unsupported plane type");
 		}
+	}
+
+	public static GeoPlane getByNormal(Quaternionf rotation) {
+		return getByNormal(rotation.transform(GameEngine.Z_POS, new Vector3f()));
 	}
 
 }

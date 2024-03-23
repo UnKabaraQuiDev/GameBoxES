@@ -93,18 +93,24 @@ public class ALSource implements Cleanupable {
 	}
 
 	public ALSource setDirection(Vector3f direction) {
+		if(!direction.isFinite())
+			return this;
 		AL11.alSource3f(sourceId, AL11.AL_DIRECTION, direction.x, direction.y, direction.z);
 		PDRUtils.checkAlError("Source3f[" + sourceId + "].DIRECTION=" + direction);
 		return this;
 	}
 	
 	public ALSource setPosition(Vector3f position) {
+		if(!position.isFinite())
+			return this;
 		AL11.alSource3f(sourceId, AL11.AL_POSITION, position.x, position.y, position.z);
 		PDRUtils.checkAlError("Source3f[" + sourceId + "].POSITION=" + position);
 		return this;
 	}
 
 	public ALSource setVelocity(Vector3f velocity) {
+		if(!velocity.isFinite())
+			return this;
 		AL11.alSource3f(sourceId, AL11.AL_VELOCITY, velocity.x, velocity.y, velocity.z);
 		PDRUtils.checkAlError("Source3f[" + sourceId + "].VELOCITY=" + velocity);
 		return this;
