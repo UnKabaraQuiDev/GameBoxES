@@ -362,8 +362,8 @@ public class PDRClientGame4 extends GameLogic {
 						uiComponentInterpolation.setInterpolator(Interpolators.BACK_OUT);
 						uiComponentInterpolation.add(0.1f).clamp().exec();
 					} else {
-						uiComponentInterpolation.setInterpolator(Interpolators.BOUNCE_IN);
-						uiComponentInterpolation.add(-0.05f).clamp().exec();
+						uiComponentInterpolation.setInterpolator(Interpolators.QUAD_OUT);
+						uiComponentInterpolation.add(-0.15f).clamp().exec();
 					}
 
 					/*

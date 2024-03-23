@@ -59,7 +59,6 @@ public enum GeoPlane {
 	}
 
 	public static Vector2f projectToPlane(Vector3f pos, GeoPlane plane) {
-		System.out.println("plane: "+plane);
 		switch (plane) {
 		case XY:
 			return new Vector2f(pos.x, pos.y);
