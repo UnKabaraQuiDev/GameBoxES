@@ -92,6 +92,8 @@ public class PDRClientGame4 extends GameLogic {
 
 	ShaderManager sm;
 
+	// Trigger Maven recompile 
+	
 	@Override
 	public void init(GameEngine e) {
 		System.err.println("Cache: " + cache);
