@@ -58,7 +58,7 @@ public class InstanceEmitterRenderer extends Renderer<Scene, InstanceEmitterComp
 
 		Matrix4f projectionMatrix = null, viewMatrix = null, transformationMatrix = new Matrix4f().identity();
 		if (scene != null) {
-			projectionMatrix = scene.getCamera().getProjection().getProjMatrix();
+			projectionMatrix = scene.getCamera().getProjection().getProjectionMatrix();
 			viewMatrix = scene.getCamera().getViewMatrix();
 			material.setPropertyIfPresent(RenderShader.PROJECTION_MATRIX, projectionMatrix);
 			material.setPropertyIfPresent(RenderShader.VIEW_MATRIX, viewMatrix);

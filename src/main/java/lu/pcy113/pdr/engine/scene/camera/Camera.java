@@ -23,13 +23,13 @@ public abstract class Camera {
 	public abstract Matrix4f updateMatrix();
 
 	public Vector3f projectPoint(Vector3f in, int[] viewport) {
-		Matrix4f projView = projection.getProjMatrix().mul(viewMatrix, new Matrix4f());
+		Matrix4f projView = projection.getProjectionMatrix().mul(viewMatrix, new Matrix4f());
 
 		return projView.unproject(PDRUtils.getCoordinates(in, viewport), viewport, new Vector3f());
 	}
 
 	public Ray projectRay(Vector2f in, int[] viewport) {
-		Matrix4f projView = projection.getProjMatrix().mul(viewMatrix, new Matrix4f());
+		Matrix4f projView = projection.getProjectionMatrix().mul(viewMatrix, new Matrix4f());
 
 		Vector3f origin = new Vector3f(), dir = new Vector3f();
 
@@ -82,15 +82,15 @@ public abstract class Camera {
 	}
 
 	public static final Camera3D perspectiveCamera3D() {
-		return new Camera3D(new Vector3f(0), new Quaternionf().identity().rotateTo(new Vector3f(-1, 0, 0), new Vector3f(1, 0, 0)), new Projection(true, (float) Math.toRadians(60), 0.01f, 1000f));
+		return new Camera3D(new Vector3f(0), new Quaternionf().identity().rotateTo(new Vector3f(-1, 0, 0), new Vector3f(1, 0, 0)), new Projection(720, 480, 0.1f, 1000f, (float) Math.toRadians(60), 100, true));
 	}
 
 	public static final Camera3D orthographicCamera3D() {
-		return new Camera3D(new Vector3f(0), new Quaternionf().identity().rotateTo(GameEngine.FORWARD, GameEngine.BACK), new Projection(0.01f, 1000f, 0, 1, 0, 1));
+		return new Camera3D(new Vector3f(0), new Quaternionf().identity().rotateTo(GameEngine.FORWARD, GameEngine.BACK), new Projection(720, 480, 0.1f, 1000f, (float) Math.toRadians(60), 100, false));
 	}
 
 	public static Camera2D orthographicCamera2D() {
-		return new Camera2D(new Vector2f(0), new Quaternionf().identity(), new Projection(0.01f, 1000f, 0, 1, 0, 1));
+		return new Camera2D(new Vector2f(0), new Quaternionf().identity(), new Projection(720, 480, 0.1f, 1000f, (float) Math.toRadians(60), 100, false));
 	}
 
 }

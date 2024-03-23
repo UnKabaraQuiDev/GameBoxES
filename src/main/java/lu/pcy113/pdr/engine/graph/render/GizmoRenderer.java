@@ -54,7 +54,7 @@ public class GizmoRenderer extends Renderer<Scene, GizmoComponent> {
 		Matrix4f projectionMatrix = null, viewMatrix = null, transformationMatrix = new Matrix4f().identity();
 		if (scene != null) {
 			Camera camera = scene.getCamera();
-			projectionMatrix = camera.getProjection().getProjMatrix();
+			projectionMatrix = camera.getProjection().getProjectionMatrix();
 			viewMatrix = camera.getViewMatrix();
 			shader.setUniform(RenderShader.PROJECTION_MATRIX, projectionMatrix);
 			shader.setUniform(RenderShader.VIEW_MATRIX, viewMatrix);

@@ -4,120 +4,80 @@ import org.joml.Matrix4f;
 
 public class Projection {
 
-	protected Matrix4f projMatrix;
-	protected float near, far;
-	protected boolean perspective = true;
+	private Matrix4f projectionMatrix;
+	private float nearPlane, farPlane;
+	private boolean perspective;
+	private int width, height;
+	private float fov, size = 100f;
 
-	// perspective only
-	protected float fov;
-
-	// orthographic only
-	protected float size = 0.8f;
-	protected float left, right, bottom, top;
-
-	protected int width, height;
-
-	public Projection(boolean perspective, float fov_size, float near, float far) {
-		this.fov = fov_size;
-		this.size = fov_size;
-		this.near = near;
-		this.far = far;
-
-		this.projMatrix = new Matrix4f();
-	}
-
-	public Projection(float near, float far, float left, float right, float bottom, float top) {
-		this(near, far, left, right, bottom, top, 150f);
-	}
-
-	public Projection(float near, float far, float left, float right, float bottom, float top, float size) {
-		this.perspective = false;
-		this.near = near;
-		this.far = far;
-		this.left = left;
-		this.right = right;
-		this.bottom = bottom;
-		this.top = top;
+	public Projection(int width, int height, float nearPlane, float farPlane, float fov, float size, boolean perspective) {
+		this.width = width;
+		this.height = height;
+		this.nearPlane = nearPlane;
+		this.farPlane = farPlane;
+		this.fov = fov;
+		this.perspective = perspective;
 		this.size = size;
-
-		this.projMatrix = new Matrix4f();
 
 		update();
 	}
 
-	public Matrix4f perspectiveUpdateMatrix(int width, int height) {
-		return projMatrix.setPerspective(fov, (float) width / height, near, far);
-	}
-
-	public Matrix4f orthographicUpdateMatrix(int width, int height) {
-		return projMatrix.setOrtho(left * width / size, right * width / size, top * height / size, bottom * height / size, near, far);
-		// return projMatrix.setOrthoSymmetric(width / size, height / size, near, far);
-	}
-
-	public Matrix4f update(int w, int h) {
+	public Projection update(int w, int h) {
 		this.width = w;
 		this.height = h;
+		return update();
+	}
+
+	public Projection update() {
 		if (perspective) {
-			return perspectiveUpdateMatrix(w, h);
+			float aspectRatio = (float) width / height;
+			float yScale = (float) (1 / Math.tan(Math.toRadians(fov / 2)));
+			// float xScale = yScale / aspectRatio;
+			// float frustumLength = farPlane - nearPlane;
+
+			projectionMatrix = new Matrix4f().identity().perspective(fov, aspectRatio, nearPlane, farPlane);
 		} else {
-			return orthographicUpdateMatrix(w, h);
+			float halfWidth = width / 2f;
+			float halfHeight = height / 2f;
+
+			projectionMatrix = new Matrix4f().identity().ortho(-halfWidth / size, halfWidth / size, -halfHeight / size, halfHeight / size, nearPlane, farPlane);
 		}
+		return this;
 	}
 
-	public void update() {
-		update(width, height);
+	public Matrix4f getProjectionMatrix() {
+		return projectionMatrix;
 	}
 
-	public Matrix4f getProjMatrix() {
-		return projMatrix;
-	}
-
-	public void setProjMatrix(Matrix4f projMatrix) {
-		this.projMatrix = projMatrix;
-	}
-
-	public float getFar() {
-		return far;
-	}
-
-	public void setFar(float far) {
-		this.far = far;
-	}
-
-	public float getFov() {
-		return fov;
-	}
-
-	public void setFov(float fov) {
-		this.fov = fov;
-	}
-
-	public float getNear() {
-		return near;
-	}
-
-	public void setNear(float near) {
-		this.near = near;
-	}
-
-	public boolean isPerspective() {
-		return perspective;
-	}
-
-	public boolean isOrthographic() {
-		return !perspective;
-	}
-
-	public void setPerspective(boolean perspective) {
+	public Projection setPerspective(boolean perspective) {
 		this.perspective = perspective;
+		return this;
 	}
 
-	public float getSize() {
-		return size;
+	public Projection setNearPlane(float nearPlane) {
+		this.nearPlane = nearPlane;
+		return this;
 	}
 
-	public void setSize(float size) {
+	public Projection setFarPlane(float farPlane) {
+		this.farPlane = farPlane;
+		return this;
+	}
+
+	public Projection setFov(float fov) {
+		this.fov = fov;
+		return this;
+	}
+
+	public Projection setSize(int width, int height) {
+		this.width = width;
+		this.height = height;
+		return this;
+	}
+
+	public Projection setSize(float size) {
 		this.size = size;
+		return this;
 	}
 
 }

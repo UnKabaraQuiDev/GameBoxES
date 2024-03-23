@@ -9,6 +9,7 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.openal.AL11;
+import org.lwjgl.openal.EnumerateAllExt;
 import org.lwjgl.opengl.GL41;
 
 import lu.pcy113.pclib.GlobalLogger;
@@ -205,7 +206,7 @@ public class PDRClientGame4 extends GameLogic {
 		// camera.getProjection().update();
 
 		cameraUi = (Camera3D) this.ui.getCamera();
-		cameraUi.setProjection(new Projection(0.01f, 100f, -0.5f, 0.5f, 0.5f, -0.5f));
+		//cameraUi.setProjection(new Projection(0.01f, 100f, -0.5f, 0.5f, 0.5f, -0.5f));
 		cameraUi.setPosition(new Vector3f(-1, 0, 0));
 		cameraUi.lookAt(new Vector3f(-5, 0, 0), new Vector3f(-1, 0, 0));
 		cameraUi.updateMatrix();
@@ -217,7 +218,7 @@ public class PDRClientGame4 extends GameLogic {
 		engine.getWindow().onResize((w, h) -> {
 			System.out.println("resize update: " + w + "x" + h);
 			this.scene.getCamera().getProjection().update(w, h);
-			// this.ui.getCamera().getProjection().update(w, h);
+			this.ui.getCamera().getProjection().update(w, h);
 		});
 		engine.getWindow().setBackground(new Vector4f(0.1f));
 
@@ -354,18 +355,6 @@ public class PDRClientGame4 extends GameLogic {
 					}else if(((UIComponentRectangle) uiComponent).needsAttention()) {
 						((UIComponentRectangle) uiComponent).attention(pos);
 					}
-					
-					/*
-					 * if (((UIComponentRectangle) uiComponent).contains(pos)) { hover += 0.4f;
-					 * hover = org.joml.Math.clamp(0, 1, hover);
-					 * e.getComponent(Transform3DComponent.class).getTransform().setScale(new
-					 * Vector3f(1).lerp(new Vector3f(1.1f), Interpolators.CIRC_OUT.evaluate(hover),
-					 * new Vector3f())).updateMatrix(); } else { hover -= 0.15f; hover =
-					 * org.joml.Math.clamp(0, 1, hover);
-					 * e.getComponent(Transform3DComponent.class).getTransform().setScale(new
-					 * Vector3f(1).lerp(new Vector3f(1.1f), Interpolators.CIRC_IN.evaluate(hover),
-					 * new Vector3f())).updateMatrix(); }
-					 */
 				}
 			}
 
@@ -375,9 +364,6 @@ public class PDRClientGame4 extends GameLogic {
 
 	private void moveCube() {
 		System.out.println("click");
-
-		// audioBridge.replay(cache.getSound("buzz"));
-		// cache.getSound("buzz").replay();
 
 		int[] viewport = new int[4];
 		createTask(GameEngine.QUEUE_RENDER).exec((s) -> {
@@ -395,20 +381,7 @@ public class PDRClientGame4 extends GameLogic {
 			direction.normalize();
 			Quaternionf eulerQuaternion = new Quaternionf().rotationTo(new Vector3f(1, 0, 0), direction);
 
-			// System.err.println(ray);
-
-			/*
-			 * rayEntity.getComponent(Transform3DComponent.class).getTransform()
-			 * .setTranslation(ray.getOrigin()) //.setScale(ray.getLength())
-			 * .setRotation(eulerQuaternion) .updateMatrix();
-			 */
-
-			// System.err.println(camera.getPosition());
-			// System.err.println(ray.getOrigin() + " -> " + ray.getDir());
-
 			Vector3f pos = ((Camera3D) scene.getCamera()).projectPlane(ray, GameEngine.FORWARD, GameEngine.RIGHT);
-
-			// System.err.println(pos);
 
 			defaultCube.getComponent(Transform3DComponent.class).getTransform().setTranslation(pos).updateMatrix();
 
@@ -430,6 +403,7 @@ public class PDRClientGame4 extends GameLogic {
 		debugInfo.setText("FPS: " + PDRUtils.round(engine.getCurrentFps(), 2) + "\nNL");
 		debugInfo.setBoxed(true);
 		debugInfo.setBoxSize(new Vector2f(1 + (float) Math.sin(backgroundMaterialInterpolation.get()), 1));
+		//ui.getCamera().getProjection().setSize(Math.lerp(100f, 500f, Math.sin(backgroundMaterialInterpolation.get()*(float) Math.PI))).update();
 		debugInfo.updateText();
 
 		compositor.render(cache, engine);
