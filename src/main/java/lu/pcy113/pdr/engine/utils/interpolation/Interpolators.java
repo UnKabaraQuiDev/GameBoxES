@@ -4,7 +4,7 @@ import org.joml.Math;
 
 import lu.pcy113.pdr.engine.utils.MathUtils;
 
-public enum Interpolators implements Interpolator, InverseInterpolator {
+public enum Interpolators implements Interpolator {
 
 	LINEAR {
 		@Override
@@ -264,7 +264,15 @@ public enum Interpolators implements Interpolator, InverseInterpolator {
 		}
 	};
 
-	public static float findClosestX(float closest, Interpolators interpolator, float interval, float _default) {
+	public static float findClosestX(float closest, Interpolator interpolator, float interval, float _default) {
+		System.out.println("interpolator: "+interpolator);
+		
+		float x = interpolator.inverse(closest);
+		if(x != -1 && Float.isFinite(x)) {
+			System.out.println("found quick x: "+x);
+			return x;
+		}
+		
 		for(float j = 1; j >= 0; j -= interval) {
 			float y = interpolator.evaluate(j);
 			if(MathUtils.compare(y, closest, 0.05f)) {

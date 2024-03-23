@@ -6,6 +6,7 @@ import org.joml.Vector3f;
 import lu.pcy113.pdr.engine.anim.CallbackValueInterpolation;
 import lu.pcy113.pdr.engine.objs.entity.Entity;
 import lu.pcy113.pdr.engine.utils.MathUtils;
+import lu.pcy113.pdr.engine.utils.interpolation.Interpolator;
 import lu.pcy113.pdr.engine.utils.interpolation.Interpolators;
 import lu.pcy113.pdr.engine.utils.transform.Transform;
 import lu.pcy113.pdr.engine.utils.transform.Transform2D;
@@ -76,17 +77,20 @@ public class UIComponentRectangle extends UIComponent {
 	
 	private boolean isReverse = false;
 	
+	private Interpolator outIntepolation = Interpolators.QUAD_OUT,
+			inInterpolation = Interpolators.BACK_OUT;
+	
+	private float inSpeed = 0.01f, outSpeed = 0.01f;
+	
 	@Override
 	public void hover(Vector2f pos) {
 		if(isReverse == true) {
-			interpolator.progress = Interpolators.findClosestX(interpolator.getInterpolator().evaluate(interpolator.progress), Interpolators.BACK_OUT, 0.025f, 0);
+			interpolator.progress = Interpolators.findClosestX(interpolator.getInterpolator().evaluate(interpolator.progress), inInterpolation, 0.025f, 0);
 			isReverse = false;
 		}
-		interpolator.setInterpolator(Interpolators.BACK_OUT);
-		interpolator.add(0.1f).clamp().exec();
+		interpolator.setInterpolator(inInterpolation);
+		interpolator.add(inSpeed).clamp().exec();
 	}
-	
-	private boolean done = true;
 	
 	public boolean needsAttention() {
 		return interpolator.progress != 0;
@@ -94,11 +98,11 @@ public class UIComponentRectangle extends UIComponent {
 	
 	public void attention(Vector2f pos) {
 		if(isReverse == false) {
-			interpolator.progress = Interpolators.findClosestX(interpolator.getInterpolator().evaluate(interpolator.progress), Interpolators.QUAD_IN, 0.025f, 1);
+			interpolator.progress = Interpolators.findClosestX(interpolator.getInterpolator().evaluate(interpolator.progress), outIntepolation, 0.025f, 1);
 			isReverse = true;
 		}
-		interpolator.setInterpolator(Interpolators.QUAD_IN);
-		interpolator.add(-0.15f).clamp().exec();
+		interpolator.setInterpolator(Interpolators.QUAD_OUT);
+		interpolator.add(-outSpeed).clamp().exec();
 	}
 
 }
