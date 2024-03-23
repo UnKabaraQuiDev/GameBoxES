@@ -3,7 +3,6 @@ package lu.pcy113.pdr.engine.utils.geo;
 import org.joml.Quaternionf;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-import org.lwjgl.system.MathUtil;
 
 import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.utils.MathUtils;
@@ -72,7 +71,8 @@ public enum GeoPlane {
 	}
 
 	public static GeoPlane getByNormal(Quaternionf rotation) {
-		return getByNormal(rotation.transform(GameEngine.Z_POS, new Vector3f()));
+		
+		return getByNormal(MathUtils.vec3fromQuatf(rotation));
 	}
 
 }

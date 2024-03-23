@@ -213,6 +213,7 @@ public class PDRClientGame4 extends GameLogic {
 		this.ui.getCamera().getProjection().update(1920, 1080);
 		((Camera3D) this.scene.getCamera()).lookAt(new Vector3f(-5, 0, 0), new Vector3f(0, 0, 0));
 		this.scene.getCamera().getProjection().setPerspective(true);
+		//this.scene.getCamera().getProjection().update(1920, 1080);
 		engine.getWindow().onResize((w, h) -> {
 			System.out.println("resize update: " + w + "x" + h);
 			this.scene.getCamera().getProjection().update(w, h);
@@ -252,8 +253,8 @@ public class PDRClientGame4 extends GameLogic {
 	public void updateInit() {
 		audioPool = new ALSourcePool(audio, 50);
 
-		//ALSource source1 = audioPool.getFreeSource().setLooping(true).setRolloffFactor(2).play(cache.loadSound("bz", "./resources/audio/subnautica_bz_stranger_pings.ogg"));
-		source2 = audioPool.getFreeSource().setVolume(0.2f).setLooping(true).appendQueue(cache.loadSound("buzz", "./resources/audio/wrong_buzz.ogg", false)).play();
+		ALSource source1 = audioPool.getFreeSource().setLooping(true).setRolloffFactor(2).play(cache.loadSound("bz", "./resources/audio/subnautica_bz_stranger_pings.ogg", false));
+		source2 = audioPool.getFreeSource().setVolume(0.2f).setLooping(true).appendQueue(cache.loadSound("buzz", "./resources/audio/wrong_buzz_mono.ogg")).play();
 
 		audio.setVolume(0.5f);
 		audio.setVelocity(GameEngine.ZERO);
@@ -276,6 +277,7 @@ public class PDRClientGame4 extends GameLogic {
 		camera.updateMatrix();
 
 		audio.setPosition(camera.getPosition());
+		audio.setOrientation(MathUtils.vec3fromQuatf(camera.getRotation()), GameEngine.UP);
 
 		if (window.isKeyPressed(GLFW.GLFW_KEY_T) && !previousF) {
 			previousF = true;

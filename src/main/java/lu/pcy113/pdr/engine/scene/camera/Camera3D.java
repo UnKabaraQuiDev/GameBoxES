@@ -4,7 +4,6 @@ import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pdr.engine.GameEngine;
 
 public class Camera3D extends Camera {
@@ -73,11 +72,7 @@ public class Camera3D extends Camera {
 	
 	@Deprecated
 	public Camera3D loadRotation(Matrix4f matrix) {
-		// matrix.positiveZ(new Vector3f()).negate()
-		// Matrix4f rotationMatrix = new Matrix4f(matrix).invert().transpose3x3();
-		// rotation.setFromUnnormalized(rotationMatrix);
 		return setRotation(matrix.getUnnormalizedRotation(new Quaternionf()));
-		// return this;
 	}
 
 	@Deprecated
