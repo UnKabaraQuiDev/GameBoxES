@@ -26,6 +26,7 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v4
         with:
+          token: ${{ secrets.MY_REPO_PAT }}
           submodules: true
           fetch-depth: 0
 
