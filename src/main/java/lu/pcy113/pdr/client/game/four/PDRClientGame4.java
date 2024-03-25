@@ -9,7 +9,6 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.openal.AL11;
-import org.lwjgl.openal.EnumerateAllExt;
 import org.lwjgl.opengl.GL41;
 
 import lu.pcy113.pclib.GlobalLogger;
@@ -55,13 +54,12 @@ import lu.pcy113.pdr.engine.objs.entity.components.MeshComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.TextEmitterComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.Transform3DComponent;
 import lu.pcy113.pdr.engine.objs.entity.components.UIComponent;
-import lu.pcy113.pdr.engine.objs.entity.components.UIComponentRectangle;
+import lu.pcy113.pdr.engine.objs.entity.components.UIComponentRectangleScale;
 import lu.pcy113.pdr.engine.objs.text.TextEmitter;
 import lu.pcy113.pdr.engine.scene.Scene2D;
 import lu.pcy113.pdr.engine.scene.Scene3D;
 import lu.pcy113.pdr.engine.scene.camera.Camera;
 import lu.pcy113.pdr.engine.scene.camera.Camera3D;
-import lu.pcy113.pdr.engine.scene.camera.Projection;
 import lu.pcy113.pdr.engine.utils.MathUtils;
 import lu.pcy113.pdr.engine.utils.PDRUtils;
 import lu.pcy113.pdr.engine.utils.consts.FrameBufferAttachment;
@@ -158,7 +156,7 @@ public class PDRClientGame4 extends GameLogic {
 		Mesh slotMesh = ObjLoader.loadMesh("slot", slotMaterial, "./resources/models/plane.obj");
 		// slotMesh.createDrawBuffer();
 		this.cache.addMesh(slotMesh);
-		slotUiEntity = ui.addEntity("slotUi", new MeshComponent(slotMesh), new Transform3DComponent(new Quaternionf().rotateAxis((float) Math.toRadians(90), 0, 1, 0)), new UIComponentRectangle(new Vector2f(1, 1), true, Transform3DComponent.class));
+		slotUiEntity = ui.addEntity("slotUi", new MeshComponent(slotMesh), new Transform3DComponent(new Quaternionf().rotateAxis((float) Math.toRadians(90), 0, 1, 0)), new UIComponentRectangleScale(new Vector2f(1, 1), true, Transform3DComponent.class));
 
 		cache.addRenderer(new Scene3DRenderer());
 		cache.addRenderer(new Scene2DRenderer());
@@ -349,12 +347,12 @@ public class PDRClientGame4 extends GameLogic {
 					continue;
 
 				UIComponent uiComponent = (UIComponent) e.getComponent(e.getComponents(UIComponent.class).get(0));
-				if (uiComponent instanceof UIComponentRectangle) {
+				if (uiComponent instanceof UIComponentRectangleScale) {
 
 					if (uiComponent.contains(pos)) {
-						((UIComponentRectangle) uiComponent).hover(pos);
-					} else if (((UIComponentRectangle) uiComponent).needsAttention()) {
-						((UIComponentRectangle) uiComponent).attention(pos);
+						((UIComponentRectangleScale) uiComponent).hover(pos);
+					} else if (((UIComponentRectangleScale) uiComponent).needsAttention()) {
+						((UIComponentRectangleScale) uiComponent).attention(pos);
 					}
 				}
 			}

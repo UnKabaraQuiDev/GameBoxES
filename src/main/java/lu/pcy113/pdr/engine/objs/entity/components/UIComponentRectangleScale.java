@@ -5,14 +5,13 @@ import org.joml.Vector3f;
 
 import lu.pcy113.pdr.engine.anim.CallbackValueInterpolation;
 import lu.pcy113.pdr.engine.objs.entity.Entity;
-import lu.pcy113.pdr.engine.utils.MathUtils;
 import lu.pcy113.pdr.engine.utils.interpolation.Interpolator;
 import lu.pcy113.pdr.engine.utils.interpolation.Interpolators;
 import lu.pcy113.pdr.engine.utils.transform.Transform;
 import lu.pcy113.pdr.engine.utils.transform.Transform2D;
 import lu.pcy113.pdr.engine.utils.transform.Transform3D;
 
-public class UIComponentRectangle extends UIComponent {
+public class UIComponentRectangleScale extends UIComponent {
 
 	// from center
 	private Vector2f size;
@@ -23,7 +22,7 @@ public class UIComponentRectangle extends UIComponent {
 
 	private CallbackValueInterpolation<Transform3D, Vector3f> interpolator;
 
-	public UIComponentRectangle(Vector2f size, boolean inheritScale, Class<? extends TransformComponent> targetClazz) {
+	public UIComponentRectangleScale(Vector2f size, boolean inheritScale, Class<? extends TransformComponent> targetClazz) {
 		this.size = size;
 		this.targetClazz = targetClazz;
 		this.inheritScale = inheritScale;
@@ -38,10 +37,12 @@ public class UIComponentRectangle extends UIComponent {
 			Vector3f translation = ((Transform3D) tc).getTranslation();
 			center = new Vector2f(translation.x, translation.y);
 			Vector3f scale = ((Transform3D) tc).getScale();
-			size.mul(new Vector2f(scale.x, scale.y));
+			if(inheritScale)
+				size.mul(new Vector2f(scale.x, scale.y));
 		} else if (tc instanceof Transform2D) {
 			center = ((Transform2D) tc).getTranslation();
-			size.mul(((Transform2D) tc).getScale());
+			if(inheritScale)
+				size.mul(((Transform2D) tc).getScale());
 		}
 
 		// System.err.println("bounding box: "+center+" "+size);
@@ -84,7 +85,7 @@ public class UIComponentRectangle extends UIComponent {
 	@Override
 	public void hover(Vector2f pos) {
 		if (isReverse == true) {
-			interpolator.set(Interpolators.findClosestX(interpolator.getInterpolator().evaluate(interpolator.progress), inInterpolation, 0.025f, 0));
+			interpolator.set(Interpolators.inverse(interpolator.getInterpolator().evaluate(interpolator.progress), inInterpolation, 0.025f, 0));
 			isReverse = false;
 		}
 		interpolator.setInterpolator(inInterpolation);
@@ -97,7 +98,7 @@ public class UIComponentRectangle extends UIComponent {
 
 	public void attention(Vector2f pos) {
 		if (isReverse == false) {
-			interpolator.set(Interpolators.findClosestX(interpolator.getInterpolator().evaluate(interpolator.progress), outIntepolation, 0.025f, 1));
+			interpolator.set(Interpolators.inverse(interpolator.getInterpolator().evaluate(interpolator.progress), outIntepolation, 0.025f, 1));
 			isReverse = true;
 		}
 		interpolator.setInterpolator(Interpolators.QUAD_OUT);
