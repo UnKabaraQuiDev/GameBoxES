@@ -1,20 +1,64 @@
 package lu.pcy113.pdr.engine.utils.bake.openal;
 
+import static org.lwjgl.openal.AL10.AL_EXTENSIONS;
+import static org.lwjgl.openal.AL10.AL_NO_ERROR;
+import static org.lwjgl.openal.AL10.AL_RENDERER;
+import static org.lwjgl.openal.AL10.AL_VENDOR;
+import static org.lwjgl.openal.AL10.AL_VERSION;
+import static org.lwjgl.openal.AL10.alGetError;
+import static org.lwjgl.openal.AL10.alGetString;
+import static org.lwjgl.openal.ALC10.ALC_DEFAULT_DEVICE_SPECIFIER;
+import static org.lwjgl.openal.ALC10.ALC_DEVICE_SPECIFIER;
+import static org.lwjgl.openal.ALC10.ALC_EXTENSIONS;
+import static org.lwjgl.openal.ALC10.ALC_MAJOR_VERSION;
+import static org.lwjgl.openal.ALC10.ALC_MINOR_VERSION;
+import static org.lwjgl.openal.ALC10.ALC_NO_ERROR;
+import static org.lwjgl.openal.ALC10.alcCloseDevice;
+import static org.lwjgl.openal.ALC10.alcCreateContext;
+import static org.lwjgl.openal.ALC10.alcDestroyContext;
+import static org.lwjgl.openal.ALC10.alcGetError;
+import static org.lwjgl.openal.ALC10.alcGetInteger;
+import static org.lwjgl.openal.ALC10.alcGetString;
+import static org.lwjgl.openal.ALC10.alcMakeContextCurrent;
+import static org.lwjgl.openal.ALC10.alcOpenDevice;
+import static org.lwjgl.openal.ALC11.ALC_CAPTURE_DEFAULT_DEVICE_SPECIFIER;
+import static org.lwjgl.openal.ALC11.ALC_CAPTURE_DEVICE_SPECIFIER;
+import static org.lwjgl.openal.EXTEfx.ALC_EFX_MAJOR_VERSION;
+import static org.lwjgl.openal.EXTEfx.ALC_EFX_MINOR_VERSION;
+import static org.lwjgl.openal.EXTEfx.ALC_MAX_AUXILIARY_SENDS;
+import static org.lwjgl.openal.EXTEfx.AL_EFFECT_AUTOWAH;
+import static org.lwjgl.openal.EXTEfx.AL_EFFECT_CHORUS;
+import static org.lwjgl.openal.EXTEfx.AL_EFFECT_COMPRESSOR;
+import static org.lwjgl.openal.EXTEfx.AL_EFFECT_DISTORTION;
+import static org.lwjgl.openal.EXTEfx.AL_EFFECT_EAXREVERB;
+import static org.lwjgl.openal.EXTEfx.AL_EFFECT_ECHO;
+import static org.lwjgl.openal.EXTEfx.AL_EFFECT_EQUALIZER;
+import static org.lwjgl.openal.EXTEfx.AL_EFFECT_FLANGER;
+import static org.lwjgl.openal.EXTEfx.AL_EFFECT_FREQUENCY_SHIFTER;
+import static org.lwjgl.openal.EXTEfx.AL_EFFECT_PITCH_SHIFTER;
+import static org.lwjgl.openal.EXTEfx.AL_EFFECT_REVERB;
+import static org.lwjgl.openal.EXTEfx.AL_EFFECT_RING_MODULATOR;
+import static org.lwjgl.openal.EXTEfx.AL_EFFECT_VOCAL_MORPHER;
+import static org.lwjgl.openal.EXTEfx.AL_FILTER_BANDPASS;
+import static org.lwjgl.openal.EXTEfx.AL_FILTER_HIGHPASS;
+import static org.lwjgl.openal.EXTEfx.AL_FILTER_LOWPASS;
+import static org.lwjgl.openal.EXTThreadLocalContext.alcSetThreadContext;
+import static org.lwjgl.system.MemoryUtil.NULL;
+
+import java.nio.IntBuffer;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
+
 /*
  * Copyright LWJGL. All rights reserved.
  * License terms: https://www.lwjgl.org/license
  */
-
-import org.lwjgl.openal.*;
-
-import java.nio.*;
-import java.util.*;
-
-import static org.lwjgl.openal.AL10.*;
-import static org.lwjgl.openal.ALC11.*;
-import static org.lwjgl.openal.EXTEfx.*;
-import static org.lwjgl.openal.EXTThreadLocalContext.*;
-import static org.lwjgl.system.MemoryUtil.*;
+import org.lwjgl.openal.AL;
+import org.lwjgl.openal.ALC;
+import org.lwjgl.openal.ALCCapabilities;
+import org.lwjgl.openal.ALUtil;
+import org.lwjgl.openal.EnumerateAllExt;
 
 /**
  * idea from openal-info

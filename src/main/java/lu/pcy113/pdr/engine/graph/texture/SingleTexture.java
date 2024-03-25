@@ -11,8 +11,8 @@ import lu.pcy113.pdr.engine.utils.PDRUtils;
 import lu.pcy113.pdr.engine.utils.consts.TexelInternalFormat;
 import lu.pcy113.pdr.engine.utils.consts.TextureType;
 import lu.pcy113.pdr.engine.utils.file.FileUtils;
-import lu.pcy113.pdr.engine.utils.img.MemImage;
-import lu.pcy113.pdr.engine.utils.img.MemImageOrigin;
+import lu.pcy113.pdr.engine.utils.mem.img.MemImage;
+import lu.pcy113.pdr.engine.utils.mem.img.MemImageOrigin;
 
 public class SingleTexture extends Texture {
 

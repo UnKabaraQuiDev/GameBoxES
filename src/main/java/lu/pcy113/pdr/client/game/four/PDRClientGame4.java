@@ -1,6 +1,7 @@
 package lu.pcy113.pdr.client.game.four;
 
 import java.io.IOException;
+import java.nio.ShortBuffer;
 
 import org.joml.Math;
 import org.joml.Quaternionf;
@@ -10,6 +11,7 @@ import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.openal.AL11;
 import org.lwjgl.opengl.GL41;
+import org.lwjgl.system.MemoryUtil;
 
 import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pdr.client.game.four.PlainShader.PlainMaterial;
@@ -23,6 +25,8 @@ import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.anim.CallbackValueInterpolation;
 import lu.pcy113.pdr.engine.audio.ALSource;
 import lu.pcy113.pdr.engine.audio.ALSourcePool;
+import lu.pcy113.pdr.engine.audio.AudioMaster;
+import lu.pcy113.pdr.engine.audio.Sound;
 import lu.pcy113.pdr.engine.cache.attrib.UIntAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.Vec3fAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.Vec4fAttribArray;
@@ -69,8 +73,10 @@ import lu.pcy113.pdr.engine.utils.file.FileUtils;
 import lu.pcy113.pdr.engine.utils.file.ShaderManager;
 import lu.pcy113.pdr.engine.utils.geo.GeoPlane;
 import lu.pcy113.pdr.engine.utils.geo.Ray;
-import lu.pcy113.pdr.engine.utils.img.MemImage;
 import lu.pcy113.pdr.engine.utils.interpolation.Interpolators;
+import lu.pcy113.pdr.engine.utils.mem.buffer.MemBuffer;
+import lu.pcy113.pdr.engine.utils.mem.buffer.MemBufferOrigin;
+import lu.pcy113.pdr.engine.utils.mem.img.MemImage;
 import lu.pcy113.pdr.engine.utils.transform.Transform3D;
 
 public class PDRClientGame4 extends GameLogic {
@@ -156,7 +162,8 @@ public class PDRClientGame4 extends GameLogic {
 		Mesh slotMesh = ObjLoader.loadMesh("slot", slotMaterial, "./resources/models/plane.obj");
 		// slotMesh.createDrawBuffer();
 		this.cache.addMesh(slotMesh);
-		slotUiEntity = ui.addEntity("slotUi", new MeshComponent(slotMesh), new Transform3DComponent(new Quaternionf().rotateAxis((float) Math.toRadians(90), 0, 1, 0)), new UIComponentRectangleScale(new Vector2f(1, 1), true, Transform3DComponent.class));
+		slotUiEntity = ui.addEntity("slotUi", new MeshComponent(slotMesh), new Transform3DComponent(new Quaternionf().rotateAxis((float) Math.toRadians(90), 0, 1, 0)),
+				new UIComponentRectangleScale(new Vector2f(1, 1), true, Transform3DComponent.class));
 
 		cache.addRenderer(new Scene3DRenderer());
 		cache.addRenderer(new Scene2DRenderer());
@@ -253,8 +260,12 @@ public class PDRClientGame4 extends GameLogic {
 	public void updateInit() {
 		audioPool = new ALSourcePool(audio, 50);
 
-		ALSource source1 = audioPool.getFreeSource().setLooping(true).setRolloffFactor(2).play(cache.loadSound("bz", "./resources/audio/subnautica_bz_stranger_pings.ogg", false));
-		source2 = audioPool.getFreeSource().setVolume(0.2f).setLooping(true).appendQueue(cache.loadSound("buzz", "./resources/audio/wrong_buzz_mono.ogg")).play();
+		// ALSource source1 =
+		// audioPool.getFreeSource().setLooping(true).setRolloffFactor(2).play(cache.loadSound("bz",
+		// "./resources/audio/subnautica_bz_stranger_pings.ogg", false));
+		// source2 =
+		// audioPool.getFreeSource().setVolume(0.2f).setLooping(true).appendQueue(cache.loadSound("buzz",
+		// "./resources/audio/wrong_buzz_mono.ogg")).play();
 
 		audio.setVolume(0.5f);
 		audio.setVelocity(GameEngine.ZERO);
@@ -262,6 +273,40 @@ public class PDRClientGame4 extends GameLogic {
 
 		defaultCube.addComponent(new ALSource3DComponent(source2));
 		audio.setDistanceModel(AL11.AL_INVERSE_DISTANCE);
+
+		int sampleRate = 44100; // Sample rate in Hz
+		int durationSeconds = 1; // Duration of the sine wave in seconds
+		int numSamples = sampleRate * durationSeconds;
+
+		double lastFrequency = 440; // Frequency of the sine wave in Hz (A4 note)
+		double frequencyMul = 1.059;
+		double amplitude = Short.MAX_VALUE; // Amplitude of the sine wave
+
+		ALSource source = audioPool.getFreeSource();
+
+		for (int note = 0; note < 8; note++) {
+			
+			lastFrequency *= frequencyMul;
+
+			ShortBuffer sb = MemoryUtil.memAllocShort(numSamples);
+
+			for (int i = 0; i < sampleRate * durationSeconds; i++) {
+				double time = i / (double) sampleRate; // Time in seconds
+				double value = Math.sin(2 * Math.PI * lastFrequency * time) * amplitude;
+				sb.put((short) value);
+			}
+
+			sb.flip();
+
+			Sound nSound = new Sound("note" + note, sampleRate, 1, new MemBuffer<ShortBuffer>(sb, MemBufferOrigin.OPENAL), false);
+			cache.addSound(nSound);
+
+			source.appendQueue(nSound);
+		}
+
+		source.setPitch(3f).setVolume(1).setLooping(true).play();
+		
+		cache.dump(System.out);
 	}
 
 	private boolean previousF = false;
@@ -312,7 +357,8 @@ public class PDRClientGame4 extends GameLogic {
 
 		defaultCube.getComponent(ALSource3DComponent.class).update();
 
-		source2.setPosition(defaultCube.getComponent(Transform3DComponent.class).getTransform().getTranslation());
+		if (source2 != null)
+			source2.setPosition(defaultCube.getComponent(Transform3DComponent.class).getTransform().getTranslation());
 
 		// cache.getSound("buzz").setPosition(defaultCube.getComponent(Transform3DComponent.class).getTransform().getTranslation());
 	}

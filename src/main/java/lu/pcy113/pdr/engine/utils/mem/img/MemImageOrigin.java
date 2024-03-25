@@ -1,4 +1,4 @@
-package lu.pcy113.pdr.engine.utils.img;
+package lu.pcy113.pdr.engine.utils.mem.img;
 
 public enum MemImageOrigin {
 

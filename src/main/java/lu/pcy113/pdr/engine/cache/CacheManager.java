@@ -534,6 +534,8 @@ public class CacheManager implements Cleanupable {
 		out.println(RenderLayer.class.getName() + ": " + this.renderLayers.size() + ": " + this.renderLayers);
 		out.println(TextEmitter.class.getName() + ": " + this.textEmitters.size() + ": " + this.textEmitters);
 		out.println(PointLight.class.getName() + ": " + this.pointLights.size() + ": " + this.pointLights);
+		out.println(Framebuffer.class.getName() + ": " + this.framebuffers.size() + ": " + this.framebuffers);
+		out.println(Sound.class.getName() + ": " + this.sounds.size() + ": " + this.sounds);
 		out.println("== DUMP:" + this.getClass().getName() + ":end ==");
 	}
 

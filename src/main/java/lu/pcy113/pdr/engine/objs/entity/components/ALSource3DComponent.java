@@ -24,6 +24,9 @@ public class ALSource3DComponent extends Component {
 	}
 
 	public void updatePositionDirection() {
+		if(source == null)
+			return;
+		
 		if (!super.getParent().hasComponent(Transform3DComponent.class))
 			return;
 

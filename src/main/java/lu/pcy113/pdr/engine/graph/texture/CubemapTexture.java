@@ -8,7 +8,7 @@ import org.lwjgl.opengl.GL40;
 import lu.pcy113.pdr.engine.utils.PDRUtils;
 import lu.pcy113.pdr.engine.utils.consts.TextureType;
 import lu.pcy113.pdr.engine.utils.file.FileUtils;
-import lu.pcy113.pdr.engine.utils.img.MemImage;
+import lu.pcy113.pdr.engine.utils.mem.img.MemImage;
 
 public class CubemapTexture extends Texture {
 

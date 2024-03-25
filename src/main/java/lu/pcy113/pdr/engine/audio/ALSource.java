@@ -1,7 +1,5 @@
 package lu.pcy113.pdr.engine.audio;
 
-import java.io.PrintStream;
-
 import org.joml.Vector3f;
 import org.lwjgl.openal.AL11;
 

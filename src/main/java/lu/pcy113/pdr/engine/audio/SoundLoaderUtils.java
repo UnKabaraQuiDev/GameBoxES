@@ -7,10 +7,12 @@ import org.lwjgl.stb.STBVorbis;
 import org.lwjgl.system.MemoryUtil;
 
 import lu.pcy113.pclib.Triplet;
+import lu.pcy113.pdr.engine.utils.mem.buffer.MemBuffer;
+import lu.pcy113.pdr.engine.utils.mem.buffer.MemBufferOrigin;
 
 public final class SoundLoaderUtils {
 
-	public static Triplet<ShortBuffer, Integer, Integer> readVorbis(String file) {
+	public static Triplet<MemBuffer<ShortBuffer>, Integer, Integer> readVorbis(String file) {
 		IntBuffer channels = MemoryUtil.memAllocInt(1);
 		IntBuffer sampleRate = MemoryUtil.memAllocInt(1);
 		ShortBuffer vorbis = STBVorbis.stb_vorbis_decode_filename(file, channels, sampleRate);
@@ -27,8 +29,10 @@ public final class SoundLoaderUtils {
 
 		MemoryUtil.memFree(channels);
 		MemoryUtil.memFree(sampleRate);
+		
+		MemBuffer<ShortBuffer> mb = new MemBuffer<ShortBuffer>(vorbis, MemBufferOrigin.STBV);
 
-		return new Triplet<ShortBuffer, Integer, Integer>(vorbis, ch, sr);
+		return new Triplet<MemBuffer<ShortBuffer>, Integer, Integer>(mb, ch, sr);
 	}
 
 }

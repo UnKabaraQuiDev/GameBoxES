@@ -4,7 +4,6 @@ import org.joml.Quaternionf;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
-import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.utils.MathUtils;
 
 public enum GeoPlane {

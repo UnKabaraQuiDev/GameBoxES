@@ -1,20 +1,24 @@
 package lu.pcy113.pdr.engine.utils.bake.openal;
 
+import static org.lwjgl.BufferUtils.createByteBuffer;
+import static org.lwjgl.system.MemoryUtil.memSlice;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.ByteBuffer;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.SeekableByteChannel;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 /*
  * Copyright LWJGL. All rights reserved.
  * License terms: https://www.lwjgl.org/license
  */
-
-import org.lwjgl.*;
-
-import java.io.*;
-import java.net.*;
-import java.nio.*;
-import java.nio.channels.*;
-import java.nio.file.*;
-
-import static org.lwjgl.BufferUtils.*;
-import static org.lwjgl.system.MemoryUtil.*;
+import org.lwjgl.BufferUtils;
 
 public final class IOUtil {
 
