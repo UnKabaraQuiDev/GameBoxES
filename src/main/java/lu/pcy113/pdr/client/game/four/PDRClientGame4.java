@@ -25,7 +25,6 @@ import lu.pcy113.pdr.engine.GameEngine;
 import lu.pcy113.pdr.engine.anim.CallbackValueInterpolation;
 import lu.pcy113.pdr.engine.audio.ALSource;
 import lu.pcy113.pdr.engine.audio.ALSourcePool;
-import lu.pcy113.pdr.engine.audio.AudioMaster;
 import lu.pcy113.pdr.engine.audio.Sound;
 import lu.pcy113.pdr.engine.cache.attrib.UIntAttribArray;
 import lu.pcy113.pdr.engine.cache.attrib.Vec3fAttribArray;
