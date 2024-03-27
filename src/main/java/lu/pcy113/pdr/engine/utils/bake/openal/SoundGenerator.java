@@ -5,57 +5,109 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ShortBuffer;
+import java.util.Arrays;
 
 import org.joml.Math;
+import org.lwjgl.system.MemoryUtil;
+
+import lu.pcy113.pdr.engine.utils.MathUtils;
 
 public class SoundGenerator {
 
-	public static void fillBuffer(ShortBuffer buffer, int sampleRate) {
+	public static final float notes[] = new float[8];
+	static {
+		float start = 440;
+		notes[0] = start;
+		for (int i = 1; i < 8; i++) {
+			start *= 1.057;
+			notes[i] = start;
+		}
+	}
+
+	// Function to compute the Fourier series value for a given x
+	public static double computeFourierSeries(double x, double[] radii) {
+		double sum = 0;
+		for (int i = 0; i < radii.length; i++) {
+			double radius = radii[i];
+			sum += radius * Math.sin(2 * Math.PI * (i + 1) * x);
+		}
+		return sum;
+	}
+
+	public static void fillBuffer(ShortBuffer buffer, double seconds, int sampleRate) {
 		// Constants for the Fourier series
-		double[] radii = { 1.0, 0.5 };
-		double[] coefficients = { 2.0, 5.0 };
+		double[] radii = { 1.0, 0.8, 0.5 };
+		double[] coefficients = { 400.0, 200.0, 300.0 };
 
-		// Calculate the number of samples for 10 seconds
-		int numSamples = sampleRate * 10;
+		for (double second = 0; second < seconds; second++) {
+			// Fill for half of the note
+			for (int moment = 0; moment < sampleRate / 2; moment++) {
+				double time = (second * sampleRate + moment) * Math.PI * 2;
 
-		// Generate audio samples for 10 seconds
-		for (int second = 0; second < 10; second++) {
-			// Generate the note
-			for (int i = 0; i < sampleRate / 2; i++) {
-				// Calculate time in seconds
-				double time = ((double) second / (double) sampleRate) * i;
+				double x = 0, y = 0;
+				double amplitude = 0;
+				for (int circle = 0; circle < radii.length; circle++) {
+					double radius = radii[circle];
+					double coefficient = coefficients[circle];
 
-				// Calculate angle based on time
-				double angle = 2 * Math.PI * time;
-
-				// Initialize amplitude
-				double amplitude = 0.0;
-
-				// Calculate amplitude using Fourier series
-				for (int ji = 0; ji < radii.length; ji++) {
-					amplitude += radii[ji] * Math.cos(coefficients[ji] * angle);
+					x += Math.cos(time) * radius;
+					y += Math.sin(time) * radius;
 				}
 
-				// Calculate frequency based on angle
-				double frequency = 440 * java.lang.Math.pow(1.059, angle);
+				amplitude = computeFourierSeries(time, radii);
 
-				// Calculate amplitude-adjusted sample value
-				short sampleValue = (short) (amplitude * Short.MAX_VALUE / 500);
+				float angle = (float) java.lang.Math.atan2(x, y);
+				int note = (int) (MathUtils.snap(angle, (float) (Math.PI * 2 / 8)) / 8);
 
-				buffer.put(sampleValue);
+				double noteFrequency = notes[note];
+
+				System.out.println("amplitude: " + (time/sampleRate) + " " + amplitude + " : " + (Math.sin(noteFrequency * (time/sampleRate)) * Short.MAX_VALUE));
+
+				buffer.put((short) (Math.sin(noteFrequency * (time/sampleRate)) * Short.MAX_VALUE));
 			}
+
+			buffer.position(buffer.position() + sampleRate / 2);
 
 			// Silence for the remaining half of the second
-			for (int i = 0; i < sampleRate / 2; i++) {
-				buffer.put((short) 0);
-			}
+			/*
+			 * for (int i = 0; i < sampleRate / 2; i++) { buffer.put((short) 0); }
+			 */
 		}
+
+		/*
+		 * // Calculate the number of samples for 10 seconds int numSamples = sampleRate
+		 * * 10;
+		 * 
+		 * // Generate audio samples for 10 seconds for (int second = 0; second < 10;
+		 * second++) { // Generate the note for (int i = 0; i < sampleRate / 2; i++) {
+		 * // Calculate time in seconds double time = ((double) second / (double)
+		 * sampleRate) * i;
+		 * 
+		 * // Calculate angle based on time double angle = 2 * Math.PI * time;
+		 * 
+		 * // Initialize amplitude double amplitude = 0.0;
+		 * 
+		 * // Calculate amplitude using Fourier series for (int ji = 0; ji <
+		 * radii.length; ji++) { amplitude += radii[ji] * Math.cos(coefficients[ji] *
+		 * angle + 1); }
+		 * 
+		 * // Calculate frequency based on angle double frequency = 440 *
+		 * java.lang.Math.pow(1.059, angle);
+		 * 
+		 * // Calculate amplitude-adjusted sample value short sampleValue = (short)
+		 * (amplitude * Short.MAX_VALUE / 500);
+		 * 
+		 * buffer.put(sampleValue); }
+		 * 
+		 * // Silence for the remaining half of the second for (int i = 0; i <
+		 * sampleRate / 2; i++) { buffer.put((short) 0); } }
+		 */
 
 		// Reset position of the buffer to prepare for playback
 		buffer.flip();
 	}
 
-	public static void main(String[] args) throws IOException {
+	public static ShortBuffer create() {
 		// Define the buffer size
 		int bufferSize = 44100 * 10; // 10 seconds at 44100Hz
 
@@ -63,10 +115,17 @@ public class SoundGenerator {
 		int numSamples = sampleRate * 10;
 
 		// Create a ShortBuffer with the specified size
-		ShortBuffer buffer = ShortBuffer.allocate(bufferSize);
+		ShortBuffer buffer = MemoryUtil.memAllocShort(bufferSize); // ShortBuffer.allocate(bufferSize);
 
 		// Fill the buffer with audio samples
-		fillBuffer(buffer, sampleRate);
+		fillBuffer(buffer, 10, sampleRate);
+
+		return buffer;
+	}
+
+	public static void main(String[] args) throws IOException {
+
+		ShortBuffer buffer = create();
 
 		ByteBuffer byteBuffer = ByteBuffer.allocate(buffer.capacity() * 2); // Each short is 2 bytes
 

@@ -179,7 +179,7 @@
 						</goals>
 						<configuration>
 							<sources>
-								<source>${project.basedir}/../PCLib/src</source>
+								<source>${project.basedir}/PCLib/src</source>
 							</sources>
 						</configuration>
 					</execution>
@@ -207,7 +207,7 @@
 						</goals>
 						<configuration>
 							<sources>
-								<source>${project.basedir}/JByteCodec/src</source>
+								<source>${project.basedir}/jbcodec/src</source>
 							</sources>
 						</configuration>
 					</execution>

@@ -65,6 +65,7 @@ import lu.pcy113.pdr.engine.scene.camera.Camera;
 import lu.pcy113.pdr.engine.scene.camera.Camera3D;
 import lu.pcy113.pdr.engine.utils.MathUtils;
 import lu.pcy113.pdr.engine.utils.PDRUtils;
+import lu.pcy113.pdr.engine.utils.bake.openal.SoundGenerator;
 import lu.pcy113.pdr.engine.utils.consts.FrameBufferAttachment;
 import lu.pcy113.pdr.engine.utils.consts.TextureFilter;
 import lu.pcy113.pdr.engine.utils.consts.TextureType;
@@ -72,7 +73,6 @@ import lu.pcy113.pdr.engine.utils.file.FileUtils;
 import lu.pcy113.pdr.engine.utils.file.ShaderManager;
 import lu.pcy113.pdr.engine.utils.geo.GeoPlane;
 import lu.pcy113.pdr.engine.utils.geo.Ray;
-import lu.pcy113.pdr.engine.utils.interpolation.Interpolators;
 import lu.pcy113.pdr.engine.utils.mem.buffer.MemBuffer;
 import lu.pcy113.pdr.engine.utils.mem.buffer.MemBufferOrigin;
 import lu.pcy113.pdr.engine.utils.mem.img.MemImage;
@@ -249,7 +249,8 @@ public class PDRClientGame4 extends GameLogic {
 		}).push();
 
 		worker.closeInput();
-
+		
+		codec
 	}
 
 	private ALSourcePool audioPool;
@@ -303,7 +304,12 @@ public class PDRClientGame4 extends GameLogic {
 			source.appendQueue(nSound);
 		}
 
-		source.setPitch(3f).setVolume(1).setLooping(true).play();
+		//source.setPitch(3f).setVolume(1).setLooping(false).play();
+		
+		ShortBuffer buffer = SoundGenerator.create();
+		Sound otherSound = new Sound("other_note", sampleRate, 1, new MemBuffer<ShortBuffer>(buffer, MemBufferOrigin.OPENAL), false);
+		cache.addSound(otherSound);
+		audioPool.getFreeSource().setLooping(true).play(otherSound);
 		
 		cache.dump(System.out);
 	}
@@ -407,7 +413,7 @@ public class PDRClientGame4 extends GameLogic {
 	}
 
 	private void moveCube() {
-		System.out.println("click");
+		//System.out.println("click");
 
 		int[] viewport = new int[4];
 		createTask(GameEngine.QUEUE_RENDER).exec((s) -> {
