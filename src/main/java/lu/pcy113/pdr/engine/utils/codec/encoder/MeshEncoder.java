@@ -35,14 +35,18 @@ public class MeshEncoder extends DefaultObjectEncoder<Mesh> {
 			// bufferLength += cm.estimateSize(true, arr);
 		}
 
-		System.out.println(bufferLength);
+		System.out.println("bufferLength 1: "+bufferLength);
 
 		StringEncoder stringEncoder = (StringEncoder) cm.getEncoderByClass(String.class);
 		bufferLength += stringEncoder.estimateSize(false, name);
 
-		System.out.println(bufferLength);
+		System.out.println("bufferLength 2: "+bufferLength);
 
 		ByteBuffer bb = ByteBuffer.allocate(bufferLength);
+		
+		if (head) {
+			bb.putShort(header);
+		}
 
 		bb.put(stringEncoder.encode(false, name));
 

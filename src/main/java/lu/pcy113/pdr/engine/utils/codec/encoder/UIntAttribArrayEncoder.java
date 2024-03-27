@@ -46,7 +46,11 @@ public class UIntAttribArrayEncoder extends DefaultObjectEncoder<UIntAttribArray
 		System.out.println("data: " + data.length);
 
 		ByteBuffer bb = ByteBuffer.allocate(bufferLength);
-
+		
+		if (head) {
+			bb.putShort(header);
+		}
+		
 		ByteBuffer bbName = ((StringEncoder) cm.getEncoderByClass(String.class)).encode(false, name);
 		bb.put(bbName);
 		bbName.clear();
@@ -74,7 +78,12 @@ public class UIntAttribArrayEncoder extends DefaultObjectEncoder<UIntAttribArray
 
 	@Override
 	public int estimateSize(boolean head, UIntAttribArray obj) {
-		return (head ? CodecManager.HEAD_SIZE : 0) + cm.estimateSize(false, obj.getName()) + 5 * Integer.BYTES + 1 + Integer.BYTES * obj.getData().length;
+		return (head ? CodecManager.HEAD_SIZE : 0) +
+				cm.estimateSize(false, obj.getName()) +
+				5 * Integer.BYTES + // index, dataSize, bufferType, divisor, dataLength
+				1 + // isStatic
+				Integer.BYTES * obj.getData().length + // data
+				2; // end short
 	}
 
 }

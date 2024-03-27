@@ -1,6 +1,7 @@
 package lu.pcy113.pdr.client.game.four;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.ShortBuffer;
 
 import org.joml.Math;
@@ -13,6 +14,9 @@ import org.lwjgl.openal.AL11;
 import org.lwjgl.opengl.GL41;
 import org.lwjgl.system.MemoryUtil;
 
+import lu.pcy113.jb.codec.CodecManager;
+import lu.pcy113.jb.utils.ArrayUtils;
+import lu.pcy113.pclib.ByteArrayUtils;
 import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pdr.client.game.four.PlainShader.PlainMaterial;
 import lu.pcy113.pdr.client.game.three.BoxBlurShader;
@@ -66,6 +70,10 @@ import lu.pcy113.pdr.engine.scene.camera.Camera3D;
 import lu.pcy113.pdr.engine.utils.MathUtils;
 import lu.pcy113.pdr.engine.utils.PDRUtils;
 import lu.pcy113.pdr.engine.utils.bake.openal.SoundGenerator;
+import lu.pcy113.pdr.engine.utils.codec.decoder.UIntAttribArrayDecoder;
+import lu.pcy113.pdr.engine.utils.codec.encoder.AttribArrayEncoder;
+import lu.pcy113.pdr.engine.utils.codec.encoder.MeshEncoder;
+import lu.pcy113.pdr.engine.utils.codec.encoder.UIntAttribArrayEncoder;
 import lu.pcy113.pdr.engine.utils.consts.FrameBufferAttachment;
 import lu.pcy113.pdr.engine.utils.consts.TextureFilter;
 import lu.pcy113.pdr.engine.utils.consts.TextureType;
@@ -73,6 +81,7 @@ import lu.pcy113.pdr.engine.utils.file.FileUtils;
 import lu.pcy113.pdr.engine.utils.file.ShaderManager;
 import lu.pcy113.pdr.engine.utils.geo.GeoPlane;
 import lu.pcy113.pdr.engine.utils.geo.Ray;
+import lu.pcy113.pdr.engine.utils.interpolation.Interpolators;
 import lu.pcy113.pdr.engine.utils.mem.buffer.MemBuffer;
 import lu.pcy113.pdr.engine.utils.mem.buffer.MemBufferOrigin;
 import lu.pcy113.pdr.engine.utils.mem.img.MemImage;
@@ -96,8 +105,6 @@ public class PDRClientGame4 extends GameLogic {
 	NextTaskWorker worker;
 
 	ShaderManager sm;
-
-	// Trigger Maven recompile
 
 	@Override
 	public void init(GameEngine e) {
@@ -249,8 +256,6 @@ public class PDRClientGame4 extends GameLogic {
 		}).push();
 
 		worker.closeInput();
-		
-		codec
 	}
 
 	private ALSourcePool audioPool;
@@ -304,14 +309,23 @@ public class PDRClientGame4 extends GameLogic {
 			source.appendQueue(nSound);
 		}
 
-		//source.setPitch(3f).setVolume(1).setLooping(false).play();
+		source.setPitch(3f).setVolume(1).setLooping(true).play();
 		
-		ShortBuffer buffer = SoundGenerator.create();
+		/*ShortBuffer buffer = SoundGenerator.create();
 		Sound otherSound = new Sound("other_note", sampleRate, 1, new MemBuffer<ShortBuffer>(buffer, MemBufferOrigin.OPENAL), false);
 		cache.addSound(otherSound);
-		audioPool.getFreeSource().setLooping(true).play(otherSound);
+		audioPool.getFreeSource().setLooping(true).play(otherSound);*/
 		
 		cache.dump(System.out);
+		
+		CodecManager cm = CodecManager.base();
+		cm.register(new UIntAttribArrayEncoder(), new UIntAttribArrayDecoder(), (short) 0x20);
+		cm.register(new MeshEncoder(), (short) 0x21);
+		// cm.register(new AttribArrayEncoder(), (short) 0x22);
+		
+		ByteBuffer bb = cm.encode(true, defaultCube.getComponent(MeshComponent.class).getMesh(cache));
+		System.out.println(ArrayUtils.byteBufferToHexString(bb));
+		bb.clear();
 	}
 
 	private boolean previousF = false;
