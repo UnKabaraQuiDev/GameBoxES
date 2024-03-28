@@ -78,6 +78,10 @@
 		</dependency>
 		<dependency>
 			<groupId>org.lwjgl</groupId>
+			<artifactId>lwjgl-opengles</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.lwjgl</groupId>
 			<artifactId>lwjgl-stb</artifactId>
 		</dependency>
 		<dependency>
@@ -135,34 +139,9 @@
 			<version>${joml.version}</version>
 		</dependency>
 
-		<!--<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<version>1.18.28</version>
-		</dependency>-->
-
-		<!--<dependency>
-			<groupId>lu.pcy113</groupId>
-			<artifactId>jbcodec</artifactId>
-			<scope>system</scope>
-			<systemPath>${project.baseDir}/libs/jbcodec-release_1.0.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>lu.pcy113</groupId>
-			<artifactId>packets4j</artifactId>
-			<scope>system</scope>
-			<systemPath>${project.baseDir}/libs/packets4j-release_0.2.jar</systemPath>
-		</dependency>-->
-
 	</dependencies>
 
 	<build>
-		<!--<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-			</resource>
-		</resources>-->
-		<!--<sourceDirectory>src</sourceDirectory>-->
 		<plugins>
 
 			<plugin>
@@ -180,20 +159,6 @@
 						<configuration>
 							<sources>
 								<source>${project.basedir}/PCLib/src</source>
-							</sources>
-						</configuration>
-					</execution>
-
-					<!-- Add a source directory for packets4j project -->
-					<execution>
-						<id>add-source-packets4j</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>add-source</goal>
-						</goals>
-						<configuration>
-							<sources>
-								<source>${project.basedir}/packets4j/src</source>
 							</sources>
 						</configuration>
 					</execution>
