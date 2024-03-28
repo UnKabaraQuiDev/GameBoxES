@@ -79,12 +79,12 @@ public class Compositor implements Cleanupable {
 		} else {
 			resolution = new Vector2i(width, height);
 			if (!genTextures())
-				throw new RuntimeException("Could not attach textures to framebuffer");
+				throw new RuntimeException("Error while generating textures and framebuffer.");
 			GL40.glViewport(0, 0, width, height);
 		}
 
 		color0.bind();
-
+		
 		if (!framebuffer.isComplete()) {
 			GlobalLogger.log(Level.SEVERE, "Framebuffer not complete: " + framebuffer.getError() + ", w:" + width + " h:" + height);
 			return;

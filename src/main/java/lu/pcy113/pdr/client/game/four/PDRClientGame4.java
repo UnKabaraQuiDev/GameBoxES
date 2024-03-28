@@ -98,7 +98,7 @@ public class PDRClientGame4 extends GameLogic {
 
 	TextEmitter debugInfo;
 
-	Entity defaultCube, rayEntity, debugFps, slotUiEntity;
+	Entity defaultCube, debugFps, slotUiEntity;
 
 	Compositor compositor;
 
@@ -124,11 +124,6 @@ public class PDRClientGame4 extends GameLogic {
 
 		ui = new Scene2D("ui", Camera.orthographicCamera3D());
 		scene = new Scene3D("main");
-
-		Gizmo ray = new Gizmo("ray", new Vec3fAttribArray("pos", 0, 1, new Vector3f[] { new Vector3f(0, 0, 0), new Vector3f(1, 0, 0) }), new UIntAttribArray("ind", -1, 1, new int[] { 0, 1 }),
-				new Vec4fAttribArray("color", 1, 1, new Vector4f[] { new Vector4f(0.5f), new Vector4f(1) }));
-		cache.addGizmo(ray);
-		rayEntity = scene.addEntity("ray", new GizmoComponent(ray), new Transform3DComponent());
 
 		PlainMaterial cubeMat = (PlainMaterial) cache.loadMaterial(PlainShader.PlainMaterial.class);
 		sm.monitorShader(cubeMat.getRenderShader()/* , "./resources/shaders/plain.vert", "./resources/shaders/plain.frag" */);
