@@ -21,6 +21,7 @@ public class GLWindow extends Window {
 		GlobalLogger.log();
 	}
 
+	@Override
 	protected void init() {
 		errorCallback = GLFWErrorCallback.createPrint(System.err);
 		errorCallback.set();
