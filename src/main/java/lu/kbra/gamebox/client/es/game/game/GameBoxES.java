@@ -4,7 +4,6 @@ import org.joml.Vector4f;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.graph.composition.Compositor;
-import lu.kbra.gamebox.client.es.engine.graph.composition.GenerateRenderLayer;
 import lu.kbra.gamebox.client.es.engine.graph.composition.SceneRenderLayer;
 import lu.kbra.gamebox.client.es.engine.graph.material.Material;
 import lu.kbra.gamebox.client.es.engine.graph.render.GizmoRenderer;
@@ -26,30 +25,39 @@ public class GameBoxES extends GameLogic {
 	private WorldScene3D worldScene;
 	
 	private SceneRenderLayer worldSceneRenderLayer;
+	private SceneRenderLayer uiSceneRenderLayer;
 
 	@Override
 	public void init(GameEngine e) {
 		registerRenderers();
 
-		loadWorldScene("not nyll");
+		loadWorldScene("not world");
+		loadUiScene("not ui");
 
 		compositor = new Compositor();
 
-		// compositor.addRenderLayer(0, new GenerateRenderLayer("bg",
-		// generateRenderLayerMaterial));
-		
 		worldSceneRenderLayer = new SceneRenderLayer("worldScene", worldScene);
 		cache.addRenderLayer(worldSceneRenderLayer);
 		compositor.addRenderLayer(0, worldSceneRenderLayer);
 		
+		uiSceneRenderLayer = new SceneRenderLayer("uiScene", uiScene);
+		cache.addRenderLayer(uiSceneRenderLayer);
+		compositor.addRenderLayer(1, uiSceneRenderLayer);
+		
 		engine.getWindow().onResize((w, h) -> {
 			System.out.println("resize update: " + w + "x" + h);
 			worldScene.getCamera().getProjection().update(w, h);
-			// uiScene.getCamera().getProjection().update(w, h);
+			uiScene.getCamera().getProjection().update(w, h);
 		});
 		engine.getWindow().setBackground(new Vector4f(0.1f));
 	}
-
+	
+	private void loadUiScene(String path) {
+		uiScene = new UIScene3D(path, cache);
+		uiScene.setupScene();
+		cache.addScene(uiScene);
+	}
+	
 	private void loadWorldScene(String path) {
 		worldScene = new WorldScene3D(path, cache);
 		worldScene.setupScene();
