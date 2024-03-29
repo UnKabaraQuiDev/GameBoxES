@@ -52,6 +52,8 @@ public class CacheManager implements Cleanupable {
 	}
 
 	public CacheManager(CacheManager parent) {
+		this.parent = parent;
+		
 		this.meshes = new HashMap<>();
 		this.scenes = new HashMap<>();
 		this.renderers = new HashMap<>();
@@ -247,7 +249,7 @@ public class CacheManager implements Cleanupable {
 	 */
 
 	public Mesh getMesh(String name) {
-		return this.meshes.getOrDefault(name, parent.getMesh(name) == null ? null : parent.getMesh(name));
+		return this.meshes.getOrDefault(name, parent == null ? null : parent.getMesh(name));
 	}
 
 	public Renderer<?, ?> getRenderer(String name) {
@@ -255,51 +257,51 @@ public class CacheManager implements Cleanupable {
 		 * if (name != null && !renderers.containsKey(name))
 		 * GlobalLogger.log("No renderer found for: " + name);
 		 */
-		return this.renderers.getOrDefault(name, parent.getRenderer(name) == null ? null : parent.getRenderer(name));
+		return this.renderers.getOrDefault(name, parent == null ? null : parent.getRenderer(name));
 	}
 
 	public Scene getScene(String name) {
-		return this.scenes.getOrDefault(name, parent.getScene(name) == null ? null : parent.getScene(name));
+		return this.scenes.getOrDefault(name, parent == null ? null : parent.getScene(name));
 	}
 
 	public Material getMaterial(String name) {
-		return this.materials.getOrDefault(name, parent.getMaterial(name) == null ? null : parent.getMaterial(name));
+		return this.materials.getOrDefault(name, parent == null ? null : parent.getMaterial(name));
 	}
 
 	public RenderShader getRenderShader(String name) {
-		return this.renderShaders.getOrDefault(name, parent.getRenderShader(name) == null ? null : parent.getRenderShader(name));
+		return this.renderShaders.getOrDefault(name, parent == null ? null : parent.getRenderShader(name));
 	}
 
 	public Texture getTexture(String name) {
-		return this.textures.getOrDefault(name, parent.getTexture(name) == null ? null : parent.getTexture(name));
+		return this.textures.getOrDefault(name, parent == null ? null : parent.getTexture(name));
 	}
 
 	public PointLight getPointLight(String name) {
-		return this.pointLights.getOrDefault(name, parent.getPointLight(name) == null ? null : parent.getPointLight(name));
+		return this.pointLights.getOrDefault(name, parent == null ? null : parent.getPointLight(name));
 	}
 
 	public Gizmo getGizmo(String name) {
-		return this.gizmos.getOrDefault(name, parent.getGizmo(name) == null ? null : parent.getGizmo(name));
+		return this.gizmos.getOrDefault(name, parent == null ? null : parent.getGizmo(name));
 	}
 
 	public RenderLayer getRenderLayer(String name) {
-		return this.renderLayers.getOrDefault(name, parent.getRenderLayer(name) == null ? null : parent.getRenderLayer(name));
+		return this.renderLayers.getOrDefault(name, parent == null ? null : parent.getRenderLayer(name));
 	}
 
 	public TextEmitter getTextEmitter(String name) {
-		return this.textEmitters.getOrDefault(name, parent.getTextEmitter(name) == null ? null : parent.getTextEmitter(name));
+		return this.textEmitters.getOrDefault(name, parent == null ? null : parent.getTextEmitter(name));
 	}
 
 	public InstanceEmitter getInstanceEmitter(String name) {
-		return this.instanceEmitters.getOrDefault(name, parent.getInstanceEmitter(name) == null ? null : parent.getInstanceEmitter(name));
+		return this.instanceEmitters.getOrDefault(name, parent == null ? null : parent.getInstanceEmitter(name));
 	}
 
 	public Sound getSound(String name) {
-		return this.sounds.getOrDefault(name, parent.getSound(name) == null ? null : parent.getSound(name));
+		return this.sounds.getOrDefault(name, parent == null ? null : parent.getSound(name));
 	}
 
 	public Framebuffer getFramebuffer(String name) {
-		return this.framebuffers.getOrDefault(name, parent.getFramebuffer(name) == null ? null : parent.getFramebuffer(name));
+		return this.framebuffers.getOrDefault(name, parent == null ? null : parent.getFramebuffer(name));
 	}
 
 	/*
@@ -415,23 +417,23 @@ public class CacheManager implements Cleanupable {
 	 */
 
 	public boolean hasRenderShader(String name) {
-		return renderShaders.containsKey(name) || parent != null ? parent.hasRenderShader(name) : false;
+		return renderShaders.containsKey(name) || (parent != null ? parent.hasRenderShader(name) : false);
 	}
 
 	public boolean hasMaterial(String name) {
-		return materials.containsKey(name) || parent != null ? parent.hasMaterial(name) : false;
+		return materials.containsKey(name) || (parent != null ? parent.hasMaterial(name) : false);
 	}
 
 	public boolean hasMesh(String name) {
-		return meshes.containsKey(name) || parent != null ? parent.hasMesh(name) : false;
+		return meshes.containsKey(name) || (parent != null ? parent.hasMesh(name) : false);
 	}
 
 	public boolean hasFramebuffer(String name) {
-		return framebuffers.containsKey(name) || parent != null ? parent.hasFramebuffer(name) : false;
+		return framebuffers.containsKey(name) || (parent != null ? parent.hasFramebuffer(name) : false);
 	}
 
 	public boolean hasSound(String name) {
-		return sounds.containsKey(name) || parent != null ? parent.hasSound(name) : false;
+		return sounds.containsKey(name) || (parent != null ? parent.hasSound(name) : false);
 	}
 
 	/*
@@ -447,6 +449,9 @@ public class CacheManager implements Cleanupable {
 	}
 
 	public <T extends Material> Material loadMaterial(Class<T> clazz, Object... args) {
+		System.out.println("loading mat: "+clazz+" into "+this+", parent: "+parent);
+		GlobalLogger.log();
+		
 		try {
 			Class[] types = new Class[args.length];
 			for (int i = 0; i < args.length; i++) {
@@ -550,8 +555,11 @@ public class CacheManager implements Cleanupable {
 		}else {
 			parent.dump(out);
 		}
-		parent.dump(out);
 		out.println("== DUMP:" + this.getClass().getName() + ":end ==");
+	}
+	
+	public CacheManager getParent() {
+		return parent;
 	}
 
 }

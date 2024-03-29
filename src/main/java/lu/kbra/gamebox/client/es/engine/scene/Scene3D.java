@@ -37,9 +37,9 @@ public class Scene3D extends Scene {
 	}
 
 	public Entity addEntity(String str, Entity entity) {
-		/*
-		 * if(this.entities.containsKey(str)) this.entities.remove(str);
-		 */
+		if (entity == null)
+			return null;
+
 		this.entities.put(str, entity);
 		if (entity.hasComponent(LightComponent.class)) {
 			this.lightEmittors.add(str);

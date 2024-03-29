@@ -36,7 +36,7 @@ public class TextureMaterial extends Material {
 				GlobalLogger.log(Level.WARNING, "Could not find texture: " + txt.getKey());
 				continue;
 			}
-			texture.bind(i++);
+			texture.bind(shader.getUniformLocation(txt.getKey()));
 		}
 	}
 

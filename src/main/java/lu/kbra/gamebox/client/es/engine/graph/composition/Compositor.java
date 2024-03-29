@@ -30,8 +30,6 @@ public class Compositor implements Cleanupable {
 	protected SingleTexture depth, color0;
 
 	protected Vector2i resolution = new Vector2i(0, 0);
-	protected boolean resize = true;
-	protected Vector2i outResolution = new Vector2i(0, 0);
 
 	private boolean genTextures() {
 		if (depth != null && depth.isValid())
@@ -80,8 +78,6 @@ public class Compositor implements Cleanupable {
 			// keep same texture
 		} else {
 			resolution = new Vector2i(width, height);
-			if (resize)
-				outResolution = new Vector2i(resolution);
 			if (!genTextures())
 				throw new RuntimeException("Error while generating textures and framebuffer.");
 			GL40.glViewport(0, 0, width, height);
@@ -90,8 +86,7 @@ public class Compositor implements Cleanupable {
 		color0.bind();
 
 		if (!framebuffer.isComplete()) {
-			GlobalLogger.log(Level.SEVERE,
-					"Framebuffer not complete: " + framebuffer.getError() + ", w:" + width + " h:" + height);
+			GlobalLogger.log(Level.SEVERE, "Framebuffer not complete: " + framebuffer.getError() + ", w:" + width + " h:" + height);
 			return;
 		}
 
@@ -136,12 +131,12 @@ public class Compositor implements Cleanupable {
 		}
 		GL40.glDepthMask(true);
 
-		framebuffer.unbind(GL40.GL_DRAW_FRAMEBUFFER);
+		framebuffer.unbind(GL40.GL_FRAMEBUFFER);
 		framebuffer.bind(GL40.GL_READ_FRAMEBUFFER);
+		GL40.glBindFramebuffer(GL40.GL_DRAW_FRAMEBUFFER, 0);
 
 		if (passes.isEmpty())
-			GL40.glBlitFramebuffer(0, 0, resolution.x, resolution.y, 0, 0, outResolution.x, outResolution.y,
-					GL40.GL_COLOR_BUFFER_BIT, GL40.GL_NEAREST);
+			GL40.glBlitFramebuffer(0, 0, resolution.x, resolution.y, 0, 0, resolution.x, resolution.y, GL40.GL_COLOR_BUFFER_BIT, GL40.GL_NEAREST);
 
 		framebuffer.bind();
 
@@ -171,14 +166,6 @@ public class Compositor implements Cleanupable {
 
 	public Framebuffer getFramebuffer() {
 		return framebuffer;
-	}
-
-	public void setResize(boolean resize) {
-		this.resize = resize;
-	}
-
-	public void setOutResolution(Vector2i outResolution) {
-		this.outResolution = outResolution;
 	}
 
 }

@@ -14,6 +14,7 @@ import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
 import lu.kbra.gamebox.client.es.engine.impl.UniqueID;
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 import lu.kbra.gamebox.client.es.engine.utils.consts.Alignment;
+import lu.kbra.gamebox.client.es.engine.utils.geo.GeoPlane;
 import lu.kbra.gamebox.client.es.engine.utils.transform.Transform2D;
 
 public class TextEmitter implements Cleanupable, UniqueID {
@@ -48,7 +49,7 @@ public class TextEmitter implements Cleanupable, UniqueID {
 
 		this.charBuffer = new UIntAttribArray("char", 7, 1, PDRUtils.toPrimitiveInt(chars), false, 1);
 		// GlobalLogger.log(Level.FINEST, Arrays.toString(charBuffer.getData()));
-		this.quad = Mesh.newQuad(name, material, size);
+		this.quad = Mesh.newQuad(GeoPlane.XY, name, material, size);
 
 		this.instances = new InstanceEmitter(name, quad, bufferSize, new Transform2D(), charBuffer);
 	}

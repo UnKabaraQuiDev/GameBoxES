@@ -285,7 +285,7 @@
 						<argument>-javaagent:libs/lwjglx-debug-1.0.0.jar</argument>
 						<argument>-Dorg.lwjglx.TRACE</argument>
 						<argument>-Dorg.lwjglx.OUTPUT=./logs/trace.log</argument>
-						<argument>lu.pcy113.pdr.client.ClientMain</argument>
+						<argument>lu.kbra.gamebox.client.es.game.ClientMain</argument>
 					</arguments>
 					<!--<mainClass>lu.pcy113.pdr.client.ClientMain</mainClass>-->
 					<!--<addResourcesToClasspath>true</addResourcesToClasspath>-->

@@ -9,7 +9,7 @@ import lu.kbra.gamebox.client.es.engine.utils.MathUtils;
 public enum GeoPlane {
 
 	XY, XZ, YZ;
-
+	
 	public static GeoPlane getByTangent(Vector3f tangent) {
 		float x = Math.abs(tangent.x);
 		float y = Math.abs(tangent.y);
@@ -51,7 +51,19 @@ public enum GeoPlane {
 
 		return null;
 	}
-
+	
+	public Vector3f project(Vector2f pos) {
+		switch (this) {
+		case XY:
+			return new Vector3f(pos.x, pos.y, 0);
+		case XZ:
+			return new Vector3f(pos.x, 0, pos.y);
+		case YZ:
+			return new Vector3f(0, pos.x, pos.y);
+		}
+		return null;
+	}
+	
 	public Vector2f projectToPlane(Vector3f pos) {
 		return projectToPlane(pos, this);
 	}

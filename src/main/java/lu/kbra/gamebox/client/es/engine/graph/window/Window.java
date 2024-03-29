@@ -70,8 +70,7 @@ public abstract class Window implements Cleanupable {
 	public abstract void takeGLContext();
 
 	protected long getQualifiedMonitor() {
-		long monitor = -1;
-		GLFW.glfwGetPrimaryMonitor();
+		long monitor = GLFW.glfwGetPrimaryMonitor();
 		if (monitor == MemoryUtil.NULL) {
 			// throw new RuntimeException("No primary monitor found");
 			PointerBuffer ptb = GLFW.glfwGetMonitors();

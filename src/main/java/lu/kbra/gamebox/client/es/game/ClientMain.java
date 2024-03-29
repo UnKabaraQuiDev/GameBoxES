@@ -39,6 +39,7 @@ public class ClientMain {
 			options.fullscreen = false;
 			options.vsync = true;
 			options.fps = 60;
+			options.windowMultisample = 8;
 			GameEngine engine = new GameEngine("PDRClientGame4", new GameBoxES(), options);
 			engine.start();
 

@@ -1,5 +1,8 @@
 package lu.kbra.gamebox.client.es.engine.impl.shader;
 
+import java.io.FileNotFoundException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.logging.Level;
 
 import org.lwjgl.opengl.GL40;
@@ -31,6 +34,12 @@ public abstract class AbstractShaderPart implements UniqueID, Cleanupable {
 		this.file = file;
 		this.type = type;
 
+		if(!Files.exists(Paths.get(file))) {
+			PDRUtils.throwGLError("File: "+file+" not found");
+			this.sid = -1;
+			return;
+		}
+		
 		if (type == -1) {
 			PDRUtils.throwGLError("Unknown shader type: " + file);
 			this.sid = -1;

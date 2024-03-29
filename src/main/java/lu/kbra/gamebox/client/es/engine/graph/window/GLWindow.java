@@ -32,7 +32,9 @@ public class GLWindow extends Window {
 		monitor = getQualifiedMonitor();
 		
 		handle = GLFW.glfwCreateWindow(options.windowSize.x, options.windowSize.y, options.title, MemoryUtil.NULL, MemoryUtil.NULL);
-
+		if(handle == MemoryUtil.NULL)
+			throw new RuntimeException("Failed to create GLFW Window");
+		
 		takeGLContext();
 		if ((this.capabilities = GL.createCapabilities()) == null)
 			throw new RuntimeException("Failed to create OpenGL context");
