@@ -87,7 +87,7 @@ public class TextureRenderer implements Cleanupable, UniqueID {
 	@Override
 	public void cleanup() {
 		framebuffer.bind();
-		framebuffer.getAttachments().values().forEach(Texture::cleanup);
+		framebuffer.getAttachments().values().forEach(FramebufferAttachment::cleanup);
 		framebuffer.clearAttachments();
 		framebuffer.unbind();
 		framebuffer.cleanup();

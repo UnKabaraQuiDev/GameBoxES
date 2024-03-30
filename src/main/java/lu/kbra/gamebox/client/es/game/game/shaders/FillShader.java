@@ -38,6 +38,11 @@ public class FillShader extends RenderShader {
 		public FillMaterial(FillShader shader) {
 			super(NAME, shader);
 		}
+		
+		public FillMaterial(Vector4f color) {
+			super(NAME, new FillShader());
+			this.color = color;
+		}
 
 		@Override
 		public void bindProperties(CacheManager cache, Renderable parent, RenderShader shader) {

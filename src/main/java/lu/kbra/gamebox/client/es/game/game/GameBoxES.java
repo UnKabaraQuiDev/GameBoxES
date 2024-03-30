@@ -7,10 +7,7 @@ import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL40;
 
-import lu.pcy113.pclib.GlobalLogger;
-
 import lu.kbra.gamebox.client.es.engine.GameEngine;
-import lu.kbra.gamebox.client.es.engine.graph.composition.Compositor;
 import lu.kbra.gamebox.client.es.engine.graph.composition.SceneRenderLayer;
 import lu.kbra.gamebox.client.es.engine.graph.render.GizmoRenderer;
 import lu.kbra.gamebox.client.es.engine.graph.render.InstanceEmitterRenderer;
@@ -29,7 +26,7 @@ public class GameBoxES extends GameLogic {
 
 	private DebugUIElements debug;
 
-	private Compositor compositor;
+	private AdvancedCompositor compositor;
 
 	private UIScene3D uiScene;
 	private WorldScene3D worldScene;
@@ -41,9 +38,9 @@ public class GameBoxES extends GameLogic {
 	public void init(GameEngine e) {
 		GameEngine.DEBUG.wireframe = false;
 		GameEngine.DEBUG.gizmos = false;
-		
-		GlobalLogger.getLogger().setForwardContent(false);
-		
+
+		// GlobalLogger.getLogger().setForwardContent(false);
+
 		registerRenderers();
 
 		loadWorldScene("not world");
@@ -51,7 +48,7 @@ public class GameBoxES extends GameLogic {
 
 		debug = new DebugUIElements(cache, engine, uiScene, new Vector3f(0, 1.5f, 4), new Quaternionf().rotateX((float) -Math.PI / 2));
 
-		compositor = new Compositor();
+		compositor = new AdvancedCompositor();
 
 		worldSceneRenderLayer = new SceneRenderLayer("worldScene", worldScene);
 		cache.addRenderLayer(worldSceneRenderLayer);

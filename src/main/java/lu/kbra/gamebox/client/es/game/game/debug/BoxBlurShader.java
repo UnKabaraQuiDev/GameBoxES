@@ -29,6 +29,10 @@ public class BoxBlurShader extends RenderShader {
 		public BoxBlurMaterial() {
 			super(NAME, new BoxBlurShader());
 		}
+		
+		public BoxBlurMaterial(BoxBlurShader shader) {
+			super(NAME, shader);
+		}
 
 	}
 

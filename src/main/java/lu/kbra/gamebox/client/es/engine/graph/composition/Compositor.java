@@ -73,7 +73,7 @@ public class Compositor implements Cleanupable {
 
 		int width = engine.getWindow().getWidth();
 		int height = engine.getWindow().getHeight();
-
+		
 		if (resolution.equals(width, height)) {
 			// keep same texture
 		} else {
@@ -127,7 +127,7 @@ public class Compositor implements Cleanupable {
 			// color0.bind(0);
 			// depth.bind
 
-			prl.render(cache, engine, framebuffer);
+			((PassRenderLayer) prl).render(cache, engine, framebuffer);
 		}
 		GL40.glDepthMask(true);
 

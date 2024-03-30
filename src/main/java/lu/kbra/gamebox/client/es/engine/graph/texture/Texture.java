@@ -2,6 +2,7 @@ package lu.kbra.gamebox.client.es.engine.graph.texture;
 
 import org.lwjgl.opengl.GL40;
 
+import lu.kbra.gamebox.client.es.engine.graph.composition.FramebufferAttachment;
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
 import lu.kbra.gamebox.client.es.engine.impl.UniqueID;
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
@@ -13,7 +14,7 @@ import lu.kbra.gamebox.client.es.engine.utils.consts.TextureParameter;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureType;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureWrap;
 
-public abstract class Texture implements Cleanupable, UniqueID {
+public abstract class Texture implements Cleanupable, UniqueID, FramebufferAttachment {
 
 	public static final int MAX_DEPTH_TEXTURE_SAMPLES = GL40.glGetInteger(GL40.GL_MAX_DEPTH_TEXTURE_SAMPLES);
 	public static final int MAX_COLOR_TEXTURE_SAMPLES = GL40.glGetInteger(GL40.GL_MAX_COLOR_TEXTURE_SAMPLES);
@@ -67,11 +68,6 @@ public abstract class Texture implements Cleanupable, UniqueID {
 		PDRUtils.checkGlError("BindTexture[" + txtType + "]=" + tid);
 	}
 	
-	public void bindUniform(int loc, int i) {
-		GL40.glUniform1i(loc, i);
-		PDRUtils.checkGlError("Uniform1i["+loc+"] = "+i);
-	}
-
 	public void unbind(int i) {
 		active(i);
 		unbind();

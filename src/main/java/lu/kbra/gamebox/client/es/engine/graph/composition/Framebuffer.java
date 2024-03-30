@@ -11,6 +11,7 @@ import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
 import lu.kbra.gamebox.client.es.engine.impl.UniqueID;
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 import lu.kbra.gamebox.client.es.engine.utils.consts.FrameBufferAttachment;
+import lu.kbra.gamebox.client.es.engine.utils.consts.TexelFormat;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureType;
 
 public class Framebuffer implements UniqueID, Cleanupable {
@@ -19,7 +20,7 @@ public class Framebuffer implements UniqueID, Cleanupable {
 	private int fbo = -1;
 
 	// texture attachment point : texture
-	private HashMap<Integer, Texture> attachments = new HashMap<>();
+	private HashMap<Integer, FramebufferAttachment> attachments = new HashMap<>();
 
 	public Framebuffer(String name) {
 		this.name = name;
@@ -48,13 +49,23 @@ public class Framebuffer implements UniqueID, Cleanupable {
 		this.attachments.put(attach.getGlId() + offset, texture);
 		return PDRUtils.checkGlError("FrameBufferTexture[" + attach + "+" + offset + "][" + name + "]=" + texture.getId());
 	}
+	
+	public boolean attachRenderBuffer(FrameBufferAttachment attach, int offset, RenderBuffer texture) {
+		GL40.glFramebufferRenderbuffer(GL40.GL_FRAMEBUFFER, attach.getGlId()+offset, GL40.GL_RENDERBUFFER, texture.getRBid());
+		this.attachments.put(attach.getGlId() + offset, texture);
+		return PDRUtils.checkGlError("FrameBufferRenderbuffer[" + attach + "+" + offset + "][" + name + "]=" + texture.getId());
+	}
+
+	public boolean hasAttachment(FrameBufferAttachment attach, int offset) {
+		return attachments.containsKey(attach.getGlId()+offset);
+	}
 
 	public boolean clearAttachments() {
-		for (Entry<Integer, Texture> it : attachments.entrySet()) {
+		for (Entry<Integer, FramebufferAttachment> it : attachments.entrySet()) {
 			GL40.glFramebufferTexture(GL40.GL_FRAMEBUFFER, it.getKey(), 0, 0);
-
 			PDRUtils.checkGlError("FrameBufferTexture[" + it.getKey() + "][" + name + "]=0");
 		}
+		attachments.clear();
 		return true;
 	}
 
@@ -84,7 +95,7 @@ public class Framebuffer implements UniqueID, Cleanupable {
 		PDRUtils.checkGlError("BindFrameBuffer[" + target + "][" + name + "]=" + fbo);
 	}
 
-	public Texture getAttachmedTexture(FrameBufferAttachment attach, int offset) {
+	public FramebufferAttachment getAttachment(FrameBufferAttachment attach, int offset) {
 		return attachments.get(attach.getGlId() + offset);
 	}
 
@@ -101,7 +112,7 @@ public class Framebuffer implements UniqueID, Cleanupable {
 		return name;
 	}
 
-	public HashMap<Integer, Texture> getAttachments() {
+	public HashMap<Integer, FramebufferAttachment> getAttachments() {
 		return attachments;
 	}
 

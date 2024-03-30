@@ -17,7 +17,7 @@ import lu.kbra.gamebox.client.es.engine.cache.attrib.Vec3fAttribArray;
 import lu.kbra.gamebox.client.es.engine.geom.Mesh;
 import lu.kbra.gamebox.client.es.engine.graph.material.Material;
 import lu.kbra.gamebox.client.es.engine.graph.shader.RenderShader;
-import lu.kbra.gamebox.client.es.engine.graph.texture.Texture;
+import lu.kbra.gamebox.client.es.engine.impl.UniqueID;
 
 public class PassRenderLayer extends RenderLayer<GameEngine, Framebuffer, Mesh> {
 
@@ -35,7 +35,7 @@ public class PassRenderLayer extends RenderLayer<GameEngine, Framebuffer, Mesh> 
 	}
 
 	@Override
-	public void render(CacheManager cache, GameEngine engine, Framebuffer fb) {
+	public void render(CacheManager cache, GameEngine engine, Framebuffer from) {
 		GlobalLogger.log(Level.INFO, "PassRenderLayer : m:" + material);
 
 		target.bind();
@@ -56,14 +56,8 @@ public class PassRenderLayer extends RenderLayer<GameEngine, Framebuffer, Mesh> 
 		material.setPropertyIfPresent(SCREEN_HEIGHT, engine.getWindow().getHeight());
 		material.setPropertyIfPresent(SCREEN_WIDTH, engine.getWindow().getWidth());
 
-		for (Entry<Integer, Texture> attachments : fb.getAttachments().entrySet()) {
-			// GlobalLogger.info("Attachment:
-			// "+shader.getUniform(attachments.getValue().getId())+"
-			// "+material.getProperty(attachments.getValue().getId())+" "+attachments);
-			// material.setProperty(attachments.getValue().getId(),
-			// attachments.getValue().getTid());
-
-			int id = shader.getUniformLocation(attachments.getValue().getId());
+		for (Entry<Integer, FramebufferAttachment> attachments : from.getAttachments().entrySet()) {
+			int id = shader.getUniformLocation(((UniqueID) attachments.getValue()).getId());
 			if (id != -1) {
 				attachments.getValue().bind(id);
 			}

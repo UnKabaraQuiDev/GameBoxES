@@ -4,15 +4,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
-import org.lwjgl.opengl.GL40;
-
 import lu.pcy113.pclib.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
 import lu.kbra.gamebox.client.es.engine.graph.shader.RenderShader;
 import lu.kbra.gamebox.client.es.engine.graph.texture.Texture;
 import lu.kbra.gamebox.client.es.engine.impl.Renderable;
-import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 
 public class TextureMaterial extends Material {
 
