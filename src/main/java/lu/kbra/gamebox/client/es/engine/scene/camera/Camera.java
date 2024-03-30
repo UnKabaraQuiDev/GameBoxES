@@ -7,6 +7,7 @@ import org.joml.Vector3f;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
+import lu.kbra.gamebox.client.es.engine.utils.geo.GeoPlane;
 import lu.kbra.gamebox.client.es.engine.utils.geo.Ray;
 
 public abstract class Camera {
@@ -43,6 +44,10 @@ public abstract class Camera {
 		return new Ray(origin, dir);
 	}
 
+	public Vector3f projectPlane(Ray ray, GeoPlane plane) {
+		return projectPlane(ray, plane.getPoints()[0], plane.getPoints()[1], plane.getNormal());
+	}
+	
 	public Vector3f projectPlane(Ray ray, Vector3f p1, Vector3f p2) {
 		Vector3f normal = new Vector3f();
 		p1.cross(p2, normal).normalize(); // Calculate plane normal

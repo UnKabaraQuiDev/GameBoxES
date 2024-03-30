@@ -37,7 +37,7 @@ public class WorldScene3D extends Scene3D {
 		camera.getProjection().setFov((float) Math.toRadians(70));
 		camera.getProjection().update();
 
-		placeCamera(new Vector2f(0, 0), -5);
+		placeCamera(new Vector2f(0, 0), 5);
 
 		cache.dump(System.out);
 	}

@@ -208,6 +208,10 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 		return "{" + name + " | VAO: " + vao + " | VBO: " + vbo + " | V: " + vertexCount + "/" + indicesCount + " | Attribs: " + Arrays.toString(attribs) + "}";
 	}
 
+	public static Mesh newQuad(String name, Material material2, Vector2f size) {
+		return newQuad(GeoPlane.XY, name, material2, size);
+	}
+	
 	public static Mesh newQuad(GeoPlane plane, String name, Material material2, Vector2f size) {
 		Mesh mesh = new Mesh(name, material2,
 				new Vec3fAttribArray("pos", 0, 1,
@@ -215,7 +219,8 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 								new Vector3f(-1f, -1f, -1f).mul(plane.project(size)).div(2),
 								new Vector3f(1f, -1f, 1f).mul(plane.project(size)).div(2),
 								new Vector3f(1f, 1f, 1f).mul(plane.project(size)).div(2),
-								new Vector3f(-1f, 1f, -1f).mul(plane.project(size)).div(2), }),
+								new Vector3f(-1f, 1f, -1f).mul(plane.project(size)).div(2)
+				}),
 				new UIntAttribArray("ind", -1, 1, new int[] { 0, 1, 2, 0, 2, 3 }, GL40.GL_ELEMENT_ARRAY_BUFFER),
 				new Vec3fAttribArray("normal", 1, 1, new Vector3f[] {
 						new Vector3f(0, 0, 1),

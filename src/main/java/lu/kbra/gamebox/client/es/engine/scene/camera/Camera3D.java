@@ -26,24 +26,11 @@ public class Camera3D extends Camera {
 		Vector3f forward = new Vector3f(to).sub(from).normalize();
 		Vector3f right = forward.cross(up, new Vector3f()).normalize();
 
-		// Recalculate up vector
 		Vector3f up = right.cross(forward, new Vector3f()).normalize();
 
-		// Construct rotation quaternion
-		// rotation = new Quaternionf().rotationTo(GameEngine.Y_POS,
-		// up).rotateTo(forward, GameEngine.Z_POS);
 		rotation.identity().lookAlong(forward, up);
 
-		// Construct translation vector
 		position = new Vector3f(from);
-
-		// Construct transformation matrix
-		/*
-		 * Matrix4f result = new Matrix4f().identity(); result.rotation(rotation);
-		 * result.setTranslation(position);
-		 * 
-		 * viewMatrix = result;
-		 */
 
 		return this;
 	}
@@ -94,6 +81,14 @@ public class Camera3D extends Camera {
 	public Camera3D setRotation(Quaternionf rotation) {
 		this.rotation = rotation;
 		return this;
+	}
+
+	public Vector3f getUp() {
+		return up;
+	}
+
+	public void setUp(Vector3f up) {
+		this.up = up;
 	}
 
 	public Matrix4f updateMatrix() {

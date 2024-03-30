@@ -59,13 +59,13 @@ public class Scene3DRenderer extends Renderer<GameEngine, Scene3D> {
 			}
 
 			// Component c = null;
-			if (e.hasComponent(MeshComponent.class)) {
+			if (meshRenderer != null &&e.hasComponent(MeshComponent.class)) {
 				meshRenderer.render(cache, scene, (MeshComponent) e.getComponent(MeshComponent.class));
-			} else if (e.hasComponent(GizmoComponent.class)) {
+			} else if (gizmoRenderer != null &&e.hasComponent(GizmoComponent.class)) {
 				gizmoRenderer.render(cache, scene, (GizmoComponent) e.getComponent(GizmoComponent.class));
-			} else if (e.hasComponent(InstanceEmitterComponent.class)) {
+			} else if (instanceEmitterRenderer != null &&e.hasComponent(InstanceEmitterComponent.class)) {
 				instanceEmitterRenderer.render(cache, scene, (InstanceEmitterComponent) e.getComponent(InstanceEmitterComponent.class));
-			} else if (e.hasComponent(TextEmitterComponent.class)) {
+			} else if (textEmitterRenderer != null && e.hasComponent(TextEmitterComponent.class)) {
 				textEmitterRenderer.render(cache, scene, (TextEmitterComponent) e.getComponent(TextEmitterComponent.class));
 			}
 			GameEngine.DEBUG.end("r_for_single");

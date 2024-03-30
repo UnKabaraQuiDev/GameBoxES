@@ -27,10 +27,7 @@ public class TextShader extends RenderShader {
 
 	@Override
 	public void createUniforms() {
-		createUniform(TRANSFORMATION_MATRIX);
-		createUniform(VIEW_MATRIX);
-		createUniform(PROJECTION_MATRIX);
-		createUniform(VIEW_POSITION);
+		createSceneUniforms();
 
 		createUniform(TXT1);
 
@@ -45,7 +42,7 @@ public class TextShader extends RenderShader {
 		public static final String NAME = TextMaterial.class.getName();
 
 		private Vector4f fgColor = new Vector4f(1, 1, 1, 1);
-		private Vector4f bgColor = new Vector4f(0, 0, 0, 1);
+		private Vector4f bgColor = new Vector4f(0, 0, 0, 0);
 
 		public TextMaterial(SingleTexture txt1) {
 			super(NAME, new TextShader(), new HashMap<String, Texture>() {

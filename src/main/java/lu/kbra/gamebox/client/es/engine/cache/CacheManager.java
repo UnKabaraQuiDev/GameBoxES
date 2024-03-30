@@ -435,21 +435,36 @@ public class CacheManager implements Cleanupable {
 	public boolean hasSound(String name) {
 		return sounds.containsKey(name) || (parent != null ? parent.hasSound(name) : false);
 	}
+	
+	public boolean hasTexture(String name) {
+		return textures.containsKey(name) || (parent != null ? parent.hasTexture(name) : false);
+	}
 
 	/*
 	 * LOADER
 	 */
-
+	
+	public SingleTexture loadOrGetSingleTexture(String name, String path) {
+		return loadOrGetSingleTexture(name, path, TextureFilter.LINEAR);
+	}
+	
+	public SingleTexture loadOrGetSingleTexture(String name, String path, TextureFilter nearest) {
+		if (hasTexture(name)) {
+			return (SingleTexture) getTexture(name);
+		} else {
+			return loadSingleTexture(name, path);
+		}
+	}
+	
 	public <T extends Material> Material loadOrGetMaterial(String name, Class<T> clazz, Object... args) {
 		if (hasMaterial(name)) {
 			return getMaterial(name);
 		} else {
-			return loadMaterial(clazz, name, args);
+			return loadMaterial(clazz, args);
 		}
 	}
 
 	public <T extends Material> Material loadMaterial(Class<T> clazz, Object... args) {
-		System.out.println("loading mat: "+clazz+" into "+this+", parent: "+parent);
 		GlobalLogger.log();
 		
 		try {
@@ -470,15 +485,12 @@ public class CacheManager implements Cleanupable {
 		}
 	}
 
-	public Texture loadSingleTexture(String string, String path) {
-		Texture texture = new SingleTexture(string, path);
-		texture.setup();
-		addTexture(texture);
-		return texture;
+	public SingleTexture loadSingleTexture(String string, String path) {
+		return loadSingleTexture(string, path, TextureFilter.LINEAR, TextureType.TXT2D);
 	}
 
-	public Texture loadSingleTexture(String string, String path, TextureFilter filter, TextureType type) {
-		Texture texture = new SingleTexture(string, path);
+	public SingleTexture loadSingleTexture(String string, String path, TextureFilter filter, TextureType type) {
+		SingleTexture texture = new SingleTexture(string, path);
 		texture.setFilters(filter);
 		texture.setTextureType(type);
 		texture.setup();

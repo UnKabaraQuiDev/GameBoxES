@@ -13,9 +13,9 @@ public class UIScene3D extends Scene3D {
 	}
 
 	public void setupScene() {
-		((Camera3D) camera).setPosition(new Vector3f(-1, 0, 0));
-		((Camera3D) camera).lookAt(new Vector3f(-5, 0, 0), new Vector3f(-1, 0, 0));
-		camera.updateMatrix();
+		((Camera3D) camera).setPosition(new Vector3f(5, 0, 0));
+		((Camera3D) camera).lookAt(new Vector3f(5, 0, 0), new Vector3f(0, 0, 0));
+		((Camera3D) camera).updateMatrix();
 
 		camera.getProjection().update(1920, 1080);
 	}

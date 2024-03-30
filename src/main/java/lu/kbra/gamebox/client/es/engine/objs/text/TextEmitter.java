@@ -34,7 +34,7 @@ public class TextEmitter implements Cleanupable, UniqueID {
 
 	private Alignment alignment = Alignment.CENTER;
 	private boolean justify = false, boxed = false;
-	private Vector2f boxSize;
+	private Vector2f boxSize = new Vector2f(1);
 
 	public TextEmitter(String name, TextMaterial material, int bufferSize, String text, Vector2f size) {
 		this.name = name;
@@ -49,7 +49,7 @@ public class TextEmitter implements Cleanupable, UniqueID {
 
 		this.charBuffer = new UIntAttribArray("char", 7, 1, PDRUtils.toPrimitiveInt(chars), false, 1);
 		// GlobalLogger.log(Level.FINEST, Arrays.toString(charBuffer.getData()));
-		this.quad = Mesh.newQuad(GeoPlane.XY, name, material, size);
+		this.quad = Mesh.newQuad(name, material, size);
 
 		this.instances = new InstanceEmitter(name, quad, bufferSize, new Transform2D(), charBuffer);
 	}
