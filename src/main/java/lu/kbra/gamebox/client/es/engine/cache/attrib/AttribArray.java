@@ -9,13 +9,13 @@ import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 
 public abstract class AttribArray implements Cleanupable {
 
-	protected int bufferIndex;
+	protected int bufferIndex = -1;
 	protected boolean iStatic = true;;
 
-	protected int bufferType;
+	protected int bufferType = -1;
 
-	protected String name;
-	protected int index;
+	protected String name = null;
+	protected int index = -1;
 	protected final int dataSize, divisor;
 
 	public AttribArray(String name, int index, int dataSize) {

@@ -7,6 +7,8 @@ import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL40;
 
+import lu.pcy113.pclib.GlobalLogger;
+
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.graph.composition.Compositor;
 import lu.kbra.gamebox.client.es.engine.graph.composition.SceneRenderLayer;
@@ -39,7 +41,9 @@ public class GameBoxES extends GameLogic {
 	public void init(GameEngine e) {
 		GameEngine.DEBUG.wireframe = false;
 		GameEngine.DEBUG.gizmos = false;
-
+		
+		GlobalLogger.getLogger().setForwardContent(false);
+		
 		registerRenderers();
 
 		loadWorldScene("not world");
@@ -105,7 +109,7 @@ public class GameBoxES extends GameLogic {
 				Ray ray = uiScene.getCamera().projectRay(new Vector2f(window.getMousePos()), viewport);
 
 				Vector3f pos = uiScene.getCamera().projectPlane(ray, GeoPlane.YZ);
-				
+
 				System.err.println(pos);
 				return null;
 			}).push();

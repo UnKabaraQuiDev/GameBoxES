@@ -40,7 +40,7 @@ public class Projection {
 			float halfWidth = width / 2f;
 			float halfHeight = height / 2f;
 
-			projectionMatrix = new Matrix4f().identity().ortho(-halfWidth / size, halfWidth / size, -halfHeight / size, halfHeight / size, nearPlane, farPlane);
+			projectionMatrix = new Matrix4f().identity().ortho(-halfWidth/size, halfWidth/size, -halfHeight/size, halfHeight/size, nearPlane, farPlane);
 		}
 		return this;
 	}
