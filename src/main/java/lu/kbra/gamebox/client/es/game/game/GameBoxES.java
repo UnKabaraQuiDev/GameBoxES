@@ -38,6 +38,7 @@ public class GameBoxES extends GameLogic {
 	@Override
 	public void init(GameEngine e) {
 		GameEngine.DEBUG.wireframe = false;
+		GameEngine.DEBUG.gizmos = false;
 
 		registerRenderers();
 

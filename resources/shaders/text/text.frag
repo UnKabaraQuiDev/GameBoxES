@@ -19,7 +19,6 @@ in struct per_Vertex {
 
 out vec4 fragColor;
 
-uniform sampler1D lookup;
 uniform sampler2D txt1;
 uniform vec4 bgColor;
 uniform vec4 fgColor;
@@ -38,10 +37,9 @@ void main() {
 			)
 	);
 
-	if(mask.a == 0) {
+	/*if(mask.a == 0) {
 		discard;
-	}
+	}*/
 
 	fragColor = mix(bgColor, fgColor, mask.r);
-
 }

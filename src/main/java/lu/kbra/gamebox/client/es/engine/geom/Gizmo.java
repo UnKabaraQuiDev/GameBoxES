@@ -83,6 +83,8 @@ public class Gizmo implements UniqueID, Cleanupable, Renderable {
 	}
 
 	private void storeElementArray(UIntAttribArray indices) {
+		if(indices == null)
+			throw new NullPointerException("UintAttribArray indices is null");
 		indices.setBufferType(GL40.GL_ELEMENT_ARRAY_BUFFER);
 		this.vbo.put(indices.getIndex(), indices.gen());
 		indices.bind();

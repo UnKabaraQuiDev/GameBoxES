@@ -66,6 +66,11 @@ public abstract class Texture implements Cleanupable, UniqueID {
 		GL40.glBindTexture(txtType.getGlId(), tid);
 		PDRUtils.checkGlError("BindTexture[" + txtType + "]=" + tid);
 	}
+	
+	public void bindUniform(int loc, int i) {
+		GL40.glUniform1i(loc, i);
+		PDRUtils.checkGlError("Uniform1i["+loc+"] = "+i);
+	}
 
 	public void unbind(int i) {
 		active(i);

@@ -3,8 +3,6 @@ package lu.kbra.gamebox.client.es.game.game.debug;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
-import lu.pcy113.pclib.GlobalLogger;
-
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
 import lu.kbra.gamebox.client.es.engine.geom.Mesh;
 import lu.kbra.gamebox.client.es.engine.objs.entity.Entity;

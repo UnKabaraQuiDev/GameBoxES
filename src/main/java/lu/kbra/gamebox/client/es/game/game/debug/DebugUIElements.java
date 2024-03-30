@@ -20,7 +20,6 @@ import lu.kbra.gamebox.client.es.engine.scene.Scene3D;
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 import lu.kbra.gamebox.client.es.engine.utils.consts.Alignment;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
-import lu.kbra.gamebox.client.es.engine.utils.file.FileUtils;
 import lu.kbra.gamebox.client.es.engine.utils.transform.Transform3D;
 
 public class DebugUIElements {
@@ -42,16 +41,17 @@ public class DebugUIElements {
 		final Quaternionf axis = new Quaternionf().rotateXYZ((float) Math.toRadians(180f), (float) Math.toRadians(-90f), (float) Math.toRadians(0));
 		
 		fpsDebug = new TextEmitter("fpsDebug",
-				(TextMaterial) cache.loadOrGetMaterial(TextMaterial.NAME, TextShader.TextMaterial.class, cache.loadOrGetSingleTexture(TextShader.NAME + "-30", FileUtils.RESOURCES + FileUtils.TEXTURES + "fonts/font1row.png", TextureFilter.NEAREST)),
-				24, "FPS: ", new Vector2f(0.1f));
+				(TextMaterial) cache.loadOrGetMaterial(TextMaterial.NAME, TextShader.TextMaterial.class, cache.loadOrGetSingleTexture("text_30px", "./resources/textures/fonts/font1row.png", TextureFilter.NEAREST)),
+				32, "FPS: ", new Vector2f(0.1f));
 		fpsDebug.setAlignment(Alignment.ABSOLUTE_CENTER);
-		cache.addTextEmitter(fpsDebug);
-		/*fpsDebug.getMesh().createDrawBuffer();
+		fpsDebug.setBoxed(true);
+		fpsDebug.getMesh().createDrawBuffer();
 		fpsDebug.getMesh().getDrawBuffer().bind();
-		fpsDebug.getMesh().getDrawBuffer().setInstancesCount(24);
-		fpsDebug.getMesh().getDrawBuffer().unbind();*/
+		fpsDebug.getMesh().getDrawBuffer().setInstancesCount(32);
+		fpsDebug.getMesh().getDrawBuffer().unbind();
 		fpsDebug.updateText();
-		Entity fpsDebugEntity = new Entity(new TextEmitterComponent(fpsDebug), new Transform3DComponent(new Vector3f(0, 1.2f, 0).add(pos), axis));
+		cache.addTextEmitter(fpsDebug);
+		Entity fpsDebugEntity = new Entity(new TextEmitterComponent(fpsDebug), new Transform3DComponent(new Vector3f(0, 1.3f, 0).add(pos), axis));
 		scene.addEntity("fpsDebug", fpsDebugEntity);
 		
 		this.leftJoystick = new JoystickState(cache, new Transform3D(new Vector3f(0, 0.5f, 0.5f).add(pos), axis));
@@ -70,7 +70,7 @@ public class DebugUIElements {
 	}
 
 	float joystickThreshold = 0.1f;
-
+	
 	public void update() {
 		fpsDebug.setText("FPS: "+PDRUtils.round(engine.getCurrentFps(), 3)).updateText();
 		
