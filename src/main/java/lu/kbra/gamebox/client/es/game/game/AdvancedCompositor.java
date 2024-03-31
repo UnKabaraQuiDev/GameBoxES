@@ -26,15 +26,17 @@ import lu.kbra.gamebox.client.es.engine.graph.composition.RenderLayer;
 import lu.kbra.gamebox.client.es.engine.graph.material.Material;
 import lu.kbra.gamebox.client.es.engine.graph.shader.RenderShader;
 import lu.kbra.gamebox.client.es.engine.graph.texture.SingleTexture;
-import lu.kbra.gamebox.client.es.engine.graph.texture.Texture;
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
 import lu.kbra.gamebox.client.es.engine.impl.UniqueID;
 import lu.kbra.gamebox.client.es.engine.utils.consts.DataType;
 import lu.kbra.gamebox.client.es.engine.utils.consts.FrameBufferAttachment;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TexelFormat;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TexelInternalFormat;
+import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureType;
-import lu.kbra.gamebox.client.es.game.game.shaders.FillShader;
+import lu.kbra.gamebox.client.es.game.game.shaders.BrightnessFilterShader;
+import lu.kbra.gamebox.client.es.game.game.shaders.ScaleShader;
+import lu.kbra.gamebox.client.es.game.game.shaders.ScaleShader.ScaleMaterial;
 
 public class AdvancedCompositor implements Cleanupable {
 
@@ -49,12 +51,13 @@ public class AdvancedCompositor implements Cleanupable {
 	protected LinkedList<String> layers = new LinkedList<>();
 	protected LinkedList<String> passes = new LinkedList<>();
 
-	protected Framebuffer framebuffer;
+	protected Framebuffer framebuffer, lastFramebuffer;
 	protected SingleTexture depth, color0;
 
 	protected Vector2i resolution = new Vector2i(0, 0);
+	protected int samples = 0;
 
-	private Material highLightsMaterial;
+	private Material highLightsMaterial, scaleMaterial;
 
 	private boolean genTextures() {
 		if (depth != null && depth.isValid())
@@ -65,16 +68,24 @@ public class AdvancedCompositor implements Cleanupable {
 		framebuffer.clearAttachments();
 
 		depth = new SingleTexture("depth", resolution.x, resolution.y);
-		depth.setTextureType(TextureType.TXT2DMS);
-		depth.setSampleCount(8);
+		if (samples > 0) {
+			depth.setTextureType(TextureType.TXT2DMS);
+			depth.setSampleCount(samples);
+		} else {
+			depth.setTextureType(TextureType.TXT2D);
+		}
 		depth.setInternalFormat(TexelInternalFormat.DEPTH_COMPONENT32F);
 		depth.setFormat(TexelFormat.DEPTH);
 		depth.setDataType(DataType.FLOAT);
 		depth.setup();
 
 		color0 = new SingleTexture("color", resolution.x, resolution.y);
-		color0.setTextureType(TextureType.TXT2DMS);
-		color0.setSampleCount(8);
+		if (samples > 0) {
+			color0.setTextureType(TextureType.TXT2DMS);
+			color0.setSampleCount(samples);
+		} else {
+			color0.setTextureType(TextureType.TXT2D);
+		}
 		color0.setInternalFormat(TexelInternalFormat.RGBA);
 		color0.setFormat(TexelFormat.RGBA);
 		color0.setDataType(DataType.UBYTE);
@@ -91,7 +102,10 @@ public class AdvancedCompositor implements Cleanupable {
 
 	public void render(CacheManager cache, GameEngine engine) {
 		if (highLightsMaterial == null) {
-			highLightsMaterial = cache.loadOrGetMaterial(FillShader.FillMaterial.NAME, FillShader.FillMaterial.class, new Vector4f(1, 0, 0, 1));
+			highLightsMaterial = cache.loadOrGetMaterial(BrightnessFilterShader.BrightnessFilterMaterial.NAME, BrightnessFilterShader.BrightnessFilterMaterial.class, (float) 0.49801f);
+		}
+		if (scaleMaterial == null) {
+			scaleMaterial = cache.loadOrGetMaterial(ScaleShader.ScaleMaterial.NAME, ScaleShader.ScaleMaterial.class, (int) 1920, (int) 1080);
 		}
 
 		if (framebuffer == null) {
@@ -99,6 +113,7 @@ public class AdvancedCompositor implements Cleanupable {
 		}
 
 		framebuffer.bind();
+		lastFramebuffer = framebuffer;
 
 		int width = engine.getWindow().getWidth();
 		int height = engine.getWindow().getHeight();
@@ -112,7 +127,7 @@ public class AdvancedCompositor implements Cleanupable {
 			GL40.glViewport(0, 0, width, height);
 		}
 
-		color0.bind();
+		// color0.bind();
 
 		if (!framebuffer.isComplete()) {
 			GlobalLogger.log(Level.SEVERE, "Framebuffer not complete: " + framebuffer.getError() + ", w:" + width + " h:" + height);
@@ -141,16 +156,18 @@ public class AdvancedCompositor implements Cleanupable {
 
 		GL40.glDepthMask(false);
 
-		Framebuffer highLights = genFBO(width, height);
-		//render(cache, engine, framebuffer, highLights, highLightsMaterial);
-
-		//highLights.unbind();
-		//highLights.bind(GL40.GL_READ_FRAMEBUFFER);
-
-		framebuffer.unbind(GL40.GL_FRAMEBUFFER);
-		framebuffer.bind(GL40.GL_READ_FRAMEBUFFER);
-		//highLights.bind(GL40.GL_READ_FRAMEBUFFER);
+		int scale = 5;
+		
+		((ScaleMaterial) scaleMaterial).setResolution(resolution.x/scale, resolution.y/scale);
+		
+		Framebuffer highLights = genFBO(resolution.x, resolution.y, TextureFilter.LINEAR);
+		render(cache, engine, framebuffer, highLights, highLightsMaterial);
+		
+		Framebuffer lowScale = genFBO(resolution.x, resolution.y, TextureFilter.LINEAR);
+		render(cache, engine, highLights, lowScale, scaleMaterial);
+		
 		GL40.glBindFramebuffer(GL40.GL_DRAW_FRAMEBUFFER, 0);
+		lastFramebuffer.bind(GL40.GL_READ_FRAMEBUFFER);
 
 		GL40.glBlitFramebuffer(0, 0, resolution.x, resolution.y, 0, 0, resolution.x, resolution.y, GL40.GL_COLOR_BUFFER_BIT, GL40.GL_NEAREST);
 
@@ -175,7 +192,7 @@ public class AdvancedCompositor implements Cleanupable {
 		GL40.glClear(GL40.GL_COLOR_BUFFER_BIT | GL40.GL_DEPTH_BUFFER_BIT);
 	}
 
-	private Framebuffer genFBO(int width, int height) {
+	private Framebuffer genFBO(int width, int height, TextureFilter filter) {
 		Framebuffer fbo1 = new Framebuffer("fbo1");
 
 		fbo1.bind();
@@ -184,6 +201,7 @@ public class AdvancedCompositor implements Cleanupable {
 		fbo1color0.setTextureType(TextureType.TXT2D);
 		fbo1color0.setInternalFormat(TexelInternalFormat.RGBA);
 		fbo1color0.setFormat(TexelFormat.RGBA);
+		fbo1color0.setFilters(filter, filter);
 		fbo1color0.setDataType(DataType.UBYTE);
 		fbo1color0.setup();
 
@@ -197,8 +215,8 @@ public class AdvancedCompositor implements Cleanupable {
 		 * fbo1.attachRenderBuffer(FrameBufferAttachment.DEPTH, 0, fbo1drb);
 		 */
 
-		SingleTexture fbo1depth = new SingleTexture("depth", resolution.x, resolution.y);
-		fbo1depth.setTextureType(TextureType.TXT2DMS);
+		SingleTexture fbo1depth = new SingleTexture("depth", width, height);
+		fbo1depth.setTextureType(TextureType.TXT2D);
 		fbo1depth.setInternalFormat(TexelInternalFormat.DEPTH_COMPONENT32F);
 		fbo1depth.setFormat(TexelFormat.DEPTH);
 		fbo1depth.setDataType(DataType.FLOAT);
@@ -221,9 +239,12 @@ public class AdvancedCompositor implements Cleanupable {
 
 		from.bind(GL40.GL_READ_FRAMEBUFFER);
 		if (to == null) {
-			from.unbind(GL40.GL_DRAW_FRAMEBUFFER); // rendering to default
+			// from.unbind(GL40.GL_DRAW_FRAMEBUFFER);
+			GL40.glBindFramebuffer(GL40.GL_DRAW_FRAMEBUFFER, 0); // rendering to default
+			lastFramebuffer = framebuffer;
 		} else {
 			to.bind(GL40.GL_DRAW_FRAMEBUFFER);
+			lastFramebuffer = to;
 		}
 
 		SCREEN.bind();
@@ -243,22 +264,21 @@ public class AdvancedCompositor implements Cleanupable {
 		material.setPropertyIfPresent(SCREEN_HEIGHT, engine.getWindow().getHeight());
 		material.setPropertyIfPresent(SCREEN_WIDTH, engine.getWindow().getWidth());
 
+		material.bindProperties(cache, null, shader);
+
 		int i = 0;
 		for (Entry<Integer, FramebufferAttachment> attachments : from.getAttachments().entrySet()) {
 			int loc = shader.getUniformLocation(((UniqueID) attachments.getValue()).getId());
-			System.err.println("uniform loc: " + loc + " for " + attachments.getValue());
-			
-			if(attachments.getValue() instanceof RenderBuffer)
+
+			if (attachments.getValue() instanceof RenderBuffer)
 				continue;
-			
+
 			if (loc != -1) {
-				((Texture) attachments.getValue()).bind(i);
-				((Texture) attachments.getValue()).bindUniform(loc, i);
+				attachments.getValue().bind(i);
+				attachments.getValue().bindUniform(loc, i);
 				i++;
 			}
 		}
-
-		material.bindProperties(cache, null, shader);
 
 		if (shader.isTransparent()) {
 			GL40.glEnable(GL40.GL_BLEND);

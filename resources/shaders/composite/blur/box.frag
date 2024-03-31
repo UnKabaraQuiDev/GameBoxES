@@ -22,7 +22,7 @@ void main() {
 		}
 	}
 
-	sa = sa / 25;
+	sa = sa /25;
 
 	frag = vec4(sa, 1);//vec4(1)/*-vec4(vec3(texture(color, uv)), 0)*/-vec4(vec3(texture(depth, uv).r), 0);
 }

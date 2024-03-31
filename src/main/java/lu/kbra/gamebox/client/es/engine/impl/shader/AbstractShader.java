@@ -164,8 +164,10 @@ public abstract class AbstractShader implements UniqueID, Cleanupable {
 	}
 
 	public void bind() {
-		if (this.shaderProgram == -1)
+		if (this.shaderProgram == -1) {
 			System.out.println("Shader program is -1");
+			return;
+		}
 		GL20.glUseProgram(this.shaderProgram);
 		PDRUtils.checkGlError("UseProgram(" + shaderProgram + ") (" + name + ")");
 	}
