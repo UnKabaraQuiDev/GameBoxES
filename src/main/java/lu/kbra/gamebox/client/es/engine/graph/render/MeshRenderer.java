@@ -107,7 +107,6 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 
 		GameEngine.DEBUG.start("r_blend");
 		if (shader.isTransparent()) {
-			System.err.println("transparent");
 			GL40.glBlendFunc(GL40.GL_SRC_ALPHA, GL40.GL_ONE_MINUS_SRC_ALPHA);
 			GL40.glEnable(GL40.GL_BLEND);
 		}
@@ -118,7 +117,6 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 		GameEngine.DEBUG.start("r_draw");
 		if (mesh.hasDrawBuffer()) {
 			mesh.getDrawBuffer().bind();
-			System.err.println(mesh+" has draw buffer");
 			GL40.glDrawElementsIndirect(shader.getBeginMode().getGlId(), GL40.GL_UNSIGNED_INT, 0);
 			mesh.getDrawBuffer().unbind();
 		} else {
@@ -140,15 +138,6 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 		GameEngine.DEBUG.start("r_debug_gizmo");
 		GameEngine.DEBUG.gizmos(cache, scene, projectionMatrix, viewMatrix, transformationMatrix);
 		GameEngine.DEBUG.end("r_debug_gizmo");
-		
-		/*
-		 * if(e.hasComponent(MeshSkeletalAnimationComponent.class)) {
-		 * GameEngine.DEBUG.bonesWireframe(cache, scene,
-		 * ((MeshSkeletalAnimationComponent)
-		 * e.getComponent(MeshSkeletalAnimationComponent.class)).
-		 * getMeshSkeletalAnimation(), projectionMatrix, viewMatrix,
-		 * transformationMatrix); }
-		 */
 	}
 
 	@Override

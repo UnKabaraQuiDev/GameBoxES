@@ -16,7 +16,9 @@ import lu.kbra.gamebox.client.es.game.game.scenes.WorldScene3D;
 public class GameBoxES extends GameLogic {
 
 	DebugUIElements debug;
-
+	
+	GameOptions gameOptiong;
+	
 	AdvancedCompositor compositor;
 
 	UIScene3D uiScene;
@@ -77,9 +79,9 @@ public class GameBoxES extends GameLogic {
 	public void input(float dTime) {
 		Camera3D cam = ((Camera3D) worldScene.getCamera());
 		cam.getPosition().add(new Vector3f(
-				(window.isKeyPressed(GLFW.GLFW_KEY_R) ? 1 : 0) - (window.isKeyPressed(GLFW.GLFW_KEY_F) ? 1 : 0),
-				(window.isKeyPressed(GLFW.GLFW_KEY_Z) ? 1 : 0) - (window.isKeyPressed(GLFW.GLFW_KEY_S) ? 1 : 0),
-				(window.isKeyPressed(GLFW.GLFW_KEY_D) ? 1 : 0) - (window.isKeyPressed(GLFW.GLFW_KEY_Q) ? 1 : 0)
+				(window.isCharPress('r') ? 1 : 0) - (window.isCharPress('f') ? 1 : 0),
+				(window.isCharPress('z') ? 1 : 0) - (window.isCharPress('s') ? 1 : 0),
+				(window.isCharPress('d') ? 1 : 0) - (window.isCharPress('q') ? 1 : 0)
 		));
 		cam.updateMatrix();
 	}

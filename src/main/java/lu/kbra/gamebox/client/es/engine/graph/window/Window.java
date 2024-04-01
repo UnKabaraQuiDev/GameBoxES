@@ -42,7 +42,8 @@ public abstract class Window implements Cleanupable {
 
 	// Callbacks
 	protected BiConsumer<Integer, Integer> onResize;
-
+	
+	private KeyState[] keyStates = new KeyState[GLFW.GLFW_KEY_LAST];
 	protected GLFWKeyCallback keyCallback;
 	protected GLFWJoystickCallback joystickCallback;
 	protected GLFWFramebufferSizeCallback frameBufferCallback;
@@ -137,11 +138,26 @@ public abstract class Window implements Cleanupable {
 	protected void callback_key(long window, int key, int scancode, int action, int mods) {
 		if (window != handle)
 			return;
+		
 		if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS) {
 			GLFW.glfwSetWindowShouldClose(window, true);
 		} else if (key == GLFW.GLFW_KEY_F11 && action == GLFW.GLFW_PRESS) {
 			options.fullscreen = !options.fullscreen;
 			updateOptions();
+		}
+
+		String strName = GLFW.glfwGetKeyName(key, scancode);
+		if(strName == null || strName.isEmpty())
+			return;
+		
+		char name = strName.toCharArray()[0];
+		
+		if (action == GLFW.GLFW_PRESS) {
+			keyStates[name] = KeyState.PRESS;
+		} else if (action == GLFW.GLFW_REPEAT) {
+			keyStates[name] = KeyState.REPEAT;
+		} else if (action == GLFW.GLFW_RELEASE) {
+			keyStates[name] = KeyState.RELEASE;
 		}
 	}
 
@@ -193,11 +209,15 @@ public abstract class Window implements Cleanupable {
 	public GLFWGamepadState getGamepad() {
 		return gamepadState;
 	}
-
+	
+	public boolean isCharPress(int code) {
+		return keyStates[code] == KeyState.PRESS;
+	}
+	
 	public boolean isKeyPressed(int code) {
 		return GLFW.glfwGetKey(handle, code) == GLFW.GLFW_PRESS;
 	}
-
+	
 	public boolean shouldClose() {
 		return GLFW.glfwWindowShouldClose(handle);
 	}
