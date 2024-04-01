@@ -32,7 +32,7 @@ public abstract class Texture implements Cleanupable, UniqueID, FramebufferAttac
 	protected TexelFormat format = TexelFormat.RGB;
 	protected TexelInternalFormat internalFormat = TexelInternalFormat.RGB;
 	protected boolean generateMipmaps = true, fixedSampleLocation = false;
-	protected int sampleCount = 2;
+	protected int sampleCount = 1;
 	protected TextureOperation textureOperation = null;
 
 	public Texture(String _name, String _path, TextureOperation txtOp) {

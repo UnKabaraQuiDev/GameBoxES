@@ -28,6 +28,7 @@ import lu.kbra.gamebox.client.es.engine.graph.shader.RenderShader;
 import lu.kbra.gamebox.client.es.engine.graph.texture.SingleTexture;
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
 import lu.kbra.gamebox.client.es.engine.impl.UniqueID;
+import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 import lu.kbra.gamebox.client.es.engine.utils.consts.DataType;
 import lu.kbra.gamebox.client.es.engine.utils.consts.FrameBufferAttachment;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TexelFormat;
@@ -36,7 +37,6 @@ import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureType;
 import lu.kbra.gamebox.client.es.game.game.shaders.BrightnessFilterShader;
 import lu.kbra.gamebox.client.es.game.game.shaders.ScaleShader;
-import lu.kbra.gamebox.client.es.game.game.shaders.ScaleShader.ScaleMaterial;
 
 public class AdvancedCompositor implements Cleanupable {
 
@@ -55,7 +55,7 @@ public class AdvancedCompositor implements Cleanupable {
 	protected SingleTexture depth, color0;
 
 	protected Vector2i resolution = new Vector2i(0, 0);
-	protected int samples = 0;
+	protected int samples = 1;
 
 	private Material highLightsMaterial, scaleMaterial;
 
@@ -68,24 +68,24 @@ public class AdvancedCompositor implements Cleanupable {
 		framebuffer.clearAttachments();
 
 		depth = new SingleTexture("depth", resolution.x, resolution.y);
-		if (samples > 0) {
+		if (samples > 1) {
 			depth.setTextureType(TextureType.TXT2DMS);
-			depth.setSampleCount(samples);
 		} else {
 			depth.setTextureType(TextureType.TXT2D);
 		}
+		depth.setSampleCount(samples);
 		depth.setInternalFormat(TexelInternalFormat.DEPTH_COMPONENT32F);
 		depth.setFormat(TexelFormat.DEPTH);
 		depth.setDataType(DataType.FLOAT);
 		depth.setup();
 
 		color0 = new SingleTexture("color", resolution.x, resolution.y);
-		if (samples > 0) {
+		if (samples > 1) {
 			color0.setTextureType(TextureType.TXT2DMS);
-			color0.setSampleCount(samples);
 		} else {
 			color0.setTextureType(TextureType.TXT2D);
 		}
+		color0.setSampleCount(samples);
 		color0.setInternalFormat(TexelInternalFormat.RGBA);
 		color0.setFormat(TexelFormat.RGBA);
 		color0.setDataType(DataType.UBYTE);
@@ -135,8 +135,14 @@ public class AdvancedCompositor implements Cleanupable {
 		}
 
 		GL40.glEnable(GL40.GL_DEPTH_TEST);
-		
-		framebuffer.bind(GL40.GL_DRAW_FRAMEBUFFER);
+		PDRUtils.checkGlError("Enable(DEPTH_TEST)");
+
+		framebuffer.bind();
+
+		GL40.glClearColor(background.x, background.y, background.z, background.w);
+		PDRUtils.checkGlError("ClearColor("+background+")");
+		GL40.glClear(GL40.GL_COLOR_BUFFER_BIT | GL40.GL_DEPTH_BUFFER_BIT);
+		PDRUtils.checkGlError("Clear(COLOR | DEPTH)");
 
 		for (String l : layers) {
 			if (l == null)
@@ -154,24 +160,35 @@ public class AdvancedCompositor implements Cleanupable {
 			rl.render(cache, engine, framebuffer);
 		}
 
-		framebuffer.unbind(GL40.GL_FRAMEBUFFER);
-
 		GL40.glDepthMask(false);
+		PDRUtils.checkGlError("DepthMask(false)");
 
-		/*int scale = 5;
+		/*
+		 * int scale = 5;
+		 * 
+		 * ((ScaleMaterial) scaleMaterial).setResolution(resolution.x/scale,
+		 * resolution.y/scale);
+		 * 
+		 * Framebuffer highLights = genFBO(resolution.x, resolution.y,
+		 * TextureFilter.LINEAR); render(cache, engine, framebuffer, highLights,
+		 * highLightsMaterial);
+		 * 
+		 * Framebuffer lowScale = genFBO(resolution.x, resolution.y,
+		 * TextureFilter.LINEAR); render(cache, engine, highLights, lowScale,
+		 * scaleMaterial);
+		 */
 		
-		((ScaleMaterial) scaleMaterial).setResolution(resolution.x/scale, resolution.y/scale);
-		
-		Framebuffer highLights = genFBO(resolution.x, resolution.y, TextureFilter.LINEAR);
-		render(cache, engine, framebuffer, highLights, highLightsMaterial);
-		
-		Framebuffer lowScale = genFBO(resolution.x, resolution.y, TextureFilter.LINEAR);
-		render(cache, engine, highLights, lowScale, scaleMaterial);*/
-		
+		GL40.glDepthMask(true);
+		PDRUtils.checkGlError("DepthMask(true)");
+
+		GL40.glBindFramebuffer(GL40.GL_FRAMEBUFFER, 0);
+		PDRUtils.checkGlError("BindFramebuffer()=0");
 		GL40.glBindFramebuffer(GL40.GL_DRAW_FRAMEBUFFER, 0);
+		PDRUtils.checkGlError("BindFramebuffer(DRAW)=0");
 		lastFramebuffer.bind(GL40.GL_READ_FRAMEBUFFER);
 
-		GL40.glBlitFramebuffer(0, 0, resolution.x, resolution.y, 0, 0, resolution.x, resolution.y, GL40.GL_COLOR_BUFFER_BIT, GL40.GL_NEAREST);
+		GL40.glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL40.GL_COLOR_BUFFER_BIT, GL40.GL_NEAREST);
+		PDRUtils.checkGlError();
 
 		/*
 		 * if (!passes.isEmpty()) {
@@ -189,9 +206,6 @@ public class AdvancedCompositor implements Cleanupable {
 		 */
 
 		framebuffer.bind();
-
-		GL40.glClearColor(background.x, background.y, background.z, background.w);
-		GL40.glClear(GL40.GL_COLOR_BUFFER_BIT | GL40.GL_DEPTH_BUFFER_BIT);
 	}
 
 	private Framebuffer genFBO(int width, int height, TextureFilter filter) {

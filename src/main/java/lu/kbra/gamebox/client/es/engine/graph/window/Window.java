@@ -202,11 +202,6 @@ public abstract class Window implements Cleanupable {
 		return GLFW.glfwWindowShouldClose(handle);
 	}
 
-	public void clear() {
-		GL40.glClear(GL40.GL_COLOR_BUFFER_BIT | GL40.GL_DEPTH_BUFFER_BIT);
-		GL40.glClearColor(background.x, background.y, background.z, background.w);
-	}
-
 	public void swapBuffers() {
 		GLFW.glfwSwapBuffers(handle);
 	}

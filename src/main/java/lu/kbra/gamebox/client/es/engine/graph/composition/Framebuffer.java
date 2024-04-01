@@ -6,12 +6,10 @@ import java.util.Map.Entry;
 import org.lwjgl.opengl.GL40;
 
 import lu.kbra.gamebox.client.es.engine.graph.texture.SingleTexture;
-import lu.kbra.gamebox.client.es.engine.graph.texture.Texture;
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
 import lu.kbra.gamebox.client.es.engine.impl.UniqueID;
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 import lu.kbra.gamebox.client.es.engine.utils.consts.FrameBufferAttachment;
-import lu.kbra.gamebox.client.es.engine.utils.consts.TexelFormat;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureType;
 
 public class Framebuffer implements UniqueID, Cleanupable {
@@ -110,6 +108,10 @@ public class Framebuffer implements UniqueID, Cleanupable {
 	@Override
 	public String getId() {
 		return name;
+	}
+	
+	public int getFbo() {
+		return fbo;
 	}
 
 	public HashMap<Integer, FramebufferAttachment> getAttachments() {

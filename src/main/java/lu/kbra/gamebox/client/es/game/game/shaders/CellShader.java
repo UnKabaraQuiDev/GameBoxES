@@ -1,4 +1,4 @@
-package lu.kbra.gamebox.client.es.game.game.scenes;
+package lu.kbra.gamebox.client.es.game.game.shaders;
 
 import java.util.HashMap;
 
@@ -14,7 +14,7 @@ public class CellShader extends RenderShader {
 	public static final String TEXTURE = "color";
 
 	public CellShader() {
-		super(NAME, false, AbstractShaderPart.load("./resources/shaders/cell/cell.frag"),
+		super(NAME, true, AbstractShaderPart.load("./resources/shaders/cell/cell.frag"),
 				AbstractShaderPart.load("./resources/shaders/plain.vert"));
 	}
 

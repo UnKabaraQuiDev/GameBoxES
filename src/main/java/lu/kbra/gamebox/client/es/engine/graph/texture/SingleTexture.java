@@ -83,11 +83,6 @@ public class SingleTexture extends Texture {
 			PDRUtils.throwGLError("Invalid sample count: " + super.sampleCount + " for " + super.txtType + ", min is 1");
 		}
 
-//		System.out.println("info: "+super.internalFormat+" does not support "+super.sampleCount+" samples, max are Depth:"+MAX_DEPTH_TEXTURE_SAMPLES+", Color:"+MAX_COLOR_TEXTURE_SAMPLES+", Integer:"+MAX_INTEGER_SAMPLES);
-//		System.out.println("info: "+"Invalid texture size: "+width+"x"+height+"x"+depth+", max is "+MAX_TEXTURE_SIZE);
-//		System.out.println("info: "+"Invalid sample count: "+super.sampleCount+" for "+super.txtType);
-//		System.out.println("info: isms: "+TextureType.isMultisampled(super.txtType));
-
 		return true;
 	}
 
