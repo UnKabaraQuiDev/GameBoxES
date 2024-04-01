@@ -75,6 +75,8 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 	}
 
 	public void createDrawBuffer() {
+		if(hasDrawBuffer())
+			return;
 		drawBuffer = new DrawBuffer(indicesCount, 1, 0, 0, 0);
 		// drawBuffer = new IntAttribArray("draw", -2, 1, new int[] {indicesCount, 1, 4,
 		// 0, 0}, GL46.GL_DRAW_INDIRECT_BUFFER, false);
@@ -231,7 +233,7 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 						new Vector2f(0, 0),
 						new Vector2f(1, 0),
 						new Vector2f(1, 1),
-						new Vector2f(0, 1)
+						new Vector2f(0, 1),
 				}));
 		return mesh;
 	}

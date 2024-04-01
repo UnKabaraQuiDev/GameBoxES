@@ -34,7 +34,8 @@ public final class FileUtils {
 
 	public static MemImage STBILoad(String filePath, int desiredChannels) {
 		int[] w = new int[1], h = new int[1], c = new int[1];
-
+		
+		STBImage.stbi_set_flip_vertically_on_load(true);
 		ByteBuffer buffer = STBImage.stbi_load(filePath, w, h, c, desiredChannels);
 
 		return new MemImage(w[0], h[0], c[0], buffer, MemImageOrigin.STBI);

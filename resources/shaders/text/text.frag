@@ -42,4 +42,5 @@ void main() {
 	}*/
 
 	fragColor = mix(bgColor, fgColor, mask.r);
+	// +vec4(vertex.uv, 0, 1);
 }

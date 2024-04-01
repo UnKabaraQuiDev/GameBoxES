@@ -165,6 +165,13 @@ public abstract class Window implements Cleanupable {
 		return GLFW.glfwJoystickPresent(GLFW.GLFW_JOYSTICK_1);
 	}
 
+	public float[] getJoystickAxis(int jid) {
+		FloatBuffer fb = GLFW.glfwGetJoystickAxes(jid);
+		float[] bb = new float[fb.remaining() - 1];
+		fb.get(bb);
+		return bb;
+	}
+	
 	public float getJoystickAxis(int jid, int axis) {
 		FloatBuffer fb = GLFW.glfwGetJoystickAxes(jid);
 		float[] bb = new float[fb.remaining() - 1];

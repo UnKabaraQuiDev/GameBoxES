@@ -12,7 +12,7 @@ uniform float radius;
 uniform float threshold;
 
 void main() {
-	float uv = 1-texCoord.y;
+	float uv = texCoord.y;
 
 	if(abs(uv-value) < radius/2) {
 		fragColor = color;
@@ -26,6 +26,8 @@ void main() {
 	}else {
 		discard;
 	}
+	
+	// fragColor += vec4(texCoord, 0, 1);
 
 	//fragColor = vec4(uv, abs(uv-value) < radius/2, abs(texCoord.x-0.5)<radius, 1);
 }

@@ -5,6 +5,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
+import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
 import lu.kbra.gamebox.client.es.engine.graph.window.Window;
 import lu.kbra.gamebox.client.es.engine.scene.Scene3D;
@@ -28,15 +29,23 @@ public class UIScene3D extends Scene3D {
 
 	UISliderEntity uiSliderEntity;
 
+	UISceneState state;
+
 	public void setupStartMenu() {
 		uiSliderEntity = new UISliderEntity(cache, new Vector2f(2.5f, 0.5f), new Vector2f(0, 1), 0.1f, 0.5f, new Transform3D(new Quaternionf().rotateXYZ(0, (float) Math.toRadians(90f), 0)));
-		addEntity("uiSlider", uiSliderEntity);
+		addEntity("uiSlider", uiSliderEntity).setActive(false);
+		
+		state = new UISceneStartMenuState(this);
 	}
 
 	public void input(float dTime) {
 
+		if (state != null) {
+			state.input(dTime);
+		}
+
 		GlobalUtils.projectUI(pos -> {
-			Vector2f p2 = GeoPlane.YZ.projectToPlane(pos);
+			Vector2f p2 = GeoPlane.XY.projectToPlane(pos);
 			if (uiSliderEntity.getComponent(UISliderComponent.class).contains(p2)) {
 				if (window.isMouseButtonPressed(GLFW.GLFW_MOUSE_BUTTON_LEFT)) {
 					uiSliderEntity.getComponent(UISliderComponent.class).click(p2);
@@ -52,13 +61,18 @@ public class UIScene3D extends Scene3D {
 		camera.getProjection().setSize(180f);
 		camera.getProjection().update(1920, 1080);
 
-		((Camera3D) camera).setPosition(new Vector3f(5, 0, 0));
-		((Camera3D) camera).lookAt(new Vector3f(5, 0, 0), new Vector3f(0, 0, 0));
+		((Camera3D) camera).setPosition(new Vector3f(0, 0, 5));
+		((Camera3D) camera).setUp(GameEngine.Y_POS);
+		((Camera3D) camera).lookAt(new Vector3f(0, 0, 5), new Vector3f(0, 0, 0));
 		((Camera3D) camera).updateMatrix();
 	}
 
 	public CacheManager getCache() {
 		return cache;
+	}
+
+	public Window getWindow() {
+		return window;
 	}
 
 }

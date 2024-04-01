@@ -19,4 +19,16 @@ public final class MathUtils {
 		return rotation.transform(GameEngine.Z_POS, new Vector3f());
 	}
 
+	public static int greatestAbsIndex(float... arr) {
+		int index = -1;
+		float max = Float.MIN_VALUE;
+		for(int i = 0; i < arr.length; i++) {
+			if(Math.abs(arr[i]) > max) {
+				index = i;
+				max = Math.abs(arr[i]);
+			}
+		}
+		return index;
+	}
+
 }

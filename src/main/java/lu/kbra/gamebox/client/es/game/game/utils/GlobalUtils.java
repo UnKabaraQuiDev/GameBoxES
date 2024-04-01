@@ -22,7 +22,7 @@ import lu.kbra.gamebox.client.es.game.game.GameBoxES;
 
 public class GlobalUtils {
 	
-	private static GameBoxES INSTANCE;
+	public static GameBoxES INSTANCE;
 
 	public static void init(GameBoxES gameBoxES) {
 		INSTANCE = gameBoxES;
@@ -38,7 +38,7 @@ public class GlobalUtils {
 	}
 	
 	public static void projectWorld(Consumer<Vector3f> consumer) {
-		project(GeoPlane.YZ, consumer, INSTANCE.worldScene);
+		project(GeoPlane.XY, consumer, INSTANCE.worldScene);
 	}
 	
 	public static void projectWorld(GeoPlane plane, Consumer<Vector3f> consumer) {
@@ -46,7 +46,7 @@ public class GlobalUtils {
 	}
 	
 	public static void projectUI(Consumer<Vector3f> consumer) {
-		project(GeoPlane.YZ, consumer, INSTANCE.uiScene);
+		project(GeoPlane.XY, consumer, INSTANCE.uiScene);
 	}
 	
 	public static void projectUI(GeoPlane plane, Consumer<Vector3f> consumer) {

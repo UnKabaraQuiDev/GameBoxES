@@ -7,6 +7,7 @@ import org.lwjgl.glfw.GLFW;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.graph.composition.SceneRenderLayer;
+import lu.kbra.gamebox.client.es.engine.graph.material.text.TextShader;
 import lu.kbra.gamebox.client.es.engine.impl.GameLogic;
 import lu.kbra.gamebox.client.es.game.game.debug.DebugUIElements;
 import lu.kbra.gamebox.client.es.game.game.options.GameOptions;
@@ -42,11 +43,13 @@ public class GameBoxES extends GameLogic {
 		// GlobalLogger.getLogger().setForwardContent(false);
 
 		GlobalUtils.registerRenderers();
+		
+		cache.loadOrGetMaterial(TextShader.TextMaterial.NAME, TextShader.TextMaterial.class, cache.loadOrGetSingleTexture("text-30px", "./resources/textures/fonts/font1row.png"));
 
 		loadWorldScene("not world");
 		loadUiScene("not ui");
 
-		debug = new DebugUIElements(cache, engine, uiScene, new Vector3f(0, 1.5f, 4), new Quaternionf().rotateX((float) -Math.PI / 2));
+		debug = new DebugUIElements(cache, engine, uiScene, new Vector3f(-4f, 1.5f, 0), new Quaternionf());
 
 		compositor = new AdvancedCompositor();
 
@@ -86,8 +89,9 @@ public class GameBoxES extends GameLogic {
 		if(GameState.START_MENU.equals(gameState)) {
 			uiScene.input(dTime);
 		}else {
-			worldScene.input(dTime);
+			// worldScene.input(dTime);
 		}
+		worldScene.input(dTime);
 	}
 
 	@Override

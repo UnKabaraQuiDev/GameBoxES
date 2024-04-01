@@ -14,8 +14,7 @@ import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
 import lu.kbra.gamebox.client.es.engine.impl.UniqueID;
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 import lu.kbra.gamebox.client.es.engine.utils.consts.Alignment;
-import lu.kbra.gamebox.client.es.engine.utils.geo.GeoPlane;
-import lu.kbra.gamebox.client.es.engine.utils.transform.Transform2D;
+import lu.kbra.gamebox.client.es.engine.utils.transform.Transform3D;
 
 public class TextEmitter implements Cleanupable, UniqueID {
 
@@ -51,9 +50,16 @@ public class TextEmitter implements Cleanupable, UniqueID {
 		// GlobalLogger.log(Level.FINEST, Arrays.toString(charBuffer.getData()));
 		this.quad = Mesh.newQuad(name, material, size);
 
-		this.instances = new InstanceEmitter(name, quad, bufferSize, new Transform2D(), charBuffer);
+		this.instances = new InstanceEmitter(name, quad, bufferSize, new Transform3D(), charBuffer);
 	}
 
+	public void createDrawBuffer() {
+		quad.createDrawBuffer();
+		quad.getDrawBuffer().bind();
+		quad.getDrawBuffer().setInstancesCount(charBuffer.getLength());
+		quad.getDrawBuffer().unbind();
+	}
+	
 	public boolean updateText() {
 		if (charBuffer.getLength() < text.length())
 			throw new RuntimeException("Char buffer too small to hold text.");

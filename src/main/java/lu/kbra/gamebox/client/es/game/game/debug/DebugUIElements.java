@@ -38,33 +38,30 @@ public class DebugUIElements {
 		this.scene = scene;
 		this.engine = engine;
 
-		final Quaternionf axis = new Quaternionf().rotateXYZ((float) Math.toRadians(180f), (float) Math.toRadians(-90f), (float) Math.toRadians(0));
+		final Quaternionf axis = new Quaternionf(); //.rotateXYZ((float) Math.toRadians(180f), (float) Math.toRadians(0), (float) Math.toRadians(0));
 		
 		fpsDebug = new TextEmitter("fpsDebug",
 				(TextMaterial) cache.loadOrGetMaterial(TextMaterial.NAME, TextShader.TextMaterial.class, cache.loadOrGetSingleTexture("text_30px", "./resources/textures/fonts/font1row.png", TextureFilter.NEAREST)),
 				32, "FPS: ", new Vector2f(0.1f));
 		fpsDebug.setAlignment(Alignment.ABSOLUTE_CENTER);
 		fpsDebug.setBoxed(true);
-		fpsDebug.getMesh().createDrawBuffer();
-		fpsDebug.getMesh().getDrawBuffer().bind();
-		fpsDebug.getMesh().getDrawBuffer().setInstancesCount(32);
-		fpsDebug.getMesh().getDrawBuffer().unbind();
+		fpsDebug.createDrawBuffer();
 		fpsDebug.updateText();
 		cache.addTextEmitter(fpsDebug);
-		Entity fpsDebugEntity = new Entity(new TextEmitterComponent(fpsDebug), new Transform3DComponent(new Vector3f(0, 1.3f, 0).add(pos), axis));
+		Entity fpsDebugEntity = new Entity(new TextEmitterComponent(fpsDebug), new Transform3DComponent(new Vector3f(1.3f, 0, 0).add(pos), axis));
 		scene.addEntity("fpsDebug", fpsDebugEntity);
 		
-		this.leftJoystick = new JoystickState(cache, new Transform3D(new Vector3f(0, 0.5f, 0.5f).add(pos), axis));
-		this.rightJoystick = new JoystickState(cache, new Transform3D(new Vector3f(0, 0.5f, -0.5f).add(pos), axis));
+		this.leftJoystick = new JoystickState(cache, new Transform3D(new Vector3f(-0.5f, 0.5f, 0).add(pos), axis));
+		this.rightJoystick = new JoystickState(cache, new Transform3D(new Vector3f(0.5f, 0.5f, 0).add(pos), axis));
 
-		this.leftButton = new BooleanButtonState(cache, new Transform3D(new Vector3f(0, 1.1f, 0.5f).add(pos), axis));
-		this.rightButton = new BooleanButtonState(cache, new Transform3D(new Vector3f(0, 1.1f, -0.5f).add(pos), axis));
+		this.leftButton = new BooleanButtonState(cache, new Transform3D(new Vector3f(-0.5f, 1.1f, 0).add(pos), axis));
+		this.rightButton = new BooleanButtonState(cache, new Transform3D(new Vector3f(0.5f, 1.1f, 0).add(pos), axis));
 
-		this.dirButtons = new FourButtonState(cache, new Transform3D(new Vector3f(0, -0.5f, 0.5f).add(pos), axis));
-		this.xyabButtons = new FourButtonState(cache, new Transform3D(new Vector3f(0, -0.5f, -0.5f).add(pos), axis));
+		this.dirButtons = new FourButtonState(cache, new Transform3D(new Vector3f(-0.5f, -0.5f, 0).add(pos), axis));
+		this.xyabButtons = new FourButtonState(cache, new Transform3D(new Vector3f(0.5f, -0.5f, 0).add(pos), axis));
 
-		this.leftZButton = new FloatButtonState(cache, new Transform3D(new Vector3f(0, 0.5f, -1f).add(pos), axis));
-		this.rightZButton = new FloatButtonState(cache, new Transform3D(new Vector3f(0, 0.5f, 1f).add(pos), axis));
+		this.leftZButton = new FloatButtonState(cache, new Transform3D(new Vector3f(-1f, 0.5f, 0).add(pos), axis));
+		this.rightZButton = new FloatButtonState(cache, new Transform3D(new Vector3f(1f, 0.5f, 0).add(pos), axis));
 
 		scene.addEntities(new String[] { "LJoy", "RJoy", "LBtn", "RBtn", "DirBtn", "XYABBtn", "LZBtn", "RZBtn" }, new Entity[] { leftJoystick, rightJoystick, leftButton, rightButton, dirButtons, xyabButtons, leftZButton, rightZButton });
 	}
@@ -83,7 +80,7 @@ public class DebugUIElements {
 			GLFWGamepadState gps = window.getGamepad();
 
 			float ax = PDRUtils.applyMinThreshold(gps.axes(GLFW.GLFW_GAMEPAD_AXIS_LEFT_X), joystickThreshold);
-			float ay = PDRUtils.applyMinThreshold(gps.axes(GLFW.GLFW_GAMEPAD_AXIS_LEFT_Y), joystickThreshold);
+			float ay = PDRUtils.applyMinThreshold(-gps.axes(GLFW.GLFW_GAMEPAD_AXIS_LEFT_Y), joystickThreshold);
 			float abtn = gps.buttons(GLFW.GLFW_GAMEPAD_BUTTON_LEFT_THUMB);
 
 			leftJoystick.setPosition(new Vector2f(ax, ay));
@@ -91,9 +88,9 @@ public class DebugUIElements {
 			leftJoystick.setThreshold(joystickThreshold);
 
 			float bx = PDRUtils.applyMinThreshold(gps.axes(GLFW.GLFW_GAMEPAD_AXIS_RIGHT_X), joystickThreshold);
-			float by = PDRUtils.applyMinThreshold(gps.axes(GLFW.GLFW_GAMEPAD_AXIS_RIGHT_Y), joystickThreshold);
+			float by = PDRUtils.applyMinThreshold(-gps.axes(GLFW.GLFW_GAMEPAD_AXIS_RIGHT_Y), joystickThreshold);
 			float bbtn = gps.buttons(GLFW.GLFW_GAMEPAD_BUTTON_RIGHT_THUMB);
-
+			
 			rightJoystick.setPosition(new Vector2f(bx, by));
 			rightJoystick.setButton(bbtn);
 			rightJoystick.setThreshold(joystickThreshold);
@@ -115,14 +112,14 @@ public class DebugUIElements {
 			float btn_a = gps.buttons(GLFW.GLFW_GAMEPAD_BUTTON_A);
 			float btn_x = gps.buttons(GLFW.GLFW_GAMEPAD_BUTTON_X);
 
-			xyabButtons.setButtons(new Vector4f(btn_b, btn_a, btn_x, btn_y));
+			xyabButtons.setButtons(new Vector4f(btn_b, btn_y, btn_x, btn_a));
 
 			float dir_up = gps.buttons(GLFW.GLFW_GAMEPAD_BUTTON_DPAD_UP);
 			float dir_down = gps.buttons(GLFW.GLFW_GAMEPAD_BUTTON_DPAD_DOWN);
 			float dir_left = gps.buttons(GLFW.GLFW_GAMEPAD_BUTTON_DPAD_LEFT);
 			float dir_right = gps.buttons(GLFW.GLFW_GAMEPAD_BUTTON_DPAD_RIGHT);
 
-			dirButtons.setButtons(new Vector4f(dir_right, dir_down, dir_left, dir_up));
+			dirButtons.setButtons(new Vector4f(dir_right, dir_up, dir_left, dir_down));
 		}
 	}
 
