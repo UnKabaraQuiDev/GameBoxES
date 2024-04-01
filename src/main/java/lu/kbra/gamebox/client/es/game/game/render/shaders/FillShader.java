@@ -1,4 +1,4 @@
-package lu.kbra.gamebox.client.es.game.game.shaders;
+package lu.kbra.gamebox.client.es.game.game.render.shaders;
 
 import org.joml.Vector4f;
 

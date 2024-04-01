@@ -105,7 +105,7 @@ public class Compositor implements Cleanupable {
 			if (!rl.isVisible())
 				continue;
 
-			rl.render(cache, engine, framebuffer);
+			rl.render(engine, framebuffer);
 		}
 
 		framebuffer.unbind(GL40.GL_FRAMEBUFFER);
@@ -127,7 +127,7 @@ public class Compositor implements Cleanupable {
 			// color0.bind(0);
 			// depth.bind
 
-			((PassRenderLayer) prl).render(cache, engine, framebuffer);
+			((PassRenderLayer) prl).render(engine, framebuffer);
 		}
 		GL40.glDepthMask(true);
 

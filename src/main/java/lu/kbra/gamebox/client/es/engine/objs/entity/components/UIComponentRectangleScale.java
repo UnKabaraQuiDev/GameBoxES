@@ -105,4 +105,10 @@ public class UIComponentRectangleScale extends UIComponent {
 		interpolator.add(-outSpeed).clamp().exec();
 	}
 
+	@Override
+	public void click(Vector2f pos) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

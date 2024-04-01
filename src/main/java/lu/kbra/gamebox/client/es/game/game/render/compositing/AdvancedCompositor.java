@@ -1,4 +1,4 @@
-package lu.kbra.gamebox.client.es.game.game;
+package lu.kbra.gamebox.client.es.game.game.render.compositing;
 
 import java.util.LinkedList;
 import java.util.Map.Entry;
@@ -35,8 +35,8 @@ import lu.kbra.gamebox.client.es.engine.utils.consts.TexelFormat;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TexelInternalFormat;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureType;
-import lu.kbra.gamebox.client.es.game.game.shaders.BrightnessFilterShader;
-import lu.kbra.gamebox.client.es.game.game.shaders.ScaleShader;
+import lu.kbra.gamebox.client.es.game.game.render.shaders.BrightnessFilterShader;
+import lu.kbra.gamebox.client.es.game.game.render.shaders.ScaleShader;
 
 public class AdvancedCompositor implements Cleanupable {
 
@@ -157,7 +157,7 @@ public class AdvancedCompositor implements Cleanupable {
 			if (!rl.isVisible())
 				continue;
 
-			rl.render(cache, engine, framebuffer);
+			rl.render(engine, framebuffer);
 		}
 
 		GL40.glDepthMask(false);

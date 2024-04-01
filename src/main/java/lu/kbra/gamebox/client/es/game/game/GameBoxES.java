@@ -8,29 +8,34 @@ import org.lwjgl.glfw.GLFW;
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.graph.composition.SceneRenderLayer;
 import lu.kbra.gamebox.client.es.engine.impl.GameLogic;
-import lu.kbra.gamebox.client.es.engine.scene.camera.Camera3D;
 import lu.kbra.gamebox.client.es.game.game.debug.DebugUIElements;
-import lu.kbra.gamebox.client.es.game.game.scenes.UIScene3D;
-import lu.kbra.gamebox.client.es.game.game.scenes.WorldScene3D;
+import lu.kbra.gamebox.client.es.game.game.options.GameOptions;
+import lu.kbra.gamebox.client.es.game.game.render.compositing.AdvancedCompositor;
+import lu.kbra.gamebox.client.es.game.game.scenes.ui.UIScene3D;
+import lu.kbra.gamebox.client.es.game.game.scenes.world.WorldScene3D;
+import lu.kbra.gamebox.client.es.game.game.utils.GameState;
+import lu.kbra.gamebox.client.es.game.game.utils.GlobalUtils;
 
 public class GameBoxES extends GameLogic {
 
-	DebugUIElements debug;
+	public DebugUIElements debug;
 	
-	GameOptions gameOptiong;
+	public GameOptions gameOptions;
 	
-	AdvancedCompositor compositor;
+	public AdvancedCompositor compositor;
 
-	UIScene3D uiScene;
-	WorldScene3D worldScene;
+	public UIScene3D uiScene;
+	public WorldScene3D worldScene;
 
-	SceneRenderLayer worldSceneRenderLayer;
-	SceneRenderLayer uiSceneRenderLayer;
+	public SceneRenderLayer worldSceneRenderLayer;
+	public SceneRenderLayer uiSceneRenderLayer;
+	
+	public GameState gameState = GameState.START_MENU;
 
 	@Override
 	public void init(GameEngine e) {
 		GameEngine.DEBUG.wireframe = false;
-		GameEngine.DEBUG.gizmos = false;
+		GameEngine.DEBUG.gizmos = true;
 		
 		GlobalUtils.init(this);
 		
@@ -45,11 +50,11 @@ public class GameBoxES extends GameLogic {
 
 		compositor = new AdvancedCompositor();
 
-		worldSceneRenderLayer = new SceneRenderLayer("worldScene", worldScene);
+		worldSceneRenderLayer = new SceneRenderLayer("worldScene", worldScene, worldScene.getCache());
 		cache.addRenderLayer(worldSceneRenderLayer);
 		compositor.addRenderLayer(0, worldSceneRenderLayer);
 
-		uiSceneRenderLayer = new SceneRenderLayer("uiScene", uiScene);
+		uiSceneRenderLayer = new SceneRenderLayer("uiScene", uiScene, uiScene.getCache());
 		cache.addRenderLayer(uiSceneRenderLayer);
 		compositor.addRenderLayer(1, uiSceneRenderLayer);
 
@@ -64,26 +69,25 @@ public class GameBoxES extends GameLogic {
 	}
 
 	private void loadUiScene(String path) {
-		uiScene = new UIScene3D(path, cache);
+		uiScene = new UIScene3D(path, cache, window);
 		uiScene.setupScene();
+		uiScene.setupStartMenu();
 		cache.addScene(uiScene);
 	}
 
 	private void loadWorldScene(String path) {
-		worldScene = new WorldScene3D(path, cache);
+		worldScene = new WorldScene3D(path, cache, window);
 		worldScene.setupScene();
 		cache.addScene(worldScene);
 	}
 
 	@Override
 	public void input(float dTime) {
-		Camera3D cam = ((Camera3D) worldScene.getCamera());
-		cam.getPosition().add(new Vector3f(
-				(window.isCharPress('r') ? 1 : 0) - (window.isCharPress('f') ? 1 : 0),
-				(window.isCharPress('z') ? 1 : 0) - (window.isCharPress('s') ? 1 : 0),
-				(window.isCharPress('d') ? 1 : 0) - (window.isCharPress('q') ? 1 : 0)
-		));
-		cam.updateMatrix();
+		if(GameState.START_MENU.equals(gameState)) {
+			uiScene.input(dTime);
+		}else {
+			worldScene.input(dTime);
+		}
 	}
 
 	@Override

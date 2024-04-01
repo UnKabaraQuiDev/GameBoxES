@@ -27,15 +27,17 @@ public class PassRenderLayer extends RenderLayer<GameEngine, Framebuffer, Mesh> 
 	private static Mesh SCREEN = new Mesh("PASS_SCREEN", null, new Vec3fAttribArray("pos", 0, 1, new Vector3f[] { new Vector3f(-1, 1, 0), new Vector3f(1, 1, 0), new Vector3f(1, -1, 0), new Vector3f(-1, -1, 0) }),
 			new UIntAttribArray("ind", -1, 1, new int[] { 0, 1, 2, 0, 2, 3 }, GL40.GL_ELEMENT_ARRAY_BUFFER), new Vec2fAttribArray("uv", 1, 1, new Vector2f[] { new Vector2f(0, 1), new Vector2f(1, 1), new Vector2f(1, 0), new Vector2f(0, 0) }));
 
+	protected CacheManager cache;
 	protected Material material;
 
-	public PassRenderLayer(String name, Material material) {
+	public PassRenderLayer(String name, Material material, CacheManager cache) {
 		super(name, SCREEN);
 		this.material = material;
+		this.cache = cache;
 	}
 
 	@Override
-	public void render(CacheManager cache, GameEngine engine, Framebuffer from) {
+	public void render(GameEngine engine, Framebuffer from) {
 		GlobalLogger.log(Level.INFO, "PassRenderLayer : m:" + material);
 
 		target.bind();

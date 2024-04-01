@@ -1,6 +1,5 @@
 package lu.kbra.gamebox.client.es.engine.graph.composition;
 
-import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
 import lu.kbra.gamebox.client.es.engine.impl.Renderable;
 import lu.kbra.gamebox.client.es.engine.impl.UniqueID;
@@ -16,7 +15,7 @@ public abstract class RenderLayer<K, J, O extends Renderable> implements Rendera
 		this.name = name;
 	}
 
-	public abstract void render(CacheManager cache, K container, J parent);
+	public abstract void render(K container, J parent);
 
 	public O getTarget() {
 		return target;

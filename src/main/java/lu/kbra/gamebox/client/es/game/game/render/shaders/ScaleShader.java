@@ -1,4 +1,4 @@
-package lu.kbra.gamebox.client.es.game.game.shaders;
+package lu.kbra.gamebox.client.es.game.game.render.shaders;
 
 import lu.kbra.gamebox.client.es.engine.graph.composition.PassRenderLayer;
 import lu.kbra.gamebox.client.es.engine.graph.material.Material;

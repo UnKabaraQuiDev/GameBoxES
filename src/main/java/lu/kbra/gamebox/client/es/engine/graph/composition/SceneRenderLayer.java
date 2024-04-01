@@ -12,13 +12,16 @@ import lu.kbra.gamebox.client.es.engine.scene.Scene2D;
 import lu.kbra.gamebox.client.es.engine.scene.Scene3D;
 
 public class SceneRenderLayer extends RenderLayer<GameEngine, Framebuffer, Scene> {
-
-	public SceneRenderLayer(String name, Scene target) {
+	
+	private CacheManager cache;
+	
+	public SceneRenderLayer(String name, Scene target, CacheManager cache) {
 		super(name, target);
+		this.cache = cache;
 	}
 
 	@Override
-	public void render(CacheManager cache, GameEngine parent, Framebuffer fb) {
+	public void render(GameEngine parent, Framebuffer fb) {
 		Renderer<GameEngine, Scene> renderer = null;
 		if (this.target instanceof Scene3D) {
 			renderer = (Renderer<GameEngine, Scene>) cache.getRenderer(Scene3D.NAME);
@@ -34,8 +37,9 @@ public class SceneRenderLayer extends RenderLayer<GameEngine, Framebuffer, Scene
 			}
 		}
 
-		if (renderer != null)
-			renderer.render(cache, parent, this.target);
+		if (renderer != null) {
+			renderer.render(this.cache, parent, this.target);
+		}
 	}
 
 }

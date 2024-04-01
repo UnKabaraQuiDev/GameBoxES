@@ -22,15 +22,17 @@ public class GenerateRenderLayer extends RenderLayer<GameEngine, Framebuffer, Me
 	private static Mesh SCREEN = new Mesh("GEN_SCREEN", null, new Vec3fAttribArray("pos", 0, 1, new Vector3f[] { new Vector3f(-1, 1, 0), new Vector3f(1, 1, 0), new Vector3f(1, -1, 0), new Vector3f(-1, -1, 0) }),
 			new UIntAttribArray("ind", -1, 1, new int[] { 0, 1, 3, 1, 2, 3 }), new Vec2fAttribArray("uv", 1, 1, new Vector2f[] { new Vector2f(-1, 1), new Vector2f(1, 1), new Vector2f(1, -1), new Vector2f(-1, -1) }));
 
+	protected CacheManager cache;
 	protected Material material;
 
-	public GenerateRenderLayer(String name, Material material) {
+	public GenerateRenderLayer(String name, Material material, CacheManager cache) {
 		super(name, SCREEN);
 		this.material = material;
+		this.cache = cache;
 	}
 
 	@Override
-	public void render(CacheManager cache, GameEngine engine, Framebuffer fb) {
+	public void render(GameEngine engine, Framebuffer fb) {
 		target.bind();
 
 		Material material = this.material;

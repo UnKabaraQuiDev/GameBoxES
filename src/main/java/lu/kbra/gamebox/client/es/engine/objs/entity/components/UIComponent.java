@@ -10,4 +10,6 @@ public abstract class UIComponent extends Component {
 
 	public abstract void hover(Vector2f pos);
 
+	public abstract void  click(Vector2f pos);
+
 }

@@ -1,4 +1,4 @@
-package lu.kbra.gamebox.client.es.game.game.scenes;
+package lu.kbra.gamebox.client.es.game.game.scenes.world.entities;
 
 import org.joml.Vector2f;
 

@@ -1,4 +1,4 @@
-package lu.kbra.gamebox.client.es.game.game.scenes;
+package lu.kbra.gamebox.client.es.game.game.scenes.world.entities;
 
 import java.io.FileNotFoundException;
 import java.nio.file.Files;
@@ -9,8 +9,8 @@ import lu.kbra.gamebox.client.es.engine.graph.material.Material;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureType;
 import lu.kbra.gamebox.client.es.engine.utils.file.FileUtils;
-import lu.kbra.gamebox.client.es.game.game.shaders.CellShader;
-import lu.kbra.gamebox.client.es.game.game.shaders.CellShader.CellMaterial;
+import lu.kbra.gamebox.client.es.game.game.render.shaders.CellShader;
+import lu.kbra.gamebox.client.es.game.game.render.shaders.CellShader.CellMaterial;
 
 public enum CellType {
 
