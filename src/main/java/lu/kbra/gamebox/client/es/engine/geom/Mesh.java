@@ -152,6 +152,9 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 		GL40.glDeleteVertexArrays(vao);
 		Arrays.stream(attribs).forEach(AttribArray::cleanup);
 		vao = -1;
+		if(hasDrawBuffer()) {
+			drawBuffer.cleanup();
+		}
 	}
 
 	@Override

@@ -1,47 +1,40 @@
 package lu.kbra.gamebox.client.es.game.game;
 
 import org.joml.Quaternionf;
-import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.opengl.GL40;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.graph.composition.SceneRenderLayer;
-import lu.kbra.gamebox.client.es.engine.graph.render.GizmoRenderer;
-import lu.kbra.gamebox.client.es.engine.graph.render.InstanceEmitterRenderer;
-import lu.kbra.gamebox.client.es.engine.graph.render.MeshRenderer;
-import lu.kbra.gamebox.client.es.engine.graph.render.Scene2DRenderer;
-import lu.kbra.gamebox.client.es.engine.graph.render.Scene3DRenderer;
-import lu.kbra.gamebox.client.es.engine.graph.render.TextEmitterRenderer;
 import lu.kbra.gamebox.client.es.engine.impl.GameLogic;
-import lu.kbra.gamebox.client.es.engine.utils.geo.GeoPlane;
-import lu.kbra.gamebox.client.es.engine.utils.geo.Ray;
+import lu.kbra.gamebox.client.es.engine.scene.camera.Camera3D;
 import lu.kbra.gamebox.client.es.game.game.debug.DebugUIElements;
 import lu.kbra.gamebox.client.es.game.game.scenes.UIScene3D;
 import lu.kbra.gamebox.client.es.game.game.scenes.WorldScene3D;
 
 public class GameBoxES extends GameLogic {
 
-	private DebugUIElements debug;
+	DebugUIElements debug;
 
-	private AdvancedCompositor compositor;
+	AdvancedCompositor compositor;
 
-	private UIScene3D uiScene;
-	private WorldScene3D worldScene;
+	UIScene3D uiScene;
+	WorldScene3D worldScene;
 
-	private SceneRenderLayer worldSceneRenderLayer;
-	private SceneRenderLayer uiSceneRenderLayer;
+	SceneRenderLayer worldSceneRenderLayer;
+	SceneRenderLayer uiSceneRenderLayer;
 
 	@Override
 	public void init(GameEngine e) {
-		GameEngine.DEBUG.wireframe = false;
-		GameEngine.DEBUG.gizmos = false;
-
+		GameEngine.DEBUG.wireframe = true;
+		GameEngine.DEBUG.gizmos = true;
+		
+		GlobalUtils.init(this);
+		
 		// GlobalLogger.getLogger().setForwardContent(false);
 
-		registerRenderers();
+		GlobalUtils.registerRenderers();
 
 		loadWorldScene("not world");
 		loadUiScene("not ui");
@@ -80,39 +73,24 @@ public class GameBoxES extends GameLogic {
 		cache.addScene(worldScene);
 	}
 
-	private void registerRenderers() {
-		cache.addRenderer(new MeshRenderer());
-		cache.addRenderer(new GizmoRenderer());
-		cache.addRenderer(new InstanceEmitterRenderer());
-		cache.addRenderer(new Scene2DRenderer());
-		cache.addRenderer(new Scene3DRenderer());
-		cache.addRenderer(new TextEmitterRenderer());
-	}
-
 	@Override
 	public void input(float dTime) {
-
+		Camera3D cam = ((Camera3D) worldScene.getCamera());
+		cam.getPosition().add(new Vector3f(
+				(window.isKeyPressed(GLFW.GLFW_KEY_R) ? 1 : 0) - (window.isKeyPressed(GLFW.GLFW_KEY_F) ? 1 : 0),
+				(window.isKeyPressed(GLFW.GLFW_KEY_Z) ? 1 : 0) - (window.isKeyPressed(GLFW.GLFW_KEY_S) ? 1 : 0),
+				(window.isKeyPressed(GLFW.GLFW_KEY_D) ? 1 : 0) - (window.isKeyPressed(GLFW.GLFW_KEY_Q) ? 1 : 0)
+		));
+		cam.updateMatrix();
 	}
 
 	@Override
 	public void update(float dTime) {
 		if (window.isMouseButtonPressed(GLFW.GLFW_MOUSE_BUTTON_LEFT)) {
-			System.err.println("press");
-			int[] viewport = new int[4];
-			createTask(GameEngine.QUEUE_RENDER).exec((t) -> {
-				GL40.glGetIntegerv(GL40.GL_VIEWPORT, viewport);
-				return null;
-			}).then((t) -> {
-				Ray ray = uiScene.getCamera().projectRay(new Vector2f(window.getMousePos()), viewport);
-
-				Vector3f pos = uiScene.getCamera().projectPlane(ray, GeoPlane.YZ);
-
-				System.err.println(pos);
-				return null;
-			}).push();
+			GlobalUtils.projectUI(System.err::println);
 		}
 	}
-
+	
 	@Override
 	public void render(float dTime) {
 		if (debug != null) {

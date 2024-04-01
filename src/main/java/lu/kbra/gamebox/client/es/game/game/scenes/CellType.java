@@ -5,11 +5,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
-import lu.kbra.gamebox.client.es.engine.graph.texture.SingleTexture;
+import lu.kbra.gamebox.client.es.engine.graph.material.Material;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureType;
 import lu.kbra.gamebox.client.es.engine.utils.file.FileUtils;
-import lu.kbra.gamebox.client.es.engine.utils.mem.img.MemImage;
 import lu.kbra.gamebox.client.es.game.game.scenes.CellShader.CellMaterial;
 
 public enum CellType {
@@ -32,7 +31,7 @@ public enum CellType {
 		return FileUtils.RESOURCES + "gd/" + dataPath + texturePath;
 	}
 
-	public CellMaterial createMaterial(CacheManager cache) {
+	public Material createMaterial(CacheManager cache) {
 		if (cache == null)
 			throw new IllegalArgumentException("CacheManager == null");
 
@@ -62,7 +61,7 @@ public enum CellType {
 				shader,
 				cache.loadSingleTexture(this.name(), imagePath, TextureFilter.NEAREST, TextureType.TXT2D));
 		cache.addMaterial(material);
-
+		
 		return material;
 	}
 

@@ -42,14 +42,15 @@ public class FillShader extends RenderShader {
 		public FillMaterial(Vector4f color) {
 			super(NAME, new FillShader());
 			this.color = color;
+			setProperty(COLOR, color);
 		}
 
-		@Override
+		/*@Override
 		public void bindProperties(CacheManager cache, Renderable parent, RenderShader shader) {
 			super.setProperty(COLOR, color);
 
 			super.bindProperties(cache, parent, shader);
-		}
+		}*/
 
 		public Vector4f getColor() {
 			return color;
@@ -57,6 +58,7 @@ public class FillShader extends RenderShader {
 
 		public void setColor(Vector4f color) {
 			this.color = color;
+			setProperty(COLOR, color);
 		}
 
 	}

@@ -135,6 +135,8 @@ public class AdvancedCompositor implements Cleanupable {
 		}
 
 		GL40.glEnable(GL40.GL_DEPTH_TEST);
+		
+		framebuffer.bind(GL40.GL_DRAW_FRAMEBUFFER);
 
 		for (String l : layers) {
 			if (l == null)
@@ -156,7 +158,7 @@ public class AdvancedCompositor implements Cleanupable {
 
 		GL40.glDepthMask(false);
 
-		int scale = 5;
+		/*int scale = 5;
 		
 		((ScaleMaterial) scaleMaterial).setResolution(resolution.x/scale, resolution.y/scale);
 		
@@ -164,7 +166,7 @@ public class AdvancedCompositor implements Cleanupable {
 		render(cache, engine, framebuffer, highLights, highLightsMaterial);
 		
 		Framebuffer lowScale = genFBO(resolution.x, resolution.y, TextureFilter.LINEAR);
-		render(cache, engine, highLights, lowScale, scaleMaterial);
+		render(cache, engine, highLights, lowScale, scaleMaterial);*/
 		
 		GL40.glBindFramebuffer(GL40.GL_DRAW_FRAMEBUFFER, 0);
 		lastFramebuffer.bind(GL40.GL_READ_FRAMEBUFFER);

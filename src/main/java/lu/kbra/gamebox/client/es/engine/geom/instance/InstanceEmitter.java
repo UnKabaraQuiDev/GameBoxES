@@ -65,7 +65,7 @@ public class InstanceEmitter implements Renderable, Cleanupable, UniqueID {
 
 		mesh.unbind();
 
-		System.err.println(this.instancesTransforms);
+		// System.err.println(this.instancesTransforms);
 
 		GlobalLogger.log(Level.INFO, "ParticleEmitter " + name + ": mesh:(" + mesh.getId() + " & " + mesh.getVbo() + "); count:" + count + "; attribs: " + Arrays.toString(attribs));
 	}

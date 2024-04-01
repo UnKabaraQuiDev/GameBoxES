@@ -4,11 +4,11 @@ import org.joml.Vector2f;
 
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
 import lu.kbra.gamebox.client.es.engine.geom.Mesh;
+import lu.kbra.gamebox.client.es.engine.graph.material.Material;
 import lu.kbra.gamebox.client.es.engine.objs.entity.Entity;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.MeshComponent;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.Transform3DComponent;
 import lu.kbra.gamebox.client.es.engine.utils.geo.GeoPlane;
-import lu.kbra.gamebox.client.es.game.game.scenes.CellShader.CellMaterial;
 
 public class CellEntity extends Entity {
 
@@ -24,7 +24,7 @@ public class CellEntity extends Entity {
 	}
 
 	public static CellEntity load(CacheManager cache, String name, CellType type) {
-		CellMaterial material = type.createMaterial(cache);
+		Material material = type.createMaterial(cache);
 		Mesh mesh = Mesh.newQuad(GeoPlane.YZ, type.getDataPath()+material.hashCode(), material, new Vector2f(1));
 		mesh.createDrawBuffer();
 		cache.addMesh(mesh);

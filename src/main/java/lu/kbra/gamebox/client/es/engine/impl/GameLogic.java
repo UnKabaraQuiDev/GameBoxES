@@ -9,10 +9,10 @@ import lu.kbra.gamebox.client.es.engine.impl.nexttask.NextTaskEnvironnment;
 
 public abstract class GameLogic {
 
-	protected GameEngine engine;
-	protected SharedCacheManager cache;
-	protected Window window;
-	protected AudioMaster audio;
+	public GameEngine engine;
+	public SharedCacheManager cache;
+	public Window window;
+	public AudioMaster audio;
 
 	public void register(GameEngine e) {
 		/*
@@ -39,15 +39,15 @@ public abstract class GameLogic {
 
 	public abstract void render(float dTime);
 
-	protected <I, B, C> NextTask<I, B, C> createTask(int target) {
+	public <I, B, C> NextTask<I, B, C> createTask(int target) {
 		return engine.<I, B, C>createTask(target);
 	}
 
-	protected <I, B, C> NextTask<I, B, C> createTask(int from, int target) {
+	public <I, B, C> NextTask<I, B, C> createTask(int from, int target) {
 		return engine.<I, B, C>createTask(from, target);
 	}
 
-	protected NextTaskEnvironnment getTaskEnvironnment() {
+	public NextTaskEnvironnment getTaskEnvironnment() {
 		return engine.getTaskEnvironnment();
 	}
 
@@ -71,7 +71,7 @@ public abstract class GameLogic {
 		return engine.waitForUpdateStart();
 	}
 
-	protected void stop() {
+	public void stop() {
 		engine.stop();
 	}
 
