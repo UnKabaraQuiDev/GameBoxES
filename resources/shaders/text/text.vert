@@ -22,6 +22,7 @@ uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 transformationMatrix;
 uniform vec3 viewPos;
+uniform bool transparent;
 
 void main() {
 	gl_Position = projectionMatrix * viewMatrix * (transformationMatrix * i_transform) * vec4(i_pos, 1);

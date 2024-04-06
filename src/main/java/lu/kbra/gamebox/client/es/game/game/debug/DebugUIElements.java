@@ -21,6 +21,7 @@ import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 import lu.kbra.gamebox.client.es.engine.utils.consts.Alignment;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
 import lu.kbra.gamebox.client.es.engine.utils.transform.Transform3D;
+import lu.kbra.gamebox.client.es.game.game.utils.GlobalUtils;
 
 public class DebugUIElements {
 
@@ -66,8 +67,6 @@ public class DebugUIElements {
 		scene.addEntities(new String[] { "LJoy", "RJoy", "LBtn", "RBtn", "DirBtn", "XYABBtn", "LZBtn", "RZBtn" }, new Entity[] { leftJoystick, rightJoystick, leftButton, rightButton, dirButtons, xyabButtons, leftZButton, rightZButton });
 	}
 
-	float joystickThreshold = 0.1f;
-	
 	public void update() {
 		fpsDebug.setText("FPS: "+PDRUtils.round(engine.getCurrentFps(), 3)).updateText();
 		
@@ -79,24 +78,24 @@ public class DebugUIElements {
 
 			GLFWGamepadState gps = window.getGamepad();
 
-			float ax = PDRUtils.applyMinThreshold(gps.axes(GLFW.GLFW_GAMEPAD_AXIS_LEFT_X), joystickThreshold);
-			float ay = PDRUtils.applyMinThreshold(-gps.axes(GLFW.GLFW_GAMEPAD_AXIS_LEFT_Y), joystickThreshold);
+			float ax = GlobalUtils.applyMinThreshold(gps.axes(GLFW.GLFW_GAMEPAD_AXIS_LEFT_X));
+			float ay = GlobalUtils.applyMinThreshold(-gps.axes(GLFW.GLFW_GAMEPAD_AXIS_LEFT_Y));
 			float abtn = gps.buttons(GLFW.GLFW_GAMEPAD_BUTTON_LEFT_THUMB);
 
 			leftJoystick.setPosition(new Vector2f(ax, ay));
 			leftJoystick.setButton(abtn);
-			leftJoystick.setThreshold(joystickThreshold);
+			leftJoystick.setThreshold(GlobalUtils.joystickThreshold);
 
-			float bx = PDRUtils.applyMinThreshold(gps.axes(GLFW.GLFW_GAMEPAD_AXIS_RIGHT_X), joystickThreshold);
-			float by = PDRUtils.applyMinThreshold(-gps.axes(GLFW.GLFW_GAMEPAD_AXIS_RIGHT_Y), joystickThreshold);
+			float bx = GlobalUtils.applyMinThreshold(gps.axes(GLFW.GLFW_GAMEPAD_AXIS_RIGHT_X));
+			float by = GlobalUtils.applyMinThreshold(-gps.axes(GLFW.GLFW_GAMEPAD_AXIS_RIGHT_Y));
 			float bbtn = gps.buttons(GLFW.GLFW_GAMEPAD_BUTTON_RIGHT_THUMB);
 			
 			rightJoystick.setPosition(new Vector2f(bx, by));
 			rightJoystick.setButton(bbtn);
-			rightJoystick.setThreshold(joystickThreshold);
+			rightJoystick.setThreshold(GlobalUtils.joystickThreshold);
 
-			float lzb = PDRUtils.applyMinThreshold(gps.axes(GLFW.GLFW_GAMEPAD_AXIS_LEFT_TRIGGER), joystickThreshold);
-			float rzb = PDRUtils.applyMinThreshold(gps.axes(GLFW.GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER), joystickThreshold);
+			float lzb = GlobalUtils.applyMinThreshold(gps.axes(GLFW.GLFW_GAMEPAD_AXIS_LEFT_TRIGGER));
+			float rzb = GlobalUtils.applyMinThreshold(gps.axes(GLFW.GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER));
 
 			leftZButton.setValue((float) (lzb / 2 + 0.5));
 			rightZButton.setValue((float) (rzb / 2 + 0.5));
@@ -121,14 +120,6 @@ public class DebugUIElements {
 
 			dirButtons.setButtons(new Vector4f(dir_right, dir_up, dir_left, dir_down));
 		}
-	}
-
-	public float getJoystickThreshold() {
-		return joystickThreshold;
-	}
-
-	public void setJoystickThreshold(float joystickThreshold) {
-		this.joystickThreshold = joystickThreshold;
 	}
 
 }

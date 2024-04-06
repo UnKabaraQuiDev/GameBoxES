@@ -14,8 +14,6 @@ in struct per_Vertex {
 
 #define CHAR_START 32.0
 #define CHAR_COUNT 95.0 //255
-//#define CHAR_WIDTH_COUNT 20.0
-//#define CHAR_HEIGHT_COUNT 5.0
 
 out vec4 fragColor;
 
@@ -23,6 +21,7 @@ uniform sampler2D txt1;
 uniform vec4 bgColor;
 uniform vec4 fgColor;
 uniform int length;
+uniform bool transparent;
 
 void main() {
 	if (instance.index >= length) {
@@ -37,10 +36,9 @@ void main() {
 			)
 	);
 
-	/*if(mask.a == 0) {
+	if(mask.a == 0 && transparent) {
 		discard;
-	}*/
+	}
 
 	fragColor = mix(bgColor, fgColor, mask.r);
-	// +vec4(vertex.uv, 0, 1);
 }

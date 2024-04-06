@@ -19,6 +19,8 @@ import lu.kbra.gamebox.client.es.game.game.utils.GlobalUtils;
 
 public class GameBoxES extends GameLogic {
 
+	public static final String TEXT_TEXTURE = "text-30px";
+
 	public DebugUIElements debug;
 	
 	public GameOptions gameOptions;
@@ -44,7 +46,7 @@ public class GameBoxES extends GameLogic {
 
 		GlobalUtils.registerRenderers();
 		
-		cache.loadOrGetMaterial(TextShader.TextMaterial.NAME, TextShader.TextMaterial.class, cache.loadOrGetSingleTexture("text-30px", "./resources/textures/fonts/font1row.png"));
+		cache.loadOrGetMaterial(TextShader.TextMaterial.NAME, TextShader.TextMaterial.class, cache.loadOrGetSingleTexture(TEXT_TEXTURE, "./resources/textures/fonts/font1row.png"));
 
 		loadWorldScene("not world");
 		loadUiScene("not ui");

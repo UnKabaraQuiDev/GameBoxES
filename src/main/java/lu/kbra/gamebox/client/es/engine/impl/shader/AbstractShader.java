@@ -133,6 +133,8 @@ public abstract class AbstractShader implements UniqueID, Cleanupable {
 			try (MemoryStack stack = MemoryStack.stackPush()) {
 				GL21.glUniformMatrix3x2fv(unif.getValue(), false, ((Matrix3x2f) value).get(stack.mallocFloat(6)));
 			}
+		} else if (value instanceof Boolean) {
+			GL20.glUniform1i(unif.getValue(), (boolean) value ? 1 : 0);
 		}
 		GameEngine.DEBUG.end("r_uniforms_bind_single_bind");
 	}

@@ -20,6 +20,7 @@ public class TextShader extends RenderShader {
 	public static final String FG_COLOR = "fgColor";
 	public static final String BG_COLOR = "bgColor";
 	public static final String TXT_LENGTH = "length";
+	public static final String TRANSPARENT = "transparent";
 
 	public TextShader() {
 		super(NAME, true, AbstractShaderPart.load("./resources/shaders/text/text.vert"), AbstractShaderPart.load("./resources/shaders/text/text.frag"));
@@ -33,6 +34,7 @@ public class TextShader extends RenderShader {
 
 		createUniform(FG_COLOR);
 		createUniform(BG_COLOR);
+		createUniform(TRANSPARENT);
 
 		createUniform(TXT_LENGTH);
 	}
@@ -43,9 +45,26 @@ public class TextShader extends RenderShader {
 
 		private Vector4f fgColor = new Vector4f(1, 1, 1, 1);
 		private Vector4f bgColor = new Vector4f(0, 0, 0, 0);
+		private boolean transparent = true;
 
 		public TextMaterial(SingleTexture txt1) {
 			super(NAME, new TextShader(), new HashMap<String, Texture>() {
+				{
+					put(TXT1, txt1);
+				}
+			});
+		}
+
+		public TextMaterial(RenderShader shader, Texture txt1) {
+			super(NAME, shader, new HashMap<String, Texture>() {
+				{
+					put(TXT1, txt1);
+				}
+			});
+		}
+
+		public TextMaterial(String name, RenderShader shader, Texture txt1) {
+			super(NAME, shader, new HashMap<String, Texture>() {
 				{
 					put(TXT1, txt1);
 				}
@@ -56,6 +75,7 @@ public class TextShader extends RenderShader {
 		public void bindProperties(CacheManager cache, Renderable scene, RenderShader shader) {
 			setProperty(FG_COLOR, fgColor);
 			setProperty(BG_COLOR, bgColor);
+			setProperty(TRANSPARENT, transparent);
 
 			super.bindProperties(cache, scene, shader);
 		}
@@ -74,6 +94,14 @@ public class TextShader extends RenderShader {
 
 		public Vector4f getBgColor() {
 			return bgColor;
+		}
+
+		public boolean isTransparent() {
+			return transparent;
+		}
+
+		public void setTransparent(boolean transparent) {
+			this.transparent = transparent;
 		}
 
 	}

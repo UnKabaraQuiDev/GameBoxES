@@ -16,6 +16,7 @@ import lu.kbra.gamebox.client.es.engine.graph.render.TextEmitterRenderer;
 import lu.kbra.gamebox.client.es.engine.scene.Scene;
 import lu.kbra.gamebox.client.es.engine.scene.Scene3D;
 import lu.kbra.gamebox.client.es.engine.scene.camera.Camera3D;
+import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 import lu.kbra.gamebox.client.es.engine.utils.geo.GeoPlane;
 import lu.kbra.gamebox.client.es.engine.utils.geo.Ray;
 import lu.kbra.gamebox.client.es.game.game.GameBoxES;
@@ -23,9 +24,15 @@ import lu.kbra.gamebox.client.es.game.game.GameBoxES;
 public class GlobalUtils {
 	
 	public static GameBoxES INSTANCE;
-
+	
 	public static void init(GameBoxES gameBoxES) {
 		INSTANCE = gameBoxES;
+	}
+	
+	public static float joystickThreshold = 0.1f;
+	
+	public static float applyMinThreshold(float value) {
+		return PDRUtils.applyMinThreshold(value, joystickThreshold);
 	}
 	
 	public static void registerRenderers() {
@@ -84,5 +91,5 @@ public class GlobalUtils {
 			return null;
 		}).push();
 	}
-	
+
 }
