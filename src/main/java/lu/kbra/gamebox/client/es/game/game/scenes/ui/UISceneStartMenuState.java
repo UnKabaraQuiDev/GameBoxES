@@ -1,11 +1,11 @@
 package lu.kbra.gamebox.client.es.game.game.scenes.ui;
 
-import java.util.Arrays;
-
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFWGamepadState;
+
+import lu.pcy113.pclib.Pair;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.graph.material.text.TextShader;
@@ -13,7 +13,6 @@ import lu.kbra.gamebox.client.es.engine.graph.material.text.TextShader.TextMater
 import lu.kbra.gamebox.client.es.engine.objs.entity.Entity;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.TextEmitterComponent;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.Transform3DComponent;
-import lu.kbra.gamebox.client.es.engine.objs.entity.components.VerticesAnimationComponent;
 import lu.kbra.gamebox.client.es.engine.objs.text.TextEmitter;
 import lu.kbra.gamebox.client.es.engine.utils.consts.Alignment;
 import lu.kbra.gamebox.client.es.engine.utils.consts.Direction;
@@ -22,15 +21,15 @@ import lu.kbra.gamebox.client.es.game.game.utils.ControllerInputWatcher;
 import lu.kbra.gamebox.client.es.game.game.utils.GlobalUtils;
 
 public class UISceneStartMenuState extends UISceneState {
-	
+
 	public static final Vector4f HIGHLIGHT_COLOR = new Vector4f(0.1f, 1f, 1f, 1f), IDLE_COLOR = new Vector4f(1);
-	
+
 	private static final float X_POS_START = 0f;
 	private static final float X_POS_END = -1f;
 
 	private static final String TEXT_PLAY = "PLAY !", TEXT_OPTIONS = "OPTIONS", TEXT_QUIT = "QUIT";
 	private static final String[] TEXTS = { TEXT_PLAY, TEXT_OPTIONS, TEXT_QUIT };
-	
+
 	private Entity[] entities1;
 	private Entity play, options, quit;
 	private Entity mode1, mode2;
@@ -45,15 +44,12 @@ public class UISceneStartMenuState extends UISceneState {
 		quit = addText("quitText", 10, TEXT_QUIT, new Vector3f(0, -0.8f, 0));
 
 		entities1 = new Entity[] { play, options, quit };
-		
-		System.out.println("texts: "+Arrays.toString(TEXTS));
-		System.out.println("entit: "+Arrays.toString(entities1));
-		
+
 		chooseElement();
 	}
 
 	private Entity addText(String name, int length, String txt, Vector3f pos) {
-		TextMaterial mat = new TextMaterial("TextMaterial-"+GameBoxES.TEXT_TEXTURE+"-"+name.hashCode(), cache.getRenderShader(TextShader.NAME), cache.getTexture(GameBoxES.TEXT_TEXTURE));
+		TextMaterial mat = new TextMaterial("TextMaterial-" + GameBoxES.TEXT_TEXTURE + "-" + name.hashCode(), cache.getRenderShader(TextShader.NAME), cache.getTexture(GameBoxES.TEXT_TEXTURE));
 		cache.addMaterial(mat);
 		TextEmitter text = new TextEmitter(name, mat, length, txt, new Vector2f(0.5f));
 		text.setAlignment(Alignment.ABSOLUTE_RIGHT);
@@ -87,12 +83,20 @@ public class UISceneStartMenuState extends UISceneState {
 				verticalIndex++;
 				break;
 
-			case EST:
+			case EAST:
 			case WEST:
 				return;
 
 			default:
 				return;
+			}
+		} else {
+			Pair<Direction, Float> dirf = cic.getSoftDirection(gps);
+			Direction dir = dirf.getKey();
+			float progress = dirf.getValue();
+			System.err.println("soft: " + dir + " " + progress);
+			if (!Direction.NONE.equals(dir)) {
+				placeElements(progress);
 			}
 		}
 
@@ -116,11 +120,11 @@ public class UISceneStartMenuState extends UISceneState {
 			}
 			return null;
 		}).push();
-
 	}
 
-	private void placeElements(float playMenu) {
-
+	private void placeElements(float progressPlayMenu) {
+		Entity te = entities1[verticalIndex];
+		te.getComponent(Transform3DComponent.class).getTransform().translateAdd(progressPlayMenu, 0, progressPlayMenu).updateMatrix();
 	}
 
 }

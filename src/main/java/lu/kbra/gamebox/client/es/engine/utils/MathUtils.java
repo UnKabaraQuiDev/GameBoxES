@@ -7,6 +7,11 @@ import lu.kbra.gamebox.client.es.engine.GameEngine;
 
 public final class MathUtils {
 
+	public static float map(float x, float in_min, float in_max, float out_min, float out_max) {
+		System.out.println("mapping: "+x+" from "+in_min+"-"+in_max+" to "+out_min+"-"+out_max);
+		return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+	}
+
 	public static float snap(float x, float interval) {
 		return Math.round(x / interval) * interval;
 	}
@@ -22,8 +27,8 @@ public final class MathUtils {
 	public static int greatestAbsIndex(float... arr) {
 		int index = -1;
 		float max = Float.MIN_VALUE;
-		for(int i = 0; i < arr.length; i++) {
-			if(Math.abs(arr[i]) > max) {
+		for (int i = 0; i < arr.length; i++) {
+			if (Math.abs(arr[i]) > max) {
 				index = i;
 				max = Math.abs(arr[i]);
 			}

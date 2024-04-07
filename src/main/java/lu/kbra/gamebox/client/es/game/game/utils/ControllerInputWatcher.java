@@ -1,10 +1,12 @@
 package lu.kbra.gamebox.client.es.game.game.utils;
 
 import java.nio.FloatBuffer;
-import java.util.Arrays;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWGamepadState;
+
+import lu.pcy113.pclib.Pair;
+import lu.pcy113.pclib.Pairs;
 
 import lu.kbra.gamebox.client.es.engine.utils.MathUtils;
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
@@ -22,7 +24,7 @@ public class ControllerInputWatcher {
 		float[] jsaxis = new float[fb.remaining() - 1];
 		fb.get(jsaxis).clear();
 		int dir = MathUtils.greatestAbsIndex(jsaxis);
-		
+
 		float leftX = PDRUtils.applyMinThreshold(jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_X], highThreshold);
 		float leftY = PDRUtils.applyMinThreshold(jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_Y], highThreshold);
 
@@ -33,26 +35,24 @@ public class ControllerInputWatcher {
 			// continue;
 		}
 
-		switch (dir) {
-		case GLFW.GLFW_GAMEPAD_AXIS_LEFT_X:
-			if (Math.signum(leftX) == -1) {
-				direction = Direction.WEST;
-			} else if (Math.signum(leftX) == 1) {
-				direction = Direction.EST;
-			}
-			break;
-		case GLFW.GLFW_GAMEPAD_AXIS_LEFT_Y:
-			if (Math.signum(leftY) == -1) {
-				direction = Direction.NORTH;
-			} else if (Math.signum(leftY) == 1) {
-				direction = Direction.SOUTH;
-			}
-			break;
-		}
+		direction = Direction.getGLFW(dir, leftX, leftY);
+	}
 
-		/*
-		 * if (!direction.equals(previous)) { waitingForNone = false; }
-		 */
+	public Pair<Direction, Float> getSoftDirection(GLFWGamepadState gps) {
+		FloatBuffer fb = gps.axes();
+		float[] jsaxis = new float[fb.remaining() - 1];
+		fb.get(jsaxis).clear();
+		int dir = MathUtils.greatestAbsIndex(jsaxis);
+
+		float leftX = GlobalUtils.applyMinThreshold(jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_X]);
+		float leftY = GlobalUtils.applyMinThreshold(jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_Y]);
+
+		Direction ddir = Direction.getGLFW(dir, leftX, leftY);
+
+		leftX = org.joml.Math.clamp(0, 1, MathUtils.map(Math.abs(leftX), 0, highThreshold, 0, 1));
+		leftY = org.joml.Math.clamp(0, 1, MathUtils.map(Math.abs(leftY), 0, highThreshold, 0, 1));
+
+		return Pairs.pair(ddir, Math.max(leftX, leftY));
 	}
 
 	public boolean hasNext() {
