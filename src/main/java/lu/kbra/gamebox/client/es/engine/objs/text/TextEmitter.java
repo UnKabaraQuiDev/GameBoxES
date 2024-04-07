@@ -19,7 +19,9 @@ import lu.kbra.gamebox.client.es.engine.utils.transform.Transform3D;
 public class TextEmitter implements Cleanupable, UniqueID {
 
 	public static final String NAME = TextEmitter.class.getName();
-
+	
+	public static final String STRING = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+	
 	public static int TAB_SIZE = 4;
 
 	private final String name;
@@ -56,7 +58,7 @@ public class TextEmitter implements Cleanupable, UniqueID {
 	public void createDrawBuffer() {
 		quad.createDrawBuffer();
 		quad.getDrawBuffer().bind();
-		quad.getDrawBuffer().setInstancesCount(charBuffer.getLength());
+		quad.getDrawBuffer().setInstancesCount(instances.getParticleCount());
 		quad.getDrawBuffer().unbind();
 	}
 	
