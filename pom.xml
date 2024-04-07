@@ -138,12 +138,6 @@
 			<artifactId>joml</artifactId>
 			<version>${joml.version}</version>
 		</dependency>
-
-		<dependency>
-			<groupId>TestGame</groupId>
-			<artifactId>TestGame</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
 	</dependencies>
 
 	<build>
