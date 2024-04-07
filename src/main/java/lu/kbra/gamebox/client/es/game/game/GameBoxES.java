@@ -50,7 +50,7 @@ public class GameBoxES extends GameLogic {
 
 		GlobalUtils.registerRenderers();
 		
-		cache.loadOrGetMaterial(TextShader.TextMaterial.NAME, TextShader.TextMaterial.class, cache.loadOrGetSingleTexture(TEXT_TEXTURE, "./resources/textures/fonts/font1row.png"));
+		cache.loadOrGetMaterial(TextShader.TextMaterial.NAME, TextShader.TextMaterial.class, cache.loadOrGetSingleTexture(TEXT_TEXTURE, "./resources/textures/fonts/arial_grid_bold_sdf-64_norm.png"));
 
 		loadWorldScene("not world");
 		loadUiScene("not ui");

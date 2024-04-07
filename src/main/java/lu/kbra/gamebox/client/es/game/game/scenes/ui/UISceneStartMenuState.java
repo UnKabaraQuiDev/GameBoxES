@@ -51,7 +51,7 @@ public class UISceneStartMenuState extends UISceneState {
 	private Entity addText(String name, int length, String txt, Vector3f pos) {
 		TextMaterial mat = new TextMaterial("TextMaterial-" + GameBoxES.TEXT_TEXTURE + "-" + name.hashCode(), cache.getRenderShader(TextShader.NAME), cache.getTexture(GameBoxES.TEXT_TEXTURE));
 		cache.addMaterial(mat);
-		TextEmitter text = new TextEmitter(name, mat, length, txt, new Vector2f(0.5f));
+		TextEmitter text = new TextEmitter(name, mat, length, txt, new Vector2f(0.35f, 0.5f));
 		text.setAlignment(Alignment.ABSOLUTE_RIGHT);
 		text.createDrawBuffer();
 		text.updateText();
@@ -61,7 +61,9 @@ public class UISceneStartMenuState extends UISceneState {
 
 	int verticalIndex = 0;
 	int horizontalIndex = 0;
-
+	
+	float t = 0;
+	
 	@Override
 	public void input(float dTime) {
 		if (!window.isJoystickPresent())
@@ -69,6 +71,12 @@ public class UISceneStartMenuState extends UISceneState {
 		if (!window.updateGamepad(0))
 			return;
 
+		/*t += 0.025f;
+		System.out.println("current: "+Math.sin(t));
+		for(Entity e : entities1) {
+			((TextMaterial) e.getComponent(TextEmitterComponent.class).getTextEmitter(cache).getInstances().getParticleMesh().getMaterial()).setThickness((float) Math.sin(t));
+		}*/
+		
 		GLFWGamepadState gps = window.getGamepad();
 
 		cic.update(gps);
@@ -94,7 +102,6 @@ public class UISceneStartMenuState extends UISceneState {
 			Pair<Direction, Float> dirf = cic.getSoftDirection(gps);
 			Direction dir = dirf.getKey();
 			float progress = dirf.getValue();
-			System.err.println("soft: " + dir + " " + progress);
 			if (!Direction.NONE.equals(dir)) {
 				placeElements(progress);
 			}

@@ -21,6 +21,7 @@ public class TextShader extends RenderShader {
 	public static final String BG_COLOR = "bgColor";
 	public static final String TXT_LENGTH = "length";
 	public static final String TRANSPARENT = "transparent";
+	public static final String THICKNESS = "thickness";
 
 	public TextShader() {
 		super(NAME, true, AbstractShaderPart.load("./resources/shaders/text/text.vert"), AbstractShaderPart.load("./resources/shaders/text/text.frag"));
@@ -35,6 +36,7 @@ public class TextShader extends RenderShader {
 		createUniform(FG_COLOR);
 		createUniform(BG_COLOR);
 		createUniform(TRANSPARENT);
+		createUniform(THICKNESS);
 
 		createUniform(TXT_LENGTH);
 	}
@@ -46,6 +48,7 @@ public class TextShader extends RenderShader {
 		private Vector4f fgColor = new Vector4f(1, 1, 1, 1);
 		private Vector4f bgColor = new Vector4f(0, 0, 0, 0);
 		private boolean transparent = true;
+		private float thickness = 0.35f;
 
 		public TextMaterial(SingleTexture txt1) {
 			super(NAME, new TextShader(), new HashMap<String, Texture>() {
@@ -76,8 +79,17 @@ public class TextShader extends RenderShader {
 			setProperty(FG_COLOR, fgColor);
 			setProperty(BG_COLOR, bgColor);
 			setProperty(TRANSPARENT, transparent);
+			setProperty(THICKNESS, thickness);
 
 			super.bindProperties(cache, scene, shader);
+		}
+
+		public float getThickness() {
+			return thickness;
+		}
+
+		public void setThickness(float thickness) {
+			this.thickness = thickness;
 		}
 
 		public void setFgColor(Vector4f fgColor) {

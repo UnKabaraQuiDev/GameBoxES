@@ -55,7 +55,10 @@ public class JSONFontRemapper {
 		String outImgPath = FileUtils.appendName(inImgPath, "_norm");
 		BufferedImage output = new BufferedImage(STRING.length() * fontSize, fontSize, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = output.createGraphics();
-
+		
+		g2d.setColor(Color.BLACK);
+		g2d.fillRect(0, 0, STRING.length()*fontSize, fontSize);
+		
 		for (int i = 0; i < STRING.length(); i++) {
 			char c = STRING.charAt(i);
 
