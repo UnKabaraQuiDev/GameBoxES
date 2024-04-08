@@ -17,12 +17,13 @@ public class ControllerInputWatcher {
 	private Direction direction = Direction.NONE;
 	private boolean waitingForNone = true;
 
-	private float highThreshold = 0.35f;
+	private float highThreshold = 0.8f;
 
 	public void update(GLFWGamepadState gps) {
 		FloatBuffer fb = gps.axes();
 		float[] jsaxis = new float[fb.remaining() - 1];
 		fb.get(jsaxis).clear();
+		jsaxis = new float[] {jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_X], jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_Y]};
 		int dir = MathUtils.greatestAbsIndex(jsaxis);
 
 		float leftX = PDRUtils.applyMinThreshold(jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_X], highThreshold);
@@ -42,6 +43,7 @@ public class ControllerInputWatcher {
 		FloatBuffer fb = gps.axes();
 		float[] jsaxis = new float[fb.remaining() - 1];
 		fb.get(jsaxis).clear();
+		jsaxis = new float[] {jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_X], jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_Y]};
 		int dir = MathUtils.greatestAbsIndex(jsaxis);
 
 		float leftX = GlobalUtils.applyMinThreshold(jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_X]);
