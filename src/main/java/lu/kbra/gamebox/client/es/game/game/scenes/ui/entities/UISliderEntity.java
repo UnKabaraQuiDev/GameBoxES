@@ -20,6 +20,8 @@ public class UISliderEntity extends Entity {
 
 	private Mesh mesh;
 
+	private UISliderComponent sliderComponent;
+
 	public UISliderEntity(CacheManager cache, Vector2f size, Vector2f values, float step, float _default, Transform3D transform) {
 		UISliderMaterial mat = (UISliderMaterial) cache.loadOrGetMaterial(UISliderShader.UISliderMaterial.NAME, UISliderShader.UISliderMaterial.class, 0.1f, new Vector2f(size), new Vector2f(1, 0.5f), new Vector2f(0.1f, 1), new Vector4f(0, 1, 0, 1),
 				new Vector4f(1, 0, 0.2f, 1), 0.01f, new Vector4f(1, 1, 1, 1), new Vector4f(0), 1.05f);
@@ -27,11 +29,19 @@ public class UISliderEntity extends Entity {
 		cache.addMesh(mesh);
 		addComponent(new MeshComponent(mesh));
 
-		addComponent(new UISliderComponent(_default, step, new Vector2f(size), values, new Vector2f(0.1f, 1)));
+		addComponent(sliderComponent = new UISliderComponent(_default, step, new Vector2f(size), values, new Vector2f(0.1f, 1)));
 
 		addComponent(new Transform3DComponent(transform));
 	}
 
+	public UISliderComponent getSliderComponent() {
+		return sliderComponent;
+	}
+
+	public void update() {
+		sliderComponent.update(mesh);
+	}
+	
 	public class UISliderComponent extends UIComponent {
 
 		private float progress, step;
@@ -45,6 +55,19 @@ public class UISliderEntity extends Entity {
 			this.values = values;
 		}
 
+		public void increment() {
+			this.progress += step;
+		}
+
+		public void decrement() {
+			this.progress -= step;
+		}
+		
+		public void update(Mesh mesh) {
+			UISliderMaterial material = (UISliderMaterial) mesh.getMaterial();
+			material.setProgress(progress);
+		}
+
 		@Override
 		public boolean contains(Vector2f point) {
 			point = new Vector2f(point.y, point.x);
@@ -54,12 +77,9 @@ public class UISliderEntity extends Entity {
 		@Override
 		public void hover(Vector2f point) {
 			point = new Vector2f(point.y, point.x);
-			System.err.println("point1: "+point);
-			System.err.println("point2: "+point.add(meshSize.mul(progress-0.5f, new Vector2f()).x, 0));
-			System.err.println("in rect: "+sliderSize);
 			if (point.x > -sliderSize.x / 2 && point.y > -sliderSize.y / 2 && point.x < sliderSize.x / 2 && point.y < sliderSize.y / 2) {
 				((UISliderMaterial) mesh.getMaterial()).setFgColor(new Vector4f(1, 0, 0, 1));
-			}else {
+			} else {
 				((UISliderMaterial) mesh.getMaterial()).setFgColor(new Vector4f(1, 1, 1, 1));
 			}
 		}

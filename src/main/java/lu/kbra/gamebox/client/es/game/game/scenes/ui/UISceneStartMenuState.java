@@ -1,11 +1,11 @@
 package lu.kbra.gamebox.client.es.game.game.scenes.ui;
 
-import java.util.Stack;
 import java.util.function.Function;
 
 import org.joml.Math;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWGamepadState;
 
@@ -19,10 +19,12 @@ import lu.kbra.gamebox.client.es.engine.objs.entity.components.TextEmitterCompon
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.Transform3DComponent;
 import lu.kbra.gamebox.client.es.engine.objs.text.TextEmitter;
 import lu.kbra.gamebox.client.es.engine.utils.consts.Alignment;
+import lu.kbra.gamebox.client.es.engine.utils.consts.Button;
 import lu.kbra.gamebox.client.es.engine.utils.consts.Direction;
 import lu.kbra.gamebox.client.es.engine.utils.interpolation.Interpolators;
 import lu.kbra.gamebox.client.es.engine.utils.transform.Transform3D;
 import lu.kbra.gamebox.client.es.game.game.GameBoxES;
+import lu.kbra.gamebox.client.es.game.game.scenes.ui.entities.UISliderEntity;
 import lu.kbra.gamebox.client.es.game.game.utils.ControllerInputWatcher;
 import lu.kbra.gamebox.client.es.game.game.utils.GlobalConsts;
 import lu.kbra.gamebox.client.es.game.game.utils.GlobalUtils;
@@ -103,7 +105,7 @@ public class UISceneStartMenuState extends UISceneState {
 		entitiesPlayMenupos = new Vector3f[] { new Vector3f(0, 0.4f, 0), new Vector3f(0, -0.4f, 0) };
 
 		option1 = addText("option1", 15, TEXT_OPTION_1, new Vector3f(0f, 0.4f, 0));
-		option2 = addText("option2", 15, TEXT_OPTION_2, new Vector3f(0f, -0.4f, 0));
+		option2 = addSlider("option2");
 
 		entitiesOptionMenu = new Entity[] { option1, option2 };
 		entitiesOptionMenupos = new Vector3f[] { new Vector3f(0, 0.4f, 0), new Vector3f(0, -0.4f, 0) };
@@ -117,6 +119,11 @@ public class UISceneStartMenuState extends UISceneState {
 		setPos(entitiesOptionMenu, OTHER_X_POS_START, OTHER_X_POS_END, i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
 		menuTransitionValue = 0; // set to active
 		setPos(entitiesMainMenu, MAIN_X_POS_START, MAIN_X_POS_END, i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
+	}
+
+	private Entity addSlider(String name) { // need to also add text, create TextSlideBar entity or smth
+		UISliderEntity slider = new UISliderEntity(cache, new Vector2f(2, 0.3f), new Vector2f(0, 100), 0.05f, 0.5f, new Transform3D());
+		return scene.addEntity(name, slider);
 	}
 
 	private Entity addText(String name, int length, String txt, Vector3f pos) {
@@ -142,7 +149,7 @@ public class UISceneStartMenuState extends UISceneState {
 		chooseMenuElement(entitiesMainMenu, MAIN_MENU_TEXTS, mainVerticalIndex);
 		chooseMenuElement(entitiesPlayMenu, PLAY_MENU_TEXTS, otherVerticalIndex);
 		chooseMenuElement(entitiesOptionMenu, OPTION_MENU_TEXTS, otherVerticalIndex);
-		
+
 		if (menuTransition != MENU_TRANSITION_IDLE) {
 			updateMenuTransition();
 			return;
@@ -170,9 +177,14 @@ public class UISceneStartMenuState extends UISceneState {
 			// placeMainMenuElements(Direction.NORTH.equals(ddir) ? progress : -progress);
 		}
 
-		cic.update(gps);
-		if (cic.hasNext()) {
-			Direction dir = cic.consume();
+		cic.updateButton(gps);
+		if (cic.hasNextButton()) {
+			interact(otherVerticalIndex, false, null, cic.consumeButton());
+		}
+
+		cic.updateDirection(gps);
+		if (cic.hasNextDirection()) {
+			Direction dir = cic.consumeDirection();
 			switch (dir) {
 			case NORTH:
 				if (menuIndex == MI_MAIN) {
@@ -192,6 +204,9 @@ public class UISceneStartMenuState extends UISceneState {
 
 			case EAST:
 			case WEST:
+				if (menuIndex != MI_MAIN) {
+					interact(otherVerticalIndex, true, dir, Button.NONE);
+				}
 				return;
 
 			default:
@@ -202,6 +217,44 @@ public class UISceneStartMenuState extends UISceneState {
 		if (menuIndex == MI_MAIN) {
 			otherVerticalIndex = org.joml.Math.clamp(0, 2, otherVerticalIndex);
 		}
+	}
+
+	private void interact(int verticalIndex, boolean direction, Direction dir, Button button) {
+		Entity entity = getSelectedEntity();
+		if (direction) { // analog input (slider, etc)
+			// do nothing
+			if (entity instanceof UISliderEntity) {
+				if(dir.equals(Direction.EAST)) {
+					((UISliderEntity) entity).getSliderComponent().increment();
+				}else if(dir.equals(Direction.WEST)) {
+					((UISliderEntity) entity).getSliderComponent().decrement();
+				}
+				((UISliderEntity) entity).update();
+			}
+		} else { // button
+			setFGColor(entity, GlobalConsts.PRIMARY_LIGHT);
+		}
+	}
+
+	private Entity getSelectedEntity() {
+		if (menuIndex == MI_MAIN) {
+			return entitiesMainMenu[mainVerticalIndex];
+		} else if (menuIndex == MI_OPTIONS) {
+			return entitiesOptionMenu[otherVerticalIndex];
+		}else if (menuIndex == MI_PLAY) {
+			return entitiesPlayMenu[otherVerticalIndex];
+		}
+		return null;
+	}
+
+	private void setFGColor(Entity entity, Vector4f primaryLight) {
+		GlobalUtils.INSTANCE.createTask(GameEngine.QUEUE_RENDER).exec((t) -> {
+			if (entity.hasComponent(TextEmitterComponent.class)) {
+				TextMaterial mat = ((TextMaterial) entity.getComponent(TextEmitterComponent.class).getTextEmitter(cache).getInstances().getParticleMesh().getMaterial());
+				mat.setFgColor(GlobalConsts.HIGHLIGHT);
+			}
+			return null;
+		}).push();
 	}
 
 	private void startTransition(int from, int to) {

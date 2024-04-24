@@ -36,4 +36,34 @@ public final class MathUtils {
 		return index;
 	}
 
+	public static int greatestAbsIndex(byte... arr) {
+		int index = -1;
+		byte max = Byte.MIN_VALUE;
+		for (int i = 0; i < arr.length; i++) {
+			if (Math.abs(arr[i]) > max) {
+				index = i;
+				max = (byte) Math.abs(arr[i]);
+			}
+		}
+		return index;
+	}
+
+	public static float greatestAbs(byte... arr) {
+		byte max = Byte.MIN_VALUE;
+		for (int i = 0; i < arr.length; i++) {
+			if (Math.abs(arr[i]) > max) {
+				max = (byte) Math.abs(arr[i]);
+			}
+		}
+		return max;
+	}
+
+	public static byte sum(byte... arr) {
+		byte sum = Byte.MIN_VALUE;
+		for (int i = 0; i < arr.length; i++) {
+			sum += (byte) Math.abs(arr[i]);
+		}
+		return sum;
+	}
+
 }

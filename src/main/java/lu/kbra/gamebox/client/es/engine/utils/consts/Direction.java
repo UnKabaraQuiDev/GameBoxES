@@ -3,8 +3,6 @@ package lu.kbra.gamebox.client.es.engine.utils.consts;
 import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
 
-import lu.kbra.gamebox.client.es.engine.utils.MathUtils;
-
 public enum Direction {
 
 	NORTH(new Vector2f(0, 1), 0), EAST(new Vector2f(1, 0), 1), SOUTH(new Vector2f(0, -1), 2), WEST(new Vector2f(-1, 0), 3), NONE(new Vector2f(0, 0), -1);

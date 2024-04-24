@@ -1,6 +1,8 @@
 package lu.kbra.gamebox.client.es.game.game.utils;
 
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+import java.util.Arrays;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWGamepadState;
@@ -10,29 +12,56 @@ import lu.pcy113.pclib.Pairs;
 
 import lu.kbra.gamebox.client.es.engine.utils.MathUtils;
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
+import lu.kbra.gamebox.client.es.engine.utils.consts.Button;
 import lu.kbra.gamebox.client.es.engine.utils.consts.Direction;
 
 public class ControllerInputWatcher {
 
 	private Direction direction = Direction.NONE;
-	private boolean waitingForNone = true;
+	private boolean waitingForNoneDirection = true;
 
 	private float highThreshold = 0.8f;
 
-	public void update(GLFWGamepadState gps) {
+	private Button button = Button.NONE;
+	private boolean waitingForNoneButton = true;
+
+	public void updateButton(GLFWGamepadState gps) {
+		ByteBuffer fb = gps.buttons();
+		byte[] jsaxis = new byte[fb.remaining() - 1];
+		fb.get(jsaxis).clear();
+
+		byte xBtn = jsaxis[GLFW.GLFW_GAMEPAD_BUTTON_X];
+		byte aBtn = jsaxis[GLFW.GLFW_GAMEPAD_BUTTON_A];
+		byte bBtn = jsaxis[GLFW.GLFW_GAMEPAD_BUTTON_B];
+		byte yBtn = jsaxis[GLFW.GLFW_GAMEPAD_BUTTON_Y];
+
+		jsaxis = new byte[] { xBtn, aBtn, bBtn, yBtn };
+		int dir = MathUtils.greatestAbsIndex(jsaxis);
+
+		if (waitingForNoneButton && !(xBtn == 0 && aBtn == 0 && bBtn == 0 && yBtn == 0)) {
+			return;
+		} else {
+			waitingForNoneButton = false;
+			// continue;
+		}
+
+		button = Button.getByIndex(dir);
+	}
+
+	public void updateDirection(GLFWGamepadState gps) {
 		FloatBuffer fb = gps.axes();
 		float[] jsaxis = new float[fb.remaining() - 1];
 		fb.get(jsaxis).clear();
-		jsaxis = new float[] {jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_X], jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_Y]};
+		jsaxis = new float[] { jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_X], jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_Y] };
 		int dir = MathUtils.greatestAbsIndex(jsaxis);
 
 		float leftX = PDRUtils.applyMinThreshold(jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_X], highThreshold);
 		float leftY = PDRUtils.applyMinThreshold(jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_Y], highThreshold);
 
-		if (waitingForNone && !(leftX == 0 && leftY == 0)) {
+		if (waitingForNoneDirection && !(leftX == 0 && leftY == 0)) {
 			return;
 		} else {
-			waitingForNone = false;
+			waitingForNoneDirection = false;
 			// continue;
 		}
 
@@ -43,7 +72,7 @@ public class ControllerInputWatcher {
 		FloatBuffer fb = gps.axes();
 		float[] jsaxis = new float[fb.remaining() - 1];
 		fb.get(jsaxis).clear();
-		jsaxis = new float[] {jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_X], jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_Y]};
+		jsaxis = new float[] { jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_X], jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_Y] };
 		int dir = MathUtils.greatestAbsIndex(jsaxis);
 
 		float leftX = GlobalUtils.applyMinThreshold(jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_X]);
@@ -57,19 +86,34 @@ public class ControllerInputWatcher {
 		return Pairs.pair(ddir, Math.max(leftX, leftY));
 	}
 
-	public boolean hasNext() {
+	public boolean hasNextDirection() {
 		return direction != Direction.NONE;
 	}
 
-	public Direction consume() {
-		waitingForNone = true;
+	public Direction consumeDirection() {
+		waitingForNoneDirection = true;
 		Direction dir = direction;
 		direction = Direction.NONE;
 		return dir;
 	}
 
-	public Direction get() {
+	public Direction getDirection() {
 		return direction;
+	}
+
+	public Button getButton() {
+		return button;
+	}
+
+	public boolean hasNextButton() {
+		return button != Button.NONE;
+	}
+
+	public Button consumeButton() {
+		waitingForNoneButton = true;
+		Button dir = button;
+		button = Button.NONE;
+		return dir;
 	}
 
 }
