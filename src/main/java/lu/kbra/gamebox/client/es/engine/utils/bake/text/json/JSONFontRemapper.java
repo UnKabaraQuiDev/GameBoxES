@@ -39,6 +39,8 @@ public class JSONFontRemapper {
 	}
 
 	public static void map(String inJsonPath) throws JSONException, IOException {
+		System.out.println("Mapping: "+inJsonPath);
+		
 		JSONObject obj = new JSONObject(new String(Files.readAllBytes(Paths.get(inJsonPath))));
 
 		String fontName = obj.getString("name");

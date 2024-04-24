@@ -72,7 +72,7 @@ public class GameBoxES extends GameLogic {
 			worldScene.getCamera().getProjection().update(w, h);
 			uiScene.getCamera().getProjection().update(w, h);
 		});
-		engine.getWindow().setBackground(new Vector4f(0.1f));
+		engine.getWindow().setBackground(new Vector4f(0.0f));
 
 		cache.dump(System.err);
 	}
