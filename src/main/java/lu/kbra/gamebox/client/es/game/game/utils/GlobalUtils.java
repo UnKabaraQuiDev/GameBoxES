@@ -24,9 +24,11 @@ import lu.kbra.gamebox.client.es.game.game.GameBoxES;
 public class GlobalUtils {
 	
 	public static GameBoxES INSTANCE;
+	private static GameEngine engine;
 	
-	public static void init(GameBoxES gameBoxES) {
+	public static void init(GameBoxES gameBoxES, GameEngine e) {
 		INSTANCE = gameBoxES;
+		engine = e;
 	}
 	
 	public static float joystickThreshold = 0.1f;
@@ -90,6 +92,10 @@ public class GlobalUtils {
 			consumer.accept(pos);
 			return null;
 		}).push();
+	}
+
+	public static void requestQuit() {
+		engine.getWindow().setWindowShouldClose(true);
 	}
 
 }

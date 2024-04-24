@@ -1,13 +1,9 @@
 package lu.kbra.gamebox.client.es.game.game;
 
-import java.util.logging.Level;
-
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
-
-import lu.pcy113.pclib.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.graph.composition.SceneRenderLayer;
@@ -42,9 +38,9 @@ public class GameBoxES extends GameLogic {
 	@Override
 	public void init(GameEngine e) {
 		GameEngine.DEBUG.wireframe = false;
-		GameEngine.DEBUG.gizmos = true;
+		GameEngine.DEBUG.gizmos = false;
 		
-		GlobalUtils.init(this);
+		GlobalUtils.init(this, super.engine);
 		
 		// GlobalLogger.getLogger().setMinForwardLevel(Level.SEVERE);
 

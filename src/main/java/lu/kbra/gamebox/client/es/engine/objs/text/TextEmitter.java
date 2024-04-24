@@ -64,7 +64,7 @@ public class TextEmitter implements Cleanupable, UniqueID {
 	
 	public boolean updateText() {
 		if (charBuffer.getLength() < text.length())
-			throw new RuntimeException("Char buffer too small to hold text.");
+			throw new RuntimeException("Char buffer too small to hold text. ('"+text+"' for length: "+charBuffer.getLength()+")");
 
 		TextMaterial material = (TextMaterial) quad.getMaterial();
 

@@ -140,7 +140,7 @@ public abstract class Window implements Cleanupable {
 			return;
 		
 		if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS) {
-			GLFW.glfwSetWindowShouldClose(window, true);
+			setWindowShouldClose(true);
 		} else if (key == GLFW.GLFW_KEY_F11 && action == GLFW.GLFW_PRESS) {
 			options.fullscreen = !options.fullscreen;
 			updateOptions();
@@ -159,6 +159,10 @@ public abstract class Window implements Cleanupable {
 		} else if (action == GLFW.GLFW_RELEASE) {
 			keyStates[name] = KeyState.RELEASE;
 		}
+	}
+
+	public void setWindowShouldClose(boolean b) {
+		GLFW.glfwSetWindowShouldClose(handle, b);
 	}
 
 	public boolean isJoystickPresent() {
