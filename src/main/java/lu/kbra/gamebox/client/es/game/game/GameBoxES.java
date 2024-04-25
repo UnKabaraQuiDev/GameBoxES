@@ -1,5 +1,6 @@
 package lu.kbra.gamebox.client.es.game.game;
 
+import java.io.IOException;
 import java.util.logging.Level;
 
 import org.joml.Quaternionf;
@@ -19,6 +20,7 @@ import lu.kbra.gamebox.client.es.game.game.render.compositing.AdvancedCompositor
 import lu.kbra.gamebox.client.es.game.game.scenes.ui.UIScene3D;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.WorldScene3D;
 import lu.kbra.gamebox.client.es.game.game.utils.GameState;
+import lu.kbra.gamebox.client.es.game.game.utils.GlobalLang;
 import lu.kbra.gamebox.client.es.game.game.utils.GlobalUtils;
 
 public class GameBoxES extends GameLogic {
@@ -49,6 +51,12 @@ public class GameBoxES extends GameLogic {
 		GlobalLogger.getLogger().setMinForwardLevel(Level.SEVERE);
 
 		GlobalUtils.registerRenderers();
+		
+		try {
+			GlobalLang.load("english");
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 		
 		cache.loadOrGetMaterial(TextShader.TextMaterial.NAME, TextShader.TextMaterial.class, cache.loadOrGetSingleTexture(TEXT_TEXTURE, "./resources/textures/fonts/arial_grid_bold_sdf-64_norm.png"));
 
