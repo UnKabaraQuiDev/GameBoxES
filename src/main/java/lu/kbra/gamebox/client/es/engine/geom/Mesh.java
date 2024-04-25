@@ -213,70 +213,16 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 		return "{" + name + " | VAO: " + vao + " | VBO: " + vbo + " | V: " + vertexCount + "/" + indicesCount + " | Attribs: " + Arrays.toString(attribs) + "}";
 	}
 
-	public static Mesh newQuad(String name, Material material2, Vector2f size) {
-		Mesh mesh = new Mesh(name, material2,
-				new Vec3fAttribArray("pos", 0, 1,
-						new Vector3f[] {
-								new Vector3f(-1f, -1f, 0f).mul(size.x, size.y, 0).div(2),
-								new Vector3f(1f, -1f, 0f).mul(size.x, size.y, 0).div(2),
-								new Vector3f(1f, 1f, 0f).mul(size.x, size.y, 0).div(2),
-								new Vector3f(-1f, 1f, 0f).mul(size.x, size.y, 0).div(2)
-						}),
-				new UIntAttribArray("ind", -1, 1, new int[] { 0, 1, 2, 0, 2, 3 }, GL40.GL_ELEMENT_ARRAY_BUFFER),
-				new Vec3fAttribArray("normal", 1, 1, new Vector3f[] {
-						new Vector3f(0, 0, 1),
-						new Vector3f(0, 0, 1),
-						new Vector3f(0, 0, 1),
-						new Vector3f(0, 0, 1)
-				}),
-				new Vec2fAttribArray("uv", 2, 1, new Vector2f[] {
-						new Vector2f(0, 0),
-						new Vector2f(1, 0),
-						new Vector2f(1, 1),
-						new Vector2f(0, 1),
-				}));
-		return mesh;
+	public static QuadMesh newQuad(String name, Material material2, Vector2f size) {
+		return new QuadMesh(name, material2, size);
 	}
 	
-	public static Mesh newQuad(GeoPlane plane, String name, Material material2, Vector2f size) {
-		Mesh mesh = new Mesh(name, material2,
-				new Vec3fAttribArray("pos", 0, 1,
-						new Vector3f[] {
-								new Vector3f(-1f, -1f, -1f).mul(plane.project(size)).div(2),
-								new Vector3f(1f, -1f, 1f).mul(plane.project(size)).div(2),
-								new Vector3f(1f, 1f, 1f).mul(plane.project(size)).div(2),
-								new Vector3f(-1f, 1f, -1f).mul(plane.project(size)).div(2)
-				}),
-				new UIntAttribArray("ind", -1, 1, new int[] { 0, 1, 2, 0, 2, 3 }, GL40.GL_ELEMENT_ARRAY_BUFFER),
-				new Vec3fAttribArray("normal", 1, 1, new Vector3f[] {
-						new Vector3f(0, 0, 1),
-						new Vector3f(0, 0, 1),
-						new Vector3f(0, 0, 1),
-						new Vector3f(0, 0, 1)
-				}),
-				new Vec2fAttribArray("uv", 2, 1, new Vector2f[] {
-						new Vector2f(0, 0),
-						new Vector2f(1, 0),
-						new Vector2f(1, 1),
-						new Vector2f(0, 1)
-				}));
-		return mesh;
+	public static QuadMesh newQuad(GeoPlane plane, String name, Material material2, Vector2f size) {
+		return new QuadMesh(name, material2, size, plane);
 	}
 
-	public static Mesh newCube(String name, Material material2, Vector3f size) {
-		Mesh mesh = new Mesh(name, material2,
-				new Vec3fAttribArray("pos", 0, 1,
-						new Vector3f[] { new Vector3f(-1, -1, -1).mul(size.x, size.y, size.z).div(2), new Vector3f(1, -1, -1).mul(size.x, size.y, size.z).div(2), new Vector3f(1, 1, -1).mul(size.x, size.y, size.z).div(2),
-								new Vector3f(-1, 1, -1).mul(size.x, size.y, size.z).div(2), new Vector3f(-1, -1, 1).mul(size.x, size.y, size.z).div(2), new Vector3f(1, -1, 1).mul(size.x, size.y, size.z).div(2),
-								new Vector3f(1, 1, 1).mul(size.x, size.y, size.z).div(2), new Vector3f(-1, 1, 1).mul(size.x, size.y, size.z).div(2) }),
-				new UIntAttribArray("ind", -1, 1, new int[] { 0, 1, 2, 2, 3, 0, 1, 5, 6, 6, 2, 1, 7, 6, 5, 5, 4, 7, 4, 0, 3, 3, 7, 4, 4, 5, 1, 1, 0, 4, 3, 2, 6, 6, 7, 3 }, GL40.GL_ELEMENT_ARRAY_BUFFER),
-				new Vec3fAttribArray("normal", 1, 1,
-						new Vector3f[] { new Vector3f(-1, -1, -1).normalize(), new Vector3f(1, -1, -1).normalize(), new Vector3f(1, 1, -1).normalize(), new Vector3f(-1, 1, -1).normalize(), new Vector3f(-1, -1, 1).normalize(),
-								new Vector3f(1, -1, 1).normalize(), new Vector3f(1, 1, 1).normalize(), new Vector3f(-1, 1, 1).normalize() }),
-				new Vec2fAttribArray("uv", 2, 1, // TODO: 3d uvs ?
-						new Vector2f[] { new Vector2f(0, 0), new Vector2f(1, 0), new Vector2f(1, 1), new Vector2f(0, 1), new Vector2f(0, 0), new Vector2f(1, 0), new Vector2f(1, 1), new Vector2f(0, 1) }));
-
-		return mesh;
+	public static CubeMesh newCube(String name, Material material2, Vector3f size) {
+		return new CubeMesh(name, material2, size);
 	}
 
 }

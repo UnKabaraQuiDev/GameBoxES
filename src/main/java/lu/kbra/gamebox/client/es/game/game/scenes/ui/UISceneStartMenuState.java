@@ -26,6 +26,8 @@ import lu.kbra.gamebox.client.es.engine.utils.interpolation.Interpolators;
 import lu.kbra.gamebox.client.es.engine.utils.transform.Transform3D;
 import lu.kbra.gamebox.client.es.game.game.GameBoxES;
 import lu.kbra.gamebox.client.es.game.game.scenes.ui.entities.UISliderEntity;
+import lu.kbra.gamebox.client.es.game.game.scenes.ui.entities.UITextButton;
+import lu.kbra.gamebox.client.es.game.game.scenes.ui.entities.UITextLabel;
 import lu.kbra.gamebox.client.es.game.game.utils.ControllerInputWatcher;
 import lu.kbra.gamebox.client.es.game.game.utils.GlobalConsts;
 import lu.kbra.gamebox.client.es.game.game.utils.GlobalLang;
@@ -90,20 +92,21 @@ public class UISceneStartMenuState extends UISceneState {
 	public UISceneStartMenuState(UIScene3D scene) {
 		super(scene);
 
-		play = addText("playText", MAIN_MENU_TEXTS[0], new Vector3f(0, 0.8f, 0));
-		options = addText("optionsText", MAIN_MENU_TEXTS[1], new Vector3f(0, 0, 0));
-		quit = addText("quitText", MAIN_MENU_TEXTS[2], new Vector3f(0, -0.8f, 0));
+		// play = addText("playText", MAIN_MENU_TEXTS[0], new Vector3f(0, 0.8f, 0));
+		play = addTextButton("playText", MAIN_MENU_TEXTS[0], GlobalConsts.BTN_PRIMARY, new Vector3f(0, 0.8f, 0));
+		options = addTextLabel("optionsText", MAIN_MENU_TEXTS[1], new Vector3f(0, 0, 0), Alignment.TEXT_RIGHT);
+		quit = addTextLabel("quitText", MAIN_MENU_TEXTS[2], new Vector3f(0, -0.8f, 0), Alignment.TEXT_RIGHT);
 
 		entitiesMainMenu = new Entity[] { play, options, quit };
 		entitiesMainMenupos = new Vector3f[] { new Vector3f(0, 0.8f, 0), new Vector3f(0, 0, 0), new Vector3f(0, -0.8f, 0) };
 
-		playMode1 = addText("playMode1", PLAY_MENU_TEXTS[0], new Vector3f(0f, 0.4f, 0));
-		playMode2 = addText("playMode2", PLAY_MENU_TEXTS[1], new Vector3f(0f, -0.4f, 0));
+		playMode1 = addTextLabel("playMode1", PLAY_MENU_TEXTS[0], new Vector3f(0f, 0.4f, 0), Alignment.TEXT_RIGHT);
+		playMode2 = addTextLabel("playMode2", PLAY_MENU_TEXTS[1], new Vector3f(0f, -0.4f, 0), Alignment.TEXT_RIGHT);
 
 		entitiesPlayMenu = new Entity[] { playMode1, playMode2 };
 		entitiesPlayMenupos = new Vector3f[] { new Vector3f(0, 0.4f, 0), new Vector3f(0, -0.4f, 0) };
 
-		option1 = addText("option1", OPTION_MENU_TEXTS[0], new Vector3f(0f, 0.4f, 0));
+		option1 = addTextLabel("option1", OPTION_MENU_TEXTS[0], new Vector3f(0f, 0.4f, 0), Alignment.TEXT_RIGHT);
 		option2 = addSlider("option2");
 
 		entitiesOptionMenu = new Entity[] { option1, option2 };
@@ -125,33 +128,12 @@ public class UISceneStartMenuState extends UISceneState {
 		return scene.addEntity(name, slider);
 	}
 
-	private Entity addTextButton(String name, String txt, String btnType, Vector3f pos) {
-		Entity entity = addText(name + "-txt", txt, pos);
-		MeshComponent meshComponent = GlobalUtils.createUIButton(cache, name + "-btn", btnType);
-		entity.addComponent(meshComponent);
-		return entity;
+	private UITextButton addTextButton(String name, String txt, String btnType, Vector3f pos) {
+		return (UITextButton) scene.addEntity(name, new UITextButton(cache, name, txt, pos, Alignment.TEXT_CENTER, btnType));
 	}
 
-	private Entity addText(String name, String txt, Vector3f pos) {
-		TextMaterial mat = new TextMaterial("TextMaterial-" + GameBoxES.TEXT_TEXTURE + "-" + name.hashCode(), cache.getRenderShader(TextShader.NAME), cache.getTexture(GameBoxES.TEXT_TEXTURE));
-		cache.addMaterial(mat);
-		TextEmitter text = new TextEmitter(name, mat, txt.length() + 2, txt, new Vector2f(0.35f, 0.5f));
-		text.setAlignment(Alignment.ABSOLUTE_RIGHT);
-		text.createDrawBuffer();
-		text.updateText();
-		cache.addTextEmitter(text);
-		return scene.addEntity(name, new Entity(new Transform3DComponent(pos), new TextEmitterComponent(text)));
-	}
-
-	private Entity addText(String name, int length, String txt, Vector3f pos) {
-		TextMaterial mat = new TextMaterial("TextMaterial-" + GameBoxES.TEXT_TEXTURE + "-" + name.hashCode(), cache.getRenderShader(TextShader.NAME), cache.getTexture(GameBoxES.TEXT_TEXTURE));
-		cache.addMaterial(mat);
-		TextEmitter text = new TextEmitter(name, mat, txt.length() + 2, txt, new Vector2f(0.35f, 0.5f));
-		text.setAlignment(Alignment.ABSOLUTE_RIGHT);
-		text.createDrawBuffer();
-		text.updateText();
-		cache.addTextEmitter(text);
-		return scene.addEntity(name, new Entity(new Transform3DComponent(pos), new TextEmitterComponent(text)));
+	private UITextLabel addTextLabel(String name, String txt, Vector3f pos, Alignment alignment) {
+		return (UITextLabel) scene.addEntity(name, new UITextLabel(cache, name, txt, pos, alignment));
 	}
 
 	@Override
@@ -321,7 +303,11 @@ public class UISceneStartMenuState extends UISceneState {
 		for (int i = 0; i < entities.length; i++) {
 			Entity te = entities[i];
 			Transform3D transform = te.getComponent(Transform3DComponent.class).getTransform();
-			transform.setTranslation(new Vector3f(Math.lerp(start, end, Math.clamp(0, 1, intFun.apply(i))), transform.getTranslation().y, transform.getTranslation().z)).updateMatrix();
+			if (te instanceof UITextButton) {
+				((UITextButton) te).setPosition(new Vector3f(Math.lerp(start, end, Math.clamp(0, 1, intFun.apply(i))), transform.getTranslation().y, transform.getTranslation().z));
+			} else {
+				transform.setTranslation(new Vector3f(Math.lerp(start, end, Math.clamp(0, 1, intFun.apply(i))), transform.getTranslation().y, transform.getTranslation().z)).updateMatrix();
+			}
 		}
 	}
 

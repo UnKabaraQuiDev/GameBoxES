@@ -28,9 +28,9 @@ public class GameBoxES extends GameLogic {
 	public static final String TEXT_TEXTURE = "text-30px";
 
 	public DebugUIElements debug;
-	
+
 	public GameOptions gameOptions;
-	
+
 	public AdvancedCompositor compositor;
 
 	public UIScene3D uiScene;
@@ -38,26 +38,26 @@ public class GameBoxES extends GameLogic {
 
 	public SceneRenderLayer worldSceneRenderLayer;
 	public SceneRenderLayer uiSceneRenderLayer;
-	
+
 	public GameState gameState = GameState.START_MENU;
 
 	@Override
 	public void init(GameEngine e) {
 		GameEngine.DEBUG.wireframe = false;
 		GameEngine.DEBUG.gizmos = false;
-		
+
 		GlobalUtils.init(this, super.engine);
-		
-		GlobalLogger.getLogger().setMinForwardLevel(Level.SEVERE);
+
+		// GlobalLogger.getLogger().setMinForwardLevel(Level.SEVERE);
 
 		GlobalUtils.registerRenderers();
-		
+
 		try {
 			GlobalLang.load("english");
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		cache.loadOrGetMaterial(TextShader.TextMaterial.NAME, TextShader.TextMaterial.class, cache.loadOrGetSingleTexture(TEXT_TEXTURE, "./resources/textures/fonts/arial_grid_bold_sdf-64_norm.png"));
 
 		loadWorldScene("not world");
@@ -100,9 +100,9 @@ public class GameBoxES extends GameLogic {
 
 	@Override
 	public void input(float dTime) {
-		if(GameState.START_MENU.equals(gameState)) {
+		if (GameState.START_MENU.equals(gameState)) {
 			uiScene.input(dTime);
-		}else {
+		} else {
 			// worldScene.input(dTime);
 		}
 		worldScene.input(dTime);
@@ -114,7 +114,7 @@ public class GameBoxES extends GameLogic {
 			GlobalUtils.projectUI(System.err::println);
 		}
 	}
-	
+
 	@Override
 	public void render(float dTime) {
 		if (debug != null) {

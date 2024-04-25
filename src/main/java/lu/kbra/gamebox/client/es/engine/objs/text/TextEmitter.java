@@ -88,15 +88,15 @@ public class TextEmitter implements Cleanupable, UniqueID {
 	private void updateTextContent(Matrix4f[] transforms, Integer[] chars) {
 		if (Alignment.LEFT.equals(alignment)) {
 			updateTextContentLeft(transforms, chars);
-		} else if (Alignment.ABSOLUTE_LEFT.equals(alignment)) { // same as LEFT
+		} else if (Alignment.TEXT_LEFT.equals(alignment)) { // same as LEFT
 			updateTextContentLeft(transforms, chars);
 		} else if (Alignment.RIGHT.equals(alignment)) {
 			updateTextContentRight(transforms, chars);
-		} else if (Alignment.ABSOLUTE_RIGHT.equals(alignment)) {
+		} else if (Alignment.TEXT_RIGHT.equals(alignment)) {
 			updateTextContentAbsRight(transforms, chars);
 		} else if (Alignment.CENTER.equals(alignment)) {
 			updateTextContentCenter(transforms, chars);
-		} else if (Alignment.ABSOLUTE_CENTER.equals(alignment)) {
+		} else if (Alignment.TEXT_CENTER.equals(alignment)) {
 			updateTextContentAbsCenter(transforms, chars);
 		}
 
@@ -261,7 +261,7 @@ public class TextEmitter implements Cleanupable, UniqueID {
 		}
 	}
 
-	public int computeWidthCount() {
+	public int computeMaxWidthCount() {
 		int max = Integer.MIN_VALUE;
 
 		for (String s : text.split("\n")) {

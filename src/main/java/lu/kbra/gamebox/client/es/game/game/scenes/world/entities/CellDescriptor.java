@@ -45,7 +45,7 @@ public class CellDescriptor {
 			cache.addRenderShader(shader);
 		}
 
-		CellMaterial material = new CellMaterial(cellType.name(), shader, cache.loadSingleTexture(cellType.name(), imagePath, TextureFilter.NEAREST, TextureType.TXT2D));
+		CellMaterial material = new CellMaterial(cellType.name(), shader, cache.loadSingleTexture(shaderName, imagePath, TextureFilter.NEAREST, TextureType.TXT2D));
 		cache.addMaterial(material);
 
 		return material;

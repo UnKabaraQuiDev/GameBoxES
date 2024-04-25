@@ -44,7 +44,7 @@ public class DebugUIElements {
 		fpsDebug = new TextEmitter("fpsDebug",
 				(TextMaterial) cache.loadOrGetMaterial(TextMaterial.NAME, TextShader.TextMaterial.class, cache.loadOrGetSingleTexture("text_30px", "./resources/textures/fonts/font1row.png", TextureFilter.NEAREST)),
 				32, "FPS: ", new Vector2f(0.1f));
-		fpsDebug.setAlignment(Alignment.ABSOLUTE_CENTER);
+		fpsDebug.setAlignment(Alignment.TEXT_CENTER);
 		fpsDebug.setBoxed(true);
 		fpsDebug.createDrawBuffer();
 		fpsDebug.updateText();

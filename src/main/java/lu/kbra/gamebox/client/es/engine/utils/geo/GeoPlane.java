@@ -105,4 +105,15 @@ public enum GeoPlane {
 		return getByNormal(MathUtils.vec3fromQuatf(rotation));
 	}
 
+	public Vector2f getBoundingPlane(Vector3f[] data) {
+		Vector2f min = new Vector2f(Float.MAX_VALUE), max = new Vector2f(Float.MIN_VALUE);
+		
+		for(Vector3f v : data) {
+			min.min(projectToPlane(v));
+			max.max(projectToPlane(v));
+		}
+		
+		return max.sub(min);
+	}
+
 }
