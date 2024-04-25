@@ -4,6 +4,8 @@ import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import org.joml.Vector2f;
+import org.joml.Vector2i;
 import org.lwjgl.opengl.GL40;
 import org.lwjgl.system.MemoryUtil;
 
@@ -241,6 +243,14 @@ public class SingleTexture extends Texture {
 
 	public void destroyBuffer() {
 		buffer = null;
+	}
+
+	public Vector2i getSize2D() {
+		return new Vector2i(width, height);
+	}
+
+	public Vector2f getNormalizedSize2D() {
+		return new Vector2f(getSize2D()).div(Math.max(width, height));
 	}
 
 }

@@ -7,16 +7,22 @@ import org.joml.Vector3f;
 import org.lwjgl.opengl.GL40;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
+import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
+import lu.kbra.gamebox.client.es.engine.geom.Mesh;
 import lu.kbra.gamebox.client.es.engine.graph.render.GizmoRenderer;
 import lu.kbra.gamebox.client.es.engine.graph.render.InstanceEmitterRenderer;
 import lu.kbra.gamebox.client.es.engine.graph.render.MeshRenderer;
 import lu.kbra.gamebox.client.es.engine.graph.render.Scene2DRenderer;
 import lu.kbra.gamebox.client.es.engine.graph.render.Scene3DRenderer;
 import lu.kbra.gamebox.client.es.engine.graph.render.TextEmitterRenderer;
+import lu.kbra.gamebox.client.es.engine.graph.texture.SingleTexture;
+import lu.kbra.gamebox.client.es.engine.objs.entity.components.MeshComponent;
 import lu.kbra.gamebox.client.es.engine.scene.Scene;
 import lu.kbra.gamebox.client.es.engine.scene.Scene3D;
 import lu.kbra.gamebox.client.es.engine.scene.camera.Camera3D;
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
+import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
+import lu.kbra.gamebox.client.es.engine.utils.file.FileUtils;
 import lu.kbra.gamebox.client.es.engine.utils.geo.GeoPlane;
 import lu.kbra.gamebox.client.es.engine.utils.geo.Ray;
 import lu.kbra.gamebox.client.es.game.game.GameBoxES;
@@ -96,6 +102,17 @@ public class GlobalUtils {
 
 	public static void requestQuit() {
 		engine.getWindow().setWindowShouldClose(true);
+	}
+
+	public static MeshComponent createUIButton(CacheManager cache, String name, String btnName) {
+		final String cacheName = "btn-"+btnName;
+		
+		SingleTexture txt = cache.loadOrGetSingleTexture(cacheName, FileUtils.RESOURCES+FileUtils.TEXTURES+btnName, TextureFilter.NEAREST);
+		
+		Mesh mesh = Mesh.newQuad(name, cache.loadMaterial(UIButtonShader.UIButtonMaterial.class, txt), txt.getNormalizedSize2D());
+		
+		cache.addMesh(mesh);
+		return new MeshComponent(mesh);
 	}
 
 }

@@ -15,6 +15,7 @@ import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.graph.material.text.TextShader;
 import lu.kbra.gamebox.client.es.engine.graph.material.text.TextShader.TextMaterial;
 import lu.kbra.gamebox.client.es.engine.objs.entity.Entity;
+import lu.kbra.gamebox.client.es.engine.objs.entity.components.MeshComponent;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.TextEmitterComponent;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.Transform3DComponent;
 import lu.kbra.gamebox.client.es.engine.objs.text.TextEmitter;
@@ -38,22 +39,19 @@ public class UISceneStartMenuState extends UISceneState {
 	private static final float OTHER_X_POS_START = 0f;
 	private static final float OTHER_X_POS_END = 10f;
 
-	private static final String[] MAIN_MENU_TEXTS = { GlobalLang.get("menu.main.play"),
-			GlobalLang.get("menu.main.options"), GlobalLang.get("menu.main.quit") };
+	private static final String[] MAIN_MENU_TEXTS = { GlobalLang.get("menu.main.play"), GlobalLang.get("menu.main.options"), GlobalLang.get("menu.main.quit") };
 
 	private Entity[] entitiesMainMenu;
 	private Vector3f[] entitiesMainMenupos;
 	private Entity play, options, quit;
 
-	private static final String[] PLAY_MENU_TEXTS = { GlobalLang.get("menu.play.evolution"),
-			GlobalLang.get("menu.play.infection")};
+	private static final String[] PLAY_MENU_TEXTS = { GlobalLang.get("menu.play.evolution"), GlobalLang.get("menu.play.infection") };
 
 	private Entity[] entitiesPlayMenu;
 	private Vector3f[] entitiesPlayMenupos;
 	private Entity playMode1, playMode2;
 
-	private static final String[] OPTION_MENU_TEXTS = { GlobalLang.get("menu.options.language"),
-			GlobalLang.get("menu.options.volume") };
+	private static final String[] OPTION_MENU_TEXTS = { GlobalLang.get("menu.options.language"), GlobalLang.get("menu.options.volume") };
 
 	private Entity[] entitiesOptionMenu;
 	private Vector3f[] entitiesOptionMenupos;
@@ -97,8 +95,7 @@ public class UISceneStartMenuState extends UISceneState {
 		quit = addText("quitText", MAIN_MENU_TEXTS[2], new Vector3f(0, -0.8f, 0));
 
 		entitiesMainMenu = new Entity[] { play, options, quit };
-		entitiesMainMenupos = new Vector3f[] { new Vector3f(0, 0.8f, 0), new Vector3f(0, 0, 0),
-				new Vector3f(0, -0.8f, 0) };
+		entitiesMainMenupos = new Vector3f[] { new Vector3f(0, 0.8f, 0), new Vector3f(0, 0, 0), new Vector3f(0, -0.8f, 0) };
 
 		playMode1 = addText("playMode1", PLAY_MENU_TEXTS[0], new Vector3f(0f, 0.4f, 0));
 		playMode2 = addText("playMode2", PLAY_MENU_TEXTS[1], new Vector3f(0f, -0.4f, 0));
@@ -117,24 +114,26 @@ public class UISceneStartMenuState extends UISceneState {
 		chooseMenuElement(entitiesOptionMenu, OPTION_MENU_TEXTS, otherVerticalIndex);
 
 		menuTransitionValue = 1; // set to inactive
-		setPos(entitiesPlayMenu, OTHER_X_POS_START, OTHER_X_POS_END,
-				i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
-		setPos(entitiesOptionMenu, OTHER_X_POS_START, OTHER_X_POS_END,
-				i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
+		setPos(entitiesPlayMenu, OTHER_X_POS_START, OTHER_X_POS_END, i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
+		setPos(entitiesOptionMenu, OTHER_X_POS_START, OTHER_X_POS_END, i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
 		menuTransitionValue = 0; // set to active
-		setPos(entitiesMainMenu, MAIN_X_POS_START, MAIN_X_POS_END,
-				i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
+		setPos(entitiesMainMenu, MAIN_X_POS_START, MAIN_X_POS_END, i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
 	}
 
 	private Entity addSlider(String name) { // need to also add text, create TextSlideBar entity or smth
-		UISliderEntity slider = new UISliderEntity(cache, new Vector2f(2, 0.3f), new Vector2f(0, 100), 0.05f, 0.5f,
-				new Transform3D());
+		UISliderEntity slider = new UISliderEntity(cache, new Vector2f(2, 0.3f), new Vector2f(0, 100), 0.05f, 0.5f, new Transform3D());
 		return scene.addEntity(name, slider);
 	}
 
+	private Entity addTextButton(String name, String txt, String btnType, Vector3f pos) {
+		Entity entity = addText(name + "-txt", txt, pos);
+		MeshComponent meshComponent = GlobalUtils.createUIButton(cache, name + "-btn", btnType);
+		entity.addComponent(meshComponent);
+		return entity;
+	}
+
 	private Entity addText(String name, String txt, Vector3f pos) {
-		TextMaterial mat = new TextMaterial("TextMaterial-" + GameBoxES.TEXT_TEXTURE + "-" + name.hashCode(),
-				cache.getRenderShader(TextShader.NAME), cache.getTexture(GameBoxES.TEXT_TEXTURE));
+		TextMaterial mat = new TextMaterial("TextMaterial-" + GameBoxES.TEXT_TEXTURE + "-" + name.hashCode(), cache.getRenderShader(TextShader.NAME), cache.getTexture(GameBoxES.TEXT_TEXTURE));
 		cache.addMaterial(mat);
 		TextEmitter text = new TextEmitter(name, mat, txt.length() + 2, txt, new Vector2f(0.35f, 0.5f));
 		text.setAlignment(Alignment.ABSOLUTE_RIGHT);
@@ -143,11 +142,11 @@ public class UISceneStartMenuState extends UISceneState {
 		cache.addTextEmitter(text);
 		return scene.addEntity(name, new Entity(new Transform3DComponent(pos), new TextEmitterComponent(text)));
 	}
-	
+
 	private Entity addText(String name, int length, String txt, Vector3f pos) {
 		TextMaterial mat = new TextMaterial("TextMaterial-" + GameBoxES.TEXT_TEXTURE + "-" + name.hashCode(), cache.getRenderShader(TextShader.NAME), cache.getTexture(GameBoxES.TEXT_TEXTURE));
 		cache.addMaterial(mat);
-		TextEmitter text = new TextEmitter(name, mat, txt.length()+2, txt, new Vector2f(0.35f, 0.5f));
+		TextEmitter text = new TextEmitter(name, mat, txt.length() + 2, txt, new Vector2f(0.35f, 0.5f));
 		text.setAlignment(Alignment.ABSOLUTE_RIGHT);
 		text.createDrawBuffer();
 		text.updateText();
@@ -178,8 +177,7 @@ public class UISceneStartMenuState extends UISceneState {
 				GlobalUtils.requestQuit();
 				return;
 			}
-			startTransition(MI_MAIN, mainVerticalIndex == VI_MAIN_PLAY ? MI_PLAY
-					: (mainVerticalIndex == VI_MAIN_OPTIONS ? MI_OPTIONS : MI_NONE));
+			startTransition(MI_MAIN, mainVerticalIndex == VI_MAIN_PLAY ? MI_PLAY : (mainVerticalIndex == VI_MAIN_OPTIONS ? MI_OPTIONS : MI_NONE));
 			otherVerticalIndex = 0;
 			return;
 		}
@@ -269,8 +267,7 @@ public class UISceneStartMenuState extends UISceneState {
 	private void setFGColor(Entity entity, Vector4f primaryLight) {
 		GlobalUtils.INSTANCE.createTask(GameEngine.QUEUE_RENDER).exec((t) -> {
 			if (entity.hasComponent(TextEmitterComponent.class)) {
-				TextMaterial mat = ((TextMaterial) entity.getComponent(TextEmitterComponent.class).getTextEmitter(cache)
-						.getInstances().getParticleMesh().getMaterial());
+				TextMaterial mat = ((TextMaterial) entity.getComponent(TextEmitterComponent.class).getTextEmitter(cache).getInstances().getParticleMesh().getMaterial());
 				mat.setFgColor(GlobalConsts.HIGHLIGHT);
 			}
 			return null;
@@ -292,27 +289,21 @@ public class UISceneStartMenuState extends UISceneState {
 		menuTransitionValue = Math.clamp(0, 1, menuTransitionValue);
 
 		if (menuTransitionBase == MI_MAIN) {
-			setPos(entitiesMainMenu, MAIN_X_POS_START, MAIN_X_POS_END,
-					i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
+			setPos(entitiesMainMenu, MAIN_X_POS_START, MAIN_X_POS_END, i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
 		} else if (menuTransitionTarget == MI_MAIN) {
-			setPos(entitiesMainMenu, MAIN_X_POS_END, MAIN_X_POS_START,
-					i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
+			setPos(entitiesMainMenu, MAIN_X_POS_END, MAIN_X_POS_START, i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
 		}
 
 		if (menuTransitionBase == MI_PLAY) {
-			setPos(entitiesPlayMenu, OTHER_X_POS_START, OTHER_X_POS_END,
-					i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
+			setPos(entitiesPlayMenu, OTHER_X_POS_START, OTHER_X_POS_END, i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
 		} else if (menuTransitionTarget == MI_PLAY) {
-			setPos(entitiesPlayMenu, OTHER_X_POS_END, OTHER_X_POS_START,
-					i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
+			setPos(entitiesPlayMenu, OTHER_X_POS_END, OTHER_X_POS_START, i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
 		}
 
 		if (menuTransitionBase == MI_OPTIONS) {
-			setPos(entitiesOptionMenu, OTHER_X_POS_START, OTHER_X_POS_END,
-					i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
+			setPos(entitiesOptionMenu, OTHER_X_POS_START, OTHER_X_POS_END, i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
 		} else if (menuTransitionTarget == MI_OPTIONS) {
-			setPos(entitiesOptionMenu, OTHER_X_POS_END, OTHER_X_POS_START,
-					i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
+			setPos(entitiesOptionMenu, OTHER_X_POS_END, OTHER_X_POS_START, i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
 		}
 
 		if (menuTransitionValue >= 1) {
@@ -330,8 +321,7 @@ public class UISceneStartMenuState extends UISceneState {
 		for (int i = 0; i < entities.length; i++) {
 			Entity te = entities[i];
 			Transform3D transform = te.getComponent(Transform3DComponent.class).getTransform();
-			transform.setTranslation(new Vector3f(Math.lerp(start, end, Math.clamp(0, 1, intFun.apply(i))),
-					transform.getTranslation().y, transform.getTranslation().z)).updateMatrix();
+			transform.setTranslation(new Vector3f(Math.lerp(start, end, Math.clamp(0, 1, intFun.apply(i))), transform.getTranslation().y, transform.getTranslation().z)).updateMatrix();
 		}
 	}
 
@@ -341,15 +331,12 @@ public class UISceneStartMenuState extends UISceneState {
 				Entity te = entities[i];
 
 				if (te.hasComponent(TextEmitterComponent.class)) {
-					TextMaterial mat = ((TextMaterial) te.getComponent(TextEmitterComponent.class).getTextEmitter(cache)
-							.getInstances().getParticleMesh().getMaterial());
+					TextMaterial mat = ((TextMaterial) te.getComponent(TextEmitterComponent.class).getTextEmitter(cache).getInstances().getParticleMesh().getMaterial());
 					if (i == verticalIndex) {
-						te.getComponent(TextEmitterComponent.class).getTextEmitter(cache).setText(">" + texts[i] + "<")
-								.updateText();
+						te.getComponent(TextEmitterComponent.class).getTextEmitter(cache).setText(">" + texts[i] + "<").updateText();
 						mat.setFgColor(GlobalConsts.HIGHLIGHT);
 					} else {
-						te.getComponent(TextEmitterComponent.class).getTextEmitter(cache).setText(texts[i])
-								.updateText();
+						te.getComponent(TextEmitterComponent.class).getTextEmitter(cache).setText(texts[i]).updateText();
 						mat.setFgColor(GlobalConsts.NEUTRAL);
 					}
 				}

@@ -21,6 +21,7 @@ import lu.kbra.gamebox.client.es.engine.scene.camera.Camera3D;
 import lu.kbra.gamebox.client.es.engine.utils.consts.Alignment;
 import lu.kbra.gamebox.client.es.engine.utils.geo.GeoPlane;
 import lu.kbra.gamebox.client.es.engine.utils.transform.Transform3D;
+import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.CellDescriptor;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.CellEntity;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.CellType;
 
@@ -60,7 +61,7 @@ public class WorldScene3D extends Scene3D {
 		cache.addGizmo(axis);
 		super.addEntity("grid_xyz", new GizmoComponent(axis), new Transform3DComponent(new Transform3D(new Vector3f(0), new Quaternionf(), new Vector3f(10))));
 
-		ce = addCellEntity("player", CellType.PLAYER);
+		ce = addCellEntity("player", new CellDescriptor(CellType.PLAYER, "noname", "player"));
 
 		camera.getProjection().setPerspective(true);
 		((Camera3D) camera).setUp(GameEngine.Y_POS);
@@ -82,8 +83,8 @@ public class WorldScene3D extends Scene3D {
 		placeCamera(pos);
 	}
 
-	private CellEntity addCellEntity(String name, CellType type) {
-		CellEntity ce = CellEntity.load(cache, name, type);
+	private CellEntity addCellEntity(String name, CellDescriptor desc) {
+		CellEntity ce = CellEntity.load(cache, name, desc);
 
 		return (CellEntity) addEntity(name, ce);
 	}

@@ -27,11 +27,13 @@ public class CellDescriptor {
 		if (cache == null)
 			throw new IllegalArgumentException("CacheManager == null");
 
-		if (cache.hasMaterial(cellType.name())) {
-			return (CellMaterial) cache.getMaterial(cellType.name());
+		final String shaderName = cellType.name() + dataName;
+
+		if (cache.hasMaterial(shaderName)) {
+			return (CellMaterial) cache.getMaterial(shaderName);
 		}
 
-		String imagePath = cellType.getTexturePath();
+		String imagePath = cellType.getTexturePath()+dataName+".png";
 
 		if (!Files.exists(Paths.get(imagePath))) {
 			throw new RuntimeException(new FileNotFoundException("Couln't find file: " + imagePath));
@@ -48,7 +50,7 @@ public class CellDescriptor {
 
 		return material;
 	}
-	
+
 	public CellType getCellType() {
 		return cellType;
 	}
