@@ -126,10 +126,21 @@ public class UISceneStartMenuState extends UISceneState {
 		return scene.addEntity(name, slider);
 	}
 
-	private Entity addText(String name, int length, String txt, Vector3f pos) {
+	private Entity addButton(String name, String txt, Vector3f pos) {
 		TextMaterial mat = new TextMaterial("TextMaterial-" + GameBoxES.TEXT_TEXTURE + "-" + name.hashCode(), cache.getRenderShader(TextShader.NAME), cache.getTexture(GameBoxES.TEXT_TEXTURE));
 		cache.addMaterial(mat);
 		TextEmitter text = new TextEmitter(name, mat, length, txt, new Vector2f(0.35f, 0.5f));
+		text.setAlignment(Alignment.ABSOLUTE_RIGHT);
+		text.createDrawBuffer();
+		text.updateText();
+		cache.addTextEmitter(text);
+		return scene.addEntity(name, new Entity(new Transform3DComponent(pos), new TextEmitterComponent(text)));
+	}
+	
+	private Entity addText(String name, int length, String txt, Vector3f pos) {
+		TextMaterial mat = new TextMaterial("TextMaterial-" + GameBoxES.TEXT_TEXTURE + "-" + name.hashCode(), cache.getRenderShader(TextShader.NAME), cache.getTexture(GameBoxES.TEXT_TEXTURE));
+		cache.addMaterial(mat);
+		TextEmitter text = new TextEmitter(name, mat, txt.length()+2, txt, new Vector2f(0.35f, 0.5f));
 		text.setAlignment(Alignment.ABSOLUTE_RIGHT);
 		text.createDrawBuffer();
 		text.updateText();

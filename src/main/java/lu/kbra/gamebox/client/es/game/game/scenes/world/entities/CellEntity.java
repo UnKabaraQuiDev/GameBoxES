@@ -11,10 +11,12 @@ import lu.kbra.gamebox.client.es.engine.objs.entity.components.Transform3DCompon
 
 public class CellEntity extends Entity {
 
+	private CellDescriptor cellDescriptor;
 	private Transform3DComponent transform;
 	private MeshComponent mesh;
 
-	public CellEntity(CacheManager cache, Mesh mesh, CellType cellType) {
+	public CellEntity(CacheManager cache, Mesh mesh, CellDescriptor descriptor) {
+		this.cellDescriptor = descriptor;
 		this.transform = new Transform3DComponent();
 		this.mesh = new MeshComponent(mesh);
 
@@ -22,18 +24,23 @@ public class CellEntity extends Entity {
 		addComponent(this.mesh);
 	}
 
-	public static CellEntity load(CacheManager cache, String name, CellType type) {
-		Material material = type.createMaterial(cache);
-		Mesh mesh = Mesh.newQuad(type.getDataPath()+material.hashCode(), material, new Vector2f(1));
+	public static CellEntity load(CacheManager cache, String name, CellDescriptor descriptor) {
+		Material material = descriptor.createMaterial(cache);
+		Mesh mesh = Mesh.newQuad(descriptor.getCellType().getDataPath() + material.hashCode(), material, new Vector2f(1));
 		mesh.createDrawBuffer();
 		cache.addMesh(mesh);
-		CellEntity ce = new CellEntity(cache, mesh, type);
+		CellEntity ce = new CellEntity(cache, mesh, descriptor);
 		return ce;
 	}
-	
+
+	public CellDescriptor getCellDescriptor() {
+		return cellDescriptor;
+	}
+
 	public Transform3DComponent getTransform() {
 		return transform;
 	}
+
 	public MeshComponent getMesh() {
 		return mesh;
 	}
