@@ -1,4 +1,4 @@
-package lu.kbra.gamebox.client.es.game.game.scenes.ui;
+package lu.kbra.gamebox.client.es.engine.objs.entity.components;
 
 import org.joml.Math;
 

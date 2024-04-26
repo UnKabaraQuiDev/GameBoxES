@@ -7,7 +7,6 @@ import org.joml.Vector4f;
 
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
 import lu.kbra.gamebox.client.es.engine.geom.Mesh;
-import lu.kbra.gamebox.client.es.engine.objs.entity.Entity;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.MeshComponent;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.Transform3DComponent;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.UIComponent;
@@ -16,7 +15,7 @@ import lu.kbra.gamebox.client.es.engine.utils.transform.Transform3D;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.UISliderShader;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.UISliderShader.UISliderMaterial;
 
-public class UISliderEntity extends Entity {
+public class UISliderEntity extends UIEntity {
 
 	private Mesh mesh;
 
@@ -38,7 +37,8 @@ public class UISliderEntity extends Entity {
 		return sliderComponent;
 	}
 
-	public void update() {
+	@Override
+	public void updateUI() {
 		sliderComponent.update(mesh);
 	}
 	

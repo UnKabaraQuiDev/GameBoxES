@@ -22,6 +22,11 @@ uniform vec4 bgColor;
 uniform vec4 fgColor;
 uniform int length;
 uniform bool transparent;
+uniform float thickness;
+
+float smoothThreshold(float threshold, float value) {
+    return smoothstep(threshold - 0.05, threshold + 0.05, value);
+}
 
 void main() {
 	if (instance.index >= length) {
@@ -40,5 +45,5 @@ void main() {
 		discard;
 	}
 
-	fragColor = mix(bgColor, fgColor, mask.r >= 0.5f);
+	fragColor = mix(bgColor, fgColor, smoothThreshold(thickness, mask.r));
 }

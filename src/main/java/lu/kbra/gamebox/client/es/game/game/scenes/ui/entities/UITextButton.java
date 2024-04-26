@@ -4,7 +4,6 @@ import org.joml.Vector3f;
 
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
 import lu.kbra.gamebox.client.es.engine.geom.QuadMesh;
-import lu.kbra.gamebox.client.es.engine.objs.entity.Entity;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.MeshComponent;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.SubEntitiesComponent;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.Transform3DComponent;
@@ -12,7 +11,7 @@ import lu.kbra.gamebox.client.es.engine.objs.text.TextEmitter;
 import lu.kbra.gamebox.client.es.engine.utils.consts.Alignment;
 import lu.kbra.gamebox.client.es.game.game.utils.GlobalUtils;
 
-public class UITextButton extends Entity {
+public class UITextButton extends UIEntity {
 
 	private MeshComponent meshComponent;
 	private CacheManager cache;
@@ -33,6 +32,11 @@ public class UITextButton extends Entity {
 		adjustScale();
 	}
 
+	@Override
+	public void updateUI() {
+		adjustScale();
+	}
+	
 	public void adjustScale() {
 		TextEmitter emit = textLabelEntity.getTextEmitterComponent().getTextEmitter(cache);
 		transformComponent.getTransform().setScale(emit.computeMaxWidthCount()*((QuadMesh) emit.getMesh()).getSize().x());

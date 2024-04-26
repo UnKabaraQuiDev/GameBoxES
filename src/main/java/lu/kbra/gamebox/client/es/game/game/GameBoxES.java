@@ -14,12 +14,13 @@ import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.graph.composition.SceneRenderLayer;
 import lu.kbra.gamebox.client.es.engine.graph.material.text.TextShader;
 import lu.kbra.gamebox.client.es.engine.impl.GameLogic;
+import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
 import lu.kbra.gamebox.client.es.game.game.debug.DebugUIElements;
 import lu.kbra.gamebox.client.es.game.game.options.GameOptions;
 import lu.kbra.gamebox.client.es.game.game.render.compositing.AdvancedCompositor;
-import lu.kbra.gamebox.client.es.game.game.scenes.ui.GameMode;
 import lu.kbra.gamebox.client.es.game.game.scenes.ui.UIScene3D;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.WorldScene3D;
+import lu.kbra.gamebox.client.es.game.game.utils.GameMode;
 import lu.kbra.gamebox.client.es.game.game.utils.GameState;
 import lu.kbra.gamebox.client.es.game.game.utils.GlobalConsts;
 import lu.kbra.gamebox.client.es.game.game.utils.GlobalLang;
@@ -58,7 +59,7 @@ public class GameBoxES extends GameLogic {
 			e1.printStackTrace();
 		}
 
-		cache.loadOrGetMaterial(TextShader.TextMaterial.NAME, TextShader.TextMaterial.class, cache.loadOrGetSingleTexture(GlobalConsts.TEXT_TEXTURE, "./resources/textures/fonts/font1row.png"));
+		cache.loadOrGetMaterial(TextShader.TextMaterial.NAME, TextShader.TextMaterial.class, cache.loadOrGetSingleTexture(GlobalConsts.TEXT_TEXTURE, "./resources/textures/fonts/font1row.png", TextureFilter.NEAREST));
 
 		loadWorldScene("not world");
 		loadUiScene("not ui");
