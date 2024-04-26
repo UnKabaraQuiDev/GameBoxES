@@ -17,6 +17,7 @@ import lu.kbra.gamebox.client.es.engine.graph.render.MeshRenderer;
 import lu.kbra.gamebox.client.es.engine.graph.render.Scene3DRenderer;
 import lu.kbra.gamebox.client.es.engine.graph.render.TextEmitterRenderer;
 import lu.kbra.gamebox.client.es.engine.graph.texture.SingleTexture;
+import lu.kbra.gamebox.client.es.engine.objs.entity.Entity;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.MeshComponent;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.TextEmitterComponent;
 import lu.kbra.gamebox.client.es.engine.objs.text.TextEmitter;
@@ -129,6 +130,13 @@ public class GlobalUtils {
 		text.updateText();
 		cache.addTextEmitter(text);
 		return new TextEmitterComponent(text);
+	}
+
+	public static void updateText(final TextEmitter textEmitter) {
+		GlobalUtils.INSTANCE.createTask(GameEngine.QUEUE_RENDER).exec((t) -> {
+			System.err.println("updated: "+textEmitter.updateText());
+			return null;
+		}).push();
 	}
 
 }

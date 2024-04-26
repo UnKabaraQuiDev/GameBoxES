@@ -9,13 +9,10 @@ import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWGamepadState;
 
-import lu.pcy113.pclib.Pair;
-
 import lu.kbra.gamebox.client.es.engine.GameEngine;
-import lu.kbra.gamebox.client.es.engine.graph.material.text.TextShader;
 import lu.kbra.gamebox.client.es.engine.graph.material.text.TextShader.TextMaterial;
 import lu.kbra.gamebox.client.es.engine.objs.entity.Entity;
-import lu.kbra.gamebox.client.es.engine.objs.entity.components.MeshComponent;
+import lu.kbra.gamebox.client.es.engine.objs.entity.components.SubEntitiesComponent;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.TextEmitterComponent;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.Transform3DComponent;
 import lu.kbra.gamebox.client.es.engine.objs.text.TextEmitter;
@@ -24,7 +21,6 @@ import lu.kbra.gamebox.client.es.engine.utils.consts.Button;
 import lu.kbra.gamebox.client.es.engine.utils.consts.Direction;
 import lu.kbra.gamebox.client.es.engine.utils.interpolation.Interpolators;
 import lu.kbra.gamebox.client.es.engine.utils.transform.Transform3D;
-import lu.kbra.gamebox.client.es.game.game.GameBoxES;
 import lu.kbra.gamebox.client.es.game.game.scenes.ui.entities.UISliderEntity;
 import lu.kbra.gamebox.client.es.game.game.scenes.ui.entities.UITextButton;
 import lu.kbra.gamebox.client.es.game.game.scenes.ui.entities.UITextLabel;
@@ -32,6 +28,7 @@ import lu.kbra.gamebox.client.es.game.game.utils.ControllerInputWatcher;
 import lu.kbra.gamebox.client.es.game.game.utils.GlobalConsts;
 import lu.kbra.gamebox.client.es.game.game.utils.GlobalLang;
 import lu.kbra.gamebox.client.es.game.game.utils.GlobalUtils;
+import lu.pcy113.pclib.Pair;
 
 public class UISceneStartMenuState extends UISceneState {
 
@@ -41,23 +38,26 @@ public class UISceneStartMenuState extends UISceneState {
 	private static final float OTHER_X_POS_START = 0f;
 	private static final float OTHER_X_POS_END = 10f;
 
-	private static final String[] MAIN_MENU_TEXTS = { GlobalLang.get("menu.main.play"), GlobalLang.get("menu.main.options"), GlobalLang.get("menu.main.quit") };
+	private static final String[] MAIN_MENU_TEXTS = { GlobalLang.get("menu.main.play"),
+			GlobalLang.get("menu.main.options"), GlobalLang.get("menu.main.quit") };
 
 	private Entity[] entitiesMainMenu;
 	private Vector3f[] entitiesMainMenupos;
 	private Entity play, options, quit;
 
-	private static final String[] PLAY_MENU_TEXTS = { GlobalLang.get("menu.play.evolution"), GlobalLang.get("menu.play.infection") };
+	private static final String[] PLAY_MENU_TEXTS = { GlobalLang.get("menu.play.evolution"),
+			GlobalLang.get("menu.play.infection") };
 
 	private Entity[] entitiesPlayMenu;
 	private Vector3f[] entitiesPlayMenupos;
 	private Entity playMode1, playMode2;
 
-	private static final String[] OPTION_MENU_TEXTS = { GlobalLang.get("menu.options.language"), GlobalLang.get("menu.options.volume") };
+	private static final String[] OPTION_MENU_TEXTS = { GlobalLang.get("menu.options.language"),
+			GlobalLang.get("menu.options.volume") };
 
 	private Entity[] entitiesOptionMenu;
 	private Vector3f[] entitiesOptionMenupos;
-	private Entity option1, option2;
+	private Entity option1, optionVolumeText, optionVolumeSlider;
 
 	private static final int MI_NONE = 0;
 	private static final int MI_MAIN = 1;
@@ -76,7 +76,7 @@ public class UISceneStartMenuState extends UISceneState {
 	private int otherVerticalIndex = mainVerticalIndex;
 
 	private static final int MENU_TRANSITION_IDLE = 0;
-	private static final int MENU_TRANSITION_ONGOIG = 1;
+	private static final int MENU_TRANSITION_ONGOING = 1;
 
 	private int menuTransition = MENU_TRANSITION_IDLE;
 
@@ -93,47 +93,78 @@ public class UISceneStartMenuState extends UISceneState {
 		super(scene);
 
 		// play = addText("playText", MAIN_MENU_TEXTS[0], new Vector3f(0, 0.8f, 0));
-		play = addTextButton("playText", MAIN_MENU_TEXTS[0], GlobalConsts.BTN_PRIMARY, new Vector3f(0, 0.8f, 0));
-		options = addTextLabel("optionsText", MAIN_MENU_TEXTS[1], new Vector3f(0, 0, 0), Alignment.TEXT_RIGHT);
-		quit = addTextLabel("quitText", MAIN_MENU_TEXTS[2], new Vector3f(0, -0.8f, 0), Alignment.TEXT_RIGHT);
+		play = addTextLabel("playText", MAIN_MENU_TEXTS[0], new Vector3f(0, 0.8f, 0), Alignment.TEXT_CENTER);
+		options = addTextLabel("optionsText", MAIN_MENU_TEXTS[1], new Vector3f(0, 0, 0), Alignment.TEXT_CENTER);
+		quit = addTextLabel("quitText", MAIN_MENU_TEXTS[2], new Vector3f(0, -0.8f, 0), Alignment.TEXT_CENTER);
 
 		entitiesMainMenu = new Entity[] { play, options, quit };
-		entitiesMainMenupos = new Vector3f[] { new Vector3f(0, 0.8f, 0), new Vector3f(0, 0, 0), new Vector3f(0, -0.8f, 0) };
+		entitiesMainMenupos = new Vector3f[] { new Vector3f(0, 0.8f, 0), new Vector3f(0, 0, 0),
+				new Vector3f(0, -0.8f, 0) };
 
-		playMode1 = addTextLabel("playMode1", PLAY_MENU_TEXTS[0], new Vector3f(0f, 0.4f, 0), Alignment.TEXT_RIGHT);
-		playMode2 = addTextLabel("playMode2", PLAY_MENU_TEXTS[1], new Vector3f(0f, -0.4f, 0), Alignment.TEXT_RIGHT);
+		playMode1 = addTextLabel("playMode1", PLAY_MENU_TEXTS[0], new Vector3f(0f, 0.4f, 0), Alignment.TEXT_CENTER);
+		playMode2 = addTextLabel("playMode2", PLAY_MENU_TEXTS[1], new Vector3f(0f, -0.4f, 0), Alignment.TEXT_CENTER);
 
 		entitiesPlayMenu = new Entity[] { playMode1, playMode2 };
 		entitiesPlayMenupos = new Vector3f[] { new Vector3f(0, 0.4f, 0), new Vector3f(0, -0.4f, 0) };
 
-		option1 = addTextLabel("option1", OPTION_MENU_TEXTS[0], new Vector3f(0f, 0.4f, 0), Alignment.TEXT_RIGHT);
-		option2 = addSlider("option2");
+		option1 = addTextLabel("option1", OPTION_MENU_TEXTS[0], new Vector3f(0f, 0.4f, 0), Alignment.TEXT_CENTER);
+		optionVolumeText = addTextLabel("option2text", OPTION_MENU_TEXTS[1], new Vector3f(0, -0.4f, 0),
+				Alignment.TEXT_CENTER, (Entity entity, boolean direction, Direction dir, Button button) -> {
+					if (direction) {
+						if (dir.equals(Direction.WEST)) {
+							optionVolumeSlider.getComponent(IntValueComponent.class)
+									.setValue(optionVolumeSlider.getComponent(IntValueComponent.class).getValue() - 1);
+						} else if (dir.equals(Direction.EAST)) {
+							optionVolumeSlider.getComponent(IntValueComponent.class)
+									.setValue(optionVolumeSlider.getComponent(IntValueComponent.class).getValue() + 1);
+						}
+						TextEmitter te = optionVolumeSlider.getComponent(TextEmitterComponent.class)
+								.getTextEmitter(cache);
+						te.setText("" + optionVolumeSlider.getComponent(IntValueComponent.class).getValue());
+						GlobalUtils.updateText(te);
+					}
+				});
+		optionVolumeSlider = addTextLabel("option2slider", "5", new Vector3f(1f, -0.4f, 0), Alignment.TEXT_CENTER);
+		optionVolumeSlider.addComponent(new IntValueComponent(5, 0, 10));
 
-		entitiesOptionMenu = new Entity[] { option1, option2 };
-		entitiesOptionMenupos = new Vector3f[] { new Vector3f(0, 0.4f, 0), new Vector3f(0, -0.4f, 0) };
+		optionVolumeText.addComponent(new SubEntitiesComponent(optionVolumeSlider));
+
+		entitiesOptionMenu = new Entity[] { option1, optionVolumeText };
+		entitiesOptionMenupos = new Vector3f[] { new Vector3f(0, 0.4f, 0), new Vector3f(0, -0.4f, 0),
+				new Vector3f(1f, -0.4f, 0) };
 
 		chooseMenuElement(entitiesMainMenu, MAIN_MENU_TEXTS, mainVerticalIndex);
 		chooseMenuElement(entitiesPlayMenu, PLAY_MENU_TEXTS, otherVerticalIndex);
 		chooseMenuElement(entitiesOptionMenu, OPTION_MENU_TEXTS, otherVerticalIndex);
 
 		menuTransitionValue = 1; // set to inactive
-		setPos(entitiesPlayMenu, OTHER_X_POS_START, OTHER_X_POS_END, i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
-		setPos(entitiesOptionMenu, OTHER_X_POS_START, OTHER_X_POS_END, i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
+		setPos(entitiesPlayMenu, entitiesPlayMenupos, OTHER_X_POS_START, OTHER_X_POS_END,
+				i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
+		setPos(entitiesOptionMenu, entitiesOptionMenupos, OTHER_X_POS_START, OTHER_X_POS_END,
+				i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
 		menuTransitionValue = 0; // set to active
-		setPos(entitiesMainMenu, MAIN_X_POS_START, MAIN_X_POS_END, i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
+		setPos(entitiesMainMenu, entitiesMainMenupos, MAIN_X_POS_START, MAIN_X_POS_END,
+				i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
 	}
 
 	private Entity addSlider(String name) { // need to also add text, create TextSlideBar entity or smth
-		UISliderEntity slider = new UISliderEntity(cache, new Vector2f(2, 0.3f), new Vector2f(0, 100), 0.05f, 0.5f, new Transform3D());
+		UISliderEntity slider = new UISliderEntity(cache, new Vector2f(2, 0.3f), new Vector2f(0, 100), 0.05f, 0.5f,
+				new Transform3D());
 		return scene.addEntity(name, slider);
 	}
 
 	private UITextButton addTextButton(String name, String txt, String btnType, Vector3f pos) {
-		return (UITextButton) scene.addEntity(name, new UITextButton(cache, name, txt, pos, Alignment.TEXT_CENTER, btnType));
+		return (UITextButton) scene.addEntity(name,
+				new UITextButton(cache, name, txt, pos, Alignment.TEXT_CENTER, btnType));
 	}
 
 	private UITextLabel addTextLabel(String name, String txt, Vector3f pos, Alignment alignment) {
 		return (UITextLabel) scene.addEntity(name, new UITextLabel(cache, name, txt, pos, alignment));
+	}
+
+	private UITextLabel addTextLabel(String name, String txt, Vector3f pos, Alignment alignment,
+			UIInteractRunnable run) {
+		return (UITextLabel) scene.addEntity(name, new UITextLabel(cache, name, txt, pos, alignment, run));
 	}
 
 	@Override
@@ -159,7 +190,8 @@ public class UISceneStartMenuState extends UISceneState {
 				GlobalUtils.requestQuit();
 				return;
 			}
-			startTransition(MI_MAIN, mainVerticalIndex == VI_MAIN_PLAY ? MI_PLAY : (mainVerticalIndex == VI_MAIN_OPTIONS ? MI_OPTIONS : MI_NONE));
+			startTransition(MI_MAIN, mainVerticalIndex == VI_MAIN_PLAY ? MI_PLAY
+					: (mainVerticalIndex == VI_MAIN_OPTIONS ? MI_OPTIONS : MI_NONE));
 			otherVerticalIndex = 0;
 			return;
 		}
@@ -214,14 +246,17 @@ public class UISceneStartMenuState extends UISceneState {
 		}
 
 		if (menuIndex == MI_MAIN) {
-			otherVerticalIndex = org.joml.Math.clamp(0, 2, otherVerticalIndex);
+			mainVerticalIndex = org.joml.Math.clamp(0, 2, mainVerticalIndex);
+		} else if(menuIndex == MI_OPTIONS) {
+			otherVerticalIndex = org.joml.Math.clamp(0, 1, otherVerticalIndex);
+		}if(menuIndex == MI_PLAY) {
+			otherVerticalIndex = org.joml.Math.clamp(0, 1, otherVerticalIndex);
 		}
 	}
 
 	private void interact(int verticalIndex, boolean direction, Direction dir, Button button) {
 		Entity entity = getSelectedEntity();
 		if (direction) { // analog input (slider, etc)
-			// do nothing
 			if (entity instanceof UISliderEntity) {
 				if (dir.equals(Direction.EAST)) {
 					((UISliderEntity) entity).getSliderComponent().increment();
@@ -229,6 +264,8 @@ public class UISceneStartMenuState extends UISceneState {
 					((UISliderEntity) entity).getSliderComponent().decrement();
 				}
 				((UISliderEntity) entity).update();
+			} else if (entity instanceof UITextLabel) {
+				((UITextLabel) entity).interact(direction, dir, button);
 			}
 		} else { // button
 			setFGColor(entity, GlobalConsts.PRIMARY_LIGHT);
@@ -249,7 +286,8 @@ public class UISceneStartMenuState extends UISceneState {
 	private void setFGColor(Entity entity, Vector4f primaryLight) {
 		GlobalUtils.INSTANCE.createTask(GameEngine.QUEUE_RENDER).exec((t) -> {
 			if (entity.hasComponent(TextEmitterComponent.class)) {
-				TextMaterial mat = ((TextMaterial) entity.getComponent(TextEmitterComponent.class).getTextEmitter(cache).getInstances().getParticleMesh().getMaterial());
+				TextMaterial mat = ((TextMaterial) entity.getComponent(TextEmitterComponent.class).getTextEmitter(cache)
+						.getInstances().getParticleMesh().getMaterial());
 				mat.setFgColor(GlobalConsts.HIGHLIGHT);
 			}
 			return null;
@@ -260,32 +298,38 @@ public class UISceneStartMenuState extends UISceneState {
 		this.menuTransitionTarget = to;
 		this.menuTransitionBase = from;
 
-		menuTransition = MENU_TRANSITION_ONGOIG;
+		menuTransition = MENU_TRANSITION_ONGOING;
 	}
 
 	private void updateMenuTransition() {
-		if (menuTransition == MENU_TRANSITION_ONGOIG) {
+		if (menuTransition == MENU_TRANSITION_ONGOING) {
 			menuTransitionValue += MENU_TRANSITION_INC;
 		}
 
 		menuTransitionValue = Math.clamp(0, 1, menuTransitionValue);
 
 		if (menuTransitionBase == MI_MAIN) {
-			setPos(entitiesMainMenu, MAIN_X_POS_START, MAIN_X_POS_END, i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
+			setPos(entitiesMainMenu, entitiesMainMenupos, MAIN_X_POS_START, MAIN_X_POS_END,
+					i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
 		} else if (menuTransitionTarget == MI_MAIN) {
-			setPos(entitiesMainMenu, MAIN_X_POS_END, MAIN_X_POS_START, i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
+			setPos(entitiesMainMenu, entitiesMainMenupos, MAIN_X_POS_END, MAIN_X_POS_START,
+					i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
 		}
 
 		if (menuTransitionBase == MI_PLAY) {
-			setPos(entitiesPlayMenu, OTHER_X_POS_START, OTHER_X_POS_END, i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
+			setPos(entitiesPlayMenu, entitiesPlayMenupos, OTHER_X_POS_START, OTHER_X_POS_END,
+					i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
 		} else if (menuTransitionTarget == MI_PLAY) {
-			setPos(entitiesPlayMenu, OTHER_X_POS_END, OTHER_X_POS_START, i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
+			setPos(entitiesPlayMenu, entitiesPlayMenupos, OTHER_X_POS_END, OTHER_X_POS_START,
+					i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
 		}
 
 		if (menuTransitionBase == MI_OPTIONS) {
-			setPos(entitiesOptionMenu, OTHER_X_POS_START, OTHER_X_POS_END, i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
+			setPos(entitiesOptionMenu, entitiesOptionMenupos, OTHER_X_POS_START, OTHER_X_POS_END,
+					i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
 		} else if (menuTransitionTarget == MI_OPTIONS) {
-			setPos(entitiesOptionMenu, OTHER_X_POS_END, OTHER_X_POS_START, i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
+			setPos(entitiesOptionMenu, entitiesOptionMenupos, OTHER_X_POS_END, OTHER_X_POS_START,
+					i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
 		}
 
 		if (menuTransitionValue >= 1) {
@@ -299,14 +343,26 @@ public class UISceneStartMenuState extends UISceneState {
 		}
 	}
 
-	private void setPos(Entity[] entities, float start, float end, Function<Integer, Float> intFun) {
+	private void setPos(Entity[] entities, Vector3f[] offset, float start, float end, Function<Integer, Float> intFun) {
 		for (int i = 0; i < entities.length; i++) {
 			Entity te = entities[i];
 			Transform3D transform = te.getComponent(Transform3DComponent.class).getTransform();
 			if (te instanceof UITextButton) {
-				((UITextButton) te).setPosition(new Vector3f(Math.lerp(start, end, Math.clamp(0, 1, intFun.apply(i))), transform.getTranslation().y, transform.getTranslation().z));
+				((UITextButton) te).setPosition(new Vector3f(Math.lerp(start, end, Math.clamp(0, 1, intFun.apply(i))),
+						transform.getTranslation().y, transform.getTranslation().z));
 			} else {
-				transform.setTranslation(new Vector3f(Math.lerp(start, end, Math.clamp(0, 1, intFun.apply(i))), transform.getTranslation().y, transform.getTranslation().z)).updateMatrix();
+				transform.setTranslation(
+						new Vector3f(Math.lerp(start, end, Math.clamp(0, 1, intFun.apply(i))) + offset[i].x,
+								offset[i].y, offset[i].z))
+						.updateMatrix();
+				if (te.hasComponent(SubEntitiesComponent.class)) {
+					transform = te.getComponent(SubEntitiesComponent.class).getEntities().get(0)
+							.getComponent(Transform3DComponent.class).getTransform();
+					transform.setTranslation(
+							new Vector3f(Math.lerp(start, end, Math.clamp(0, 1, intFun.apply(i))) + offset[i].x + 1.5f,
+									offset[i].y, offset[i].z))
+							.updateMatrix();
+				}
 			}
 		}
 	}
@@ -317,12 +373,15 @@ public class UISceneStartMenuState extends UISceneState {
 				Entity te = entities[i];
 
 				if (te.hasComponent(TextEmitterComponent.class)) {
-					TextMaterial mat = ((TextMaterial) te.getComponent(TextEmitterComponent.class).getTextEmitter(cache).getInstances().getParticleMesh().getMaterial());
+					TextMaterial mat = ((TextMaterial) te.getComponent(TextEmitterComponent.class).getTextEmitter(cache)
+							.getInstances().getParticleMesh().getMaterial());
 					if (i == verticalIndex) {
-						te.getComponent(TextEmitterComponent.class).getTextEmitter(cache).setText(">" + texts[i] + "<").updateText();
+						te.getComponent(TextEmitterComponent.class).getTextEmitter(cache).setText(">" + texts[i] + "<")
+								.updateText();
 						mat.setFgColor(GlobalConsts.HIGHLIGHT);
 					} else {
-						te.getComponent(TextEmitterComponent.class).getTextEmitter(cache).setText(texts[i]).updateText();
+						te.getComponent(TextEmitterComponent.class).getTextEmitter(cache).setText(texts[i])
+								.updateText();
 						mat.setFgColor(GlobalConsts.NEUTRAL);
 					}
 				}

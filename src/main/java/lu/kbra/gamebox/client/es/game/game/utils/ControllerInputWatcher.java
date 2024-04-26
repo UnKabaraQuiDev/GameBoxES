@@ -17,6 +17,7 @@ import lu.kbra.gamebox.client.es.engine.utils.consts.Direction;
 
 public class ControllerInputWatcher {
 
+	private static final int TIME_DIRECTION = 500;
 	private Direction direction = Direction.NONE;
 	private boolean waitingForNoneDirection = true;
 
@@ -24,6 +25,7 @@ public class ControllerInputWatcher {
 
 	private Button button = Button.NONE;
 	private boolean waitingForNoneButton = true;
+	private long lastDirection;
 
 	public void updateButton(GLFWGamepadState gps) {
 		ByteBuffer fb = gps.buttons();
@@ -58,7 +60,10 @@ public class ControllerInputWatcher {
 		float leftX = PDRUtils.applyMinThreshold(jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_X], highThreshold);
 		float leftY = PDRUtils.applyMinThreshold(jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_Y], highThreshold);
 
-		if (waitingForNoneDirection && !(leftX == 0 && leftY == 0)) {
+		if(System.currentTimeMillis() - lastDirection > TIME_DIRECTION) {
+			waitingForNoneDirection = false;
+			lastDirection = System.currentTimeMillis();
+		}else if (waitingForNoneDirection && !(leftX == 0 && leftY == 0)) {
 			return;
 		} else {
 			waitingForNoneDirection = false;
