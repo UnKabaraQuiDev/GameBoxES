@@ -1,5 +1,7 @@
 package lu.kbra.gamebox.client.es.game.game.scenes.ui;
 
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.function.Function;
 
 import org.joml.Math;
@@ -8,6 +10,7 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWGamepadState;
+import org.lwjgl.system.MathUtil;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.graph.material.text.TextShader.TextMaterial;
@@ -16,6 +19,7 @@ import lu.kbra.gamebox.client.es.engine.objs.entity.components.SubEntitiesCompon
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.TextEmitterComponent;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.Transform3DComponent;
 import lu.kbra.gamebox.client.es.engine.objs.text.TextEmitter;
+import lu.kbra.gamebox.client.es.engine.utils.MathUtils;
 import lu.kbra.gamebox.client.es.engine.utils.consts.Alignment;
 import lu.kbra.gamebox.client.es.engine.utils.consts.Button;
 import lu.kbra.gamebox.client.es.engine.utils.consts.Direction;
@@ -38,26 +42,25 @@ public class UISceneStartMenuState extends UISceneState {
 	private static final float OTHER_X_POS_START = 0f;
 	private static final float OTHER_X_POS_END = 10f;
 
-	private static final String[] MAIN_MENU_TEXTS = { GlobalLang.get("menu.main.play"),
-			GlobalLang.get("menu.main.options"), GlobalLang.get("menu.main.quit") };
+	private static String[] MAIN_MENU_TEXTS = { GlobalLang.get("menu.main.play"), GlobalLang.get("menu.main.options"),
+			GlobalLang.get("menu.main.quit") };
 
 	private Entity[] entitiesMainMenu;
 	private Vector3f[] entitiesMainMenupos;
 	private Entity play, options, quit;
 
-	private static final String[] PLAY_MENU_TEXTS = { GlobalLang.get("menu.play.evolution"),
+	private static String[] PLAY_MENU_TEXTS = { GlobalLang.get("menu.play.evolution"),
 			GlobalLang.get("menu.play.infection") };
 
 	private Entity[] entitiesPlayMenu;
 	private Vector3f[] entitiesPlayMenupos;
 	private Entity playMode1, playMode2;
 
-	private static final String[] OPTION_MENU_TEXTS = { GlobalLang.get("menu.options.language"),
-			GlobalLang.get("menu.options.volume") };
+	private static String[] OPTION_MENU_TEXTS = { GlobalLang.LANGUAGES[0], GlobalLang.get("menu.options.volume") };
 
 	private Entity[] entitiesOptionMenu;
 	private Vector3f[] entitiesOptionMenupos;
-	private Entity option1, optionVolumeText, optionVolumeSlider;
+	private Entity optionLanguage, optionVolumeText;
 
 	private static final int MI_NONE = 0;
 	private static final int MI_MAIN = 1;
@@ -101,37 +104,56 @@ public class UISceneStartMenuState extends UISceneState {
 		entitiesMainMenupos = new Vector3f[] { new Vector3f(0, 0.8f, 0), new Vector3f(0, 0, 0),
 				new Vector3f(0, -0.8f, 0) };
 
-		playMode1 = addTextLabel("playMode1", PLAY_MENU_TEXTS[0], new Vector3f(0f, 0.4f, 0), Alignment.TEXT_CENTER);
-		playMode2 = addTextLabel("playMode2", PLAY_MENU_TEXTS[1], new Vector3f(0f, -0.4f, 0), Alignment.TEXT_CENTER);
+		playMode1 = addTextLabel("playMode1", PLAY_MENU_TEXTS[0], new Vector3f(0f, 0.4f, 0), Alignment.TEXT_CENTER, this::interact_playMode1);
+		playMode2 = addTextLabel("playMode2", PLAY_MENU_TEXTS[1], new Vector3f(0f, -0.4f, 0), Alignment.TEXT_CENTER, this::interact_playMode2);
 
 		entitiesPlayMenu = new Entity[] { playMode1, playMode2 };
 		entitiesPlayMenupos = new Vector3f[] { new Vector3f(0, 0.4f, 0), new Vector3f(0, -0.4f, 0) };
 
-		option1 = addTextLabel("option1", OPTION_MENU_TEXTS[0], new Vector3f(0f, 0.4f, 0), Alignment.TEXT_CENTER);
-		optionVolumeText = addTextLabel("option2text", OPTION_MENU_TEXTS[1], new Vector3f(0, -0.4f, 0),
+		optionLanguage = addTextLabel("optionslanguage", GlobalLang.getLongestLang(), new Vector3f(0f, 0.4f, 0),
 				Alignment.TEXT_CENTER, (Entity entity, boolean direction, Direction dir, Button button) -> {
 					if (direction) {
 						if (dir.equals(Direction.WEST)) {
-							optionVolumeSlider.getComponent(IntValueComponent.class)
-									.setValue(optionVolumeSlider.getComponent(IntValueComponent.class).getValue() - 1);
+							entity.getComponent(IntValueComponent.class)
+									.setValue(entity.getComponent(IntValueComponent.class).getValue() - 1);
 						} else if (dir.equals(Direction.EAST)) {
-							optionVolumeSlider.getComponent(IntValueComponent.class)
-									.setValue(optionVolumeSlider.getComponent(IntValueComponent.class).getValue() + 1);
+							entity.getComponent(IntValueComponent.class)
+									.setValue(entity.getComponent(IntValueComponent.class).getValue() + 1);
 						}
-						TextEmitter te = optionVolumeSlider.getComponent(TextEmitterComponent.class)
-								.getTextEmitter(cache);
-						te.setText("" + optionVolumeSlider.getComponent(IntValueComponent.class).getValue());
+						TextEmitter te = entity.getComponent(TextEmitterComponent.class).getTextEmitter(cache);
+						OPTION_MENU_TEXTS[0] = GlobalLang.LANGUAGES[entity.getComponent(IntValueComponent.class).getValue()];
+						te.setText(OPTION_MENU_TEXTS[0]);
 						GlobalUtils.updateText(te);
 					}
 				});
-		optionVolumeSlider = addTextLabel("option2slider", "5", new Vector3f(1f, -0.4f, 0), Alignment.TEXT_CENTER);
-		optionVolumeSlider.addComponent(new IntValueComponent(5, 0, 10));
+		optionLanguage.addComponent(new IntValueComponent(
+				Arrays.binarySearch(GlobalLang.LANGUAGES, GlobalLang.getCURRENT_LANG()), GlobalLang.LANGUAGES.length));
 
-		optionVolumeText.addComponent(new SubEntitiesComponent(optionVolumeSlider));
+		optionVolumeText = addTextLabel("optionvolumetext", OPTION_MENU_TEXTS[1]+": 05", new Vector3f(0, -0.4f, 0),
+				Alignment.TEXT_CENTER, (Entity entity, boolean direction, Direction dir, Button button) -> {
+					System.out.println("callback "+direction+" "+dir+" "+button+" "+entity.getComponent(IntValueComponent.class).getValue());
+					if (direction) {
+						if (dir.equals(Direction.WEST)) {
+							entity.getComponent(IntValueComponent.class)
+									.setValue(entity.getComponent(IntValueComponent.class).getValue() - 1);
+						} else if (dir.equals(Direction.EAST)) {
+							entity.getComponent(IntValueComponent.class)
+									.setValue(entity.getComponent(IntValueComponent.class).getValue() + 1);
+						}
+						TextEmitter te = entity.getComponent(TextEmitterComponent.class)
+								.getTextEmitter(cache);
+						OPTION_MENU_TEXTS[1] = GlobalLang.get("menu.options.volume")+": " + MathUtils.fillPrefix(2, '0', entity.getComponent(IntValueComponent.class).getValue()+"");
+						te.setText(OPTION_MENU_TEXTS[1]);
+						GlobalUtils.updateText(te);
+						System.err.println(": "+te.getText()+" "+te.getInstances().getParticleCount());
+					}
+				});
+		optionVolumeText.addComponent(new IntValueComponent(5, 0, 10));
+		((UITextLabel) optionVolumeText).interact(true, Direction.NONE, Button.NONE);
 
-		entitiesOptionMenu = new Entity[] { option1, optionVolumeText };
-		entitiesOptionMenupos = new Vector3f[] { new Vector3f(0, 0.4f, 0), new Vector3f(0, -0.4f, 0),
-				new Vector3f(1f, -0.4f, 0) };
+
+		entitiesOptionMenu = new Entity[] { optionLanguage, optionVolumeText };
+		entitiesOptionMenupos = new Vector3f[] { new Vector3f(0, 0.4f, 0), new Vector3f(0, -0.4f, 0)};
 
 		chooseMenuElement(entitiesMainMenu, MAIN_MENU_TEXTS, mainVerticalIndex);
 		chooseMenuElement(entitiesPlayMenu, PLAY_MENU_TEXTS, otherVerticalIndex);
@@ -147,6 +169,14 @@ public class UISceneStartMenuState extends UISceneState {
 				i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
 	}
 
+	private void interact_playMode1(Entity entity1, boolean boolean2, Direction direction3, Button button4) {
+		GlobalUtils.INSTANCE.startGame(GameMode.EVOLUTION);
+	}
+
+	private void interact_playMode2(Entity entity1, boolean boolean2, Direction direction3, Button button4) {
+		GlobalUtils.INSTANCE.startGame(GameMode.EVOLUTION);
+	}
+	
 	private Entity addSlider(String name) { // need to also add text, create TextSlideBar entity or smth
 		UISliderEntity slider = new UISliderEntity(cache, new Vector2f(2, 0.3f), new Vector2f(0, 100), 0.05f, 0.5f,
 				new Transform3D());
@@ -247,9 +277,9 @@ public class UISceneStartMenuState extends UISceneState {
 
 		if (menuIndex == MI_MAIN) {
 			mainVerticalIndex = org.joml.Math.clamp(0, 2, mainVerticalIndex);
-		} else if(menuIndex == MI_OPTIONS) {
+		} else if (menuIndex == MI_OPTIONS) {
 			otherVerticalIndex = org.joml.Math.clamp(0, 1, otherVerticalIndex);
-		}if(menuIndex == MI_PLAY) {
+		} else if (menuIndex == MI_PLAY) {
 			otherVerticalIndex = org.joml.Math.clamp(0, 1, otherVerticalIndex);
 		}
 	}
@@ -264,11 +294,10 @@ public class UISceneStartMenuState extends UISceneState {
 					((UISliderEntity) entity).getSliderComponent().decrement();
 				}
 				((UISliderEntity) entity).update();
-			} else if (entity instanceof UITextLabel) {
+			} else if (entity instanceof UITextLabel) { // interaction button
 				((UITextLabel) entity).interact(direction, dir, button);
 			}
-		} else { // button
-			setFGColor(entity, GlobalConsts.PRIMARY_LIGHT);
+		} else if(!Button.NONE.equals(button)){ // button
 		}
 	}
 
@@ -283,12 +312,12 @@ public class UISceneStartMenuState extends UISceneState {
 		return null;
 	}
 
-	private void setFGColor(Entity entity, Vector4f primaryLight) {
+	private void setFGColor(Entity entity, Vector4f color) {
 		GlobalUtils.INSTANCE.createTask(GameEngine.QUEUE_RENDER).exec((t) -> {
 			if (entity.hasComponent(TextEmitterComponent.class)) {
 				TextMaterial mat = ((TextMaterial) entity.getComponent(TextEmitterComponent.class).getTextEmitter(cache)
 						.getInstances().getParticleMesh().getMaterial());
-				mat.setFgColor(GlobalConsts.HIGHLIGHT);
+				mat.setFgColor(color);
 			}
 			return null;
 		}).push();
@@ -310,26 +339,27 @@ public class UISceneStartMenuState extends UISceneState {
 
 		if (menuTransitionBase == MI_MAIN) {
 			setPos(entitiesMainMenu, entitiesMainMenupos, MAIN_X_POS_START, MAIN_X_POS_END,
-					i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
+					i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue*(i+1)));
 		} else if (menuTransitionTarget == MI_MAIN) {
 			setPos(entitiesMainMenu, entitiesMainMenupos, MAIN_X_POS_END, MAIN_X_POS_START,
-					i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
+					i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue*(i+1)));
 		}
 
 		if (menuTransitionBase == MI_PLAY) {
 			setPos(entitiesPlayMenu, entitiesPlayMenupos, OTHER_X_POS_START, OTHER_X_POS_END,
-					i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
+					i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue*(i+1)));
 		} else if (menuTransitionTarget == MI_PLAY) {
 			setPos(entitiesPlayMenu, entitiesPlayMenupos, OTHER_X_POS_END, OTHER_X_POS_START,
-					i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
+					i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue*(i+1)));
 		}
 
 		if (menuTransitionBase == MI_OPTIONS) {
 			setPos(entitiesOptionMenu, entitiesOptionMenupos, OTHER_X_POS_START, OTHER_X_POS_END,
-					i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
+					i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue*(i+1)));
+			updateLanguge();
 		} else if (menuTransitionTarget == MI_OPTIONS) {
 			setPos(entitiesOptionMenu, entitiesOptionMenupos, OTHER_X_POS_END, OTHER_X_POS_START,
-					i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
+					i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue*(i+1)));
 		}
 
 		if (menuTransitionValue >= 1) {
@@ -341,6 +371,22 @@ public class UISceneStartMenuState extends UISceneState {
 
 			menuTransitionValue = 0;
 		}
+	}
+
+	private void updateLanguge() {
+		String langName = OPTION_MENU_TEXTS[0];
+		try {
+			GlobalLang.load(langName);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		MAIN_MENU_TEXTS = new String[] { GlobalLang.get("menu.main.play"), GlobalLang.get("menu.main.options"),
+				GlobalLang.get("menu.main.quit") };
+
+		PLAY_MENU_TEXTS = new String[] { GlobalLang.get("menu.play.evolution"), GlobalLang.get("menu.play.infection") };
+
+		OPTION_MENU_TEXTS = new String[] { langName, GlobalLang.get("menu.options.volume") };
 	}
 
 	private void setPos(Entity[] entities, Vector3f[] offset, float start, float end, Function<Integer, Float> intFun) {
@@ -355,14 +401,14 @@ public class UISceneStartMenuState extends UISceneState {
 						new Vector3f(Math.lerp(start, end, Math.clamp(0, 1, intFun.apply(i))) + offset[i].x,
 								offset[i].y, offset[i].z))
 						.updateMatrix();
-				if (te.hasComponent(SubEntitiesComponent.class)) {
+				/*if (te.hasComponent(SubEntitiesComponent.class)) {
 					transform = te.getComponent(SubEntitiesComponent.class).getEntities().get(0)
 							.getComponent(Transform3DComponent.class).getTransform();
 					transform.setTranslation(
 							new Vector3f(Math.lerp(start, end, Math.clamp(0, 1, intFun.apply(i))) + offset[i].x + 1.5f,
 									offset[i].y, offset[i].z))
 							.updateMatrix();
-				}
+				}*/
 			}
 		}
 	}

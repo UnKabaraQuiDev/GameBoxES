@@ -37,6 +37,7 @@ import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureType;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.BrightnessFilterShader;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.ScaleShader;
+import lu.kbra.gamebox.client.es.game.game.utils.GlobalConsts;
 
 public class AdvancedCompositor implements Cleanupable {
 
@@ -46,7 +47,7 @@ public class AdvancedCompositor implements Cleanupable {
 	private static Mesh SCREEN = new Mesh("PASS_SCREEN", null, new Vec3fAttribArray("pos", 0, 1, new Vector3f[] { new Vector3f(-1, 1, 0), new Vector3f(1, 1, 0), new Vector3f(1, -1, 0), new Vector3f(-1, -1, 0) }),
 			new UIntAttribArray("ind", -1, 1, new int[] { 0, 1, 2, 0, 2, 3 }, GL40.GL_ELEMENT_ARRAY_BUFFER), new Vec2fAttribArray("uv", 1, 1, new Vector2f[] { new Vector2f(0, 1), new Vector2f(1, 1), new Vector2f(1, 0), new Vector2f(0, 0) }));
 
-	protected Vector4f background = new Vector4f(0.5f, 0.5f, 0.5f, 1);
+	protected Vector4f background = GlobalConsts.BG;
 
 	protected LinkedList<String> layers = new LinkedList<>();
 	protected LinkedList<String> passes = new LinkedList<>();

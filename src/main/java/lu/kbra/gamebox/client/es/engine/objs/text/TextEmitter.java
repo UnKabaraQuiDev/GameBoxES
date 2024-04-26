@@ -15,6 +15,8 @@ import lu.kbra.gamebox.client.es.engine.impl.UniqueID;
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 import lu.kbra.gamebox.client.es.engine.utils.consts.Alignment;
 import lu.kbra.gamebox.client.es.engine.utils.transform.Transform3D;
+import lu.kbra.gamebox.client.es.game.game.utils.GlobalLang;
+import lu.pcy113.pclib.GlobalLogger;
 
 public class TextEmitter implements Cleanupable, UniqueID {
 
@@ -63,8 +65,11 @@ public class TextEmitter implements Cleanupable, UniqueID {
 	}
 	
 	public boolean updateText() {
-		if (charBuffer.getLength() < text.length())
-			throw new RuntimeException("Char buffer too small to hold text. ('"+text+"' for length: "+charBuffer.getLength()+")");
+		// if (charBuffer.getLength() < text.length())
+		// 	throw new RuntimeException("Char buffer too small to hold text. ('"+text+"' for length: "+charBuffer.getLength()+")");
+		GlobalLogger.warning("Char buffer too small to hold text. ('"+text+"' for length: "+charBuffer.getLength()+")");
+		
+		text = text.substring(0, Math.min(text.length(), charBuffer.getLength()));
 
 		TextMaterial material = (TextMaterial) quad.getMaterial();
 

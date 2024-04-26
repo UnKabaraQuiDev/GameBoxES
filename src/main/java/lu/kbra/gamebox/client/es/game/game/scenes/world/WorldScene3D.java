@@ -59,7 +59,7 @@ public class WorldScene3D extends Scene3D {
 	public void setupScene() {
 		Gizmo axis = ObjLoader.loadGizmo("grid_xyz", "./resources/models/gizmos/grid_xyz.obj");
 		cache.addGizmo(axis);
-		super.addEntity("grid_xyz", new GizmoComponent(axis), new Transform3DComponent(new Transform3D(new Vector3f(0), new Quaternionf(), new Vector3f(10))));
+		// super.addEntity("grid_xyz", new GizmoComponent(axis), new Transform3DComponent(new Transform3D(new Vector3f(0), new Quaternionf(), new Vector3f(10))));
 
 		ce = addCellEntity("player", new CellDescriptor(CellType.PLAYER, "noname", "player"));
 

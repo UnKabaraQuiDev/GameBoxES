@@ -44,7 +44,7 @@ public class UIScene3D extends Scene3D {
 			state.input(dTime);
 		}
 
-		GlobalUtils.projectUI(pos -> {
+		/*GlobalUtils.projectUI(pos -> {
 			Vector2f p2 = GeoPlane.XY.projectToPlane(pos);
 			if (uiSliderEntity.getComponent(UISliderComponent.class).contains(p2)) {
 				if (window.isMouseButtonPressed(GLFW.GLFW_MOUSE_BUTTON_LEFT)) {
@@ -52,7 +52,7 @@ public class UIScene3D extends Scene3D {
 				}
 				uiSliderEntity.getComponent(UISliderComponent.class).hover(p2);
 			}
-		});
+		});*/
 
 	}
 

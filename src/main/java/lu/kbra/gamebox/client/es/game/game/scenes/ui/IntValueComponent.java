@@ -7,7 +7,7 @@ import lu.kbra.gamebox.client.es.engine.objs.entity.Component;
 public class IntValueComponent extends Component {
 
 	private int value;
-	private boolean clamp;
+	private boolean clamp, mod;
 	private int clampBoundsMin, clampBoundsMax;
 	
 	public IntValueComponent(int value) {
@@ -21,6 +21,12 @@ public class IntValueComponent extends Component {
 		this.clamp = true;
 	}
 	
+	public IntValueComponent(int val, int mod) {
+		this.value = val;
+		this.clampBoundsMax = mod;
+		this.mod = true;
+	}
+
 	public int getValue() {
 		return value;
 	}
@@ -28,6 +34,14 @@ public class IntValueComponent extends Component {
 	public void setValue(int value) {
 		this.value = value;
 		clamp();
+		mod();
+	}
+
+	private void mod() {
+		if(mod) {
+			value = java.lang.Math.floorMod(value, clampBoundsMax);
+			System.out.println("true mod: "+value+" "+clampBoundsMax);
+		}
 	}
 
 	private void clamp() {

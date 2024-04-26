@@ -66,4 +66,15 @@ public final class MathUtils {
 		return sum;
 	}
 
+	public static String fillPrefix(int desiredLength, char c, String string) {
+		if(string.length() >= desiredLength)
+			return string;
+		int missing = desiredLength - string.length();
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < missing; i++) {
+			sb.append(c);
+		}
+		return sb.toString() + string;
+	}
+
 }

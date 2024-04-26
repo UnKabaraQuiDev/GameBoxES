@@ -21,7 +21,7 @@ public class ControllerInputWatcher {
 	private Direction direction = Direction.NONE;
 	private boolean waitingForNoneDirection = true;
 
-	private float highThreshold = 0.8f;
+	private float highThreshold = 0.6f;
 
 	private Button button = Button.NONE;
 	private boolean waitingForNoneButton = true;
@@ -48,6 +48,9 @@ public class ControllerInputWatcher {
 		}
 
 		button = Button.getByIndex(dir);
+		if(xBtn == 0 && aBtn == 0 && bBtn == 0 && yBtn == 0) {
+			button = Button.NONE;
+		}
 	}
 
 	public void updateDirection(GLFWGamepadState gps) {
@@ -57,8 +60,8 @@ public class ControllerInputWatcher {
 		jsaxis = new float[] { jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_X], jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_Y] };
 		int dir = MathUtils.greatestAbsIndex(jsaxis);
 
-		float leftX = PDRUtils.applyMinThreshold(jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_X], highThreshold);
-		float leftY = PDRUtils.applyMinThreshold(jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_Y], highThreshold);
+		float leftX = PDRUtils.applyMinThreshold(GlobalUtils.applyMinThreshold(jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_X]), highThreshold);
+		float leftY = PDRUtils.applyMinThreshold(GlobalUtils.applyMinThreshold(jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_Y]), highThreshold);
 
 		if(System.currentTimeMillis() - lastDirection > TIME_DIRECTION) {
 			waitingForNoneDirection = false;

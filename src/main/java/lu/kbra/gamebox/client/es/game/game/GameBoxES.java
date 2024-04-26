@@ -17,15 +17,15 @@ import lu.kbra.gamebox.client.es.engine.impl.GameLogic;
 import lu.kbra.gamebox.client.es.game.game.debug.DebugUIElements;
 import lu.kbra.gamebox.client.es.game.game.options.GameOptions;
 import lu.kbra.gamebox.client.es.game.game.render.compositing.AdvancedCompositor;
+import lu.kbra.gamebox.client.es.game.game.scenes.ui.GameMode;
 import lu.kbra.gamebox.client.es.game.game.scenes.ui.UIScene3D;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.WorldScene3D;
 import lu.kbra.gamebox.client.es.game.game.utils.GameState;
+import lu.kbra.gamebox.client.es.game.game.utils.GlobalConsts;
 import lu.kbra.gamebox.client.es.game.game.utils.GlobalLang;
 import lu.kbra.gamebox.client.es.game.game.utils.GlobalUtils;
 
 public class GameBoxES extends GameLogic {
-
-	public static final String TEXT_TEXTURE = "text-30px";
 
 	public DebugUIElements debug;
 
@@ -53,12 +53,12 @@ public class GameBoxES extends GameLogic {
 		GlobalUtils.registerRenderers();
 
 		try {
-			GlobalLang.load("english");
+			GlobalLang.load(GlobalLang.LANGUAGES[0]);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 
-		cache.loadOrGetMaterial(TextShader.TextMaterial.NAME, TextShader.TextMaterial.class, cache.loadOrGetSingleTexture(TEXT_TEXTURE, "./resources/textures/fonts/arial_grid_bold_sdf-64_norm.png"));
+		cache.loadOrGetMaterial(TextShader.TextMaterial.NAME, TextShader.TextMaterial.class, cache.loadOrGetSingleTexture(GlobalConsts.TEXT_TEXTURE, "./resources/textures/fonts/font1row.png"));
 
 		loadWorldScene("not world");
 		loadUiScene("not ui");
@@ -103,9 +103,8 @@ public class GameBoxES extends GameLogic {
 		if (GameState.START_MENU.equals(gameState)) {
 			uiScene.input(dTime);
 		} else {
-			// worldScene.input(dTime);
+			worldScene.input(dTime);
 		}
-		worldScene.input(dTime);
 	}
 
 	@Override
@@ -121,6 +120,10 @@ public class GameBoxES extends GameLogic {
 			debug.update();
 		}
 		compositor.render(worldScene.getCache(), engine);
+	}
+
+	public void startGame(GameMode evolution) {
+		// gameState = GameState.
 	}
 
 }

@@ -120,11 +120,11 @@ public class GlobalUtils {
 		return new MeshComponent(mesh);
 	}
 
-	public static TextEmitterComponent createUIText(CacheManager cache, String name, String txt, Alignment align) {
-		TextMaterial mat = new TextMaterial("TextMaterial-" + GameBoxES.TEXT_TEXTURE + "-" + name.hashCode(), cache.getRenderShader(TextShader.NAME), cache.getTexture(GameBoxES.TEXT_TEXTURE));
+	public static TextEmitterComponent createUIText(CacheManager cache, String name, int bufferSize, String txt, Alignment align) {
+		TextMaterial mat = new TextMaterial("TextMaterial-" + GlobalConsts.TEXT_TEXTURE + "-" + name.hashCode(), cache.getRenderShader(TextShader.NAME), cache.getTexture(GlobalConsts.TEXT_TEXTURE));
 		cache.addMaterial(mat);
 		
-		TextEmitter text = new TextEmitter(name, mat, txt.length() + 2, txt, new Vector2f(0.35f, 0.5f));
+		TextEmitter text = new TextEmitter(name, mat, bufferSize, txt, new Vector2f(0.35f, 0.5f));
 		text.setAlignment(align);
 		text.createDrawBuffer();
 		text.updateText();
@@ -134,7 +134,8 @@ public class GlobalUtils {
 
 	public static void updateText(final TextEmitter textEmitter) {
 		GlobalUtils.INSTANCE.createTask(GameEngine.QUEUE_RENDER).exec((t) -> {
-			System.err.println("updated: "+textEmitter.updateText());
+			boolean res = textEmitter.updateText();
+			System.err.println(res);
 			return null;
 		}).push();
 	}
