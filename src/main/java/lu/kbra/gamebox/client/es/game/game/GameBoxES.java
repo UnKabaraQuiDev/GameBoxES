@@ -55,8 +55,10 @@ public class GameBoxES extends GameLogic {
 		GlobalUtils.registerRenderers();
 
 		try {
-			GlobalLang.load(GlobalLang.LANGUAGES[0]);
 			GlobalOptions.load();
+			System.err.println("loaded lang: "+GlobalOptions.LANGUAGE+" gets: "+GlobalLang.LANGUAGES[GlobalOptions.LANGUAGE]);
+			GlobalLang.load(GlobalLang.LANGUAGES[GlobalOptions.LANGUAGE]);
+			System.err.println(GlobalLang.get("menu.options.volume"));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -99,6 +101,16 @@ public class GameBoxES extends GameLogic {
 		worldScene = new WorldScene3D(path, cache, window);
 		worldScene.setupScene();
 		cache.addScene(worldScene);
+	}
+	
+	public void eventStop() {
+		try {
+			System.err.println("saveing: "+GlobalOptions.LANGUAGE);
+			
+			GlobalOptions.save();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

@@ -6,18 +6,20 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Properties;
 
+import lu.pcy113.pclib.GlobalLogger;
+
 public final class GlobalOptions {
 	
 	public static int VOLUME = 5;
+	public static int LANGUAGE = 0;
 	
 	public static void load() throws IOException {
 		File defaultFile = new File("resources/gd/config/default_options.properties");
-		
 		Properties defaultProp = new Properties();
 		defaultProp.load(new FileReader(defaultFile));
 		
 		Properties prop = new Properties(defaultProp);
-		File file = new File("options.properties");
+		File file = new File("config/options.properties");
 		if(!file.exists()) {
 			file.createNewFile();
 			prop.store(new FileWriter(file), null);
@@ -25,6 +27,18 @@ public final class GlobalOptions {
 		prop.load(new FileReader(file));
 		
 		VOLUME = Integer.parseInt(prop.getProperty("volume"));
+		LANGUAGE = Integer.parseInt(prop.getProperty("language"));
+	}
+	
+	public static void save() throws IOException {
+		GlobalLogger.info("Saving options");
+		
+		Properties prop = new Properties();
+		prop.setProperty("volume", VOLUME+"");
+		prop.setProperty("language", LANGUAGE+"");
+		
+		File file = new File("config/options.properties");
+		prop.store(new FileWriter(file), null);
 	}
 	
 }

@@ -1,20 +1,18 @@
 package lu.kbra.gamebox.client.es.game.game.scenes.ui;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.function.Function;
 
+import org.joml.Math;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-import org.joml.Math;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWGamepadState;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.graph.material.text.TextShader.TextMaterial;
 import lu.kbra.gamebox.client.es.engine.objs.entity.Entity;
-import lu.kbra.gamebox.client.es.engine.objs.entity.components.IntValueComponent;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.TextEmitterComponent;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.Transform3DComponent;
 import lu.kbra.gamebox.client.es.engine.objs.text.TextEmitter;
@@ -32,8 +30,8 @@ import lu.kbra.gamebox.client.es.game.game.scenes.ui.entities.UITextButton;
 import lu.kbra.gamebox.client.es.game.game.scenes.ui.entities.UITextLabel;
 import lu.kbra.gamebox.client.es.game.game.utils.ControllerInputWatcher;
 import lu.kbra.gamebox.client.es.game.game.utils.GameMode;
-import lu.kbra.gamebox.client.es.game.game.utils.GlobalOptions;
 import lu.kbra.gamebox.client.es.game.game.utils.GlobalLang;
+import lu.kbra.gamebox.client.es.game.game.utils.GlobalOptions;
 import lu.kbra.gamebox.client.es.game.game.utils.GlobalUtils;
 import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pclib.Pair;
@@ -116,18 +114,20 @@ public class UISceneStartMenuState extends UISceneState {
 
 		optionLanguage = addTextLabel("optionslanguage", GlobalLang.getLongestLang(), new Vector3f(0f, 0.4f, 0), Alignment.TEXT_CENTER, (Entity entity, boolean direction, Direction dir, Button button) -> {
 			if (direction) {
-				if (dir.equals(Direction.WEST)) {
-					entity.getComponent(IntValueComponent.class).setValue(entity.getComponent(IntValueComponent.class).getValue() - 1);
-				} else if (dir.equals(Direction.EAST)) {
-					entity.getComponent(IntValueComponent.class).setValue(entity.getComponent(IntValueComponent.class).getValue() + 1);
+				/*if (dir.equals(Direction.WEST)) {
+					GlobalOptions.LANGUAGE--;
+				} else */
+				if (dir.equals(Direction.EAST)) {
+					GlobalOptions.LANGUAGE++;
 				}
+				GlobalOptions.LANGUAGE %= GlobalLang.LANGUAGES.length;
 				TextEmitter te = entity.getComponent(TextEmitterComponent.class).getTextEmitter(cache);
-				OPTION_MENU_TEXTS[0] = GlobalLang.LANGUAGES[entity.getComponent(IntValueComponent.class).getValue()];
+				OPTION_MENU_TEXTS[0] = GlobalLang.LANGUAGES[GlobalOptions.LANGUAGE];
 				((UITextLabel) optionLanguage).setText(OPTION_MENU_TEXTS[0]);
 				GlobalUtils.updateText(te);
 			}
 		});
-		optionLanguage.addComponent(new IntValueComponent(Arrays.binarySearch(GlobalLang.LANGUAGES, GlobalLang.getCURRENT_LANG()), GlobalLang.LANGUAGES.length));
+		// optionLanguage.addComponent(new IntValueComponent(Arrays.binarySearch(GlobalLang.LANGUAGES, GlobalLang.getCURRENT_LANG()), GlobalLang.LANGUAGES.length));
 
 		optionVolume = addTextLabel("optionvolumetext", OPTION_MENU_TEXTS[1] + ": 0"+GlobalOptions.VOLUME, new Vector3f(0, -0.4f, 0), Alignment.TEXT_CENTER, (Entity entity, boolean direction, Direction dir, Button button) -> {
 			if (direction) {
@@ -363,7 +363,7 @@ public class UISceneStartMenuState extends UISceneState {
 	}
 
 	private void updateLanguge() {
-		String langName = OPTION_MENU_TEXTS[0];
+		String langName = GlobalLang.LANGUAGES[GlobalOptions.LANGUAGE];
 		try {
 			GlobalLang.load(langName);
 		} catch (IOException e) {
