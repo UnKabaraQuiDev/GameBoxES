@@ -40,7 +40,7 @@ public class TextEmitterRenderer extends Renderer<Scene, TextEmitterComponent> {
 			return;
 		}
 
-		GlobalLogger.log(Level.INFO, "TextEmitter : " + te.getId());
+		GlobalLogger.log(Level.FINE, "TextEmitter : " + te.getId());
 
 		InstanceEmitter pe = te.getInstances();
 		if (pe == null) {

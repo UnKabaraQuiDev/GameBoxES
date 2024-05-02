@@ -40,5 +40,9 @@ void main() {
 		discard;
 	}
 
-	fragColor = mix(bgColor, fgColor, mask.r >= 0.5f);
+	if(mask.r >= 0.5f) {
+		fragColor = fgColor;
+	}else{
+		fragColor = bgColor;
+	}
 }

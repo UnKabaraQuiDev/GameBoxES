@@ -65,9 +65,9 @@ public class TextEmitter implements Cleanupable, UniqueID {
 	}
 	
 	public boolean updateText() {
-		// if (charBuffer.getLength() < text.length())
+		if (charBuffer.getLength() < text.length())
 		// 	throw new RuntimeException("Char buffer too small to hold text. ('"+text+"' for length: "+charBuffer.getLength()+")");
-		GlobalLogger.warning("Char buffer too small to hold text. ('"+text+"' for length: "+charBuffer.getLength()+")");
+		GlobalLogger.warning("Char buffer too small to hold text. ('"+text+"' ("+text.length()+") for length: "+charBuffer.getLength()+")");
 		
 		text = text.substring(0, Math.min(text.length(), charBuffer.getLength()));
 

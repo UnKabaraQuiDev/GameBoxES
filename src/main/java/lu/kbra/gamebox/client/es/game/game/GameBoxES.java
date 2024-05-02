@@ -24,6 +24,7 @@ import lu.kbra.gamebox.client.es.game.game.utils.GameMode;
 import lu.kbra.gamebox.client.es.game.game.utils.GameState;
 import lu.kbra.gamebox.client.es.game.game.utils.GlobalConsts;
 import lu.kbra.gamebox.client.es.game.game.utils.GlobalLang;
+import lu.kbra.gamebox.client.es.game.game.utils.GlobalOptions;
 import lu.kbra.gamebox.client.es.game.game.utils.GlobalUtils;
 
 public class GameBoxES extends GameLogic {
@@ -49,12 +50,13 @@ public class GameBoxES extends GameLogic {
 
 		GlobalUtils.init(this, super.engine);
 
-		GlobalLogger.getLogger().setMinForwardLevel(Level.SEVERE);
+		GlobalLogger.getLogger().setMinForwardLevel(Level.INFO);
 
 		GlobalUtils.registerRenderers();
 
 		try {
 			GlobalLang.load(GlobalLang.LANGUAGES[0]);
+			GlobalOptions.load();
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -123,8 +125,9 @@ public class GameBoxES extends GameLogic {
 		compositor.render(worldScene.getCache(), engine);
 	}
 
-	public void startGame(GameMode evolution) {
-		// gameState = GameState.
+	public void startGame(GameMode mode) {
+		GlobalLogger.info("Starting: "+mode);
+		gameState = GameState.valueOf("LOADING_"+mode.name());
 	}
 
 }

@@ -36,7 +36,7 @@ public class GizmoRenderer extends Renderer<Scene, GizmoComponent> {
 
 		GameEngine.DEBUG.start("r_gizmo");
 
-		GlobalLogger.log(Level.INFO, "Gizmo : " + gizmo.getId());
+		GlobalLogger.log(Level.FINE, "Gizmo : " + gizmo.getId());
 
 		gizmo.bind();
 

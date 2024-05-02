@@ -36,7 +36,7 @@ public class InstanceEmitterRenderer extends Renderer<Scene, InstanceEmitterComp
 
 		GameEngine.DEBUG.start("r_inst");
 
-		GlobalLogger.log(Level.INFO, "InstanceEmitter : " + pe.getId());
+		GlobalLogger.log(Level.FINE, "InstanceEmitter : " + pe.getId());
 
 		Mesh mesh = pe.getParticleMesh();
 		if (mesh == null)

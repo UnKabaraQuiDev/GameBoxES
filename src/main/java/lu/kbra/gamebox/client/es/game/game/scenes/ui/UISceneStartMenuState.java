@@ -4,15 +4,12 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.function.Function;
 
-import org.joml.Math;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
+import org.joml.Math;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWGamepadState;
-
-import lu.pcy113.pclib.GlobalLogger;
-import lu.pcy113.pclib.Pair;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.graph.material.text.TextShader.TextMaterial;
@@ -35,9 +32,11 @@ import lu.kbra.gamebox.client.es.game.game.scenes.ui.entities.UITextButton;
 import lu.kbra.gamebox.client.es.game.game.scenes.ui.entities.UITextLabel;
 import lu.kbra.gamebox.client.es.game.game.utils.ControllerInputWatcher;
 import lu.kbra.gamebox.client.es.game.game.utils.GameMode;
-import lu.kbra.gamebox.client.es.game.game.utils.GlobalConsts;
+import lu.kbra.gamebox.client.es.game.game.utils.GlobalOptions;
 import lu.kbra.gamebox.client.es.game.game.utils.GlobalLang;
 import lu.kbra.gamebox.client.es.game.game.utils.GlobalUtils;
+import lu.pcy113.pclib.GlobalLogger;
+import lu.pcy113.pclib.Pair;
 
 public class UISceneStartMenuState extends UISceneState {
 
@@ -59,7 +58,7 @@ public class UISceneStartMenuState extends UISceneState {
 	private Vector3f[] entitiesPlayMenupos;
 	private UIEntity playMode1, playMode2;
 
-	private static String[] OPTION_MENU_TEXTS = { GlobalLang.LANGUAGES[0], GlobalLang.get("menu.options.volume") + ": 05" };
+	private static String[] OPTION_MENU_TEXTS = { GlobalLang.LANGUAGES[0], GlobalLang.get("menu.options.volume") + ": 0"+GlobalOptions.VOLUME };
 
 	private UIEntity[] entitiesOptionMenu;
 	private Vector3f[] entitiesOptionMenupos;
@@ -130,20 +129,20 @@ public class UISceneStartMenuState extends UISceneState {
 		});
 		optionLanguage.addComponent(new IntValueComponent(Arrays.binarySearch(GlobalLang.LANGUAGES, GlobalLang.getCURRENT_LANG()), GlobalLang.LANGUAGES.length));
 
-		optionVolume = addTextLabel("optionvolumetext", OPTION_MENU_TEXTS[1] + ": 05", new Vector3f(0, -0.4f, 0), Alignment.TEXT_CENTER, (Entity entity, boolean direction, Direction dir, Button button) -> {
+		optionVolume = addTextLabel("optionvolumetext", OPTION_MENU_TEXTS[1] + ": 0"+GlobalOptions.VOLUME, new Vector3f(0, -0.4f, 0), Alignment.TEXT_CENTER, (Entity entity, boolean direction, Direction dir, Button button) -> {
 			if (direction) {
 				if (dir.equals(Direction.WEST)) {
-					entity.getComponent(IntValueComponent.class).setValue(entity.getComponent(IntValueComponent.class).getValue() - 1);
+					GlobalOptions.VOLUME--;
 				} else if (dir.equals(Direction.EAST)) {
-					entity.getComponent(IntValueComponent.class).setValue(entity.getComponent(IntValueComponent.class).getValue() + 1);
+					GlobalOptions.VOLUME++;
 				}
 				TextEmitter te = entity.getComponent(TextEmitterComponent.class).getTextEmitter(cache);
-				OPTION_MENU_TEXTS[1] = GlobalLang.get("menu.options.volume") + ": " + MathUtils.fillPrefix(2, '0', entity.getComponent(IntValueComponent.class).getValue() + "");
+				OPTION_MENU_TEXTS[1] = GlobalLang.get("menu.options.volume") + ": " + MathUtils.fillPrefix(2, '0', GlobalOptions.VOLUME + "");
 				((UITextLabel) optionVolume).setText(OPTION_MENU_TEXTS[1]);
 				GlobalUtils.updateText(te);
 			}
 		});
-		optionVolume.addComponent(new IntValueComponent(5, 0, 10));
+		// optionVolume.addComponent(new IntValueComponent(5, 0, 10));
 		((UITextLabel) optionVolume).interact(true, Direction.NONE, Button.NONE);
 
 		entitiesOptionMenu = new UIEntity[] { optionLanguage, optionVolume };
@@ -163,11 +162,13 @@ public class UISceneStartMenuState extends UISceneState {
 	}
 
 	private void interact_playMode1(Entity entity1, boolean boolean2, Direction direction3, Button button4) {
-		GlobalUtils.INSTANCE.startGame(GameMode.EVOLUTION);
+		if(button4.equals(Button.EAST))
+			GlobalUtils.INSTANCE.startGame(GameMode.EVOLUTION);
 	}
 
 	private void interact_playMode2(Entity entity1, boolean boolean2, Direction direction3, Button button4) {
-		GlobalUtils.INSTANCE.startGame(GameMode.EVOLUTION);
+		if(button4.equals(Button.EAST))
+			GlobalUtils.INSTANCE.startGame(GameMode.INFECTION);
 	}
 
 	private UISliderEntity addSlider(String name) { // need to also add text, create TextSlideBar entity or smth
@@ -229,6 +230,7 @@ public class UISceneStartMenuState extends UISceneState {
 
 		cic.updateButton(gps);
 		if (cic.hasNextButton()) {
+			System.err.println("button: "+cic.getButton());
 			interact(otherVerticalIndex, false, null, cic.consumeButton());
 		}
 
@@ -287,6 +289,11 @@ public class UISceneStartMenuState extends UISceneState {
 				((UITextLabel) entity).interact(direction, dir, button);
 			}
 		} else if (!Button.NONE.equals(button)) { // button
+			if (entity instanceof UISliderEntity) {
+				// ignore
+			} else if (entity instanceof UITextLabel) { // interaction button
+				((UITextLabel) entity).interact(direction, dir, button);
+			}
 		}
 	}
 
@@ -365,7 +372,7 @@ public class UISceneStartMenuState extends UISceneState {
 
 		MAIN_MENU_TEXTS = new String[] { GlobalLang.get("menu.main.play"), GlobalLang.get("menu.main.options"), GlobalLang.get("menu.main.quit") };
 		PLAY_MENU_TEXTS = new String[] { GlobalLang.get("menu.play.evolution"), GlobalLang.get("menu.play.infection") + "" };
-		OPTION_MENU_TEXTS = new String[] { langName, GlobalLang.get("menu.options.volume") + ": " + MathUtils.fillPrefix(2, '0', optionVolume.getComponent(IntValueComponent.class).getValue() + "") };
+		OPTION_MENU_TEXTS = new String[] { langName, GlobalLang.get("menu.options.volume") + ": " + MathUtils.fillPrefix(2, '0', GlobalOptions.VOLUME + "") };
 
 		updateMenuTexts(entitiesMainMenu, MAIN_MENU_TEXTS);
 		updateMenuTexts(entitiesPlayMenu, PLAY_MENU_TEXTS);
@@ -415,5 +422,5 @@ public class UISceneStartMenuState extends UISceneState {
 			return null;
 		}).push();
 	}
-
+	
 }

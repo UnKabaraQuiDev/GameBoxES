@@ -39,7 +39,7 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 
 		GameEngine.DEBUG.start("r_mesh");
 
-		GlobalLogger.log(Level.INFO, "Mesh : " + mesh.getId() + ", vao:" + mesh.getVao() + ", vec:" + mesh.getVertexCount() + ", vbo:" + mesh.getVbo());
+		GlobalLogger.log(Level.FINE, "Mesh : " + mesh.getId() + ", vao:" + mesh.getVao() + ", vec:" + mesh.getVertexCount() + ", vbo:" + mesh.getVbo());
 
 		GameEngine.DEBUG.start("r_mesh_bind");
 		mesh.bind();

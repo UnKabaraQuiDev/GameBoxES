@@ -51,4 +51,8 @@ public enum Direction {
 		return NONE;
 	}
 
+	public static Direction getGLFWCross(int dir, byte up, byte right, byte down, byte left) {
+		return getByIndex(dir);
+	}
+
 }

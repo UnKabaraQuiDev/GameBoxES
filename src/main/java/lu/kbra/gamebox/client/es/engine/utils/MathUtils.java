@@ -38,14 +38,17 @@ public final class MathUtils {
 
 	public static int greatestAbsIndex(byte... arr) {
 		int index = -1;
-		byte max = Byte.MIN_VALUE;
+		byte max = Byte.MIN_VALUE, min = Byte.MAX_VALUE;
 		for (int i = 0; i < arr.length; i++) {
 			if (Math.abs(arr[i]) > max) {
 				index = i;
 				max = (byte) Math.abs(arr[i]);
 			}
+			if(Math.abs(arr[i]) < min) {
+				min = (byte) Math.abs(arr[i]);
+			}
 		}
-		return index;
+		return min != max ? index : -1;
 	}
 
 	public static float greatestAbs(byte... arr) {

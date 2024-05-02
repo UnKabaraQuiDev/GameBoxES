@@ -37,7 +37,7 @@ public class ControllerInputWatcher {
 		byte bBtn = jsaxis[GLFW.GLFW_GAMEPAD_BUTTON_B];
 		byte yBtn = jsaxis[GLFW.GLFW_GAMEPAD_BUTTON_Y];
 
-		jsaxis = new byte[] { xBtn, aBtn, bBtn, yBtn };
+		jsaxis = new byte[] { yBtn, bBtn, aBtn, xBtn };
 		int dir = MathUtils.greatestAbsIndex(jsaxis);
 
 		if (waitingForNoneButton && !(xBtn == 0 && aBtn == 0 && bBtn == 0 && yBtn == 0)) {
@@ -54,31 +54,33 @@ public class ControllerInputWatcher {
 	}
 
 	public void updateDirection(GLFWGamepadState gps) {
-		FloatBuffer fb = gps.axes();
-		float[] jsaxis = new float[fb.remaining() - 1];
+		ByteBuffer fb = gps.buttons();
+		byte[] jsaxis = new byte[fb.remaining()];
 		fb.get(jsaxis).clear();
-		jsaxis = new float[] { jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_X], jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_Y] };
+		jsaxis = new byte[] { jsaxis[GLFW.GLFW_GAMEPAD_BUTTON_DPAD_UP], jsaxis[GLFW.GLFW_GAMEPAD_BUTTON_DPAD_RIGHT], jsaxis[GLFW.GLFW_GAMEPAD_BUTTON_DPAD_DOWN], jsaxis[GLFW.GLFW_GAMEPAD_BUTTON_DPAD_LEFT] };
 		int dir = MathUtils.greatestAbsIndex(jsaxis);
 
-		float leftX = PDRUtils.applyMinThreshold(GlobalUtils.applyMinThreshold(jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_X]), highThreshold);
-		float leftY = PDRUtils.applyMinThreshold(GlobalUtils.applyMinThreshold(jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_Y]), highThreshold);
-
+		byte up = jsaxis[0],
+				right = jsaxis[1],
+				down = jsaxis[2],
+				left = jsaxis[3];
+		
 		if(System.currentTimeMillis() - lastDirection > TIME_DIRECTION) {
 			waitingForNoneDirection = false;
 			lastDirection = System.currentTimeMillis();
-		}else if (waitingForNoneDirection && !(leftX == 0 && leftY == 0)) {
+		}else if (waitingForNoneDirection && !(left == 0 && right == 0 && up == 0 && down == 0)) {
 			return;
 		} else {
 			waitingForNoneDirection = false;
 			// continue;
 		}
-
-		direction = Direction.getGLFW(dir, leftX, leftY);
+		
+		direction = Direction.getGLFWCross(dir, up, right, down, left);
 	}
 
 	public Pair<Direction, Float> getSoftDirection(GLFWGamepadState gps) {
 		FloatBuffer fb = gps.axes();
-		float[] jsaxis = new float[fb.remaining() - 1];
+		float[] jsaxis = new float[fb.remaining()];
 		fb.get(jsaxis).clear();
 		jsaxis = new float[] { jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_X], jsaxis[GLFW.GLFW_GAMEPAD_AXIS_LEFT_Y] };
 		int dir = MathUtils.greatestAbsIndex(jsaxis);
