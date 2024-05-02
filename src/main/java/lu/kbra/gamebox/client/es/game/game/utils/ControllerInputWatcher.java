@@ -14,6 +14,7 @@ import lu.kbra.gamebox.client.es.engine.utils.MathUtils;
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 import lu.kbra.gamebox.client.es.engine.utils.consts.Button;
 import lu.kbra.gamebox.client.es.engine.utils.consts.Direction;
+import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
 
 public class ControllerInputWatcher {
 

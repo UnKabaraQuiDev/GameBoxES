@@ -1,4 +1,4 @@
-package lu.kbra.gamebox.client.es.game.game.utils;
+package lu.kbra.gamebox.client.es.game.game.render.shaders;
 
 import java.util.HashMap;
 

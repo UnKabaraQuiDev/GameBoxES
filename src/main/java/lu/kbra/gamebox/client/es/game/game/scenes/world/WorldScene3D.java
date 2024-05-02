@@ -31,6 +31,8 @@ public class WorldScene3D extends Scene3D {
 	private Window window;
 
 	private float distance;
+	
+	private World world;
 
 	public WorldScene3D(String name, CacheManager parentCache, Window window) {
 		super(name);

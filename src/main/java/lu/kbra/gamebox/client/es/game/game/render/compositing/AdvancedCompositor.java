@@ -37,7 +37,7 @@ import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureType;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.BrightnessFilterShader;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.ScaleShader;
-import lu.kbra.gamebox.client.es.game.game.utils.GlobalConsts;
+import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalConsts;
 
 public class AdvancedCompositor implements Cleanupable {
 

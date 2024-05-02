@@ -21,7 +21,7 @@ import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 import lu.kbra.gamebox.client.es.engine.utils.consts.Alignment;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
 import lu.kbra.gamebox.client.es.engine.utils.transform.Transform3D;
-import lu.kbra.gamebox.client.es.game.game.utils.GlobalUtils;
+import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
 
 public class DebugUIElements {
 

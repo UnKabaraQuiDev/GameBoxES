@@ -5,7 +5,7 @@ import org.joml.Vector3f;
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
 import lu.kbra.gamebox.client.es.engine.graph.material.text.TextShader.TextMaterial;
 import lu.kbra.gamebox.client.es.engine.utils.consts.Alignment;
-import lu.kbra.gamebox.client.es.game.game.utils.GlobalConsts;
+import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalConsts;
 
 public class SelectableUITextLabel extends UITextLabel {
 

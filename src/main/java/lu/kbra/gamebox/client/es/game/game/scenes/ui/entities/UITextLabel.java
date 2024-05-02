@@ -8,7 +8,7 @@ import lu.kbra.gamebox.client.es.engine.objs.entity.components.Transform3DCompon
 import lu.kbra.gamebox.client.es.engine.utils.consts.Alignment;
 import lu.kbra.gamebox.client.es.engine.utils.consts.Button;
 import lu.kbra.gamebox.client.es.engine.utils.consts.Direction;
-import lu.kbra.gamebox.client.es.game.game.utils.GlobalUtils;
+import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
 
 public class UITextLabel extends UIEntity {
 

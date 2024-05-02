@@ -30,9 +30,9 @@ import lu.kbra.gamebox.client.es.game.game.scenes.ui.entities.UITextButton;
 import lu.kbra.gamebox.client.es.game.game.scenes.ui.entities.UITextLabel;
 import lu.kbra.gamebox.client.es.game.game.utils.ControllerInputWatcher;
 import lu.kbra.gamebox.client.es.game.game.utils.GameMode;
-import lu.kbra.gamebox.client.es.game.game.utils.GlobalLang;
-import lu.kbra.gamebox.client.es.game.game.utils.GlobalOptions;
-import lu.kbra.gamebox.client.es.game.game.utils.GlobalUtils;
+import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalLang;
+import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalOptions;
+import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
 import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pclib.Pair;
 
@@ -421,6 +421,13 @@ public class UISceneStartMenuState extends UISceneState {
 			}
 			return null;
 		}).push();
+	}
+	
+	@Override
+	public void cleanup() {
+		scene.getEntities().clear();
+		
+		super.cleanup();
 	}
 	
 }

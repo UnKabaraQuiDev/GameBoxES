@@ -14,12 +14,15 @@ import lu.kbra.gamebox.client.es.engine.utils.geo.GeoPlane;
 import lu.kbra.gamebox.client.es.engine.utils.transform.Transform3D;
 import lu.kbra.gamebox.client.es.game.game.scenes.ui.entities.UISliderEntity;
 import lu.kbra.gamebox.client.es.game.game.scenes.ui.entities.UISliderEntity.UISliderComponent;
-import lu.kbra.gamebox.client.es.game.game.utils.GlobalUtils;
+import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
 
 public class UIScene3D extends Scene3D {
 
 	private CacheManager cache;
 	private Window window;
+
+	private UISceneState state;
+	private UISceneMajorUpgradeTree treeState;
 
 	public UIScene3D(String name, CacheManager cache, Window window) {
 		super(name);
@@ -27,33 +30,33 @@ public class UIScene3D extends Scene3D {
 		this.window = window;
 	}
 
-	UISliderEntity uiSliderEntity;
-
-	UISceneState state;
-
 	public void setupStartMenu() {
-		uiSliderEntity = new UISliderEntity(cache, new Vector2f(2.5f, 0.5f), new Vector2f(0, 1), 0.1f, 0.5f, new Transform3D(new Quaternionf().rotateXYZ(0, (float) Math.toRadians(90f), 0)));
-		addEntity("uiSlider", uiSliderEntity).setActive(false);
-		
 		state = new UISceneStartMenuState(this);
 	}
 
-	public void input(float dTime) {
+	public void setupGame() {
+		treeState = new UISceneMajorUpgradeTree(this);
+	}
+	
+	public void clearMainMenu() {
+		if(state instanceof UISceneStartMenuState) {
+			GlobalUtils.cleanup(state);
+			state = null;
+		}
+	}
+	
+	public void showUpgradeTree(boolean b) {
+		if (b) {
+			state = treeState;
+		} else {
+			state = null;
+		}
+	}
 
+	public void input(float dTime) {
 		if (state != null) {
 			state.input(dTime);
 		}
-
-		/*GlobalUtils.projectUI(pos -> {
-			Vector2f p2 = GeoPlane.XY.projectToPlane(pos);
-			if (uiSliderEntity.getComponent(UISliderComponent.class).contains(p2)) {
-				if (window.isMouseButtonPressed(GLFW.GLFW_MOUSE_BUTTON_LEFT)) {
-					uiSliderEntity.getComponent(UISliderComponent.class).click(p2);
-				}
-				uiSliderEntity.getComponent(UISliderComponent.class).hover(p2);
-			}
-		});*/
-
 	}
 
 	public void setupScene() {

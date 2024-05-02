@@ -1,4 +1,4 @@
-package lu.kbra.gamebox.client.es.game.game.utils;
+package lu.kbra.gamebox.client.es.game.game.utils.global;
 
 import org.joml.Vector4f;
 

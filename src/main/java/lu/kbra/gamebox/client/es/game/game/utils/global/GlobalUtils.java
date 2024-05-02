@@ -1,4 +1,4 @@
-package lu.kbra.gamebox.client.es.game.game.utils;
+package lu.kbra.gamebox.client.es.game.game.utils.global;
 
 import java.util.function.Consumer;
 
@@ -17,6 +17,7 @@ import lu.kbra.gamebox.client.es.engine.graph.render.MeshRenderer;
 import lu.kbra.gamebox.client.es.engine.graph.render.Scene3DRenderer;
 import lu.kbra.gamebox.client.es.engine.graph.render.TextEmitterRenderer;
 import lu.kbra.gamebox.client.es.engine.graph.texture.SingleTexture;
+import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
 import lu.kbra.gamebox.client.es.engine.objs.entity.Entity;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.MeshComponent;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.TextEmitterComponent;
@@ -31,6 +32,9 @@ import lu.kbra.gamebox.client.es.engine.utils.file.FileUtils;
 import lu.kbra.gamebox.client.es.engine.utils.geo.GeoPlane;
 import lu.kbra.gamebox.client.es.engine.utils.geo.Ray;
 import lu.kbra.gamebox.client.es.game.game.GameBoxES;
+import lu.kbra.gamebox.client.es.game.game.render.shaders.UIButtonShader;
+import lu.kbra.gamebox.client.es.game.game.render.shaders.UIButtonShader.UIButtonMaterial;
+import lu.kbra.gamebox.client.es.game.game.scenes.ui.UISceneState;
 
 public class GlobalUtils {
 	
@@ -136,6 +140,20 @@ public class GlobalUtils {
 		GlobalUtils.INSTANCE.createTask(GameEngine.QUEUE_RENDER).exec((t) -> {
 			boolean res = textEmitter.updateText();
 			System.err.println(res);
+			return null;
+		}).push();
+	}
+
+	public static void cleanup(Cleanupable state) {
+		GlobalUtils.INSTANCE.createTask(GameEngine.QUEUE_RENDER).exec((t) -> {
+			state.cleanup();
+			return null;
+		}).push();
+	}
+
+	public static void pushRender(Runnable run) {
+		GlobalUtils.INSTANCE.createTask(GameEngine.QUEUE_RENDER).exec((t) -> {
+			run.run();
 			return null;
 		}).push();
 	}

@@ -15,7 +15,7 @@ import lu.kbra.gamebox.client.es.engine.impl.UniqueID;
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 import lu.kbra.gamebox.client.es.engine.utils.consts.Alignment;
 import lu.kbra.gamebox.client.es.engine.utils.transform.Transform3D;
-import lu.kbra.gamebox.client.es.game.game.utils.GlobalLang;
+import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalLang;
 import lu.pcy113.pclib.GlobalLogger;
 
 public class TextEmitter implements Cleanupable, UniqueID {

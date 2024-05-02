@@ -8,30 +8,27 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 
-import lu.pcy113.pclib.GlobalLogger;
-
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.graph.composition.SceneRenderLayer;
 import lu.kbra.gamebox.client.es.engine.graph.material.text.TextShader;
 import lu.kbra.gamebox.client.es.engine.impl.GameLogic;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
 import lu.kbra.gamebox.client.es.game.game.debug.DebugUIElements;
-import lu.kbra.gamebox.client.es.game.game.options.GameOptions;
 import lu.kbra.gamebox.client.es.game.game.render.compositing.AdvancedCompositor;
 import lu.kbra.gamebox.client.es.game.game.scenes.ui.UIScene3D;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.WorldScene3D;
 import lu.kbra.gamebox.client.es.game.game.utils.GameMode;
 import lu.kbra.gamebox.client.es.game.game.utils.GameState;
-import lu.kbra.gamebox.client.es.game.game.utils.GlobalConsts;
-import lu.kbra.gamebox.client.es.game.game.utils.GlobalLang;
-import lu.kbra.gamebox.client.es.game.game.utils.GlobalOptions;
-import lu.kbra.gamebox.client.es.game.game.utils.GlobalUtils;
+import lu.kbra.gamebox.client.es.game.game.utils.data.PlayerData;
+import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalConsts;
+import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalLang;
+import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalOptions;
+import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
+import lu.pcy113.pclib.GlobalLogger;
 
 public class GameBoxES extends GameLogic {
 
 	public DebugUIElements debug;
-
-	public GameOptions gameOptions;
 
 	public AdvancedCompositor compositor;
 
@@ -40,6 +37,8 @@ public class GameBoxES extends GameLogic {
 
 	public SceneRenderLayer worldSceneRenderLayer;
 	public SceneRenderLayer uiSceneRenderLayer;
+
+	public PlayerData playerData;
 
 	public GameState gameState = GameState.START_MENU;
 
@@ -56,14 +55,17 @@ public class GameBoxES extends GameLogic {
 
 		try {
 			GlobalOptions.load();
-			System.err.println("loaded lang: "+GlobalOptions.LANGUAGE+" gets: "+GlobalLang.LANGUAGES[GlobalOptions.LANGUAGE]);
+			System.err.println("loaded lang: " + GlobalOptions.LANGUAGE + " gets: "
+					+ GlobalLang.LANGUAGES[GlobalOptions.LANGUAGE]);
 			GlobalLang.load(GlobalLang.LANGUAGES[GlobalOptions.LANGUAGE]);
 			System.err.println(GlobalLang.get("menu.options.volume"));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 
-		cache.loadOrGetMaterial(TextShader.TextMaterial.NAME, TextShader.TextMaterial.class, cache.loadOrGetSingleTexture(GlobalConsts.TEXT_TEXTURE, "./resources/textures/fonts/font1row.png", TextureFilter.NEAREST));
+		cache.loadOrGetMaterial(TextShader.TextMaterial.NAME, TextShader.TextMaterial.class,
+				cache.loadOrGetSingleTexture(GlobalConsts.TEXT_TEXTURE, "./resources/textures/fonts/font1row.png",
+						TextureFilter.NEAREST));
 
 		loadWorldScene("not world");
 		loadUiScene("not ui");
@@ -102,11 +104,9 @@ public class GameBoxES extends GameLogic {
 		worldScene.setupScene();
 		cache.addScene(worldScene);
 	}
-	
+
 	public void eventStop() {
 		try {
-			System.err.println("saveing: "+GlobalOptions.LANGUAGE);
-			
 			GlobalOptions.save();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -138,8 +138,14 @@ public class GameBoxES extends GameLogic {
 	}
 
 	public void startGame(GameMode mode) {
-		GlobalLogger.info("Starting: "+mode);
-		gameState = GameState.valueOf("LOADING_"+mode.name());
+		GlobalLogger.info("Starting: " + mode);
+		gameState = GameState.valueOf("LOADING_" + mode.name());
+		playerData = new PlayerData();
+		uiScene.clearMainMenu();
+		GlobalUtils.pushRender(() -> {
+			uiScene.setupGame();
+			uiScene.showUpgradeTree(true);
+		});
 	}
 
 }

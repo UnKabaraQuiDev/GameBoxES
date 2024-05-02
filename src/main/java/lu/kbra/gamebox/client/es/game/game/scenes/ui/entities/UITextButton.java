@@ -9,7 +9,7 @@ import lu.kbra.gamebox.client.es.engine.objs.entity.components.SubEntitiesCompon
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.Transform3DComponent;
 import lu.kbra.gamebox.client.es.engine.objs.text.TextEmitter;
 import lu.kbra.gamebox.client.es.engine.utils.consts.Alignment;
-import lu.kbra.gamebox.client.es.game.game.utils.GlobalUtils;
+import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
 
 public class UITextButton extends UIEntity {
 
