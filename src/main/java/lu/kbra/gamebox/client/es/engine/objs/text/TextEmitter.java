@@ -5,6 +5,8 @@ import java.util.Arrays;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 
+import lu.pcy113.pclib.GlobalLogger;
+
 import lu.kbra.gamebox.client.es.engine.cache.attrib.UIntAttribArray;
 import lu.kbra.gamebox.client.es.engine.geom.Mesh;
 import lu.kbra.gamebox.client.es.engine.geom.instance.InstanceEmitter;
@@ -15,8 +17,6 @@ import lu.kbra.gamebox.client.es.engine.impl.UniqueID;
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 import lu.kbra.gamebox.client.es.engine.utils.consts.Alignment;
 import lu.kbra.gamebox.client.es.engine.utils.transform.Transform3D;
-import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalLang;
-import lu.pcy113.pclib.GlobalLogger;
 
 public class TextEmitter implements Cleanupable, UniqueID {
 

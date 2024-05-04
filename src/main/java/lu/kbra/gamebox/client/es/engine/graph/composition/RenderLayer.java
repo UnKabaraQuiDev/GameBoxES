@@ -29,8 +29,9 @@ public abstract class RenderLayer<K, J, O extends Renderable> implements Rendera
 		return visible;
 	}
 
-	public void setVisible(boolean visible) {
+	public RenderLayer<K, J, O> setVisible(boolean visible) {
 		this.visible = visible;
+		return this;
 	}
 
 	@Override

@@ -13,13 +13,13 @@ import lu.kbra.gamebox.client.es.engine.graph.composition.SceneRenderLayer;
 import lu.kbra.gamebox.client.es.engine.graph.material.text.TextShader;
 import lu.kbra.gamebox.client.es.engine.impl.GameLogic;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
+import lu.kbra.gamebox.client.es.game.game.data.PlayerData;
 import lu.kbra.gamebox.client.es.game.game.debug.DebugUIElements;
 import lu.kbra.gamebox.client.es.game.game.render.compositing.AdvancedCompositor;
 import lu.kbra.gamebox.client.es.game.game.scenes.ui.UIScene3D;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.WorldScene3D;
 import lu.kbra.gamebox.client.es.game.game.utils.GameMode;
 import lu.kbra.gamebox.client.es.game.game.utils.GameState;
-import lu.kbra.gamebox.client.es.game.game.utils.data.PlayerData;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalConsts;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalLang;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalOptions;
@@ -55,30 +55,27 @@ public class GameBoxES extends GameLogic {
 
 		try {
 			GlobalOptions.load();
-			System.err.println("loaded lang: " + GlobalOptions.LANGUAGE + " gets: "
-					+ GlobalLang.LANGUAGES[GlobalOptions.LANGUAGE]);
+			GlobalLogger.log("Loaded lang: " + GlobalOptions.LANGUAGE + " gets: " + GlobalLang.LANGUAGES[GlobalOptions.LANGUAGE]);
 			GlobalLang.load(GlobalLang.LANGUAGES[GlobalOptions.LANGUAGE]);
-			System.err.println(GlobalLang.get("menu.options.volume"));
+			GlobalLogger.log("Loaded volume: "+GlobalLang.get("menu.options.volume"));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 
-		cache.loadOrGetMaterial(TextShader.TextMaterial.NAME, TextShader.TextMaterial.class,
-				cache.loadOrGetSingleTexture(GlobalConsts.TEXT_TEXTURE, "./resources/textures/fonts/font1row.png",
-						TextureFilter.NEAREST));
+		cache.loadOrGetMaterial(TextShader.TextMaterial.NAME, TextShader.TextMaterial.class, cache.loadOrGetSingleTexture(GlobalConsts.TEXT_TEXTURE, "./resources/textures/fonts/font1row.png", TextureFilter.NEAREST));
 
-		loadWorldScene("not world");
-		loadUiScene("not ui");
+		loadWorldScene("world1");
+		loadUiScene("ui");
 
 		debug = new DebugUIElements(cache, engine, uiScene, new Vector3f(-4f, 1.5f, 0), new Quaternionf());
 
 		compositor = new AdvancedCompositor();
 
-		worldSceneRenderLayer = new SceneRenderLayer("worldScene", worldScene, worldScene.getCache());
+		worldSceneRenderLayer = (SceneRenderLayer) new SceneRenderLayer("worldScene", worldScene, () -> worldScene.getWorld() != null ? worldScene.getWorld().getCache() : worldScene.getCache()).setVisible(false);
 		cache.addRenderLayer(worldSceneRenderLayer);
 		compositor.addRenderLayer(0, worldSceneRenderLayer);
 
-		uiSceneRenderLayer = new SceneRenderLayer("uiScene", uiScene, uiScene.getCache());
+		uiSceneRenderLayer = new SceneRenderLayer("uiScene", uiScene, () -> uiScene.getState() != null ? uiScene.getState().getCache() : uiScene.getCache());
 		cache.addRenderLayer(uiSceneRenderLayer);
 		compositor.addRenderLayer(1, uiSceneRenderLayer);
 
@@ -134,7 +131,7 @@ public class GameBoxES extends GameLogic {
 		if (debug != null) {
 			debug.update();
 		}
-		compositor.render(worldScene.getCache(), engine);
+		compositor.render(engine);
 	}
 
 	public void startGame(GameMode mode) {
@@ -144,7 +141,9 @@ public class GameBoxES extends GameLogic {
 		uiScene.clearMainMenu();
 		GlobalUtils.pushRender(() -> {
 			uiScene.setupGame();
-			uiScene.showUpgradeTree(true);
+			uiScene.showUpgradeTree(false);
+			worldScene.setupGame();
+			worldSceneRenderLayer.setVisible(true);
 		});
 	}
 

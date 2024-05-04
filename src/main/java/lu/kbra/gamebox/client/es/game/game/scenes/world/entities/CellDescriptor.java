@@ -4,8 +4,11 @@ import java.io.FileNotFoundException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import org.joml.Vector2f;
+
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
 import lu.kbra.gamebox.client.es.engine.graph.material.Material;
+import lu.kbra.gamebox.client.es.engine.utils.MathUtils;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureType;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.CellShader;
@@ -14,26 +17,37 @@ import lu.kbra.gamebox.client.es.game.game.render.shaders.CellShader.CellMateria
 public class CellDescriptor {
 
 	private CellType cellType;
+	private String id;
 	private String scientificName;
-	private String dataName;
 
-	public CellDescriptor(CellType cellType, String scientificName, String dataName) {
+	private Vector2f hostilityRange, fertilityRange, humidityRange;
+
+	public CellDescriptor(String id, CellType cellType, String scientificName, Vector2f hostilityRange, Vector2f fertilityRange, Vector2f humidityRange) {
+		this.id = id;
+
 		this.cellType = cellType;
 		this.scientificName = scientificName;
-		this.dataName = dataName;
+
+		this.hostilityRange = hostilityRange;
+		this.fertilityRange = fertilityRange;
+		this.humidityRange = humidityRange;
+	}
+
+	public boolean match(float hostility, float fertility, float humidity) {
+		return MathUtils.rangeContains(hostility, hostilityRange) && MathUtils.rangeContains(fertility, fertilityRange) && MathUtils.rangeContains(humidity, humidityRange);
 	}
 
 	public Material createMaterial(CacheManager cache) {
 		if (cache == null)
 			throw new IllegalArgumentException("CacheManager == null");
 
-		final String shaderName = cellType.name() + dataName;
+		final String shaderName = cellType.name() + id;
 
 		if (cache.hasMaterial(shaderName)) {
 			return (CellMaterial) cache.getMaterial(shaderName);
 		}
 
-		String imagePath = cellType.getTexturePath()+dataName+".png";
+		String imagePath = cellType.getTexturePath() + id + ".png";
 
 		if (!Files.exists(Paths.get(imagePath))) {
 			throw new RuntimeException(new FileNotFoundException("Couln't find file: " + imagePath));
@@ -51,6 +65,10 @@ public class CellDescriptor {
 		return material;
 	}
 
+	public String getId() {
+		return id;
+	}
+
 	public CellType getCellType() {
 		return cellType;
 	}
@@ -65,14 +83,6 @@ public class CellDescriptor {
 
 	public void setScientificName(String scientificName) {
 		this.scientificName = scientificName;
-	}
-
-	public String getDataName() {
-		return dataName;
-	}
-
-	public void setDataName(String dataName) {
-		this.dataName = dataName;
 	}
 
 }

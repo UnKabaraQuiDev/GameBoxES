@@ -17,7 +17,7 @@ public enum CellType {
 	}
 
 	public String getTexturePath() {
-		return FileUtils.RESOURCES + "gd/" + dataPath;
+		return FileUtils.RESOURCES + "gd/cells/" + dataPath;
 	}
 
 }

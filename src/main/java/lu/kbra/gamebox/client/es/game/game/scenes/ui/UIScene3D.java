@@ -1,19 +1,12 @@
 package lu.kbra.gamebox.client.es.game.game.scenes.ui;
 
-import org.joml.Quaternionf;
-import org.joml.Vector2f;
 import org.joml.Vector3f;
-import org.lwjgl.glfw.GLFW;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
 import lu.kbra.gamebox.client.es.engine.graph.window.Window;
 import lu.kbra.gamebox.client.es.engine.scene.Scene3D;
 import lu.kbra.gamebox.client.es.engine.scene.camera.Camera3D;
-import lu.kbra.gamebox.client.es.engine.utils.geo.GeoPlane;
-import lu.kbra.gamebox.client.es.engine.utils.transform.Transform3D;
-import lu.kbra.gamebox.client.es.game.game.scenes.ui.entities.UISliderEntity;
-import lu.kbra.gamebox.client.es.game.game.scenes.ui.entities.UISliderEntity.UISliderComponent;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
 
 public class UIScene3D extends Scene3D {
@@ -23,7 +16,7 @@ public class UIScene3D extends Scene3D {
 
 	private UISceneState state;
 	private UISceneMajorUpgradeTree treeState;
-
+	
 	public UIScene3D(String name, CacheManager cache, Window window) {
 		super(name);
 		this.cache = new CacheManager(cache);
@@ -70,6 +63,10 @@ public class UIScene3D extends Scene3D {
 		((Camera3D) camera).updateMatrix();
 	}
 
+	public UISceneState getState() {
+		return state;
+	}
+	
 	public CacheManager getCache() {
 		return cache;
 	}

@@ -1,6 +1,7 @@
 package lu.kbra.gamebox.client.es.engine.utils;
 
 import org.joml.Quaternionf;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
@@ -78,6 +79,10 @@ public final class MathUtils {
 			sb.append(c);
 		}
 		return sb.toString() + string;
+	}
+
+	public static boolean rangeContains(float value, Vector2f range) {
+		return range.x < value && value < range.y;
 	}
 
 }

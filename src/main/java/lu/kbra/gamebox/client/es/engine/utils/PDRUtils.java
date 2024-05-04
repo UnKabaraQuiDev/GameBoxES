@@ -3,12 +3,15 @@ package lu.kbra.gamebox.client.es.engine.utils;
 import java.awt.Color;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.stream.IntStream;
 
 import org.joml.Matrix3x2f;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.lwjgl.openal.AL11;
 import org.lwjgl.openal.ALC11;
 import org.lwjgl.opengl.GL11;
@@ -213,8 +216,8 @@ public final class PDRUtils {
 		return in;
 	}
 
-	public static int[] toPrimitiveInt(Integer[] data) {
-		return Arrays.stream(data).map((Integer i) -> (i == null ? 0 : i)).mapToInt(Integer::intValue).toArray();
+	public static int[] toPrimitiveInt(Object[] data) {
+		return Arrays.stream(data).map((Object i) -> (int) (i == null ? 0 : i)).mapToInt(Integer::intValue).toArray();
 	}
 
 	public static byte[] toPrimitiveByte(Byte[] data) {
@@ -378,6 +381,20 @@ public final class PDRUtils {
 
 	public static Vector3f getCoordinates(Vector3f in, int[] viewport) {
 		return new Vector3f(in.x, viewport[3] - in.y, in.z);
+	}
+
+	public static Vector2f loadRangeFloat(JSONObject sobj, String key) {
+		JSONArray arr = sobj.getJSONArray(key);
+		return new Vector2f(arr.getInt(0), arr.getInt(1));
+	}
+
+	public static int[] randomIntArray(int length, int min, int max) {
+		Random rand = new Random();
+		int[] arr = new int[length];
+		for(int i = 0; i < length; i++) {
+			arr[i] = rand.nextInt(max-min)+min;
+		}
+		return arr;
 	}
 
 }

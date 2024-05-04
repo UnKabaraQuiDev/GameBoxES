@@ -141,9 +141,9 @@ public abstract class AttribArray implements Cleanupable {
 	public static <T> boolean update(AttribArray arr, T[] data) {
 		arr.bind();
 		if (arr instanceof IntAttribArray)
-			return ((IntAttribArray) arr).update(PDRUtils.toPrimitiveInt((Integer[]) data));
+			return ((IntAttribArray) arr).update(PDRUtils.toPrimitiveInt(data));
 		else if (arr instanceof UIntAttribArray)
-			return ((UIntAttribArray) arr).update(PDRUtils.toPrimitiveInt((Integer[]) data));
+			return ((UIntAttribArray) arr).update(PDRUtils.toPrimitiveInt(data));
 		else if (arr instanceof FloatAttribArray)
 			return ((FloatAttribArray) arr).update(PDRUtils.toPrimitiveFloat(data));
 		else if (arr instanceof Mat4fAttribArray)

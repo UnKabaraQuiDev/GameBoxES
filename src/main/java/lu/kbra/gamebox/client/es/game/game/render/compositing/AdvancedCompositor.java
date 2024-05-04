@@ -101,16 +101,16 @@ public class AdvancedCompositor implements Cleanupable {
 		return true;
 	}
 
-	public void render(CacheManager cache, GameEngine engine) {
+	public void render(GameEngine engine) {
 		if (highLightsMaterial == null) {
-			highLightsMaterial = cache.loadOrGetMaterial(BrightnessFilterShader.BrightnessFilterMaterial.NAME, BrightnessFilterShader.BrightnessFilterMaterial.class, (float) 0.49801f);
+			highLightsMaterial = engine.getCache().loadOrGetMaterial(BrightnessFilterShader.BrightnessFilterMaterial.NAME, BrightnessFilterShader.BrightnessFilterMaterial.class, (float) 0.49801f);
 		}
 		if (scaleMaterial == null) {
-			scaleMaterial = cache.loadOrGetMaterial(ScaleShader.ScaleMaterial.NAME, ScaleShader.ScaleMaterial.class, (int) 1920, (int) 1080);
+			scaleMaterial = engine.getCache().loadOrGetMaterial(ScaleShader.ScaleMaterial.NAME, ScaleShader.ScaleMaterial.class, (int) 1920, (int) 1080);
 		}
 
 		if (framebuffer == null) {
-			framebuffer = cache.loadFramebuffer(this.getClass().getName() + "#" + hashCode());
+			framebuffer = engine.getCache().loadFramebuffer(this.getClass().getName() + "#" + hashCode());
 		}
 
 		framebuffer.bind();
@@ -149,7 +149,7 @@ public class AdvancedCompositor implements Cleanupable {
 			if (l == null)
 				continue;
 
-			RenderLayer rl = cache.getRenderLayer(l);
+			RenderLayer rl = engine.getCache().getRenderLayer(l);
 			if (rl == null) {
 				GlobalLogger.log(Level.WARNING, "Render Layer: " + l + ", not found in Cache");
 				break;
@@ -157,7 +157,8 @@ public class AdvancedCompositor implements Cleanupable {
 
 			if (!rl.isVisible())
 				continue;
-
+			
+			GlobalLogger.info("Rendering: "+rl.getId());
 			rl.render(engine, framebuffer);
 		}
 

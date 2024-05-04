@@ -2,6 +2,11 @@ package lu.kbra.gamebox.client.es.game.game.utils;
 
 import java.util.Random;
 
+import org.joml.Vector2d;
+import org.joml.Vector2f;
+import org.joml.Vector3d;
+import org.joml.Vector3f;
+
 /**
  * https://gist.github.com/alksily/7a85a1898e65c936f861ee93516e397d
  */
@@ -96,6 +101,22 @@ public class NoiseGenerator {
 		}
 
 		return value / initialSize;
+	}
+	
+	public double noise(Vector2f a) {
+		return noise(a.x, a.y);
+	}
+	
+	public double noise(Vector3f a) {
+		return noise(a.x, a.y, a.z);
+	}
+	
+	public double noise(Vector2d a) {
+		return noise(a.x, a.y);
+	}
+	
+	public double noise(Vector3d a) {
+		return noise(a.x, a.y, a.z);
 	}
 
 	public double smoothNoise(double x, double y, double z) {

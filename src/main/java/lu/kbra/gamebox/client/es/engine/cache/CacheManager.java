@@ -4,6 +4,9 @@ import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+
+import lu.pcy113.pclib.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.audio.Sound;
 import lu.kbra.gamebox.client.es.engine.cache.attrib.AttribArray;
@@ -27,7 +30,6 @@ import lu.kbra.gamebox.client.es.engine.scene.Scene;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureType;
 import lu.kbra.gamebox.client.es.engine.utils.transform.Transform;
-import lu.pcy113.pclib.GlobalLogger;
 
 public class CacheManager implements Cleanupable {
 
@@ -53,7 +55,7 @@ public class CacheManager implements Cleanupable {
 
 	public CacheManager(CacheManager parent) {
 		this.parent = parent;
-		
+
 		this.meshes = new HashMap<>();
 		this.scenes = new HashMap<>();
 		this.renderers = new HashMap<>();
@@ -71,8 +73,9 @@ public class CacheManager implements Cleanupable {
 
 	@Override
 	public void cleanup() {
-		GlobalLogger.log();
-
+		GlobalLogger.log(Level.WARNING);
+		GlobalLogger.warning("Cleaning up !");
+		
 		this.meshes.values().forEach(Mesh::cleanup);
 		this.meshes.clear();
 
@@ -175,8 +178,11 @@ public class CacheManager implements Cleanupable {
 	public boolean addRenderShader(RenderShader m) {
 		if (m == null)
 			return false;
-		if (this.renderShaders.containsKey(m.getId()) && !this.renderShaders.get(m.getId()).equals(m))
+		if (this.renderShaders.containsKey(m.getId()) && !this.renderShaders.get(m.getId()).equals(m)) {
+			GlobalLogger.log();
+			GlobalLogger.warning("Overwriting shader: "+m.getId());
 			this.renderShaders.remove(m.getId()).cleanup();
+		}
 		return this.renderShaders.putIfAbsent(m.getId(), m) == null;
 	}
 
@@ -435,7 +441,7 @@ public class CacheManager implements Cleanupable {
 	public boolean hasSound(String name) {
 		return sounds.containsKey(name) || (parent != null ? parent.hasSound(name) : false);
 	}
-	
+
 	public boolean hasTexture(String name) {
 		return textures.containsKey(name) || (parent != null ? parent.hasTexture(name) : false);
 	}
@@ -443,11 +449,11 @@ public class CacheManager implements Cleanupable {
 	/*
 	 * LOADER
 	 */
-	
+
 	public SingleTexture loadOrGetSingleTexture(String name, String path) {
 		return loadOrGetSingleTexture(name, path, TextureFilter.LINEAR);
 	}
-	
+
 	public SingleTexture loadOrGetSingleTexture(String name, String path, TextureFilter nearest) {
 		if (hasTexture(name)) {
 			return (SingleTexture) getTexture(name);
@@ -455,16 +461,26 @@ public class CacheManager implements Cleanupable {
 			return loadSingleTexture(name, path);
 		}
 	}
-	
-	public <T extends Material> Material loadOrGetMaterial(String name, Class<T> clazz, Object... args) {
+
+	public <T extends Material> T loadOrGetMaterial(String name, Class<T> clazz, Object... args) {
+		GlobalLogger.log();
+		
 		if (hasMaterial(name)) {
-			return getMaterial(name);
+			return (T) getMaterial(name);
 		} else {
 			return loadMaterial(clazz, args);
 		}
 	}
 
-	public <T extends Material> Material loadMaterial(Class<T> clazz, Object... args) {
+	public <T extends RenderShader> T loadOrGetRenderShader(String name, Class<T> clazz, Object... args) {
+		if(hasRenderShader(name)) {
+			return (T) getRenderShader(name);
+		}else {
+			return loadRenderShader(clazz, args);
+		}
+	}
+
+	private <T extends RenderShader> T loadRenderShader(Class<T> clazz, Object[] args) {
 		GlobalLogger.log();
 		
 		try {
@@ -473,14 +489,32 @@ public class CacheManager implements Cleanupable {
 				types[i] = args[i].getClass();
 			}
 
-			Material mat = clazz.getConstructor(types).newInstance(args);
+			T shader = clazz.getConstructor(types).newInstance(args);
+
+			addRenderShader(shader);
+
+			return shader;
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+			throw new ShaderInstantiationException(e);
+		}
+	}
+
+	public <T extends Material> T loadMaterial(Class<T> clazz, Object... args) {
+		GlobalLogger.log();
+
+		try {
+			Class[] types = new Class[args.length];
+			for (int i = 0; i < args.length; i++) {
+				types[i] = args[i].getClass();
+			}
+
+			T mat = clazz.getConstructor(types).newInstance(args);
 
 			addMaterial(mat);
 			addRenderShader(mat.getRenderShader());
 
 			return mat;
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-				| NoSuchMethodException | SecurityException e) {
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 			throw new ShaderInstantiationException(e);
 		}
 	}
@@ -498,8 +532,7 @@ public class CacheManager implements Cleanupable {
 		return texture;
 	}
 
-	public InstanceEmitter loadInstanceEmitter(String name, Mesh mesh, int count, Transform baseTransform,
-			AttribArray... attribArrays) {
+	public InstanceEmitter loadInstanceEmitter(String name, Mesh mesh, int count, Transform baseTransform, AttribArray... attribArrays) {
 		InstanceEmitter instanceEmitter = new InstanceEmitter(name, mesh, count, baseTransform, attribArrays);
 		addInstanceEmitter(instanceEmitter);
 		return instanceEmitter;
@@ -562,14 +595,14 @@ public class CacheManager implements Cleanupable {
 		out.println(Framebuffer.class.getName() + ": " + this.framebuffers.size() + ": " + this.framebuffers);
 		out.println(Sound.class.getName() + ": " + this.sounds.size() + ": " + this.sounds);
 		out.println("== PARENT ==");
-		if(parent == null) {
+		if (parent == null) {
 			out.println("null");
-		}else {
+		} else {
 			parent.dump(out);
 		}
 		out.println("== DUMP:" + this.getClass().getName() + ":end ==");
 	}
-	
+
 	public CacheManager getParent() {
 		return parent;
 	}

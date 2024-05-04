@@ -1,6 +1,7 @@
 package lu.kbra.gamebox.client.es.engine;
 
 import java.util.Objects;
+import java.util.logging.Level;
 
 import org.joml.Vector3f;
 
@@ -358,6 +359,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 
 	public void stop() {
 		GlobalLogger.getLogger().setForwardContent(true);
+		GlobalLogger.getLogger().setMinForwardLevel(Level.ALL);
 		GlobalLogger.log();
 		GlobalLogger.info("Thread: " + Thread.currentThread().getName() + " stopped GameEngine");
 		this.running = false;

@@ -1,5 +1,6 @@
 package lu.kbra.gamebox.client.es.engine.graph.composition;
 
+import java.util.function.Supplier;
 import java.util.logging.Level;
 
 import lu.pcy113.pclib.GlobalLogger;
@@ -13,9 +14,9 @@ import lu.kbra.gamebox.client.es.engine.scene.Scene3D;
 
 public class SceneRenderLayer extends RenderLayer<GameEngine, Framebuffer, Scene> {
 	
-	private CacheManager cache;
+	private Supplier<CacheManager> cache;
 	
-	public SceneRenderLayer(String name, Scene target, CacheManager cache) {
+	public SceneRenderLayer(String name, Scene target, Supplier<CacheManager> cache) {
 		super(name, target);
 		this.cache = cache;
 	}
@@ -24,13 +25,13 @@ public class SceneRenderLayer extends RenderLayer<GameEngine, Framebuffer, Scene
 	public void render(GameEngine parent, Framebuffer fb) {
 		Renderer<GameEngine, Scene> renderer = null;
 		if (this.target instanceof Scene3D) {
-			renderer = (Renderer<GameEngine, Scene>) cache.getRenderer(Scene3D.NAME);
+			renderer = (Renderer<GameEngine, Scene>) cache.get().getRenderer(Scene3D.NAME);
 			if (renderer == null) {
 				GlobalLogger.log(Level.SEVERE, "No renderer found for: " + Scene3D.NAME);
 				return;
 			}
 		} else if (this.target instanceof Scene2D) {
-			renderer = (Renderer<GameEngine, Scene>) cache.getRenderer(Scene2D.NAME);
+			renderer = (Renderer<GameEngine, Scene>) cache.get().getRenderer(Scene2D.NAME);
 			if (renderer == null) {
 				GlobalLogger.log(Level.SEVERE, "No renderer found for: " + Scene2D.NAME);
 				return;
@@ -38,7 +39,7 @@ public class SceneRenderLayer extends RenderLayer<GameEngine, Framebuffer, Scene
 		}
 
 		if (renderer != null) {
-			renderer.render(this.cache, parent, this.target);
+			renderer.render(this.cache.get(), parent, this.target);
 		}
 	}
 

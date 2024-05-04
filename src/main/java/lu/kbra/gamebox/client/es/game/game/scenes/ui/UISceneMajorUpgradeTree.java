@@ -15,7 +15,7 @@ public class UISceneMajorUpgradeTree extends UISceneState {
 		
 		Mesh bgMesh = Mesh.newQuad("uiBGMesh", cache.loadOrGetMaterial(FillMaterial.NAME, FillShader.FillMaterial.class, GlobalConsts.BG), new Vector2f(2));
 		cache.addMesh(bgMesh);
-		scene.addEntity("uiBG", new MeshComponent(bgMesh));
+		scene.addEntity("uiBG", new MeshComponent(bgMesh)).setActive(true);
 	}
 
 	@Override

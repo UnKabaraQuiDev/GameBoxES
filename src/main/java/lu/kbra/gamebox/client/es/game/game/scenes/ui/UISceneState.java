@@ -12,11 +12,15 @@ public abstract class UISceneState implements Cleanupable {
 	
 	public UISceneState(UIScene3D scene) {
 		this.scene = scene;
-		this.cache = scene.getCache();
+		this.cache = new CacheManager(scene.getCache());
 		this.window = scene.getWindow();
 	}
 	
 	public abstract void input(float dTime);
+	
+	public CacheManager getCache() {
+		return cache;
+	}
 	
 	@Override
 	public void cleanup() {

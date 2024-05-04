@@ -30,12 +30,6 @@ public class Material implements UniqueID {
 		if (shader.getUniforms() == null)
 			throw new IllegalArgumentException("Shader uniforms cannot be null!");
 		shader.getUniforms().keySet().forEach(t -> properties.put(t, null));
-
-		/*
-		 * this.uniforms = new FloatAttribArray(name+"#"+hashCode(), -1, 1, new
-		 * float[16], BufferType.UNIFORM.getGlId(), false); uniforms.bind();
-		 * uniforms.init(); uniforms.unbind();
-		 */
 	}
 
 	public void bindProperties(CacheManager cache, Renderable parent, RenderShader shader) {

@@ -1,0 +1,9 @@
+{
+	"virus1": {
+		"type": "VIRUS",
+		"scientific": "Scientifico i don't kno",
+		"hostility": [0, 1],
+		"fertility": [0, 1],
+		"humidity": [0, 1]
+	}
+}

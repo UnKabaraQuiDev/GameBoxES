@@ -24,7 +24,7 @@ public class CellEntity extends Entity {
 		addComponent(this.mesh);
 	}
 
-	public static CellEntity load(CacheManager cache, String name, CellDescriptor descriptor) {
+	public static CellEntity load(CacheManager cache, CellDescriptor descriptor) {
 		Material material = descriptor.createMaterial(cache);
 		Mesh mesh = Mesh.newQuad(descriptor.getCellType().getDataPath() + material.hashCode(), material, new Vector2f(1));
 		mesh.createDrawBuffer();
@@ -43,6 +43,11 @@ public class CellEntity extends Entity {
 
 	public MeshComponent getMesh() {
 		return mesh;
+	}
+	
+	@Override
+	public String toString() {
+		return super.toString()+"{"+cellDescriptor.getCellType()+" & "+cellDescriptor.getId()+"}";
 	}
 
 }

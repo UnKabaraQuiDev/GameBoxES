@@ -9,21 +9,14 @@ import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
 import lu.kbra.gamebox.client.es.engine.geom.Gizmo;
 import lu.kbra.gamebox.client.es.engine.geom.utils.ObjLoader;
-import lu.kbra.gamebox.client.es.engine.graph.material.text.TextShader;
-import lu.kbra.gamebox.client.es.engine.graph.material.text.TextShader.TextMaterial;
 import lu.kbra.gamebox.client.es.engine.graph.window.Window;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.GizmoComponent;
-import lu.kbra.gamebox.client.es.engine.objs.entity.components.TextEmitterComponent;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.Transform3DComponent;
-import lu.kbra.gamebox.client.es.engine.objs.text.TextEmitter;
 import lu.kbra.gamebox.client.es.engine.scene.Scene3D;
 import lu.kbra.gamebox.client.es.engine.scene.camera.Camera3D;
-import lu.kbra.gamebox.client.es.engine.utils.consts.Alignment;
 import lu.kbra.gamebox.client.es.engine.utils.geo.GeoPlane;
 import lu.kbra.gamebox.client.es.engine.utils.transform.Transform3D;
-import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.CellDescriptor;
-import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.CellEntity;
-import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.CellType;
+import lu.kbra.gamebox.client.es.game.game.world.World;
 
 public class WorldScene3D extends Scene3D {
 
@@ -31,7 +24,7 @@ public class WorldScene3D extends Scene3D {
 	private Window window;
 
 	private float distance;
-	
+
 	private World world;
 
 	public WorldScene3D(String name, CacheManager parentCache, Window window) {
@@ -40,31 +33,37 @@ public class WorldScene3D extends Scene3D {
 		this.window = window;
 	}
 
-	CellEntity ce;
-
 	public void input(float dTime) {
 		Camera3D cam = ((Camera3D) super.getCamera());
 		cam.getPosition()
 				.add(new Vector3f((window.isCharPress('r') ? 1 : 0) - (window.isCharPress('f') ? 1 : 0), (window.isCharPress('z') ? 1 : 0) - (window.isCharPress('s') ? 1 : 0), (window.isCharPress('d') ? 1 : 0) - (window.isCharPress('q') ? 1 : 0)));
 
-		if (window.isJoystickPresent()) {
-			ce.getTransform().getTransform().translateAdd(new Vector3f(
-					window.getJoystickAxis(GLFW.GLFW_JOYSTICK_1, GLFW.GLFW_GAMEPAD_AXIS_LEFT_X),
-					-window.getJoystickAxis(GLFW.GLFW_JOYSTICK_1, GLFW.GLFW_GAMEPAD_AXIS_LEFT_Y),
-					0));
-			ce.getTransform().getTransform().updateMatrix();
-			placeCamera(GeoPlane.XY.projectToPlane(ce.getTransform().getTransform().getTranslation()));
+		if (window.isJoystickPresent() && world != null && world.getPlayer() != null) {
+			world.getPlayer().getTransform().getTransform().translateAdd(new Vector3f(window.getJoystickAxis(GLFW.GLFW_JOYSTICK_1, GLFW.GLFW_GAMEPAD_AXIS_LEFT_X), -window.getJoystickAxis(GLFW.GLFW_JOYSTICK_1, GLFW.GLFW_GAMEPAD_AXIS_LEFT_Y), 0));
+			world.getPlayer().getTransform().getTransform().updateMatrix();
+			placeCamera(GeoPlane.XY.projectToPlane(world.getPlayer().getTransform().getTransform().getTranslation()));
 		}
 		cam.updateMatrix();
+	}
+
+	public void setupGame() {
+		if (world != null) {
+			world.cleanup();
+			world = null;
+		}
+
+		world = new World(cache);
+		world.genWorld(new Vector2f(0), 10, 5 * 5 * 3 * 10).forEach(e -> this.addEntity(e.getClass().getSimpleName() + "-" + e.hashCode(), e));
 	}
 
 	public void setupScene() {
 		Gizmo axis = ObjLoader.loadGizmo("grid_xyz", "./resources/models/gizmos/grid_xyz.obj");
 		cache.addGizmo(axis);
-		// super.addEntity("grid_xyz", new GizmoComponent(axis), new Transform3DComponent(new Transform3D(new Vector3f(0), new Quaternionf(), new Vector3f(10))));
+		super.addEntity("grid_xyz", new GizmoComponent(axis), new Transform3DComponent(new Transform3D(new Vector3f(0), new Quaternionf(), new Vector3f(10))));
 
-		ce = addCellEntity("player", new CellDescriptor(CellType.PLAYER, "noname", "player"));
-
+		System.err.println("added gizmo: ");
+		cache.dump(System.err);
+		
 		camera.getProjection().setPerspective(true);
 		((Camera3D) camera).setUp(GameEngine.Y_POS);
 		camera.getProjection().setFov((float) Math.toRadians(70));
@@ -85,14 +84,12 @@ public class WorldScene3D extends Scene3D {
 		placeCamera(pos);
 	}
 
-	private CellEntity addCellEntity(String name, CellDescriptor desc) {
-		CellEntity ce = CellEntity.load(cache, name, desc);
-
-		return (CellEntity) addEntity(name, ce);
-	}
-
 	public CacheManager getCache() {
 		return cache;
+	}
+
+	public World getWorld() {
+		return world;
 	}
 
 }
