@@ -234,12 +234,6 @@ public final class PDRUtils {
 		return y;
 	}
 
-	/*
-	 * public static int[] intRepeating(int[] is, int size) { int[] in = new
-	 * int[size*is.length]; for(int i = 0; i < is.length; i++) for(int j = 0; j <
-	 * size; j++) in[i*size+j] = is[i]; return in; }
-	 */
-
 	public static float[] floatRepeating(float[] is, int size) {
 		if (size <= 0) {
 			throw new IllegalArgumentException("Size should be greater than 0");
@@ -288,10 +282,8 @@ public final class PDRUtils {
 
 	public static byte[] toByteArray(ByteBuffer cb) {
 		int old = cb.position();
-		System.out.println("pos: " + old + " " + cb.remaining());
 		byte[] c = new byte[cb.remaining()];
 		cb.get(c);
-		System.out.println("cont: " + Arrays.toString(c));
 		cb.position(old);
 		return c;
 	}
