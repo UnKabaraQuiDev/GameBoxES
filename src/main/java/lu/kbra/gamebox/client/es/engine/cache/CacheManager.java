@@ -24,14 +24,18 @@ import lu.kbra.gamebox.client.es.engine.graph.texture.CubemapTexture;
 import lu.kbra.gamebox.client.es.engine.graph.texture.SingleTexture;
 import lu.kbra.gamebox.client.es.engine.graph.texture.Texture;
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
+import lu.kbra.gamebox.client.es.engine.impl.UniqueID;
 import lu.kbra.gamebox.client.es.engine.objs.lights.PointLight;
 import lu.kbra.gamebox.client.es.engine.objs.text.TextEmitter;
 import lu.kbra.gamebox.client.es.engine.scene.Scene;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureType;
+import lu.kbra.gamebox.client.es.engine.utils.consts.TextureWrap;
 import lu.kbra.gamebox.client.es.engine.utils.transform.Transform;
 
-public class CacheManager implements Cleanupable {
+public class CacheManager implements Cleanupable, UniqueID {
+
+	protected String name;
 
 	protected CacheManager parent;
 
@@ -49,12 +53,17 @@ public class CacheManager implements Cleanupable {
 	protected Map<String, Sound> sounds;
 	protected Map<String, Framebuffer> framebuffers;
 
-	public CacheManager() {
-		this(null);
+	public CacheManager(String name) {
+		this(name, null);
 	}
 
 	public CacheManager(CacheManager parent) {
+		this(parent.getId() + "-child", parent);
+	}
+
+	public CacheManager(String name, CacheManager parent) {
 		this.parent = parent;
+		this.name = name;
 
 		this.meshes = new HashMap<>();
 		this.scenes = new HashMap<>();
@@ -75,7 +84,7 @@ public class CacheManager implements Cleanupable {
 	public void cleanup() {
 		GlobalLogger.log(Level.WARNING);
 		GlobalLogger.warning("Cleaning up !");
-		
+
 		this.meshes.values().forEach(Mesh::cleanup);
 		this.meshes.clear();
 
@@ -114,6 +123,11 @@ public class CacheManager implements Cleanupable {
 
 		this.framebuffers.values().forEach(Framebuffer::cleanup);
 		this.framebuffers.clear();
+	}
+
+	@Override
+	public String getId() {
+		return name;
 	}
 
 	public void cleanupSounds() {
@@ -180,7 +194,7 @@ public class CacheManager implements Cleanupable {
 			return false;
 		if (this.renderShaders.containsKey(m.getId()) && !this.renderShaders.get(m.getId()).equals(m)) {
 			GlobalLogger.log();
-			GlobalLogger.warning("Overwriting shader: "+m.getId());
+			GlobalLogger.warning("Overwriting shader: " + m.getId());
 			this.renderShaders.remove(m.getId()).cleanup();
 		}
 		return this.renderShaders.putIfAbsent(m.getId(), m) == null;
@@ -453,18 +467,22 @@ public class CacheManager implements Cleanupable {
 	public SingleTexture loadOrGetSingleTexture(String name, String path) {
 		return loadOrGetSingleTexture(name, path, TextureFilter.LINEAR);
 	}
+	
+	public SingleTexture loadOrGetSingleTexture(String name, String path, TextureFilter filter) {
+		return loadOrGetSingleTexture(name, path, filter, TextureWrap.REPEAT);
+	}
 
-	public SingleTexture loadOrGetSingleTexture(String name, String path, TextureFilter nearest) {
+	public SingleTexture loadOrGetSingleTexture(String name, String path, TextureFilter filter, TextureWrap wrap) {
 		if (hasTexture(name)) {
 			return (SingleTexture) getTexture(name);
 		} else {
-			return loadSingleTexture(name, path);
+			return loadSingleTexture(name, path, filter, wrap);
 		}
 	}
 
 	public <T extends Material> T loadOrGetMaterial(String name, Class<T> clazz, Object... args) {
 		GlobalLogger.log();
-		
+
 		if (hasMaterial(name)) {
 			return (T) getMaterial(name);
 		} else {
@@ -473,16 +491,16 @@ public class CacheManager implements Cleanupable {
 	}
 
 	public <T extends RenderShader> T loadOrGetRenderShader(String name, Class<T> clazz, Object... args) {
-		if(hasRenderShader(name)) {
+		if (hasRenderShader(name)) {
 			return (T) getRenderShader(name);
-		}else {
+		} else {
 			return loadRenderShader(clazz, args);
 		}
 	}
 
 	private <T extends RenderShader> T loadRenderShader(Class<T> clazz, Object[] args) {
 		GlobalLogger.log();
-		
+
 		try {
 			Class[] types = new Class[args.length];
 			for (int i = 0; i < args.length; i++) {
@@ -519,14 +537,19 @@ public class CacheManager implements Cleanupable {
 		}
 	}
 
-	public SingleTexture loadSingleTexture(String string, String path) {
-		return loadSingleTexture(string, path, TextureFilter.LINEAR, TextureType.TXT2D);
+	public SingleTexture loadSingleTexture(String string, String path, TextureFilter filter) {
+		return loadSingleTexture(string, path, filter, TextureType.TXT2D, TextureWrap.REPEAT);
+	}
+	
+	public SingleTexture loadSingleTexture(String string, String path, TextureFilter filter, TextureWrap wrap) {
+		return loadSingleTexture(string, path, filter, TextureType.TXT2D, wrap);
 	}
 
-	public SingleTexture loadSingleTexture(String string, String path, TextureFilter filter, TextureType type) {
+	public SingleTexture loadSingleTexture(String string, String path, TextureFilter filter, TextureType type, TextureWrap wrap) {
 		SingleTexture texture = new SingleTexture(string, path);
 		texture.setFilters(filter);
 		texture.setTextureType(type);
+		texture.setWraps(wrap);
 		texture.setup();
 		addTexture(texture);
 		return texture;
@@ -581,7 +604,7 @@ public class CacheManager implements Cleanupable {
 	 */
 
 	public void dump(PrintStream out) {
-		out.println("== DUMP:" + this.getClass().getName() + ":start ==");
+		out.println("== DUMP:" + this.getClass().getName() + " :==: " + getId() + " :start ==");
 		out.println(Mesh.class.getName() + ": " + this.meshes.size() + ": " + this.meshes);
 		out.println(Scene.class.getName() + ": " + this.scenes.size() + ": " + this.scenes);
 		out.println(Renderer.class.getName() + ": " + this.renderers.size() + ": " + this.renderers);

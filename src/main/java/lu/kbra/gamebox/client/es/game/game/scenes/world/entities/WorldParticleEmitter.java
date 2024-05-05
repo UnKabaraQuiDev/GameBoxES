@@ -4,10 +4,8 @@ import org.joml.Vector2f;
 
 import lu.kbra.gamebox.client.es.engine.cache.attrib.AttribArray;
 import lu.kbra.gamebox.client.es.engine.cache.attrib.FloatAttribArray;
-import lu.kbra.gamebox.client.es.engine.cache.attrib.IntAttribArray;
 import lu.kbra.gamebox.client.es.engine.geom.Mesh;
 import lu.kbra.gamebox.client.es.engine.geom.instance.InstanceEmitter;
-import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 import lu.kbra.gamebox.client.es.engine.utils.transform.Transform;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.WorldParticleShader.WorldParticleMaterial;
 

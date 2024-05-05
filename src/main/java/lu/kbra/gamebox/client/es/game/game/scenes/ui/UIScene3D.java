@@ -19,7 +19,7 @@ public class UIScene3D extends Scene3D {
 	
 	public UIScene3D(String name, CacheManager cache, Window window) {
 		super(name);
-		this.cache = new CacheManager(cache);
+		this.cache = new CacheManager("UIScene3D", cache);
 		this.window = window;
 	}
 
@@ -29,6 +29,7 @@ public class UIScene3D extends Scene3D {
 
 	public void setupGame() {
 		treeState = new UISceneMajorUpgradeTree(this);
+		state = treeState;
 	}
 	
 	public void clearMainMenu() {
@@ -44,6 +45,7 @@ public class UIScene3D extends Scene3D {
 		} else {
 			state = null;
 		}
+		treeState.setActive(b);
 	}
 
 	public void input(float dTime) {

@@ -11,6 +11,8 @@ import lu.kbra.gamebox.client.es.engine.graph.material.Material;
 import lu.kbra.gamebox.client.es.engine.utils.MathUtils;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureType;
+import lu.kbra.gamebox.client.es.game.game.render.shaders.CellInstanceShader;
+import lu.kbra.gamebox.client.es.game.game.render.shaders.CellInstanceShader.CellInstanceMaterial;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.CellShader;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.CellShader.CellMaterial;
 
@@ -21,8 +23,9 @@ public class CellDescriptor {
 	private String scientificName;
 
 	private Vector2f hostilityRange, fertilityRange, humidityRange;
+	private int variationCount;
 
-	public CellDescriptor(String id, CellType cellType, String scientificName, Vector2f hostilityRange, Vector2f fertilityRange, Vector2f humidityRange) {
+	public CellDescriptor(String id, CellType cellType, String scientificName, Vector2f hostilityRange, Vector2f fertilityRange, Vector2f humidityRange, int variationCount) {
 		this.id = id;
 
 		this.cellType = cellType;
@@ -31,12 +34,43 @@ public class CellDescriptor {
 		this.hostilityRange = hostilityRange;
 		this.fertilityRange = fertilityRange;
 		this.humidityRange = humidityRange;
+		
+		this.variationCount = variationCount;
 	}
 
 	public boolean match(float hostility, float fertility, float humidity) {
 		return MathUtils.rangeContains(hostility, hostilityRange) && MathUtils.rangeContains(fertility, fertilityRange) && MathUtils.rangeContains(humidity, humidityRange);
 	}
 
+	public CellInstanceMaterial loadOrGetMaterial(CacheManager cache) {
+		if (cache == null)
+			throw new IllegalArgumentException("CacheManager == null");
+
+		final String materialName = cellType.name() + "-" + id;
+
+		if (cache.hasMaterial(materialName)) {
+			return (CellInstanceMaterial) cache.getMaterial(materialName);
+		}
+
+		String imagePath = cellType.getTexturePath() + id + ".png";
+
+		if (!Files.exists(Paths.get(imagePath))) {
+			throw new RuntimeException(new FileNotFoundException("Couln't find file: " + imagePath));
+		}
+
+		CellInstanceShader shader = (CellInstanceShader) cache.getRenderShader(CellInstanceShader.NAME);
+		if (shader == null) {
+			shader = new CellInstanceShader();
+			cache.addRenderShader(shader);
+		}
+
+		CellInstanceMaterial material = new CellInstanceMaterial(cellType.name(), shader, cache.loadSingleTexture(materialName, imagePath, TextureFilter.NEAREST));
+		cache.addMaterial(material);
+
+		return material;
+	}
+	
+	@Deprecated
 	public Material createMaterial(CacheManager cache) {
 		if (cache == null)
 			throw new IllegalArgumentException("CacheManager == null");
@@ -59,7 +93,7 @@ public class CellDescriptor {
 			cache.addRenderShader(shader);
 		}
 
-		CellMaterial material = new CellMaterial(cellType.name(), shader, cache.loadSingleTexture(shaderName, imagePath, TextureFilter.NEAREST, TextureType.TXT2D));
+		CellMaterial material = new CellMaterial(cellType.name(), shader, cache.loadSingleTexture(shaderName, imagePath, TextureFilter.NEAREST));
 		cache.addMaterial(material);
 
 		return material;
@@ -84,5 +118,9 @@ public class CellDescriptor {
 	public void setScientificName(String scientificName) {
 		this.scientificName = scientificName;
 	}
-
+	
+	public int getTextureVariationCount() {
+		return variationCount;
+	}
+	
 }

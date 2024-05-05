@@ -284,7 +284,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 		if (running)
 			throw new IllegalStateException("Already running");
 
-		this.cache = new SharedCacheManager();
+		this.cache = new SharedCacheManager("GameEngineMain");
 
 		this.window = new GLWindow(this.windowOptions);
 

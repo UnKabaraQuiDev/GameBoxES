@@ -35,6 +35,7 @@ import lu.kbra.gamebox.client.es.engine.utils.consts.TexelFormat;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TexelInternalFormat;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureType;
+import lu.kbra.gamebox.client.es.game.game.render.shaders.BackgroundShader;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.BrightnessFilterShader;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.ScaleShader;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalConsts;
@@ -58,7 +59,7 @@ public class AdvancedCompositor implements Cleanupable {
 	protected Vector2i resolution = new Vector2i(0, 0);
 	protected int samples = 1;
 
-	private Material highLightsMaterial, scaleMaterial;
+	private Material backGroundMaterial, highLightsMaterial, scaleMaterial;
 
 	private boolean genTextures() {
 		if (depth != null && depth.isValid())
@@ -108,6 +109,10 @@ public class AdvancedCompositor implements Cleanupable {
 		if (scaleMaterial == null) {
 			scaleMaterial = engine.getCache().loadOrGetMaterial(ScaleShader.ScaleMaterial.NAME, ScaleShader.ScaleMaterial.class, (int) 1920, (int) 1080);
 		}
+		if (backGroundMaterial == null) {
+			backGroundMaterial = engine.getCache().loadOrGetMaterial(BackgroundShader.BackgroundMaterial.NAME, BackgroundShader.BackgroundMaterial.class,
+					engine.getCache().loadOrGetSingleTexture("compositeBG", "./resources/textures/ui/defaultBG.png", TextureFilter.LINEAR));
+		}
 
 		if (framebuffer == null) {
 			framebuffer = engine.getCache().loadFramebuffer(this.getClass().getName() + "#" + hashCode());
@@ -141,10 +146,16 @@ public class AdvancedCompositor implements Cleanupable {
 		framebuffer.bind();
 
 		GL40.glClearColor(background.x, background.y, background.z, background.w);
-		PDRUtils.checkGlError("ClearColor("+background+")");
+		PDRUtils.checkGlError("ClearColor(" + background + ")");
 		GL40.glClear(GL40.GL_COLOR_BUFFER_BIT | GL40.GL_DEPTH_BUFFER_BIT);
 		PDRUtils.checkGlError("Clear(COLOR | DEPTH)");
-
+		
+		/*Framebuffer bg = genFBO(resolution.x, resolution.y, TextureFilter.LINEAR);
+		render(engine.getCache(), engine, framebuffer, bg, backGroundMaterial);
+		
+		GL40.glClear(GL40.GL_DEPTH_BUFFER_BIT);
+		PDRUtils.checkGlError("Clear(DEPTH)");*/
+		
 		for (String l : layers) {
 			if (l == null)
 				continue;
@@ -157,28 +168,23 @@ public class AdvancedCompositor implements Cleanupable {
 
 			if (!rl.isVisible())
 				continue;
-			
-			GlobalLogger.info("Rendering: "+rl.getId());
+
+			GlobalLogger.info("Rendering: " + rl.getId());
 			rl.render(engine, framebuffer);
 		}
 
 		GL40.glDepthMask(false);
 		PDRUtils.checkGlError("DepthMask(false)");
 
-		/*
-		 * int scale = 5;
-		 * 
-		 * ((ScaleMaterial) scaleMaterial).setResolution(resolution.x/scale,
-		 * resolution.y/scale);
-		 * 
-		 * Framebuffer highLights = genFBO(resolution.x, resolution.y,
-		 * TextureFilter.LINEAR); render(cache, engine, framebuffer, highLights,
-		 * highLightsMaterial);
-		 * 
-		 * Framebuffer lowScale = genFBO(resolution.x, resolution.y,
-		 * TextureFilter.LINEAR); render(cache, engine, highLights, lowScale,
-		 * scaleMaterial);
-		 */
+		/*int scale = 5;
+
+		((ScaleMaterial) scaleMaterial).setResolution(resolution.x / scale, resolution.y / scale);
+
+		Framebuffer highLights = genFBO(resolution.x, resolution.y, TextureFilter.LINEAR);
+		render(cache, engine, framebuffer, highLights, highLightsMaterial);
+
+		Framebuffer lowScale = genFBO(resolution.x, resolution.y, TextureFilter.LINEAR);
+		render(cache, engine, highLights, lowScale, scaleMaterial);*/
 		
 		GL40.glDepthMask(true);
 		PDRUtils.checkGlError("DepthMask(true)");

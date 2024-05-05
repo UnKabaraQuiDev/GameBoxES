@@ -5,10 +5,13 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import org.joml.Math;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -56,13 +59,13 @@ public class World implements Cleanupable {
 	private CellEntity player;
 
 	public World(CacheManager cache) {
-		this.cache = new CacheManager(cache);
+		this.cache = new CacheManager(cache.getId()+"-World", cache);
 
 		this.hostilityGen = new NoiseGenerator();
 		this.fertilityGen = new NoiseGenerator();
 		this.humidityGen = new NoiseGenerator();
 
-		this.player = CellEntity.load(cache, new CellDescriptor("player", CellType.PLAYER, "noname", null, null, null));
+		this.player = CellEntity.load(cache, new CellDescriptor("player", CellType.PLAYER, "noname", null, null, null, 1));
 
 		cellDescriptorPool = loadCellDescriptorPool();
 	}
@@ -75,7 +78,8 @@ public class World implements Cleanupable {
 
 			for (String k : obj.keySet()) {
 				JSONObject sobj = obj.getJSONObject(k);
-				pool.add(new CellDescriptor(k, sobj.getEnum(CellType.class, "type"), sobj.getString("scientific"), PDRUtils.loadRangeFloat(sobj, "hostility"), PDRUtils.loadRangeFloat(sobj, "fertility"), PDRUtils.loadRangeFloat(sobj, "humidity")));
+				pool.add(new CellDescriptor(k, sobj.getEnum(CellType.class, "type"), sobj.getString("scientific"), PDRUtils.loadRangeFloat(sobj, "hostility"), PDRUtils.loadRangeFloat(sobj, "fertility"), PDRUtils.loadRangeFloat(sobj, "humidity"),
+						sobj.getInt("textureVariationCount")));
 			}
 		} catch (JSONException | IOException e) {
 			e.printStackTrace();
@@ -98,13 +102,39 @@ public class World implements Cleanupable {
 		List<Vector2f> cells = distributePoints(center, halfSquareSize, numPoint / 3);
 		cells = genCells(cells);
 
-		List<Entity> entities = new ArrayList<Entity>(numPoint);
+		HashMap<CellDescriptor, ArrayList<Vector2f>> cellDesc = new HashMap<>(numPoint);
 
 		for (Vector2f pos : cells) {
 			CellDescriptor desc = getRandomCellDescriptor(pos);
-			CellEntity cell = CellEntity.load(cache, desc);
-			entities.add(cell);
-			cell.getTransform().getTransform().translateAdd(new Vector3f(pos.x, pos.y, 0)).updateMatrix();
+			if (!cellDesc.containsKey(desc)) {
+				cellDesc.put(desc, new ArrayList<Vector2f>());
+			}
+			cellDesc.get(desc).add(pos);
+		}
+
+		List<Entity> entities = new ArrayList<>();
+
+		for (Entry<CellDescriptor, ArrayList<Vector2f>> e : cellDesc.entrySet()) {
+			CellDescriptor desc = e.getKey();
+			ArrayList<Vector2f> poss = e.getValue();
+
+			CellInstanceEmitter emit = new CellInstanceEmitter(desc.getId() + "-part", poss.size(), desc.loadOrGetMaterial(cache), new Transform3D());
+			cache.addMesh(emit.getParticleMesh());
+			cache.addInstanceEmitter(emit);
+			
+			try {
+				Files.write(Paths.get("./resources/bakes/noise/sizes.txt"), poss.parallelStream().map(t -> Math.clamp(0.3f, 1.2f, (float) ((1 - hostilityGen.noise(t)*0.2f) + fertilityGen.noise(t) * 0.3f + humidityGen.noise(t)))+"").collect(Collectors.joining("\n")).getBytes());
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			
+			Matrix4f[] matrices = poss.parallelStream().map(t -> new Matrix4f().setTranslation(t.x, t.y, 0).scale(Math.clamp(0.3f, 1.2f, (float) ((1 - hostilityGen.noise(t)) + fertilityGen.noise(t) * 0.3f + humidityGen.noise(t)))))
+					.collect(Collectors.toList()).toArray(new Matrix4f[poss.size()]);
+			Object[] states = poss.stream().map(p -> (int) random.nextInt(desc.getTextureVariationCount())).collect(Collectors.toList()).toArray();
+
+			emit.updateDirect(matrices, new Object[][] { states });
+
+			entities.add(new Entity(new InstanceEmitterComponent(emit), new Transform3DComponent()));
 		}
 
 		return entities;
@@ -121,10 +151,7 @@ public class World implements Cleanupable {
 		cache.addInstanceEmitter(emit);
 
 		Matrix4f[] matrices = toxins.parallelStream().map(t -> new Matrix4f().setTranslation(t.x, t.y, 0)).collect(Collectors.toList()).toArray(new Matrix4f[toxins.size()]);
-		Object[] sizes = toxins.stream().map(p -> (float) hostilityGen.noise(p)).collect(Collectors.toList()).toArray();
-		// Object[] states = toxins.stream().map(p -> (int)
-		// random.nextInt(ToxinWorldParticleMaterial.COLUMN_COUNT *
-		// ToxinWorldParticleMaterial.ROW_COUNT)).collect(Collectors.toList()).toArray();
+		Object[] sizes = toxins.stream().map(p -> Math.clamp(0.2f, 1f, (float) hostilityGen.noise(p))).collect(Collectors.toList()).toArray();
 
 		emit.updateDirect(matrices, new Object[][] { sizes });
 
@@ -142,12 +169,7 @@ public class World implements Cleanupable {
 		cache.addInstanceEmitter(emit);
 
 		Matrix4f[] matrices = plants.parallelStream().map(t -> new Matrix4f().setTranslation(t.x, t.y, random.nextFloat() * 0.1f)).collect(Collectors.toList()).toArray(new Matrix4f[plants.size()]);
-		Object[] sizes = plants.stream().map(p -> (float) humidityGen.noise(p)).collect(Collectors.toList()).toArray();
-		// Object[] states = plants.stream().map(p -> (int)
-		// random.nextInt(PlantWorldParticleMaterial.COLUMN_COUNT *
-		// PlantWorldParticleMaterial.ROW_COUNT)).collect(Collectors.toList()).toArray();
-
-		// System.err.println("states: "+Arrays.toString(states));
+		Object[] sizes = plants.stream().map(p -> Math.clamp(0.2f, 1f, (float) humidityGen.noise(p))).collect(Collectors.toList()).toArray();
 
 		emit.updateDirect(matrices, new Object[][] { sizes });
 

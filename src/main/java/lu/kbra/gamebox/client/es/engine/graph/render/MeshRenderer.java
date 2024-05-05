@@ -34,6 +34,7 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 		Mesh mesh = m.getMesh(cache);
 		if (mesh == null) {
 			GlobalLogger.log(Level.WARNING, "Mesh is null, for entity: "+e+"!");
+			cache.dump(System.err);
 			return;
 		}
 

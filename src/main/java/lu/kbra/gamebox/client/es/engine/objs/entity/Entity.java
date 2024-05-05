@@ -5,15 +5,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class Entity {
+import lu.kbra.gamebox.client.es.engine.impl.UniqueID;
+
+public class Entity implements UniqueID {
 
 	private boolean active = true;
 
+	private String name = "undefined";
 	private Map<Class<? extends Component>, Component> components = new HashMap<>();
 
 	public Entity(Component... cs) {
-		for (Component c : cs)
+		for (Component c : cs) {
 			addComponent(c);
+		}
+	}
+
+	public Entity(String str, Component... cs) {
+		this.name = str;
+		
+		for (Component c : cs) {
+			addComponent(c);
+		}
 	}
 
 	public Entity addComponent(Component component) {
@@ -53,7 +65,12 @@ public class Entity {
 
 	@Override
 	public String toString() {
-		return "Entity@" + getClass().getSimpleName() + "[active=" + active + ", componentCount=" + components.size() + "]";
+		return "Entity@" + getClass().getSimpleName() + "#" + name + "[active=" + active + ", componentCount=" + components.size() + "]";
+	}
+
+	@Override
+	public String getId() {
+		return name;
 	}
 
 }

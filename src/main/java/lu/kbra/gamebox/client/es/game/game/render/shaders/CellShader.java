@@ -14,8 +14,7 @@ public class CellShader extends RenderShader {
 	public static final String TEXTURE = "color";
 
 	public CellShader() {
-		super(NAME, true, AbstractShaderPart.load("./resources/shaders/cell/cell.frag"),
-				AbstractShaderPart.load("./resources/shaders/plain.vert"));
+		super(NAME, true, AbstractShaderPart.load("./resources/shaders/cell/cell.frag"), AbstractShaderPart.load("./resources/shaders/plain.vert"));
 	}
 
 	@Override

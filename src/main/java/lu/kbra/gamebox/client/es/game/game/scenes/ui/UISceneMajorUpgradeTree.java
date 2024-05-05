@@ -10,8 +10,10 @@ import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalConsts;
 
 public class UISceneMajorUpgradeTree extends UISceneState {
 
+	private boolean active = false;
+	
 	public UISceneMajorUpgradeTree(UIScene3D scene) {
-		super(scene);
+		super("MajorUpgradeTree", scene);
 		
 		Mesh bgMesh = Mesh.newQuad("uiBGMesh", cache.loadOrGetMaterial(FillMaterial.NAME, FillShader.FillMaterial.class, GlobalConsts.BG), new Vector2f(2));
 		cache.addMesh(bgMesh);
@@ -21,6 +23,12 @@ public class UISceneMajorUpgradeTree extends UISceneState {
 	@Override
 	public void input(float dTime) {
 
+	}
+
+	public void setActive(boolean b) {
+		active = b;
+		
+		scene.getEntity("uiBG").setActive(b);
 	}
 
 }

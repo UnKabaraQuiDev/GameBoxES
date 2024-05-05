@@ -43,5 +43,9 @@ public class TextureMaterial extends Material {
 			i++;
 		}
 	}
+	
+	public Texture setTexture(String key, Texture texture) {
+		return textures.put(key, texture);
+	}
 
 }

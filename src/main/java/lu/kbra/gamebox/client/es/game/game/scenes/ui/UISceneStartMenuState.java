@@ -96,7 +96,7 @@ public class UISceneStartMenuState extends UISceneState {
 	private ControllerInputWatcher cic = new ControllerInputWatcher();
 
 	public UISceneStartMenuState(UIScene3D scene) {
-		super(scene);
+		super("MainMenu", scene);
 
 		// play = addText("playText", MAIN_MENU_TEXTS[0], new Vector3f(0, 0.8f, 0));
 		play = addTextLabel("playText", MAIN_MENU_TEXTS[0], new Vector3f(0, 0.8f, 0), Alignment.TEXT_CENTER);

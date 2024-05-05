@@ -104,7 +104,7 @@ public class NoiseGenerator {
 	}
 	
 	public double noise(Vector2f a) {
-		return noise(a.x, a.y);
+		return noise(a.x, a.y, 0, 64);
 	}
 	
 	public double noise(Vector3f a) {

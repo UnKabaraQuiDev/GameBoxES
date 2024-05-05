@@ -122,7 +122,7 @@ public class InstanceEmitter implements Renderable, Cleanupable, UniqueID {
 			if (!AttribArray.update(this.instancesAttribs[c], atts[c]))
 				GlobalLogger.log(Level.WARNING, "Failed to update attrib array: " + this.instancesAttribs[c].getName() + " (" + this.instancesAttribs[c].getIndex() + ")");
 			else
-				GlobalLogger.info("Updated attrib array: " + this.instancesAttribs[c].getName() + " (" + this.instancesAttribs[c].getIndex() + ")");
+				GlobalLogger.info("Updated attrib array: " + this.instancesAttribs[c].getName() + " (" + this.instancesAttribs[c].getIndex() + ") for "+this.getId());
 			/*
 			 * else GlobalLogger.log(Level.INFO, "Updated attrib array: " +
 			 * this.instancesAttribs[c].getName());

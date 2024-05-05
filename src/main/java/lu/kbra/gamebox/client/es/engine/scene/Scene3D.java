@@ -48,7 +48,7 @@ public class Scene3D extends Scene {
 	}
 
 	public Entity addEntity(String str, Component... components) {
-		return addEntity(str, new Entity(components));
+		return addEntity(str, new Entity(str, components));
 	}
 
 	public Entity getEntity(String str) {
