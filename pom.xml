@@ -11,7 +11,7 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 
-		<lwjgl.version>3.3.2</lwjgl.version>
+		<lwjgl.version>3.3.3</lwjgl.version>
 		<steamworks4j-server.version>1.9.0</steamworks4j-server.version>
 		<steamworks4j.version>1.9.0</steamworks4j.version>
 		<joml.version>1.10.5</joml.version>
@@ -286,9 +286,9 @@
 					<arguments>
 						<argument>-cp</argument>
 						<classpath />
-						<argument>-javaagent:libs/lwjglx-debug-1.0.0.jar</argument>
+						<!--<argument>-javaagent:libs/lwjglx-debug-1.0.0.jar</argument>
 						<argument>-Dorg.lwjglx.TRACE</argument>
-						<argument>-Dorg.lwjglx.OUTPUT=./logs/trace.log</argument>
+						<argument>-Dorg.lwjglx.OUTPUT=./logs/trace.log</argument>-->
 						<argument>lu.kbra.gamebox.client.es.game.ClientMain</argument>
 					</arguments>
 				</configuration>

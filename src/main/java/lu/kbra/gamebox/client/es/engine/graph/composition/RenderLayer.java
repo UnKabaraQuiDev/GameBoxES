@@ -1,5 +1,7 @@
 package lu.kbra.gamebox.client.es.engine.graph.composition;
 
+import lu.pcy113.pclib.GlobalLogger;
+
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
 import lu.kbra.gamebox.client.es.engine.impl.Renderable;
 import lu.kbra.gamebox.client.es.engine.impl.UniqueID;
@@ -36,6 +38,7 @@ public abstract class RenderLayer<K, J, O extends Renderable> implements Rendera
 
 	@Override
 	public void cleanup() {
+		GlobalLogger.log("Cleaning up: "+name);
 	}
 
 	@Override

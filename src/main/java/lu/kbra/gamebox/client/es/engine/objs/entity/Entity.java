@@ -14,11 +14,11 @@ public class Entity implements UniqueID {
 	private String name = "undefined";
 	private Map<Class<? extends Component>, Component> components = new HashMap<>();
 
-	public Entity(Component... cs) {
+	/*public Entity(Component... cs) {
 		for (Component c : cs) {
 			addComponent(c);
 		}
-	}
+	}*/
 
 	public Entity(String str, Component... cs) {
 		this.name = str;

@@ -1,5 +1,7 @@
 package lu.kbra.gamebox.client.es.engine.graph.render;
 
+import lu.pcy113.pclib.GlobalLogger;
+
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
 import lu.kbra.gamebox.client.es.engine.impl.Renderable;
@@ -17,6 +19,8 @@ public abstract class Renderer<T, K extends Renderable> implements UniqueID, Cle
 
 	@Override
 	public void cleanup() {
+		GlobalLogger.log("Cleaning up: "+clazz);
+		
 		if (clazz != null) {
 			clazz = null;
 		}

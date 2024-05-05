@@ -342,6 +342,11 @@ public class TextEmitter implements Cleanupable, UniqueID {
 
 	@Override
 	public void cleanup() {
+		GlobalLogger.log("Cleaning up: "+name);
+		
+		if(quad == null)
+			return;
+		
 		instances.cleanup();
 		instances = null;
 		quad.cleanup();

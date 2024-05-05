@@ -18,10 +18,12 @@ import lu.kbra.gamebox.client.es.engine.objs.entity.components.GizmoComponent;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.InstanceEmitterComponent;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.MeshComponent;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.RenderComponent;
+import lu.kbra.gamebox.client.es.engine.objs.entity.components.RenderConditionComponent;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.SubEntitiesComponent;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.TextEmitterComponent;
 import lu.kbra.gamebox.client.es.engine.objs.text.TextEmitter;
 import lu.kbra.gamebox.client.es.engine.scene.Scene3D;
+import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalOptions;
 
 public class Scene3DRenderer extends Renderer<GameEngine, Scene3D> {
 
@@ -35,8 +37,8 @@ public class Scene3DRenderer extends Renderer<GameEngine, Scene3D> {
 	}
 
 	private static final Comparator<Entry<String, Entity>> COMPARATOR = (a, b) -> {
-		return !a.getValue().hasComponent(RenderComponent.class) ? -1
-				: (!b.getValue().hasComponent(RenderComponent.class) ? 1 : (b.getValue().getComponent(RenderComponent.class).getPriority() - a.getValue().getComponent(RenderComponent.class).getPriority()));
+		return !a.getValue().hasComponent(RenderComponent.class) ? 1
+				: (!b.getValue().hasComponent(RenderComponent.class) ? -1 : (b.getValue().getComponent(RenderComponent.class).getPriority() - a.getValue().getComponent(RenderComponent.class).getPriority()));
 	};
 
 	@Override
@@ -53,6 +55,8 @@ public class Scene3DRenderer extends Renderer<GameEngine, Scene3D> {
 		GameEngine.DEBUG.start("r_sort");
 		LinkedHashMap<String, Entity> sortedMap = scene.getEntities().entrySet().stream().sorted(COMPARATOR).collect(LinkedHashMap::new, (linkedHashMap, entry) -> linkedHashMap.put(entry.getKey(), entry.getValue()), LinkedHashMap::putAll);
 		scene.setEntities(sortedMap);
+		// System.err.println("Render order:");
+		// sortedMap.values().forEach(System.err::println);
 		GameEngine.DEBUG.end("r_sort");
 
 		GameEngine.DEBUG.start("r_for");
@@ -60,6 +64,14 @@ public class Scene3DRenderer extends Renderer<GameEngine, Scene3D> {
 		ce.forEach((e) -> {
 			GameEngine.DEBUG.start("r_for_single");
 			if (!e.isActive()) {
+				return;
+			}
+			
+			/*if(e.hasComponent(RenderConditionComponent.class)) {
+				System.out.println(e+" = "+e.getComponent(RenderConditionComponent.class).get());
+			}*/
+			
+			if (e.hasComponent(RenderConditionComponent.class) && !e.getComponent(RenderConditionComponent.class).get() && GlobalOptions.CULLING_OPTIMISATION) {
 				return;
 			}
 

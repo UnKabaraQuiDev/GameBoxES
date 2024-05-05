@@ -23,6 +23,8 @@ public class FloatButtonState extends Entity {
 	}
 	
 	public FloatButtonState(CacheManager cache, Transform3D transform3d, GeoPlane plane) {
+		super(FloatButtonState.class.getName()+transform3d.hashCode());
+		
 		if (cache.hasRenderShader(FloatButtonStateShader.NAME)) {
 			FloatButtonStateShader shader = (FloatButtonStateShader) cache.getRenderShader(FloatButtonStateShader.NAME);
 			this.material = (FloatButtonStateMaterial) new FloatButtonStateMaterial(shader);

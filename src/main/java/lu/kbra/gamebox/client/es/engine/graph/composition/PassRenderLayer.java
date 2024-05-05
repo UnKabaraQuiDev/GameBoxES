@@ -84,12 +84,15 @@ public class PassRenderLayer extends RenderLayer<GameEngine, Framebuffer, Mesh> 
 
 	@Override
 	public void cleanup() {
+		GlobalLogger.log("Cleaning up: " + name);
+
 		super.cleanup();
 
-		if (SCREEN != null) {
-			SCREEN.cleanup();
-			SCREEN = null;
-		}
+		if (SCREEN == null)
+			return;
+
+		SCREEN.cleanup();
+		SCREEN = null;
 	}
 
 }

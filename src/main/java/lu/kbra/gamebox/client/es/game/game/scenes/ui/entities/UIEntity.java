@@ -6,6 +6,10 @@ public abstract class UIEntity extends Entity {
 
 	protected boolean selected = false;
 
+	public UIEntity(String str) {
+		super(str);
+	}
+	
 	public abstract void updateUI();
 
 	public void setSelected(boolean selected) {

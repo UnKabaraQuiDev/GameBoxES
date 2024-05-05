@@ -156,12 +156,22 @@ public class Compositor implements Cleanupable {
 
 	@Override
 	public void cleanup() {
-		if (framebuffer != null)
+		GlobalLogger.log("Cleaning up: "+getClass().getName());
+		
+		if (framebuffer != null) {
 			framebuffer.cleanup();
-		if (depth != null)
+			framebuffer = null;
+		}
+		
+		if (depth != null) {
 			depth.cleanup();
-		if (color0 != null)
+			depth = null;
+		}
+		
+		if (color0 != null) {
 			color0.cleanup();
+			color0 = null;
+		}
 	}
 
 	public Framebuffer getFramebuffer() {

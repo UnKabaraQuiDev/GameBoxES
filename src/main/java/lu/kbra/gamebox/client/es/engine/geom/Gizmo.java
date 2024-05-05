@@ -26,7 +26,7 @@ public class Gizmo implements UniqueID, Cleanupable, Renderable {
 
 	protected final String name;
 	protected int vao = -1;
-	protected final HashMap<Integer, Integer> vbo = new HashMap<>();
+	protected HashMap<Integer, Integer> vbo = new HashMap<>();
 
 	protected Vec3fAttribArray vertices;
 	protected UIntAttribArray indices;
@@ -83,7 +83,7 @@ public class Gizmo implements UniqueID, Cleanupable, Renderable {
 	}
 
 	private void storeElementArray(UIntAttribArray indices) {
-		if(indices == null)
+		if (indices == null)
 			throw new NullPointerException("UintAttribArray indices is null");
 		indices.setBufferType(GL40.GL_ELEMENT_ARRAY_BUFFER);
 		this.vbo.put(indices.getIndex(), indices.gen());
@@ -101,12 +101,18 @@ public class Gizmo implements UniqueID, Cleanupable, Renderable {
 
 	@Override
 	public void cleanup() {
-		if (vao != -1) {
-			GL40.glDeleteVertexArrays(vao);
-			vertices.cleanup();
-			indices.cleanup();
-			vao = -1;
-		}
+		GlobalLogger.log("Cleaning up: "+name+" ("+vao+")");
+		
+		if (vao == -1)
+			return;
+		
+		GL40.glDeleteVertexArrays(vao);
+		vbo = null;
+		vertices.cleanup();
+		vertices = null;
+		indices.cleanup();
+		indices = null;
+		vao = -1;
 	}
 
 	@Override

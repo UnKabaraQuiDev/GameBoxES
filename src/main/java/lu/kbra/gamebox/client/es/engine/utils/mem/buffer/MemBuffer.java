@@ -11,7 +11,9 @@ import java.nio.ShortBuffer;
 import org.lwjgl.system.MemoryUtil;
 import org.lwjgl.system.libc.LibCStdlib;
 
-public class MemBuffer<T extends Buffer> {
+import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
+
+public class MemBuffer<T extends Buffer> implements Cleanupable {
 
 	private T buffer;
 	private MemBufferOrigin origin;
@@ -21,8 +23,12 @@ public class MemBuffer<T extends Buffer> {
 		this.origin = origin;
 	}
 
-	public void free() {
-		if (MemBufferOrigin.STBV.equals(origin) && buffer != null) {
+	@Override
+	public void cleanup() {
+		if(buffer == null)
+			return;
+		
+		if (MemBufferOrigin.STBV.equals(origin)) {
 			if(buffer instanceof ShortBuffer) {
 				LibCStdlib.free((ShortBuffer) buffer);
 			}else if(buffer instanceof ByteBuffer) {
@@ -37,7 +43,7 @@ public class MemBuffer<T extends Buffer> {
 				LibCStdlib.free((LongBuffer) buffer);
 			}
 			buffer = null;
-		} else if (MemBufferOrigin.OPENAL.equals(origin) && buffer != null) {
+		} else if (MemBufferOrigin.OPENAL.equals(origin)) {
 			MemoryUtil.memFree(buffer);
 			buffer = null;
 		}

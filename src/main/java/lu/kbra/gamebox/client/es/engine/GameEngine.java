@@ -258,7 +258,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 				}
 
 				if (this.window.shouldClose()) {
-					running = false;
+					stop();
 					break;
 				}
 
@@ -276,8 +276,9 @@ public class GameEngine implements Cleanupable, UniqueID {
 			e.printStackTrace();
 		}
 
-		this.window.clearGLContext();
-		this.stop();
+		this.cleanup();
+		// this.window.clearGLContext();
+		// this.stop();
 	}
 
 	public void start() {
@@ -346,12 +347,10 @@ public class GameEngine implements Cleanupable, UniqueID {
 			this.updateThread.join();
 			this.renderThread.join();
 		} catch (InterruptedException e) {
-			// String interruptingThreadName = e.getStackTrace()[0].getThreadName();
-			// System.out.println("Interrupted by thread: " + interruptingThreadName);
 			GlobalLogger.severe("Main thread interrupted while joining subthreads");
 		}
 
-		this.window.takeGLContext();
+		// this.window.takeGLContext();
 		this.cleanup();
 
 		TimeGraphPlot.main(new String[] { FileUtils.appendName(GlobalLogger.getLogger().getLogFile().getPath(), "-time") });
@@ -432,14 +431,25 @@ public class GameEngine implements Cleanupable, UniqueID {
 
 	@Override
 	public void cleanup() {
+		GlobalLogger.log("Cleaning up: "+name);
+		
 		if (getThreadId() == QUEUE_UPDATE) {
 			this.cache.cleanupSounds();
 			this.audioMaster.cleanup();
-		} else if (getThreadId() == QUEUE_MAIN) {
+			audioMaster = null;
+		} else if (getThreadId() == QUEUE_RENDER) {
 			this.cache.cleanup();
+			
 			this.window.cleanup();
+			// window = null;
 
 			DEBUG.cleanup();
+			DEBUG = null;
+		} else if(getThreadId() == QUEUE_MAIN) {
+			this.window.cleanupGLFW();
+			window = null;
+			
+			cache = null;
 		}
 	}
 

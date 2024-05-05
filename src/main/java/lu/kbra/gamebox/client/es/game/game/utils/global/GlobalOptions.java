@@ -12,6 +12,7 @@ public final class GlobalOptions {
 	
 	public static int VOLUME = 5;
 	public static int LANGUAGE = 0;
+	public static boolean CULLING_OPTIMISATION = true;
 	
 	public static void load() throws IOException {
 		File defaultFile = new File("resources/gd/config/default_options.properties");
@@ -28,6 +29,7 @@ public final class GlobalOptions {
 		
 		VOLUME = Integer.parseInt(prop.getProperty("volume"));
 		LANGUAGE = Integer.parseInt(prop.getProperty("language"));
+		CULLING_OPTIMISATION = Boolean.parseBoolean(prop.getProperty("culling"));
 	}
 	
 	public static void save() throws IOException {
@@ -36,6 +38,7 @@ public final class GlobalOptions {
 		Properties prop = new Properties();
 		prop.setProperty("volume", VOLUME+"");
 		prop.setProperty("language", LANGUAGE+"");
+		prop.setProperty("culling", false+"");
 		
 		File file = new File("config/options.properties");
 		prop.store(new FileWriter(file), null);

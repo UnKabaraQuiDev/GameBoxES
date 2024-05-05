@@ -2,6 +2,8 @@ package lu.kbra.gamebox.client.es.engine.graph.composition;
 
 import org.lwjgl.opengl.GL40;
 
+import lu.pcy113.pclib.GlobalLogger;
+
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
 import lu.kbra.gamebox.client.es.engine.impl.UniqueID;
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
@@ -83,8 +85,14 @@ public class RenderBuffer implements UniqueID, Cleanupable, FramebufferAttachmen
 	
 	@Override
 	public void cleanup() {
+		GlobalLogger.log("Cleaning up: "+name+"("+rbid+")");
+		
+		if(rbid == -1)
+			return;
+		
 		GL40.glDeleteRenderbuffers(rbid);
 		PDRUtils.checkGlError("DeleteRenderbuffers("+rbid+")");
+		rbid = -1;
 	}
 	
 	@Override

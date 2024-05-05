@@ -135,7 +135,7 @@ public class SingleTexture extends Texture {
 
 		generateBufferTexture();
 
-		image.free();
+		image.cleanup();
 	}
 
 	// BUFFER LOAD

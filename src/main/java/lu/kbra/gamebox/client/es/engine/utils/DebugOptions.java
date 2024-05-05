@@ -213,9 +213,15 @@ public class DebugOptions implements Cleanupable {
 
 	@Override
 	public void cleanup() {
+		GlobalLogger.log("Cleaning up: "+getClass().getName());
+		
+		if(eventFileWriter == null)
+			return;
+		
 		try {
 			eventFileWriter.flush();
 			eventFileWriter.close();
+			eventFileWriter = null;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

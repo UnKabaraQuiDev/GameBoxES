@@ -1,6 +1,5 @@
 package lu.kbra.gamebox.client.es.engine.impl.shader;
 
-import java.io.FileNotFoundException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.logging.Level;
@@ -27,19 +26,19 @@ public abstract class AbstractShaderPart implements UniqueID, Cleanupable {
 	public static final int COMPUTE = GL43.GL_COMPUTE_SHADER;
 
 	private final String file;
-	private final int sid;
+	private int sid;
 	private final int type;
 
 	public AbstractShaderPart(String file, int type) {
 		this.file = file;
 		this.type = type;
 
-		if(!Files.exists(Paths.get(file))) {
-			PDRUtils.throwGLError("File: "+file+" not found");
+		if (!Files.exists(Paths.get(file))) {
+			PDRUtils.throwGLError("File: " + file + " not found");
 			this.sid = -1;
 			return;
 		}
-		
+
 		if (type == -1) {
 			PDRUtils.throwGLError("Unknown shader type: " + file);
 			this.sid = -1;
@@ -98,7 +97,13 @@ public abstract class AbstractShaderPart implements UniqueID, Cleanupable {
 
 	@Override
 	public void cleanup() {
+		GlobalLogger.log("Cleaning up: " + file + " (" + sid + ")");
+
+		if (sid == -1)
+			return;
+
 		GL40.glDeleteShader(sid);
+		sid = -1;
 	}
 
 	@Override

@@ -35,7 +35,7 @@ public class GLESWindow extends Window {
 		handle = GLFW.glfwCreateWindow(options.windowSize.x, options.windowSize.y, options.title, MemoryUtil.NULL, MemoryUtil.NULL);
 
 		takeGLContext();
-		
+
 		if ((this.capabilities = GLES.createCapabilities()) == null)
 			throw new RuntimeException("Failed to create OpenGLES context");
 
@@ -66,15 +66,22 @@ public class GLESWindow extends Window {
 
 	@Override
 	public void cleanup() {
+		GlobalLogger.log("Cleaning up: " + getClass().getName() + " (" + handle + ")");
+
+		if (GLES.getCapabilities() != null) {
+			GLES.setCapabilities(null);
+		}
+	}
+
+	@Override
+	public void cleanupGLFW() {
+		GlobalLogger.log("Cleaning up: " + getClass().getName() + " (" + handle + ")");
+		
 		if (handle != -1) {
 			Callbacks.glfwFreeCallbacks(handle);
 			GLFW.glfwDestroyWindow(handle);
 			GLFW.glfwTerminate();
 			handle = -1;
-		}
-		if (GLES.getCapabilities() != null) {
-			GLES.setCapabilities(null);
-			// MemoryUtil.memFree(capabilities.getAddressBuffer());
 		}
 	}
 

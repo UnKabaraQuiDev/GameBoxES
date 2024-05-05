@@ -5,6 +5,7 @@ import java.nio.ShortBuffer;
 import org.lwjgl.openal.AL11;
 import org.lwjgl.system.MemoryUtil;
 
+import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pclib.Triplet;
 
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
@@ -42,7 +43,7 @@ public class Sound implements UniqueID, Cleanupable {
 		if (!stereo && !monoBuffer) {
 			System.err.println("converting");
 			sb = new MemBuffer<ShortBuffer>(bufferToMonoAvg(mb.getBuffer(), channels), MemBufferOrigin.OPENAL);
-			mb.free();
+			mb.cleanup();
 			stereoBuffer = false;
 		}
 
@@ -63,7 +64,7 @@ public class Sound implements UniqueID, Cleanupable {
 		if (!stereo && !monoBuffer) {
 			MemBuffer<ShortBuffer> preBuffer = vorbis_channels_sampleRate.getFirst();
 			vorbis_channels_sampleRate.setFirst(new MemBuffer<ShortBuffer>(bufferToMonoAvg(preBuffer.getBuffer(), vorbis_channels_sampleRate.getSecond()), MemBufferOrigin.OPENAL));
-			preBuffer.free();
+			preBuffer.cleanup();
 			stereoBuffer = false;
 		}
 
@@ -71,7 +72,7 @@ public class Sound implements UniqueID, Cleanupable {
 		buffer.setData(vorbis_channels_sampleRate.getFirst().getBuffer(), stereoBuffer ? AL11.AL_FORMAT_STEREO16 : AL11.AL_FORMAT_MONO16, vorbis_channels_sampleRate.getThird());
 
 		// free mem
-		vorbis_channels_sampleRate.getFirst().free();
+		vorbis_channels_sampleRate.getFirst().cleanup();
 		// vorbis_channels_sampleRate.getFirst().clear();
 		// vorbis_channels_sampleRate = null;
 
@@ -101,6 +102,11 @@ public class Sound implements UniqueID, Cleanupable {
 
 	@Override
 	public void cleanup() {
+		GlobalLogger.log("Cleaning up: "+name);
+		
+		if(buffer == null)
+			return;
+		
 		buffer.cleanup();
 		buffer = null;
 	}

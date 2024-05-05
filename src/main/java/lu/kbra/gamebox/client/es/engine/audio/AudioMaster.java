@@ -188,15 +188,22 @@ public class AudioMaster implements Cleanupable {
 
 	@Override
 	public void cleanup() {
-		ALC11.alcMakeContextCurrent(MemoryUtil.NULL);
+		GlobalLogger.log("Cleaning up: "+getClass().getName()+" in "+thread.getName());
+		
+		if(device == -1)
+			return;
+		
+		ALC10.alcDestroyContext(alContext);
+		alContext = -1;
+		// ALC11.alcMakeContextCurrent(MemoryUtil.NULL);
 		if (useTLC) {
 			AL.setCurrentThread(null);
 		} else {
 			AL.setCurrentProcess(null);
 		}
 		MemoryUtil.memFree(capabilities.getAddressBuffer());
-		ALC10.alcDestroyContext(alContext);
 		ALC10.alcCloseDevice(device);
+		device = -1;
 	}
 
 }

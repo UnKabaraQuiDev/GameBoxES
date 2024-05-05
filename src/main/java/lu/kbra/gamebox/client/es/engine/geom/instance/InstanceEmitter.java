@@ -141,10 +141,19 @@ public class InstanceEmitter implements Renderable, Cleanupable, UniqueID {
 
 	@Override
 	public void cleanup() {
+		GlobalLogger.log("Cleaning up: "+name);
+		
+		if(instanceMesh == null)
+			return;
+		
 		Arrays.stream(this.instancesAttribs).forEach(AttribArray::cleanup);
+		this.instancesAttribs = null;
+		
 		this.instancesTransforms.cleanup();
-
+		this.instancesTransforms = null;
+		
 		this.instanceMesh.cleanup();
+		this.instanceMesh = null;
 	}
 
 	@Override

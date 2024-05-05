@@ -23,6 +23,8 @@ public class FourButtonState extends Entity {
 	}
 	
 	public FourButtonState(CacheManager cache, Transform3D transform3d, GeoPlane plane) {
+		super(FourButtonState.class.getName()+transform3d.hashCode());
+		
 		if (cache.hasRenderShader(FourButtonStateShader.NAME)) {
 			FourButtonStateShader shader = (FourButtonStateShader) cache.getRenderShader(FourButtonStateShader.NAME);
 			this.material = (FourButtonStateMaterial) new FourButtonStateMaterial(shader);

@@ -103,17 +103,6 @@ public class AdvancedCompositor implements Cleanupable {
 	}
 
 	public void render(GameEngine engine) {
-		if (highLightsMaterial == null) {
-			highLightsMaterial = engine.getCache().loadOrGetMaterial(BrightnessFilterShader.BrightnessFilterMaterial.NAME, BrightnessFilterShader.BrightnessFilterMaterial.class, (float) 0.49801f);
-		}
-		if (scaleMaterial == null) {
-			scaleMaterial = engine.getCache().loadOrGetMaterial(ScaleShader.ScaleMaterial.NAME, ScaleShader.ScaleMaterial.class, (int) 1920, (int) 1080);
-		}
-		if (backGroundMaterial == null) {
-			backGroundMaterial = engine.getCache().loadOrGetMaterial(BackgroundShader.BackgroundMaterial.NAME, BackgroundShader.BackgroundMaterial.class,
-					engine.getCache().loadOrGetSingleTexture("compositeBG", "./resources/textures/ui/defaultBG.png", TextureFilter.LINEAR));
-		}
-
 		if (framebuffer == null) {
 			framebuffer = engine.getCache().loadFramebuffer(this.getClass().getName() + "#" + hashCode());
 		}
@@ -133,8 +122,6 @@ public class AdvancedCompositor implements Cleanupable {
 			GL40.glViewport(0, 0, width, height);
 		}
 
-		// color0.bind();
-
 		if (!framebuffer.isComplete()) {
 			GlobalLogger.log(Level.SEVERE, "Framebuffer not complete: " + framebuffer.getError() + ", w:" + width + " h:" + height);
 			return;
@@ -149,12 +136,6 @@ public class AdvancedCompositor implements Cleanupable {
 		PDRUtils.checkGlError("ClearColor(" + background + ")");
 		GL40.glClear(GL40.GL_COLOR_BUFFER_BIT | GL40.GL_DEPTH_BUFFER_BIT);
 		PDRUtils.checkGlError("Clear(COLOR | DEPTH)");
-		
-		/*Framebuffer bg = genFBO(resolution.x, resolution.y, TextureFilter.LINEAR);
-		render(engine.getCache(), engine, framebuffer, bg, backGroundMaterial);
-		
-		GL40.glClear(GL40.GL_DEPTH_BUFFER_BIT);
-		PDRUtils.checkGlError("Clear(DEPTH)");*/
 		
 		for (String l : layers) {
 			if (l == null)
@@ -173,19 +154,6 @@ public class AdvancedCompositor implements Cleanupable {
 			rl.render(engine, framebuffer);
 		}
 
-		GL40.glDepthMask(false);
-		PDRUtils.checkGlError("DepthMask(false)");
-
-		/*int scale = 5;
-
-		((ScaleMaterial) scaleMaterial).setResolution(resolution.x / scale, resolution.y / scale);
-
-		Framebuffer highLights = genFBO(resolution.x, resolution.y, TextureFilter.LINEAR);
-		render(cache, engine, framebuffer, highLights, highLightsMaterial);
-
-		Framebuffer lowScale = genFBO(resolution.x, resolution.y, TextureFilter.LINEAR);
-		render(cache, engine, highLights, lowScale, scaleMaterial);*/
-		
 		GL40.glDepthMask(true);
 		PDRUtils.checkGlError("DepthMask(true)");
 
@@ -193,25 +161,10 @@ public class AdvancedCompositor implements Cleanupable {
 		PDRUtils.checkGlError("BindFramebuffer()=0");
 		GL40.glBindFramebuffer(GL40.GL_DRAW_FRAMEBUFFER, 0);
 		PDRUtils.checkGlError("BindFramebuffer(DRAW)=0");
-		lastFramebuffer.bind(GL40.GL_READ_FRAMEBUFFER);
+		framebuffer.bind(GL40.GL_READ_FRAMEBUFFER);
 
 		GL40.glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL40.GL_COLOR_BUFFER_BIT, GL40.GL_NEAREST);
 		PDRUtils.checkGlError();
-
-		/*
-		 * if (!passes.isEmpty()) {
-		 * 
-		 * Framebuffer highLights = genFBO(width, height); render(cache, engine,
-		 * framebuffer, null, highLightsMaterial);
-		 * 
-		 * highLights.unbind(); highLights.bind(GL40.GL_READ_FRAMEBUFFER);
-		 * 
-		 * // GL40.glBlitFramebuffer(0, 0, resolution.x, resolution.y, 0, 0,
-		 * resolution.x, resolution.y, GL40.GL_COLOR_BUFFER_BIT, GL40.GL_NEAREST);
-		 * 
-		 * } else { GL40.glBlitFramebuffer(0, 0, resolution.x, resolution.y, 0, 0,
-		 * resolution.x, resolution.y, GL40.GL_COLOR_BUFFER_BIT, GL40.GL_NEAREST); }
-		 */
 
 		framebuffer.bind();
 	}
@@ -331,12 +284,24 @@ public class AdvancedCompositor implements Cleanupable {
 
 	@Override
 	public void cleanup() {
-		if (framebuffer != null)
+		GlobalLogger.log("Cleaning up: "+getClass().getName());
+		
+		if (framebuffer != null) {
 			framebuffer.cleanup();
-		if (depth != null)
+			framebuffer = null;
+		}
+		
+		if (depth != null) {
 			depth.cleanup();
-		if (color0 != null)
+			depth = null;
+		}
+		
+		
+		if (color0 != null) {
 			color0.cleanup();
+			color0 = null;
+		}
+		
 		if (SCREEN != null) {
 			SCREEN.cleanup();
 			SCREEN = null;

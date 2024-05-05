@@ -21,6 +21,8 @@ public class UITextLabel extends UIEntity {
 	protected UIInteractRunnable run;
 
 	public UITextLabel(CacheManager cache, String name, String txt, Vector3f pos, Alignment alignment) {
+		super(name);
+		
 		this.cache = cache;
 		this.text = txt;
 

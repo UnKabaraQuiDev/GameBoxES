@@ -19,6 +19,8 @@ public class UITextButton extends UIEntity {
 	private UITextLabel textLabelEntity;
 
 	public UITextButton(CacheManager cache, String name, String txt, Vector3f pos, Alignment alignment, String btnType) {
+		super(name);
+		
 		this.cache = cache;
 		
 		textLabelEntity = new UITextLabel(cache, name, txt, pos, alignment);

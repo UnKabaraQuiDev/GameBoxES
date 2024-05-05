@@ -23,6 +23,8 @@ public class BooleanButtonState extends Entity {
 	}
 
 	public BooleanButtonState(CacheManager cache, Transform3D transform3d, GeoPlane plane) {
+		super(BooleanButtonState.class.getName()+transform3d.hashCode());
+		
 		if (cache.hasRenderShader(BooleanButtonStateShader.NAME)) {
 			BooleanButtonStateShader shader = (BooleanButtonStateShader) cache.getRenderShader(BooleanButtonStateShader.NAME);
 			this.material = (BooleanButtonStateMaterial) new BooleanButtonStateMaterial(shader);

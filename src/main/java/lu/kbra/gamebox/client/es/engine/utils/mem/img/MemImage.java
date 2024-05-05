@@ -5,7 +5,9 @@ import java.nio.ByteBuffer;
 import org.lwjgl.stb.STBImage;
 import org.lwjgl.system.MemoryUtil;
 
-public class MemImage {
+import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
+
+public class MemImage implements Cleanupable {
 
 	private int width, height, channels;
 	private ByteBuffer buffer;
@@ -19,11 +21,15 @@ public class MemImage {
 		this.origin = origin;
 	}
 
-	public void free() {
-		if (MemImageOrigin.STBI.equals(origin) && buffer != null) {
+	@Override
+	public void cleanup() {
+		if(buffer == null)
+			return;
+		
+		if (MemImageOrigin.STBI.equals(origin)) {
 			STBImage.stbi_image_free(buffer);
 			buffer = null;
-		} else if (MemImageOrigin.OPENGL.equals(origin) && buffer != null) {
+		} else if (MemImageOrigin.OPENGL.equals(origin)) {
 			MemoryUtil.memFree(buffer);
 			buffer = null;
 		}

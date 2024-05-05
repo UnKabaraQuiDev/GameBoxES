@@ -24,17 +24,17 @@ public class GLWindow extends Window {
 	@Override
 	protected void init() {
 		errorCallback = GLFWErrorCallback.createPrint(System.err);
-		errorCallback.set();
+		// GLFW.glfwSetErrorCallback(errorCallback);
 
 		if (!GLFW.glfwInit())
 			throw new RuntimeException("Failed to initialize GLFW");
 
 		monitor = getQualifiedMonitor();
-		
+
 		handle = GLFW.glfwCreateWindow(options.windowSize.x, options.windowSize.y, options.title, MemoryUtil.NULL, MemoryUtil.NULL);
-		if(handle == MemoryUtil.NULL)
+		if (handle == MemoryUtil.NULL)
 			throw new RuntimeException("Failed to create GLFW Window");
-		
+
 		takeGLContext();
 		if ((this.capabilities = GL.createCapabilities()) == null)
 			throw new RuntimeException("Failed to create OpenGL context");
@@ -63,17 +63,28 @@ public class GLWindow extends Window {
 		GLFW.glfwMakeContextCurrent(handle);
 		GL.setCapabilities(this.capabilities);
 	}
-	
+
 	@Override
 	public void cleanup() {
+		GlobalLogger.log("Cleaning up: " + getClass().getName() + " (" + handle + ")");
+		
+		if (GL.getCapabilities() != null) {
+			GL.setCapabilities(null);
+		}
+	}
+	
+	public void cleanupGLFW() {
+		GlobalLogger.log("Cleaning up: " + getClass().getName() + " (" + handle + ")");
+		
 		if (handle != -1) {
 			Callbacks.glfwFreeCallbacks(handle);
+			
+			errorCallback.free();
+			joystickCallback.free();
+			
 			GLFW.glfwDestroyWindow(handle);
 			GLFW.glfwTerminate();
 			handle = -1;
-		}
-		if (GL.getCapabilities() != null) {
-			GL.setCapabilities(null);
 		}
 	}
 

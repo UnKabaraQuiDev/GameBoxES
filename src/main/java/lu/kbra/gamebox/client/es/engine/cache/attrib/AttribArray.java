@@ -4,6 +4,8 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.opengl.GL40;
 
+import lu.pcy113.pclib.GlobalLogger;
+
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 
@@ -85,8 +87,14 @@ public abstract class AttribArray implements Cleanupable {
 
 	@Override
 	public void cleanup() {
+		GlobalLogger.log("Cleaning up: "+name+" ("+index+"="+bufferIndex+")");
+		
+		if (bufferIndex == -1)
+			return;
+
 		GL40.glDeleteBuffers(bufferIndex);
 		PDRUtils.checkGlError("DeleteBuffers(" + bufferIndex + ") (" + name + ")");
+		bufferIndex = -1;
 	}
 
 	public String getName() {

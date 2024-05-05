@@ -119,7 +119,7 @@ public class CubemapTexture extends Texture {
 			// if (image != null) {
 			GL40.glTexImage2D(TextureType.CM_PX.getGlId() + i, 0, internalFormat.getGlId(), image.getWidth(), image.getHeight(), 0, format.getGlId(), dataType.getGlId(), image.getBuffer());
 			PDRUtils.checkGlError("TexImage2D[" + (TextureType.values()[TextureType.CM_PX.ordinal() + i]) + "]");
-			image.free();
+			image.cleanup();
 			/*
 			 * } else { cleanup(); throw new RuntimeException("Failed to load texture"); }
 			 */

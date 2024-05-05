@@ -23,6 +23,8 @@ public class JoystickState extends Entity {
 	}
 	
 	public JoystickState(CacheManager cache, Transform3D transform, GeoPlane plane) {
+		super(JoystickState.class.getName()+transform.hashCode());
+		
 		if (cache.hasRenderShader(JoystickStateShader.NAME)) {
 			JoystickStateShader shader = (JoystickStateShader) cache.getRenderShader(JoystickStateShader.NAME);
 			this.material = (JoystickStateMaterial) new JoystickStateMaterial(shader);

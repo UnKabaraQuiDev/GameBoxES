@@ -21,7 +21,9 @@ public class UISliderEntity extends UIEntity {
 
 	private UISliderComponent sliderComponent;
 
-	public UISliderEntity(CacheManager cache, Vector2f size, Vector2f values, float step, float _default, Transform3D transform) {
+	public UISliderEntity(String name, CacheManager cache, Vector2f size, Vector2f values, float step, float _default, Transform3D transform) {
+		super(name);
+		
 		UISliderMaterial mat = (UISliderMaterial) cache.loadOrGetMaterial(UISliderShader.UISliderMaterial.NAME, UISliderShader.UISliderMaterial.class, 0.1f, new Vector2f(size), new Vector2f(1, 0.5f), new Vector2f(0.1f, 1), new Vector4f(0, 1, 0, 1),
 				new Vector4f(1, 0, 0.2f, 1), 0.01f, new Vector4f(1, 1, 1, 1), new Vector4f(0), 1.05f);
 		mesh = Mesh.newQuad("uiSliderEntityMesh" + hashCode(), mat, new Vector2f(size).div(1.05f));

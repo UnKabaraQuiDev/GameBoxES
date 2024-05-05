@@ -182,14 +182,16 @@ public abstract class AbstractShader implements UniqueID, Cleanupable {
 	@Override
 	public void cleanup() {
 		GlobalLogger.log();
-		GlobalLogger.warning("Cleaning up: "+name);
+		GlobalLogger.warning("Cleaning up: " + name);
 
-		if (this.shaderProgram != -1) {
-			this.parts.values().forEach(AbstractShaderPart::cleanup);
-			GL20.glDeleteProgram(this.shaderProgram);
-			PDRUtils.checkGlError("DeleteProgram(" + shaderProgram + ") (" + name + ")");
-			this.shaderProgram = -1;
-		}
+		if (this.shaderProgram == -1)
+			return;
+
+		this.parts.values().forEach(AbstractShaderPart::cleanup);
+		this.parts = null;
+		GL20.glDeleteProgram(this.shaderProgram);
+		PDRUtils.checkGlError("DeleteProgram(" + shaderProgram + ") (" + name + ")");
+		this.shaderProgram = -1;
 	}
 
 	@Override

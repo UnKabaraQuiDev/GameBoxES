@@ -2,6 +2,8 @@ package lu.kbra.gamebox.client.es.engine.graph.texture;
 
 import org.lwjgl.opengl.GL40;
 
+import lu.pcy113.pclib.GlobalLogger;
+
 import lu.kbra.gamebox.client.es.engine.graph.composition.FramebufferAttachment;
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
 import lu.kbra.gamebox.client.es.engine.impl.UniqueID;
@@ -67,7 +69,7 @@ public abstract class Texture implements Cleanupable, UniqueID, FramebufferAttac
 		GL40.glBindTexture(txtType.getGlId(), tid);
 		PDRUtils.checkGlError("BindTexture[" + txtType + "]=" + tid);
 	}
-	
+
 	public void unbind(int i) {
 		active(i);
 		unbind();
@@ -105,11 +107,14 @@ public abstract class Texture implements Cleanupable, UniqueID, FramebufferAttac
 
 	@Override
 	public void cleanup() {
-		if (isValid()) {
-			GL40.glDeleteTextures(tid);
-			PDRUtils.checkGlError("DeleteTextures[" + tid + "] (" + name + ")");
-			tid = -1;
-		}
+		GlobalLogger.log("Cleaning up: " + name + " (" + tid + ")");
+
+		if (tid == -1)
+			return;
+
+		GL40.glDeleteTextures(tid);
+		PDRUtils.checkGlError("DeleteTextures[" + tid + "] (" + name + ")");
+		tid = -1;
 	}
 
 	@Override

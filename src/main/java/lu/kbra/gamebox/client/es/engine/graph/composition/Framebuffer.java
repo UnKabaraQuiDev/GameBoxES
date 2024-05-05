@@ -5,6 +5,8 @@ import java.util.Map.Entry;
 
 import org.lwjgl.opengl.GL40;
 
+import lu.pcy113.pclib.GlobalLogger;
+
 import lu.kbra.gamebox.client.es.engine.graph.texture.SingleTexture;
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
 import lu.kbra.gamebox.client.es.engine.impl.UniqueID;
@@ -47,15 +49,15 @@ public class Framebuffer implements UniqueID, Cleanupable {
 		this.attachments.put(attach.getGlId() + offset, texture);
 		return PDRUtils.checkGlError("FrameBufferTexture[" + attach + "+" + offset + "][" + name + "]=" + texture.getId());
 	}
-	
+
 	public boolean attachRenderBuffer(FrameBufferAttachment attach, int offset, RenderBuffer texture) {
-		GL40.glFramebufferRenderbuffer(GL40.GL_FRAMEBUFFER, attach.getGlId()+offset, GL40.GL_RENDERBUFFER, texture.getRBid());
+		GL40.glFramebufferRenderbuffer(GL40.GL_FRAMEBUFFER, attach.getGlId() + offset, GL40.GL_RENDERBUFFER, texture.getRBid());
 		this.attachments.put(attach.getGlId() + offset, texture);
 		return PDRUtils.checkGlError("FrameBufferRenderbuffer[" + attach + "+" + offset + "][" + name + "]=" + texture.getId());
 	}
 
 	public boolean hasAttachment(FrameBufferAttachment attach, int offset) {
-		return attachments.containsKey(attach.getGlId()+offset);
+		return attachments.containsKey(attach.getGlId() + offset);
 	}
 
 	public boolean clearAttachments() {
@@ -99,17 +101,20 @@ public class Framebuffer implements UniqueID, Cleanupable {
 
 	@Override
 	public void cleanup() {
-		if (fbo != -1) {
-			GL40.glDeleteFramebuffers(fbo);
-			PDRUtils.checkGlError("DeleteFrameBuffer[" + fbo + "]");
-		}
+		GlobalLogger.log("Cleaning up: " + name + "(" + fbo + ")");
+
+		if (fbo == -1)
+			return;
+		GL40.glDeleteFramebuffers(fbo);
+		PDRUtils.checkGlError("DeleteFrameBuffer[" + fbo + "]");
+		fbo = -1;
 	}
 
 	@Override
 	public String getId() {
 		return name;
 	}
-	
+
 	public int getFbo() {
 		return fbo;
 	}

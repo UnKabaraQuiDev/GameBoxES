@@ -49,7 +49,7 @@ public class DebugUIElements {
 		fpsDebug.createDrawBuffer();
 		fpsDebug.updateText();
 		cache.addTextEmitter(fpsDebug);
-		Entity fpsDebugEntity = new Entity(new TextEmitterComponent(fpsDebug), new Transform3DComponent(new Vector3f(1.3f, 0, 0).add(pos), axis));
+		Entity fpsDebugEntity = new Entity("fpsDebug", new TextEmitterComponent(fpsDebug), new Transform3DComponent(new Vector3f(1.3f, 0, 0).add(pos), axis));
 		scene.addEntity("fpsDebug", fpsDebugEntity);
 		
 		this.leftJoystick = new JoystickState(cache, new Transform3D(new Vector3f(-0.5f, 0.5f, 0).add(pos), axis));

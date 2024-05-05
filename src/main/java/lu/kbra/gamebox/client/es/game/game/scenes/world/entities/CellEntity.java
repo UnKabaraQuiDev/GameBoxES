@@ -15,7 +15,9 @@ public class CellEntity extends Entity {
 	private Transform3DComponent transform;
 	private MeshComponent mesh;
 
-	public CellEntity(CacheManager cache, Mesh mesh, CellDescriptor descriptor) {
+	public CellEntity(String name, CacheManager cache, Mesh mesh, CellDescriptor descriptor) {
+		super(name);
+		
 		this.cellDescriptor = descriptor;
 		this.transform = new Transform3DComponent();
 		this.mesh = new MeshComponent(mesh);
@@ -23,13 +25,14 @@ public class CellEntity extends Entity {
 		addComponent(transform);
 		addComponent(this.mesh);
 	}
-
+	
+	@Deprecated
 	public static CellEntity load(CacheManager cache, CellDescriptor descriptor) {
 		Material material = descriptor.createMaterial(cache);
 		Mesh mesh = Mesh.newQuad(descriptor.getCellType().getDataPath() + material.hashCode(), material, new Vector2f(1));
 		mesh.createDrawBuffer();
 		cache.addMesh(mesh);
-		CellEntity ce = new CellEntity(cache, mesh, descriptor);
+		CellEntity ce = new CellEntity(descriptor.getId()+mesh.hashCode(), cache, mesh, descriptor);
 		return ce;
 	}
 

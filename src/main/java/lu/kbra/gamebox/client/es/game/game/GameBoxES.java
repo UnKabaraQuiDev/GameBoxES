@@ -44,8 +44,8 @@ public class GameBoxES extends GameLogic {
 
 	@Override
 	public void init(GameEngine e) {
-		GameEngine.DEBUG.wireframe = false;
-		GameEngine.DEBUG.gizmos = false;
+		GameEngine.DEBUG.wireframe = true;
+		GameEngine.DEBUG.gizmos = true;
 
 		GlobalUtils.init(this, super.engine);
 

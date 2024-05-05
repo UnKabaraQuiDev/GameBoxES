@@ -172,7 +172,7 @@ public class UISceneStartMenuState extends UISceneState {
 	}
 
 	private UISliderEntity addSlider(String name) { // need to also add text, create TextSlideBar entity or smth
-		UISliderEntity slider = new UISliderEntity(cache, new Vector2f(2, 0.3f), new Vector2f(0, 100), 0.05f, 0.5f, new Transform3D());
+		UISliderEntity slider = new UISliderEntity(name, cache, new Vector2f(2, 0.3f), new Vector2f(0, 100), 0.05f, 0.5f, new Transform3D());
 		return (UISliderEntity) scene.addEntity(name, slider);
 	}
 
@@ -425,6 +425,8 @@ public class UISceneStartMenuState extends UISceneState {
 	
 	@Override
 	public void cleanup() {
+		GlobalLogger.log("Cleaning up: "+getClass().getName());
+		
 		scene.getEntities().clear();
 		
 		super.cleanup();

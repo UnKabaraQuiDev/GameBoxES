@@ -61,12 +61,15 @@ public class GenerateRenderLayer extends RenderLayer<GameEngine, Framebuffer, Me
 
 	@Override
 	public void cleanup() {
+		GlobalLogger.log("Cleaning up: " + name);
+
 		super.cleanup();
 
-		if (SCREEN != null) {
-			SCREEN.cleanup();
-			SCREEN = null;
-		}
+		if (SCREEN == null)
+			return;
+
+		SCREEN.cleanup();
+		SCREEN = null;
 	}
 
 }

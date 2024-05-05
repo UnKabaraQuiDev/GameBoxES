@@ -3,6 +3,8 @@ package lu.kbra.gamebox.client.es.engine.audio;
 import org.joml.Vector3f;
 import org.lwjgl.openal.AL11;
 
+import lu.pcy113.pclib.GlobalLogger;
+
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 
@@ -202,10 +204,16 @@ public class ALSource implements Cleanupable {
 
 	@Override
 	public void cleanup() {
+		GlobalLogger.log("Cleaning up: "+sourceId);
+		
+		if(sourceId == -1)
+			return;
+		
 		stop();
 		AL11.alDeleteSources(sourceId);
 		PDRUtils.checkAlError("DeleteSources(" + sourceId + ")");
 		pool.remove(this);
+		sourceId = -1;
 	}
 
 }

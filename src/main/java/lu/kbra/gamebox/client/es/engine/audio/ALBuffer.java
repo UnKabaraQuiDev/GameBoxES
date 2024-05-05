@@ -6,6 +6,8 @@ import java.nio.ShortBuffer;
 
 import org.lwjgl.openal.AL11;
 
+import lu.pcy113.pclib.GlobalLogger;
+
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 
@@ -57,7 +59,13 @@ public class ALBuffer implements Cleanupable {
 
 	@Override
 	public void cleanup() {
+		GlobalLogger.log("Cleaning up: "+bufferId);
+		
+		if(bufferId == -1)
+			return;
+		
 		AL11.alDeleteBuffers(bufferId);
+		bufferId = -1;
 	}
 
 }

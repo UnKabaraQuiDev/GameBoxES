@@ -63,6 +63,8 @@ public abstract class Window implements Cleanupable {
 	}
 
 	protected abstract void init();
+	
+	public abstract void cleanupGLFW();
 
 	public void clearGLContext() {
 		GLFW.glfwMakeContextCurrent(MemoryUtil.NULL);

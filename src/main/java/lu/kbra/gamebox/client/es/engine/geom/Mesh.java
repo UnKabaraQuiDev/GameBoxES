@@ -14,7 +14,6 @@ import lu.kbra.gamebox.client.es.engine.cache.attrib.AttribArray;
 import lu.kbra.gamebox.client.es.engine.cache.attrib.DrawBuffer;
 import lu.kbra.gamebox.client.es.engine.cache.attrib.MultiAttribArray;
 import lu.kbra.gamebox.client.es.engine.cache.attrib.UIntAttribArray;
-import lu.kbra.gamebox.client.es.engine.cache.attrib.Vec2fAttribArray;
 import lu.kbra.gamebox.client.es.engine.cache.attrib.Vec3fAttribArray;
 import lu.kbra.gamebox.client.es.engine.graph.material.Material;
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
@@ -148,11 +147,15 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 
 	@Override
 	public void cleanup() {
+		GlobalLogger.log("Cleaning up: "+name+" ("+vao+")");
+		
 		if (vao == -1)
 			return;
 
 		GL40.glDeleteVertexArrays(vao);
 		Arrays.stream(attribs).forEach(AttribArray::cleanup);
+		attribs = null;
+		vbo = null;
 		vao = -1;
 		if(hasDrawBuffer()) {
 			drawBuffer.cleanup();
