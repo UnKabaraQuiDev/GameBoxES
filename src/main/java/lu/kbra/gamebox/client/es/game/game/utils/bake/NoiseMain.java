@@ -93,7 +93,7 @@ public class NoiseMain {
 
 	public static void map(NoiseGenerator noiseGenerator, String name, int from, int to) {
 		map(noiseGenerator, name + "_normal", from, to, a -> a);
-		map(noiseGenerator, name + "_squared", from, to, a -> a*a);
+		map(noiseGenerator, name + "_squared", from, to, a -> a * a);
 	}
 
 	private static void map(NoiseGenerator noiseGenerator, String name, int from, int to, Function<Double, Double> transformer) {
@@ -122,9 +122,9 @@ public class NoiseMain {
 		try {
 			File output = new File("./resources/bakes/noise/map-" + noiseGenerator.getScale() + "_" + name + ".png");
 			ImageIO.write(image, "png", output);
-			System.out.println("Texture generated and saved successfully: " + output.getName());
+			System.out.println("[" + Thread.currentThread().getName() + "] Texture generated and saved successfully: " + output.getName());
 		} catch (IOException e) {
-			System.out.println("Error saving texture: " + e.getMessage());
+			System.out.println("[" + Thread.currentThread().getName() + "] Error saving texture: " + e.getMessage());
 		}
 	}
 
@@ -154,9 +154,9 @@ public class NoiseMain {
 		try {
 			File output = new File("./resources/bakes/noise/map-" + name + ".png");
 			ImageIO.write(image, "png", output);
-			System.out.println("Texture generated and saved successfully: " + output.getName());
+			System.out.println("[" + Thread.currentThread().getName() + "] Texture generated and saved successfully: " + output.getName());
 		} catch (IOException e) {
-			System.out.println("Error saving texture: " + e.getMessage());
+			System.out.println("[" + Thread.currentThread().getName() + "] Error saving texture: " + e.getMessage());
 		}
 	}
 

@@ -41,6 +41,7 @@ import lu.kbra.gamebox.client.es.engine.exceptions.opengl.GLOutOfMemoryException
 import lu.kbra.gamebox.client.es.engine.exceptions.opengl.GLRuntimeException;
 import lu.kbra.gamebox.client.es.engine.exceptions.opengl.GLStackOverflowException;
 import lu.kbra.gamebox.client.es.engine.exceptions.opengl.GLStackUnderflowException;
+import lu.kbra.gamebox.client.es.engine.impl.nexttask.NextTask;
 
 public final class PDRUtils {
 
@@ -387,6 +388,16 @@ public final class PDRUtils {
 			arr[i] = rand.nextInt(max-min)+min;
 		}
 		return arr;
+	}
+
+	public static NextTask[] castNextTask(Object[] array) {
+		NextTask[] nt = new NextTask[array.length];
+		
+		for(int i = 0; i < array.length; i++) {
+			nt[i] = (NextTask) array[i];
+		}
+		
+		return nt;
 	}
 
 }

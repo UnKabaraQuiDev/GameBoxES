@@ -1,5 +1,7 @@
 package lu.kbra.gamebox.client.es.engine.impl.nexttask;
 
+import lu.pcy113.pclib.GlobalLogger;
+
 import lu.kbra.gamebox.client.es.engine.impl.UniqueID;
 
 public class NextTaskWorker extends NextTaskEnvironnment implements UniqueID {
@@ -18,10 +20,22 @@ public class NextTaskWorker extends NextTaskEnvironnment implements UniqueID {
 		}
 	}
 
+	public boolean push(NextTask... tasks) {
+		boolean bb = true;
+
+		for (NextTask nt : tasks) {
+			bb &= push(nt);
+		}
+
+		return bb;
+	}
+
 	public boolean push(NextTask task) {
 		int ntth = super.getShortestQueueId();
 
 		boolean bb = super.push(ntth, task);
+
+		GlobalLogger.info("Pushed task: " + task.getSource() + " -> " + task.getTarget() + " on thread: " + ntth + " = " + bb);
 
 		((NextTaskThread) super.threads[ntth]).wakeUp();
 

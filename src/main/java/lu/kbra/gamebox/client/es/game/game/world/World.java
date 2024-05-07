@@ -19,6 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import lu.pcy113.pclib.GlobalLogger;
+import lu.pcy113.pclib.ThreadBuilder;
 
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
 import lu.kbra.gamebox.client.es.engine.geom.Mesh;
@@ -45,12 +46,13 @@ import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.CellType;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.WorldParticleEmitter;
 import lu.kbra.gamebox.client.es.game.game.utils.NoiseGenerator;
 import lu.kbra.gamebox.client.es.game.game.utils.bake.NoiseMain;
+import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
 
 public class World implements Cleanupable {
 
 	public static final float CULLING_DISTANCE = 25;
 
-	private static final double GEN_FACTOR = 0.1;
+	private static final double GEN_FACTOR = 100;
 
 	private static final double SEED_OFFSET_DISTRIBUTION = 11;
 	private static final double SEED_OFFSET_HOSTILITY = 10;
@@ -93,13 +95,27 @@ public class World implements Cleanupable {
 		this.fertilityGen = new NoiseGenerator(seed + SEED_OFFSET_FERTILITY, 32);
 		this.humidityGen = new NoiseGenerator(seed + SEED_OFFSET_HUMIDITY, 64);
 
-		NoiseMain.map(distributionGen, "distribution", -5 * 20, +5 * 20);
-		NoiseMain.map(hostilityGen, "hostility", -5 * 20, +5 * 20);
-		NoiseMain.map(fertilityGen, "fertility", -5 * 20, +5 * 20);
-		NoiseMain.map(humidityGen, "humidity", -5 * 20, +5 * 20);
+		GlobalUtils.pushWorker(
+				() -> NoiseMain.map(distributionGen, "distribution", -5 * 20, +5 * 20),
+				() -> NoiseMain.map(hostilityGen, "hostility", -5 * 20, +5 * 20),
+				() -> NoiseMain.map(fertilityGen, "fertility", -5 * 20, +5 * 20),
+				() -> NoiseMain.map(humidityGen, "humidity", -5 * 20, +5 * 20),
 
-		NoiseMain.map((point) -> humidityGen.noise(point) > 0.2 && java.lang.Math.pow(hostilityGen.noise(point), 2) < 0.4, "plants_squared", -5 * 20, +5 * 20);
-		NoiseMain.map((point) -> humidityGen.noise(point) > 0.2 && hostilityGen.noise(point) < 0.4, "plants_normal", -5 * 20, +5 * 20);
+				() -> NoiseMain.map((point) -> humidityGen.noise(point) > 0.2 && hostilityGen.noise(point) < 0.4, "plants_normal", -5 * 20, +5 * 20),
+				
+				() -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.2, "humidity_less_0.2", -5 * 20, +5 * 20),
+				() -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.4, "humidity_less_0.4", -5 * 20, +5 * 20),
+				() -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.6, "humidity_less_0.6", -5 * 20, +5 * 20),
+				() -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.8, "humidity_less_0.8", -5 * 20, +5 * 20),
+				
+				() -> NoiseMain.map((point) -> hostilityGen.noise(point) > 0.8, "hostility_greater_0.5", -5 * 20, +5 * 20),
+				() -> NoiseMain.map((point) -> hostilityGen.noise(point) > 0.8, "hostility_greater_0.8", -5 * 20, +5 * 20),
+				
+				() -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.4 && hostilityGen.noise(point) > 0.5, "toxins_normal", -5 * 20, +5 * 20),
+				() -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.4 && java.lang.Math.pow(hostilityGen.noise(point), 2) > 0.5, "toxins_squared", -5 * 20, +5 * 20),
+				() -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.4 && hostilityGen.noise(point)*2 > 0.5, "toxins_doubled", -5 * 20, +5 * 20),
+				() -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.4 && hostilityGen.noise(point)/2 > 0.5, "toxins_halved", -5 * 20, +5 * 20)
+		);
 
 		CellMaterial playerMaterial = cache.loadOrGetMaterial("playerMaterial", CellShader.CellMaterial.class, CellType.PLAYER.name(),
 				cache.loadOrGetSingleTexture(CellShader.CellMaterial.PLAYER_TEXTURE_NAME, CellShader.CellMaterial.PLAYER_TEXTURE_PATH));
@@ -216,7 +232,7 @@ public class World implements Cleanupable {
 		cache.addInstanceEmitter(emit);
 
 		Matrix4f[] matrices = toxins.parallelStream().map(t -> new Matrix4f().setTranslation(t.x, t.y, 0)).collect(Collectors.toList()).toArray(new Matrix4f[toxins.size()]);
-		Object[] sizes = toxins.stream().map(p -> Math.clamp(0.6f, 1f, (float) hostilityGen.noise(p))).collect(Collectors.toList()).toArray();
+		Object[] sizes = toxins.stream().map(p -> Math.clamp(5f, 10f, (float) hostilityGen.noise(p))).collect(Collectors.toList()).toArray();
 
 		for (int i = 0; i < matrices.length; i++) {
 			matrices[i].translate(0, 0, 0.01f * i);
@@ -263,7 +279,7 @@ public class World implements Cleanupable {
 	public List<Vector2f> genPlants(Vector2f center, List<Vector2f> points) {
 		List<Vector2f> rePoints = new ArrayList<Vector2f>();
 		for (Vector2f point : points) {
-			if (humidityGen.noise(point, center) > 0.2 && java.lang.Math.pow(hostilityGen.noise(point, center), 2) < 0.4) {
+			if (humidityGen.noise(point, center) > 0.2 && hostilityGen.noise(point, center) < 0.4) {
 				rePoints.add(point);
 			}
 		}
@@ -274,7 +290,7 @@ public class World implements Cleanupable {
 	public List<Vector2f> genToxins(Vector2f center, List<Vector2f> points) {
 		List<Vector2f> rePoints = new ArrayList<Vector2f>();
 		for (Vector2f point : points) {
-			if (humidityGen.noise(point, center) < 0.2 && hostilityGen.noise(point, center) > 0.5 && random.nextFloat() > 0.9f) {
+			if (humidityGen.noise(point, center) < 0.4 && hostilityGen.noise(point, center) > 0.5 && random.nextFloat() > 0.6f) {
 				rePoints.add(point);
 			}
 		}
@@ -301,10 +317,8 @@ public class World implements Cleanupable {
 		float maxY = +halfSquareSize;
 
 		for (int i = 0; i < numPoints; i++) {
-			// float randomX = minX + (float) distributionGen.noise(i * GEN_FACTOR + seed.x,
-			// i * GEN_FACTOR + seed.y) * (maxX - minX);
-			// float randomY = minY + (float) distributionGen.noise(i * GEN_FACTOR * 2 +
-			// seed.x, i * GEN_FACTOR / 3 + seed.y) * (maxY - minY);
+			// float randomX = minX + (float) distributionGen.noise(i * GEN_FACTOR + seed.x, i * GEN_FACTOR + seed.y) * (maxX - minX);
+			// float randomY = minY + (float) distributionGen.noise(i * GEN_FACTOR * 2 + seed.x, i * GEN_FACTOR / 3 + seed.y) * (maxY - minY);
 
 			float randomX = minX + random.nextFloat() * (maxX - minX);
 			float randomY = minY + random.nextFloat() * (maxY - minY);
