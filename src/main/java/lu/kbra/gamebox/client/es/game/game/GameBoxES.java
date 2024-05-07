@@ -121,8 +121,10 @@ public class GameBoxES extends GameLogic {
 
 	@Override
 	public void update(float dTime) {
-		if (window.isMouseButtonPressed(GLFW.GLFW_MOUSE_BUTTON_LEFT)) {
-			GlobalUtils.projectUI(System.err::println);
+		if (GameState.START_MENU.equals(gameState)) {
+			uiScene.update(dTime);
+		} else {
+			worldScene.update(dTime);
 		}
 	}
 

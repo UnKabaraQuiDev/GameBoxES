@@ -26,6 +26,9 @@ public class CellShader extends RenderShader {
 
 	public static class CellMaterial extends TextureMaterial {
 
+		public static final String PLAYER_TEXTURE_NAME = "player.png";
+		public static final String PLAYER_TEXTURE_PATH = "./resources/gd/cells/player/player.png";
+
 		public CellMaterial(String name, CellShader shader, Texture color) {
 			super(name, shader, new HashMap<String, Texture>() {
 				{

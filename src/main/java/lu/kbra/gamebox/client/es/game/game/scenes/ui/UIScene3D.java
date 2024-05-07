@@ -77,4 +77,8 @@ public class UIScene3D extends Scene3D {
 		return window;
 	}
 
+	public void update(float dTime) {
+		
+	}
+
 }
