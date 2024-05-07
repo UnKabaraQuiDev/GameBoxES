@@ -53,33 +53,23 @@ public class WorldScene3D extends Scene3D {
 	public void input(float dTime) {
 		Camera3D cam = ((Camera3D) super.getCamera());
 		cam.getPosition()
-				.add(new Vector3f((window.isCharPress('r') ? 1 : 0) - (window.isCharPress('f') ? 1 : 0),
-						(window.isCharPress('z') ? 1 : 0) - (window.isCharPress('s') ? 1 : 0),
-						(window.isCharPress('d') ? 1 : 0) - (window.isCharPress('q') ? 1 : 0)));
+				.add(new Vector3f((window.isCharPress('r') ? 1 : 0) - (window.isCharPress('f') ? 1 : 0), (window.isCharPress('z') ? 1 : 0) - (window.isCharPress('s') ? 1 : 0), (window.isCharPress('d') ? 1 : 0) - (window.isCharPress('q') ? 1 : 0)));
 
 		if (window.isJoystickPresent() && world != null && world.getPlayer() != null) {
-			world.getPlayer().getTransform().getTransform().translateAdd(
-					new Vector3f(window.getJoystickAxis(GLFW.GLFW_JOYSTICK_1, GLFW.GLFW_GAMEPAD_AXIS_LEFT_X),
-							-window.getJoystickAxis(GLFW.GLFW_JOYSTICK_1, GLFW.GLFW_GAMEPAD_AXIS_LEFT_Y), 0));
+			world.getPlayer().getTransform().getTransform().translateAdd(new Vector3f(window.getJoystickAxis(GLFW.GLFW_JOYSTICK_1, GLFW.GLFW_GAMEPAD_AXIS_LEFT_X), -window.getJoystickAxis(GLFW.GLFW_JOYSTICK_1, GLFW.GLFW_GAMEPAD_AXIS_LEFT_Y), 0));
 			world.getPlayer().getTransform().getTransform().updateMatrix();
 
 			placeCamera(GeoPlane.XY.projectToPlane(world.getPlayer().getTransform().getTransform().getTranslation()));
 		}
 		cam.updateMatrix();
 
-		System.err
-				.println("axis: "
-						+ GlobalUtils.applyMinThreshold(
-								window.getJoystickAxis(GLFW.GLFW_JOYSTICK_1, GLFW.GLFW_GAMEPAD_AXIS_RIGHT_X))
-						+ " = " + size);
-		size += (window.getJoystickButton(GLFW.GLFW_JOYSTICK_1, GLFW.GLFW_GAMEPAD_BUTTON_A) ? 1 : 0)
-				- (window.getJoystickButton(GLFW.GLFW_JOYSTICK_1, GLFW.GLFW_GAMEPAD_BUTTON_B) ? 1 : 0);
+		size += (window.getJoystickButton(GLFW.GLFW_JOYSTICK_1, GLFW.GLFW_GAMEPAD_BUTTON_A) ? 1 : 0) - (window.getJoystickButton(GLFW.GLFW_JOYSTICK_1, GLFW.GLFW_GAMEPAD_BUTTON_B) ? 1 : 0);
 		camera.getProjection().setSize(size * 5);
 		camera.getProjection().update();
 	}
 
 	public void update(float dTime) {
-		if(world != null) {
+		if (world != null) {
 			world.update();
 		}
 	}
@@ -90,7 +80,7 @@ public class WorldScene3D extends Scene3D {
 			world = null;
 		}
 
-		world = new World(this);
+		world = new World(this, Math.random());
 		for (int x = -5; x < 5; x++) {
 			for (int y = -5; y < 5; y++) {
 				genChunk(new Vector2f(x * chunkSize, y * chunkSize));
@@ -124,19 +114,12 @@ public class WorldScene3D extends Scene3D {
 	public void setupScene() {
 		Gizmo axis = ObjLoader.loadGizmo("grid_xyz", "./resources/models/gizmos/grid_xyz.obj");
 		cache.addGizmo(axis);
-		super.addEntity("grid_xyz", new GizmoComponent(axis),
-				new Transform3DComponent(new Transform3D(new Vector3f(0), new Quaternionf(), new Vector3f(10))))
-				.setActive(true);
+		super.addEntity("grid_xyz", new GizmoComponent(axis), new Transform3DComponent(new Transform3D(new Vector3f(0), new Quaternionf(), new Vector3f(10)))).setActive(true);
 
-		Mesh backgroundMesh = Mesh.newQuad("backgroundMesh",
-				cache.getParent().loadOrGetMaterial(BackgroundShader.BackgroundMaterial.NAME,
-						BackgroundShader.BackgroundMaterial.class,
-						cache.getParent().loadOrGetSingleTexture("worldBgTexture",
-								"./resources/textures/ui/defaultBG.png", TextureFilter.LINEAR)),
-				new Vector2f(16, 9).div(1));
+		Mesh backgroundMesh = Mesh.newQuad("backgroundMesh", cache.getParent().loadOrGetMaterial(BackgroundShader.BackgroundMaterial.NAME, BackgroundShader.BackgroundMaterial.class,
+				cache.getParent().loadOrGetSingleTexture("worldBgTexture", "./resources/textures/ui/defaultBG.png", TextureFilter.LINEAR)), new Vector2f(16, 9).div(1));
 		cache.addMesh(backgroundMesh);
-		background = addEntity("worldBG", new MeshComponent(backgroundMesh),
-				new Transform3DComponent(new Vector3f(0, 0, -1)), new RenderComponent(10)).setActive(false);
+		background = addEntity("worldBG", new MeshComponent(backgroundMesh), new Transform3DComponent(new Vector3f(0, 0, -1)), new RenderComponent(10)).setActive(false);
 
 		System.err.println("added gizmo: ");
 		cache.dump(System.err);
@@ -155,8 +138,7 @@ public class WorldScene3D extends Scene3D {
 
 	public void placeCamera(Vector2f pos) {
 		((Camera3D) camera).lookAt(new Vector3f(pos.x, pos.y, distance), new Vector3f(pos.x, pos.y, 0));
-		background.getComponent(Transform3DComponent.class).getTransform()
-				.setTranslation(new Vector3f(pos.x, pos.y, -1)).updateMatrix();
+		background.getComponent(Transform3DComponent.class).getTransform().setTranslation(new Vector3f(pos.x, pos.y, -1)).updateMatrix();
 		camera.updateMatrix();
 
 		// genChunk(pos);

@@ -5,6 +5,7 @@
 		"hostility": [0, 1],
 		"fertility": [0, 1],
 		"humidity": [0, 1],
-		"textureVariationCount": 1
+		"textureVariationCount": 1,
+		"agressivity": 0
 	}
 }

@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
+import org.joml.Vector2f;
+
 import lu.pcy113.pclib.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.audio.Sound;
@@ -13,6 +15,7 @@ import lu.kbra.gamebox.client.es.engine.cache.attrib.AttribArray;
 import lu.kbra.gamebox.client.es.engine.exceptions.opengl.ShaderInstantiationException;
 import lu.kbra.gamebox.client.es.engine.geom.Gizmo;
 import lu.kbra.gamebox.client.es.engine.geom.Mesh;
+import lu.kbra.gamebox.client.es.engine.geom.QuadMesh;
 import lu.kbra.gamebox.client.es.engine.geom.instance.InstanceEmitter;
 import lu.kbra.gamebox.client.es.engine.geom.utils.ObjLoader;
 import lu.kbra.gamebox.client.es.engine.graph.composition.Framebuffer;
@@ -32,6 +35,7 @@ import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureType;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureWrap;
 import lu.kbra.gamebox.client.es.engine.utils.transform.Transform;
+import lu.kbra.gamebox.client.es.game.game.render.shaders.CellShader.CellMaterial;
 
 public class CacheManager implements Cleanupable, UniqueID {
 
@@ -535,6 +539,12 @@ public class CacheManager implements Cleanupable, UniqueID {
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 			throw new ShaderInstantiationException(e);
 		}
+	}
+	
+	public QuadMesh newQuadMesh(String name, CellMaterial mat, Vector2f size) {
+		QuadMesh mesh = Mesh.newQuad(name, mat, size);
+		addMesh(mesh);
+		return mesh;
 	}
 
 	public SingleTexture loadSingleTexture(String string, String path, TextureFilter filter) {

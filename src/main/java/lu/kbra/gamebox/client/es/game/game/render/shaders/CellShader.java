@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import lu.kbra.gamebox.client.es.engine.graph.material.TextureMaterial;
 import lu.kbra.gamebox.client.es.engine.graph.shader.RenderShader;
+import lu.kbra.gamebox.client.es.engine.graph.texture.SingleTexture;
 import lu.kbra.gamebox.client.es.engine.graph.texture.Texture;
 import lu.kbra.gamebox.client.es.engine.impl.shader.AbstractShaderPart;
 
@@ -37,7 +38,7 @@ public class CellShader extends RenderShader {
 			});
 		}
 
-		public CellMaterial(String name, Texture color) {
+		public CellMaterial(String name, SingleTexture color) {
 			this(name, new CellShader(), color);
 		}
 

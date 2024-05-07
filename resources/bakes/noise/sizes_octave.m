@@ -1,4 +1,4 @@
-data = dlmread('sizes.txt');
+data = dlmread('distribution.txt');
 hist(data);
 
 % Save plot as PNG file

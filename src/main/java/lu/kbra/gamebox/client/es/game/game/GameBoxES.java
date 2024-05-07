@@ -6,7 +6,8 @@ import java.util.logging.Level;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-import org.lwjgl.glfw.GLFW;
+
+import lu.pcy113.pclib.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.graph.composition.SceneRenderLayer;
@@ -24,7 +25,6 @@ import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalConsts;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalLang;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalOptions;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
-import lu.pcy113.pclib.GlobalLogger;
 
 public class GameBoxES extends GameLogic {
 
@@ -57,7 +57,7 @@ public class GameBoxES extends GameLogic {
 			GlobalOptions.load();
 			GlobalLogger.log("Loaded lang: " + GlobalOptions.LANGUAGE + " gets: " + GlobalLang.LANGUAGES[GlobalOptions.LANGUAGE]);
 			GlobalLang.load(GlobalLang.LANGUAGES[GlobalOptions.LANGUAGE]);
-			GlobalLogger.log("Loaded volume: "+GlobalLang.get("menu.options.volume"));
+			GlobalLogger.log("Loaded volume: " + GlobalLang.get("menu.options.volume"));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
