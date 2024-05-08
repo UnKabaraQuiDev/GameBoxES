@@ -95,32 +95,47 @@ public class World implements Cleanupable {
 		this.fertilityGen = new NoiseGenerator(seed + SEED_OFFSET_FERTILITY, 32);
 		this.humidityGen = new NoiseGenerator(seed + SEED_OFFSET_HUMIDITY, 64);
 
-		GlobalUtils.pushWorker(
-				() -> NoiseMain.map(distributionGen, "distribution", -5 * 20, +5 * 20),
-				() -> NoiseMain.map(hostilityGen, "hostility", -5 * 20, +5 * 20),
-				() -> NoiseMain.map(fertilityGen, "fertility", -5 * 20, +5 * 20),
+		GlobalUtils.pushWorker(() -> NoiseMain.map(distributionGen, "distribution", -5 * 20, +5 * 20), () -> NoiseMain.map(hostilityGen, "hostility", -5 * 20, +5 * 20), () -> NoiseMain.map(fertilityGen, "fertility", -5 * 20, +5 * 20),
 				() -> NoiseMain.map(humidityGen, "humidity", -5 * 20, +5 * 20),
 
 				() -> NoiseMain.map((point) -> humidityGen.noise(point) > 0.2 && hostilityGen.noise(point) < 0.4, "plants_normal", -5 * 20, +5 * 20),
-				
+
 				() -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.2, "humidity_less_0.2", -5 * 20, +5 * 20),
 				() -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.4, "humidity_less_0.4", -5 * 20, +5 * 20),
 				() -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.6, "humidity_less_0.6", -5 * 20, +5 * 20),
 				() -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.8, "humidity_less_0.8", -5 * 20, +5 * 20),
 				
-				() -> NoiseMain.map((point) -> hostilityGen.noise(point) > 0.8, "hostility_greater_0.5", -5 * 20, +5 * 20),
+				() -> NoiseMain.map((point) -> humidityGen.noise(point) > 0.2, "humidity_greater_0.2", -5 * 20, +5 * 20),
+				() -> NoiseMain.map((point) -> humidityGen.noise(point) > 0.4, "humidity_greater_0.4", -5 * 20, +5 * 20),
+				() -> NoiseMain.map((point) -> humidityGen.noise(point) > 0.6, "humidity_greater_0.6", -5 * 20, +5 * 20),
+				() -> NoiseMain.map((point) -> humidityGen.noise(point) > 0.8, "humidity_greater_0.8", -5 * 20, +5 * 20),
+				
+				() -> NoiseMain.map((point) -> fertilityGen.noise(point) < 0.2, "fertility_less_0.2", -5 * 20, +5 * 20),
+				() -> NoiseMain.map((point) -> fertilityGen.noise(point) < 0.4, "fertility_less_0.4", -5 * 20, +5 * 20),
+				() -> NoiseMain.map((point) -> fertilityGen.noise(point) < 0.6, "fertility_less_0.6", -5 * 20, +5 * 20),
+				() -> NoiseMain.map((point) -> fertilityGen.noise(point) < 0.8, "fertility_less_0.8", -5 * 20, +5 * 20),
+
+				() -> NoiseMain.map((point) -> hostilityGen.noise(point) > 0.5, "hostility_greater_0.5", -5 * 20, +5 * 20),
 				() -> NoiseMain.map((point) -> hostilityGen.noise(point) > 0.8, "hostility_greater_0.8", -5 * 20, +5 * 20),
 				
+				() -> NoiseMain.map((point) -> hostilityGen.noise(point) < 0.4, "hostility_less_0.4", -5 * 20, +5 * 20),
+				() -> NoiseMain.map((point) -> hostilityGen.noise(point) < 0.2, "hostility_less_0.2", -5 * 20, +5 * 20),
+
 				() -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.4 && hostilityGen.noise(point) > 0.5, "toxins_normal", -5 * 20, +5 * 20),
 				() -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.4 && java.lang.Math.pow(hostilityGen.noise(point), 2) > 0.5, "toxins_squared", -5 * 20, +5 * 20),
-				() -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.4 && hostilityGen.noise(point)*2 > 0.5, "toxins_doubled", -5 * 20, +5 * 20),
-				() -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.4 && hostilityGen.noise(point)/2 > 0.5, "toxins_halved", -5 * 20, +5 * 20)
+				() -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.4 && hostilityGen.noise(point) * 2 > 0.5, "toxins_doubled", -5 * 20, +5 * 20),
+				() -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.4 && hostilityGen.noise(point) / 2 > 0.5, "toxins_halved", -5 * 20, +5 * 20),
+
+				() -> NoiseMain.map((point) -> fertilityGen.noise(point) > 0.8 && hostilityGen.noise(point) < 0.2 && humidityGen.noise(point) > 0.4, "cells_normal", -5 * 20, +5 * 20),
+				() -> NoiseMain.map((point) -> fertilityGen.noise(point) > 0.8 && hostilityGen.noise(point) < 0.4 && humidityGen.noise(point) > 0.4, "cells_soft_hostility", -5 * 20, +5 * 20),
+				() -> NoiseMain.map((point) -> fertilityGen.noise(point) > 0.6 && hostilityGen.noise(point) < 0.4 && humidityGen.noise(point) > 0.4, "cells_soft_hostility_soft_fertility", -5 * 20, +5 * 20)
 		);
 
 		CellMaterial playerMaterial = cache.loadOrGetMaterial("playerMaterial", CellShader.CellMaterial.class, CellType.PLAYER.name(),
 				cache.loadOrGetSingleTexture(CellShader.CellMaterial.PLAYER_TEXTURE_NAME, CellShader.CellMaterial.PLAYER_TEXTURE_PATH));
-		Mesh playerMesh = cache.newQuadMesh("playerMesh", playerMaterial, new Vector2f(1));
+		Mesh playerMesh = cache.newQuadMesh("playerMesh", playerMaterial, new Vector2f(2.5f * 2));
 		this.player = new CellEntity("player", cache, playerMesh, new CellDescriptor("player", CellType.PLAYER, "noname", null, null, null, 1));
+		scene.addEntity(player);
 
 		cellDescriptorPool = loadCellDescriptorPool();
 	}
@@ -161,8 +176,8 @@ public class World implements Cleanupable {
 		List<Entity> toxins = genToxins(center, halfSquareSize, numPoint / 3);
 		toxins.forEach(scene::addEntity);
 
-		List<Entity> cells = genCells(center, halfSquareSize, numPoint / 3);
-		// cells.forEach(scene::addEntity);
+		List<Entity> cells = genCells(center, halfSquareSize, numPoint / 10);
+		cells.forEach(scene::addEntity);
 
 		entities.addAll(plants);
 		entities.addAll(toxins);
@@ -194,14 +209,6 @@ public class World implements Cleanupable {
 			CellInstanceEmitter emit = new CellInstanceEmitter(desc.getId() + "-part-" + center, poss.size(), desc.loadOrGetMaterial(cache), new Transform3D());
 			cache.addMesh(emit.getParticleMesh());
 			cache.addInstanceEmitter(emit);
-
-			/*
-			 * try { Files.write(Paths.get("./resources/bakes/noise/sizes.txt"),
-			 * poss.parallelStream().map(t -> Math.clamp(0.6f, 1.2f, (float) ((1 -
-			 * hostilityGen.noise(t)*0.2f) + fertilityGen.noise(t) * 0.3f +
-			 * humidityGen.noise(t)))+"").collect(Collectors.joining("\n")).getBytes()); }
-			 * catch (IOException e1) { e1.printStackTrace(); }
-			 */
 
 			Matrix4f[] matrices = poss.stream().map(t -> new Matrix4f().setTranslation(t.x, t.y, 0).scale(Math.clamp(0.6f, 1.2f, (float) ((1 - hostilityGen.noise(t)) + fertilityGen.noise(t) * 0.3f + humidityGen.noise(t)))))
 					.collect(Collectors.toList()).toArray(new Matrix4f[poss.size()]);
@@ -256,7 +263,7 @@ public class World implements Cleanupable {
 		cache.addInstanceEmitter(emit);
 
 		Matrix4f[] matrices = plants.parallelStream().map(t -> new Matrix4f().setTranslation(t.x, t.y, 0)).collect(Collectors.toList()).toArray(new Matrix4f[plants.size()]);
-		Object[] sizes = plants.stream().map(p -> Math.clamp(0.6f, 1f, (float) humidityGen.noise(p) / 10 * 4 + 0.6f)).collect(Collectors.toList()).toArray();
+		Object[] sizes = plants.stream().map(p -> Math.clamp(0.6f, 2f, (float) humidityGen.noise(p) * 5)).collect(Collectors.toList()).toArray();
 
 		for (int i = 0; i < matrices.length; i++) {
 			matrices[i].translate(0, 0, 0.01f * i);
@@ -294,16 +301,18 @@ public class World implements Cleanupable {
 				rePoints.add(point);
 			}
 		}
+		GlobalLogger.info("Toxin growth ratio: " + ((double) rePoints.size() / points.size() * 100) + "%");
 		return rePoints;
 	}
 
 	public List<Vector2f> genCells(Vector2f center, List<Vector2f> points) {
 		List<Vector2f> rePoints = new ArrayList<Vector2f>();
 		for (Vector2f point : points) {
-			if (fertilityGen.noise(point, center) > 0.4 && hostilityGen.noise(point, center) > 0.2 && humidityGen.noise(point, center) > 0.3 && random.nextFloat() > 0.6f) {
+			if (fertilityGen.noise(point, center) > 0.6 && hostilityGen.noise(point, center) < 0.4 && humidityGen.noise(point, center) > 0.4 && random.nextFloat() > 0.2f) {
 				rePoints.add(point);
 			}
 		}
+		GlobalLogger.info("Cell growth ratio: " + ((double) rePoints.size() / points.size() * 100) + "%");
 		return rePoints;
 	}
 
@@ -317,8 +326,10 @@ public class World implements Cleanupable {
 		float maxY = +halfSquareSize;
 
 		for (int i = 0; i < numPoints; i++) {
-			// float randomX = minX + (float) distributionGen.noise(i * GEN_FACTOR + seed.x, i * GEN_FACTOR + seed.y) * (maxX - minX);
-			// float randomY = minY + (float) distributionGen.noise(i * GEN_FACTOR * 2 + seed.x, i * GEN_FACTOR / 3 + seed.y) * (maxY - minY);
+			// float randomX = minX + (float) distributionGen.noise(i * GEN_FACTOR + seed.x,
+			// i * GEN_FACTOR + seed.y) * (maxX - minX);
+			// float randomY = minY + (float) distributionGen.noise(i * GEN_FACTOR * 2 +
+			// seed.x, i * GEN_FACTOR / 3 + seed.y) * (maxY - minY);
 
 			float randomX = minX + random.nextFloat() * (maxX - minX);
 			float randomY = minY + random.nextFloat() * (maxY - minY);
