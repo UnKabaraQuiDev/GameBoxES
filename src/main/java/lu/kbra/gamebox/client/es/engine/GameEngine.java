@@ -166,12 +166,12 @@ public class GameEngine implements Cleanupable, UniqueID {
 					this.pollEvents();
 					DEBUG.end("u_pollEvents");
 					DEBUG.start("u_input");
-					this.gameLogic.input(deltaUpdate);
+					this.gameLogic.input(deltaUpdate/1e9f);
 					DEBUG.end("u_input");
 					this.window.clearScroll();
 
 					DEBUG.start("u_update");
-					this.gameLogic.update(deltaUpdate);
+					this.gameLogic.update(deltaUpdate/1e9f);
 					DEBUG.end("u_update");
 
 					lastTime = now;
@@ -239,7 +239,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 					// this.window.clear();
 					DEBUG.end("r_clear");
 					DEBUG.start("r_render");
-					this.gameLogic.render(deltaRender);
+					this.gameLogic.render(deltaRender/1e9f);
 					DEBUG.end("r_render");
 					DEBUG.start("r_swap");
 					this.window.swapBuffers();
@@ -295,7 +295,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 
 		taskEnvironnment = new NextTaskEnvironnment(3);
 
-		this.threadGroup = new ThreadGroup(getClass().getName() + "#" + name);
+		this.threadGroup = new ThreadGroup(getClass().getSimpleName() + "#" + name);
 
 		this.mainThread = Thread.currentThread();
 		this.updateThread = new Thread(threadGroup, this::updateRun, threadGroup.getName() + ":update");

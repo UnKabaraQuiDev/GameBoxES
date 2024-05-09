@@ -2,7 +2,7 @@ package lu.kbra.gamebox.client.es.engine.utils.transform;
 
 import org.joml.Matrix4f;
 
-public abstract class Transform {
+public abstract class Transform implements Cloneable {
 
 	protected Matrix4f matrix;
 
@@ -16,6 +16,7 @@ public abstract class Transform {
 		this.matrix = matrix;
 	}
 
+	@Override
 	public abstract Transform clone();
 
 }

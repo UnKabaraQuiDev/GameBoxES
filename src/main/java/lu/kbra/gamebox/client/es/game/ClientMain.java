@@ -43,7 +43,7 @@ public class ClientMain {
 			
 			GameBoxES gbes = new GameBoxES();
 			
-			GameEngine engine = new GameEngine("PDRClientGame4", gbes, options);
+			GameEngine engine = new GameEngine("GameBoxES", gbes, options);
 			engine.start();
 			
 			// when quitting:

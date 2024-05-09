@@ -1,5 +1,7 @@
 package lu.kbra.gamebox.client.es.engine.scene.camera;
 
+import java.io.PrintStream;
+
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector2f;
@@ -42,6 +44,13 @@ public class Camera2D extends Camera {
 		viewMatrix.rotate(rotation);
 		viewMatrix.translate(-position.x, -position.y, 0);
 		return viewMatrix;
+	}
+	
+	@Override
+	public void dump(PrintStream out) {
+		out.println("Position: "+position);
+		out.println("Rotation: "+rotation);
+		projection.dump(out);
 	}
 
 }

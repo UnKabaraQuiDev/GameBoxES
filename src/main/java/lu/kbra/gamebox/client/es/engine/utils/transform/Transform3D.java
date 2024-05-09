@@ -145,12 +145,12 @@ public class Transform3D extends Transform {
 
 	@Override
 	public Transform clone() {
-		return new Transform3D(translation, rotation, scale);
+		return new Transform3D(translation.get(new Vector3f()), rotation.get(new Quaternionf()), scale.get(new Vector3f()));
 	}
 
 	@Override
 	public String toString() {
 		return "Transform:3D[t" + translation + ", r" + rotation + ", s" + scale + "]";
 	}
-
+	
 }

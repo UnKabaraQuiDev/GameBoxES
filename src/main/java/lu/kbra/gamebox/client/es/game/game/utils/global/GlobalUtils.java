@@ -6,7 +6,10 @@ import java.util.stream.Collectors;
 
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL40;
+
+import lu.pcy113.pclib.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
@@ -192,6 +195,20 @@ public class GlobalUtils {
 
 	public static boolean pushWorker(NextTaskFunction... run) {
 		return Arrays.stream(run).map((r) -> (boolean) new NextTask(0, 0, workers, null).exec(r).push(workers)).reduce((a, b) -> a && b).orElse(true);
+	}
+
+	public static Vector2f getDPadDirection() {
+		byte[] btns = INSTANCE.window.getJoystickButtonsArray(GLFW.GLFW_JOYSTICK_1);
+		GlobalLogger.warning(Arrays.toString(btns));
+		return new Vector2f(btns[GLFW.GLFW_GAMEPAD_BUTTON_DPAD_RIGHT] - btns[GLFW.GLFW_GAMEPAD_BUTTON_DPAD_LEFT], btns[GLFW.GLFW_GAMEPAD_BUTTON_DPAD_UP] - btns[GLFW.GLFW_GAMEPAD_BUTTON_DPAD_DOWN]);
+	}
+
+	public static NextTask newRenderTask() {
+		return INSTANCE.createTask(GameEngine.QUEUE_RENDER);
+	}
+
+	public static <A, B, C> NextTask<A, B, C> newWorkerToRenderTask() {
+		return new NextTask<A, B, C>(GameEngine.QUEUE_RENDER, 0, INSTANCE.getTaskEnvironnment(), workers);
 	}
 
 }

@@ -1,5 +1,7 @@
 package lu.kbra.gamebox.client.es.engine.scene.camera;
 
+import java.io.PrintStream;
+
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector2f;
@@ -22,6 +24,8 @@ public abstract class Camera {
 	}
 
 	public abstract Matrix4f updateMatrix();
+
+	public abstract void dump(PrintStream out);
 
 	public Vector3f projectPoint(Vector3f in, int[] viewport) {
 		Matrix4f projView = projection.getProjectionMatrix().mul(viewMatrix, new Matrix4f());
@@ -47,7 +51,7 @@ public abstract class Camera {
 	public Vector3f projectPlane(Ray ray, GeoPlane plane) {
 		return projectPlane(ray, plane.getPoints()[0], plane.getPoints()[1], plane.getNormal());
 	}
-	
+
 	public Vector3f projectPlane(Ray ray, Vector3f p1, Vector3f p2) {
 		Vector3f normal = new Vector3f();
 		p1.cross(p2, normal).normalize(); // Calculate plane normal

@@ -114,9 +114,6 @@ public class UISceneStartMenuState extends UISceneState {
 
 		optionLanguage = addTextLabel("optionslanguage", GlobalLang.getLongestLang(), new Vector3f(0f, 0.4f, 0), Alignment.TEXT_CENTER, (Entity entity, boolean direction, Direction dir, Button button) -> {
 			if (direction) {
-				/*if (dir.equals(Direction.WEST)) {
-					GlobalOptions.LANGUAGE--;
-				} else */
 				if (dir.equals(Direction.EAST)) {
 					GlobalOptions.LANGUAGE++;
 				}
@@ -127,7 +124,6 @@ public class UISceneStartMenuState extends UISceneState {
 				GlobalUtils.updateText(te);
 			}
 		});
-		// optionLanguage.addComponent(new IntValueComponent(Arrays.binarySearch(GlobalLang.LANGUAGES, GlobalLang.getCURRENT_LANG()), GlobalLang.LANGUAGES.length));
 
 		optionVolume = addTextLabel("optionvolumetext", OPTION_MENU_TEXTS[1] + ": 0"+GlobalOptions.VOLUME, new Vector3f(0, -0.4f, 0), Alignment.TEXT_CENTER, (Entity entity, boolean direction, Direction dir, Button button) -> {
 			if (direction) {
@@ -142,7 +138,6 @@ public class UISceneStartMenuState extends UISceneState {
 				GlobalUtils.updateText(te);
 			}
 		});
-		// optionVolume.addComponent(new IntValueComponent(5, 0, 10));
 		((UITextLabel) optionVolume).interact(true, Direction.NONE, Button.NONE);
 
 		entitiesOptionMenu = new UIEntity[] { optionLanguage, optionVolume };
@@ -230,7 +225,6 @@ public class UISceneStartMenuState extends UISceneState {
 
 		cic.updateButton(gps);
 		if (cic.hasNextButton()) {
-			System.err.println("button: "+cic.getButton());
 			interact(otherVerticalIndex, false, null, cic.consumeButton());
 		}
 

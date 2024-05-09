@@ -80,32 +80,21 @@ public class InstanceEmitter implements Renderable, Cleanupable, UniqueID {
 		for (int i = 0; i < this.count; i++) {
 			update.accept(this.particles[i]);
 
-			/*
-			 * if (this.particles[i].getTransform() instanceof Transform2D) { FloatBuffer fb
-			 * = BufferUtils.createFloatBuffer(16); ((Transform2D)
-			 * this.particles[i].getTransform()).getMatrix().get4x4(fb); fb.flip();
-			 * transforms[i] = new Matrix4f(fb); } else if (this.particles[i].getTransform()
-			 * instanceof Transform3D) {
-			 */
 			transforms[i] = this.particles[i].getTransform().getMatrix();
-			// }
 
 			for (int c = 0; c < this.instancesAttribs.length; c++) {
 				atts[c][i] = this.particles[i].getBuffers()[c];
 			}
 		}
 
-		if (!AttribArray.update(this.instancesTransforms, transforms))
+		if (!AttribArray.update(this.instancesTransforms, transforms)) {
 			GlobalLogger.log(Level.WARNING, "Could not update transforms");
+		}
 
 		for (int c = 0; c < this.instancesAttribs.length; c++) {
-			// System.out.println(Arrays.deepToString(atts));
-			if (!AttribArray.update(this.instancesAttribs[c], atts[c]))
+			if (!AttribArray.update(this.instancesAttribs[c], atts[c])) {
 				GlobalLogger.log(Level.WARNING, "Failed to update attrib array: " + this.instancesAttribs[c].getName());
-			/*
-			 * else GlobalLogger.log(Level.INFO, "Updated attrib array: " +
-			 * this.instancesAttribs[c].getName());
-			 */
+			}
 		}
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
 	}
@@ -113,21 +102,57 @@ public class InstanceEmitter implements Renderable, Cleanupable, UniqueID {
 	public void updateDirect(Matrix4f[] transforms, Object[][] atts) {
 		if (transforms.length != this.count || atts.length != this.instancesAttribs.length)
 			throw new IllegalArgumentException();
-
+		
+		// update this.particles to the new values ?
+		
 		if (!AttribArray.update(this.instancesTransforms, transforms))
 			GlobalLogger.log(Level.WARNING, "Could not update transforms");
 
+		
 		for (int c = 0; c < this.instancesAttribs.length; c++) {
-			// GlobalLogger.log(Level.FINEST, Arrays.toString(atts[c]));
 			if (!AttribArray.update(this.instancesAttribs[c], atts[c]))
 				GlobalLogger.log(Level.WARNING, "Failed to update attrib array: " + this.instancesAttribs[c].getName() + " (" + this.instancesAttribs[c].getIndex() + ")");
-			else
-				GlobalLogger.info("Updated attrib array: " + this.instancesAttribs[c].getName() + " (" + this.instancesAttribs[c].getIndex() + ") for "+this.getId());
-			/*
-			 * else GlobalLogger.log(Level.INFO, "Updated attrib array: " +
-			 * this.instancesAttribs[c].getName());
-			 */
+			/*else
+				GlobalLogger.info("Updated attrib array: " + this.instancesAttribs[c].getName() + " (" + this.instancesAttribs[c].getIndex() + ") for " + this.getId());*/
 		}
+		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+	}
+
+	public void updateParticles() {
+		Matrix4f[] transforms = new Matrix4f[this.count];
+		Object[][] atts = new Object[this.instancesAttribs.length][this.count];
+
+		for (int i = 0; i < this.count; i++) {
+			transforms[i] = this.particles[i].getTransform().getMatrix();
+
+			for (int c = 0; c < this.instancesAttribs.length; c++) {
+				atts[c][i] = this.particles[i].getBuffers()[c];
+			}
+		}
+
+		if (!AttribArray.update(this.instancesTransforms, transforms)) {
+			GlobalLogger.log(Level.WARNING, "Could not update transforms");
+		}
+
+		for (int c = 0; c < this.instancesAttribs.length; c++) {
+			if (!AttribArray.update(this.instancesAttribs[c], atts[c])) {
+				GlobalLogger.log(Level.WARNING, "Failed to update attrib array: " + this.instancesAttribs[c].getName());
+			}
+		}
+		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+	}
+
+	public void updateParticlesTransforms() {
+		Matrix4f[] transforms = new Matrix4f[this.count];
+
+		for (int i = 0; i < this.count; i++) {
+			transforms[i] = this.particles[i].getTransform().getMatrix();
+		}
+
+		if (!AttribArray.update(this.instancesTransforms, transforms)) {
+			GlobalLogger.log(Level.WARNING, "Could not update transforms");
+		}
+
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
 	}
 
@@ -141,17 +166,17 @@ public class InstanceEmitter implements Renderable, Cleanupable, UniqueID {
 
 	@Override
 	public void cleanup() {
-		GlobalLogger.log("Cleaning up: "+name);
-		
-		if(instanceMesh == null)
+		GlobalLogger.log("Cleaning up: " + name);
+
+		if (instanceMesh == null)
 			return;
-		
+
 		Arrays.stream(this.instancesAttribs).forEach(AttribArray::cleanup);
 		this.instancesAttribs = null;
-		
+
 		this.instancesTransforms.cleanup();
 		this.instancesTransforms = null;
-		
+
 		this.instanceMesh.cleanup();
 		this.instanceMesh = null;
 	}
@@ -167,6 +192,10 @@ public class InstanceEmitter implements Renderable, Cleanupable, UniqueID {
 
 	public Mesh getParticleMesh() {
 		return this.instanceMesh;
+	}
+
+	public Instance[] getParticles() {
+		return particles;
 	}
 
 	public AttribArray[] getParticleAttribs() {

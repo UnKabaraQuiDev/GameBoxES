@@ -1,5 +1,7 @@
 package lu.kbra.gamebox.client.es.engine.scene.camera;
 
+import java.io.PrintStream;
+
 import org.joml.Matrix4f;
 
 public class Projection {
@@ -10,6 +12,13 @@ public class Projection {
 	private int width, height;
 	private float fov, size = 100f;
 
+	public void dump(PrintStream out) {
+		out.println("Planes: "+nearPlane+" <> "+farPlane);
+		out.println("Perspective: "+perspective);
+		out.println("Resolution: "+width+":"+height);
+		out.println("Fov: "+fov+", size: "+size);
+	}
+	
 	public Projection(int width, int height, float nearPlane, float farPlane, float fov, float size, boolean perspective) {
 		this.width = width;
 		this.height = height;
@@ -79,5 +88,6 @@ public class Projection {
 		this.size = size;
 		return this;
 	}
+
 
 }

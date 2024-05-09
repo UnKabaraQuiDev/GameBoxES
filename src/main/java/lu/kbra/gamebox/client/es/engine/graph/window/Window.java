@@ -173,23 +173,30 @@ public abstract class Window implements Cleanupable {
 
 	public float[] getJoystickAxis(int jid) {
 		FloatBuffer fb = GLFW.glfwGetJoystickAxes(jid);
-		float[] bb = new float[fb.remaining() - 1];
+		float[] bb = new float[fb.remaining()];
 		fb.get(bb);
 		return bb;
 	}
 	
 	public float getJoystickAxis(int jid, int axis) {
 		FloatBuffer fb = GLFW.glfwGetJoystickAxes(jid);
-		float[] bb = new float[fb.remaining() - 1];
+		float[] bb = new float[fb.remaining()];
 		fb.get(bb);
 		return bb[axis];
 	}
 
 	public boolean getJoystickButton(int jid, int btn) {
 		ByteBuffer fb = GLFW.glfwGetJoystickButtons(jid);
-		byte[] bb = new byte[fb.remaining() - 1];
+		byte[] bb = new byte[fb.remaining()];
 		fb.get(bb);
 		return bb[btn] == GLFW.GLFW_PRESS;
+	}
+	
+	public byte[] getJoystickButtonsArray(int jid) {
+		ByteBuffer fb = GLFW.glfwGetJoystickButtons(jid);
+		byte[] bb = new byte[fb.remaining()];
+		fb.get(bb);
+		return bb;
 	}
 
 	public ByteBuffer getJoystickButtons(int jid) {
@@ -198,7 +205,7 @@ public abstract class Window implements Cleanupable {
 
 	public byte getJoystickHat(int jid, int hat) {
 		ByteBuffer fb = GLFW.glfwGetJoystickButtons(jid);
-		byte[] bb = new byte[fb.remaining() - 1];
+		byte[] bb = new byte[fb.remaining()];
 		fb.get(bb);
 		return bb[hat];
 	}
