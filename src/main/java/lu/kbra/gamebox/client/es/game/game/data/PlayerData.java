@@ -33,13 +33,13 @@ public class PlayerData {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void eatPlant() {
 		glucose += Math.random() < 0.4f ? 1 : 0;
 		aminoAcid += Math.random() < 0.1f ? 1 : 0;
 		lipid += Math.random() < 0.1f ? 1 : 0;
 	}
-	
+
 	public void eatCell() {
 		glucose += Math.random() < 0.5f ? 1 : 0;
 		aminoAcid += Math.random() < 0.4f ? 1 : 0;
@@ -114,6 +114,18 @@ public class PlayerData {
 
 	public void setSpeed(int speed) {
 		this.speed = speed;
+	}
+
+	public int getGlucose() {
+		return glucose;
+	}
+
+	public int getAminoAcid() {
+		return aminoAcid;
+	}
+
+	public int getLipid() {
+		return lipid;
 	}
 
 }

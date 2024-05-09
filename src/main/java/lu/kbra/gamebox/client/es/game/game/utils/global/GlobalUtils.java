@@ -31,6 +31,7 @@ import lu.kbra.gamebox.client.es.engine.objs.entity.components.TextEmitterCompon
 import lu.kbra.gamebox.client.es.engine.objs.text.TextEmitter;
 import lu.kbra.gamebox.client.es.engine.scene.Scene;
 import lu.kbra.gamebox.client.es.engine.scene.Scene3D;
+import lu.kbra.gamebox.client.es.engine.scene.camera.Camera;
 import lu.kbra.gamebox.client.es.engine.scene.camera.Camera3D;
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 import lu.kbra.gamebox.client.es.engine.utils.consts.Alignment;
@@ -43,6 +44,9 @@ import lu.kbra.gamebox.client.es.game.game.render.shaders.UIButtonShader;
 
 public class GlobalUtils {
 
+	private static final int PROJECTION_WIDTH = 1920;
+	private static final int PROJECTION_HEIGHT = 1080;
+	
 	public static GameBoxES INSTANCE;
 	private static GameEngine engine;
 
@@ -209,6 +213,10 @@ public class GlobalUtils {
 
 	public static <A, B, C> NextTask<A, B, C> newWorkerToRenderTask() {
 		return new NextTask<A, B, C>(GameEngine.QUEUE_RENDER, 0, INSTANCE.getTaskEnvironnment(), workers);
+	}
+
+	public static void setFixedRatio(Camera camera) {
+		camera.getProjection().update(PROJECTION_WIDTH, PROJECTION_HEIGHT);
 	}
 
 }

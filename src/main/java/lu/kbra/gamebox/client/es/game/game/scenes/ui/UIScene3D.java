@@ -40,8 +40,7 @@ public class UIScene3D extends Scene3D {
 	}
 
 	public void setupGame() {
-		treeState = new UISceneMajorUpgradeTree(this);
-		state = treeState;
+		state = treeState = new UISceneMajorUpgradeTree(this);
 	}
 
 	public void clearMainMenu() {

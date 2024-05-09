@@ -51,7 +51,7 @@ public class GameBoxES extends GameLogic {
 
 		GlobalUtils.init(this, super.engine);
 
-		GlobalLogger.getLogger().setMinForwardLevel(Level.INFO);
+		GlobalLogger.getLogger().setMinForwardLevel(Level.ALL);
 
 		GlobalUtils.registerRenderers();
 
@@ -82,10 +82,14 @@ public class GameBoxES extends GameLogic {
 		compositor.addRenderLayer(1, uiSceneRenderLayer);
 
 		engine.getWindow().onResize((w, h) -> {
-			System.out.println("resize update: " + w + "x" + h);
-			worldScene.getCamera().getProjection().update(w, h);
-			uiScene.getCamera().getProjection().update(w, h);
+			GlobalLogger.info("Resized to: "+w+":"+h);
+			/*worldScene.getCamera().getProjection().update(w, h);
+			uiScene.getCamera().getProjection().update(w, h);*/
 		});
+		
+		GlobalUtils.setFixedRatio(worldScene.getCamera());
+		GlobalUtils.setFixedRatio(uiScene.getCamera());
+		
 		engine.getWindow().setBackground(new Vector4f(0.0f));
 
 		cache.dump(System.err);
@@ -148,7 +152,7 @@ public class GameBoxES extends GameLogic {
 		uiScene.clearMainMenu();
 		GlobalUtils.pushRender(() -> {
 			uiScene.setupGame();
-			uiScene.showUpgradeTree(false);
+			uiScene.showUpgradeTree(true);
 			worldScene.setupGame();
 			worldSceneRenderLayer.setVisible(true);
 		});

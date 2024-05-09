@@ -35,7 +35,6 @@ import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureType;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureWrap;
 import lu.kbra.gamebox.client.es.engine.utils.transform.Transform;
-import lu.kbra.gamebox.client.es.game.game.render.shaders.CellShader.CellMaterial;
 
 public class CacheManager implements Cleanupable, UniqueID {
 
@@ -541,7 +540,7 @@ public class CacheManager implements Cleanupable, UniqueID {
 		}
 	}
 	
-	public QuadMesh newQuadMesh(String name, CellMaterial mat, Vector2f size) {
+	public QuadMesh newQuadMesh(String name, Material mat, Vector2f size) {
 		QuadMesh mesh = Mesh.newQuad(name, mat, size);
 		addMesh(mesh);
 		return mesh;
