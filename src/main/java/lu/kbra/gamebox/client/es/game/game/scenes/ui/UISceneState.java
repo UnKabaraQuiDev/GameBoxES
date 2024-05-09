@@ -23,6 +23,7 @@ public abstract class UISceneState implements Cleanupable, UniqueID {
 	}
 
 	public abstract void input(float dTime);
+	public abstract void update(float dTime);
 
 	public CacheManager getCache() {
 		return cache;

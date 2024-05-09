@@ -16,11 +16,23 @@ public class UIScene3D extends Scene3D {
 
 	private UISceneState state;
 	private UISceneMajorUpgradeTree treeState;
-	
+
 	public UIScene3D(String name, CacheManager cache, Window window) {
 		super(name);
 		this.cache = new CacheManager("UIScene3D", cache);
 		this.window = window;
+	}
+
+	public void input(float dTime) {
+		if (state != null) {
+			state.input(dTime);
+		}
+	}
+
+	public void update(float dTime) {
+		if (state != null) {
+			state.update(dTime);
+		}
 	}
 
 	public void setupStartMenu() {
@@ -31,14 +43,14 @@ public class UIScene3D extends Scene3D {
 		treeState = new UISceneMajorUpgradeTree(this);
 		state = treeState;
 	}
-	
+
 	public void clearMainMenu() {
-		if(state instanceof UISceneStartMenuState) {
+		if (state instanceof UISceneStartMenuState) {
 			GlobalUtils.cleanup(state);
 			state = null;
 		}
 	}
-	
+
 	public void showUpgradeTree(boolean b) {
 		if (b) {
 			state = treeState;
@@ -46,12 +58,6 @@ public class UIScene3D extends Scene3D {
 			state = null;
 		}
 		treeState.setActive(b);
-	}
-
-	public void input(float dTime) {
-		if (state != null) {
-			state.input(dTime);
-		}
 	}
 
 	public void setupScene() {
@@ -68,17 +74,13 @@ public class UIScene3D extends Scene3D {
 	public UISceneState getState() {
 		return state;
 	}
-	
+
 	public CacheManager getCache() {
 		return cache;
 	}
 
 	public Window getWindow() {
 		return window;
-	}
-
-	public void update(float dTime) {
-		
 	}
 
 }

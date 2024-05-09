@@ -269,6 +269,9 @@ public class UISceneStartMenuState extends UISceneState {
 		}
 	}
 
+	@Override
+	public void update(float dTime) {}
+	
 	private void interact(int verticalIndex, boolean direction, Direction dir, Button button) {
 		Entity entity = getSelectedEntity();
 		if (direction) { // analog input (slider, etc)

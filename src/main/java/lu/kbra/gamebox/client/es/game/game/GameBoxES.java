@@ -127,11 +127,10 @@ public class GameBoxES extends GameLogic {
 
 	@Override
 	public void update(float dTime) {
-		if (GameState.START_MENU.equals(gameState)) {
-			uiScene.update(dTime);
-		} else {
+		if(!GameState.START_MENU.equals(gameState)) {
 			worldScene.update(dTime);
 		}
+		uiScene.update(dTime);
 	}
 
 	@Override

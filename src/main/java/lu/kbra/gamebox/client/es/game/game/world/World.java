@@ -226,7 +226,9 @@ public class World implements Cleanupable {
 	
 					if (dist < EAT_DISTANCE) {
 						part.getBuffers()[0] = 0f;
-	
+						
+						GlobalUtils.INSTANCE.playerData.eatPlant();
+						
 						changed = true;
 					}
 				}
