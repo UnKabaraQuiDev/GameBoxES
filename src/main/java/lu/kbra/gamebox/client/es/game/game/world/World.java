@@ -19,6 +19,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import lu.pcy113.pclib.GlobalLogger;
+import lu.pcy113.pclib.Triplet;
+import lu.pcy113.pclib.pointer.prim.BooleanPointer;
 
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
 import lu.kbra.gamebox.client.es.engine.geom.Mesh;
@@ -50,7 +52,6 @@ import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.PlantsEntity;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.ToxinsEntity;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.WorldParticleEmitter;
 import lu.kbra.gamebox.client.es.game.game.utils.NoiseGenerator;
-import lu.kbra.gamebox.client.es.game.game.utils.bake.NoiseMain;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
 
 public class World implements Cleanupable {
@@ -70,7 +71,8 @@ public class World implements Cleanupable {
 	private static final float ATTRACT_DISTANCE = 3f;
 	private static final float EAT_DISTANCE = 2.5f;
 
-	private HashMap<Vector2f, List<Entity>> generatedChunks = new HashMap<>();
+	private HashMap<String, List<Entity>> generatedChunks = new HashMap<>();
+	private List<String> updateTasks = new ArrayList<>(20);
 	private final int chunkSize = 20;
 
 	/**
@@ -186,69 +188,75 @@ public class World implements Cleanupable {
 
 	public void update(float dTime) {
 		Window window = scene.getWindow();
-		
+
 		player.update();
 
 		for (Vector2f chunkCenter : getNeighbouringChunks(getCenterPlayerPos())) {
-			List<Entity> entities = generatedChunks.get(chunkCenter);
+			List<Entity> entities = generatedChunks.get(chunkCenter.toString());
 			if (entities == null)
 				continue;
 
 			for (Entity e : entities) {
 				if (e instanceof PlantsEntity) {
-					simulatePlants(dTime, (PlantsEntity) e);
+					simulatePlants(dTime, chunkCenter, (PlantsEntity) e);
 				}
 			}
 		}
+	}
+
+	public void render(float dTime) {
 
 	}
 
-	private void simulatePlants(final float dTime, PlantsEntity e) {
+	private void simulatePlants(final float dTime, final Vector2f center, PlantsEntity e) {
+		if (updateTasks.contains(center.toString())) {
+			GlobalLogger.info("Already computing: " + center);
+			return;
+		}
+
+		updateTasks.add(center.toString());
+
 		WorldParticleEmitter inst = (WorldParticleEmitter) e.getComponent(InstanceEmitterComponent.class).getInstanceEmitter(cache);
 
 		final Vector3f parentAbsPos = e.getComponent(Transform3DComponent.class).getTransform().getTranslation().mul(1, 1, 0, new Vector3f());
 		final Vector3f playerAbsPos = player.getTransform().getTransform().getTranslation().mul(1, 1, 0, new Vector3f());
 
-		GlobalUtils.<Void, Boolean, Void>newWorkerToRenderTask()
-			.exec((a) -> {
-				boolean changed = false;
-				for (Instance part : inst.getParticles()) {
-					Vector3f objAbsPos = ((Transform3D) part.getTransform()).getTranslation().add(parentAbsPos, new Vector3f()).mul(1, 1, 0);
-					float dist = playerAbsPos.distance(objAbsPos);
-	
-					if (dist < ATTRACT_DISTANCE) {
-						Vector3f direction = new Vector3f(playerAbsPos).sub(objAbsPos).normalize();
-						((Transform3D) part.getTransform()).getTranslation().add(direction.mul(dTime * dist * 2));
-						part.getTransform().updateMatrix();
-	
-						changed = true;
-					}
-	
-					if (dist < EAT_DISTANCE && !MathUtils.compare((float) part.getBuffers()[0], 0, 0.001f)) {
-						part.getBuffers()[0] = 0f;
-						
-						GlobalUtils.INSTANCE.playerData.eatPlant();
-						
-						changed = true;
-					}
-				}
-				return changed;
-			}).then((Boolean changed) -> {
-				if (changed) {
-					inst.updateParticles();
-				}
-				return null;
-			}).push();
+		BooleanPointer changed = new BooleanPointer(false);
+		for (Instance part : inst.getParticles()) {
+			Vector3f objAbsPos = ((Transform3D) part.getTransform()).getTranslation().add(parentAbsPos, new Vector3f()).mul(1, 1, 0);
+			float dist = playerAbsPos.distance(objAbsPos);
 
-		/*
-		 * inst.update((part) -> { Vector3f objPos = ((Transform3D)
-		 * part.getTransform()).getTranslation(); float dist =
-		 * playerPos.distance(objPos);
-		 * 
-		 * if (dist < 10) { Vector3f direction = new
-		 * Vector3f(playerPos).sub(objPos).normalize(); objPos.add(direction.mul(0.1f *
-		 * dist)); part.getTransform().updateMatrix(); } });
-		 */
+			if (dist < ATTRACT_DISTANCE) {
+				Vector3f direction = new Vector3f(playerAbsPos).sub(objAbsPos).normalize();
+				((Transform3D) part.getTransform()).getTranslation().add(direction.mul(dTime * dist * 2));
+
+				changed.setValue(true);
+			}
+
+			if (dist < EAT_DISTANCE && !MathUtils.compare((float) part.getBuffers()[0], 0, 0.001f)) {
+				((Transform3D) part.getTransform()).setScale(0);
+				part.getBuffers()[0] = 0f;
+
+				GlobalUtils.INSTANCE.playerData.eatPlant();
+
+				changed.setValue(true);
+			}
+
+			if (changed.getValue()) {
+				part.getTransform().updateMatrix();
+			}
+		}
+
+		// GlobalLogger.severe("Has changed: "+changed.getValue());
+
+		if (changed.getValue()) {
+			GlobalUtils.pushRender(() -> {
+				inst.updateParticlesTransforms();
+				updateTasks.remove(center.toString());
+			});
+		} else {
+			updateTasks.remove(center.toString());
+		}
 	}
 
 	public Vector2f getCenterPlayerPos() {
@@ -268,13 +276,13 @@ public class World implements Cleanupable {
 		return list;
 	}
 
-	public void continueWorldGen() {
+	public void continueWorldGen(int radius) {
 		Vector2f center = GeoPlane.XY.projectToPlane(player.getTransform().getTransform().getTranslation());
 		center = getChunkCenter(center);
 		scene.axis.getComponent(Transform3DComponent.class).getTransform().setTranslation(GeoPlane.XY.project(center)).updateMatrix();
 
-		for (int x = -GEN_CIRCLE_SIDE; x <= GEN_CIRCLE_SIDE; x++) {
-			for (int y = -GEN_CIRCLE_SIDE; y <= GEN_CIRCLE_SIDE; y++) {
+		for (int x = -radius; x <= radius; x++) {
+			for (int y = -radius; y <= radius; y++) {
 
 				genChunk(new Vector2f(x, y).mul(chunkSize).add(center));
 
@@ -285,28 +293,16 @@ public class World implements Cleanupable {
 	private void genChunk(Vector2f center) {
 		center.set(getChunkCenter(center));
 
-		if (generatedChunks.containsKey(center)) {
-			GlobalLogger.info("Chunk already generated: " + center);
+		if (generatedChunks.containsKey(center.toString())) {
+			// GlobalLogger.info("Chunk already generated: " + center);
 			return;
 		}
 
-		GlobalUtils.pushRender(new Runnable() {
-			@Override
-			public void run() {
-				GlobalLogger.info("Generating chunk: " + center);
+		GlobalLogger.info("Generating chunk: " + center);
 
-				if (generatedChunks.containsKey(center)) {
-					GlobalLogger.info("Chunk already generated: " + center);
-					return;
-				}
+		generatedChunks.put(center.toString(), new ArrayList<Entity>(1));
 
-				generatedChunks.put(center, new ArrayList<Entity>(1));
-
-				List<Entity> gens = genChunk(center, chunkSize);
-
-				generatedChunks.put(center, gens);
-			}
-		});
+		genChunk(center, chunkSize);
 	}
 
 	private Vector2f getChunkCenter(Vector2f center) {
@@ -331,34 +327,49 @@ public class World implements Cleanupable {
 		return pool;
 	}
 
-	public List<Entity> genChunk(Vector2f center, int chunkSize) {
+	public boolean genChunk(Vector2f center, int chunkSize) {
 		return genWorld(center, chunkSize / 2, 5 * 5 * 3 * 10);
 	}
 
-	public List<Entity> genWorld(Vector2f center, float halfSquareSize, int numPoint) {
-		List<Entity> entities = new ArrayList<Entity>(numPoint);
+	public boolean genWorld(Vector2f center, float halfSquareSize, int numPoint) {
+		return GlobalUtils.<Void, Triplet<List<Vector2f>, List<Vector2f>, List<Vector2f>>, Void>newWorkerToRenderTask().exec((a) -> {
+			long start = System.currentTimeMillis();
+			
+			List<Vector2f> plantPos = genPlantsPos(center, halfSquareSize, numPoint / 3);
+			List<Vector2f> toxinsPos = genToxinsPos(center, halfSquareSize, numPoint / 3);
+			List<Vector2f> cellsPos = genCellsPos(center, halfSquareSize, numPoint / 3);
+			
+			System.err.println("Task gen chunk (worker): " + (System.currentTimeMillis() - start) + "ms for " + center);
+			
+			return new Triplet<List<Vector2f>, List<Vector2f>, List<Vector2f>>(plantPos, toxinsPos, cellsPos);
+		}).then((Triplet<List<Vector2f>, List<Vector2f>, List<Vector2f>> a) -> {
+			long start = System.currentTimeMillis();
+			// TODO: Reduce this time from 33ms -> max 10ms or split it up into different tasks
 
-		List<Entity> plants = genPlants(center, halfSquareSize, numPoint / 3);
-		plants.forEach(scene::addEntity);
+			final List<Entity> list = new ArrayList<Entity>();
 
-		List<Entity> toxins = genToxins(center, halfSquareSize, numPoint / 3);
-		toxins.forEach(scene::addEntity);
+			final List<Entity> plants = genPlants_render(center, a.getFirst());
+			final List<Entity> toxins = genToxins_render(center, a.getSecond());
+			final List<Entity> cells = genCells_render(center, a.getThird());
+			
+			// add to list takes <0ms
+			list.addAll(plants);
+			list.addAll(toxins);
+			list.addAll(cells);
+			list.forEach(scene::addEntity);
 
-		List<Entity> cells = genCells(center, halfSquareSize, numPoint / 10);
-		cells.forEach(scene::addEntity);
+			generatedChunks.put(center.toString(), list);
+			
+			System.err.println("Task gen chunk (render): " + (System.currentTimeMillis() - start) + "ms for " + center);
 
-		entities.addAll(plants);
-		entities.addAll(toxins);
-		entities.addAll(cells);
-
-		return entities;
+			return null;
+		}).push();
 	}
 
-	private List<Entity> genCells(Vector2f center, float halfSquareSize, int numPoint) {
-		List<Vector2f> cells = distributePoints(center, halfSquareSize, numPoint);
-		cells = genCells(center, cells);
+	private List<Entity> genCells_render(Vector2f ce, List<Vector2f> cells) {
+		final Vector2f center = new Vector2f(ce);
 
-		HashMap<CellDescriptor, ArrayList<Vector2f>> cellDesc = new HashMap<>(numPoint);
+		HashMap<CellDescriptor, ArrayList<Vector2f>> cellDesc = new HashMap<>(cells.size());
 
 		for (Vector2f pos : cells) {
 			CellDescriptor desc = getRandomCellDescriptor(pos);
@@ -388,16 +399,17 @@ public class World implements Cleanupable {
 
 			emit.updateDirect(matrices, new Object[][] { states });
 
-			entities.add(new CellsEntity(desc.getId() + "-" + center, new InstanceEmitterComponent(emit), new Transform3DComponent(new Vector3f(center.x, center.y, 0.4f)), new RenderComponent(4), new RenderComponent(10),
-					new RenderConditionComponent(() -> new Vector3f(center.x, center.y, 0).distance(((Camera3D) scene.getCamera()).getPosition()) < CULLING_DISTANCE)));
+			CellsEntity pe = new CellsEntity(desc.getId() + "-" + center, new InstanceEmitterComponent(emit), new Transform3DComponent(new Vector3f(center.x, center.y, 0.4f)), new RenderComponent(4), new RenderComponent(10));
+			pe.addComponent(new RenderConditionComponent(() -> pe.getTransform().getTransform().getTranslation().distance(((Camera3D) scene.getCamera()).getPosition()) < CULLING_DISTANCE));
+
+			entities.add(pe);
 		}
 
 		return entities;
 	}
 
-	private List<Entity> genToxins(Vector2f center, float halfSquareSize, int numPoint) {
-		List<Vector2f> toxins = distributePoints(center, halfSquareSize, numPoint);
-		toxins = genToxins(center, toxins);
+	private List<Entity> genToxins_render(Vector2f ce, List<Vector2f> toxins) {
+		final Vector2f center = new Vector2f(ce);
 
 		WorldParticleEmitter emit = new WorldParticleEmitter(
 				"toxins-" + center, toxins.size(), (ToxinWorldParticleMaterial) cache.loadOrGetMaterial(ToxinWorldParticleMaterial.NAME, ToxinWorldParticleMaterial.class,
@@ -415,13 +427,13 @@ public class World implements Cleanupable {
 
 		emit.updateDirect(matrices, new Object[][] { sizes });
 
-		return Arrays.asList(new ToxinsEntity("toxins-" + center, new InstanceEmitterComponent(emit), new Transform3DComponent(new Vector3f(center.x, center.y, 0)), new RenderComponent(8),
-				new RenderConditionComponent(() -> new Vector3f(center.x, center.y, 0).distance(((Camera3D) scene.getCamera()).getPosition()) < CULLING_DISTANCE)));
+		ToxinsEntity pe = new ToxinsEntity("toxins-" + center, new InstanceEmitterComponent(emit), new Transform3DComponent(new Vector3f(center.x, center.y, 0)), new RenderComponent(8));
+		pe.addComponent(new RenderConditionComponent(() -> pe.getTransform().getTransform().getTranslation().distance(((Camera3D) scene.getCamera()).getPosition()) < CULLING_DISTANCE));
+		return Arrays.asList(pe);
 	}
 
-	private List<Entity> genPlants(Vector2f center, float halfSquareSize, int numPoint) {
-		List<Vector2f> plants = distributePoints(center, halfSquareSize, numPoint);
-		plants = genPlants(center, plants);
+	private List<Entity> genPlants_render(Vector2f ce, List<Vector2f> plants) {
+		final Vector2f center = new Vector2f(ce);
 
 		WorldParticleEmitter emit = new WorldParticleEmitter(
 				"plants-" + center, plants.size(), (PlantWorldParticleMaterial) cache.loadOrGetMaterial(PlantWorldParticleMaterial.NAME, PlantWorldParticleMaterial.class,
@@ -439,16 +451,11 @@ public class World implements Cleanupable {
 			part.getBuffers()[0] = Math.clamp(0.6f, 2f, (float) humidityGen.noise(pos) * 5);
 		}
 
-		// Matrix4f[] matrices = plants.parallelStream().map(t -> new
-		// Matrix4f().setTranslation(t.x, t.y,
-		// 0)).collect(Collectors.toList()).toArray(new Matrix4f[plants.size()]);
-		// Object[] sizes = plants.stream().map(p -> Math.clamp(0.6f, 2f, (float)
-		// humidityGen.noise(p) * 5)).collect(Collectors.toList()).toArray();
-
 		emit.updateParticles();
 
-		return Arrays.asList(new PlantsEntity("plants-" + center, new InstanceEmitterComponent(emit), new Transform3DComponent(new Vector3f(center.x, center.y, 0.2f)), new RenderComponent(6),
-				new RenderConditionComponent(() -> new Vector3f(center.x, center.y, 0).distance(((Camera3D) scene.getCamera()).getPosition()) < CULLING_DISTANCE)));
+		PlantsEntity pe = new PlantsEntity("plants-" + center, new InstanceEmitterComponent(emit), new Transform3DComponent(new Vector3f(center.x, center.y, 0.2f)), new RenderComponent(6));
+		pe.addComponent(new RenderConditionComponent(() -> pe.getTransform().getTransform().getTranslation().distance(((Camera3D) scene.getCamera()).getPosition()) < CULLING_DISTANCE));
+		return Arrays.asList(pe);
 	}
 
 	private CellDescriptor getRandomCellDescriptor(Vector2f pos) {
@@ -459,7 +466,8 @@ public class World implements Cleanupable {
 		return cellDescriptorPool.parallelStream().filter((d) -> d.match(hostility, fertility, humidity)).findAny().orElseGet(() -> cellDescriptorPool.get(random.nextInt(cellDescriptorPool.size())));
 	}
 
-	public List<Vector2f> genPlants(Vector2f center, List<Vector2f> points) {
+	public List<Vector2f> genPlantsPos(Vector2f center, float halfSquareSize, int numPoints) {
+		List<Vector2f> points = distributePoints(center, halfSquareSize, numPoints);
 		List<Vector2f> rePoints = new ArrayList<Vector2f>();
 		for (Vector2f point : points) {
 			if (humidityGen.noise(point, center) > 0.2 && hostilityGen.noise(point, center) < 0.4) {
@@ -470,7 +478,8 @@ public class World implements Cleanupable {
 		return rePoints;
 	}
 
-	public List<Vector2f> genToxins(Vector2f center, List<Vector2f> points) {
+	public List<Vector2f> genToxinsPos(Vector2f center, float halfSquareSize, int numPoints) {
+		List<Vector2f> points = distributePoints(center, halfSquareSize, numPoints);
 		List<Vector2f> rePoints = new ArrayList<Vector2f>();
 		for (Vector2f point : points) {
 			if (humidityGen.noise(point, center) < 0.4 && hostilityGen.noise(point, center) > 0.5 && random.nextFloat() > 0.6f) {
@@ -481,7 +490,8 @@ public class World implements Cleanupable {
 		return rePoints;
 	}
 
-	public List<Vector2f> genCells(Vector2f center, List<Vector2f> points) {
+	public List<Vector2f> genCellsPos(Vector2f center, float halfSquareSize, int numPoints) {
+		List<Vector2f> points = distributePoints(center, halfSquareSize, numPoints);
 		List<Vector2f> rePoints = new ArrayList<Vector2f>();
 		for (Vector2f point : points) {
 			if (fertilityGen.noise(point, center) > 0.6 && hostilityGen.noise(point, center) < 0.4 && humidityGen.noise(point, center) > 0.4 && random.nextFloat() > 0.2f) {

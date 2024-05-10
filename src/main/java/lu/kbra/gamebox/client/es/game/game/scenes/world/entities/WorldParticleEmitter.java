@@ -13,17 +13,8 @@ public class WorldParticleEmitter extends InstanceEmitter {
 
 	public WorldParticleEmitter(String name, int count, WorldParticleMaterial material, Transform baseTransform) {
 		super(name, Mesh.newQuad(name + name.hashCode(), material, new Vector2f(1)), count, baseTransform, new AttribArray[] { new FloatAttribArray("size", 7, 1, new float[count], false, 1) });
-
+		
 		createDrawBuffer();
-	}
-
-	public void createDrawBuffer() {
-		Mesh quad = super.getParticleMesh();
-
-		quad.createDrawBuffer();
-		quad.getDrawBuffer().bind();
-		quad.getDrawBuffer().setInstancesCount(super.getParticleCount());
-		quad.getDrawBuffer().unbind();
 	}
 
 }

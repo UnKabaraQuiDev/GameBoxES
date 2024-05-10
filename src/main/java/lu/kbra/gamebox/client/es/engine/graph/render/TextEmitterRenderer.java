@@ -31,7 +31,7 @@ public class TextEmitterRenderer extends Renderer<Scene, TextEmitterComponent> {
 	}
 
 	@Override
-	public void render(CacheManager cache, Scene scene, TextEmitterComponent tec) {
+	public void render_in(CacheManager cache, Scene scene, TextEmitterComponent tec) {
 		Entity e = tec.getParent();
 
 		TextEmitter te = tec.getTextEmitter(cache);
@@ -82,8 +82,7 @@ public class TextEmitterRenderer extends Renderer<Scene, TextEmitterComponent> {
 		GameEngine.DEBUG.start("r_uniforms_transform");
 		if (material.hasProperty(RenderShader.TRANSFORMATION_MATRIX)) {
 			if (e.hasComponent(TransformComponent.class)) {
-				TransformComponent transform = (TransformComponent) e
-						.getComponent(e.getComponents(TransformComponent.class).get(0));
+				TransformComponent transform = (TransformComponent) e.getComponent(e.getComponents(TransformComponent.class).get(0));
 				if (transform != null) {
 					transformationMatrix = transform.getTransform().getMatrix();
 				}
@@ -107,27 +106,22 @@ public class TextEmitterRenderer extends Renderer<Scene, TextEmitterComponent> {
 
 		pe.bind();
 
-		// pe.updatePull();
-
 		if (mesh.hasDrawBuffer()) {
 			mesh.getDrawBuffer().bind();
 			GL46.glDrawElementsIndirect(shader.getBeginMode().getGlId(), GL40.GL_UNSIGNED_INT, 0);
 		} else {
-			GL40.glDrawElementsInstanced(shader.getBeginMode().getGlId(), mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT,
-					0, pe.getParticleCount());
+			GL40.glDrawElementsInstanced(shader.getBeginMode().getGlId(), mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0, pe.getParticleCount());
 		}
 
 		GL40.glDisable(GL40.GL_BLEND);
 
 		// debug only
-		// GameEngine.DEBUG.wireframe(cache, scene, mesh, projectionMatrix, viewMatrix,
-		// c.getTransform().getMatrix());
+		// GameEngine.DEBUG.wireframe(cache, scene, mesh, projectionMatrix, viewMatrix, c.getTransform().getMatrix());
 
 		mesh.unbind();
 
 		GameEngine.DEBUG.gizmos(cache, scene, projectionMatrix, viewMatrix, transformationMatrix);
-		GameEngine.DEBUG.boundingRect(cache, scene, projectionMatrix, viewMatrix, transformationMatrix,
-				te.getBoxSize());
+		GameEngine.DEBUG.boundingRect(cache, scene, projectionMatrix, viewMatrix, transformationMatrix, te.getBoxSize());
 	}
 
 }

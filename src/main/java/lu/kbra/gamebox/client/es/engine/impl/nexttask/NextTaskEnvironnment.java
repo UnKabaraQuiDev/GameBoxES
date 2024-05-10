@@ -82,10 +82,10 @@ public class NextTaskEnvironnment {
 	public int getShortestQueueId() {
 		int thId = (int) (Math.random() * threads.length);
 		int lowestValue = queues.get(thId).size();
-		
-		if(lowestValue == 0)
+
+		if (lowestValue == 0)
 			return thId;
-		
+
 		for (Entry<Integer, Queue<NextTask>> entry : queues.entrySet()) {
 			if (entry.getValue().size() == 0) {
 				thId = entry.getKey();
@@ -107,6 +107,10 @@ public class NextTaskEnvironnment {
 
 	public void setThreads(Thread[] threads) {
 		this.threads = threads;
+	}
+
+	public HashMap<Integer, Queue<NextTask>> getQueues() {
+		return queues;
 	}
 
 	public boolean isInputClosed() {

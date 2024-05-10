@@ -37,7 +37,7 @@ public class ClientMain {
 
 			WindowOptions options = new WindowOptions();
 			options.fullscreen = false;
-			options.vsync = true;
+			options.vsync = false;
 			options.fps = 60;
 			options.windowMultisample = 8;
 			

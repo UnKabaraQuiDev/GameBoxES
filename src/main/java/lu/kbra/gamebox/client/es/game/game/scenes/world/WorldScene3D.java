@@ -50,11 +50,17 @@ public class WorldScene3D extends Scene3D {
 
 	public void update(float dTime) {
 		if (world != null) {
-			world.continueWorldGen();
+			world.continueWorldGen(1);
 
 			world.update(dTime);
 
 			placeCamera(GeoPlane.XY.projectToPlane(world.getPlayer().getTransform().getTransform().getTranslation()));
+		}
+	}
+	
+	public void render(float dTime) {
+		if (world != null) {
+			world.render(dTime);
 		}
 	}
 
@@ -65,6 +71,7 @@ public class WorldScene3D extends Scene3D {
 		}
 
 		world = new World(this, Math.random());
+		// world.continueWorldGen(4);
 
 		camera.getProjection().setSize(55).update();
 	}

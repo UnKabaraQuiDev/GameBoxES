@@ -141,6 +141,16 @@ public class InstanceEmitter implements Renderable, Cleanupable, UniqueID {
 		}
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
 	}
+	
+	public void createDrawBuffer() {
+		Mesh quad = getParticleMesh();
+
+		quad.createDrawBuffer();
+		quad.getDrawBuffer().bind();
+		quad.getDrawBuffer().setInstancesCount(getParticleCount());
+		quad.getDrawBuffer().unbind();
+	}
+
 
 	public void updateParticlesTransforms() {
 		Matrix4f[] transforms = new Matrix4f[this.count];
@@ -180,7 +190,7 @@ public class InstanceEmitter implements Renderable, Cleanupable, UniqueID {
 		this.instanceMesh.cleanup();
 		this.instanceMesh = null;
 	}
-
+	
 	@Override
 	public String getId() {
 		return this.name;

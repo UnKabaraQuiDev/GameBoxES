@@ -42,7 +42,7 @@ public class Scene3DRenderer extends Renderer<GameEngine, Scene3D> {
 	};
 
 	@Override
-	public void render(CacheManager cache, GameEngine ge, Scene3D scene) {
+	public void render_in(CacheManager cache, GameEngine ge, Scene3D scene) {
 		GlobalLogger.log(Level.FINE, "Scene3D : " + scene.getId());
 
 		GameEngine.DEBUG.start("r_scene3d");

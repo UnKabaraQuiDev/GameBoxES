@@ -1,6 +1,8 @@
 package lu.kbra.gamebox.client.es.game.game.utils.global;
 
 import java.util.Arrays;
+import java.util.Map.Entry;
+import java.util.Queue;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -46,7 +48,7 @@ public class GlobalUtils {
 
 	private static final int PROJECTION_WIDTH = 1920;
 	private static final int PROJECTION_HEIGHT = 1080;
-	
+
 	public static GameBoxES INSTANCE;
 	private static GameEngine engine;
 
@@ -121,8 +123,8 @@ public class GlobalUtils {
 	}
 
 	public static void requestQuit() {
-		if(engine != null)	
-			if(engine.getWindow() != null)
+		if (engine != null)
+			if (engine.getWindow() != null)
 				engine.getWindow().setWindowShouldClose(true);
 		workers.closeInput();
 		workers.block();
@@ -153,6 +155,7 @@ public class GlobalUtils {
 		text.createDrawBuffer();
 		text.updateText();
 		cache.addTextEmitter(text);
+		
 		return new TextEmitterComponent(text);
 	}
 
@@ -224,6 +227,19 @@ public class GlobalUtils {
 
 	public static void setFixedRatio(Camera camera) {
 		camera.getProjection().update(PROJECTION_WIDTH, PROJECTION_HEIGHT);
+	}
+
+	public static void dumpThreads() {
+		GlobalLogger.severe("== Thread dump ==");
+
+		for (Entry<Integer, Queue<NextTask>> thread : workers.getQueues().entrySet()) {
+			GlobalLogger.severe("Worker: " + thread.getKey() + " (" + workers.getThreads()[thread.getKey()] + ") > " + thread.getValue().size());
+		}
+
+		for (Entry<Integer, Queue<NextTask>> thread : INSTANCE.getTaskEnvironnment().getQueues().entrySet()) {
+			GlobalLogger.severe("Main: " + thread.getKey() + " (" + INSTANCE.getTaskEnvironnment().getThreads()[thread.getKey()] + ") > " + thread.getValue().size());
+		}
+
 	}
 
 }

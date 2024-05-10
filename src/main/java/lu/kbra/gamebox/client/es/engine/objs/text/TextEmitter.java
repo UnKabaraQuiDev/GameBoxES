@@ -58,10 +58,7 @@ public class TextEmitter implements Cleanupable, UniqueID {
 	}
 
 	public void createDrawBuffer() {
-		quad.createDrawBuffer();
-		quad.getDrawBuffer().bind();
-		quad.getDrawBuffer().setInstancesCount(instances.getParticleCount());
-		quad.getDrawBuffer().unbind();
+		instances.createDrawBuffer();
 	}
 	
 	public boolean updateText() {

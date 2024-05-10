@@ -68,11 +68,14 @@ public class UISceneMajorUpgradeTree extends UISceneState {
 
 	@Override
 	public void update(float dTime) {
-		GlobalUtils.pushRender(() -> {
-			aminoAcidText.setText(Math.clamp(0, 9999, GlobalUtils.INSTANCE.playerData.getAminoAcid())+"").updateText();
-			glucoseText.setText(Math.clamp(0, 9999, GlobalUtils.INSTANCE.playerData.getGlucose())+"").updateText();
-			lipidText.setText(Math.clamp(0, 9999, GlobalUtils.INSTANCE.playerData.getLipid())+"").updateText();
-		});
+		
+	}
+	
+	@Override
+	public void render(float dTime) {
+		aminoAcidText.setText(Math.clamp(0, 9999, GlobalUtils.INSTANCE.playerData.getAminoAcid())+"").updateText();
+		glucoseText.setText(Math.clamp(0, 9999, GlobalUtils.INSTANCE.playerData.getGlucose())+"").updateText();
+		lipidText.setText(Math.clamp(0, 9999, GlobalUtils.INSTANCE.playerData.getLipid())+"").updateText();
 	}
 
 	public void setActive(boolean b) {

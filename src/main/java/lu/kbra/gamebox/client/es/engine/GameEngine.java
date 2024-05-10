@@ -23,15 +23,13 @@ import lu.kbra.gamebox.client.es.engine.utils.file.FileUtils;
 
 public class GameEngine implements Cleanupable, UniqueID {
 
-	public static Vector3f X_POS = new Vector3f(1, 0, 0), X_NEG = new Vector3f(-1, 0, 0), Y_POS = new Vector3f(0, 1, 0),
-			Y_NEG = new Vector3f(0, -1, 0), Z_POS = new Vector3f(0, 0, 1), Z_NEG = new Vector3f(0, 0, -1),
-			ZERO = new Vector3f(0, 0, 0);
+	private static final long MIN_NANO_TIME_TO_START_TASK = 10_000;
 
-	public static Vector3f UP = new Vector3f(Y_POS), DOWN = new Vector3f(Z_NEG), LEFT = new Vector3f(X_NEG),
-			RIGHT = new Vector3f(X_POS), FORWARD = new Vector3f(Z_POS), BACK = new Vector3f(X_POS);
+	public static Vector3f X_POS = new Vector3f(1, 0, 0), X_NEG = new Vector3f(-1, 0, 0), Y_POS = new Vector3f(0, 1, 0), Y_NEG = new Vector3f(0, -1, 0), Z_POS = new Vector3f(0, 0, 1), Z_NEG = new Vector3f(0, 0, -1), ZERO = new Vector3f(0, 0, 0);
 
-	public static long POLL_EVENT_TIMEOUT = 500, BUFFER_SWAP_TIMEOUT = 500, WAIT_FRAME_END_TIMEOUT = 500,
-			WAIT_FRAME_START_TIMEOUT = 500, WAIT_UPDATE_END_TIMEOUT = 500, WAIT_UPDATE_START_TIMEOUT = 500; // ms
+	public static Vector3f UP = new Vector3f(Y_POS), DOWN = new Vector3f(Z_NEG), LEFT = new Vector3f(X_NEG), RIGHT = new Vector3f(X_POS), FORWARD = new Vector3f(Z_POS), BACK = new Vector3f(X_POS);
+
+	public static long POLL_EVENT_TIMEOUT = 500, BUFFER_SWAP_TIMEOUT = 500, WAIT_FRAME_END_TIMEOUT = 500, WAIT_FRAME_START_TIMEOUT = 500, WAIT_UPDATE_END_TIMEOUT = 500, WAIT_UPDATE_START_TIMEOUT = 500; // ms
 
 	public static int QUEUE_MAIN = 0, QUEUE_RENDER = 1, QUEUE_UPDATE = 2;
 
@@ -55,8 +53,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 	private ThreadGroup threadGroup;
 	private Thread updateThread, renderThread, mainThread;
 
-	private final Object waitForFrameEnd = new Object(), waitForUpdateEnd = new Object(),
-			waitForFrameStart = new Object(), waitForUpdateStart = new Object();
+	private final Object waitForFrameEnd = new Object(), waitForUpdateEnd = new Object(), waitForFrameStart = new Object(), waitForUpdateStart = new Object();
 
 	private NextTaskEnvironnment taskEnvironnment;
 
@@ -192,6 +189,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 						DEBUG.start("u_async_task");
 						NextTask nt = pullTask();
 						nt.execute();
+						removeTask();
 						DEBUG.end("u_async_task");
 					}
 				}
@@ -252,15 +250,14 @@ public class GameEngine implements Cleanupable, UniqueID {
 
 					lastTime = now;
 
-					this.currentFps = (double) 1 / ((double) deltaRender / 1_000_000_000);
+					this.currentFps = (double) 1 / ((double) deltaRender / 1e9);
 					DEBUG.end("r_render_loop");
 
 					synchronized (waitForFrameEnd) {
 						waitForFrameEnd.notifyAll(); // wake up waiting threads
 					}
 
-					GlobalLogger.info("FPS: " + this.currentFps + " delta: " + ((double) deltaRender / 1_000_000)
-							+ "ms renderLoop: " + ((double) (System.nanoTime() - loopStart) / 1_000_000) + "ms");
+					GlobalLogger.info("FPS: " + this.currentFps + " delta: " + ((double) deltaRender / 1_000_000) + "ms renderLoop: " + ((double) (System.nanoTime() - loopStart) / 1_000_000) + "ms");
 				}
 
 				if (this.window.shouldClose()) {
@@ -269,7 +266,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 				}
 
 				queue: {
-					if (nextTask()) {
+					if (nextTask() && System.nanoTime()-now < MIN_NANO_TIME_TO_START_TASK) {
 						DEBUG.start("r_async_task");
 						NextTask nt = pullTask();
 						nt.execute();
@@ -360,8 +357,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 		// this.window.takeGLContext();
 		this.cleanup();
 
-		TimeGraphPlot
-				.main(new String[] { FileUtils.appendName(GlobalLogger.getLogger().getLogFile().getPath(), "-time") });
+		TimeGraphPlot.main(new String[] { FileUtils.appendName(GlobalLogger.getLogger().getLogFile().getPath(), "-time") });
 	}
 
 	public void stop() {

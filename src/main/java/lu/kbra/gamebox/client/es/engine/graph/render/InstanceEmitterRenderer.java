@@ -27,7 +27,7 @@ public class InstanceEmitterRenderer extends Renderer<Scene, InstanceEmitterComp
 	}
 
 	@Override
-	public void render(CacheManager cache, Scene scene, InstanceEmitterComponent pec) {
+	public void render_in(CacheManager cache, Scene scene, InstanceEmitterComponent pec) {
 		InstanceEmitter pe = pec.getInstanceEmitter(cache);
 		if (pe == null) {
 			GlobalLogger.log(Level.WARNING, "InstanceEmitter is null!");

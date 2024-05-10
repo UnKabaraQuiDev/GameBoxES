@@ -25,7 +25,7 @@ public class Scene2DRenderer extends Renderer<GameEngine, Scene2D> {
 	}
 
 	@Override
-	public void render(CacheManager cache, GameEngine engine, Scene2D scene) {
+	public void render_in(CacheManager cache, GameEngine engine, Scene2D scene) {
 		GlobalLogger.log(Level.INFO, "Scene2D : " + scene.getId());
 
 		GameEngine.DEBUG.start("r_scene2d");

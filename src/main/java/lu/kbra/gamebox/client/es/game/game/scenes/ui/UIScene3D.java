@@ -34,6 +34,12 @@ public class UIScene3D extends Scene3D {
 			state.update(dTime);
 		}
 	}
+	
+	public void render(float dTime) {
+		if (state != null) {
+			state.render(dTime);
+		}
+	}
 
 	public void setupStartMenu() {
 		state = new UISceneStartMenuState(this);

@@ -28,7 +28,7 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 	}
 
 	@Override
-	public void render(CacheManager cache, Scene scene, MeshComponent m) {
+	public void render_in(CacheManager cache, Scene scene, MeshComponent m) {
 		Entity e = m.getParent();
 
 		Mesh mesh = m.getMesh(cache);

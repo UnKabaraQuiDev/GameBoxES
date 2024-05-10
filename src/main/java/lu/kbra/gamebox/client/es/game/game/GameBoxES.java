@@ -51,7 +51,7 @@ public class GameBoxES extends GameLogic {
 
 		GlobalUtils.init(this, super.engine);
 
-		GlobalLogger.getLogger().setMinForwardLevel(Level.INFO);
+		GlobalLogger.getLogger().setMinForwardLevel(Level.ALL);
 
 		GlobalUtils.registerRenderers();
 
@@ -136,6 +136,8 @@ public class GameBoxES extends GameLogic {
 			worldScene.update(dTime);
 		}
 		uiScene.update(dTime);
+		
+		// GlobalUtils.dumpThreads();
 	}
 
 	@Override
@@ -143,6 +145,8 @@ public class GameBoxES extends GameLogic {
 		if (debug != null) {
 			debug.update();
 		}
+		// worldScene.render(dTime);
+		uiScene.render(dTime);
 		compositor.render(engine);
 	}
 

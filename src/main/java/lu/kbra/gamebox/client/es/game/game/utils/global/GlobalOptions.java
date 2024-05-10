@@ -38,7 +38,7 @@ public final class GlobalOptions {
 		Properties prop = new Properties();
 		prop.setProperty("volume", VOLUME+"");
 		prop.setProperty("language", LANGUAGE+"");
-		prop.setProperty("culling", false+"");
+		prop.setProperty("culling", CULLING_OPTIMISATION+"");
 		
 		File file = new File("config/options.properties");
 		prop.store(new FileWriter(file), null);

@@ -55,6 +55,10 @@ public class NextTask<I, B, C> {
 		}
 	}
 
+	public NextTask<B, C, ?> getCallback() {
+		return callback;
+	}
+	
 	public Object getState() {
 		return state;
 	}

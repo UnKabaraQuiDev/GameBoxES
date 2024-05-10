@@ -27,7 +27,7 @@ public class GizmoRenderer extends Renderer<Scene, GizmoComponent> {
 	}
 
 	@Override
-	public void render(CacheManager cache, Scene scene, GizmoComponent gi) {
+	public void render_in(CacheManager cache, Scene scene, GizmoComponent gi) {
 		Entity e = gi.getParent();
 
 		Gizmo gizmo = gi.getGizmo(cache);
