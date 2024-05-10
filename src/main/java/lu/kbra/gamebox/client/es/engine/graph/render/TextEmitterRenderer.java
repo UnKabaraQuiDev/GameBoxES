@@ -36,7 +36,7 @@ public class TextEmitterRenderer extends Renderer<Scene, TextEmitterComponent> {
 
 		TextEmitter te = tec.getTextEmitter(cache);
 		if (te == null) {
-			GlobalLogger.log(Level.WARNING, "TextEmitter is null!");
+			GlobalLogger.log(Level.WARNING, "TextEmitter is null: " + e + "!");
 			return;
 		}
 
@@ -82,7 +82,8 @@ public class TextEmitterRenderer extends Renderer<Scene, TextEmitterComponent> {
 		GameEngine.DEBUG.start("r_uniforms_transform");
 		if (material.hasProperty(RenderShader.TRANSFORMATION_MATRIX)) {
 			if (e.hasComponent(TransformComponent.class)) {
-				TransformComponent transform = (TransformComponent) e.getComponent(e.getComponents(TransformComponent.class).get(0));
+				TransformComponent transform = (TransformComponent) e
+						.getComponent(e.getComponents(TransformComponent.class).get(0));
 				if (transform != null) {
 					transformationMatrix = transform.getTransform().getMatrix();
 				}
@@ -112,7 +113,8 @@ public class TextEmitterRenderer extends Renderer<Scene, TextEmitterComponent> {
 			mesh.getDrawBuffer().bind();
 			GL46.glDrawElementsIndirect(shader.getBeginMode().getGlId(), GL40.GL_UNSIGNED_INT, 0);
 		} else {
-			GL40.glDrawElementsInstanced(shader.getBeginMode().getGlId(), mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0, pe.getParticleCount());
+			GL40.glDrawElementsInstanced(shader.getBeginMode().getGlId(), mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT,
+					0, pe.getParticleCount());
 		}
 
 		GL40.glDisable(GL40.GL_BLEND);
@@ -124,7 +126,8 @@ public class TextEmitterRenderer extends Renderer<Scene, TextEmitterComponent> {
 		mesh.unbind();
 
 		GameEngine.DEBUG.gizmos(cache, scene, projectionMatrix, viewMatrix, transformationMatrix);
-		GameEngine.DEBUG.boundingRect(cache, scene, projectionMatrix, viewMatrix, transformationMatrix, te.getBoxSize());
+		GameEngine.DEBUG.boundingRect(cache, scene, projectionMatrix, viewMatrix, transformationMatrix,
+				te.getBoxSize());
 	}
 
 }

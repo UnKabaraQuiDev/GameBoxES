@@ -15,8 +15,8 @@ void main() {
 	int rowIndex = index % (columns*rows) / columns;
 	int colIndex = index % (columns*rows) % columns;
 	
-	float colWidth = 1f/float(columns);
-	float rowHeight = 1f/float(rows);
+	float colWidth = 1.0/float(columns);
+	float rowHeight = 1.0/float(rows);
 	
 	fragColor = texture(txt1, mix(vec2(colWidth*colIndex, rowHeight*rowIndex), vec2(colWidth*(colIndex+1), rowHeight*(rowIndex+1)), texCoord))-vec4(0, 0, 0, length(texCoord-vec2(0.5))*2);
 }
