@@ -7,7 +7,14 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class NextTaskEnvironnment {
 
-	private boolean inputClosed = false, blocking = false;
+	/**
+	 * blocks push of next task
+	 */
+	private boolean inputClosed = false;
+	/**
+	 * blocks retrieving of next task
+	 */
+	private boolean blocking = false;
 
 	protected Thread[] threads;
 	protected HashMap<Integer, Queue<NextTask>> queues = new HashMap<>();
@@ -34,7 +41,14 @@ public class NextTaskEnvironnment {
 		if (blocking)
 			return null;
 
-		return queues.get(id).poll();
+		return queues.get(id).peek();
+	}
+
+	public void removeNext(int id) {
+		if (blocking)
+			return;
+
+		queues.get(id).poll();
 	}
 
 	public boolean hasNext(int id) {
@@ -66,7 +80,12 @@ public class NextTaskEnvironnment {
 	}
 
 	public int getShortestQueueId() {
-		int lowestValue = Integer.MAX_VALUE, thId = -1;
+		int thId = (int) (Math.random() * threads.length);
+		int lowestValue = queues.get(thId).size();
+		
+		if(lowestValue == 0)
+			return thId;
+		
 		for (Entry<Integer, Queue<NextTask>> entry : queues.entrySet()) {
 			if (entry.getValue().size() == 0) {
 				thId = entry.getKey();
@@ -95,11 +114,11 @@ public class NextTaskEnvironnment {
 	}
 
 	public void closeInput() {
-		inputClosed = false;
+		inputClosed = true;
 	}
 
 	public void openInput() {
-		inputClosed = true;
+		inputClosed = false;
 	}
 
 	public boolean isBlocking() {

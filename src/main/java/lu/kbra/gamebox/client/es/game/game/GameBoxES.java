@@ -51,7 +51,7 @@ public class GameBoxES extends GameLogic {
 
 		GlobalUtils.init(this, super.engine);
 
-		GlobalLogger.getLogger().setMinForwardLevel(Level.ALL);
+		GlobalLogger.getLogger().setMinForwardLevel(Level.INFO);
 
 		GlobalUtils.registerRenderers();
 
@@ -111,6 +111,7 @@ public class GameBoxES extends GameLogic {
 	public void eventStop() {
 		try {
 			GlobalOptions.save();
+			GlobalUtils.requestQuit();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

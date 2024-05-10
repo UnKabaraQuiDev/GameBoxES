@@ -121,7 +121,16 @@ public class GlobalUtils {
 	}
 
 	public static void requestQuit() {
-		engine.getWindow().setWindowShouldClose(true);
+		if(engine != null)	
+			if(engine.getWindow() != null)
+				engine.getWindow().setWindowShouldClose(true);
+		workers.closeInput();
+		workers.block();
+		try {
+			workers.shutdown();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static MeshComponent createUIButton(CacheManager cache, String name, String btnName) {
@@ -149,9 +158,7 @@ public class GlobalUtils {
 
 	public static void updateText(final TextEmitter textEmitter) {
 		GlobalUtils.INSTANCE.createTask(GameEngine.QUEUE_RENDER).exec((t) -> {
-			boolean res = textEmitter.updateText();
-			System.err.println(res);
-			return null;
+			return textEmitter.updateText();
 		}).push();
 	}
 

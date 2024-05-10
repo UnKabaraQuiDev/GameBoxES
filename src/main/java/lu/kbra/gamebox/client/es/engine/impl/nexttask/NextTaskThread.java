@@ -30,6 +30,7 @@ public class NextTaskThread extends Thread {
 				if (env.hasNext(id)) {
 					NextTask nt = env.getNext(id);
 					nt.execute();
+					env.removeNext(id);
 				}
 			}
 
