@@ -88,4 +88,11 @@ public final class MathUtils {
 		return range.x < value && value < range.y;
 	}
 
+	public static float zigzag(float x, float period) {
+		return x % 2*period < period ? x % period : period - x % period;
+	}
+	public static float zigzagNormalized(float x, float period) {
+		return zigzag(x, period)/period;
+	}
+
 }

@@ -1,7 +1,10 @@
 package lu.kbra.gamebox.client.es.engine.anim;
 
 import org.joml.Math;
+import org.joml.Quaternionf;
 
+import lu.kbra.gamebox.client.es.engine.objs.entity.Entity;
+import lu.kbra.gamebox.client.es.engine.utils.MathUtils;
 import lu.kbra.gamebox.client.es.engine.utils.interpolation.Interpolator;
 
 public abstract class CallbackValueInterpolation<T, D> {
@@ -45,7 +48,20 @@ public abstract class CallbackValueInterpolation<T, D> {
 	}
 
 	public synchronized CallbackValueInterpolation<T, D> mod() {
-		this.progress %= 1;
+		return mod(1);
+	}
+	
+	public synchronized CallbackValueInterpolation<T, D> mod(float period) {
+		this.progress %= period;
+		return this;
+	}
+	
+	public synchronized CallbackValueInterpolation<T, D> zigzag() {
+		return zigzag(1);
+	}
+	
+	public synchronized CallbackValueInterpolation<T, D> zigzag(float period) {
+		this.progress = MathUtils.zigzag(progress, period);
 		return this;
 	}
 

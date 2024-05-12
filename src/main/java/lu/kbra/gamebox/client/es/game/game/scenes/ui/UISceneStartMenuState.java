@@ -4,11 +4,15 @@ import java.io.IOException;
 import java.util.function.Function;
 
 import org.joml.Math;
+import org.joml.Quaternionf;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWGamepadState;
+
+import lu.pcy113.pclib.GlobalLogger;
+import lu.pcy113.pclib.Pair;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.graph.material.text.TextShader.TextMaterial;
@@ -33,8 +37,6 @@ import lu.kbra.gamebox.client.es.game.game.utils.GameMode;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalLang;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalOptions;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
-import lu.pcy113.pclib.GlobalLogger;
-import lu.pcy113.pclib.Pair;
 
 public class UISceneStartMenuState extends UISceneState {
 
@@ -87,6 +89,8 @@ public class UISceneStartMenuState extends UISceneState {
 	private int menuTransition = MENU_TRANSITION_IDLE;
 
 	private static final float MENU_TRANSITION_INC = 0.1f;
+	private static final float ANIMATION_IDLE_SPEED = 0.9f;
+	private static final float ANIMATION_IDLE_ANGLE = 8f; // degrees
 
 	private float menuTransitionValue = 0;
 
@@ -94,6 +98,7 @@ public class UISceneStartMenuState extends UISceneState {
 	private int menuTransitionBase = MI_NONE;
 
 	private ControllerInputWatcher cic = new ControllerInputWatcher();
+	private QuaternionArrayCallbackValueInterpolator rotInterpolator;
 
 	public UISceneStartMenuState(UIScene3D scene) {
 		super("MainMenu", scene);
@@ -154,6 +159,8 @@ public class UISceneStartMenuState extends UISceneState {
 		setPos(entitiesOptionMenu, entitiesOptionMenupos, OTHER_X_POS_START, OTHER_X_POS_END, i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
 		menuTransitionValue = 0; // set to active
 		setPos(entitiesMainMenu, entitiesMainMenupos, MAIN_X_POS_START, MAIN_X_POS_END, i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
+		
+		rotInterpolator = new QuaternionArrayCallbackValueInterpolator(new Entity[] {play, options, quit, playMode1, playMode2, optionLanguage, optionVolume}, new Quaternionf().rotateLocalZ(Math.toRadians(-ANIMATION_IDLE_ANGLE)), new Quaternionf().rotateLocalZ(Math.toRadians(ANIMATION_IDLE_ANGLE)), Interpolators.CUBIC_IN_OUT);
 	}
 
 	private void interact_playMode1(Entity entity1, boolean boolean2, Direction direction3, Button button4) {
@@ -268,9 +275,14 @@ public class UISceneStartMenuState extends UISceneState {
 			otherVerticalIndex = org.joml.Math.clamp(0, 1, otherVerticalIndex);
 		}
 	}
-
+	
+	private float time = 0;
+	
 	@Override
-	public void update(float dTime) {}
+	public void update(float dTime) {
+		time += dTime;
+		rotInterpolator.set(ANIMATION_IDLE_SPEED*time).zigzag().exec();
+	}
 	
 	@Override
 	public void render(float dTime) {}

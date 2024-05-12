@@ -54,7 +54,9 @@ public class NextTaskWorker extends NextTaskEnvironnment implements UniqueID {
 	 */
 	public void shutdown() throws InterruptedException {
 		for (int i = 0; i < threads.length; i++) {
-			((NextTaskThread) this.threads[i]).shutdown();
+			if(this.threads[i] != null) {
+				((NextTaskThread) this.threads[i]).shutdown();
+			}
 		}
 		for (int i = 0; i < threads.length; i++) {
 			this.threads[i].join();
