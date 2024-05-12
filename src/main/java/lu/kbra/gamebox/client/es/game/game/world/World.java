@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pclib.Triplet;
 import lu.pcy113.pclib.pointer.prim.BooleanPointer;
+import lu.pcy113.pclib.pointer.prim.IntPointer;
 
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
 import lu.kbra.gamebox.client.es.engine.geom.Mesh;
@@ -332,38 +333,68 @@ public class World implements Cleanupable {
 	}
 
 	public boolean genWorld(Vector2f center, float halfSquareSize, int numPoint) {
-		return GlobalUtils.<Void, Triplet<List<Vector2f>, List<Vector2f>, List<Vector2f>>, Void>newWorkerToRenderTask().exec((a) -> {
-			long start = System.currentTimeMillis();
+		final List<Entity> list = new ArrayList<Entity>();
+		
+		final IntPointer finished = new IntPointer();
+		
+		final Runnable pushList = () -> {
+			long start2 = System.nanoTime();
 			
-			List<Vector2f> plantPos = genPlantsPos(center, halfSquareSize, numPoint / 3);
-			List<Vector2f> toxinsPos = genToxinsPos(center, halfSquareSize, numPoint / 3);
-			List<Vector2f> cellsPos = genCellsPos(center, halfSquareSize, numPoint / 3);
-			
-			System.err.println("Task gen chunk (worker): " + (System.currentTimeMillis() - start) + "ms for " + center);
-			
-			return new Triplet<List<Vector2f>, List<Vector2f>, List<Vector2f>>(plantPos, toxinsPos, cellsPos);
-		}).then((Triplet<List<Vector2f>, List<Vector2f>, List<Vector2f>> a) -> {
-			long start = System.currentTimeMillis();
-			// TODO: Reduce this time from 33ms -> max 10ms or split it up into different tasks
-
-			final List<Entity> list = new ArrayList<Entity>();
-
-			final List<Entity> plants = genPlants_render(center, a.getFirst());
-			final List<Entity> toxins = genToxins_render(center, a.getSecond());
-			final List<Entity> cells = genCells_render(center, a.getThird());
-			
-			// add to list takes <0ms
-			list.addAll(plants);
-			list.addAll(toxins);
-			list.addAll(cells);
 			list.forEach(scene::addEntity);
-
 			generatedChunks.put(center.toString(), list);
 			
-			System.err.println("Task gen chunk (render): " + (System.currentTimeMillis() - start) + "ms for " + center);
+			System.err.println("Task gen chunk (render: push): " + (float) (System.nanoTime() - start2) / 1e6f + "ms for " + center);
+		};
 
-			return null;
-		}).push();
+		return GlobalUtils.pushWorker(() -> {
+			long start = System.currentTimeMillis();
+
+			final List<Vector2f> plantPos = genPlantsPos(center, halfSquareSize, numPoint / 3);
+			final List<Vector2f> toxinsPos = genToxinsPos(center, halfSquareSize, numPoint / 3);
+			final List<Vector2f> cellsPos = genCellsPos(center, halfSquareSize, numPoint / 3);
+
+			System.err.println("Task gen chunk (worker): " + (System.currentTimeMillis() - start) + "ms for " + center);
+
+			GlobalUtils.pushRender(() -> {
+				long start1 = System.nanoTime();
+
+				final List<Entity> plants = genPlants_render(center, plantPos);
+				list.addAll(plants);
+
+				System.err.println("Task gen chunk (render: plants): " + (float) (System.nanoTime() - start1) / 1e6f + "ms for " + center);
+
+				ifLast(finished.increment(), 2, pushList);
+			});
+
+			GlobalUtils.pushRender(() -> {
+				long start1 = System.nanoTime();
+
+				final List<Entity> toxins = genToxins_render(center, toxinsPos);
+				list.addAll(toxins);
+
+				System.err.println("Task gen chunk (render: toxins): " + (float) (System.nanoTime() - start1) / 1e6f + "ms for " + center);
+
+				ifLast(finished.increment(), 2, pushList);
+			});
+
+			GlobalUtils.pushRender(() -> {
+				long start1 = System.nanoTime();
+
+				final List<Entity> cells = genCells_render(center, cellsPos);
+				list.addAll(cells);
+
+				System.err.println("Task gen chunk (render: cells): " + (float) (System.nanoTime() - start1) / 1e6f + "ms for " + center);
+
+				ifLast(finished.increment(), 2, pushList);
+			});
+
+		});
+	}
+
+	private void ifLast(int count, int min, Runnable run) {
+		if (count >= min) {
+			run.run();
+		}
 	}
 
 	private List<Entity> genCells_render(Vector2f ce, List<Vector2f> cells) {
@@ -389,15 +420,17 @@ public class World implements Cleanupable {
 			cache.addMesh(emit.getParticleMesh());
 			cache.addInstanceEmitter(emit);
 
-			Matrix4f[] matrices = poss.stream().map(t -> new Matrix4f().setTranslation(t.x, t.y, 0).scale(Math.clamp(0.6f, 1.2f, (float) ((1 - hostilityGen.noise(t)) + fertilityGen.noise(t) * 0.3f + humidityGen.noise(t)))))
-					.collect(Collectors.toList()).toArray(new Matrix4f[poss.size()]);
-			Object[] states = poss.stream().map(p -> (int) random.nextInt(desc.getTextureVariationCount())).collect(Collectors.toList()).toArray();
+			for (int i = 0; i < poss.size(); i++) {
+				Instance part = emit.getParticles()[i];
+				Vector2f pos = poss.get(i);
 
-			for (int i = 0; i < matrices.length; i++) {
-				matrices[i].translate(0, 0, Y_OFFSET * i);
+				((Transform3D) part.getTransform()).getTranslation().set(pos.x, pos.y, Y_OFFSET * i);
+				((Transform3D) part.getTransform()).getScale().set(Math.clamp(0.6f, 1.2f, (float) ((1 - hostilityGen.noise(pos)) + fertilityGen.noise(pos) * 0.3f + humidityGen.noise(pos))));
+				((Transform3D) part.getTransform()).updateMatrix();
+				part.getBuffers()[0] = (int) random.nextInt(desc.getTextureVariationCount());
 			}
 
-			emit.updateDirect(matrices, new Object[][] { states });
+			emit.updateParticles();
 
 			CellsEntity pe = new CellsEntity(desc.getId() + "-" + center, new InstanceEmitterComponent(emit), new Transform3DComponent(new Vector3f(center.x, center.y, 0.4f)), new RenderComponent(4), new RenderComponent(10));
 			pe.addComponent(new RenderConditionComponent(() -> pe.getTransform().getTransform().getTranslation().distance(((Camera3D) scene.getCamera()).getPosition()) < CULLING_DISTANCE));
@@ -418,14 +451,16 @@ public class World implements Cleanupable {
 		cache.addMesh(emit.getParticleMesh());
 		cache.addInstanceEmitter(emit);
 
-		Matrix4f[] matrices = toxins.parallelStream().map(t -> new Matrix4f().setTranslation(t.x, t.y, 0)).collect(Collectors.toList()).toArray(new Matrix4f[toxins.size()]);
-		Object[] sizes = toxins.stream().map(p -> Math.clamp(5f, 10f, (float) hostilityGen.noise(p))).collect(Collectors.toList()).toArray();
+		for (int i = 0; i < toxins.size(); i++) {
+			Instance part = emit.getParticles()[i];
+			Vector2f pos = toxins.get(i);
 
-		for (int i = 0; i < matrices.length; i++) {
-			matrices[i].translate(0, 0, Y_OFFSET * i);
+			((Transform3D) part.getTransform()).getTranslation().set(pos.x, pos.y, Y_OFFSET * i);
+			((Transform3D) part.getTransform()).updateMatrix();
+			part.getBuffers()[0] = Math.clamp(0.6f, 2f, Math.clamp(5f, 10f, (float) hostilityGen.noise(pos)));
 		}
 
-		emit.updateDirect(matrices, new Object[][] { sizes });
+		emit.updateParticles();
 
 		ToxinsEntity pe = new ToxinsEntity("toxins-" + center, new InstanceEmitterComponent(emit), new Transform3DComponent(new Vector3f(center.x, center.y, 0)), new RenderComponent(8));
 		pe.addComponent(new RenderConditionComponent(() -> pe.getTransform().getTransform().getTranslation().distance(((Camera3D) scene.getCamera()).getPosition()) < CULLING_DISTANCE));

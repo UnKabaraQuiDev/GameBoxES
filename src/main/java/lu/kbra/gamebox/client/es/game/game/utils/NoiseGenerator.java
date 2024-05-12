@@ -2,11 +2,8 @@ package lu.kbra.gamebox.client.es.game.game.utils;
 
 import java.util.Random;
 
-import org.joml.Vector2d;
 import org.joml.Vector2f;
-import org.joml.Vector3d;
 import org.joml.Vector3f;
-import org.lwjgl.system.MathUtil;
 
 import lu.kbra.gamebox.client.es.engine.utils.MathUtils;
 
@@ -69,9 +66,9 @@ public class NoiseGenerator {
 		return scale;
 	}
 
-	public double noise(double x, double y, double z, int scale) {
-		double value = 0.0;
-		double or_scale = scale;
+	public float noise(float x, float y, float z, int scale) {
+		float value = 0f;
+		float or_scale = scale;
 
 		while (scale >= 1) {
 			value += smoothNoise((x / scale), (y / scale), (z / scale)) * scale;
@@ -81,9 +78,9 @@ public class NoiseGenerator {
 		return normalize(value / or_scale);
 	}
 
-	public double noise(double x, double y, double z) {
-		double value = 0.0;
-		double scale = this.scale;
+	public float noise(float x, float y, float z) {
+		float value = 0f;
+		float scale = this.scale;
 
 		while (scale >= 1) {
 			value += smoothNoise((x / scale), (y / scale), (z / scale)) * scale;
@@ -93,9 +90,9 @@ public class NoiseGenerator {
 		return normalize(value / this.scale);
 	}
 
-	public double noise(double x, double y) {
-		double value = 0.0;
-		double scale = this.scale;
+	public float noise(float x, float y) {
+		float value = 0f;
+		float scale = this.scale;
 
 		while (scale >= 1) {
 			value += smoothNoise((x / scale), (y / scale), (0f / scale)) * scale;
@@ -105,9 +102,9 @@ public class NoiseGenerator {
 		return normalize(value / this.scale);
 	}
 
-	public double noise(double x) {
-		double value = 0.0;
-		double scale = this.scale;
+	public float noise(float x) {
+		float value = 0f;
+		float scale = this.scale;
 
 		while (scale >= 1) {
 			value += smoothNoise((x / scale), (0f / scale), (0f / scale)) * scale;
@@ -117,31 +114,23 @@ public class NoiseGenerator {
 		return normalize(value / this.scale);
 	}
 
-	private double normalize(double d) {
+	private float normalize(float d) {
 		return org.joml.Math.clamp(0, 1, MathUtils.map(d, -1, 1, 0, 1));
 	}
 
-	public double noise(Vector2f a, Vector2f offset) {
+	public float noise(Vector2f a, Vector2f offset) {
 		return noise(a.x + offset.x, a.y + offset.y);
 	}
 
-	public double noise(Vector2f a) {
+	public float noise(Vector2f a) {
 		return noise(a.x, a.y);
 	}
 
-	public double noise(Vector3f a) {
+	public float noise(Vector3f a) {
 		return noise(a.x, a.y, a.z);
 	}
 
-	public double noise(Vector2d a) {
-		return noise(a.x, a.y);
-	}
-
-	public double noise(Vector3d a) {
-		return noise(a.x, a.y, a.z);
-	}
-
-	public double smoothNoise(double x, double y, double z) {
+	public float smoothNoise(float x, float y, float z) {
 		// Offset each coordinate by the seed value
 		x += this.seed;
 		y += this.seed;
@@ -155,9 +144,9 @@ public class NoiseGenerator {
 		y -= Math.floor(y); // OF POINT IN CUBE.
 		z -= Math.floor(z);
 
-		double u = fade(x); // COMPUTE FADE CURVES
-		double v = fade(y); // FOR EACH OF X,Y,Z.
-		double w = fade(z);
+		float u = fade(x); // COMPUTE FADE CURVES
+		float v = fade(y); // FOR EACH OF X,Y,Z.
+		float w = fade(z);
 
 		int A = p[X] + Y;
 		int AA = p[A] + Z;
@@ -175,17 +164,17 @@ public class NoiseGenerator {
 						lerp(u, grad(p[AB + 1], x, y - 1, z - 1), grad(p[BB + 1], x - 1, y - 1, z - 1))));
 	}
 
-	private double fade(double t) {
+	private float fade(float t) {
 		return t * t * t * (t * (t * 6 - 15) + 10);
 	}
 
-	private double lerp(double t, double a, double b) {
+	private float lerp(float t, float a, float b) {
 		return a + t * (b - a);
 	}
 
-	private double grad(int hash, double x, double y, double z) {
+	private float grad(int hash, float x, float y, float z) {
 		int h = hash & 15; // CONVERT LO 4 BITS OF HASH CODE
-		double u = h < 8 ? x : y, // INTO 12 GRADIENT DIRECTIONS.
+		float u = h < 8 ? x : y, // INTO 12 GRADIENT DIRECTIONS.
 				v = h < 4 ? y : h == 12 || h == 14 ? x : z;
 		return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
 	}
