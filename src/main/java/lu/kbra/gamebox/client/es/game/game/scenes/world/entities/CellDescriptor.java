@@ -10,7 +10,6 @@ import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
 import lu.kbra.gamebox.client.es.engine.graph.material.Material;
 import lu.kbra.gamebox.client.es.engine.utils.MathUtils;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
-import lu.kbra.gamebox.client.es.engine.utils.consts.TextureType;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.CellInstanceShader;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.CellInstanceShader.CellInstanceMaterial;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.CellShader;
@@ -63,6 +62,8 @@ public class CellDescriptor {
 			shader = new CellInstanceShader();
 			cache.addRenderShader(shader);
 		}
+		
+		System.err.println("image path: "+imagePath);
 
 		CellInstanceMaterial material = new CellInstanceMaterial(cellType.name(), shader, cache.loadSingleTexture(materialName, imagePath, TextureFilter.NEAREST));
 		cache.addMaterial(material);

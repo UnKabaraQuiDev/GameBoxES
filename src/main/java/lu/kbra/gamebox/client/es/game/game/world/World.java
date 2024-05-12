@@ -5,21 +5,20 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import org.joml.Math;
-import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.lwjgl.glfw.GLFW;
 
 import lu.pcy113.pclib.GlobalLogger;
-import lu.pcy113.pclib.Triplet;
 import lu.pcy113.pclib.pointer.prim.BooleanPointer;
 import lu.pcy113.pclib.pointer.prim.IntPointer;
 
@@ -44,6 +43,7 @@ import lu.kbra.gamebox.client.es.game.game.render.shaders.CellShader.CellMateria
 import lu.kbra.gamebox.client.es.game.game.render.shaders.PlantWorldParticleMaterial;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.ToxinWorldParticleMaterial;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.WorldParticleShader;
+import lu.kbra.gamebox.client.es.game.game.scenes.ui.UISceneMajorUpgradeTree;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.WorldScene3D;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.CellDescriptor;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.CellEntity;
@@ -62,7 +62,7 @@ public class World implements Cleanupable {
 	private static final double GEN_FACTOR = 100;
 
 	private static final float Y_OFFSET = 0.001f;
-	private static int GEN_CIRCLE_SIDE = 1;
+	public static final int GEN_CIRCLE_SIDE = 1;
 
 	private static final double SEED_OFFSET_DISTRIBUTION = 11;
 	private static final double SEED_OFFSET_HOSTILITY = 10;
@@ -197,9 +197,11 @@ public class World implements Cleanupable {
 			if (entities == null)
 				continue;
 
-			for (Entity e : entities) {
-				if (e instanceof PlantsEntity) {
-					simulatePlants(dTime, chunkCenter, (PlantsEntity) e);
+			synchronized (entities) {
+				for (Entity e : entities) {
+					if (e instanceof PlantsEntity) {
+						simulatePlants(dTime, chunkCenter, (PlantsEntity) e);
+					}
 				}
 			}
 		}
@@ -265,11 +267,11 @@ public class World implements Cleanupable {
 	}
 
 	private Vector2f[] getNeighbouringChunks(Vector2f center) {
-		Vector2f[] list = new Vector2f[9];
+		Vector2f[] list = new Vector2f[(int) java.lang.Math.pow((1+2*GEN_CIRCLE_SIDE), 2)];
 
 		int i = 0;
-		for (int x = -1; x <= 1; x++) {
-			for (int y = -1; y <= 1; y++) {
+		for (int x = -GEN_CIRCLE_SIDE; x <= GEN_CIRCLE_SIDE; x++) {
+			for (int y = -GEN_CIRCLE_SIDE; y <= GEN_CIRCLE_SIDE; y++) {
 				list[i++] = new Vector2f(x * chunkSize, y * chunkSize).add(center);
 			}
 		}
@@ -333,16 +335,16 @@ public class World implements Cleanupable {
 	}
 
 	public boolean genWorld(Vector2f center, float halfSquareSize, int numPoint) {
-		final List<Entity> list = new ArrayList<Entity>();
-		
+		final List<Entity> list = Collections.synchronizedList(new ArrayList<Entity>(3));
+
 		final IntPointer finished = new IntPointer();
-		
+
 		final Runnable pushList = () -> {
 			long start2 = System.nanoTime();
-			
+
 			list.forEach(scene::addEntity);
 			generatedChunks.put(center.toString(), list);
-			
+
 			System.err.println("Task gen chunk (render: push): " + (float) (System.nanoTime() - start2) / 1e6f + "ms for " + center);
 		};
 

@@ -34,7 +34,7 @@ public class NoiseMain {
 
 		FileWriter fw = new FileWriter(file);
 
-		for (double i = 0; i < 100_000; i += 0.1) {
+		for (float i = 0; i < 100_000; i += 0.1) {
 
 			fw.append(Double.toString(noiseGenerator.noise(i)) + "\n");
 
@@ -57,7 +57,7 @@ public class NoiseMain {
 		// Create buffered image
 		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
-		for (double factor = 1; factor < 100; factor *= 2) {
+		for (float factor = 1; factor < 100; factor *= 2) {
 			for (int scale = 1; scale < 15; scale++) {
 				// Generate texture
 				for (int y = 0; y < height; y++) {
@@ -96,7 +96,7 @@ public class NoiseMain {
 		map(noiseGenerator, name + "_squared", from, to, a -> a * a);
 	}
 
-	private static void map(NoiseGenerator noiseGenerator, String name, int from, int to, Function<Double, Double> transformer) {
+	private static void map(NoiseGenerator noiseGenerator, String name, int from, int to, Function<Float, Float> transformer) {
 		// Define texture dimensions
 		int width = 2048;
 		int height = 2048;

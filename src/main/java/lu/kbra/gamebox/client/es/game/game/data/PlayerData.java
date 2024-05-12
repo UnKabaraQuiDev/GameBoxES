@@ -4,9 +4,12 @@ import java.io.IOException;
 
 import org.json.JSONException;
 
+import lu.kbra.gamebox.client.es.game.game.scenes.ui.UISceneMajorUpgradeTree;
+import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
+
 public class PlayerData {
 
-	private int health = 2;
+	private int health = 2, maxHealth = health;;
 	private int speed = 1;
 
 	/**
@@ -45,6 +48,15 @@ public class PlayerData {
 		aminoAcid += Math.random() < 0.4f ? 1 : 0;
 		lipid += Math.random() < 0.4f ? 1 : 0;
 	}
+	
+	/**
+	 * @return true if the player dies
+	 */
+	public boolean damage(int damage) {
+		this.health -= damage;
+		((UISceneMajorUpgradeTree) GlobalUtils.INSTANCE.uiScene.getState()).startHealthEmpty();
+		return this.health <= 0;
+	}
 
 	public void setGlucose(int glucose) {
 		this.glucose = glucose;
@@ -59,7 +71,7 @@ public class PlayerData {
 	}
 
 	public int getNextHealthPrice() {
-		return 2 * health;
+		return 2 * maxHealth;
 	}
 
 	public int getNextSpeedPrice() {
@@ -68,7 +80,8 @@ public class PlayerData {
 
 	public boolean upgradeHealth() {
 		if (canUpgradeHealth()) {
-			health++;
+			maxHealth++;
+			health = maxHealth;
 			return true;
 		} else {
 			return false;
@@ -110,6 +123,14 @@ public class PlayerData {
 
 	public int getSpeed() {
 		return speed;
+	}
+
+	public int getMaxHealth() {
+		return maxHealth;
+	}
+
+	public void setMaxHealth(int maxHealth) {
+		this.maxHealth = maxHealth;
 	}
 
 	public void setSpeed(int speed) {

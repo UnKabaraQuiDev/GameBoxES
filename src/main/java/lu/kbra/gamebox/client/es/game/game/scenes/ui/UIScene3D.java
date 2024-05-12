@@ -62,7 +62,7 @@ public class UIScene3D extends Scene3D {
 		} else {
 			state = null;
 		}
-		treeState.setActive(b);
+		treeState.setTreeViewActive(b);
 	}
 
 	public void setupScene() {

@@ -1,0 +1,30 @@
+#version 400 core
+
+layout (location = 0) in vec3 i_pos;
+layout (location = 1) in vec3 i_norm;
+layout (location = 2) in vec2 i_uv;
+
+out vec2 texCoord;
+out vec3 normal;
+out vec2 fragPos;
+
+uniform mat4 projectionMatrix;
+uniform mat4 viewMatrix;
+uniform mat4 transformationMatrix;
+
+uniform vec2 barOffset;
+
+#define BAR_MAX_HEIGHT 0.2f
+
+void main() {
+	vec3 pos = i_pos;
+	
+	if(texCoord.y < BAR_MAX_HEIGHT) {
+		pos.xy += barOffset;
+	}
+
+	gl_Position = projectionMatrix * viewMatrix * transformationMatrix * vec4(pos, 1.0);
+	fragPos = i_pos.xy;
+	texCoord = i_uv;
+	normal = i_norm;
+}

@@ -46,12 +46,12 @@ public class GameBoxES extends GameLogic {
 
 	@Override
 	public void init(GameEngine e) {
-		GameEngine.DEBUG.wireframe = true;
+		GameEngine.DEBUG.wireframe = false;
 		GameEngine.DEBUG.gizmos = true;
 
 		GlobalUtils.init(this, super.engine);
 
-		GlobalLogger.getLogger().setMinForwardLevel(Level.ALL);
+		GlobalLogger.getLogger().setMinForwardLevel(Level.INFO);
 
 		GlobalUtils.registerRenderers();
 

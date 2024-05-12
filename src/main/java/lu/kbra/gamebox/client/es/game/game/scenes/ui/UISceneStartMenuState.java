@@ -90,7 +90,7 @@ public class UISceneStartMenuState extends UISceneState {
 
 	private static final float MENU_TRANSITION_INC = 0.1f;
 	private static final float ANIMATION_IDLE_SPEED = 0.9f;
-	private static final float ANIMATION_IDLE_ANGLE = 8f; // degrees
+	private static final float ANIMATION_IDLE_ANGLE = 3f; // degrees
 
 	private float menuTransitionValue = 0;
 

@@ -3,6 +3,7 @@ package lu.kbra.gamebox.client.es.game.game.scenes.world;
 import org.joml.Quaternionf;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.lwjgl.glfw.GLFW;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
@@ -21,16 +22,22 @@ import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
 import lu.kbra.gamebox.client.es.engine.utils.geo.GeoPlane;
 import lu.kbra.gamebox.client.es.engine.utils.transform.Transform3D;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.BackgroundShader;
+import lu.kbra.gamebox.client.es.game.game.scenes.ui.UISceneMajorUpgradeTree;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
 import lu.kbra.gamebox.client.es.game.game.world.World;
 
 public class WorldScene3D extends Scene3D {
 
+	private static final long MIN_UPGRADE_DELAY = 250;
+	
 	private CacheManager cache;
 	private Window window;
 
-	private float distance;
-
+	private float cameraDistance;
+	
+	private long lastHealthUpgrade = System.currentTimeMillis();
+	private long lastSpeedUpgrade = System.currentTimeMillis();
+	
 	private World world;
 	private Entity background;
 
@@ -46,11 +53,32 @@ public class WorldScene3D extends Scene3D {
 		if (world != null) {
 			world.input(dTime);
 		}
+		
+		if (window.getJoystickButton(GLFW.GLFW_JOYSTICK_1, GLFW.GLFW_GAMEPAD_BUTTON_LEFT_BUMPER) && System.currentTimeMillis() - lastHealthUpgrade >= MIN_UPGRADE_DELAY) {
+			System.err.println("LEFT BUMPER = true");
+			if (GlobalUtils.INSTANCE.playerData.canUpgradeHealth()) {
+				((UISceneMajorUpgradeTree) GlobalUtils.INSTANCE.uiScene.getState()).startHealthUpgradeAccepted();
+				lastHealthUpgrade = System.currentTimeMillis();
+			}else {
+				((UISceneMajorUpgradeTree) GlobalUtils.INSTANCE.uiScene.getState()).startHealthUpgradeDenied();
+			}
+			GlobalUtils.INSTANCE.playerData.upgradeHealth();
+		}
+		if (window.getJoystickButton(GLFW.GLFW_JOYSTICK_1, GLFW.GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER) && System.currentTimeMillis() - lastSpeedUpgrade >= MIN_UPGRADE_DELAY) {
+			GlobalUtils.INSTANCE.playerData.damage(1);
+			if (GlobalUtils.INSTANCE.playerData.canUpgradeSpeed()) {
+				((UISceneMajorUpgradeTree) GlobalUtils.INSTANCE.uiScene.getState()).startSpeedUpgradeAccepted();
+				lastSpeedUpgrade = System.currentTimeMillis();
+			}else {
+				((UISceneMajorUpgradeTree) GlobalUtils.INSTANCE.uiScene.getState()).startSpeedUpgradeDenied();
+			}
+			GlobalUtils.INSTANCE.playerData.upgradeSpeed();
+		}
 	}
 
 	public void update(float dTime) {
 		if (world != null) {
-			world.continueWorldGen(1);
+			world.continueWorldGen(World.GEN_CIRCLE_SIDE);
 
 			world.update(dTime);
 
@@ -101,13 +129,13 @@ public class WorldScene3D extends Scene3D {
 	}
 
 	public void placeCamera(Vector2f pos) {
-		((Camera3D) camera).lookAt(new Vector3f(pos.x, pos.y, distance), new Vector3f(pos.x, pos.y, 0));
+		((Camera3D) camera).lookAt(new Vector3f(pos.x, pos.y, cameraDistance), new Vector3f(pos.x, pos.y, 0));
 		background.getComponent(Transform3DComponent.class).getTransform().setTranslation(new Vector3f(pos.x, pos.y, -1)).updateMatrix();
 		camera.updateMatrix();
 	}
 
 	public void placeCamera(Vector2f pos, float distance) {
-		this.distance = distance;
+		this.cameraDistance = distance;
 		placeCamera(pos);
 	}
 
