@@ -10,14 +10,15 @@
 JNIEXPORT void JNICALL Java_lu_kbra_gamebox_client_es_game_game_world_World_ntv_1genCells_1render(JNIEnv* env, jobject thisObj, jobject posList, jobject emitter) {
 	jclass emitterClass = env->GetObjectClass(emitter);
 	jmethodID emitterClassGetParticleMethod = env->GetMethodID(emitterClass, "getParticles", "()[Llu/kbra/gamebox/client/es/engine/geom/instance/Instance;");
-	jarray partArray = env->CallObjectMethod(emitter, emitterClassGetParticleMethod);
-	jsize length = env->GetArrayLength(env, partArray);
+	jobjectArray partArray = (jobjectArray) env->CallObjectMethod(emitter, emitterClassGetParticleMethod); // Instance[}
+	jsize length = env->GetArrayLength((jarray) partArray);
 
 	jclass listClass = env->GetObjectClass(posList);
 	jmethodID listClassGetMethod = env->GetMethodID(listClass, "get", "(I)Lorg/joml/Vector2f;");
 
 	jclass instanceClass = env->FindClass("lu/kbra/gamebox/client/es/engine/geom/instance/Instance");
 	jmethodID instanceClassGetTransformMethod = env->GetMethodID(instanceClass, "getTransform", "()Llu/kbra/gamebox/client/es/engine/utils/transform/Transform;");
+	jmethodID instanceClassGetBuffersMethod = env->GetMethodID(instanceClass, "getBuffers", "()[Ljava/lang/Object;");
 
 	jclass transform3DClass = env->FindClass("lu/kbra/gamebox/client/es/engine/utils/transform/Transform3D");
 	jmethodID transform3DClassGetTranslationMethod = env->GetMethodID(transform3DClass, "getTranslation", "()Lorg/joml/Vector3f;");
@@ -30,21 +31,19 @@ JNIEXPORT void JNICALL Java_lu_kbra_gamebox_client_es_game_game_world_World_ntv_
 	jfieldID vector2fClassXField = env->GetFieldID(vector2fClass, "x", "I");
 	jfieldID vector2fClassYField = env->GetFieldID(vector2fClass, "y", "I");
 
-	jclass instanceClass = env->FindClass("lu/kbra/gamebox/client/es/engine/geom/instance/Instance");
-	jmethodID instanceClassGetBuffersMethod = env->GetMethodID(instanceClass, "getBuffers", "()[Ljava/lang/Object;");
 
 	jclass noiseGeneratorClass = env->FindClass("Llu/kbra/gamebox/client/es/game/game/utils/NoiseGenerator");
 	jmethodID noiseGeneratorClassNoiseMethod = env->GetMethodID(noiseGeneratorClass, "noise", "(Lorg/joml/Vector2f;)F");
 
-	jclass worldClass = env->FindClass("lu/kbra/gamebox/client/es/game/game/world/World")
-	jfieldID worldClassHumidityGenField = env->GetFieldID(worldClass, "humidityGen", "Llu/kbra/gamebox/client/es/game/game/utils/NoiseGenerator")
+	jclass worldClass = env->FindClass("lu/kbra/gamebox/client/es/game/game/world/World");
+	jfieldID worldClassHumidityGenField = env->GetFieldID(worldClass, "humidityGen", "Llu/kbra/gamebox/client/es/game/game/utils/NoiseGenerator");
 	jobject humidityGen = env->GetObjectField(thisObj, worldClassHumidityGenField);
 
 	jclass jomlMathClass = env->FindClass("org/joml/Math");
 	jmethodID jomlMathClassClampMethod = env->GetStaticMethodID(jomlMathClass, "clamp", "(F, F, F)F");
 
 	for (jsize i = 0; i < length; i++) {
-		jobject instance = env->GetObjectArrayElement(env, partArray, i); // Instance
+		jobject instance = env->GetObjectArrayElement(partArray, i); // Instance
 		jobject pos = env->CallObjectMethod(posList, listClassGetMethod, i);// Vector2f
 
 		jobject transform = env->CallObjectMethod(instance, instanceClassGetTransformMethod); // Transform3D extends Transform
@@ -53,23 +52,21 @@ JNIEXPORT void JNICALL Java_lu_kbra_gamebox_client_es_game_game_world_World_ntv_
 		jfloat x = env->GetFloatField(pos, vector2fClassXField); // float
 		jfloat y = env->GetFloatField(pos, vector2fClassYField); // float
 
-		env->CallObjectMethod(translation, vector3fClassSetMethod, x, y, Y_OFFSET * i); // Vector3f#set(x, y, z)
+		env->CallObjectMethod(translation, vector3fClassSetMethod, x, y, lu_kbra_gamebox_client_es_game_game_world_World_Y_OFFSET * i); // Vector3f#set(x, y, z)
 
 		env->CallObjectMethod(transform, transform3DClassUpdateMatrixMethod); // Transform3D extends Transform#updateMatrix()
 
-		jarray buffers = env->CallObjectArrayMethod(instance, instanceClassGetBuffersMethod); // Object[]
+		jobjectArray buffers = (jobjectArray) env->CallObjectMethod(instance, instanceClassGetBuffersMethod); // Object[]
 		jfloat value = env->CallFloatMethod(humidityGen, noiseGeneratorClassNoiseMethod, pos); // float
 		value = env->CallStaticFloatMethod(jomlMathClass, jomlMathClassClampMethod, 0.6, 2, value * 5);
 
-		env->SetFloatArrayElement(buffers, 0, value);
+		env->SetFloatArrayRegion((jfloatArray) buffers, 0, 1, &value); // array, index, length, values
 
-		env->DeleteLocalRef(env, value);
-		env->DeleteLocalRef(env, buffers);
-		env->DeleteLocalRef(env, y);
-		env->DeleteLocalRef(env, x);
-		env->DeleteLocalRef(env, transform);
-		env->DeleteLocalRef(env, pos);
-		env->DeleteLocalRef(env, instance);
+		// env->ReleaseObjectArrayElements(buffers, );
+		env->DeleteLocalRef(buffers);
+		env->DeleteLocalRef(transform);
+		env->DeleteLocalRef(pos);
+		env->DeleteLocalRef(instance);
 	}
 }
 

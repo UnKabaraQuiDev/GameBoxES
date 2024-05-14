@@ -57,6 +57,14 @@
 				<artifactId>ant-nodeps</artifactId>
 				<version>1.10.11</version>
 			</dependency>
+			<!--
+			https://mvnrepository.com/artifact/org.codehaus.mojo/native-maven-plugin -->
+			<dependency>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>native-maven-plugin</artifactId>
+				<version>1.0-M1</version>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 
@@ -285,7 +293,8 @@
 						</goals>
 						<configuration>
 							<target>
-								<exec executable="javah" failonerror="true" dir="${project.build.sourceDirectory}">
+								<exec executable="javah" failonerror="true"
+									dir="${project.build.sourceDirectory}">
 									<arg value="-classpath" />
 									<arg
 										value="${project.basedir}/classes:${project.build.directory}/libs:." />
@@ -296,6 +305,40 @@
 										value="lu.kbra.gamebox.client.es.game.game.world.World" />
 								</exec>
 							</target>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Plugin to compile JNI C++ code -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>native-maven-plugin</artifactId>
+				<version>1.0-M1</version>
+				<executions>
+					<execution>
+						<id>default-jni</id>
+						<goals>
+							<goal>compile</goal>
+							<goal>link</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>
+									<directory>src/main/cpp</directory>
+									<includes>
+										<include>**/*.cpp</include>
+									</includes>
+								</source>
+								<source>
+									<directory>
+										/usr/lib/jvm/default-java/include</directory>
+								</source>
+								<source>
+									<directory>
+										/usr/lib/jvm/default-java/include/linux</directory>
+								</source>
+							</sources>
 						</configuration>
 					</execution>
 				</executions>
