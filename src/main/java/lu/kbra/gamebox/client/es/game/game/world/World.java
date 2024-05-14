@@ -57,7 +57,7 @@ import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
 public class World implements Cleanupable {
 
 	static {
-		System.loadLibrary("native");
+		System.loadLibrary("gamebox_native");
 	}
 
 	public static final float CULLING_DISTANCE = 35;

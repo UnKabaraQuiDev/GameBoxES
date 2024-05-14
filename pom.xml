@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>lu.lam.3ci1.kbra</groupId>
 	<artifactId>gamebox.client.es</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<name>GameBoxES</name>
 
 	<properties>
@@ -237,7 +237,8 @@
 							<goal>copy-dependencies</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.build.directory}/libs/</outputDirectory>
+							<outputDirectory>
+								${project.build.directory}/libs/</outputDirectory>
 						</configuration>
 					</execution>
 				</executions>
@@ -339,6 +340,10 @@
 										/usr/lib/jvm/default-java/include/linux</directory>
 								</source>
 							</sources>
+							<linkerStartOptions>-nostartfiles -shared</linkerStartOptions>
+							<linkerFinalName>libgamebox_native</linkerFinalName>
+							<linkerFinalNameExt>so</linkerFinalNameExt>
+							<linkerOutputDirectory>${project.basedir}/libs</linkerOutputDirectory>
 						</configuration>
 					</execution>
 				</executions>
@@ -366,6 +371,7 @@
 						<!--<argument>-javaagent:libs/lwjglx-debug-1.0.0.jar</argument>
 						<argument>-Dorg.lwjglx.TRACE</argument>
 						<argument>-Dorg.lwjglx.OUTPUT=./logs/trace.log</argument>-->
+						<argument>-Djava.library.path=${project.basedir}/libs</argument>
 						<argument>lu.kbra.gamebox.client.es.game.ClientMain</argument>
 					</arguments>
 				</configuration>
