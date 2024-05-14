@@ -340,6 +340,7 @@
 										/usr/lib/jvm/default-java/include/linux</directory>
 								</source>
 							</sources>
+							<compilerStartOptions>-g</compilerStartOptions>
 							<linkerStartOptions>-nostartfiles -shared</linkerStartOptions>
 							<linkerFinalName>libgamebox_native</linkerFinalName>
 							<linkerFinalNameExt>so</linkerFinalNameExt>
@@ -356,6 +357,8 @@
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
+					<debug>true</debug>
+					<debuglevel>lines,vars,source</debuglevel>
 				</configuration>
 			</plugin>
 

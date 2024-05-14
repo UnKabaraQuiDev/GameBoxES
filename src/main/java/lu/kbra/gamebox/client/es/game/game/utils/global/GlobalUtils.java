@@ -213,7 +213,7 @@ public class GlobalUtils {
 
 	public static Vector2f getDPadDirection() {
 		byte[] btns = INSTANCE.window.getJoystickButtonsArray(GLFW.GLFW_JOYSTICK_1);
-		GlobalLogger.warning(Arrays.toString(btns));
+		// GlobalLogger.warning(Arrays.toString(btns));
 		return new Vector2f(btns[GLFW.GLFW_GAMEPAD_BUTTON_DPAD_RIGHT] - btns[GLFW.GLFW_GAMEPAD_BUTTON_DPAD_LEFT], btns[GLFW.GLFW_GAMEPAD_BUTTON_DPAD_UP] - btns[GLFW.GLFW_GAMEPAD_BUTTON_DPAD_DOWN]);
 	}
 
