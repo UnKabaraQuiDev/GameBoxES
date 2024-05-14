@@ -285,14 +285,13 @@
 						</goals>
 						<configuration>
 							<target>
-								<exec executable="javah" failonerror="true">
-									<arg value="-jni" />
+								<exec executable="javah" failonerror="true" dir="${project.build.sourceDirectory}">
 									<arg value="-classpath" />
 									<arg
-										value="${project.build.outputDirectory} ${project.build.directory}/libs" />
+										value="${project.basedir}/classes:${project.build.directory}/libs:." />
 									<arg value="-d" />
 									<arg
-										value="${project.basedir}/src/main/c/headers" />
+										value="${project.basedir}/src/main/cpp" />
 									<arg
 										value="lu.kbra.gamebox.client.es.game.game.world.World" />
 								</exec>
