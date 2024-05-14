@@ -52,6 +52,11 @@
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>
+			<dependency>
+				<groupId>ant</groupId>
+				<artifactId>ant-nodeps</artifactId>
+				<version>1.10.11</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -262,6 +267,36 @@
 									<directory>config</directory>
 								</resource>
 							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.8</version>
+				<executions>
+					<execution>
+						<id>generate-header-files</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<exec executable="javah" failonerror="true">
+									<arg value="-jni" />
+									<arg value="-classpath" />
+									<arg
+										value="${project.build.outputDirectory} ${project.build.directory}/libs" />
+									<arg value="-d" />
+									<arg
+										value="${project.basedir}/src/main/c/headers" />
+									<arg
+										value="lu.kbra.gamebox.client.es.game.game.world.World" />
+								</exec>
+							</target>
 						</configuration>
 					</execution>
 				</executions>

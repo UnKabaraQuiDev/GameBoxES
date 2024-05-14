@@ -16,7 +16,6 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.lwjgl.glfw.GLFW;
 
 import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pclib.pointer.prim.BooleanPointer;
@@ -43,10 +42,10 @@ import lu.kbra.gamebox.client.es.game.game.render.shaders.CellShader.CellMateria
 import lu.kbra.gamebox.client.es.game.game.render.shaders.PlantWorldParticleMaterial;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.ToxinWorldParticleMaterial;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.WorldParticleShader;
-import lu.kbra.gamebox.client.es.game.game.scenes.ui.UISceneMajorUpgradeTree;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.WorldScene3D;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.CellDescriptor;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.CellEntity;
+import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.CellInstanceEmitter;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.CellType;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.CellsEntity;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.PlantsEntity;
@@ -56,6 +55,10 @@ import lu.kbra.gamebox.client.es.game.game.utils.NoiseGenerator;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
 
 public class World implements Cleanupable {
+
+	static {
+		System.loadLibrary("native");
+	}
 
 	public static final float CULLING_DISTANCE = 35;
 
@@ -115,60 +118,31 @@ public class World implements Cleanupable {
 		this.humidityGen = new NoiseGenerator(seed + SEED_OFFSET_HUMIDITY, 64);
 
 		/*
-		 * GlobalUtils.pushWorker(() -> NoiseMain.map(distributionGen, "distribution",
-		 * -5 * 20, +5 * 20), () -> NoiseMain.map(hostilityGen, "hostility", -5 * 20, +5
-		 * * 20), () -> NoiseMain.map(fertilityGen, "fertility", -5 * 20, +5 * 20), ()
+		 * GlobalUtils.pushWorker(() -> NoiseMain.map(distributionGen, "distribution", -5 * 20, +5 * 20), () -> NoiseMain.map(hostilityGen, "hostility", -5 * 20, +5 * 20), () -> NoiseMain.map(fertilityGen, "fertility", -5 * 20, +5 * 20), ()
 		 * -> NoiseMain.map(humidityGen, "humidity", -5 * 20, +5 * 20),
 		 * 
-		 * () -> NoiseMain.map((point) -> humidityGen.noise(point) > 0.2 &&
-		 * hostilityGen.noise(point) < 0.4, "plants_normal", -5 * 20, +5 * 20),
+		 * () -> NoiseMain.map((point) -> humidityGen.noise(point) > 0.2 && hostilityGen.noise(point) < 0.4, "plants_normal", -5 * 20, +5 * 20),
 		 * 
-		 * () -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.2,
-		 * "humidity_less_0.2", -5 * 20, +5 * 20), () -> NoiseMain.map((point) ->
-		 * humidityGen.noise(point) < 0.4, "humidity_less_0.4", -5 * 20, +5 * 20), () ->
-		 * NoiseMain.map((point) -> humidityGen.noise(point) < 0.6, "humidity_less_0.6",
-		 * -5 * 20, +5 * 20), () -> NoiseMain.map((point) -> humidityGen.noise(point) <
-		 * 0.8, "humidity_less_0.8", -5 * 20, +5 * 20),
+		 * () -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.2, "humidity_less_0.2", -5 * 20, +5 * 20), () -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.4, "humidity_less_0.4", -5 * 20, +5 * 20), () ->
+		 * NoiseMain.map((point) -> humidityGen.noise(point) < 0.6, "humidity_less_0.6", -5 * 20, +5 * 20), () -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.8, "humidity_less_0.8", -5 * 20, +5 * 20),
 		 * 
-		 * () -> NoiseMain.map((point) -> humidityGen.noise(point) > 0.2,
-		 * "humidity_greater_0.2", -5 * 20, +5 * 20), () -> NoiseMain.map((point) ->
-		 * humidityGen.noise(point) > 0.4, "humidity_greater_0.4", -5 * 20, +5 * 20), ()
-		 * -> NoiseMain.map((point) -> humidityGen.noise(point) > 0.6,
-		 * "humidity_greater_0.6", -5 * 20, +5 * 20), () -> NoiseMain.map((point) ->
-		 * humidityGen.noise(point) > 0.8, "humidity_greater_0.8", -5 * 20, +5 * 20),
+		 * () -> NoiseMain.map((point) -> humidityGen.noise(point) > 0.2, "humidity_greater_0.2", -5 * 20, +5 * 20), () -> NoiseMain.map((point) -> humidityGen.noise(point) > 0.4, "humidity_greater_0.4", -5 * 20, +5 * 20), () ->
+		 * NoiseMain.map((point) -> humidityGen.noise(point) > 0.6, "humidity_greater_0.6", -5 * 20, +5 * 20), () -> NoiseMain.map((point) -> humidityGen.noise(point) > 0.8, "humidity_greater_0.8", -5 * 20, +5 * 20),
 		 * 
-		 * () -> NoiseMain.map((point) -> fertilityGen.noise(point) < 0.2,
-		 * "fertility_less_0.2", -5 * 20, +5 * 20), () -> NoiseMain.map((point) ->
-		 * fertilityGen.noise(point) < 0.4, "fertility_less_0.4", -5 * 20, +5 * 20), ()
-		 * -> NoiseMain.map((point) -> fertilityGen.noise(point) < 0.6,
-		 * "fertility_less_0.6", -5 * 20, +5 * 20), () -> NoiseMain.map((point) ->
-		 * fertilityGen.noise(point) < 0.8, "fertility_less_0.8", -5 * 20, +5 * 20),
+		 * () -> NoiseMain.map((point) -> fertilityGen.noise(point) < 0.2, "fertility_less_0.2", -5 * 20, +5 * 20), () -> NoiseMain.map((point) -> fertilityGen.noise(point) < 0.4, "fertility_less_0.4", -5 * 20, +5 * 20), () ->
+		 * NoiseMain.map((point) -> fertilityGen.noise(point) < 0.6, "fertility_less_0.6", -5 * 20, +5 * 20), () -> NoiseMain.map((point) -> fertilityGen.noise(point) < 0.8, "fertility_less_0.8", -5 * 20, +5 * 20),
 		 * 
-		 * () -> NoiseMain.map((point) -> hostilityGen.noise(point) > 0.5,
-		 * "hostility_greater_0.5", -5 * 20, +5 * 20), () -> NoiseMain.map((point) ->
-		 * hostilityGen.noise(point) > 0.8, "hostility_greater_0.8", -5 * 20, +5 * 20),
+		 * () -> NoiseMain.map((point) -> hostilityGen.noise(point) > 0.5, "hostility_greater_0.5", -5 * 20, +5 * 20), () -> NoiseMain.map((point) -> hostilityGen.noise(point) > 0.8, "hostility_greater_0.8", -5 * 20, +5 * 20),
 		 * 
-		 * () -> NoiseMain.map((point) -> hostilityGen.noise(point) < 0.4,
-		 * "hostility_less_0.4", -5 * 20, +5 * 20), () -> NoiseMain.map((point) ->
-		 * hostilityGen.noise(point) < 0.2, "hostility_less_0.2", -5 * 20, +5 * 20),
+		 * () -> NoiseMain.map((point) -> hostilityGen.noise(point) < 0.4, "hostility_less_0.4", -5 * 20, +5 * 20), () -> NoiseMain.map((point) -> hostilityGen.noise(point) < 0.2, "hostility_less_0.2", -5 * 20, +5 * 20),
 		 * 
-		 * () -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.4 &&
-		 * hostilityGen.noise(point) > 0.5, "toxins_normal", -5 * 20, +5 * 20), () ->
-		 * NoiseMain.map((point) -> humidityGen.noise(point) < 0.4 &&
-		 * java.lang.Math.pow(hostilityGen.noise(point), 2) > 0.5, "toxins_squared", -5
-		 * * 20, +5 * 20), () -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.4
-		 * && hostilityGen.noise(point) * 2 > 0.5, "toxins_doubled", -5 * 20, +5 * 20),
-		 * () -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.4 &&
-		 * hostilityGen.noise(point) / 2 > 0.5, "toxins_halved", -5 * 20, +5 * 20),
+		 * () -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.4 && hostilityGen.noise(point) > 0.5, "toxins_normal", -5 * 20, +5 * 20), () -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.4 &&
+		 * java.lang.Math.pow(hostilityGen.noise(point), 2) > 0.5, "toxins_squared", -5 * 20, +5 * 20), () -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.4 && hostilityGen.noise(point) * 2 > 0.5, "toxins_doubled", -5 * 20, +5 *
+		 * 20), () -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.4 && hostilityGen.noise(point) / 2 > 0.5, "toxins_halved", -5 * 20, +5 * 20),
 		 * 
-		 * () -> NoiseMain.map((point) -> fertilityGen.noise(point) > 0.8 &&
-		 * hostilityGen.noise(point) < 0.2 && humidityGen.noise(point) > 0.4,
-		 * "cells_normal", -5 * 20, +5 * 20), () -> NoiseMain.map((point) ->
-		 * fertilityGen.noise(point) > 0.8 && hostilityGen.noise(point) < 0.4 &&
-		 * humidityGen.noise(point) > 0.4, "cells_soft_hostility", -5 * 20, +5 * 20), ()
-		 * -> NoiseMain.map((point) -> fertilityGen.noise(point) > 0.6 &&
-		 * hostilityGen.noise(point) < 0.4 && humidityGen.noise(point) > 0.4,
-		 * "cells_soft_hostility_soft_fertility", -5 * 20, +5 * 20));
+		 * () -> NoiseMain.map((point) -> fertilityGen.noise(point) > 0.8 && hostilityGen.noise(point) < 0.2 && humidityGen.noise(point) > 0.4, "cells_normal", -5 * 20, +5 * 20), () -> NoiseMain.map((point) -> fertilityGen.noise(point) >
+		 * 0.8 && hostilityGen.noise(point) < 0.4 && humidityGen.noise(point) > 0.4, "cells_soft_hostility", -5 * 20, +5 * 20), () -> NoiseMain.map((point) -> fertilityGen.noise(point) > 0.6 && hostilityGen.noise(point) < 0.4 &&
+		 * humidityGen.noise(point) > 0.4, "cells_soft_hostility_soft_fertility", -5 * 20, +5 * 20));
 		 */
 
 		CellMaterial playerMaterial = cache.loadOrGetMaterial("playerMaterial", CellShader.CellMaterial.class, CellType.PLAYER.name(),
@@ -267,7 +241,7 @@ public class World implements Cleanupable {
 	}
 
 	private Vector2f[] getNeighbouringChunks(Vector2f center) {
-		Vector2f[] list = new Vector2f[(int) java.lang.Math.pow((1+2*GEN_CIRCLE_SIDE), 2)];
+		Vector2f[] list = new Vector2f[(int) java.lang.Math.pow((1 + 2 * GEN_CIRCLE_SIDE), 2)];
 
 		int i = 0;
 		for (int x = -GEN_CIRCLE_SIDE; x <= GEN_CIRCLE_SIDE; x++) {
@@ -320,8 +294,8 @@ public class World implements Cleanupable {
 
 			for (String k : obj.keySet()) {
 				JSONObject sobj = obj.getJSONObject(k);
-				pool.add(new CellDescriptor(k, sobj.getEnum(CellType.class, "type"), sobj.getString("scientific"), PDRUtils.loadRangeFloat(sobj, "hostility"), PDRUtils.loadRangeFloat(sobj, "fertility"), PDRUtils.loadRangeFloat(sobj, "humidity"),
-						sobj.getInt("textureVariationCount")));
+				pool.add(new CellDescriptor(k, sobj.getEnum(CellType.class, "type"), sobj.getString("scientific"), PDRUtils.loadRangeFloat(sobj, "hostility"), PDRUtils.loadRangeFloat(sobj, "fertility"),
+						PDRUtils.loadRangeFloat(sobj, "humidity"), sobj.getInt("textureVariationCount")));
 			}
 		} catch (JSONException | IOException e) {
 			e.printStackTrace();
@@ -422,6 +396,8 @@ public class World implements Cleanupable {
 			cache.addMesh(emit.getParticleMesh());
 			cache.addInstanceEmitter(emit);
 
+			ntv_genCells_render(poss, emit);
+
 			for (int i = 0; i < poss.size(); i++) {
 				Instance part = emit.getParticles()[i];
 				Vector2f pos = poss.get(i);
@@ -443,12 +419,13 @@ public class World implements Cleanupable {
 		return entities;
 	}
 
+	private native void ntv_genCells_render(ArrayList<Vector2f> poss, CellInstanceEmitter emit);
+
 	private List<Entity> genToxins_render(Vector2f ce, List<Vector2f> toxins) {
 		final Vector2f center = new Vector2f(ce);
 
-		WorldParticleEmitter emit = new WorldParticleEmitter(
-				"toxins-" + center, toxins.size(), (ToxinWorldParticleMaterial) cache.loadOrGetMaterial(ToxinWorldParticleMaterial.NAME, ToxinWorldParticleMaterial.class,
-						cache.loadOrGetRenderShader(WorldParticleShader.NAME, WorldParticleShader.class), cache.loadOrGetSingleTexture(ToxinWorldParticleMaterial.TEXTURE_NAME, ToxinWorldParticleMaterial.TEXTURE_PATH, TextureFilter.NEAREST)),
+		WorldParticleEmitter emit = new WorldParticleEmitter("toxins-" + center, toxins.size(), (ToxinWorldParticleMaterial) cache.loadOrGetMaterial(ToxinWorldParticleMaterial.NAME, ToxinWorldParticleMaterial.class,
+				cache.loadOrGetRenderShader(WorldParticleShader.NAME, WorldParticleShader.class), cache.loadOrGetSingleTexture(ToxinWorldParticleMaterial.TEXTURE_NAME, ToxinWorldParticleMaterial.TEXTURE_PATH, TextureFilter.NEAREST)),
 				new Transform3D());
 		cache.addMesh(emit.getParticleMesh());
 		cache.addInstanceEmitter(emit);
@@ -469,12 +446,13 @@ public class World implements Cleanupable {
 		return Arrays.asList(pe);
 	}
 
+	private native void ntv_genToxins_render(ArrayList<Vector2f> poss, WorldParticleEmitter emit);
+
 	private List<Entity> genPlants_render(Vector2f ce, List<Vector2f> plants) {
 		final Vector2f center = new Vector2f(ce);
 
-		WorldParticleEmitter emit = new WorldParticleEmitter(
-				"plants-" + center, plants.size(), (PlantWorldParticleMaterial) cache.loadOrGetMaterial(PlantWorldParticleMaterial.NAME, PlantWorldParticleMaterial.class,
-						cache.loadOrGetRenderShader(WorldParticleShader.NAME, WorldParticleShader.class), cache.loadOrGetSingleTexture(PlantWorldParticleMaterial.TEXTURE_NAME, PlantWorldParticleMaterial.TEXTURE_PATH, TextureFilter.NEAREST)),
+		WorldParticleEmitter emit = new WorldParticleEmitter("plants-" + center, plants.size(), (PlantWorldParticleMaterial) cache.loadOrGetMaterial(PlantWorldParticleMaterial.NAME, PlantWorldParticleMaterial.class,
+				cache.loadOrGetRenderShader(WorldParticleShader.NAME, WorldParticleShader.class), cache.loadOrGetSingleTexture(PlantWorldParticleMaterial.TEXTURE_NAME, PlantWorldParticleMaterial.TEXTURE_PATH, TextureFilter.NEAREST)),
 				new Transform3D());
 		cache.addMesh(emit.getParticleMesh());
 		cache.addInstanceEmitter(emit);
@@ -494,6 +472,8 @@ public class World implements Cleanupable {
 		pe.addComponent(new RenderConditionComponent(() -> pe.getTransform().getTransform().getTranslation().distance(((Camera3D) scene.getCamera()).getPosition()) < CULLING_DISTANCE));
 		return Arrays.asList(pe);
 	}
+
+	private native void ntv_genPlants_render(ArrayList<Vector2f> poss, WorldParticleEmitter emit);
 
 	private CellDescriptor getRandomCellDescriptor(Vector2f pos) {
 		float hostility = (float) hostilityGen.noise(pos);
