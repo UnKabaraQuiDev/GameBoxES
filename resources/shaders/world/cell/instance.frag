@@ -12,9 +12,9 @@ uniform sampler2D txt1;
 uniform int columns; 
 
 void main() {
-	int colIndex = state % columns;
+	int colIndex = index % columns;
 	
-	float colWidth = (1.0/float(columns));
+	float colWidth = (1.0f/1.0f);
 	
 	fragColor = texture(txt1, mix(vec2(colWidth*colIndex, 0), vec2(colWidth*(colIndex+1), 1), texCoord));
 }

@@ -51,7 +51,7 @@ public class GameBoxES extends GameLogic {
 
 		GlobalUtils.init(this, super.engine);
 
-		GlobalLogger.getLogger().setMinForwardLevel(Level.INFO);
+		GlobalLogger.getLogger().setMinForwardLevel(Level.SEVERE);
 
 		GlobalUtils.registerRenderers();
 

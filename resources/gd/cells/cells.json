@@ -6,6 +6,8 @@
 		"fertility": [0, 1],
 		"humidity": [0, 1],
 		"textureVariationCount": 1,
-		"agressivity": 0
+		"aggressivity": 1,
+		"hardAggressiveDistance": 5,
+		"softAggressiveDistance": 20
 	}
 }

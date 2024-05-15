@@ -26,17 +26,18 @@ public class CellInstanceShader extends RenderShader {
 		
 		createUniform(TXT1);
 		createUniform(GRID_COLUMNS);
-		createUniform(GRID_ROWS);
 	}
 
 	public static class CellInstanceMaterial extends TextureMaterial {
 
-		public CellInstanceMaterial(String name, RenderShader shader, SingleTexture texture) {
+		public CellInstanceMaterial(String name, RenderShader shader, SingleTexture texture, Integer variationCount) {
 			super(name, shader, new HashMap<String, Texture>() {
 				{
 					put(TXT1, texture);
 				}
 			});
+			
+			setProperty(GRID_COLUMNS, variationCount);
 		}
 
 	}

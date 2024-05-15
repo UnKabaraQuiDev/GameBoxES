@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.function.Consumer;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import org.joml.Vector2f;
@@ -229,15 +230,15 @@ public class GlobalUtils {
 		camera.getProjection().update(PROJECTION_WIDTH, PROJECTION_HEIGHT);
 	}
 
-	public static void dumpThreads() {
+	public static void dumpThreads(Level lvl) {
 		GlobalLogger.severe("== Thread dump ==");
 
 		for (Entry<Integer, Queue<NextTask>> thread : workers.getQueues().entrySet()) {
-			GlobalLogger.severe("Worker: " + thread.getKey() + " (" + workers.getThreads()[thread.getKey()] + ") > " + thread.getValue().size());
+			GlobalLogger.log(lvl, "Worker: " + thread.getKey() + " (" + workers.getThreads()[thread.getKey()] + ") > " + thread.getValue().size());
 		}
 
 		for (Entry<Integer, Queue<NextTask>> thread : INSTANCE.getTaskEnvironnment().getQueues().entrySet()) {
-			GlobalLogger.severe("Main: " + thread.getKey() + " (" + INSTANCE.getTaskEnvironnment().getThreads()[thread.getKey()] + ") > " + thread.getValue().size());
+			GlobalLogger.log(lvl, "Main: " + thread.getKey() + " (" + INSTANCE.getTaskEnvironnment().getThreads()[thread.getKey()] + ") > " + thread.getValue().size());
 		}
 
 	}

@@ -23,8 +23,9 @@ public class CellDescriptor {
 
 	private Vector2f hostilityRange, fertilityRange, humidityRange;
 	private int variationCount;
+	private float aggressivity, hardAggressiveDistance, softAggressiveDistance;
 
-	public CellDescriptor(String id, CellType cellType, String scientificName, Vector2f hostilityRange, Vector2f fertilityRange, Vector2f humidityRange, int variationCount) {
+	public CellDescriptor(String id, CellType cellType, String scientificName, Vector2f hostilityRange, Vector2f fertilityRange, Vector2f humidityRange, int variationCount, float aggresiv, float hardAggresivDist, float softAggresivDist) {
 		this.id = id;
 
 		this.cellType = cellType;
@@ -33,8 +34,12 @@ public class CellDescriptor {
 		this.hostilityRange = hostilityRange;
 		this.fertilityRange = fertilityRange;
 		this.humidityRange = humidityRange;
-		
+
 		this.variationCount = variationCount;
+
+		this.aggressivity = aggresiv;
+		this.hardAggressiveDistance = hardAggresivDist;
+		this.softAggressiveDistance = softAggresivDist;
 	}
 
 	public boolean match(float hostility, float fertility, float humidity) {
@@ -57,20 +62,14 @@ public class CellDescriptor {
 			throw new RuntimeException(new FileNotFoundException("Couln't find file: " + imagePath));
 		}
 
-		CellInstanceShader shader = (CellInstanceShader) cache.getRenderShader(CellInstanceShader.NAME);
-		if (shader == null) {
-			shader = new CellInstanceShader();
-			cache.addRenderShader(shader);
-		}
-		
-		System.err.println("image path: "+imagePath);
+		CellInstanceShader shader = (CellInstanceShader) cache.loadOrGetRenderShader(CellInstanceShader.NAME, CellInstanceShader.class);
 
-		CellInstanceMaterial material = new CellInstanceMaterial(cellType.name(), shader, cache.loadSingleTexture(materialName, imagePath, TextureFilter.NEAREST));
+		CellInstanceMaterial material = new CellInstanceMaterial(materialName, shader, cache.loadSingleTexture(materialName, imagePath, TextureFilter.NEAREST), variationCount);
 		cache.addMaterial(material);
 
 		return material;
 	}
-	
+
 	@Deprecated
 	public Material createMaterial(CacheManager cache) {
 		if (cache == null)
@@ -119,9 +118,37 @@ public class CellDescriptor {
 	public void setScientificName(String scientificName) {
 		this.scientificName = scientificName;
 	}
-	
+
 	public int getTextureVariationCount() {
 		return variationCount;
 	}
-	
+
+	public Vector2f getHostilityRange() {
+		return hostilityRange;
+	}
+
+	public Vector2f getFertilityRange() {
+		return fertilityRange;
+	}
+
+	public Vector2f getHumidityRange() {
+		return humidityRange;
+	}
+
+	public int getVariationCount() {
+		return variationCount;
+	}
+
+	public float getAggressivity() {
+		return aggressivity;
+	}
+
+	public float getHardAggressiveDistance() {
+		return hardAggressiveDistance;
+	}
+
+	public float getSoftAggressiveDistance() {
+		return softAggressiveDistance;
+	}
+
 }

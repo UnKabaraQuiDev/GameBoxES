@@ -80,6 +80,7 @@ public class PlayerData {
 
 	public boolean upgradeHealth() {
 		if (canUpgradeHealth()) {
+			lipid -= getNextHealthPrice();
 			maxHealth++;
 			health = maxHealth;
 			return true;
@@ -94,6 +95,7 @@ public class PlayerData {
 
 	public boolean upgradeSpeed() {
 		if (canUpgradeSpeed()) {
+			glucose -= getNextSpeedPrice();
 			speed++;
 			return true;
 		} else {

@@ -9,12 +9,16 @@ extern "C" {
 #endif
 #undef lu_kbra_gamebox_client_es_game_game_world_World_CULLING_DISTANCE
 #define lu_kbra_gamebox_client_es_game_game_world_World_CULLING_DISTANCE 35.0f
-#undef lu_kbra_gamebox_client_es_game_game_world_World_GEN_FACTOR
-#define lu_kbra_gamebox_client_es_game_game_world_World_GEN_FACTOR 100.0
 #undef lu_kbra_gamebox_client_es_game_game_world_World_Y_OFFSET
 #define lu_kbra_gamebox_client_es_game_game_world_World_Y_OFFSET 0.001f
 #undef lu_kbra_gamebox_client_es_game_game_world_World_GEN_CIRCLE_SIDE
 #define lu_kbra_gamebox_client_es_game_game_world_World_GEN_CIRCLE_SIDE 1L
+#undef lu_kbra_gamebox_client_es_game_game_world_World_ATTRACT_DISTANCE
+#define lu_kbra_gamebox_client_es_game_game_world_World_ATTRACT_DISTANCE 3.0f
+#undef lu_kbra_gamebox_client_es_game_game_world_World_EAT_DISTANCE
+#define lu_kbra_gamebox_client_es_game_game_world_World_EAT_DISTANCE 2.5f
+#undef lu_kbra_gamebox_client_es_game_game_world_World_CELLS_MOV_SPEED
+#define lu_kbra_gamebox_client_es_game_game_world_World_CELLS_MOV_SPEED 1.0f
 #undef lu_kbra_gamebox_client_es_game_game_world_World_SEED_OFFSET_DISTRIBUTION
 #define lu_kbra_gamebox_client_es_game_game_world_World_SEED_OFFSET_DISTRIBUTION 11.0
 #undef lu_kbra_gamebox_client_es_game_game_world_World_SEED_OFFSET_HOSTILITY
@@ -23,34 +27,8 @@ extern "C" {
 #define lu_kbra_gamebox_client_es_game_game_world_World_SEED_OFFSET_HUMIDITY 69.0
 #undef lu_kbra_gamebox_client_es_game_game_world_World_SEED_OFFSET_FERTILITY
 #define lu_kbra_gamebox_client_es_game_game_world_World_SEED_OFFSET_FERTILITY 685.0
-#undef lu_kbra_gamebox_client_es_game_game_world_World_ATTRACT_DISTANCE
-#define lu_kbra_gamebox_client_es_game_game_world_World_ATTRACT_DISTANCE 3.0f
-#undef lu_kbra_gamebox_client_es_game_game_world_World_EAT_DISTANCE
-#define lu_kbra_gamebox_client_es_game_game_world_World_EAT_DISTANCE 2.5f
-/*
- * Class:     lu_kbra_gamebox_client_es_game_game_world_World
- * Method:    ntv_genCells_render
- * Signature: (Ljava/util/List;Llu/kbra/gamebox/client/es/game/game/scenes/world/entities/CellInstanceEmitter;)V
- */
-JNIEXPORT void JNICALL Java_lu_kbra_gamebox_client_es_game_game_world_World_ntv_1genCells_1render
-  (JNIEnv *, jobject, jobject, jobject);
-
-/*
- * Class:     lu_kbra_gamebox_client_es_game_game_world_World
- * Method:    ntv_genToxins_render
- * Signature: (Ljava/util/List;Llu/kbra/gamebox/client/es/game/game/scenes/world/entities/WorldParticleEmitter;)V
- */
-JNIEXPORT void JNICALL Java_lu_kbra_gamebox_client_es_game_game_world_World_ntv_1genToxins_1render
-  (JNIEnv *, jobject, jobject, jobject);
-
-/*
- * Class:     lu_kbra_gamebox_client_es_game_game_world_World
- * Method:    ntv_genPlants_render
- * Signature: (Ljava/util/List;Llu/kbra/gamebox/client/es/game/game/scenes/world/entities/WorldParticleEmitter;)V
- */
-JNIEXPORT void JNICALL Java_lu_kbra_gamebox_client_es_game_game_world_World_ntv_1genPlants_1render
-  (JNIEnv *, jobject, jobject, jobject);
-
+#undef lu_kbra_gamebox_client_es_game_game_world_World_TOXIN_DAMAGE_DELAY
+#define lu_kbra_gamebox_client_es_game_game_world_World_TOXIN_DAMAGE_DELAY 800LL
 #ifdef __cplusplus
 }
 #endif
