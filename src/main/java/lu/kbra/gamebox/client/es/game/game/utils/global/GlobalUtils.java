@@ -155,7 +155,7 @@ public class GlobalUtils {
 		text.createDrawBuffer();
 		text.updateText();
 		cache.addTextEmitter(text);
-		
+
 		return new TextEmitterComponent(text);
 	}
 
@@ -240,6 +240,12 @@ public class GlobalUtils {
 			GlobalLogger.severe("Main: " + thread.getKey() + " (" + INSTANCE.getTaskEnvironnment().getThreads()[thread.getKey()] + ") > " + thread.getValue().size());
 		}
 
+	}
+
+	public static void time(Runnable run, Consumer<Float> callback) {
+		long start = System.nanoTime();
+		run.run();
+		callback.accept((float) (System.nanoTime() - start) / 1e6f);
 	}
 
 }

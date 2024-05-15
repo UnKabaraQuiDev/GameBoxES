@@ -123,14 +123,11 @@ public class InstanceEmitter implements Renderable, Cleanupable, UniqueID {
 		Object[][] atts = new Object[this.instancesAttribs.length][this.count];
 
 		for (int i = 0; i < this.count; i++) {
-			System.err.print("Working for: "+i+" > ");
 			transforms[i] = this.particles[i].getTransform().getMatrix();
 
 			for (int c = 0; c < this.instancesAttribs.length; c++) {
-				System.err.println(c+" & ");
 				atts[c][i] = this.particles[i].getBuffers()[c];
 			}
-			System.err.println("end");
 		}
 
 		if (!AttribArray.update(this.instancesTransforms, transforms)) {

@@ -1,5 +1,7 @@
 package lu.kbra.gamebox.client.es.game.game.world;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -429,9 +431,9 @@ public class World implements Cleanupable {
 				new Transform3D());
 		cache.addMesh(emit.getParticleMesh());
 		cache.addInstanceEmitter(emit);
-		
+
 		// ntv_genToxins_render(toxins, emit);
-		
+
 		for (int i = 0; i < toxins.size(); i++) {
 			Instance part = emit.getParticles()[i];
 			Vector2f pos = toxins.get(i);
@@ -450,6 +452,8 @@ public class World implements Cleanupable {
 
 	private native void ntv_genToxins_render(List<Vector2f> poss, WorldParticleEmitter emit);
 
+	private FileWriter plantsStats1, plantsStats2;
+
 	private List<Entity> genPlants_render(Vector2f ce, List<Vector2f> plants) {
 		final Vector2f center = new Vector2f(ce);
 
@@ -458,17 +462,41 @@ public class World implements Cleanupable {
 				new Transform3D());
 		cache.addMesh(emit.getParticleMesh());
 		cache.addInstanceEmitter(emit);
-		
-		ntv_genPlants_render(plants, emit);
-		
-		/*for (int i = 0; i < plants.size(); i++) {
-			Instance part = emit.getParticles()[i];
-			Vector2f pos = plants.get(i);
 
-			((Transform3D) part.getTransform()).getTranslation().set(pos.x, pos.y, Y_OFFSET * i);
-			((Transform3D) part.getTransform()).updateMatrix();
-			part.getBuffers()[0] = Math.clamp(0.6f, 2f, (float) humidityGen.noise(pos) * 5);
-		}*/
+		if (Math.random() < 0.5) {
+			GlobalUtils.time(() -> ntv_genPlants_render(plants, emit), time -> {
+				try {
+					if (plantsStats1 == null) {
+						plantsStats1 = new FileWriter(new File("./resources/bakes/noise/plants_dist1.txt"));
+					}
+
+					plantsStats1.write(Float.toString(time) + "\n");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			});
+		} else {
+			GlobalUtils.time(() -> {
+				for (int i = 0; i < plants.size(); i++) {
+					Instance part = emit.getParticles()[i];
+					Vector2f pos = plants.get(i);
+
+					((Transform3D) part.getTransform()).getTranslation().set(pos.x, pos.y, Y_OFFSET * i);
+					((Transform3D) part.getTransform()).updateMatrix();
+					part.getBuffers()[0] = Math.clamp(0.6f, 2f, (float) humidityGen.noise(pos) * 5);
+				}
+			}, time -> {
+				try {
+					if (plantsStats2 == null) {
+						plantsStats2 = new FileWriter(new File("./resources/bakes/noise/plants_dist2.txt"));
+					}
+
+					plantsStats2.write(Float.toString(time) + "\n");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			});
+		}
 
 		emit.updateParticles();
 
@@ -550,7 +578,15 @@ public class World implements Cleanupable {
 	@Override
 	public void cleanup() {
 		GlobalLogger.log("Cleaning up: " + getClass().getName());
-
+		try {
+			plantsStats1.flush();
+			plantsStats1.close();
+			
+			plantsStats2.flush();
+			plantsStats2.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		cache.cleanup();
 	}
 
