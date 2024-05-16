@@ -1,4 +1,4 @@
-package lu.kbra.gamebox.client.es.game.game.scenes.ui;
+package lu.kbra.gamebox.client.es.game.game.utils;
 
 import org.joml.Quaternionf;
 

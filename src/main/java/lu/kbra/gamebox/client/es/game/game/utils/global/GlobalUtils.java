@@ -212,12 +212,18 @@ public class GlobalUtils {
 		return Arrays.stream(run).map((r) -> (boolean) new NextTask(0, 0, workers, null).exec(r).push(workers)).reduce((a, b) -> a && b).orElse(true);
 	}
 
+	@Deprecated
 	public static Vector2f getDPadDirection() {
 		byte[] btns = INSTANCE.window.getJoystickButtonsArray(GLFW.GLFW_JOYSTICK_1);
-		// GlobalLogger.warning(Arrays.toString(btns));
+		// GlobalLogger.severe(Arrays.toString(btns));
 		return new Vector2f(btns[GLFW.GLFW_GAMEPAD_BUTTON_DPAD_RIGHT] - btns[GLFW.GLFW_GAMEPAD_BUTTON_DPAD_LEFT], btns[GLFW.GLFW_GAMEPAD_BUTTON_DPAD_UP] - btns[GLFW.GLFW_GAMEPAD_BUTTON_DPAD_DOWN]);
 	}
 
+	public static Vector2f getJoystickDirection() {
+		float[] btns = INSTANCE.window.getJoystickAxis(GLFW.GLFW_JOYSTICK_1);
+		return new Vector2f(btns[0], -btns[1]);
+	}
+	
 	public static NextTask newRenderTask() {
 		return INSTANCE.createTask(GameEngine.QUEUE_RENDER);
 	}

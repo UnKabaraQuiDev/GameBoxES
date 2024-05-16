@@ -12,13 +12,7 @@ public class PlayerData {
 	private int health = 2, maxHealth = health;;
 	private int speed = 1;
 
-	/**
-	 * To upgrade speed, from plants & other dead cells
-	 */
 	private int glucose = 0;
-	/**
-	 * To upgrade the major tree, from other dead cells
-	 */
 	private int aminoAcid = 0;
 	/**
 	 * To upgrade the cell aka health, from plants or other dead cells
@@ -38,9 +32,17 @@ public class PlayerData {
 	}
 
 	public void eatPlant() {
-		glucose += Math.random() < 0.4f ? 1 : 0;
+		int rand = (int) (Math.random() * 3);
+		if (rand < 1) {
+			glucose++;
+		} else if (rand < 2) {
+			aminoAcid++;
+		} else if (rand < 3) {
+			lipid++;
+		}
+		/**glucose += Math.random() < 0.4f ? 1 : 0;
 		aminoAcid += Math.random() < 0.1f ? 1 : 0;
-		lipid += Math.random() < 0.1f ? 1 : 0;
+		lipid += Math.random() < 0.1f ? 1 : 0;*/
 	}
 
 	public void eatCell() {
@@ -48,7 +50,7 @@ public class PlayerData {
 		aminoAcid += Math.random() < 0.4f ? 1 : 0;
 		lipid += Math.random() < 0.4f ? 1 : 0;
 	}
-	
+
 	/**
 	 * @return true if the player dies
 	 */

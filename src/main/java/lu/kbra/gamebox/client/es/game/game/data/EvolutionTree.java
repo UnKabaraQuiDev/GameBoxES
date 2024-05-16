@@ -10,6 +10,9 @@ import org.json.JSONObject;
 
 import lu.pcy113.pclib.GlobalLogger;
 
+/**
+ * Random [+3;-3] for each upgrade price
+ */
 public class EvolutionTree extends EvolutionTreeNode {
 
 	public EvolutionTree(String id) throws JSONException, IOException {

@@ -159,8 +159,8 @@ public class World implements Cleanupable {
 
 	public void input(float dTime) {
 		Window window = scene.getWindow();
-
-		player.getAcceleration().add(GlobalUtils.getDPadDirection().mul(dTime * GlobalUtils.INSTANCE.playerData.getSpeed()));
+		
+		player.getAcceleration().add(GlobalUtils.getJoystickDirection().mul(dTime * GlobalUtils.INSTANCE.playerData.getSpeed()));
 	}
 
 	private long lastToxinDamage = 0;
@@ -403,7 +403,7 @@ public class World implements Cleanupable {
 		return GlobalUtils.pushWorker(() -> {
 			long start = System.currentTimeMillis();
 
-			final List<Vector2f> plantPos = genPlantsPos(center, halfSquareSize, numPoint / 3);
+			final List<Vector2f> plantPos = genPlantsPos(center, halfSquareSize, numPoint / 3 / 3);
 			final List<Vector2f> toxinsPos = genToxinsPos(center, halfSquareSize, numPoint / 3);
 			final List<Vector2f> cellsPos = genCellsPos(center, halfSquareSize, numPoint / 3);
 
