@@ -8,9 +8,9 @@ public class ToxinWorldParticleMaterial extends WorldParticleMaterial {
 	public static final String NAME = ToxinWorldParticleMaterial.class.getName();
 	
 	public static final String TEXTURE_NAME = "toxins-png";
-	public static final String TEXTURE_PATH = "./resources/textures/toxins.png";
+	public static final String TEXTURE_PATH = "./resources/textures/toxins-1.png";
 
-	public static final int COLUMN_COUNT = 5;
+	public static final int COLUMN_COUNT = 1;
 	public static final int ROW_COUNT = 5;
 
 	public ToxinWorldParticleMaterial(SingleTexture texture) {

@@ -25,13 +25,16 @@ import lu.kbra.gamebox.client.es.game.game.render.shaders.HealthSpeedIndicatorSh
 import lu.kbra.gamebox.client.es.game.game.render.shaders.HealthSpeedIndicatorShader.HealthSpeedIndicatorMaterial;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.MaterialListShader;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalConsts;
+import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalLang;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
 
 public class UISceneMajorUpgradeTree extends UISceneState {
 
 	private static final Vector2f CLICK_OFFSET_END = new Vector2f(0f, 0.1f);
-	private static final float CLICK_ANIMATION_SPEED = 10f, ACCEPTED_ANIMATION_SPEED = 10f, DENIED_ANIMATION_SPEED = 10f, CLICK_ANIMATION_AMPLITUDE = 0.8f, HEALTH_FILL_SPEED = 1f;
-	private static final Vector4f DENIED_COLOR_START = new Vector4f(1, 0, 0, 1), ACCEPTED_COLOR_START = new Vector4f(0, 1, 0, 1), IDLE_COLOR_START = new Vector4f(1, 1, 1, 1);
+	private static final float CLICK_ANIMATION_SPEED = 10f, ACCEPTED_ANIMATION_SPEED = 10f,
+			DENIED_ANIMATION_SPEED = 10f, CLICK_ANIMATION_AMPLITUDE = 0.8f, HEALTH_FILL_SPEED = 1f;
+	private static final Vector4f DENIED_COLOR_START = new Vector4f(1, 0, 0, 1),
+			ACCEPTED_COLOR_START = new Vector4f(0, 1, 0, 1), IDLE_COLOR_START = new Vector4f(1, 1, 1, 1);
 
 	private boolean treeViewActive = false;
 
@@ -40,69 +43,77 @@ public class UISceneMajorUpgradeTree extends UISceneState {
 	private Entity materialList;
 	private TextEmitter aminoAcidText, glucoseText, lipidText;
 
-	private static final Vector3f HEALTH_INDICATOR_TEXT_BASE = new Vector3f(-3.1f, 2.48f, 1.1f), HEALTH_INDICATOR_BASE = new Vector3f(-4f, 2.7f, 1);
+	private static final Vector3f HEALTH_INDICATOR_TEXT_BASE = new Vector3f(-2.9f, 2.28f, 1.1f),
+			HEALTH_INDICATOR_BASE = new Vector3f(-3.9f, 2.4f, 1);
 
 	private Entity maxHealthIndicator, maxHealthIndicatorTextEntity;
 	private TextEmitter maxHealthIndicatorText;
 
-	private float healthUpgradeClickProgress = 1, healthUpgradeDeniedProgress = 1, healthUpgradeAcceptedProgress = 1, healthFillProgress = 1, healthEmptyProgress = 1;
-	private float visibleHealth = 1, oldVisibleHealth = 1;
-
-	private static final Vector3f SPEED_INDICATOR_TEXT_BASE = new Vector3f(3.1f, 2.48f, 1.1f), SPEED_INDICATOR_BASE = new Vector3f(4f, 2.7f, 1);
-
-	private Entity speedIndicator, speedIndicatorTextEntity;
-	private TextEmitter speedIndicatorText;
-
-	private float speedUpgradeClickProgress = 1, speedUpgradeDeniedProgress = 1, speedUpgradeAcceptedProgress = 1;
+	private float healthRestoreClickProgress = 1, healthRestoreDeniedProgress = 1, healthRestoreAcceptedProgress = 1,
+			healthFillProgress = 1, healthEmptyProgress = 1;
+	private float visibleHealth = 1, oldVisibleHealth = 0;
 
 	public UISceneMajorUpgradeTree(UIScene3D scene) {
 		super("MajorUpgradeTree", scene);
 
-		Mesh bgMesh = cache.newQuadMesh("uiBGMesh", cache.loadOrGetMaterial(FillMaterial.NAME, FillShader.FillMaterial.class, GlobalConsts.BG), new Vector2f(2));
+		Mesh bgMesh = cache.newQuadMesh("uiBGMesh",
+				cache.loadOrGetMaterial(FillMaterial.NAME, FillShader.FillMaterial.class, GlobalConsts.BG),
+				new Vector2f(2));
 		uiBG = scene.addEntity("uiBG", new MeshComponent(bgMesh)).setActive(false);
 
-		Mesh materialListMesh = cache.loadMesh("materialList", cache.loadOrGetMaterial(MaterialListShader.MaterialListMaterial.NAME, MaterialListShader.MaterialListMaterial.class,
-				cache.loadOrGetSingleTexture(MaterialListShader.MaterialListMaterial.TEXTURE_NAME, MaterialListShader.MaterialListMaterial.TEXTURE_PATH, TextureFilter.NEAREST)), MaterialListShader.MaterialListMaterial.MESH_PATH);
-		materialList = scene.addEntity("materialList", new MeshComponent(materialListMesh), new Transform3DComponent(new Vector3f(-4f, -2, 1), new Quaternionf(), new Vector3f(2)), new RenderComponent(15));
+		Mesh materialListMesh = cache.loadMesh("materialList",
+				cache.loadOrGetMaterial(MaterialListShader.MaterialListMaterial.NAME,
+						MaterialListShader.MaterialListMaterial.class,
+						cache.loadOrGetSingleTexture(MaterialListShader.MaterialListMaterial.TEXTURE_NAME,
+								MaterialListShader.MaterialListMaterial.TEXTURE_PATH, TextureFilter.NEAREST)),
+				MaterialListShader.MaterialListMaterial.MESH_PATH);
+		materialList = scene.addEntity("materialList", new MeshComponent(materialListMesh),
+				new Transform3DComponent(new Vector3f(-4f, -2, 1), new Quaternionf(), new Vector3f(2)),
+				new RenderComponent(15));
 
-		aminoAcidText = GlobalUtils.createUIText(cache, "aminoAcidText", 4, "0000", Alignment.TEXT_RIGHT).getTextEmitter(cache);
-		glucoseText = GlobalUtils.createUIText(cache, "glucoseText", 4, "0000", Alignment.TEXT_RIGHT).getTextEmitter(cache);
+		aminoAcidText = GlobalUtils.createUIText(cache, "aminoAcidText", 4, "0000", Alignment.TEXT_RIGHT)
+				.getTextEmitter(cache);
+		glucoseText = GlobalUtils.createUIText(cache, "glucoseText", 4, "0000", Alignment.TEXT_RIGHT)
+				.getTextEmitter(cache);
 		lipidText = GlobalUtils.createUIText(cache, "lipidText", 4, "0000", Alignment.TEXT_RIGHT).getTextEmitter(cache);
-		materialList.addComponent(new SubEntitiesComponent(new Entity("aminoAcidText", new TextEmitterComponent(aminoAcidText), new Transform3DComponent(new Vector3f(-3.1f, -1.8f, 1.1f))),
-				new Entity("glucoseText", new TextEmitterComponent(glucoseText), new Transform3DComponent(new Vector3f(-3.1f, -2.25f, 1.1f))),
-				new Entity("lipidText", new TextEmitterComponent(lipidText), new Transform3DComponent(new Vector3f(-3.1f, -2.7f, 1.1f)))));
+		materialList.addComponent(new SubEntitiesComponent(
+				new Entity("aminoAcidText", new TextEmitterComponent(aminoAcidText),
+						new Transform3DComponent(new Vector3f(-3.1f, -1.8f, 1.1f))),
+				new Entity("glucoseText", new TextEmitterComponent(glucoseText),
+						new Transform3DComponent(new Vector3f(-3.1f, -2.25f, 1.1f))),
+				new Entity("lipidText", new TextEmitterComponent(lipidText),
+						new Transform3DComponent(new Vector3f(-3.1f, -2.7f, 1.1f)))));
 
 		// health indicator
 		Mesh healthIndicatorMesh = cache.loadMesh("healthIndicator",
-				cache.loadOrGetMaterial(HealthSpeedIndicatorShader.HealthSpeedIndicatorMaterial.HEALTH_NAME, HealthSpeedIndicatorShader.HealthSpeedIndicatorMaterial.class, HealthSpeedIndicatorShader.HealthSpeedIndicatorMaterial.HEALTH_NAME,
+				cache.loadOrGetMaterial(HealthSpeedIndicatorShader.HealthSpeedIndicatorMaterial.HEALTH_NAME,
+						HealthSpeedIndicatorShader.HealthSpeedIndicatorMaterial.class,
+						HealthSpeedIndicatorShader.HealthSpeedIndicatorMaterial.HEALTH_NAME,
 						cache.loadOrGetRenderShader(HealthSpeedIndicatorShader.NAME, HealthSpeedIndicatorShader.class),
-						cache.loadOrGetSingleTexture(HealthSpeedIndicatorShader.HealthSpeedIndicatorMaterial.TEXTURE_HEALTH_NAME, HealthSpeedIndicatorShader.HealthSpeedIndicatorMaterial.TEXTURE_HEALTH_PATH, TextureFilter.NEAREST)),
+						cache.loadOrGetSingleTexture(
+								HealthSpeedIndicatorShader.HealthSpeedIndicatorMaterial.TEXTURE_HEALTH_NAME,
+								HealthSpeedIndicatorShader.HealthSpeedIndicatorMaterial.TEXTURE_HEALTH_PATH,
+								TextureFilter.NEAREST)),
 				HealthSpeedIndicatorShader.HealthSpeedIndicatorMaterial.MESH_HEALTH_PATH);
 		maxHealthIndicator = scene.addEntity("healthIndicator", new MeshComponent(healthIndicatorMesh),
-				new Transform3DComponent(new Vector3f(CLICK_OFFSET_END.x, CLICK_OFFSET_END.y, 0).add(HEALTH_INDICATOR_BASE), new Quaternionf(), new Vector3f(1.5f)), new RenderComponent(15));
+				new Transform3DComponent(
+						new Vector3f(CLICK_OFFSET_END.x, CLICK_OFFSET_END.y, 0).add(HEALTH_INDICATOR_BASE),
+						new Quaternionf(), new Vector3f(1.5f)),
+				new RenderComponent(15));
 
-		maxHealthIndicatorText = GlobalUtils.createUIText(cache, "healthIndicatorText", 3, "000", Alignment.TEXT_RIGHT).getTextEmitter(cache);
+		maxHealthIndicatorText = GlobalUtils
+				.createUIText(cache, "healthIndicatorText", 5, GlobalLang.get("ui.hp") + " 00", Alignment.TEXT_RIGHT)
+				.getTextEmitter(cache);
 		((TextMaterial) maxHealthIndicatorText.getMesh().getMaterial()).setFgColor(IDLE_COLOR_START);
 		maxHealthIndicatorText.setCharOffset(new Vector2f(0.1f, 0));
-		maxHealthIndicatorTextEntity = new Entity("healthIndicatorText", new TextEmitterComponent(maxHealthIndicatorText),
-				new Transform3DComponent(new Vector3f(CLICK_OFFSET_END.x, CLICK_OFFSET_END.y, 0).add(HEALTH_INDICATOR_TEXT_BASE), new Quaternionf(), new Vector3f(0.9f)));
+		maxHealthIndicatorTextEntity = new Entity("healthIndicatorText",
+				new TextEmitterComponent(maxHealthIndicatorText),
+				new Transform3DComponent(
+						new Vector3f(CLICK_OFFSET_END.x, CLICK_OFFSET_END.y, 0).add(HEALTH_INDICATOR_TEXT_BASE),
+						new Quaternionf(), new Vector3f(0.9f)));
 		maxHealthIndicator.addComponent(new SubEntitiesComponent(maxHealthIndicatorTextEntity));
 
-		// speed indicator
-		Mesh speedIndicatorMesh = cache.loadMesh("speedIndicator",
-				cache.loadOrGetMaterial(HealthSpeedIndicatorShader.HealthSpeedIndicatorMaterial.SPEED_NAME, HealthSpeedIndicatorShader.HealthSpeedIndicatorMaterial.class, HealthSpeedIndicatorShader.HealthSpeedIndicatorMaterial.SPEED_NAME,
-						cache.loadOrGetRenderShader(HealthSpeedIndicatorShader.NAME, HealthSpeedIndicatorShader.class),
-						cache.loadOrGetSingleTexture(HealthSpeedIndicatorShader.HealthSpeedIndicatorMaterial.TEXTURE_SPEED_NAME, HealthSpeedIndicatorShader.HealthSpeedIndicatorMaterial.TEXTURE_SPEED_PATH, TextureFilter.NEAREST)),
-				HealthSpeedIndicatorShader.HealthSpeedIndicatorMaterial.MESH_SPEED_PATH);
-		speedIndicator = scene.addEntity("speedIndicator", new MeshComponent(speedIndicatorMesh),
-				new Transform3DComponent(new Vector3f(CLICK_OFFSET_END.x, CLICK_OFFSET_END.y, 0).add(SPEED_INDICATOR_BASE), new Quaternionf(), new Vector3f(1.5f)), new RenderComponent(15));
-
-		speedIndicatorText = GlobalUtils.createUIText(cache, "speedIndicatorText", 3, "000", Alignment.TEXT_LEFT).getTextEmitter(cache);
-		((TextMaterial) speedIndicatorText.getMesh().getMaterial()).setFgColor(IDLE_COLOR_START);
-		speedIndicatorText.setCharOffset(new Vector2f(0.1f, 0));
-		speedIndicatorTextEntity = new Entity("speedIndicatorText", new TextEmitterComponent(speedIndicatorText),
-				new Transform3DComponent(new Vector3f(CLICK_OFFSET_END.x, CLICK_OFFSET_END.y, 0).add(SPEED_INDICATOR_TEXT_BASE), new Quaternionf(), new Vector3f(0.9f)));
-		speedIndicator.addComponent(new SubEntitiesComponent(speedIndicatorTextEntity));
+		healthFillProgress = 0;
 
 		cache.dump(System.err);
 	}
@@ -115,82 +126,79 @@ public class UISceneMajorUpgradeTree extends UISceneState {
 	@Override
 	public void update(float dTime) {
 		// health
-		if (healthUpgradeAcceptedProgress < 1) {
-			healthUpgradeAcceptedProgress = Math.clamp(0, 1, healthUpgradeAcceptedProgress + dTime * ACCEPTED_ANIMATION_SPEED);
+		if (healthRestoreAcceptedProgress < 1) {
+			healthRestoreAcceptedProgress = Math.clamp(0, 1,
+					healthRestoreAcceptedProgress + dTime * ACCEPTED_ANIMATION_SPEED);
 
-			((TextMaterial) maxHealthIndicatorText.getMesh().getMaterial()).setFgColor(ACCEPTED_COLOR_START.lerp(IDLE_COLOR_START, Interpolators.QUAD_IN_OUT.evaluate(healthUpgradeAcceptedProgress), new Vector4f()));
+			((TextMaterial) maxHealthIndicatorText.getMesh().getMaterial())
+					.setFgColor(ACCEPTED_COLOR_START.lerp(IDLE_COLOR_START,
+							Interpolators.QUAD_IN_OUT.evaluate(healthRestoreAcceptedProgress), new Vector4f()));
 		}
 
-		if (healthUpgradeDeniedProgress < 1) {
-			healthUpgradeDeniedProgress = Math.clamp(0, 1, healthUpgradeDeniedProgress + dTime * DENIED_ANIMATION_SPEED);
+		if (healthRestoreDeniedProgress < 1) {
+			healthRestoreDeniedProgress = Math.clamp(0, 1,
+					healthRestoreDeniedProgress + dTime * DENIED_ANIMATION_SPEED);
 
-			((TextMaterial) maxHealthIndicatorText.getMesh().getMaterial()).setFgColor(DENIED_COLOR_START.lerp(IDLE_COLOR_START, Interpolators.QUAD_IN_OUT.evaluate(healthUpgradeDeniedProgress), new Vector4f()));
+			((TextMaterial) maxHealthIndicatorText.getMesh().getMaterial()).setFgColor(DENIED_COLOR_START.lerp(
+					IDLE_COLOR_START, Interpolators.QUAD_IN_OUT.evaluate(healthRestoreDeniedProgress), new Vector4f()));
 		}
 
 		if (healthFillProgress < 1) {
 			healthFillProgress = Math.clamp(0, 1, healthFillProgress + dTime * HEALTH_FILL_SPEED);
 
-			HealthSpeedIndicatorMaterial mat = (HealthSpeedIndicatorMaterial) maxHealthIndicator.getComponent(MeshComponent.class).getMesh(cache).getMaterial();
-			oldVisibleHealth = Math.lerp(visibleHealth, GlobalUtils.INSTANCE.playerData.getMaxHealth(), Interpolators.QUART_OUT.evaluate(healthFillProgress));
-			mat.setRedProgress(1);
+			HealthSpeedIndicatorMaterial mat = (HealthSpeedIndicatorMaterial) maxHealthIndicator
+					.getComponent(MeshComponent.class).getMesh(cache).getMaterial();
+			oldVisibleHealth = Math.lerp(visibleHealth, GlobalUtils.INSTANCE.playerData.getHealth(),
+					Interpolators.QUART_OUT.evaluate(healthFillProgress));
+			mat.setRedProgress(GlobalUtils.INSTANCE.playerData.getHealth() / GlobalUtils.INSTANCE.playerData.getMaxHealth());
 			mat.setGreenProgress(oldVisibleHealth / GlobalUtils.INSTANCE.playerData.getMaxHealth());
-			
-			if(healthFillProgress >= 1) {
-				visibleHealth = GlobalUtils.INSTANCE.playerData.getMaxHealth();
+
+			if (healthFillProgress >= 1) {
+				visibleHealth = GlobalUtils.INSTANCE.playerData.getHealth();
 			}
 		}
-		
+
 		if (healthEmptyProgress < 1) {
 			healthEmptyProgress = Math.clamp(0, 1, healthEmptyProgress + dTime * HEALTH_FILL_SPEED);
-			
-			HealthSpeedIndicatorMaterial mat = (HealthSpeedIndicatorMaterial) maxHealthIndicator.getComponent(MeshComponent.class).getMesh(cache).getMaterial();
+
+			HealthSpeedIndicatorMaterial mat = (HealthSpeedIndicatorMaterial) maxHealthIndicator
+					.getComponent(MeshComponent.class).getMesh(cache).getMaterial();
 			visibleHealth = GlobalUtils.INSTANCE.playerData.getHealth();
 			mat.setGreenProgress(visibleHealth / GlobalUtils.INSTANCE.playerData.getMaxHealth());
-			mat.setRedProgress(Math.lerp(oldVisibleHealth, visibleHealth, Interpolators.QUART_OUT.evaluate(healthEmptyProgress)) / GlobalUtils.INSTANCE.playerData.getMaxHealth());
+			mat.setRedProgress(
+					Math.lerp(oldVisibleHealth, visibleHealth, Interpolators.QUART_OUT.evaluate(healthEmptyProgress))
+							/ GlobalUtils.INSTANCE.playerData.getMaxHealth());
 		}
 
-		if (healthUpgradeClickProgress < 1) {
-			healthUpgradeClickProgress = Math.clamp(0, 1, healthUpgradeClickProgress + dTime * CLICK_ANIMATION_SPEED);
+		if (healthRestoreClickProgress < 1) {
+			healthRestoreClickProgress = Math.clamp(0, 1, healthRestoreClickProgress + dTime * CLICK_ANIMATION_SPEED);
 
-			float change = Interpolators.QUAD_IN_OUT.evaluate(healthUpgradeClickProgress);
+			float change = Interpolators.QUAD_IN_OUT.evaluate(healthRestoreClickProgress);
 			Vector2f offset = CLICK_OFFSET_END.mul(change, new Vector2f()).mul(CLICK_ANIMATION_AMPLITUDE);
 
-			maxHealthIndicator.getComponent(Transform3DComponent.class).getTransform().setTranslation(new Vector3f(offset.x, offset.y, 0).add(HEALTH_INDICATOR_BASE)).updateMatrix();
-			maxHealthIndicatorTextEntity.getComponent(Transform3DComponent.class).getTransform().setTranslation(new Vector3f(offset.x, offset.y, 0).add(HEALTH_INDICATOR_TEXT_BASE)).updateMatrix();
+			maxHealthIndicator.getComponent(Transform3DComponent.class).getTransform()
+					.setTranslation(new Vector3f(offset.x, offset.y, 0).add(HEALTH_INDICATOR_BASE)).updateMatrix();
+			maxHealthIndicatorTextEntity.getComponent(Transform3DComponent.class).getTransform()
+					.setTranslation(new Vector3f(offset.x, offset.y, 0).add(HEALTH_INDICATOR_TEXT_BASE)).updateMatrix();
 		}
 
-		// speed
-		if (speedUpgradeAcceptedProgress < 1) {
-			speedUpgradeAcceptedProgress = Math.clamp(0, 1, speedUpgradeAcceptedProgress + dTime * ACCEPTED_ANIMATION_SPEED);
-
-			((TextMaterial) speedIndicatorText.getMesh().getMaterial()).setFgColor(ACCEPTED_COLOR_START.lerp(IDLE_COLOR_START, Interpolators.QUAD_IN_OUT.evaluate(speedUpgradeAcceptedProgress), new Vector4f()));
-		}
-
-		if (speedUpgradeDeniedProgress < 1) {
-			speedUpgradeDeniedProgress = Math.clamp(0, 1, speedUpgradeDeniedProgress + dTime * DENIED_ANIMATION_SPEED);
-
-			((TextMaterial) speedIndicatorText.getMesh().getMaterial()).setFgColor(DENIED_COLOR_START.lerp(IDLE_COLOR_START, Interpolators.QUAD_IN_OUT.evaluate(speedUpgradeDeniedProgress), new Vector4f()));
-		}
-
-		if (speedUpgradeClickProgress < 1) {
-			speedUpgradeClickProgress = Math.clamp(0, 1, speedUpgradeClickProgress + dTime * CLICK_ANIMATION_SPEED);
-
-			float change = Interpolators.QUAD_IN_OUT.evaluate(speedUpgradeClickProgress);
-			Vector2f offset = CLICK_OFFSET_END.mul(change, new Vector2f()).mul(CLICK_ANIMATION_AMPLITUDE);
-
-			speedIndicator.getComponent(Transform3DComponent.class).getTransform().setTranslation(new Vector3f(offset.x, offset.y, 0).add(SPEED_INDICATOR_BASE)).updateMatrix();
-			speedIndicatorTextEntity.getComponent(Transform3DComponent.class).getTransform().setTranslation(new Vector3f(offset.x, offset.y, 0).add(SPEED_INDICATOR_TEXT_BASE)).updateMatrix();
-		}
 	}
 
 	@Override
 	public void render(float dTime) {
-		aminoAcidText.setText(MathUtils.fillPrefix(4, '0', Math.clamp(0, 9999, GlobalUtils.INSTANCE.playerData.getAminoAcid()) + "")).updateText();
-		glucoseText.setText(MathUtils.fillPrefix(4, '0', Math.clamp(0, 9999, GlobalUtils.INSTANCE.playerData.getGlucose()) + "")).updateText();
-		lipidText.setText(MathUtils.fillPrefix(4, '0', Math.clamp(0, 9999, GlobalUtils.INSTANCE.playerData.getLipid()) + "")).updateText();
+		aminoAcidText.setText(
+				MathUtils.fillPrefix(4, '0', Math.clamp(0, 9999, GlobalUtils.INSTANCE.playerData.getAminoAcid()) + ""))
+				.updateText();
+		glucoseText.setText(
+				MathUtils.fillPrefix(4, '0', Math.clamp(0, 9999, GlobalUtils.INSTANCE.playerData.getGlucose()) + ""))
+				.updateText();
+		lipidText.setText(
+				MathUtils.fillPrefix(4, '0', Math.clamp(0, 9999, GlobalUtils.INSTANCE.playerData.getLipid()) + ""))
+				.updateText();
 
-		maxHealthIndicatorText.setText(MathUtils.fillPrefix(3, '0', Math.clamp(0, 999, GlobalUtils.INSTANCE.playerData.getMaxHealth()) + "")).updateText();
-		speedIndicatorText.setText(MathUtils.fillPrefix(3, '0', Math.clamp(0, 999, GlobalUtils.INSTANCE.playerData.getSpeed()) + "")).updateText();
+		maxHealthIndicatorText.setText(GlobalLang.get("ui.hp")
+				+ MathUtils.fillPrefix(2, '0', Math.clamp(0, 99, GlobalUtils.INSTANCE.playerData.getMaxHealth()) + ""))
+				.updateText();
 	}
 
 	public void setTreeViewActive(boolean b) {
@@ -199,28 +207,20 @@ public class UISceneMajorUpgradeTree extends UISceneState {
 		uiBG.setActive(b);
 	}
 
-	public void startHealthUpgradeDenied() {
-		healthUpgradeClickProgress = healthUpgradeDeniedProgress = 0;
+	public void startHealthRestoreDenied() {
+		healthRestoreClickProgress = healthRestoreDeniedProgress = 0;
 	}
 
-	public void startHealthUpgradeAccepted() {
-		healthUpgradeClickProgress = healthUpgradeAcceptedProgress = healthFillProgress = 0;
+	public void startHealthRestoreAccepted() {
+		healthRestoreClickProgress = healthRestoreAcceptedProgress = healthFillProgress = 0;
 		healthEmptyProgress = 1;
 		visibleHealth = GlobalUtils.INSTANCE.playerData.getHealth();
 	}
-	
+
 	public void startHealthEmpty() {
 		healthEmptyProgress = 0;
 		healthFillProgress = 1;
 		visibleHealth = GlobalUtils.INSTANCE.playerData.getHealth();
-	}
-
-	public void startSpeedUpgradeDenied() {
-		speedUpgradeClickProgress = speedUpgradeDeniedProgress = 0;
-	}
-
-	public void startSpeedUpgradeAccepted() {
-		speedUpgradeClickProgress = speedUpgradeAcceptedProgress = 0;
 	}
 
 }

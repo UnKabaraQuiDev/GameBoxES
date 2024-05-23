@@ -56,23 +56,13 @@ public class WorldScene3D extends Scene3D {
 		
 		if (window.getJoystickButton(GLFW.GLFW_JOYSTICK_1, GLFW.GLFW_GAMEPAD_BUTTON_LEFT_BUMPER) && System.currentTimeMillis() - lastHealthUpgrade >= MIN_UPGRADE_DELAY) {
 			System.err.println("LEFT BUMPER = true");
-			if (GlobalUtils.INSTANCE.playerData.canUpgradeHealth()) {
-				((UISceneMajorUpgradeTree) GlobalUtils.INSTANCE.uiScene.getState()).startHealthUpgradeAccepted();
+			if (GlobalUtils.INSTANCE.playerData.canRestoreHealth()) {
+				((UISceneMajorUpgradeTree) GlobalUtils.INSTANCE.uiScene.getState()).startHealthRestoreAccepted();
 				lastHealthUpgrade = System.currentTimeMillis();
 			}else {
-				((UISceneMajorUpgradeTree) GlobalUtils.INSTANCE.uiScene.getState()).startHealthUpgradeDenied();
+				((UISceneMajorUpgradeTree) GlobalUtils.INSTANCE.uiScene.getState()).startHealthRestoreDenied();
 			}
-			GlobalUtils.INSTANCE.playerData.upgradeHealth();
-		}
-		if (window.getJoystickButton(GLFW.GLFW_JOYSTICK_1, GLFW.GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER) && System.currentTimeMillis() - lastSpeedUpgrade >= MIN_UPGRADE_DELAY) {
-			GlobalUtils.INSTANCE.playerData.damage(1);
-			if (GlobalUtils.INSTANCE.playerData.canUpgradeSpeed()) {
-				((UISceneMajorUpgradeTree) GlobalUtils.INSTANCE.uiScene.getState()).startSpeedUpgradeAccepted();
-				lastSpeedUpgrade = System.currentTimeMillis();
-			}else {
-				((UISceneMajorUpgradeTree) GlobalUtils.INSTANCE.uiScene.getState()).startSpeedUpgradeDenied();
-			}
-			GlobalUtils.INSTANCE.playerData.upgradeSpeed();
+			GlobalUtils.INSTANCE.playerData.restoreHealth();
 		}
 	}
 

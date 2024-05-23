@@ -72,41 +72,21 @@ public class PlayerData {
 		this.lipid = lipid;
 	}
 
-	public int getNextHealthPrice() {
-		return 2 * maxHealth;
+	public boolean canRestoreHealth() {
+		return health < maxHealth && lipid >= getNextRestoreHealthPrice();
 	}
-
-	public int getNextSpeedPrice() {
-		return 2 * speed;
+	
+	private int getNextRestoreHealthPrice() {
+		return maxHealth - health;
 	}
-
-	public boolean upgradeHealth() {
-		if (canUpgradeHealth()) {
-			lipid -= getNextHealthPrice();
-			maxHealth++;
-			health = maxHealth;
+	
+	public boolean restoreHealth() {
+		if(canRestoreHealth()) {
+			lipid -= getNextRestoreHealthPrice();
+			health++;
 			return true;
-		} else {
-			return false;
 		}
-	}
-
-	public boolean canUpgradeHealth() {
-		return lipid >= getNextHealthPrice();
-	}
-
-	public boolean upgradeSpeed() {
-		if (canUpgradeSpeed()) {
-			glucose -= getNextSpeedPrice();
-			speed++;
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public boolean canUpgradeSpeed() {
-		return glucose >= getNextSpeedPrice();
+		return false;
 	}
 
 	public EvolutionTreeNode getCurrent() {
