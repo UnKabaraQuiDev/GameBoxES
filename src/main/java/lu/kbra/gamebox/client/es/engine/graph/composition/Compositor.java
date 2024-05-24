@@ -7,6 +7,8 @@ import org.joml.Vector2i;
 import org.joml.Vector4f;
 import org.lwjgl.opengl.GL40;
 
+import lu.pcy113.pclib.GlobalLogger;
+
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
 import lu.kbra.gamebox.client.es.engine.graph.texture.SingleTexture;
@@ -16,7 +18,6 @@ import lu.kbra.gamebox.client.es.engine.utils.consts.FrameBufferAttachment;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TexelFormat;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TexelInternalFormat;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureType;
-import lu.pcy113.pclib.GlobalLogger;
 
 public class Compositor implements Cleanupable {
 

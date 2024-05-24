@@ -8,13 +8,17 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 
+import lu.pcy113.jbcodec.CodecManager;
 import lu.pcy113.pclib.GlobalLogger;
+import lu.pcy113.pclib.PCUtils;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.graph.composition.SceneRenderLayer;
 import lu.kbra.gamebox.client.es.engine.graph.material.text.TextShader;
 import lu.kbra.gamebox.client.es.engine.impl.GameLogic;
 import lu.kbra.gamebox.client.es.engine.scene.camera.Camera3D;
+import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.MeshDecoder;
+import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.MeshEncoder;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
 import lu.kbra.gamebox.client.es.game.game.data.PlayerData;
 import lu.kbra.gamebox.client.es.game.game.debug.DebugUIElements;
@@ -83,15 +87,24 @@ public class GameBoxES extends GameLogic {
 
 		engine.getWindow().onResize((w, h) -> {
 			GlobalLogger.info("Resized to: "+w+":"+h);
-			/*worldScene.getCamera().getProjection().update(w, h);
-			uiScene.getCamera().getProjection().update(w, h);*/
+			worldScene.getCamera().getProjection().update(w, h);
+			/*uiScene.getCamera().getProjection().update(w, h);*/
 		});
 		
-		GlobalUtils.setFixedRatio(worldScene.getCamera());
+		//GlobalUtils.setFixedRatio(worldScene.getCamera());
 		GlobalUtils.setFixedRatio(uiScene.getCamera());
 		
 		engine.getWindow().setBackground(new Vector4f(0.0f));
 
+		CodecManager cm = CodecManager.base();
+		cm.register(new MeshEncoder(), new MeshDecoder(), (short) 12);
+		cm.register(new AttribArrayDecoder(), new AttribArrayDecoder(), (short) 13);
+		cm.register(new UIntAttribArrayDecoder(), new UIntAttribArrayDecoder(), (short) 14);
+		cm.register(new Vec3fAttribArrayDecoder(), new Vec3fAttribArrayDecoder(), (short) 15);
+		cm.register(new Vec3fAttribArrayDecoder(), new Vec3fAttribArrayDecoder(), (short) 15);
+		
+		System.out.println(PCUtils.byteBufferToHexString(cm.encode(cache.getMeshes().values().stream().findFirst().get())));
+		
 		cache.dump(System.err);
 	}
 

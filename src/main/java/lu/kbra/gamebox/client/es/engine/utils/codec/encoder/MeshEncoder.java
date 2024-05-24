@@ -2,10 +2,12 @@ package lu.kbra.gamebox.client.es.engine.utils.codec.encoder;
 
 import java.nio.ByteBuffer;
 
-import lu.pcy113.jb.codec.encoder.DefaultObjectEncoder;
-import lu.pcy113.jb.codec.encoder.StringEncoder;
+import lu.pcy113.jbcodec.CodecManager;
+import lu.pcy113.jbcodec.encoder.DefaultObjectEncoder;
 
 import lu.kbra.gamebox.client.es.engine.cache.attrib.AttribArray;
+import lu.kbra.gamebox.client.es.engine.cache.attrib.UIntAttribArray;
+import lu.kbra.gamebox.client.es.engine.cache.attrib.Vec3fAttribArray;
 import lu.kbra.gamebox.client.es.engine.geom.Mesh;
 import lu.kbra.gamebox.client.es.engine.graph.material.Material;
 
@@ -19,47 +21,51 @@ public class MeshEncoder extends DefaultObjectEncoder<Mesh> {
 	public ByteBuffer encode(boolean head, Mesh obj) {
 		// name
 		// attrib arrays
+		// uint indices
+		// vec3f vertices
+		// ...
 
 		String name = obj.getName();
 		Material material = obj.getMaterial();
+		UIntAttribArray indices = obj.getIndices();
+		Vec3fAttribArray vertices = obj.getVertices();
 
-		int bufferLength = head ? 2 : 0;
+		// generation
 
-		ByteBuffer bbMaterial = null;// ((MaterialEncoder) cm.getEncoderByClass(Material.class)).encode(false,
-										// material);
-		// bufferLength += bbMaterial.capacity();
+		ByteBuffer bb = ByteBuffer.allocate(estimateSize(head, obj));
 
-		bufferLength += cm.estimateSize(false, obj.getIndices());
-
-		for (AttribArray arr : obj.getAttribs()) {
-			System.out.println(arr.getName());
-			// bufferLength += cm.estimateSize(true, arr);
-		}
-
-		System.out.println("bufferLength 1: "+bufferLength);
-
-		StringEncoder stringEncoder = (StringEncoder) cm.getEncoderByClass(String.class);
-		bufferLength += stringEncoder.estimateSize(false, name);
-
-		System.out.println("bufferLength 2: "+bufferLength);
-
-		ByteBuffer bb = ByteBuffer.allocate(bufferLength);
-		
 		if (head) {
 			bb.putShort(header);
 		}
 
-		bb.put(stringEncoder.encode(false, name));
+		bb.put(cm.encode(false, (String) name));
 
-		// bb.put(bbMaterial);
-
-		bb.put(cm.encode(false, obj.getIndices()));
+		bb.put(cm.encode(false, indices));
+		bb.put(cm.encode(false, vertices));
 
 		for (AttribArray arr : obj.getAttribs()) {
-			// bb.put(cm.encode(true, arr));
+			bb.put(cm.encode(true, arr));
 		}
 
 		return (ByteBuffer) bb.flip();
+	}
+
+	@Override
+	public int estimateSize(boolean head, Mesh obj) {
+		int bufferLength = head ? CodecManager.HEAD_SIZE : 0;
+
+		bufferLength += cm.estimateSize(false, obj.getName());
+
+		bufferLength += cm.estimateSize(false, obj.getMaterial());
+		bufferLength += cm.estimateSize(false, obj.getIndices());
+		bufferLength += cm.estimateSize(false, obj.getVertices());
+
+		for (AttribArray arr : obj.getAttribs()) {
+			System.out.println(arr.getName() + " -> " + arr.getClass().getName());
+			bufferLength += cm.estimateSize(true, arr);
+		}
+
+		return bufferLength;
 	}
 
 }

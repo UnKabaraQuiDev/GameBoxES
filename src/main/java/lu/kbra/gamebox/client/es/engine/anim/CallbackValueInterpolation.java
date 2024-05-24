@@ -1,9 +1,7 @@
 package lu.kbra.gamebox.client.es.engine.anim;
 
 import org.joml.Math;
-import org.joml.Quaternionf;
 
-import lu.kbra.gamebox.client.es.engine.objs.entity.Entity;
 import lu.kbra.gamebox.client.es.engine.utils.MathUtils;
 import lu.kbra.gamebox.client.es.engine.utils.interpolation.Interpolator;
 

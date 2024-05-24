@@ -76,20 +76,13 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 	public void createDrawBuffer() {
 		if(hasDrawBuffer())
 			return;
+		
 		drawBuffer = new DrawBuffer(indicesCount, 1, 0, 0, 0);
-		// drawBuffer = new IntAttribArray("draw", -2, 1, new int[] {indicesCount, 1, 4,
-		// 0, 0}, GL46.GL_DRAW_INDIRECT_BUFFER, false);
 		drawBuffer.gen();
 		drawBuffer.bind();
 		drawBuffer.init();
 		drawBuffer.unbind();
 	}
-
-	/*
-	 * public Mesh(String name2, String material2, Vec3fAttribArray pos,
-	 * UIntAttribArray ind, Vec3fAttribArray norm, Vec2fAttribArray uv) {
-	 * this(name2, material2, pos, ind, new AttribArray[] {norm, uv}); }
-	 */
 
 	private void storeAttribArray(AttribArray data) {
 		this.vbo.put(data.getIndex(), data.gen());

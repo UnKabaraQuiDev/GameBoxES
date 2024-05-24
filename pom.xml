@@ -64,6 +64,16 @@
 				<artifactId>native-maven-plugin</artifactId>
 				<version>1.0-M1</version>
 			</dependency>
+			<dependency>
+				<groupId>lu.pcy113</groupId>
+				<artifactId>PCLib</artifactId>
+				<version>0.4</version>
+			</dependency>
+			<dependency>
+				<groupId>lu.pcy113</groupId>
+				<artifactId>jbcodec</artifactId>
+				<version>2.2</version>
+			</dependency>
 
 		</dependencies>
 	</dependencyManagement>
@@ -156,6 +166,11 @@
 			<artifactId>json</artifactId>
 			<version>20240303</version>
 		</dependency>
+		<dependency>
+			<groupId>lu.pcy113</groupId>
+			<artifactId>jbcodec</artifactId>
+			<version>2.2</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -166,34 +181,6 @@
 				<artifactId>build-helper-maven-plugin</artifactId>
 				<version>3.2.0</version>
 				<executions>
-					<!-- Add a source directory for PCLib project -->
-					<execution>
-						<id>add-source-pclib</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>add-source</goal>
-						</goals>
-						<configuration>
-							<sources>
-								<source>${project.basedir}/PCLib/src</source>
-							</sources>
-						</configuration>
-					</execution>
-
-					<!-- Add a source directory for JByteCodec project -->
-					<execution>
-						<id>add-source-jbytecodec</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>add-source</goal>
-						</goals>
-						<configuration>
-							<sources>
-								<source>${project.basedir}/jbcodec/src</source>
-							</sources>
-						</configuration>
-					</execution>
-
 					<!-- Add a source directory for PDRUtils project -->
 					<execution>
 						<id>add-source-pdrutils</id>

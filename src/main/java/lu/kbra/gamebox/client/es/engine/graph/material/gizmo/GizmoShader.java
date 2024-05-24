@@ -1,7 +1,5 @@
 package lu.kbra.gamebox.client.es.engine.graph.material.gizmo;
 
-import lu.pcy113.pclib.GlobalLogger;
-
 import lu.kbra.gamebox.client.es.engine.graph.material.Material;
 import lu.kbra.gamebox.client.es.engine.graph.shader.RenderShader;
 import lu.kbra.gamebox.client.es.engine.impl.shader.AbstractShaderPart;

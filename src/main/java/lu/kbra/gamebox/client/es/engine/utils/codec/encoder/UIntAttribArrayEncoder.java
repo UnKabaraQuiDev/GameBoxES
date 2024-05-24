@@ -2,9 +2,9 @@ package lu.kbra.gamebox.client.es.engine.utils.codec.encoder;
 
 import java.nio.ByteBuffer;
 
-import lu.pcy113.jb.codec.CodecManager;
-import lu.pcy113.jb.codec.encoder.DefaultObjectEncoder;
-import lu.pcy113.jb.codec.encoder.StringEncoder;
+import lu.pcy113.jbcodec.CodecManager;
+import lu.pcy113.jbcodec.encoder.DefaultObjectEncoder;
+import lu.pcy113.jbcodec.encoder.StringEncoder;
 
 import lu.kbra.gamebox.client.es.engine.cache.attrib.UIntAttribArray;
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
