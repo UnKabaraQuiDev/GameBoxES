@@ -29,9 +29,7 @@ public class QuadMeshEncoder extends DefaultObjectEncoder<QuadMesh> {
 		}
 
 		bb.put(cm.encode(false, (String) name));
-
 		bb.put(cm.encode(false, (Material) material));
-
 		bb.put(cm.encode(false, (Vector2f) size));
 
 		return (ByteBuffer) bb.flip();

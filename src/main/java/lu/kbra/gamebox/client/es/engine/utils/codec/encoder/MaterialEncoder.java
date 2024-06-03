@@ -22,7 +22,9 @@ public class MaterialEncoder extends DefaultObjectEncoder<Material> {
 		}
 
 		bb.put(cm.encode(false, (String) obj.getClass().getName()));
-
+		
+		bb.flip();
+		
 		return bb;
 	}
 

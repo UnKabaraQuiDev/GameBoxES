@@ -3,7 +3,6 @@ package lu.kbra.gamebox.client.es.engine.utils.codec.encoder;
 import java.nio.ByteBuffer;
 
 import org.joml.Vector2f;
-import org.joml.Vector3f;
 
 import lu.pcy113.jbcodec.CodecManager;
 import lu.pcy113.jbcodec.encoder.DefaultObjectEncoder;
@@ -41,14 +40,14 @@ public class Vec2fAttribArrayEncoder extends DefaultObjectEncoder<Vec2fAttribArr
 		// int: index, dataSize, bufferType, divisor, dataLength = 6
 
 		int bufferLength = estimateSize(head, obj);
-		GlobalLogger.log("alloc size: " + bufferLength);
-		GlobalLogger.log("name : " + obj.getName());
-		GlobalLogger.log("index; " + obj.getIndex());
-		GlobalLogger.log("dataSize: " + obj.getDataSize());
-		GlobalLogger.log("bufferType: " + obj.getBufferType());
-		GlobalLogger.log("static: " + obj.isStatic());
-		GlobalLogger.log("divisor: " + obj.getDivisor());
-		GlobalLogger.log("data: " + data.length);
+		GlobalLogger.info("alloc size: " + bufferLength);
+		GlobalLogger.info("name : " + obj.getName());
+		GlobalLogger.info("index; " + obj.getIndex());
+		GlobalLogger.info("dataSize: " + obj.getDataSize());
+		GlobalLogger.info("bufferType: " + obj.getBufferType());
+		GlobalLogger.info("static: " + obj.isStatic());
+		GlobalLogger.info("divisor: " + obj.getDivisor());
+		GlobalLogger.info("data: " + data.length);
 
 		ByteBuffer bb = ByteBuffer.allocate(bufferLength);
 		
@@ -85,7 +84,7 @@ public class Vec2fAttribArrayEncoder extends DefaultObjectEncoder<Vec2fAttribArr
 				cm.estimateSize(false, obj.getName()) +
 				5 * Integer.BYTES + // index, dataSize, bufferType, divisor, dataLength
 				1 + // isStatic
-				cm.estimateSize(false, new Vector3f()) * obj.getData().length + // data
+				cm.estimateSize(false, new Vector2f()) * obj.getData().length + // data
 				2; // end short
 	}
 

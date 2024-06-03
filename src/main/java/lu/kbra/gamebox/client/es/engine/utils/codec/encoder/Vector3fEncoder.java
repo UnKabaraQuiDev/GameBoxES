@@ -25,12 +25,14 @@ public class Vector3fEncoder extends DefaultObjectEncoder<Vector3f> {
 		bb.putFloat(obj.y);
 		bb.putFloat(obj.z);
 
+		bb.flip();
+
 		return bb;
 	}
 
 	@Override
 	public int estimateSize(boolean head, Vector3f obj) {
-		return head ? CodecManager.HEAD_SIZE : 0 + Float.BYTES * 3;
+		return (head ? CodecManager.HEAD_SIZE : 0) + Float.BYTES * 3;
 	}
 
 }

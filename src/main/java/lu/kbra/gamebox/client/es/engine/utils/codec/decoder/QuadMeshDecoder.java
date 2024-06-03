@@ -21,7 +21,6 @@ public class QuadMeshDecoder extends DefaultObjectDecoder<QuadMesh> {
 		
 		String name = cm.getDecoderByClass(String.class).decode(false, bb);
 		Material material = cm.getDecoderByClass(Material.class).decode(false, bb);
-		
 		Vector2f size = cm.getDecoderByClass(Vector2f.class).decode(false, bb);
 		
 		return new QuadMesh(name, material, size);

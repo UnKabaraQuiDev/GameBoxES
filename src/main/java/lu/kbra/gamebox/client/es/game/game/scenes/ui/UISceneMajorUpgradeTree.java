@@ -21,8 +21,8 @@ import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
 import lu.kbra.gamebox.client.es.engine.utils.interpolation.Interpolators;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.FillShader;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.FillShader.FillMaterial;
-import lu.kbra.gamebox.client.es.game.game.render.shaders.HealthSpeedIndicatorShader;
-import lu.kbra.gamebox.client.es.game.game.render.shaders.HealthSpeedIndicatorShader.HealthSpeedIndicatorMaterial;
+import lu.kbra.gamebox.client.es.game.game.render.shaders.HealthIndicatorShader;
+import lu.kbra.gamebox.client.es.game.game.render.shaders.HealthIndicatorShader.HealthIndicatorMaterial;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.MaterialListShader;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalConsts;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalLang;
@@ -61,12 +61,14 @@ public class UISceneMajorUpgradeTree extends UISceneState {
 				new Vector2f(2));
 		uiBG = scene.addEntity("uiBG", new MeshComponent(bgMesh)).setActive(false);
 
-		Mesh materialListMesh = cache.loadMesh("materialList",
+		Mesh materialListMesh = GlobalUtils.loadCompiledMesh(cache, "materialList", () -> {
+			return cache.loadMesh("materialList",
 				cache.loadOrGetMaterial(MaterialListShader.MaterialListMaterial.NAME,
 						MaterialListShader.MaterialListMaterial.class,
 						cache.loadOrGetSingleTexture(MaterialListShader.MaterialListMaterial.TEXTURE_NAME,
 								MaterialListShader.MaterialListMaterial.TEXTURE_PATH, TextureFilter.NEAREST)),
 				MaterialListShader.MaterialListMaterial.MESH_PATH);
+		});
 		materialList = scene.addEntity("materialList", new MeshComponent(materialListMesh),
 				new Transform3DComponent(new Vector3f(-4f, -2, 1), new Quaternionf(), new Vector3f(2)),
 				new RenderComponent(15));
@@ -81,20 +83,22 @@ public class UISceneMajorUpgradeTree extends UISceneState {
 						new Transform3DComponent(new Vector3f(-3.1f, -1.8f, 1.1f))),
 				new Entity("glucoseText", new TextEmitterComponent(glucoseText),
 						new Transform3DComponent(new Vector3f(-3.1f, -2.25f, 1.1f))),
-				new Entity("lipidText", new TextEmitterComponent(lipidText),
+				new Entity("lipidText", new TextEmitterComponent(lipidText), 
 						new Transform3DComponent(new Vector3f(-3.1f, -2.7f, 1.1f)))));
 
 		// health indicator
-		Mesh healthIndicatorMesh = cache.loadMesh("healthIndicator",
-				cache.loadOrGetMaterial(HealthSpeedIndicatorShader.HealthSpeedIndicatorMaterial.HEALTH_NAME,
-						HealthSpeedIndicatorShader.HealthSpeedIndicatorMaterial.class,
-						HealthSpeedIndicatorShader.HealthSpeedIndicatorMaterial.HEALTH_NAME,
-						cache.loadOrGetRenderShader(HealthSpeedIndicatorShader.NAME, HealthSpeedIndicatorShader.class),
-						cache.loadOrGetSingleTexture(
-								HealthSpeedIndicatorShader.HealthSpeedIndicatorMaterial.TEXTURE_HEALTH_NAME,
-								HealthSpeedIndicatorShader.HealthSpeedIndicatorMaterial.TEXTURE_HEALTH_PATH,
-								TextureFilter.NEAREST)),
-				HealthSpeedIndicatorShader.HealthSpeedIndicatorMaterial.MESH_HEALTH_PATH);
+		Mesh healthIndicatorMesh = GlobalUtils.loadCompiledMesh(cache, "healthIndicator", () -> {
+			return cache.loadMesh("healthIndicator",
+					cache.loadOrGetMaterial(HealthIndicatorShader.HealthIndicatorMaterial.HEALTH_NAME,
+							HealthIndicatorShader.HealthIndicatorMaterial.class,
+							HealthIndicatorShader.HealthIndicatorMaterial.HEALTH_NAME,
+							cache.loadOrGetRenderShader(HealthIndicatorShader.NAME, HealthIndicatorShader.class),
+							cache.loadOrGetSingleTexture(
+									HealthIndicatorShader.HealthIndicatorMaterial.TEXTURE_HEALTH_NAME,
+									HealthIndicatorShader.HealthIndicatorMaterial.TEXTURE_HEALTH_PATH,
+									TextureFilter.NEAREST)),
+					HealthIndicatorShader.HealthIndicatorMaterial.MESH_HEALTH_PATH);
+		});
 		maxHealthIndicator = scene.addEntity("healthIndicator", new MeshComponent(healthIndicatorMesh),
 				new Transform3DComponent(
 						new Vector3f(CLICK_OFFSET_END.x, CLICK_OFFSET_END.y, 0).add(HEALTH_INDICATOR_BASE),
@@ -115,6 +119,8 @@ public class UISceneMajorUpgradeTree extends UISceneState {
 
 		healthFillProgress = 0;
 
+		// GlobalUtils.compileMeshes(cache);
+		
 		cache.dump(System.err);
 	}
 
@@ -146,7 +152,7 @@ public class UISceneMajorUpgradeTree extends UISceneState {
 		if (healthFillProgress < 1) {
 			healthFillProgress = Math.clamp(0, 1, healthFillProgress + dTime * HEALTH_FILL_SPEED);
 
-			HealthSpeedIndicatorMaterial mat = (HealthSpeedIndicatorMaterial) maxHealthIndicator
+			HealthIndicatorMaterial mat = (HealthIndicatorMaterial) maxHealthIndicator
 					.getComponent(MeshComponent.class).getMesh(cache).getMaterial();
 			oldVisibleHealth = Math.lerp(visibleHealth, GlobalUtils.INSTANCE.playerData.getHealth(),
 					Interpolators.QUART_OUT.evaluate(healthFillProgress));
@@ -161,7 +167,7 @@ public class UISceneMajorUpgradeTree extends UISceneState {
 		if (healthEmptyProgress < 1) {
 			healthEmptyProgress = Math.clamp(0, 1, healthEmptyProgress + dTime * HEALTH_FILL_SPEED);
 
-			HealthSpeedIndicatorMaterial mat = (HealthSpeedIndicatorMaterial) maxHealthIndicator
+			HealthIndicatorMaterial mat = (HealthIndicatorMaterial) maxHealthIndicator
 					.getComponent(MeshComponent.class).getMesh(cache).getMaterial();
 			visibleHealth = GlobalUtils.INSTANCE.playerData.getHealth();
 			mat.setGreenProgress(visibleHealth / GlobalUtils.INSTANCE.playerData.getMaxHealth());

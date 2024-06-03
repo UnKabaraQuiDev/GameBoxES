@@ -30,14 +30,14 @@ public class FloatAttribArrayEncoder extends DefaultObjectEncoder<FloatAttribArr
 		float[] data = obj.getData();
 
 		int bufferLength = estimateSize(head, obj);
-		GlobalLogger.log("alloc size: " + bufferLength);
-		GlobalLogger.log("name : " + obj.getName());
-		GlobalLogger.log("index; " + obj.getIndex());
-		GlobalLogger.log("dataSize: " + obj.getDataSize());
-		GlobalLogger.log("bufferType: " + obj.getBufferType());
-		GlobalLogger.log("static: " + obj.isStatic());
-		GlobalLogger.log("divisor: " + obj.getDivisor());
-		GlobalLogger.log("data: " + data.length);
+		GlobalLogger.info("alloc size: " + bufferLength);
+		GlobalLogger.info("name : " + obj.getName());
+		GlobalLogger.info("index; " + obj.getIndex());
+		GlobalLogger.info("dataSize: " + obj.getDataSize());
+		GlobalLogger.info("bufferType: " + obj.getBufferType());
+		GlobalLogger.info("static: " + obj.isStatic());
+		GlobalLogger.info("divisor: " + obj.getDivisor());
+		GlobalLogger.info("data: " + data.length);
 
 		ByteBuffer bb = ByteBuffer.allocate(bufferLength);
 
@@ -70,7 +70,7 @@ public class FloatAttribArrayEncoder extends DefaultObjectEncoder<FloatAttribArr
 	public int estimateSize(boolean head, FloatAttribArray obj) {
 		return (head ? CodecManager.HEAD_SIZE : 0) + cm.estimateSize(false, obj.getName()) + 5 * Integer.BYTES + // index, dataSize, bufferType, divisor, dataLength
 				1 + // isStatic
-				Integer.BYTES * obj.getData().length + // data
+				Float.BYTES * obj.getData().length + // data
 				2; // end short
 	}
 

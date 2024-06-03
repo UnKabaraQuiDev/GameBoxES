@@ -24,7 +24,8 @@ public class MeshEncoder extends DefaultObjectEncoder<Mesh> {
 		UIntAttribArray indices = obj.getIndices();
 		Vec3fAttribArray vertices = obj.getVertices();
 
-		ByteBuffer bb = ByteBuffer.allocate(estimateSize(head, obj));
+		final int allocSize = estimateSize(head, obj);
+		ByteBuffer bb = ByteBuffer.allocateDirect(allocSize);
 
 		if (head) {
 			bb.putShort(header);
@@ -33,11 +34,14 @@ public class MeshEncoder extends DefaultObjectEncoder<Mesh> {
 		bb.put(cm.encode(false, (String) name));
 		bb.put(cm.encode(false, (Material) material));
 
-		bb.put(cm.encode(false, indices));
-		bb.put(cm.encode(false, vertices));
+		bb.put(cm.encode(false, (UIntAttribArray) indices));
+		bb.put(cm.encode(false, (Vec3fAttribArray) vertices));
+
+		bb.put(cm.encode(false, (int) obj.getAttribs().length));
 
 		for (AttribArray arr : obj.getAttribs()) {
-			bb.put(cm.encode(true, arr));
+			ByteBuffer bb2 = cm.encode(true, arr);
+			bb.put(bb2);
 		}
 
 		return (ByteBuffer) bb.flip();
@@ -47,14 +51,15 @@ public class MeshEncoder extends DefaultObjectEncoder<Mesh> {
 	public int estimateSize(boolean head, Mesh obj) {
 		int bufferLength = head ? CodecManager.HEAD_SIZE : 0;
 
-		bufferLength += cm.estimateSize(false, obj.getName());
+		bufferLength += cm.estimateSize(false, (String) obj.getName());
 
-		bufferLength += cm.estimateSize(false, obj.getMaterial());
-		bufferLength += cm.estimateSize(false, obj.getIndices());
-		bufferLength += cm.estimateSize(false, obj.getVertices());
+		bufferLength += cm.estimateSize(false, (Material) obj.getMaterial());
+		bufferLength += cm.estimateSize(false, (UIntAttribArray) obj.getIndices());
+		bufferLength += cm.estimateSize(false, (Vec3fAttribArray) obj.getVertices());
+
+		bufferLength += cm.estimateSize(false, (int) obj.getAttribs().length);
 
 		for (AttribArray arr : obj.getAttribs()) {
-			System.out.println(arr.getName() + " -> " + arr.getClass().getName());
 			bufferLength += cm.estimateSize(true, arr);
 		}
 

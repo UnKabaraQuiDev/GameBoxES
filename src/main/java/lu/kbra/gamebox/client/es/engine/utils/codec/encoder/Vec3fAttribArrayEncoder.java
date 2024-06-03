@@ -7,7 +7,6 @@ import org.joml.Vector3f;
 import lu.pcy113.jbcodec.CodecManager;
 import lu.pcy113.jbcodec.encoder.DefaultObjectEncoder;
 import lu.pcy113.jbcodec.encoder.Encoder;
-import lu.pcy113.jbcodec.encoder.StringEncoder;
 import lu.pcy113.pclib.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.cache.attrib.Vec3fAttribArray;
@@ -55,10 +54,8 @@ public class Vec3fAttribArrayEncoder extends DefaultObjectEncoder<Vec3fAttribArr
 			bb.putShort(header);
 		}
 		
-		ByteBuffer bbName = ((StringEncoder) cm.getEncoderByClass(String.class)).encode(false, name);
+		ByteBuffer bbName = ((Encoder<String>) cm.getEncoderByClass(String.class)).encode(false, name);
 		bb.put(bbName);
-		bbName.clear();
-		bbName = null;
 
 		bb.putInt(index);
 		bb.putInt(dataSize);
@@ -74,7 +71,7 @@ public class Vec3fAttribArrayEncoder extends DefaultObjectEncoder<Vec3fAttribArr
 		}
 		
 		bb.putShort(Vec3fAttribArrayDecoder.END);
-
+		
 		return (ByteBuffer) bb.flip();
 	}
 

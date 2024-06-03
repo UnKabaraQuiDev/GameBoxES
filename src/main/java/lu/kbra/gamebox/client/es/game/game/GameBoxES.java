@@ -1,6 +1,7 @@
 package lu.kbra.gamebox.client.es.game.game;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.logging.Level;
 
 import org.joml.Quaternionf;
@@ -10,8 +11,11 @@ import org.lwjgl.glfw.GLFW;
 
 import lu.pcy113.jbcodec.CodecManager;
 import lu.pcy113.pclib.GlobalLogger;
+import lu.pcy113.pclib.PCUtils;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
+import lu.kbra.gamebox.client.es.engine.geom.Mesh;
+import lu.kbra.gamebox.client.es.engine.geom.QuadMesh;
 import lu.kbra.gamebox.client.es.engine.graph.composition.SceneRenderLayer;
 import lu.kbra.gamebox.client.es.engine.graph.material.text.TextShader;
 import lu.kbra.gamebox.client.es.engine.impl.GameLogic;
@@ -70,9 +74,10 @@ public class GameBoxES extends GameLogic {
 
 		GlobalUtils.init(this, super.engine);
 
-		GlobalLogger.getLogger().setMinForwardLevel(Level.SEVERE);
+		GlobalLogger.getLogger().setMinForwardLevel(Level.INFO);
 
 		GlobalUtils.registerRenderers();
+		GlobalUtils.registerCodecs();
 
 		try {
 			GlobalOptions.load();
@@ -110,21 +115,9 @@ public class GameBoxES extends GameLogic {
 		GlobalUtils.setFixedRatio(uiScene.getCamera());
 
 		engine.getWindow().setBackground(new Vector4f(0.0f));
-
-		CodecManager cm = CodecManager.base();
-		cm.register(new MeshEncoder(), new MeshDecoder(), (short) 12);
-		cm.register(new QuadMeshEncoder(), new QuadMeshDecoder(), (short) 17);
-		// cm.register(new AttribArrayEncoder(), (short) 13);
-		cm.register(new UIntAttribArrayEncoder(), new UIntAttribArrayDecoder(), (short) 14);
-		cm.register(new FloatAttribArrayEncoder(), new FloatAttribArrayDecoder(), (short) 15);
-		cm.register(new Vec3fAttribArrayEncoder(), new Vec3fAttribArrayDecoder(), (short) 16);
-		cm.register(new Vec2fAttribArrayEncoder(), new Vec2fAttribArrayDecoder(), (short) 16);
-		cm.register(new MaterialEncoder(), new MaterialDecoder(), (short) 18);
-		cm.register(new Vector3fEncoder(), new Vector3fDecoder(), (short) 19);
-		cm.register(new Vector2fEncoder(), new Vector2fDecoder(), (short) 20);
-
-		// System.out.println(PCUtils.byteBufferToHexString(cm.encode(cache.getMeshes().values().stream().findAny().get())));
-
+		
+		GlobalUtils.compileMeshes(cache);
+		
 		cache.dump(System.err);
 	}
 

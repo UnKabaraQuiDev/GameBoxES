@@ -7,6 +7,8 @@ import lu.kbra.gamebox.client.es.engine.graph.material.Material;
 import lu.kbra.gamebox.client.es.engine.graph.shader.RenderShader;
 import lu.kbra.gamebox.client.es.engine.impl.Renderable;
 import lu.kbra.gamebox.client.es.engine.impl.shader.AbstractShaderPart;
+import lu.kbra.gamebox.client.es.engine.utils.codec.DefaultObjectDecoderMethod;
+import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
 
 public class FourButtonStateShader extends RenderShader {
 
@@ -48,6 +50,11 @@ public class FourButtonStateShader extends RenderShader {
 
 		public void setButtons(Vector4f buttons) {
 			this.buttons = buttons;
+		}
+
+		@DefaultObjectDecoderMethod
+		public static FourButtonStateMaterial create() {
+			return GlobalUtils.currentLoadCache.loadOrGetMaterial(NAME, FourButtonStateMaterial.class);
 		}
 
 	}

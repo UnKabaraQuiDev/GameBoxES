@@ -1,9 +1,15 @@
 package lu.kbra.gamebox.client.es.game.game.utils.global;
 
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
@@ -12,11 +18,15 @@ import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL40;
 
+import lu.pcy113.jbcodec.CodecManager;
 import lu.pcy113.pclib.GlobalLogger;
+import lu.pcy113.pclib.PCUtils;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
+import lu.kbra.gamebox.client.es.engine.cache.SharedCacheManager;
 import lu.kbra.gamebox.client.es.engine.geom.Mesh;
+import lu.kbra.gamebox.client.es.engine.geom.QuadMesh;
 import lu.kbra.gamebox.client.es.engine.graph.material.text.TextShader;
 import lu.kbra.gamebox.client.es.engine.graph.material.text.TextShader.TextMaterial;
 import lu.kbra.gamebox.client.es.engine.graph.render.GizmoRenderer;
@@ -37,6 +47,24 @@ import lu.kbra.gamebox.client.es.engine.scene.Scene3D;
 import lu.kbra.gamebox.client.es.engine.scene.camera.Camera;
 import lu.kbra.gamebox.client.es.engine.scene.camera.Camera3D;
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
+import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.FloatAttribArrayDecoder;
+import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.MaterialDecoder;
+import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.MeshDecoder;
+import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.QuadMeshDecoder;
+import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.UIntAttribArrayDecoder;
+import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.Vec2fAttribArrayDecoder;
+import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.Vec3fAttribArrayDecoder;
+import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.Vector2fDecoder;
+import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.Vector3fDecoder;
+import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.FloatAttribArrayEncoder;
+import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.MaterialEncoder;
+import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.MeshEncoder;
+import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.QuadMeshEncoder;
+import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.UIntAttribArrayEncoder;
+import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.Vec2fAttribArrayEncoder;
+import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.Vec3fAttribArrayEncoder;
+import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.Vector2fEncoder;
+import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.Vector3fEncoder;
 import lu.kbra.gamebox.client.es.engine.utils.consts.Alignment;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
 import lu.kbra.gamebox.client.es.engine.utils.file.FileUtils;
@@ -50,6 +78,9 @@ public class GlobalUtils {
 	private static final int PROJECTION_WIDTH = 1920;
 	private static final int PROJECTION_HEIGHT = 1080;
 
+	private static CodecManager cm;
+	public static CacheManager currentLoadCache;
+
 	public static GameBoxES INSTANCE;
 	private static GameEngine engine;
 
@@ -57,6 +88,7 @@ public class GlobalUtils {
 
 	public static void init(GameBoxES gameBoxES, GameEngine e) {
 		INSTANCE = gameBoxES;
+		currentLoadCache = gameBoxES.cache;
 		engine = e;
 
 		workers = new NextTaskWorker("workers", 5);
@@ -66,6 +98,20 @@ public class GlobalUtils {
 
 	public static float applyMinThreshold(float value) {
 		return PDRUtils.applyMinThreshold(value, joystickThreshold);
+	}
+
+	public static void registerCodecs() {
+		cm = CodecManager.base();
+		// cm.register(new AttribArrayEncoder(), (short) 13);
+		cm.register(new UIntAttribArrayEncoder(), new UIntAttribArrayDecoder(), (short) 14);
+		cm.register(new FloatAttribArrayEncoder(), new FloatAttribArrayDecoder(), (short) 15);
+		cm.register(new Vec3fAttribArrayEncoder(), new Vec3fAttribArrayDecoder(), (short) 16);
+		cm.register(new QuadMeshEncoder(), new QuadMeshDecoder(), (short) 17);
+		cm.register(new MeshEncoder(), new MeshDecoder(), (short) 12);
+		cm.register(new MaterialEncoder(), new MaterialDecoder(), (short) 18);
+		cm.register(new Vector3fEncoder(), new Vector3fDecoder(), (short) 19);
+		cm.register(new Vector2fEncoder(), new Vector2fDecoder(), (short) 20);
+		cm.register(new Vec2fAttribArrayEncoder(), new Vec2fAttribArrayDecoder(), (short) 21);
 	}
 
 	public static void registerRenderers() {
@@ -223,7 +269,7 @@ public class GlobalUtils {
 		float[] btns = INSTANCE.window.getJoystickAxis(GLFW.GLFW_JOYSTICK_1);
 		return new Vector2f(btns[0], -btns[1]);
 	}
-	
+
 	public static NextTask newRenderTask() {
 		return INSTANCE.createTask(GameEngine.QUEUE_RENDER);
 	}
@@ -253,6 +299,65 @@ public class GlobalUtils {
 		long start = System.nanoTime();
 		run.run();
 		callback.accept((float) (System.nanoTime() - start) / 1e6f);
+	}
+
+	public static Mesh loadCompiledMesh(CacheManager cache, String path) {
+		Path filePath = Paths.get("./resources/models/compiled/" + path + ".mesh");
+		if (Files.notExists(filePath)) {
+			throw new RuntimeException("Mesh at " + filePath + ", not found; compile it with `GlobalUtils.compileMesh(Mesh mesh, String path)`");
+		}
+
+		final CacheManager cc = currentLoadCache;
+		currentLoadCache = cache;
+
+		Mesh mesh = null;
+
+		try {
+			mesh = (Mesh) cm.decode(ByteBuffer.wrap(Files.readAllBytes(filePath)));
+			
+			cc.addMesh(mesh);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+
+		currentLoadCache = cc;
+
+		return mesh;
+	}
+
+	public static void compileMesh(Mesh mesh, String path) {
+		try {
+			Path filePath = Paths.get("./resources/models/compiled/" + path + ".mesh");
+
+			ByteBuffer bb = cm.encode(mesh);
+
+			if (Files.notExists(filePath)) {
+				Files.createFile(filePath);
+			}
+			
+			Files.write(filePath, PCUtils.byteBufferToArray(bb));
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void compileMeshes(CacheManager cache) {
+		for(Mesh mesh : cache.getMeshes().values()) {
+			if(mesh instanceof QuadMesh)
+				continue;
+			GlobalUtils.compileMesh(mesh, mesh.getName());
+			GlobalLogger.info("Compiled mesh: "+mesh.getId()+" -> "+mesh.getName());
+		}
+	}
+
+	public static Mesh loadCompiledMesh(CacheManager cache, String path, Supplier<Mesh> supplier) {
+		try {
+			return loadCompiledMesh(cache, path);
+		}catch(RuntimeException e) {
+			compileMesh(supplier.get(), path);
+		}
+		return loadCompiledMesh(cache, path);
 	}
 
 }

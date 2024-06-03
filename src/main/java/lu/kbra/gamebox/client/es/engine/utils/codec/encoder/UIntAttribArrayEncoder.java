@@ -31,14 +31,14 @@ public class UIntAttribArrayEncoder extends DefaultObjectEncoder<UIntAttribArray
 		int[] data = obj.getData();
 
 		int bufferLength = estimateSize(head, obj);
-		GlobalLogger.log("alloc size: " + bufferLength);
-		GlobalLogger.log("name : " + obj.getName());
-		GlobalLogger.log("index; " + obj.getIndex());
-		GlobalLogger.log("dataSize: " + obj.getDataSize());
-		GlobalLogger.log("bufferType: " + obj.getBufferType());
-		GlobalLogger.log("static: " + obj.isStatic());
-		GlobalLogger.log("divisor: " + obj.getDivisor());
-		GlobalLogger.log("data: " + data.length);
+		GlobalLogger.info("alloc size: " + bufferLength);
+		GlobalLogger.info("name : " + obj.getName());
+		GlobalLogger.info("index; " + obj.getIndex());
+		GlobalLogger.info("dataSize: " + obj.getDataSize());
+		GlobalLogger.info("bufferType: " + obj.getBufferType());
+		GlobalLogger.info("static: " + obj.isStatic());
+		GlobalLogger.info("divisor: " + obj.getDivisor());
+		GlobalLogger.info("data: " + data.length);
 
 		ByteBuffer bb = ByteBuffer.allocate(bufferLength);
 
@@ -48,8 +48,6 @@ public class UIntAttribArrayEncoder extends DefaultObjectEncoder<UIntAttribArray
 
 		ByteBuffer bbName = ((StringEncoder) cm.getEncoderByClass(String.class)).encode(false, name);
 		bb.put(bbName);
-		bbName.clear();
-		bbName = null;
 
 		bb.putInt(index);
 		bb.putInt(dataSize);

@@ -24,12 +24,14 @@ public class Vector2fEncoder extends DefaultObjectEncoder<Vector2f> {
 		bb.putFloat(obj.x);
 		bb.putFloat(obj.y);
 
+		bb.flip();
+
 		return bb;
 	}
 
 	@Override
 	public int estimateSize(boolean head, Vector2f obj) {
-		return head ? CodecManager.HEAD_SIZE : 0 + Float.BYTES * 2;
+		return (head ? CodecManager.HEAD_SIZE : 0) + Float.BYTES * 2;
 	}
 
 }

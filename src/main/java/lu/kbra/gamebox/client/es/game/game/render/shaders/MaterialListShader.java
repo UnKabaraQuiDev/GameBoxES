@@ -2,11 +2,15 @@ package lu.kbra.gamebox.client.es.game.game.render.shaders;
 
 import java.util.HashMap;
 
+import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
 import lu.kbra.gamebox.client.es.engine.graph.material.TextureMaterial;
 import lu.kbra.gamebox.client.es.engine.graph.shader.RenderShader;
 import lu.kbra.gamebox.client.es.engine.graph.texture.SingleTexture;
 import lu.kbra.gamebox.client.es.engine.graph.texture.Texture;
 import lu.kbra.gamebox.client.es.engine.impl.shader.AbstractShaderPart;
+import lu.kbra.gamebox.client.es.engine.utils.codec.DefaultObjectDecoderMethod;
+import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
+import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
 
 public class MaterialListShader extends RenderShader {
 
@@ -42,6 +46,15 @@ public class MaterialListShader extends RenderShader {
 		
 		public MaterialListMaterial(SingleTexture txt1) {
 			this(new MaterialListShader(), txt1);
+		}
+		
+		@DefaultObjectDecoderMethod
+		public static MaterialListMaterial create() {
+			CacheManager cache = GlobalUtils.currentLoadCache;
+			return cache.loadOrGetMaterial(MaterialListShader.MaterialListMaterial.NAME,
+					MaterialListShader.MaterialListMaterial.class,
+					cache.loadOrGetSingleTexture(MaterialListShader.MaterialListMaterial.TEXTURE_NAME,
+							MaterialListShader.MaterialListMaterial.TEXTURE_PATH, TextureFilter.NEAREST));
 		}
 
 	}

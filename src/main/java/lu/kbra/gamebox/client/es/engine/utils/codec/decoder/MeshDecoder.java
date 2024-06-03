@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 
 import lu.pcy113.jbcodec.decoder.DefaultObjectDecoder;
 
+import lu.kbra.gamebox.client.es.engine.cache.attrib.AttribArray;
 import lu.kbra.gamebox.client.es.engine.cache.attrib.UIntAttribArray;
 import lu.kbra.gamebox.client.es.engine.cache.attrib.Vec3fAttribArray;
 import lu.kbra.gamebox.client.es.engine.geom.Mesh;
@@ -24,7 +25,14 @@ public class MeshDecoder extends DefaultObjectDecoder<Mesh> {
 		UIntAttribArray indices = cm.getDecoderByClass(UIntAttribArray.class).decode(false, bb);
 		Vec3fAttribArray vertices = cm.getDecoderByClass(Vec3fAttribArray.class).decode(false, bb);
 		
-		return null;
+		int otherLength = bb.getInt();
+		AttribArray[] others = new AttribArray[otherLength];
+		
+		for(int i = 0; i < otherLength; i++) {
+			others[i] = (AttribArray) cm.decode(bb);
+		}
+		
+		return new Mesh(name, material, vertices, indices, others);
 	}
 
 }
