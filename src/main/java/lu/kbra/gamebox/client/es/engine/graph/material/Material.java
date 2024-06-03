@@ -18,8 +18,6 @@ public class Material implements UniqueID {
 	protected Map<String, Object> properties;
 	protected RenderShader shader;
 
-	// private FloatAttribArray uniforms;
-
 	public Material(String name, RenderShader shader) {
 		this.name = name;
 		this.shader = shader;

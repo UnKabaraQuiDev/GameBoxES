@@ -17,8 +17,22 @@ import lu.kbra.gamebox.client.es.engine.graph.composition.SceneRenderLayer;
 import lu.kbra.gamebox.client.es.engine.graph.material.text.TextShader;
 import lu.kbra.gamebox.client.es.engine.impl.GameLogic;
 import lu.kbra.gamebox.client.es.engine.scene.camera.Camera3D;
+import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.FloatAttribArrayDecoder;
+import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.MaterialDecoder;
 import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.MeshDecoder;
+import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.QuadMeshDecoder;
+import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.UIntAttribArrayDecoder;
+import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.Vec3fAttribArrayDecoder;
+import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.Vector2fDecoder;
+import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.Vector3fDecoder;
+import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.FloatAttribArrayEncoder;
+import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.MaterialEncoder;
 import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.MeshEncoder;
+import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.QuadMeshEncoder;
+import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.UIntAttribArrayEncoder;
+import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.Vec3fAttribArrayEncoder;
+import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.Vector2fEncoder;
+import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.Vector3fEncoder;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
 import lu.kbra.gamebox.client.es.game.game.data.PlayerData;
 import lu.kbra.gamebox.client.es.game.game.debug.DebugUIElements;
@@ -86,25 +100,29 @@ public class GameBoxES extends GameLogic {
 		compositor.addRenderLayer(1, uiSceneRenderLayer);
 
 		engine.getWindow().onResize((w, h) -> {
-			GlobalLogger.info("Resized to: "+w+":"+h);
+			GlobalLogger.info("Resized to: " + w + ":" + h);
 			worldScene.getCamera().getProjection().update(w, h);
-			/*uiScene.getCamera().getProjection().update(w, h);*/
+			/* uiScene.getCamera().getProjection().update(w, h); */
 		});
-		
-		//GlobalUtils.setFixedRatio(worldScene.getCamera());
+
+		// GlobalUtils.setFixedRatio(worldScene.getCamera());
 		GlobalUtils.setFixedRatio(uiScene.getCamera());
-		
+
 		engine.getWindow().setBackground(new Vector4f(0.0f));
 
 		CodecManager cm = CodecManager.base();
 		cm.register(new MeshEncoder(), new MeshDecoder(), (short) 12);
-		cm.register(new AttribArrayDecoder(), new AttribArrayDecoder(), (short) 13);
-		cm.register(new UIntAttribArrayDecoder(), new UIntAttribArrayDecoder(), (short) 14);
-		cm.register(new Vec3fAttribArrayDecoder(), new Vec3fAttribArrayDecoder(), (short) 15);
-		cm.register(new Vec3fAttribArrayDecoder(), new Vec3fAttribArrayDecoder(), (short) 15);
-		
-		System.out.println(PCUtils.byteBufferToHexString(cm.encode(cache.getMeshes().values().stream().findFirst().get())));
-		
+		cm.register(new QuadMeshEncoder(), new QuadMeshDecoder(), (short) 17);
+		// cm.register(new AttribArrayEncoder(), (short) 13);
+		cm.register(new UIntAttribArrayEncoder(), new UIntAttribArrayDecoder(), (short) 14);
+		cm.register(new FloatAttribArrayEncoder(), new FloatAttribArrayDecoder(), (short) 15);
+		cm.register(new Vec3fAttribArrayEncoder(), new Vec3fAttribArrayDecoder(), (short) 16);
+		cm.register(new MaterialEncoder(), new MaterialDecoder(), (short) 18);
+		cm.register(new Vector3fEncoder(), new Vector3fDecoder(), (short) 19);
+		cm.register(new Vector2fEncoder(), new Vector2fDecoder(), (short) 20);
+
+		// System.out.println(PCUtils.byteBufferToHexString(cm.encode(cache.getMeshes().values().stream().findAny().get())));
+
 		cache.dump(System.err);
 	}
 
@@ -145,11 +163,11 @@ public class GameBoxES extends GameLogic {
 
 	@Override
 	public void update(float dTime) {
-		if(!GameState.START_MENU.equals(gameState)) {
+		if (!GameState.START_MENU.equals(gameState)) {
 			worldScene.update(dTime);
 		}
 		uiScene.update(dTime);
-		
+
 		// GlobalUtils.dumpThreads();
 	}
 

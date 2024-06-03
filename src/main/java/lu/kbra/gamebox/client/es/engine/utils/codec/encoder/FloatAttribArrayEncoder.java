@@ -7,28 +7,27 @@ import lu.pcy113.jbcodec.encoder.DefaultObjectEncoder;
 import lu.pcy113.jbcodec.encoder.StringEncoder;
 import lu.pcy113.pclib.GlobalLogger;
 
-import lu.kbra.gamebox.client.es.engine.cache.attrib.UIntAttribArray;
-import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
-import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.UIntAttribArrayDecoder;
+import lu.kbra.gamebox.client.es.engine.cache.attrib.FloatAttribArray;
+import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.FloatAttribArrayDecoder;
 
 /**
- * STRING name ; INT index ; INT dataSize ; INT bufferType ; BOOL _static ; INT divisor ; INT arrayLength ; INT[] data ; INT END
+ * STRING name ; INT index ; INT dataSize ; INT bufferType ; BOOL _static ; INT divisor ; INT arrayLength ; FLOAT[] data ; INT END
  */
-public class UIntAttribArrayEncoder extends DefaultObjectEncoder<UIntAttribArray> {
+public class FloatAttribArrayEncoder extends DefaultObjectEncoder<FloatAttribArray> {
 
-	public UIntAttribArrayEncoder() {
-		super(UIntAttribArray.class);
+	public FloatAttribArrayEncoder() {
+		super(FloatAttribArray.class);
 	}
 
 	@Override
-	public ByteBuffer encode(boolean head, UIntAttribArray obj) {
+	public ByteBuffer encode(boolean head, FloatAttribArray obj) {
 		String name = obj.getName();
 		int dataSize = obj.getDataSize();
 		int bufferType = obj.getBufferType();
 		boolean _static = obj.isStatic();
 		int divisor = obj.getDivisor();
 		int index = obj.getIndex();
-		int[] data = obj.getData();
+		float[] data = obj.getData();
 
 		int bufferLength = estimateSize(head, obj);
 		GlobalLogger.log("alloc size: " + bufferLength);
@@ -58,16 +57,17 @@ public class UIntAttribArrayEncoder extends DefaultObjectEncoder<UIntAttribArray
 		bb.putInt(divisor);
 		bb.putInt(data.length);
 
-		ByteBuffer byteArray = PDRUtils.intArrayToByteBuffer(data);
-		bb.put(byteArray);
+		for (float d : data) {
+			bb.putFloat(d);
+		}
 
-		bb.putShort(UIntAttribArrayDecoder.END);
+		bb.putShort(FloatAttribArrayDecoder.END);
 
 		return (ByteBuffer) bb.flip();
 	}
 
 	@Override
-	public int estimateSize(boolean head, UIntAttribArray obj) {
+	public int estimateSize(boolean head, FloatAttribArray obj) {
 		return (head ? CodecManager.HEAD_SIZE : 0) + cm.estimateSize(false, obj.getName()) + 5 * Integer.BYTES + // index, dataSize, bufferType, divisor, dataLength
 				1 + // isStatic
 				Integer.BYTES * obj.getData().length + // data

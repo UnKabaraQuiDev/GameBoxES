@@ -19,18 +19,10 @@ public class MeshEncoder extends DefaultObjectEncoder<Mesh> {
 
 	@Override
 	public ByteBuffer encode(boolean head, Mesh obj) {
-		// name
-		// attrib arrays
-		// uint indices
-		// vec3f vertices
-		// ...
-
 		String name = obj.getName();
 		Material material = obj.getMaterial();
 		UIntAttribArray indices = obj.getIndices();
 		Vec3fAttribArray vertices = obj.getVertices();
-
-		// generation
 
 		ByteBuffer bb = ByteBuffer.allocate(estimateSize(head, obj));
 
@@ -39,6 +31,7 @@ public class MeshEncoder extends DefaultObjectEncoder<Mesh> {
 		}
 
 		bb.put(cm.encode(false, (String) name));
+		bb.put(cm.encode(false, (Material) material));
 
 		bb.put(cm.encode(false, indices));
 		bb.put(cm.encode(false, vertices));

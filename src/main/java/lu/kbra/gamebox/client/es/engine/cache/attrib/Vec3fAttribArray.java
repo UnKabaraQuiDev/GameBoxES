@@ -19,13 +19,18 @@ public class Vec3fAttribArray extends AttribArray {
 		this.data = data;
 	}
 
-	public Vec3fAttribArray(String name, int index, int dataSize, Vector3f[] data, int bufferType, boolean s) {
-		super(name, index, dataSize, bufferType, s);
+	public Vec3fAttribArray(String name, int index, int dataSize, Vector3f[] data, int bufferType, boolean _static) {
+		super(name, index, dataSize, bufferType, _static);
 		this.data = data;
 	}
 
-	public Vec3fAttribArray(String name, int index, int dataSize, Vector3f[] data, boolean b) {
-		super(name, index, dataSize, b);
+	public Vec3fAttribArray(String name, int index, int dataSize, Vector3f[] data, int bufferType, boolean _static, int _divisor) {
+		super(name, index, dataSize, bufferType, _static, _divisor);
+		this.data = data;
+	}
+
+	public Vec3fAttribArray(String name, int index, int dataSize, Vector3f[] data, boolean _static) {
+		super(name, index, dataSize, _static);
 		this.data = data;
 	}
 

@@ -40,6 +40,7 @@ public class QuadMesh extends Mesh {
 		this.size = size;
 	}
 	
+	@Deprecated
 	public QuadMesh(String name, Material material2, Vector2f size, GeoPlane plane) {
 		super(name, material2,
 				new Vec3fAttribArray("pos", 0, 1,

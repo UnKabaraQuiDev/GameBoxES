@@ -21,6 +21,11 @@ public class FloatAttribArray extends AttribArray {
 		super(name, index, dataSize, bufferType, _static);
 		this.data = data;
 	}
+	
+	public FloatAttribArray(String name, int index, int dataSize, float[] data, int bufferType, boolean _static, int divisor) {
+		super(name, index, dataSize, bufferType, _static, divisor);
+		this.data = data;
+	}
 
 	public FloatAttribArray(String name, int index, int dataSize, float[] data, boolean _static) {
 		super(name, index, dataSize, _static);
