@@ -10,7 +10,6 @@ import org.lwjgl.glfw.GLFW;
 
 import lu.pcy113.jbcodec.CodecManager;
 import lu.pcy113.pclib.GlobalLogger;
-import lu.pcy113.pclib.PCUtils;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.graph.composition.SceneRenderLayer;
@@ -22,6 +21,7 @@ import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.MaterialDecoder;
 import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.MeshDecoder;
 import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.QuadMeshDecoder;
 import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.UIntAttribArrayDecoder;
+import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.Vec2fAttribArrayDecoder;
 import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.Vec3fAttribArrayDecoder;
 import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.Vector2fDecoder;
 import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.Vector3fDecoder;
@@ -30,6 +30,7 @@ import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.MaterialEncoder;
 import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.MeshEncoder;
 import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.QuadMeshEncoder;
 import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.UIntAttribArrayEncoder;
+import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.Vec2fAttribArrayEncoder;
 import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.Vec3fAttribArrayEncoder;
 import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.Vector2fEncoder;
 import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.Vector3fEncoder;
@@ -117,6 +118,7 @@ public class GameBoxES extends GameLogic {
 		cm.register(new UIntAttribArrayEncoder(), new UIntAttribArrayDecoder(), (short) 14);
 		cm.register(new FloatAttribArrayEncoder(), new FloatAttribArrayDecoder(), (short) 15);
 		cm.register(new Vec3fAttribArrayEncoder(), new Vec3fAttribArrayDecoder(), (short) 16);
+		cm.register(new Vec2fAttribArrayEncoder(), new Vec2fAttribArrayDecoder(), (short) 16);
 		cm.register(new MaterialEncoder(), new MaterialDecoder(), (short) 18);
 		cm.register(new Vector3fEncoder(), new Vector3fDecoder(), (short) 19);
 		cm.register(new Vector2fEncoder(), new Vector2fDecoder(), (short) 20);

@@ -19,8 +19,13 @@ public class Vec2fAttribArray extends AttribArray {
 		this.data = data;
 	}
 
-	public Vec2fAttribArray(String name, int index, int dataSize, Vector2f[] data, int bufferType, boolean s) {
-		super(name, index, dataSize, bufferType, s);
+	public Vec2fAttribArray(String name, int index, int dataSize, Vector2f[] data, int bufferType, boolean _static) {
+		super(name, index, dataSize, bufferType, _static);
+		this.data = data;
+	}
+	
+	public Vec2fAttribArray(String name, int index, int dataSize, Vector2f[] data, int bufferType, boolean _static, int divisor) {
+		super(name, index, dataSize, bufferType, _static, divisor);
 		this.data = data;
 	}
 
