@@ -1,7 +1,5 @@
 package lu.kbra.gamebox.client.es.game.game.scenes.world.entities;
 
-import java.util.Arrays;
-
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
@@ -27,7 +25,7 @@ public class CellEntity extends Entity {
 		super(name);
 
 		this.cellDescriptor = descriptor;
-		
+
 		this.transform = new Transform3DComponent(position);
 		this.mesh = new MeshComponent(mesh);
 		this.velocity = new Velocity2DComponent();
@@ -39,19 +37,19 @@ public class CellEntity extends Entity {
 		addComponent(velocity);
 	}
 
-	public void update(Vector2f... forces) {
+	public void update(/* Vector2f... forces */) {
 		// https://en.wikipedia.org/wiki/Rigid_body
-		
-		Arrays.stream(forces).forEach(acceleration::add);
-		
+
+		// Arrays.stream(forces).forEach(acceleration::add);
+
 		// apply drag
 		acceleration.add(velocity.getVelocity().mul(-GlobalUtils.INSTANCE.worldScene.getWorld().getDragForce(), new Vector2f()));
-		
+
 		acceleration.update();
 		velocity.update();
-		
+
 		transform.getTransform().updateMatrix();
-		
+
 		acceleration.zero();
 	}
 

@@ -12,6 +12,7 @@ public final class GlobalConsts {
 	public static final Vector4f SECONDARY_LIGHT = new Vector4f(160f, 232f, 153f, 255f).div(255f);
 	public static final Vector4f HIGHLIGHT = new Vector4f(255f, 126f, 0f, 255f).div(255f);
 	public static final Vector4f BG = new Vector4f(70f, 70f, 70f, 255f).div(255f);
+	public static final Vector4f TRANS_BG = new Vector4f(70f, 70f, 70f, 200f).div(255f);
 	public static final Vector4f NEUTRAL = new Vector4f(255, 255, 255, 255);
 	
 	public static final String BTN_PRIMARY = "btn1.png";

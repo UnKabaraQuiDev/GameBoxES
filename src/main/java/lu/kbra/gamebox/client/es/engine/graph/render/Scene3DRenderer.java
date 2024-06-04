@@ -100,6 +100,10 @@ public class Scene3DRenderer extends Renderer<GameEngine, Scene3D> {
 
 		if (e.hasComponent(SubEntitiesComponent.class)) {
 			for (Entity en : e.getComponent(SubEntitiesComponent.class).getEntities()) {
+				if (!en.isActive()) {
+					return;
+				}
+				
 				render(cache, scene, en);
 			}
 		}

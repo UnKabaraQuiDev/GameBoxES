@@ -27,7 +27,7 @@ public final class GlobalLang {
 	}
 	
 	public static String get(String key) {
-		return (String) properties.getOrDefault(key, key);
+		return ((String) properties.getOrDefault(key, key)).replace("<br>", "\n");
 	}
 	
 	public static String getCURRENT_LANG() {

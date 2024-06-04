@@ -22,22 +22,22 @@ import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
 import lu.kbra.gamebox.client.es.engine.utils.geo.GeoPlane;
 import lu.kbra.gamebox.client.es.engine.utils.transform.Transform3D;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.BackgroundShader;
-import lu.kbra.gamebox.client.es.game.game.scenes.ui.UISceneMajorUpgradeTree;
+import lu.kbra.gamebox.client.es.game.game.scenes.ui.UISceneGameOverlay;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
 import lu.kbra.gamebox.client.es.game.game.world.World;
 
 public class WorldScene3D extends Scene3D {
 
 	private static final long MIN_UPGRADE_DELAY = 250;
-	
+
 	private CacheManager cache;
 	private Window window;
 
 	private float cameraDistance;
-	
+
 	private long lastHealthUpgrade = System.currentTimeMillis();
 	private long lastSpeedUpgrade = System.currentTimeMillis();
-	
+
 	private World world;
 	private Entity background;
 
@@ -53,14 +53,14 @@ public class WorldScene3D extends Scene3D {
 		if (world != null) {
 			world.input(dTime);
 		}
-		
+
 		if (window.getJoystickButton(GLFW.GLFW_JOYSTICK_1, GLFW.GLFW_GAMEPAD_BUTTON_LEFT_BUMPER) && System.currentTimeMillis() - lastHealthUpgrade >= MIN_UPGRADE_DELAY) {
 			System.err.println("LEFT BUMPER = true");
 			if (GlobalUtils.INSTANCE.playerData.canRestoreHealth()) {
-				((UISceneMajorUpgradeTree) GlobalUtils.INSTANCE.uiScene.getState()).startHealthRestoreAccepted();
+				((UISceneGameOverlay) GlobalUtils.INSTANCE.uiScene.getState()).startHealthRestoreAccepted();
 				lastHealthUpgrade = System.currentTimeMillis();
-			}else {
-				((UISceneMajorUpgradeTree) GlobalUtils.INSTANCE.uiScene.getState()).startHealthRestoreDenied();
+			} else {
+				((UISceneGameOverlay) GlobalUtils.INSTANCE.uiScene.getState()).startHealthRestoreDenied();
 			}
 			GlobalUtils.INSTANCE.playerData.restoreHealth();
 		}
@@ -75,7 +75,7 @@ public class WorldScene3D extends Scene3D {
 			placeCamera(GeoPlane.XY.projectToPlane(world.getPlayer().getTransform().getTransform().getTranslation()));
 		}
 	}
-	
+
 	public void render(float dTime) {
 		if (world != null) {
 			world.render(dTime);
@@ -121,6 +121,9 @@ public class WorldScene3D extends Scene3D {
 	public void placeCamera(Vector2f pos) {
 		((Camera3D) camera).lookAt(new Vector3f(pos.x, pos.y, cameraDistance), new Vector3f(pos.x, pos.y, 0));
 		background.getComponent(Transform3DComponent.class).getTransform().setTranslation(new Vector3f(pos.x, pos.y, -1)).updateMatrix();
+		/* if (world != null) {
+			world.getPlayer().getComponent(Transform3DComponent.class).getTransform().setTranslation(new Vector3f(pos.x, pos.y, 1)).updateMatrix();
+		}*/ 
 		camera.updateMatrix();
 	}
 

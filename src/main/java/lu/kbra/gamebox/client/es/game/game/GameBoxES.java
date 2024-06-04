@@ -1,7 +1,6 @@
 package lu.kbra.gamebox.client.es.game.game;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.logging.Level;
 
 import org.joml.Quaternionf;
@@ -9,40 +8,19 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 
-import lu.pcy113.jbcodec.CodecManager;
 import lu.pcy113.pclib.GlobalLogger;
-import lu.pcy113.pclib.PCUtils;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
-import lu.kbra.gamebox.client.es.engine.geom.Mesh;
-import lu.kbra.gamebox.client.es.engine.geom.QuadMesh;
 import lu.kbra.gamebox.client.es.engine.graph.composition.SceneRenderLayer;
 import lu.kbra.gamebox.client.es.engine.graph.material.text.TextShader;
 import lu.kbra.gamebox.client.es.engine.impl.GameLogic;
 import lu.kbra.gamebox.client.es.engine.scene.camera.Camera3D;
-import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.FloatAttribArrayDecoder;
-import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.MaterialDecoder;
-import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.MeshDecoder;
-import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.QuadMeshDecoder;
-import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.UIntAttribArrayDecoder;
-import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.Vec2fAttribArrayDecoder;
-import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.Vec3fAttribArrayDecoder;
-import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.Vector2fDecoder;
-import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.Vector3fDecoder;
-import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.FloatAttribArrayEncoder;
-import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.MaterialEncoder;
-import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.MeshEncoder;
-import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.QuadMeshEncoder;
-import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.UIntAttribArrayEncoder;
-import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.Vec2fAttribArrayEncoder;
-import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.Vec3fAttribArrayEncoder;
-import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.Vector2fEncoder;
-import lu.kbra.gamebox.client.es.engine.utils.codec.encoder.Vector3fEncoder;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
 import lu.kbra.gamebox.client.es.game.game.data.PlayerData;
 import lu.kbra.gamebox.client.es.game.game.debug.DebugUIElements;
 import lu.kbra.gamebox.client.es.game.game.render.compositing.AdvancedCompositor;
 import lu.kbra.gamebox.client.es.game.game.scenes.ui.UIScene3D;
+import lu.kbra.gamebox.client.es.game.game.scenes.ui.UISceneGameOverlay;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.WorldScene3D;
 import lu.kbra.gamebox.client.es.game.game.utils.GameMode;
 import lu.kbra.gamebox.client.es.game.game.utils.GameState;
@@ -115,9 +93,9 @@ public class GameBoxES extends GameLogic {
 		GlobalUtils.setFixedRatio(uiScene.getCamera());
 
 		engine.getWindow().setBackground(new Vector4f(0.0f));
-		
+
 		GlobalUtils.compileMeshes(cache);
-		
+
 		cache.dump(System.err);
 	}
 
@@ -178,14 +156,16 @@ public class GameBoxES extends GameLogic {
 
 	public void startGame(GameMode mode) {
 		GlobalLogger.info("Starting: " + mode);
-		gameState = GameState.valueOf("LOADING_" + mode.name());
+		gameState = GameState.LOADING;
 		playerData = new PlayerData();
 		uiScene.clearMainMenu();
 		GlobalUtils.pushRender(() -> {
 			uiScene.setupGame();
-			uiScene.showUpgradeTree(true);
+			uiScene.showUpgradeTree(false);
 			worldScene.setupGame();
 			worldSceneRenderLayer.setVisible(true);
+			
+			gameState = GameState.PLAYING;
 		});
 	}
 

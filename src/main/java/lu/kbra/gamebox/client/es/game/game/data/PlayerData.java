@@ -1,10 +1,12 @@
 package lu.kbra.gamebox.client.es.game.game.data;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONException;
 
-import lu.kbra.gamebox.client.es.game.game.scenes.ui.UISceneMajorUpgradeTree;
+import lu.kbra.gamebox.client.es.game.game.scenes.ui.UISceneGameOverlay;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
 
 public class PlayerData {
@@ -22,6 +24,9 @@ public class PlayerData {
 	private EvolutionTree tree;
 	private EvolutionTreeNode current;
 
+	private int ennemyKillCount = 0;
+	private List<Achievements> achievements = new ArrayList<>();
+
 	public PlayerData() {
 		try {
 			tree = EvolutionTree.load();
@@ -32,6 +37,8 @@ public class PlayerData {
 	}
 
 	public void eatPlant() {
+		unlockAchievement(Achievements.EAT_A_PLANT);
+
 		int rand = (int) (Math.random() * 3);
 		if (rand < 1) {
 			glucose++;
@@ -40,24 +47,27 @@ public class PlayerData {
 		} else if (rand < 3) {
 			lipid++;
 		}
-		/**glucose += Math.random() < 0.4f ? 1 : 0;
-		aminoAcid += Math.random() < 0.1f ? 1 : 0;
-		lipid += Math.random() < 0.1f ? 1 : 0;*/
+
+		if (!hasAchievement(Achievements.OVERLOADED) && glucose > 9999 && aminoAcid > 9999 && lipid > 9999) {
+			unlockAchievement(Achievements.OVERLOADED);
+		}
+
+		if (!hasAchievement(Achievements.HEAVY_POCKETS) && glucose >= 100 && aminoAcid >= 100 && lipid >= 100) {
+			unlockAchievement(Achievements.HEAVY_POCKETS);
+		}
+
+		/**
+		 * glucose += Math.random() < 0.4f ? 1 : 0; aminoAcid += Math.random() < 0.1f ? 1 : 0; lipid += Math.random() < 0.1f ? 1 : 0;
+		 */
 	}
 
-	public void eatCell() {
-		glucose += Math.random() < 0.5f ? 1 : 0;
-		aminoAcid += Math.random() < 0.4f ? 1 : 0;
-		lipid += Math.random() < 0.4f ? 1 : 0;
-	}
-
-	/**
-	 * @return true if the player dies
-	 */
-	public boolean damage(int damage) {
+	public void damage(int damage) {
 		this.health -= damage;
-		((UISceneMajorUpgradeTree) GlobalUtils.INSTANCE.uiScene.getState()).startHealthEmpty();
-		return this.health <= 0;
+		((UISceneGameOverlay) GlobalUtils.INSTANCE.uiScene.getState()).startHealthEmpty();
+
+		if (this.health <= 0) {
+			GlobalUtils.triggerGameEndDeath();
+		}
 	}
 
 	public void setGlucose(int glucose) {
@@ -75,13 +85,13 @@ public class PlayerData {
 	public boolean canRestoreHealth() {
 		return health < maxHealth && lipid >= getNextRestoreHealthPrice();
 	}
-	
+
 	private int getNextRestoreHealthPrice() {
 		return maxHealth - health;
 	}
-	
+
 	public boolean restoreHealth() {
-		if(canRestoreHealth()) {
+		if (canRestoreHealth()) {
 			lipid -= getNextRestoreHealthPrice();
 			health++;
 			return true;
@@ -131,6 +141,36 @@ public class PlayerData {
 
 	public int getLipid() {
 		return lipid;
+	}
+
+	public List<Achievements> getAchievements() {
+		return achievements;
+	}
+
+	public boolean hasAchievement(Achievements a) {
+		return achievements.contains(a);
+	}
+
+	public void unlockAchievement(Achievements a) {
+		if (!hasAchievement(a)) {
+			achievements.add(a);
+		}
+	}
+
+	public void setAchievements(List<Achievements> achievements) {
+		this.achievements = achievements;
+	}
+
+	public int getEnnemyKillCount() {
+		return ennemyKillCount;
+	}
+
+	public int addEnnemyKillCount() {
+		return ennemyKillCount++;
+	}
+
+	public void setEnnemyKillCount(int ennemyKillCount) {
+		this.ennemyKillCount = ennemyKillCount;
 	}
 
 }

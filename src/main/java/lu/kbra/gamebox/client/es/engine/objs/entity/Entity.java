@@ -60,8 +60,8 @@ public class Entity implements UniqueID {
 		return active;
 	}
 
-	public Entity setActive(boolean active) {
-		this.active = active;
+	public Entity setActive(boolean a) {
+		this.active = a;
 		return this;
 	}
 

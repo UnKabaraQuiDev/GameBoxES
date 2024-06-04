@@ -36,7 +36,7 @@ public class TextEmitter implements Cleanupable, UniqueID {
 	private Mesh quad;
 
 	private Alignment alignment = Alignment.CENTER;
-	private boolean justify = false, boxed = false;
+	private boolean justify = false, boxed = false, correctTransform = false;
 	private Vector2f boxSize = new Vector2f(1), charOffset = new Vector2f(0);
 
 	public TextEmitter(String name, TextMaterial material, int bufferSize, String text, Vector2f size) {
@@ -127,10 +127,10 @@ public class TextEmitter implements Cleanupable, UniqueID {
 				character++;
 				chars[charIndex] = (int) currentChar;
 
-				float translationX = (character - widthCount[line] / 2) * (charSize.x + charOffset.x);
+				float translationX = (character - widthCount[line] / 2) * (charSize.x + charOffset.x) - charSize.x;
 				float translationY = line * (charSize.y + charOffset.y) + charSize.y / 2 + charOffset.y;
 
-				transforms[charIndex] = new Matrix4f().identity().translate(translationX, translationY, 0);
+				transforms[charIndex] = new Matrix4f().identity().translate(translationX, (correctTransform ? -1 : 1) * translationY, 0);
 
 				charIndex++;
 			}
@@ -159,10 +159,10 @@ public class TextEmitter implements Cleanupable, UniqueID {
 				character++;
 				chars[charIndex] = (int) currentChar;
 
-				float translationX = (character - widthCount[line] / 2) * (charSize.x + charOffset.x) + widthMax / 2;
+				float translationX = (character - widthCount[line] / 2) * (charSize.x + charOffset.x) + widthMax / 2 - charSize.x;
 				float translationY = line * (charSize.y + charOffset.y) + charSize.y / 2;
 
-				transforms[charIndex] = new Matrix4f().identity().translate(translationX, translationY, 0);
+				transforms[charIndex] = new Matrix4f().identity().translate(translationX, (correctTransform ? -1 : 1) * translationY, 0);
 
 				charIndex++;
 			}
@@ -191,10 +191,10 @@ public class TextEmitter implements Cleanupable, UniqueID {
 				character++;
 				chars[charIndex] = (int) currentChar;
 
-				float translationX = ((widthMax - widthCount[line]) + character) * (charSize.x + charOffset.x);
+				float translationX = ((widthMax - widthCount[line]) + character) * (charSize.x + charOffset.x) - charSize.x;
 				float translationY = line * (charSize.y + charOffset.y) + charSize.y / 2;
 
-				transforms[charIndex] = new Matrix4f().identity().translate(translationX, translationY, 0);
+				transforms[charIndex] = new Matrix4f().identity().translate(translationX, (correctTransform ? -1 : 1) * translationY, 0);
 
 				charIndex++;
 			}
@@ -223,10 +223,10 @@ public class TextEmitter implements Cleanupable, UniqueID {
 				character++;
 				chars[charIndex] = (int) currentChar;
 
-				float translationX = (character - widthCount[line]) * (charSize.x + charOffset.x);
+				float translationX = (character - widthCount[line]) * (charSize.x + charOffset.x) - charSize.x / 2;
 				float translationY = line * (charSize.y + charOffset.y) + charSize.y / 2;
 
-				transforms[charIndex] = new Matrix4f().identity().translate(translationX, translationY, 0);
+				transforms[charIndex] = new Matrix4f().identity().translate(translationX, (correctTransform ? -1 : 1) * translationY, 0);
 
 				charIndex++;
 			}
@@ -252,10 +252,10 @@ public class TextEmitter implements Cleanupable, UniqueID {
 				character++;
 				chars[charIndex] = (int) currentChar;
 
-				float translationX = character * (charSize.x + charOffset.x);
+				float translationX = character * (charSize.x + charOffset.x) - charSize.x / 2;
 				float translationY = line * (charSize.y + charOffset.y) + charSize.y / 2;
 
-				transforms[charIndex] = new Matrix4f().identity().translate(translationX, translationY, 0);
+				transforms[charIndex] = new Matrix4f().identity().translate(translationX, (correctTransform ? -1 : 1) * translationY, 0);
 
 				charIndex++;
 			}
@@ -342,6 +342,10 @@ public class TextEmitter implements Cleanupable, UniqueID {
 
 	public void setCharOffset(Vector2f charSpace) {
 		this.charOffset = charSpace;
+	}
+
+	public void setCorrectTransform(boolean correctTransform) {
+		this.correctTransform = correctTransform;
 	}
 
 	@Override

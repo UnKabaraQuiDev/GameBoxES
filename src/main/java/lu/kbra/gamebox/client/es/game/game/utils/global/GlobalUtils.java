@@ -24,7 +24,6 @@ import lu.pcy113.pclib.PCUtils;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
-import lu.kbra.gamebox.client.es.engine.cache.SharedCacheManager;
 import lu.kbra.gamebox.client.es.engine.geom.Mesh;
 import lu.kbra.gamebox.client.es.engine.geom.QuadMesh;
 import lu.kbra.gamebox.client.es.engine.graph.material.text.TextShader;
@@ -72,6 +71,8 @@ import lu.kbra.gamebox.client.es.engine.utils.geo.GeoPlane;
 import lu.kbra.gamebox.client.es.engine.utils.geo.Ray;
 import lu.kbra.gamebox.client.es.game.game.GameBoxES;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.UIButtonShader;
+import lu.kbra.gamebox.client.es.game.game.scenes.ui.UISceneGameOverlay;
+import lu.kbra.gamebox.client.es.game.game.utils.GameState;
 
 public class GlobalUtils {
 
@@ -206,6 +207,12 @@ public class GlobalUtils {
 		return new TextEmitterComponent(text);
 	}
 
+	public static TextEmitterComponent createUIText(CacheManager cache, String name, int bufferSize, String txt, Alignment align, boolean correctTransform) {
+		TextEmitterComponent tec = createUIText(currentLoadCache, name, bufferSize, txt, align);
+		tec.getTextEmitter(cache).setCorrectTransform(correctTransform);
+		return tec;
+	}
+
 	public static void updateText(final TextEmitter textEmitter) {
 		GlobalUtils.INSTANCE.createTask(GameEngine.QUEUE_RENDER).exec((t) -> {
 			return textEmitter.updateText();
@@ -314,7 +321,7 @@ public class GlobalUtils {
 
 		try {
 			mesh = (Mesh) cm.decode(ByteBuffer.wrap(Files.readAllBytes(filePath)));
-			
+
 			cc.addMesh(mesh);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
@@ -334,30 +341,39 @@ public class GlobalUtils {
 			if (Files.notExists(filePath)) {
 				Files.createFile(filePath);
 			}
-			
+
 			Files.write(filePath, PCUtils.byteBufferToArray(bb));
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public static void compileMeshes(CacheManager cache) {
-		for(Mesh mesh : cache.getMeshes().values()) {
-			if(mesh instanceof QuadMesh)
+		for (Mesh mesh : cache.getMeshes().values()) {
+			if (mesh instanceof QuadMesh)
 				continue;
 			GlobalUtils.compileMesh(mesh, mesh.getName());
-			GlobalLogger.info("Compiled mesh: "+mesh.getId()+" -> "+mesh.getName());
+			GlobalLogger.info("Compiled mesh: " + mesh.getId() + " -> " + mesh.getName());
 		}
 	}
 
 	public static Mesh loadCompiledMesh(CacheManager cache, String path, Supplier<Mesh> supplier) {
 		try {
 			return loadCompiledMesh(cache, path);
-		}catch(RuntimeException e) {
+		} catch (RuntimeException e) {
 			compileMesh(supplier.get(), path);
 		}
 		return loadCompiledMesh(cache, path);
+	}
+
+	public static void triggerGameEndDeath() {
+		if (!GameState.PLAYING.equals(INSTANCE.gameState)) {
+			return;
+		}
+
+		INSTANCE.gameState = GameState.END;
+		((UISceneGameOverlay) INSTANCE.uiScene.getState()).startGameEndActive();
 	}
 
 }

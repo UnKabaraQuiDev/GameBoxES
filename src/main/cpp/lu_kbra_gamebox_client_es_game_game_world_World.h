@@ -28,7 +28,7 @@ extern "C" {
 #undef lu_kbra_gamebox_client_es_game_game_world_World_SEED_OFFSET_FERTILITY
 #define lu_kbra_gamebox_client_es_game_game_world_World_SEED_OFFSET_FERTILITY 685.0
 #undef lu_kbra_gamebox_client_es_game_game_world_World_TOXIN_DAMAGE_DELAY
-#define lu_kbra_gamebox_client_es_game_game_world_World_TOXIN_DAMAGE_DELAY 800LL
+#define lu_kbra_gamebox_client_es_game_game_world_World_TOXIN_DAMAGE_DELAY 1000LL
 #ifdef __cplusplus
 }
 #endif

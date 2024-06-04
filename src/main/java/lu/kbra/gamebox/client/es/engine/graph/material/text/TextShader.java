@@ -67,7 +67,7 @@ public class TextShader extends RenderShader {
 		}
 
 		public TextMaterial(String name, RenderShader shader, Texture txt1) {
-			super(NAME, shader, new HashMap<String, Texture>() {
+			super(name, shader, new HashMap<String, Texture>() {
 				{
 					put(TXT1, txt1);
 				}
@@ -76,10 +76,10 @@ public class TextShader extends RenderShader {
 
 		@Override
 		public void bindProperties(CacheManager cache, Renderable scene, RenderShader shader) {
+			setProperty(THICKNESS, thickness);
 			setProperty(FG_COLOR, fgColor);
 			setProperty(BG_COLOR, bgColor);
 			setProperty(TRANSPARENT, transparent);
-			setProperty(THICKNESS, thickness);
 
 			super.bindProperties(cache, scene, shader);
 		}

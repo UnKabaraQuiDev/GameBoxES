@@ -15,7 +15,7 @@ public class UIScene3D extends Scene3D {
 	private Window window;
 
 	private UISceneState state;
-	private UISceneMajorUpgradeTree treeState;
+	private UISceneGameOverlay treeState;
 
 	public UIScene3D(String name, CacheManager cache, Window window) {
 		super(name);
@@ -46,9 +46,9 @@ public class UIScene3D extends Scene3D {
 	}
 
 	public void setupGame() {
-		state = treeState = new UISceneMajorUpgradeTree(this);
+		state = treeState = new UISceneGameOverlay(this);
 	}
-
+	
 	public void clearMainMenu() {
 		if (state instanceof UISceneStartMenuState) {
 			GlobalUtils.cleanup(state);
@@ -57,11 +57,6 @@ public class UIScene3D extends Scene3D {
 	}
 
 	public void showUpgradeTree(boolean b) {
-		if (b) {
-			state = treeState;
-		} else {
-			state = null;
-		}
 		treeState.setTreeViewActive(b);
 	}
 

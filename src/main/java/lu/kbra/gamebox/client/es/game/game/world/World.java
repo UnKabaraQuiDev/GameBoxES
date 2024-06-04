@@ -38,6 +38,7 @@ import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
 import lu.kbra.gamebox.client.es.engine.utils.geo.GeoPlane;
 import lu.kbra.gamebox.client.es.engine.utils.transform.Transform3D;
+import lu.kbra.gamebox.client.es.game.game.data.Achievements;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.CellShader;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.CellShader.CellMaterial;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.PlantWorldParticleMaterial;
@@ -73,11 +74,13 @@ public class World implements Cleanupable {
 
 	private static final Vector2f ZERO2D = new Vector2f(0);
 
-	private static final long TOXIN_DAMAGE_DELAY = 800; // ms
+	private static final long TOXIN_DAMAGE_DELAY = 1000; // ms
 
 	private HashMap<String, List<Entity>> generatedChunks = new HashMap<>();
 	private List<String> updateTasks = new ArrayList<>(20);
 	private final int chunkSize = 20;
+
+	private boolean paused = false;
 
 	/**
 	 * Generates the points' position
@@ -159,7 +162,11 @@ public class World implements Cleanupable {
 
 	public void input(float dTime) {
 		Window window = scene.getWindow();
-		
+
+		if (paused) {
+			return;
+		}
+
 		player.getAcceleration().add(GlobalUtils.getJoystickDirection().mul(dTime * GlobalUtils.INSTANCE.playerData.getSpeed()));
 	}
 
@@ -173,6 +180,10 @@ public class World implements Cleanupable {
 		updateFrameCount++;
 
 		System.out.println(updateFrameCount);
+
+		if (paused) {
+			return;
+		}
 
 		for (Vector2f chunkCenter : getNeighbouringChunks(getCenterPlayerPos())) {
 			List<Entity> entities = generatedChunks.get(chunkCenter.toString());
@@ -196,13 +207,17 @@ public class World implements Cleanupable {
 			lastToxinDamage = System.currentTimeMillis();
 
 			GlobalUtils.INSTANCE.playerData.damage(1);
+			
+			GlobalUtils.INSTANCE.playerData.unlockAchievement(Achievements.FOG_DAMAGE);
 		}
 
 		GlobalUtils.dumpThreads(Level.SEVERE);
 	}
 
 	public void render(float dTime) {
-
+		if (paused) {
+			return;
+		}
 	}
 
 	private void simulateCells(float dTime, Vector2f center, CellsEntity e) {
@@ -235,6 +250,8 @@ public class World implements Cleanupable {
 
 				inst.getDirections().get(i).set(direction.mul(-2 * dTime * CELLS_MOV_SPEED));
 				((Transform3D) part.getTransform()).getTranslation().add(inst.getDirections().get(i));
+				
+				GlobalUtils.INSTANCE.playerData.unlockAchievement(Achievements.ENNEMY_DAMAGE);
 			} else { // idle
 				inst.getDirections().get(i).add(new Vector3f((float) Math.random() - 0.5f, (float) Math.random() - 0.5f, 0).normalize()).div(2);
 				((Transform3D) part.getTransform()).getTranslation().add(inst.getDirections().get(i));
@@ -252,12 +269,11 @@ public class World implements Cleanupable {
 
 		} else {
 
-			/*for (int i = 0; i < inst.getParticleCount(); i++) {
-				Instance part = inst.getParticles()[i];
-
-				((Transform3D) part.getTransform()).getTranslation().add(inst.getDirections().get(i));
-				part.getTransform().updateMatrix();
-			}*/
+			/*
+			 * for (int i = 0; i < inst.getParticleCount(); i++) { Instance part = inst.getParticles()[i];
+			 * 
+			 * ((Transform3D) part.getTransform()).getTranslation().add(inst.getDirections().get(i)); part.getTransform().updateMatrix(); }
+			 */
 
 		}
 	}
@@ -664,6 +680,10 @@ public class World implements Cleanupable {
 
 	public void setPlayer(CellEntity player) {
 		this.player = player;
+	}
+
+	public void setPaused(boolean b) {
+		this.paused = b;
 	}
 
 }
