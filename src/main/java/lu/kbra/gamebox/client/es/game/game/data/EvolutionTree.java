@@ -3,6 +3,8 @@ package lu.kbra.gamebox.client.es.game.game.data;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,7 +18,7 @@ import lu.pcy113.pclib.GlobalLogger;
 public class EvolutionTree extends EvolutionTreeNode {
 
 	public EvolutionTree(String id) throws JSONException, IOException {
-		super(id);
+		super(id, "root");
 	}
 
 	public static EvolutionTree load() throws JSONException, IOException {
@@ -24,34 +26,60 @@ public class EvolutionTree extends EvolutionTreeNode {
 
 		EvolutionTree root = new EvolutionTree(obj.keys().next());
 
-		loadInto(root, obj.getJSONObject(root.getId()));
+		loadInto(new ArrayList<EvolutionTreeNode>(), root, obj.getJSONObject(root.getId()));
 
 		return root;
 	}
 
-	private static void loadInto(EvolutionTreeNode parent, JSONObject obj) throws JSONException, IOException {
+	private static void loadInto(List<EvolutionTreeNode> nodes, EvolutionTreeNode parent, JSONObject obj) throws JSONException, IOException {
 		for (String k : obj.keySet()) { // iterate over self-children
 			GlobalLogger.info("Major Evolution Tree: Loading: " + k + " into " + parent.getId());
 
-			EvolutionTreeNode node = new EvolutionTreeNode(k);
-			parent.add(node);
+			if (nodes.stream().anyMatch(c -> c.getId().equals(k))) {
+				parent.add(nodes.stream().filter(c -> c.getId().equals(k)).findFirst().get());
+			} else {
+				EvolutionTreeNode node = new EvolutionTreeNode(k, k.startsWith("random") ? getRandomType() : k);
+				parent.add(node);
+				nodes.add(node);
 
-			if (obj.optJSONObject(k) != null) { // has children
-				loadInto(node, obj.getJSONObject(k));
-			} else { // is leaf parent
-				loadInto(node, obj.getJSONArray(k));
+				if (obj.optJSONObject(k) != null) { // has children
+					loadInto(nodes, node, obj.getJSONObject(k));
+				} else { // is leaf parent
+					loadInto(nodes, node, obj.getJSONArray(k));
+				}
 			}
 		}
 	}
 
-	private static void loadInto(EvolutionTreeNode parent, JSONArray obj) throws JSONException, IOException {
+	private static String getRandomType() {
+		int rand = (int) (Math.random() * 4);
+		switch (rand) {
+		case 0:
+			return "photosynthesis";
+		case 1:
+			return "damage";
+		case 2:
+			return "max_health";
+		case 3:
+			return "speed";
+		}
+		return null;
+	}
+
+	private static void loadInto(List<EvolutionTreeNode> nodes, EvolutionTreeNode parent, JSONArray obj) throws JSONException, IOException {
 		for (int i = 0; i < obj.length(); i++) { // iterate over self-children
 			String k = obj.getString(i);
-			
+
 			GlobalLogger.info("Major Evolution Tree: Loading leaf: " + k + " into " + parent.getId());
 
-			EvolutionTreeNode node = new EvolutionTreeNode(k);
-			parent.add(node);
+			if (nodes.stream().anyMatch(c -> c.getId().equals(k))) {
+				parent.add(nodes.stream().filter(c -> c.getId().equals(k)).findFirst().get());
+			} else {
+				EvolutionTreeNode node = new EvolutionTreeNode(k, k.startsWith("random") ? getRandomType() : k);
+				parent.add(node);
+				nodes.add(node);
+			}
+
 		}
 	}
 

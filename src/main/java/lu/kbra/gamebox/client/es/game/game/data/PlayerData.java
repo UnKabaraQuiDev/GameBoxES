@@ -1,5 +1,6 @@
 package lu.kbra.gamebox.client.es.game.game.data;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +8,9 @@ import java.util.List;
 import org.json.JSONException;
 
 import lu.kbra.gamebox.client.es.game.game.scenes.ui.UISceneGameOverlay;
+import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalLang;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
+import lu.pcy113.pclib.GlobalLogger;
 
 public class PlayerData {
 
@@ -171,6 +174,17 @@ public class PlayerData {
 
 	public void setEnnemyKillCount(int ennemyKillCount) {
 		this.ennemyKillCount = ennemyKillCount;
+	}
+	
+	public static void main(String[] args) {
+		try {
+			GlobalLogger.init(new File("./config/logs.properties"));
+			GlobalLang.load("english");
+			
+			System.out.println(EvolutionTree.load().toString(0));
+		} catch (JSONException | IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -15,19 +15,23 @@ import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalLang;
 
 public class EvolutionTreeNode {
 
+	private List<EvolutionTreeNode> parents = new ArrayList<EvolutionTreeNode>();
 	private List<EvolutionTreeNode> children;
 
 	private String id;
+	private String type;
 	private String title;
 	private String description;
 
 	private boolean checked = false;
 
-	public EvolutionTreeNode(String id) throws JSONException, IOException {
+	public EvolutionTreeNode(String id, String type) throws JSONException, IOException {
 		this.id = id;
-
-		JSONObject obj = new JSONObject(new String(Files.readAllBytes(Paths.get("./resources/gd/majorTree/" + GlobalLang.getCURRENT_LANG().toLowerCase() + "/" + id + ".json"))));
-		this.title = obj.optString("title", id);
+		this.type = type;
+		
+		System.out.println("path: "+"./resources/gd/majorTree/" + GlobalLang.getCURRENT_LANG().toLowerCase() + "/" + type + ".json");
+		JSONObject obj = new JSONObject(new String(Files.readAllBytes(Paths.get("./resources/gd/majorTree/" + GlobalLang.getCURRENT_LANG().toLowerCase() + "/" + type + ".json"))));
+		this.title = obj.optString("title", id + "/" + type);
 		this.description = obj.optString("desc", "no desc :/");
 	}
 
@@ -36,13 +40,14 @@ public class EvolutionTreeNode {
 			children = new ArrayList<EvolutionTreeNode>();
 
 		children.add(node);
+		node.parents.add(this);
 	}
 
 	public void add(List<EvolutionTreeNode> ch) {
 		if (children == null)
 			children = new ArrayList<EvolutionTreeNode>();
 
-		children.addAll(ch);
+		ch.forEach(c -> this.add(c));
 	}
 
 	public boolean isChecked() {
@@ -67,6 +72,10 @@ public class EvolutionTreeNode {
 
 	public boolean isLeaf() {
 		return children == null || children.isEmpty();
+	}
+	
+	public boolean isRoot() {
+		return parents == null || parents.isEmpty();
 	}
 
 	public List<EvolutionTreeNode> getChildren() {

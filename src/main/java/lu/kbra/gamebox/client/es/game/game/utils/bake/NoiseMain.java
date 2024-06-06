@@ -13,7 +13,7 @@ import org.joml.Math;
 import org.joml.Vector2f;
 
 import lu.kbra.gamebox.client.es.engine.utils.MathUtils;
-import lu.kbra.gamebox.client.es.game.game.utils.NoiseGenerator;
+import lu.kbra.gamebox.client.es.game.game.utils.noise.NoiseGenerator;
 
 public class NoiseMain {
 

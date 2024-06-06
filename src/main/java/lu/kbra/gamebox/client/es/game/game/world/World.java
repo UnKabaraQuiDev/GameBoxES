@@ -53,8 +53,8 @@ import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.CellsEntity;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.PlantsEntity;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.ToxinsEntity;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.WorldParticleEmitter;
-import lu.kbra.gamebox.client.es.game.game.utils.NoiseGenerator;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
+import lu.kbra.gamebox.client.es.game.game.utils.noise.NoiseGenerator;
 
 public class World implements Cleanupable {
 

@@ -26,6 +26,7 @@ import lu.kbra.gamebox.client.es.game.game.render.shaders.FillShader;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.FillShader.FillMaterial;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.HealthIndicatorShader;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.HealthIndicatorShader.HealthIndicatorMaterial;
+import lu.kbra.gamebox.client.es.game.game.render.shaders.MajorUpgradeTreeShader.MajorUpgradeTreeMaterial;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.MaterialListShader;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalConsts;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalLang;
@@ -57,17 +58,18 @@ public class UISceneGameOverlay extends UISceneState {
 	// game end - - -
 	private static final Vector3f GAME_OVER_BASE = new Vector3f(0, 1, 2f), GAME_OVER_TITLES_BASE = new Vector3f(-4.2f, 0.5f, 2f), GAME_OVER_VALUES_BASE = new Vector3f(4.1f, 0.5f, 2f);
 
-	private float gameEndProgress = 1;
+	private float showBGProgress = 1;
 	private Entity gameOverText, gameOverStatsTitles, gameOverStatsValues;
 	private TextEmitter gameOverStatsTitlesText, gameOverStatsValuesText;
+	
+	// major upgrade tree - - -
+	private Entity majorUpgradeTree;
 
 	public UISceneGameOverlay(UIScene3D scene) {
 		super("MajorUpgradeTree", scene);
 
 		Mesh bgMesh = cache.newQuadMesh("uiBGMesh", cache.loadOrGetMaterial(FillMaterial.NAME, FillShader.FillMaterial.class, GlobalConsts.TRANS_BG), new Vector2f(12, 6));
 		uiBG = scene.addEntity("uiBG", new MeshComponent(bgMesh), new Transform3DComponent(new Vector3f(0, 0, 1.6f))).setActive(false);
-		
-		System.err.println("ACT: "+uiBG.isActive());
 
 		// material list - - -
 		Mesh materialListMesh = GlobalUtils.loadCompiledMesh(cache, "materialList", () -> {
@@ -110,11 +112,19 @@ public class UISceneGameOverlay extends UISceneState {
 		gameOverStatsTitlesText.getCharoffset().add(0, 0.4f);
 		gameOverStatsValuesText = GlobalUtils.createUIText(cache, "gameOverStatsValuesText", 128, GlobalLang.get("game.over.values"), Alignment.TEXT_RIGHT, true).getTextEmitter(cache);
 		gameOverStatsValuesText.getCharoffset().add(0, 0.4f);
-		gameOverText = scene.addEntity("gameOverText", GlobalUtils.createUIText(cache, "gameOverText", 16, GlobalLang.get("game.over"), Alignment.TEXT_CENTER), new Transform3DComponent(GAME_OVER_BASE, new Quaternionf(), new Vector3f(2.5f))).setActive(false);
+		gameOverText = scene.addEntity("gameOverText", GlobalUtils.createUIText(cache, "gameOverText", 16, GlobalLang.get("game.over"), Alignment.TEXT_CENTER), new Transform3DComponent(GAME_OVER_BASE, new Quaternionf(), new Vector3f(2.5f)))
+				.setActive(false);
 		((TextMaterial) gameOverText.getComponent(TextEmitterComponent.class).getTextEmitter(cache).getMesh().getMaterial()).setFgColor(new Vector4f(1, 0, 0, 1));
 		gameOverStatsTitles = scene.addEntity("gameOverStatsTitles", new TextEmitterComponent(gameOverStatsTitlesText), new Transform3DComponent(GAME_OVER_TITLES_BASE)).setActive(false);
 		gameOverStatsValues = scene.addEntity("gameOverStatsValues", new TextEmitterComponent(gameOverStatsValuesText), new Transform3DComponent(GAME_OVER_VALUES_BASE)).setActive(false);
 
+		
+		// major upgrade tree - - -
+		Mesh majorUpgradeTreeMesh = GlobalUtils.loadCompiledMesh(cache, "upgradeTree", () -> {
+			return cache.loadMesh("upgradeTree", cache.loadOrGetMaterial(MajorUpgradeTreeMaterial.NAME, MajorUpgradeTreeMaterial.class, cache.loadOrGetSingleTexture(MajorUpgradeTreeMaterial.NAME, "./resources/textures/ui/icons.png", TextureFilter.NEAREST)), "./resources/models/ui/upgrade_tree.obj");
+		});
+		majorUpgradeTree = scene.addEntity("majorUpgradeTree", new MeshComponent(majorUpgradeTreeMesh), new Transform3DComponent(new Vector3f(0), new Quaternionf(), new Vector3f(2.5f)));
+		
 		// GlobalUtils.compileMeshes(cache);
 
 		cache.dump(System.err);
@@ -122,7 +132,9 @@ public class UISceneGameOverlay extends UISceneState {
 
 	@Override
 	public void input(float dTime) {
+		if (treeViewActive) {
 
+		}
 	}
 
 	@Override
@@ -172,16 +184,22 @@ public class UISceneGameOverlay extends UISceneState {
 			maxHealthIndicatorTextEntity.getComponent(Transform3DComponent.class).getTransform().setTranslation(new Vector3f(offset.x, offset.y, 0).add(HEALTH_INDICATOR_TEXT_BASE)).updateMatrix();
 		}
 
-		if (gameEndActive) {
+		if (gameEndActive || treeViewActive) {
 
-			if (gameEndProgress < 1) {
-				gameEndProgress = Math.clamp(0, 1, gameEndProgress + dTime * DEATH_BG_DARKEN_SPEED);
+			if (showBGProgress < 1) {
+				showBGProgress = Math.clamp(0, 1, showBGProgress + dTime * DEATH_BG_DARKEN_SPEED);
 
-				((FillMaterial) uiBG.getComponent(MeshComponent.class).getMesh(cache).getMaterial()).setColor(new Vector4f(0).lerp(GlobalConsts.TRANS_BG, Interpolators.QUAD_IN_OUT.evaluate(gameEndProgress)));
+				((FillMaterial) uiBG.getComponent(MeshComponent.class).getMesh(cache).getMaterial()).setColor(new Vector4f(0).lerp(GlobalConsts.TRANS_BG, Interpolators.QUAD_IN_OUT.evaluate(showBGProgress)));
 			}
-			
+
 			// uiBG.getComponent(Transform3DComponent.class).getTransform().rotate(0.1f, 0.1f, 0.1f).updateMatrix();
 
+		} else {
+			if (showBGProgress > 0) {
+				showBGProgress = Math.clamp(0, 1, showBGProgress - dTime * DEATH_BG_DARKEN_SPEED);
+
+				((FillMaterial) uiBG.getComponent(MeshComponent.class).getMesh(cache).getMaterial()).setColor(new Vector4f(0).lerp(GlobalConsts.TRANS_BG, Interpolators.QUAD_IN_OUT.evaluate(showBGProgress)));
+			}
 		}
 
 	}
@@ -218,11 +236,11 @@ public class UISceneGameOverlay extends UISceneState {
 		treeViewActive = false;
 		gameEndActive = true;
 
-		gameEndProgress = 0;
-		
+		showBGProgress = 0;
+
 		maxHealthIndicator.setActive(false);
 		materialList.setActive(false);
-		
+
 		gameOverText.setActive(true);
 		gameOverStatsTitles.setActive(true);
 		gameOverStatsValues.setActive(true);
@@ -238,7 +256,7 @@ public class UISceneGameOverlay extends UISceneState {
 
 		maxHealthIndicator.setActive(true);
 		materialList.setActive(true);
-		
+
 		gameOverText.setActive(false);
 		gameOverStatsTitles.setActive(false);
 		gameOverStatsValues.setActive(false);

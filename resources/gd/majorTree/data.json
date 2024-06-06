@@ -1,13 +1,59 @@
 {
-	"none_1": {
+	"cell": {
 		"photosynthesis": {
-			"child1": [
-				"child1-1"
-			] 
-		},
-		"moreglucose": [
-			"lastChild1",
-			"lastChild2"
-		]
+			"random_1": {
+				"random_2": {
+					"random_3": {
+						"poison_damage": {
+							"random_4": {
+								"random_5": {
+									"random_28": [
+										"predator_repulsion"
+									],
+									"random_24": [
+										"predator_repulsion"
+									]
+								}
+								
+							},
+							"random_27":{
+								"random_6": {
+									"random_7": [
+										"predator_repulsion"
+									],
+									"random_25": [
+										"predator_repulsion"
+									]
+								}
+							}
+						},
+						"poison_trail": {
+							"random_41": {
+								"random_42": {
+									"random_43": [
+										"toxin_resistence"
+									],
+									"random_44": [
+										"toxin_resistence"
+									]
+								}
+								
+							},
+							"random_45":{
+								"random_46": {
+									"random_47": [
+										"toxin_resistence"
+									],
+									"random_48": [
+										"toxin_resistence"
+									]
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
 	}
 }
