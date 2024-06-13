@@ -204,9 +204,9 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<addClasspath>true</addClasspath>
-							<mainClass>lu.pcy113.pdr.client.ClientMain</mainClass>
-							<classpathPrefix>libs/</classpathPrefix>
+							<!--<addClasspath>true</addClasspath>
+							<classpathPrefix>libs/</classpathPrefix>-->
+							<mainClass>lu.kbra.gamebox.client.es.game.ClientMain</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
