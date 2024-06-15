@@ -339,7 +339,7 @@ public class TextEmitter implements Cleanupable, UniqueID {
 	public Vector2f getCharoffset() {
 		return charOffset;
 	}
-
+	
 	public void setCharOffset(Vector2f charSpace) {
 		this.charOffset = charSpace;
 	}

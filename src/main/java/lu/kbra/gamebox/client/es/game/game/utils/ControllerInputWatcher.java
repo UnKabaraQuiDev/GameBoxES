@@ -9,6 +9,7 @@ import org.lwjgl.glfw.GLFWGamepadState;
 import lu.pcy113.pclib.Pair;
 import lu.pcy113.pclib.Pairs;
 
+import lu.kbra.gamebox.client.es.engine.graph.window.Window;
 import lu.kbra.gamebox.client.es.engine.utils.MathUtils;
 import lu.kbra.gamebox.client.es.engine.utils.consts.Button;
 import lu.kbra.gamebox.client.es.engine.utils.consts.Direction;
@@ -57,6 +58,29 @@ public class ControllerInputWatcher {
 		byte[] jsaxis = new byte[fb.remaining()];
 		fb.get(jsaxis).clear();
 		jsaxis = new byte[] { jsaxis[GLFW.GLFW_GAMEPAD_BUTTON_DPAD_UP], jsaxis[GLFW.GLFW_GAMEPAD_BUTTON_DPAD_RIGHT], jsaxis[GLFW.GLFW_GAMEPAD_BUTTON_DPAD_DOWN], jsaxis[GLFW.GLFW_GAMEPAD_BUTTON_DPAD_LEFT] };
+		int dir = MathUtils.greatestAbsIndex(jsaxis);
+
+		byte up = jsaxis[0],
+				right = jsaxis[1],
+				down = jsaxis[2],
+				left = jsaxis[3];
+		
+		if(System.currentTimeMillis() - lastDirection > TIME_DIRECTION) {
+			waitingForNoneDirection = false;
+			lastDirection = System.currentTimeMillis();
+		}else if (waitingForNoneDirection && !(left == 0 && right == 0 && up == 0 && down == 0)) {
+			return;
+		} else {
+			waitingForNoneDirection = false;
+			// continue;
+		}
+		
+		direction = Direction.getGLFWCross(dir, up, right, down, left);
+	}
+	
+	public void updateDirection(Window window) {
+		byte[] jsaxis = new byte[] { (byte) (window.isKeyPressed(GLFW.GLFW_KEY_UP) ? 1
+				: 0), (byte) (window.isKeyPressed(GLFW.GLFW_KEY_RIGHT) ? 1 : 0),(byte) (window.isKeyPressed(GLFW.GLFW_KEY_DOWN) ? 1 : 0),(byte) (window.isKeyPressed(GLFW.GLFW_KEY_LEFT) ? 1 : 0) };
 		int dir = MathUtils.greatestAbsIndex(jsaxis);
 
 		byte up = jsaxis[0],

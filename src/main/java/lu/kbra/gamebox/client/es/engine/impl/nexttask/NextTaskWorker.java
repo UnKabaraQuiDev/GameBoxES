@@ -59,6 +59,9 @@ public class NextTaskWorker extends NextTaskEnvironnment implements UniqueID {
 			}
 		}
 		for (int i = 0; i < threads.length; i++) {
+			if(threads[i] == null)
+				continue;
+			
 			this.threads[i].join();
 			this.threads[i] = null;
 		}

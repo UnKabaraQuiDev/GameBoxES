@@ -42,16 +42,16 @@ import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
 public class UISceneStartMenuState extends UISceneState {
 
 	private static final float MAIN_X_POS_START = 0f;
-	private static final float MAIN_X_POS_END = -8f;
+	private static final float MAIN_X_POS_END = -10f;
 
 	private static final float OTHER_X_POS_START = 0f;
 	private static final float OTHER_X_POS_END = 10f;
 
-	private static String[] MAIN_MENU_TEXTS = { GlobalLang.get("menu.main.play"), GlobalLang.get("menu.main.options"), GlobalLang.get("menu.main.quit") };
+	private static String[] MAIN_MENU_TEXTS = { GlobalLang.get("menu.main.play"), GlobalLang.get("menu.main.options"), GlobalLang.get("menu.main.credits"), GlobalLang.get("menu.main.quit") };
 
 	private UIEntity[] entitiesMainMenu;
 	private Vector3f[] entitiesMainMenupos;
-	private UIEntity play, options, quit;
+	private UIEntity play, options, credits, quit;
 
 	private static String[] PLAY_MENU_TEXTS = { GlobalLang.get("menu.play.evolution"), GlobalLang.get("menu.play.infection") };
 
@@ -59,24 +59,32 @@ public class UISceneStartMenuState extends UISceneState {
 	private Vector3f[] entitiesPlayMenupos;
 	private UIEntity playMode1, playMode2;
 
-	private static String[] OPTION_MENU_TEXTS = { GlobalLang.LANGUAGES[0], GlobalLang.get("menu.options.volume") + ": 0"+GlobalOptions.VOLUME };
+	private static String[] OPTION_MENU_TEXTS = { GlobalLang.LANGUAGES[0], GlobalLang.get("menu.options.volume") + ": 0" + GlobalOptions.VOLUME };
 
 	private UIEntity[] entitiesOptionMenu;
 	private Vector3f[] entitiesOptionMenupos;
 	private UIEntity optionLanguage, optionVolume;
 
+	private static String[] CREDITS_MENU_TEXTS = { GlobalLang.get("credits.list") };
+
+	private UIEntity[] entitiesCreditsMenu;
+	private Vector3f[] entitiesCreditsMenupos;
+	private UIEntity creditsText;
+
 	private static final int MI_NONE = 0;
 	private static final int MI_MAIN = 1;
 	private static final int MI_OPTIONS = 2;
 	private static final int MI_PLAY = 3;
+	private static final int MI_CREDITS = 4;
 
 	private static final int VI_MAIN_PLAY = 0;
 	private static final int VI_MAIN_OPTIONS = 1;
-	private static final int VI_MAIN_QUIT = 2;
+	private static final int VI_MAIN_CREDITS = 2;
+	private static final int VI_MAIN_QUIT = 3;
 
 	private static final int VI_PLAY_EVOLUTION = 0;
 	private static final int VI_PLAY_INFECTION = 1;
-	
+
 	private static final int VI_OPTIONS_OPTION_LANGUAGE = 0;
 	private static final int VI_OPTIONS_OPTION_VOLUME = 1;
 
@@ -107,10 +115,11 @@ public class UISceneStartMenuState extends UISceneState {
 		// play = addText("playText", MAIN_MENU_TEXTS[0], new Vector3f(0, 0.8f, 0));
 		play = addTextLabel("playText", MAIN_MENU_TEXTS[0], new Vector3f(0, 0.8f, 0), Alignment.TEXT_CENTER);
 		options = addTextLabel("optionsText", MAIN_MENU_TEXTS[1], new Vector3f(0, 0, 0), Alignment.TEXT_CENTER);
-		quit = addTextLabel("quitText", MAIN_MENU_TEXTS[2], new Vector3f(0, -0.8f, 0), Alignment.TEXT_CENTER);
+		credits = addTextLabel("creditsText", MAIN_MENU_TEXTS[2], new Vector3f(0, -0.8f, 0), Alignment.TEXT_CENTER);
+		quit = addTextLabel("quitText", MAIN_MENU_TEXTS[3], new Vector3f(0, -1.6f, 0), Alignment.TEXT_CENTER);
 
-		entitiesMainMenu = new UIEntity[] { play, options, quit };
-		entitiesMainMenupos = new Vector3f[] { new Vector3f(0, 0.8f, 0), new Vector3f(0, 0, 0), new Vector3f(0, -0.8f, 0) };
+		entitiesMainMenu = new UIEntity[] { play, options, credits, quit };
+		entitiesMainMenupos = new Vector3f[] { new Vector3f(0, 0.8f, 0), new Vector3f(0, 0, 0), new Vector3f(0, -0.8f, 0), new Vector3f(0, -1.6f, 0) };
 
 		playMode1 = addTextLabel("playMode1", PLAY_MENU_TEXTS[0], new Vector3f(0f, 0.4f, 0), Alignment.TEXT_CENTER, this::interact_playMode1);
 		playMode2 = addTextLabel("playMode2", PLAY_MENU_TEXTS[1], new Vector3f(0f, -0.4f, 0), Alignment.TEXT_CENTER, this::interact_playMode2);
@@ -131,7 +140,7 @@ public class UISceneStartMenuState extends UISceneState {
 			}
 		});
 
-		optionVolume = addTextLabel("optionvolumetext", OPTION_MENU_TEXTS[1] + ": 0"+GlobalOptions.VOLUME, new Vector3f(0, -0.4f, 0), Alignment.TEXT_CENTER, (Entity entity, boolean direction, Direction dir, Button button) -> {
+		optionVolume = addTextLabel("optionvolumetext", OPTION_MENU_TEXTS[1] + ": 0" + GlobalOptions.VOLUME, new Vector3f(0, -0.4f, 0), Alignment.TEXT_CENTER, (Entity entity, boolean direction, Direction dir, Button button) -> {
 			if (direction) {
 				if (dir.equals(Direction.WEST)) {
 					GlobalOptions.VOLUME--;
@@ -149,28 +158,40 @@ public class UISceneStartMenuState extends UISceneState {
 		entitiesOptionMenu = new UIEntity[] { optionLanguage, optionVolume };
 		entitiesOptionMenupos = new Vector3f[] { new Vector3f(0, 0.4f, 0), new Vector3f(0, -0.4f, 0) };
 
+		creditsText = addInertTextLabel("creditsList", CREDITS_MENU_TEXTS[0], new Vector3f(0, 2f, 0), Alignment.TEXT_CENTER);
+		creditsText.getComponent(TextEmitterComponent.class).getTextEmitter(cache).setCharOffset(new Vector2f(0, 0.2f));
+		creditsText.getComponent(TextEmitterComponent.class).getTextEmitter(cache).setCorrectTransform(true);
+		creditsText.getComponent(TextEmitterComponent.class).getTextEmitter(cache).updateText();
+		creditsText.getComponent(Transform3DComponent.class).getTransform().setScale(0.85f).updateMatrix();
+
+		entitiesCreditsMenu = new UIEntity[] { creditsText };
+		entitiesCreditsMenupos = new Vector3f[] { new Vector3f(0, 2f, 0) };
+
 		updateLanguge();
 
 		chooseMenuElement(entitiesMainMenu, mainVerticalIndex);
 		chooseMenuElement(entitiesPlayMenu, otherVerticalIndex);
 		chooseMenuElement(entitiesOptionMenu, otherVerticalIndex);
+		chooseMenuElement(entitiesCreditsMenu, otherVerticalIndex);
 
 		menuTransitionValue = 1; // set to inactive
 		setPos(entitiesPlayMenu, entitiesPlayMenupos, OTHER_X_POS_START, OTHER_X_POS_END, i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
 		setPos(entitiesOptionMenu, entitiesOptionMenupos, OTHER_X_POS_START, OTHER_X_POS_END, i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
+		setPos(entitiesCreditsMenu, entitiesCreditsMenupos, OTHER_X_POS_START, OTHER_X_POS_END, i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
 		menuTransitionValue = 0; // set to active
 		setPos(entitiesMainMenu, entitiesMainMenupos, MAIN_X_POS_START, MAIN_X_POS_END, i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
-		
-		rotInterpolator = new QuaternionArrayCallbackValueInterpolator(new Entity[] {play, options, quit, playMode1, playMode2, optionLanguage, optionVolume}, new Quaternionf().rotateLocalZ(Math.toRadians(-ANIMATION_IDLE_ANGLE)), new Quaternionf().rotateLocalZ(Math.toRadians(ANIMATION_IDLE_ANGLE)), Interpolators.CUBIC_IN_OUT);
+
+		rotInterpolator = new QuaternionArrayCallbackValueInterpolator(new Entity[] { play, options, quit, playMode1, playMode2, optionLanguage, optionVolume, credits }, new Quaternionf().rotateLocalZ(Math.toRadians(-ANIMATION_IDLE_ANGLE)),
+				new Quaternionf().rotateLocalZ(Math.toRadians(ANIMATION_IDLE_ANGLE)), Interpolators.CUBIC_IN_OUT);
 	}
 
 	private void interact_playMode1(Entity entity1, boolean boolean2, Direction direction3, Button button4) {
-		if(button4.equals(Button.EAST))
+		if (button4.equals(Button.EAST))
 			GlobalUtils.INSTANCE.startGame(GameMode.EVOLUTION);
 	}
 
 	private void interact_playMode2(Entity entity1, boolean boolean2, Direction direction3, Button button4) {
-		if(button4.equals(Button.EAST))
+		if (button4.equals(Button.EAST))
 			GlobalUtils.INSTANCE.startGame(GameMode.INFECTION);
 	}
 
@@ -190,104 +211,154 @@ public class UISceneStartMenuState extends UISceneState {
 	private SelectableUITextLabel addTextLabel(String name, String txt, Vector3f pos, Alignment alignment, UIInteractRunnable run) {
 		return (SelectableUITextLabel) scene.addEntity(name, new SelectableUITextLabel(cache, name, txt, pos, alignment, run));
 	}
+	private UITextLabel addInertTextLabel(String name, String txt, Vector3f pos, Alignment alignment) {
+		return (UITextLabel) scene.addEntity(name, new UITextLabel(cache, name, txt, pos, alignment));
+	}
 
 	@Override
 	public void input(float dTime) {
-		if (!window.isJoystickPresent())
-			return;
-		if (!window.updateGamepad(0))
-			return;
-
 		chooseMenuElement(entitiesMainMenu, mainVerticalIndex);
 		chooseMenuElement(entitiesOptionMenu, otherVerticalIndex);
 		chooseMenuElement(entitiesPlayMenu, otherVerticalIndex);
-
-		GLFWGamepadState gps = window.getGamepad();
 
 		if (menuTransition != MENU_TRANSITION_IDLE) {
 			updateMenuTransition();
 			return;
 		}
 
-		if (gps.buttons(GLFW.GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER) == GLFW.GLFW_PRESS && menuIndex == MI_MAIN) {
-			if (mainVerticalIndex == VI_MAIN_QUIT) {
-				GlobalUtils.requestQuit();
+		if (window.isJoystickPresent()) {
+			if (!window.updateGamepad(0))
+				return;
+
+			GLFWGamepadState gps = window.getGamepad();
+
+			if (gps.buttons(GLFW.GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER) == GLFW.GLFW_PRESS && menuIndex == MI_MAIN) {
+				if (mainVerticalIndex == VI_MAIN_QUIT) {
+					GlobalUtils.requestQuit();
+					return;
+				}
+				startTransition(MI_MAIN, mainVerticalIndex == VI_MAIN_PLAY ? MI_PLAY : (mainVerticalIndex == VI_MAIN_OPTIONS ? MI_OPTIONS : (mainVerticalIndex == VI_MAIN_CREDITS ? MI_CREDITS : MI_NONE)));
+				otherVerticalIndex = 0;
 				return;
 			}
-			startTransition(MI_MAIN, mainVerticalIndex == VI_MAIN_PLAY ? MI_PLAY : (mainVerticalIndex == VI_MAIN_OPTIONS ? MI_OPTIONS : MI_NONE));
-			otherVerticalIndex = 0;
-			return;
-		}
-		if (gps.buttons(GLFW.GLFW_GAMEPAD_BUTTON_LEFT_BUMPER) == GLFW.GLFW_PRESS && menuIndex != MI_MAIN) {
-			startTransition(menuIndex, MI_MAIN);
-			return;
-		}
-
-		Pair<Direction, Float> dirf = cic.getSoftDirection(gps);
-		Direction ddir = dirf.getKey();
-		float progress = dirf.getValue();
-		if (Direction.SOUTH.equals(ddir) || Direction.NORTH.equals(ddir) || Direction.NONE.equals(ddir)) {
-			// smooth animations ?
-			// placeMainMenuElements(Direction.NORTH.equals(ddir) ? progress : -progress);
-		}
-
-		cic.updateButton(gps);
-		if (cic.hasNextButton()) {
-			interact(otherVerticalIndex, false, null, cic.consumeButton());
-		}
-
-		cic.updateDirection(gps);
-		if (cic.hasNextDirection()) {
-			Direction dir = cic.consumeDirection();
-			switch (dir) {
-			case NORTH:
-				if (menuIndex == MI_MAIN) {
-					mainVerticalIndex--;
-				} else {
-					otherVerticalIndex--;
-				}
-				break;
-
-			case SOUTH:
-				if (menuIndex == MI_MAIN) {
-					mainVerticalIndex++;
-				} else {
-					otherVerticalIndex++;
-				}
-				break;
-
-			case EAST:
-			case WEST:
-				if (menuIndex != MI_MAIN) {
-					interact(otherVerticalIndex, true, dir, Button.NONE);
-				}
+			if (gps.buttons(GLFW.GLFW_GAMEPAD_BUTTON_LEFT_BUMPER) == GLFW.GLFW_PRESS && menuIndex != MI_MAIN) {
+				startTransition(menuIndex, MI_MAIN);
 				return;
+			}
 
-			default:
+			Pair<Direction, Float> dirf = cic.getSoftDirection(gps);
+			Direction ddir = dirf.getKey();
+			float progress = dirf.getValue();
+			if (Direction.SOUTH.equals(ddir) || Direction.NORTH.equals(ddir) || Direction.NONE.equals(ddir)) {
+				// smooth animations ?
+				// placeMainMenuElements(Direction.NORTH.equals(ddir) ? progress : -progress);
+			}
+
+			cic.updateButton(gps);
+			if (cic.hasNextButton()) {
+				interact(otherVerticalIndex, false, null, cic.consumeButton());
+			}
+
+			cic.updateDirection(gps);
+			if (cic.hasNextDirection()) {
+				Direction dir = cic.consumeDirection();
+				switch (dir) {
+				case NORTH:
+					if (menuIndex == MI_MAIN) {
+						mainVerticalIndex--;
+					} else {
+						otherVerticalIndex--;
+					}
+					break;
+
+				case SOUTH:
+					if (menuIndex == MI_MAIN) {
+						mainVerticalIndex++;
+					} else {
+						otherVerticalIndex++;
+					}
+					break;
+
+				case EAST:
+				case WEST:
+					if (menuIndex != MI_MAIN) {
+						interact(otherVerticalIndex, true, dir, Button.NONE);
+					}
+					return;
+
+				default:
+					return;
+				}
+			}
+		} else { // keyboard
+			if (window.isKeyPressed(GLFW.GLFW_KEY_KP_MULTIPLY) && menuIndex == MI_MAIN) {
+				if (mainVerticalIndex == VI_MAIN_QUIT) {
+					GlobalUtils.requestQuit();
+					return;
+				}
+				startTransition(MI_MAIN, mainVerticalIndex == VI_MAIN_PLAY ? MI_PLAY : (mainVerticalIndex == VI_MAIN_OPTIONS ? MI_OPTIONS : (mainVerticalIndex == VI_MAIN_CREDITS ? MI_CREDITS : MI_NONE)));
+				otherVerticalIndex = 0;
 				return;
+			}
+			if (window.isKeyPressed(GLFW.GLFW_KEY_KP_DIVIDE) && menuIndex != MI_MAIN) {
+				startTransition(menuIndex, MI_MAIN);
+				return;
+			}
+
+			cic.updateDirection(window);
+			if (cic.hasNextDirection()) {
+				Direction dir = cic.consumeDirection();
+				switch (dir) {
+				case NORTH:
+					if (menuIndex == MI_MAIN) {
+						mainVerticalIndex--;
+					} else {
+						otherVerticalIndex--;
+					}
+					break;
+
+				case SOUTH:
+					if (menuIndex == MI_MAIN) {
+						mainVerticalIndex++;
+					} else {
+						otherVerticalIndex++;
+					}
+					break;
+
+				case EAST:
+				case WEST:
+					if (menuIndex != MI_MAIN) {
+						interact(otherVerticalIndex, true, dir, Button.NONE);
+					}
+					return;
+
+				default:
+					return;
+				}
 			}
 		}
 
 		if (menuIndex == MI_MAIN) {
-			mainVerticalIndex = org.joml.Math.clamp(0, 2, mainVerticalIndex);
+			mainVerticalIndex = org.joml.Math.clamp(0, 3, mainVerticalIndex);
 		} else if (menuIndex == MI_OPTIONS) {
 			otherVerticalIndex = org.joml.Math.clamp(0, 1, otherVerticalIndex);
 		} else if (menuIndex == MI_PLAY) {
 			otherVerticalIndex = org.joml.Math.clamp(0, 1, otherVerticalIndex);
 		}
 	}
-	
+
 	private float time = 0;
-	
+
 	@Override
 	public void update(float dTime) {
 		time += dTime;
-		rotInterpolator.set(ANIMATION_IDLE_SPEED*time).zigzag().exec();
+		rotInterpolator.set(ANIMATION_IDLE_SPEED * time).zigzag().exec();
 	}
-	
+
 	@Override
-	public void render(float dTime) {}
-	
+	public void render(float dTime) {
+	}
+
 	private void interact(int verticalIndex, boolean direction, Direction dir, Button button) {
 		Entity entity = getSelectedEntity();
 		if (direction) { // analog input (slider, etc)
@@ -317,6 +388,8 @@ public class UISceneStartMenuState extends UISceneState {
 			return entitiesOptionMenu[otherVerticalIndex];
 		} else if (menuIndex == MI_PLAY) {
 			return entitiesPlayMenu[otherVerticalIndex];
+		}else if (menuIndex == MI_CREDITS) {
+			return entitiesCreditsMenu[otherVerticalIndex];
 		}
 		return null;
 	}
@@ -363,6 +436,13 @@ public class UISceneStartMenuState extends UISceneState {
 		} else if (menuTransitionTarget == MI_OPTIONS) {
 			setPos(entitiesOptionMenu, entitiesOptionMenupos, OTHER_X_POS_END, OTHER_X_POS_START, i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue * (i + 1)));
 		}
+		
+		if (menuTransitionBase == MI_CREDITS) {
+			setPos(entitiesCreditsMenu, entitiesCreditsMenupos, OTHER_X_POS_START, OTHER_X_POS_END, i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue * (i + 1)));
+			updateLanguge();
+		} else if (menuTransitionTarget == MI_CREDITS) {
+			setPos(entitiesCreditsMenu, entitiesCreditsMenupos, OTHER_X_POS_END, OTHER_X_POS_START, i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue * (i + 1)));
+		}
 
 		if (menuTransitionValue >= 1) {
 			menuTransition = MENU_TRANSITION_IDLE;
@@ -383,13 +463,15 @@ public class UISceneStartMenuState extends UISceneState {
 			e.printStackTrace();
 		}
 
-		MAIN_MENU_TEXTS = new String[] { GlobalLang.get("menu.main.play"), GlobalLang.get("menu.main.options"), GlobalLang.get("menu.main.quit") };
+		MAIN_MENU_TEXTS = new String[] { GlobalLang.get("menu.main.play"), GlobalLang.get("menu.main.options"), GlobalLang.get("menu.main.credits"), GlobalLang.get("menu.main.quit") };
 		PLAY_MENU_TEXTS = new String[] { GlobalLang.get("menu.play.evolution"), GlobalLang.get("menu.play.infection") + "" };
 		OPTION_MENU_TEXTS = new String[] { langName, GlobalLang.get("menu.options.volume") + ": " + MathUtils.fillPrefix(2, '0', GlobalOptions.VOLUME + "") };
+		CREDITS_MENU_TEXTS = new String[] { GlobalLang.get("credits.list") };
 
 		updateMenuTexts(entitiesMainMenu, MAIN_MENU_TEXTS);
 		updateMenuTexts(entitiesPlayMenu, PLAY_MENU_TEXTS);
 		updateMenuTexts(entitiesOptionMenu, OPTION_MENU_TEXTS);
+		updateMenuTexts(entitiesCreditsMenu, CREDITS_MENU_TEXTS);
 	}
 
 	private void setPos(Entity[] entities, Vector3f[] offset, float start, float end, Function<Integer, Float> intFun) {
@@ -435,14 +517,14 @@ public class UISceneStartMenuState extends UISceneState {
 			return null;
 		}).push();
 	}
-	
+
 	@Override
 	public void cleanup() {
-		GlobalLogger.log("Cleaning up: "+getClass().getName());
-		
+		GlobalLogger.log("Cleaning up: " + getClass().getName());
+
 		scene.getEntities().clear();
-		
+
 		super.cleanup();
 	}
-	
+
 }
