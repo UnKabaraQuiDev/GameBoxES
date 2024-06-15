@@ -9,7 +9,7 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL40;
 
-import lu.pcy113.pclib.Pair;
+import lu.pcy113.pclib.datastructure.pair.Pair;
 
 import lu.kbra.gamebox.client.es.engine.anim.skeletal.Animation;
 import lu.kbra.gamebox.client.es.engine.anim.skeletal.ArmatureAnimation;

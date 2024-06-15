@@ -5,7 +5,7 @@ import java.util.Arrays;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 
-import lu.pcy113.pclib.GlobalLogger;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.cache.attrib.UIntAttribArray;
 import lu.kbra.gamebox.client.es.engine.geom.Mesh;

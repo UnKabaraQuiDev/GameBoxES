@@ -6,7 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Properties;
 
-import lu.pcy113.pclib.GlobalLogger;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 public final class GlobalOptions {
 	

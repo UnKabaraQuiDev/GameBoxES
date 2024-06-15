@@ -18,8 +18,8 @@ import org.lwjgl.opengl.GL21;
 import org.lwjgl.opengl.GL40;
 import org.lwjgl.system.MemoryStack;
 
-import lu.pcy113.pclib.GlobalLogger;
-import lu.pcy113.pclib.Pair;
+import lu.pcy113.pclib.datastructure.pair.Pair;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;

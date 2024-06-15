@@ -7,7 +7,7 @@ import java.util.logging.Level;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL15;
 
-import lu.pcy113.pclib.GlobalLogger;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.cache.attrib.AttribArray;
 import lu.kbra.gamebox.client.es.engine.cache.attrib.Mat4fAttribArray;

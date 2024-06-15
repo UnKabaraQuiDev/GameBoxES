@@ -5,7 +5,7 @@ import java.util.logging.Level;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL40;
 
-import lu.pcy113.pclib.GlobalLogger;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.anim.skeletal.ArmatureAnimation;

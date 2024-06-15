@@ -19,8 +19,8 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL40;
 
 import lu.pcy113.jbcodec.CodecManager;
-import lu.pcy113.pclib.GlobalLogger;
 import lu.pcy113.pclib.PCUtils;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;

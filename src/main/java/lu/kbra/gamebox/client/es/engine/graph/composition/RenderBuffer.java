@@ -2,7 +2,7 @@ package lu.kbra.gamebox.client.es.engine.graph.composition;
 
 import org.lwjgl.opengl.GL40;
 
-import lu.pcy113.pclib.GlobalLogger;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
 import lu.kbra.gamebox.client.es.engine.impl.UniqueID;

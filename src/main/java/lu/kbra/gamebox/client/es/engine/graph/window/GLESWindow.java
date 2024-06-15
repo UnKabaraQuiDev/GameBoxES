@@ -9,7 +9,7 @@ import org.lwjgl.opengles.GLES20;
 import org.lwjgl.opengles.GLESCapabilities;
 import org.lwjgl.system.MemoryUtil;
 
-import lu.pcy113.pclib.GlobalLogger;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.utils.consts.GLType;
 

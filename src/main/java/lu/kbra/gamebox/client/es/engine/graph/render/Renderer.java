@@ -1,6 +1,6 @@
 package lu.kbra.gamebox.client.es.engine.graph.render;
 
-import lu.pcy113.pclib.GlobalLogger;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;

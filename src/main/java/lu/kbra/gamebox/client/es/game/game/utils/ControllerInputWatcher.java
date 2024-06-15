@@ -6,8 +6,8 @@ import java.nio.FloatBuffer;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWGamepadState;
 
-import lu.pcy113.pclib.Pair;
-import lu.pcy113.pclib.Pairs;
+import lu.pcy113.pclib.datastructure.pair.Pair;
+import lu.pcy113.pclib.datastructure.pair.Pairs;
 
 import lu.kbra.gamebox.client.es.engine.graph.window.Window;
 import lu.kbra.gamebox.client.es.engine.utils.MathUtils;

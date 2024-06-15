@@ -1,6 +1,6 @@
 package lu.kbra.gamebox.client.es.engine.impl.nexttask;
 
-import lu.pcy113.pclib.GlobalLogger;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.impl.UniqueID;
 

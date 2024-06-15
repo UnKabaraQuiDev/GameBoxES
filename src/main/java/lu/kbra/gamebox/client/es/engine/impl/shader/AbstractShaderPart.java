@@ -7,7 +7,7 @@ import java.util.logging.Level;
 import org.lwjgl.opengl.GL40;
 import org.lwjgl.opengl.GL43;
 
-import lu.pcy113.pclib.GlobalLogger;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.computing.shader.part.ComputeShaderPart;
 import lu.kbra.gamebox.client.es.engine.graph.shader.part.FragmentShaderPart;

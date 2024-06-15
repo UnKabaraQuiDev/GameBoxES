@@ -7,10 +7,11 @@ import java.util.List;
 
 import org.json.JSONException;
 
+import lu.pcy113.pclib.logger.GlobalLogger;
+
 import lu.kbra.gamebox.client.es.game.game.scenes.ui.UISceneGameOverlay;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalLang;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
-import lu.pcy113.pclib.GlobalLogger;
 
 public class PlayerData {
 

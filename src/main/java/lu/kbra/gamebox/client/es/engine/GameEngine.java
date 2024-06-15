@@ -5,7 +5,7 @@ import java.util.logging.Level;
 
 import org.joml.Vector3f;
 
-import lu.pcy113.pclib.GlobalLogger;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.audio.AudioMaster;
 import lu.kbra.gamebox.client.es.engine.cache.SharedCacheManager;

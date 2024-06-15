@@ -18,7 +18,7 @@ import org.joml.Vector3f;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import lu.pcy113.pclib.GlobalLogger;
+import lu.pcy113.pclib.logger.GlobalLogger;
 import lu.pcy113.pclib.pointer.prim.BooleanPointer;
 import lu.pcy113.pclib.pointer.prim.IntPointer;
 

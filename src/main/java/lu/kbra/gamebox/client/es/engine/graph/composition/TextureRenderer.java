@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.joml.Vector2i;
 
-import lu.pcy113.pclib.GlobalLogger;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
 import lu.kbra.gamebox.client.es.engine.graph.texture.SingleTexture;

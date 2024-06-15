@@ -2,7 +2,7 @@ package lu.kbra.gamebox.client.es.engine.utils;
 
 import org.lwjgl.openal.ALCCapabilities;
 
-import lu.pcy113.pclib.GlobalLogger;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 public final class PDRLoggerUtils {
 

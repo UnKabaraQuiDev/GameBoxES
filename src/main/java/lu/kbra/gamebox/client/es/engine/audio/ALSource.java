@@ -3,7 +3,7 @@ package lu.kbra.gamebox.client.es.engine.audio;
 import org.joml.Vector3f;
 import org.lwjgl.openal.AL11;
 
-import lu.pcy113.pclib.GlobalLogger;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
