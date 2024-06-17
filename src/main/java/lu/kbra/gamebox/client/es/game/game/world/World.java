@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
@@ -18,6 +19,7 @@ import org.joml.Vector3f;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import lu.pcy113.pclib.PCUtils;
 import lu.pcy113.pclib.logger.GlobalLogger;
 import lu.pcy113.pclib.pointer.prim.BooleanPointer;
 import lu.pcy113.pclib.pointer.prim.IntPointer;
@@ -39,16 +41,16 @@ import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
 import lu.kbra.gamebox.client.es.engine.utils.geo.GeoPlane;
 import lu.kbra.gamebox.client.es.engine.utils.transform.Transform3D;
 import lu.kbra.gamebox.client.es.game.game.data.Achievements;
+import lu.kbra.gamebox.client.es.game.game.data.CellDescriptor;
+import lu.kbra.gamebox.client.es.game.game.data.CellType;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.CellShader;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.CellShader.CellMaterial;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.PlantWorldParticleMaterial;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.ToxinWorldParticleMaterial;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.WorldParticleShader;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.WorldScene3D;
-import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.CellDescriptor;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.CellEntity;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.CellInstanceEmitter;
-import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.CellType;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.CellsEntity;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.PlantsEntity;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.ToxinsEntity;
@@ -122,34 +124,6 @@ public class World implements Cleanupable {
 		this.fertilityGen = new NoiseGenerator(seed + SEED_OFFSET_FERTILITY, 32);
 		this.humidityGen = new NoiseGenerator(seed + SEED_OFFSET_HUMIDITY, 64);
 
-		/*
-		 * GlobalUtils.pushWorker(() -> NoiseMain.map(distributionGen, "distribution", -5 * 20, +5 * 20), () -> NoiseMain.map(hostilityGen, "hostility", -5 * 20, +5 * 20), () -> NoiseMain.map(fertilityGen, "fertility", -5 * 20, +5 * 20), ()
-		 * -> NoiseMain.map(humidityGen, "humidity", -5 * 20, +5 * 20),
-		 * 
-		 * () -> NoiseMain.map((point) -> humidityGen.noise(point) > 0.2 && hostilityGen.noise(point) < 0.4, "plants_normal", -5 * 20, +5 * 20),
-		 * 
-		 * () -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.2, "humidity_less_0.2", -5 * 20, +5 * 20), () -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.4, "humidity_less_0.4", -5 * 20, +5 * 20), () ->
-		 * NoiseMain.map((point) -> humidityGen.noise(point) < 0.6, "humidity_less_0.6", -5 * 20, +5 * 20), () -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.8, "humidity_less_0.8", -5 * 20, +5 * 20),
-		 * 
-		 * () -> NoiseMain.map((point) -> humidityGen.noise(point) > 0.2, "humidity_greater_0.2", -5 * 20, +5 * 20), () -> NoiseMain.map((point) -> humidityGen.noise(point) > 0.4, "humidity_greater_0.4", -5 * 20, +5 * 20), () ->
-		 * NoiseMain.map((point) -> humidityGen.noise(point) > 0.6, "humidity_greater_0.6", -5 * 20, +5 * 20), () -> NoiseMain.map((point) -> humidityGen.noise(point) > 0.8, "humidity_greater_0.8", -5 * 20, +5 * 20),
-		 * 
-		 * () -> NoiseMain.map((point) -> fertilityGen.noise(point) < 0.2, "fertility_less_0.2", -5 * 20, +5 * 20), () -> NoiseMain.map((point) -> fertilityGen.noise(point) < 0.4, "fertility_less_0.4", -5 * 20, +5 * 20), () ->
-		 * NoiseMain.map((point) -> fertilityGen.noise(point) < 0.6, "fertility_less_0.6", -5 * 20, +5 * 20), () -> NoiseMain.map((point) -> fertilityGen.noise(point) < 0.8, "fertility_less_0.8", -5 * 20, +5 * 20),
-		 * 
-		 * () -> NoiseMain.map((point) -> hostilityGen.noise(point) > 0.5, "hostility_greater_0.5", -5 * 20, +5 * 20), () -> NoiseMain.map((point) -> hostilityGen.noise(point) > 0.8, "hostility_greater_0.8", -5 * 20, +5 * 20),
-		 * 
-		 * () -> NoiseMain.map((point) -> hostilityGen.noise(point) < 0.4, "hostility_less_0.4", -5 * 20, +5 * 20), () -> NoiseMain.map((point) -> hostilityGen.noise(point) < 0.2, "hostility_less_0.2", -5 * 20, +5 * 20),
-		 * 
-		 * () -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.4 && hostilityGen.noise(point) > 0.5, "toxins_normal", -5 * 20, +5 * 20), () -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.4 &&
-		 * java.lang.Math.pow(hostilityGen.noise(point), 2) > 0.5, "toxins_squared", -5 * 20, +5 * 20), () -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.4 && hostilityGen.noise(point) * 2 > 0.5, "toxins_doubled", -5 * 20, +5 *
-		 * 20), () -> NoiseMain.map((point) -> humidityGen.noise(point) < 0.4 && hostilityGen.noise(point) / 2 > 0.5, "toxins_halved", -5 * 20, +5 * 20),
-		 * 
-		 * () -> NoiseMain.map((point) -> fertilityGen.noise(point) > 0.8 && hostilityGen.noise(point) < 0.2 && humidityGen.noise(point) > 0.4, "cells_normal", -5 * 20, +5 * 20), () -> NoiseMain.map((point) -> fertilityGen.noise(point) >
-		 * 0.8 && hostilityGen.noise(point) < 0.4 && humidityGen.noise(point) > 0.4, "cells_soft_hostility", -5 * 20, +5 * 20), () -> NoiseMain.map((point) -> fertilityGen.noise(point) > 0.6 && hostilityGen.noise(point) < 0.4 &&
-		 * humidityGen.noise(point) > 0.4, "cells_soft_hostility_soft_fertility", -5 * 20, +5 * 20));
-		 */
-
 		CellMaterial playerMaterial = cache.loadOrGetMaterial("playerMaterial", CellShader.CellMaterial.class, CellType.PLAYER.name(),
 				cache.loadOrGetSingleTexture(CellShader.CellMaterial.PLAYER_TEXTURE_NAME, CellShader.CellMaterial.PLAYER_TEXTURE_PATH));
 		Mesh playerMesh = cache.newQuadMesh("playerMesh", playerMaterial, new Vector2f(2.5f * 2));
@@ -158,6 +132,7 @@ public class World implements Cleanupable {
 		scene.addEntity(player);
 
 		cellDescriptorPool = loadCellDescriptorPool();
+		GlobalLogger.info(cellDescriptorPool.toString());
 	}
 
 	public void input(float dTime) {
@@ -207,7 +182,7 @@ public class World implements Cleanupable {
 			lastToxinDamage = System.currentTimeMillis();
 
 			GlobalUtils.INSTANCE.playerData.damage(1);
-			
+
 			GlobalUtils.INSTANCE.playerData.unlockAchievement(Achievements.FOG_DAMAGE);
 		}
 
@@ -250,7 +225,7 @@ public class World implements Cleanupable {
 
 				inst.getDirections().get(i).set(direction.mul(-2 * dTime * CELLS_MOV_SPEED));
 				((Transform3D) part.getTransform()).getTranslation().add(inst.getDirections().get(i));
-				
+
 				GlobalUtils.INSTANCE.playerData.unlockAchievement(Achievements.ENNEMY_DAMAGE);
 			} else { // idle
 				inst.getDirections().get(i).add(new Vector3f((float) Math.random() - 0.5f, (float) Math.random() - 0.5f, 0).normalize()).div(2);
@@ -381,7 +356,7 @@ public class World implements Cleanupable {
 	}
 
 	private static List<CellDescriptor> loadCellDescriptorPool() {
-		List<CellDescriptor> pool = new ArrayList<CellDescriptor>();
+		LinkedList<CellDescriptor> pool = new LinkedList<CellDescriptor>();
 
 		try {
 			JSONObject obj = new JSONObject(new String(Files.readAllBytes(Paths.get("./resources/gd/cells/cells.json"))));
@@ -390,12 +365,14 @@ public class World implements Cleanupable {
 				JSONObject sobj = obj.getJSONObject(k);
 				pool.add(new CellDescriptor(k, sobj.getEnum(CellType.class, "type"), sobj.getString("scientific"), PDRUtils.loadRangeFloat(sobj, "hostility"), PDRUtils.loadRangeFloat(sobj, "fertility"),
 						PDRUtils.loadRangeFloat(sobj, "humidity"), sobj.getInt("textureVariationCount"), sobj.getFloat("aggressivity"), sobj.getFloat("hardAggressiveDistance"), sobj.getFloat("softAggressiveDistance")));
+
+				GlobalLogger.info("Added cell type: " + pool.getLast());
 			}
 		} catch (JSONException | IOException e) {
 			e.printStackTrace();
 		}
 
-		return pool;
+		return pool.stream().collect(PCUtils.toShuffledList());
 	}
 
 	public boolean genChunk(Vector2f center, int chunkSize) {
@@ -421,7 +398,7 @@ public class World implements Cleanupable {
 
 			final List<Vector2f> plantPos = genPlantsPos(center, halfSquareSize, numPoint / 3 / 3);
 			final List<Vector2f> toxinsPos = genToxinsPos(center, halfSquareSize, numPoint / 3);
-			final List<Vector2f> cellsPos = genCellsPos(center, halfSquareSize, numPoint / 3);
+			final List<Vector2f> cellsPos = genCellsPos(center, halfSquareSize, numPoint / 9);
 
 			System.err.println("Task gen chunk (worker): " + (System.currentTimeMillis() - start) + "ms for " + center);
 
@@ -532,7 +509,7 @@ public class World implements Cleanupable {
 
 			((Transform3D) part.getTransform()).getTranslation().set(pos.x, pos.y, Y_OFFSET * i);
 			((Transform3D) part.getTransform()).updateMatrix();
-			part.getBuffers()[0] = Math.clamp(0.6f, 2f, Math.clamp(5f, 10f, (float) hostilityGen.noise(pos)));
+			part.getBuffers()[0] = Math.clamp(0.6f, 10f, hostilityGen.noise(pos)*10);
 		}
 
 		emit.updateParticles();

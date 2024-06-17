@@ -378,7 +378,7 @@ public final class PDRUtils {
 
 	public static Vector2f loadRangeFloat(JSONObject sobj, String key) {
 		JSONArray arr = sobj.getJSONArray(key);
-		return new Vector2f(arr.getInt(0), arr.getInt(1));
+		return new Vector2f(arr.getFloat(0), arr.getFloat(1));
 	}
 
 	public static int[] randomIntArray(int length, int min, int max) {

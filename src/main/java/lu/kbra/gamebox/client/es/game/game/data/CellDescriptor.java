@@ -1,4 +1,4 @@
-package lu.kbra.gamebox.client.es.game.game.scenes.world.entities;
+package lu.kbra.gamebox.client.es.game.game.data;
 
 import java.io.FileNotFoundException;
 import java.nio.file.Files;
@@ -59,7 +59,7 @@ public class CellDescriptor {
 		String imagePath = cellType.getTexturePath() + id + ".png";
 
 		if (!Files.exists(Paths.get(imagePath))) {
-			throw new RuntimeException(new FileNotFoundException("Couln't find file: " + imagePath));
+			throw new RuntimeException(new FileNotFoundException("Couldn't find file: " + imagePath));
 		}
 
 		CellInstanceShader shader = (CellInstanceShader) cache.loadOrGetRenderShader(CellInstanceShader.NAME, CellInstanceShader.class);
@@ -149,6 +149,11 @@ public class CellDescriptor {
 
 	public float getSoftAggressiveDistance() {
 		return softAggressiveDistance;
+	}
+	
+	@Override
+	public String toString() {
+		return this.getClass().getName()+"@"+hashCode()+"{"+cellType+", "+id+", "+scientificName+", "+hostilityRange+", "+fertilityRange+", "+humidityRange+", "+variationCount+", "+aggressivity+", "+hardAggressiveDistance+", "+softAggressiveDistance+"}";
 	}
 
 }
