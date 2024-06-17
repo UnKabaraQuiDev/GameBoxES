@@ -15,6 +15,7 @@ public class WorldParticleShader extends RenderShader {
 	public static final String TXT1 = "txt1";
 	public static final String GRID_COLUMNS = "columns";
 	public static final String GRID_ROWS = "rows";
+	public static final String OPACITY = "opacity";
 
 	public WorldParticleShader() {
 		super(NAME, true, AbstractShaderPart.load("./resources/shaders/world/particle/instance.vert"), AbstractShaderPart.load("./resources/shaders/world/particle/instance.frag"));
@@ -27,6 +28,7 @@ public class WorldParticleShader extends RenderShader {
 		createUniform(TXT1);
 		createUniform(GRID_COLUMNS);
 		createUniform(GRID_ROWS);
+		createUniform(OPACITY);
 	}
 
 	public abstract static class WorldParticleMaterial extends TextureMaterial {

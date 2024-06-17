@@ -496,7 +496,7 @@ public class World implements Cleanupable {
 		final Vector2f center = new Vector2f(ce);
 
 		WorldParticleEmitter emit = new WorldParticleEmitter("toxins-" + center, toxins.size(), (ToxinWorldParticleMaterial) cache.loadOrGetMaterial(ToxinWorldParticleMaterial.NAME, ToxinWorldParticleMaterial.class,
-				cache.loadOrGetRenderShader(WorldParticleShader.NAME, WorldParticleShader.class), cache.loadOrGetSingleTexture(ToxinWorldParticleMaterial.TEXTURE_NAME, ToxinWorldParticleMaterial.TEXTURE_PATH, TextureFilter.NEAREST)),
+				cache.loadOrGetRenderShader(WorldParticleShader.NAME, WorldParticleShader.class), cache.loadOrGetSingleTexture(ToxinWorldParticleMaterial.TEXTURE_NAME, ToxinWorldParticleMaterial.TEXTURE_PATH, TextureFilter.LINEAR)),
 				new Transform3D());
 		cache.addMesh(emit.getParticleMesh());
 		cache.addInstanceEmitter(emit);

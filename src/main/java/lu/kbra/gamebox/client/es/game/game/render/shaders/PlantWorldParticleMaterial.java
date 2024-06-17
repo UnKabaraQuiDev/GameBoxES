@@ -1,6 +1,9 @@
 package lu.kbra.gamebox.client.es.game.game.render.shaders;
 
+import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
+import lu.kbra.gamebox.client.es.engine.graph.shader.RenderShader;
 import lu.kbra.gamebox.client.es.engine.graph.texture.SingleTexture;
+import lu.kbra.gamebox.client.es.engine.impl.Renderable;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.WorldParticleShader.WorldParticleMaterial;
 
 public class PlantWorldParticleMaterial extends WorldParticleMaterial {
@@ -19,6 +22,13 @@ public class PlantWorldParticleMaterial extends WorldParticleMaterial {
 	
 	public PlantWorldParticleMaterial(WorldParticleShader shader, SingleTexture texture) {
 		super(NAME, shader, texture, COLUMN_COUNT, ROW_COUNT);
+	}
+	
+	@Override
+	public void bindProperties(CacheManager cache, Renderable scene, RenderShader shader) {
+		super.setProperty(WorldParticleShader.OPACITY, 1f);
+		
+		super.bindProperties(cache, scene, shader);
 	}
 
 }
