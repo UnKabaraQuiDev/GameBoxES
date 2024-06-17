@@ -50,15 +50,15 @@ public class AdvancedCompositor implements Cleanupable {
 	protected LinkedList<String> layers = new LinkedList<>();
 	protected LinkedList<String> passes = new LinkedList<>();
 
-	protected Framebuffer framebuffer, lastFramebuffer;
-	protected SingleTexture depth, color0;
+	//protected Framebuffer framebuffer, lastFramebuffer;
+	//protected SingleTexture depth, color0;
 
 	protected Vector2i resolution = new Vector2i(0, 0);
 	protected int samples = 1;
 
 	private Material backGroundMaterial, highLightsMaterial, scaleMaterial;
 
-	private boolean genTextures() {
+	/*private boolean genTextures() {
 		if (depth != null && depth.isValid())
 			depth.cleanup();
 		if (color0 != null && color0.isValid())
@@ -97,15 +97,15 @@ public class AdvancedCompositor implements Cleanupable {
 			return false;
 
 		return true;
-	}
+	}*/
 
 	public void render(GameEngine engine) {
-		if (framebuffer == null) {
+		/*if (framebuffer == null) {
 			framebuffer = engine.getCache().loadFramebuffer(this.getClass().getName() + "#" + hashCode());
-		}
+		}*/
 
-		framebuffer.bind();
-		lastFramebuffer = framebuffer;
+		//framebuffer.bind();
+		//lastFramebuffer = framebuffer;
 
 		int width = engine.getWindow().getWidth();
 		int height = engine.getWindow().getHeight();
@@ -114,20 +114,20 @@ public class AdvancedCompositor implements Cleanupable {
 
 		if (needRegen) {
 			resolution = new Vector2i(width, height);
-			if (!genTextures())
-				throw new RuntimeException("Error while generating textures and framebuffer.");
+			/*if (!genTextures())
+				throw new RuntimeException("Error while generating textures and framebuffer.");*/
 			GL40.glViewport(0, 0, width, height);
 		}
 
-		if (!framebuffer.isComplete()) {
+		/*if (!framebuffer.isComplete()) {
 			GlobalLogger.log(Level.SEVERE, "Framebuffer not complete: " + framebuffer.getError() + ", w:" + width + " h:" + height);
 			return;
-		}
+		}*/
 
 		GL40.glEnable(GL40.GL_DEPTH_TEST);
 		PDRUtils.checkGlError("Enable(DEPTH_TEST)");
 
-		framebuffer.bind();
+		//framebuffer.bind();
 
 		GL40.glClearColor(background.x, background.y, background.z, background.w);
 		PDRUtils.checkGlError("ClearColor(" + background + ")");
@@ -148,22 +148,22 @@ public class AdvancedCompositor implements Cleanupable {
 				continue;
 
 			GlobalLogger.info("Rendering: " + rl.getId());
-			rl.render(engine, framebuffer);
+			rl.render(engine, null);
 		}
 
 		GL40.glDepthMask(true);
 		PDRUtils.checkGlError("DepthMask(true)");
 
-		GL40.glBindFramebuffer(GL40.GL_FRAMEBUFFER, 0);
+		/*GL40.glBindFramebuffer(GL40.GL_FRAMEBUFFER, 0);
 		PDRUtils.checkGlError("BindFramebuffer()=0");
 		GL40.glBindFramebuffer(GL40.GL_DRAW_FRAMEBUFFER, 0);
 		PDRUtils.checkGlError("BindFramebuffer(DRAW)=0");
 		framebuffer.bind(GL40.GL_READ_FRAMEBUFFER);
 
 		GL40.glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL40.GL_COLOR_BUFFER_BIT, GL40.GL_NEAREST);
-		PDRUtils.checkGlError();
+		PDRUtils.checkGlError();*/
 
-		framebuffer.bind();
+		//framebuffer.bind();
 	}
 
 	private Framebuffer genFBO(int width, int height, TextureFilter filter) {
@@ -199,7 +199,7 @@ public class AdvancedCompositor implements Cleanupable {
 		fbo1.attachTexture(FrameBufferAttachment.DEPTH, 0, fbo1depth);
 
 		if (!fbo1.isComplete()) {
-			GlobalLogger.log(Level.SEVERE, "Framebuffer not complete: " + framebuffer.getError() + ", w:" + width + " h:" + height);
+			//GlobalLogger.log(Level.SEVERE, "Framebuffer not complete: " + framebuffer.getError() + ", w:" + width + " h:" + height);
 			return null;
 		}
 
@@ -215,10 +215,10 @@ public class AdvancedCompositor implements Cleanupable {
 		if (to == null) {
 			// from.unbind(GL40.GL_DRAW_FRAMEBUFFER);
 			GL40.glBindFramebuffer(GL40.GL_DRAW_FRAMEBUFFER, 0); // rendering to default
-			lastFramebuffer = framebuffer;
+			//lastFramebuffer = framebuffer;
 		} else {
 			to.bind(GL40.GL_DRAW_FRAMEBUFFER);
-			lastFramebuffer = to;
+			//lastFramebuffer = to;
 		}
 
 		SCREEN.bind();
@@ -283,7 +283,7 @@ public class AdvancedCompositor implements Cleanupable {
 	public void cleanup() {
 		GlobalLogger.log("Cleaning up: "+getClass().getName());
 		
-		if (framebuffer != null) {
+		/*if (framebuffer != null) {
 			framebuffer.cleanup();
 			framebuffer = null;
 		}
@@ -297,7 +297,7 @@ public class AdvancedCompositor implements Cleanupable {
 		if (color0 != null) {
 			color0.cleanup();
 			color0 = null;
-		}
+		}*/
 		
 		if (SCREEN != null) {
 			SCREEN.cleanup();
@@ -305,8 +305,8 @@ public class AdvancedCompositor implements Cleanupable {
 		}
 	}
 
-	public Framebuffer getFramebuffer() {
+	/*public Framebuffer getFramebuffer() {
 		return framebuffer;
-	}
+	}*/
 
 }

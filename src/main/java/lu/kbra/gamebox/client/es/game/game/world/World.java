@@ -66,7 +66,7 @@ public class World implements Cleanupable {
 	public static final int GEN_CIRCLE_SIDE = 1;
 
 	private static final float ATTRACT_DISTANCE = 3f;
-	private static final float EAT_DISTANCE = 2.5f;
+	private static final float EAT_DISTANCE = 3f;
 	private static final float CELLS_MOV_SPEED = 1f;
 
 	private static final double SEED_OFFSET_DISTRIBUTION = 11;
@@ -197,7 +197,7 @@ public class World implements Cleanupable {
 
 	private void simulateCells(float dTime, Vector2f center, CellsEntity e) {
 		if (updateTasks.contains(center.toString() + "-cells-" + e.getId())) {
-			GlobalLogger.info("Already computing: " + center);
+			GlobalLogger.info("Already computing (cells): " + center);
 			return;
 		}
 
@@ -234,9 +234,9 @@ public class World implements Cleanupable {
 			part.getTransform().updateMatrix();
 		}
 
-		if (updateFrameCount % 10 == 1) {
+		if (updateFrameCount % 10 == 1 || true) {
 
-			System.err.println("push");
+			System.err.println("push cells update");
 			GlobalUtils.pushRender(() -> {
 				inst.updateParticlesTransforms();
 				updateTasks.remove(center.toString() + "-cells-" + e.getId());

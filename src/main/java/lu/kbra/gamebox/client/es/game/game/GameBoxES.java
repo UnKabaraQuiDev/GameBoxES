@@ -46,9 +46,6 @@ public class GameBoxES extends GameLogic {
 
 	@Override
 	public void init(GameEngine e) {
-		GameEngine.DEBUG.wireframe = false;
-		GameEngine.DEBUG.gizmos = true;
-
 		GlobalUtils.init(this, super.engine);
 
 		GlobalLogger.getLogger().setMinForwardLevel(Level.INFO);
@@ -64,6 +61,9 @@ public class GameBoxES extends GameLogic {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
+		
+		GameEngine.DEBUG.wireframe = GlobalOptions.DEBUG && GlobalOptions.WIREFRAME;
+		GameEngine.DEBUG.gizmos = GlobalOptions.DEBUG && GlobalOptions.GIZMOS;
 
 		cache.loadOrGetMaterial(TextShader.TextMaterial.NAME, TextShader.TextMaterial.class, cache.loadOrGetSingleTexture(GlobalConsts.TEXT_TEXTURE, "./resources/textures/fonts/font1row.png", TextureFilter.NEAREST));
 

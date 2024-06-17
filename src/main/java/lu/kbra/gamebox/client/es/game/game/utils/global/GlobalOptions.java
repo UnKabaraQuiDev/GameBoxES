@@ -10,6 +10,9 @@ import lu.pcy113.pclib.logger.GlobalLogger;
 
 public final class GlobalOptions {
 	
+	public static boolean DEBUG = false;
+	public static boolean WIREFRAME = false;
+	public static boolean GIZMOS = false;
 	public static int VOLUME = 5;
 	public static int LANGUAGE = 0;
 	public static boolean CULLING_OPTIMISATION = true;
@@ -30,6 +33,9 @@ public final class GlobalOptions {
 		VOLUME = Integer.parseInt(prop.getProperty("volume"));
 		LANGUAGE = Integer.parseInt(prop.getProperty("language"));
 		CULLING_OPTIMISATION = Boolean.parseBoolean(prop.getProperty("culling"));
+		DEBUG = Boolean.parseBoolean(prop.getProperty("debug"));
+		GIZMOS = Boolean.parseBoolean(prop.getProperty("gizmos"));
+		WIREFRAME = Boolean.parseBoolean(prop.getProperty("wireframe"));
 	}
 	
 	public static void save() throws IOException {
@@ -39,6 +45,9 @@ public final class GlobalOptions {
 		prop.setProperty("volume", VOLUME+"");
 		prop.setProperty("language", LANGUAGE+"");
 		prop.setProperty("culling", CULLING_OPTIMISATION+"");
+		prop.setProperty("debug", DEBUG+"");
+		prop.setProperty("wireframe", WIREFRAME+"");
+		prop.setProperty("gizmos", GIZMOS+"");
 		
 		File file = new File("config/options.properties");
 		prop.store(new FileWriter(file), null);
