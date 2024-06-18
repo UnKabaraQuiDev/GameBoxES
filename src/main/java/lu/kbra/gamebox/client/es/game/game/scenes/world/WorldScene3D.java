@@ -55,7 +55,6 @@ public class WorldScene3D extends Scene3D {
 		}
 
 		if (window.getJoystickButton(GLFW.GLFW_JOYSTICK_1, GLFW.GLFW_GAMEPAD_BUTTON_LEFT_BUMPER) && System.currentTimeMillis() - lastHealthUpgrade >= MIN_UPGRADE_DELAY) {
-			System.err.println("LEFT BUMPER = true");
 			if (GlobalUtils.INSTANCE.playerData.canRestoreHealth()) {
 				((UISceneGameOverlay) GlobalUtils.INSTANCE.uiScene.getState()).startHealthRestoreAccepted();
 				lastHealthUpgrade = System.currentTimeMillis();
@@ -68,7 +67,7 @@ public class WorldScene3D extends Scene3D {
 
 	public void update(float dTime) {
 		if (world != null) {
-			world.continueWorldGen(World.GEN_CIRCLE_SIDE);
+			world.continueWorldGen(World.GEN_CIRCLE_SIZE);
 
 			world.update(dTime);
 

@@ -8,13 +8,11 @@ import org.lwjgl.opengl.GL40;
 import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
-import lu.kbra.gamebox.client.es.engine.anim.skeletal.ArmatureAnimation;
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
 import lu.kbra.gamebox.client.es.engine.geom.Mesh;
 import lu.kbra.gamebox.client.es.engine.graph.material.Material;
 import lu.kbra.gamebox.client.es.engine.graph.shader.RenderShader;
 import lu.kbra.gamebox.client.es.engine.objs.entity.Entity;
-import lu.kbra.gamebox.client.es.engine.objs.entity.components.ArmatureAnimationComponent;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.MeshComponent;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.TransformComponent;
 import lu.kbra.gamebox.client.es.engine.scene.Scene;
@@ -89,17 +87,6 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 			}
 		}
 		GameEngine.DEBUG.end("r_uniforms_transform");
-
-		GameEngine.DEBUG.start("r_uniforms_skelet");
-		if (e.hasComponent(ArmatureAnimationComponent.class)) {
-			// TODO
-			ArmatureAnimationComponent msac = (ArmatureAnimationComponent) e.getComponent(e.getComponents(ArmatureAnimationComponent.class).get(0));
-			if (msac != null) {
-				ArmatureAnimation msa = msac.getArmatureAnimation();
-				msa.bind(shader);
-			}
-		}
-		GameEngine.DEBUG.end("r_uniforms_skelet");
 
 		GameEngine.DEBUG.start("r_uniforms_bind");
 		material.bindProperties(cache, scene, shader);

@@ -151,8 +151,8 @@ public class AdvancedCompositor implements Cleanupable {
 			rl.render(engine, null);
 		}
 
-		GL40.glDepthMask(true);
-		PDRUtils.checkGlError("DepthMask(true)");
+		//GL40.glDepthMask(true);
+		//PDRUtils.checkGlError("DepthMask(true)");
 
 		/*GL40.glBindFramebuffer(GL40.GL_FRAMEBUFFER, 0);
 		PDRUtils.checkGlError("BindFramebuffer()=0");

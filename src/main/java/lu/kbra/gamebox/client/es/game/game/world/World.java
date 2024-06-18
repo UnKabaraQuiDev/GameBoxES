@@ -63,7 +63,7 @@ public class World implements Cleanupable {
 	public static final float CULLING_DISTANCE = 35;
 
 	private static final float Y_OFFSET = 0.001f;
-	public static final int GEN_CIRCLE_SIDE = 1;
+	public static final int GEN_CIRCLE_SIZE = 1;
 
 	private static final float ATTRACT_DISTANCE = 3f;
 	private static final float EAT_DISTANCE = 3f;
@@ -310,11 +310,11 @@ public class World implements Cleanupable {
 	}
 
 	private Vector2f[] getNeighbouringChunks(Vector2f center) {
-		Vector2f[] list = new Vector2f[(int) java.lang.Math.pow((1 + 2 * GEN_CIRCLE_SIDE), 2)];
+		Vector2f[] list = new Vector2f[(int) java.lang.Math.pow((1 + 2 * GEN_CIRCLE_SIZE), 2)];
 
 		int i = 0;
-		for (int x = -GEN_CIRCLE_SIDE; x <= GEN_CIRCLE_SIDE; x++) {
-			for (int y = -GEN_CIRCLE_SIDE; y <= GEN_CIRCLE_SIDE; y++) {
+		for (int x = -GEN_CIRCLE_SIZE; x <= GEN_CIRCLE_SIZE; x++) {
+			for (int y = -GEN_CIRCLE_SIZE; y <= GEN_CIRCLE_SIZE; y++) {
 				list[i++] = new Vector2f(x * chunkSize, y * chunkSize).add(center);
 			}
 		}
