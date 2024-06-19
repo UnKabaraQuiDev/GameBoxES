@@ -25,7 +25,7 @@ public class ClientMain {
 
 		System.out.println(Arrays.toString(new File("./config/").list()));
 
-		System.out.println(FileUtils.recursiveTree("./resources"));
+		// System.out.println(FileUtils.recursiveTree("./resources"));
 
 		GlobalLogger.init(new File("./config/logs.properties"));
 
