@@ -32,7 +32,7 @@
 			</properties>
 		</profile>
 
-		<!-- Profile for Linux -->
+		<!-- Profile for Linux x86 -->
 		<profile>
 			<id>linux</id>
 			<activation>
@@ -40,6 +40,14 @@
 					<family>unix</family>
 				</os>
 			</activation>
+		</profile>
+		
+		<!-- Profile for Linux arm64 -->
+		<profile>
+			<id>arm64</id>
+			<properties>
+				<lwjgl.natives>natives-linux-arm64</lwjgl.natives>
+			</properties>
 		</profile>
 	</profiles>
 
@@ -56,13 +64,6 @@
 				<groupId>ant</groupId>
 				<artifactId>ant-nodeps</artifactId>
 				<version>1.10.11</version>
-			</dependency>
-			<!--
-			https://mvnrepository.com/artifact/org.codehaus.mojo/native-maven-plugin -->
-			<dependency>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>native-maven-plugin</artifactId>
-				<version>1.0-M1</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -205,62 +206,6 @@
 					</archive>
 				</configuration>
 			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>3.6.0</version>
-				<executions>
-					<execution>
-						<id>copy-dependencies</id>
-						<phase>package</phase>
-						<goals>
-							<goal>copy-dependencies</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>
-								${project.build.directory}/libs/</outputDirectory>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
-			<!--<plugin>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.0.2</version>
-				<executions>
-					<execution>
-						<id>copy-resources</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${basedir}/target/resources</outputDirectory>
-							<resources>
-								<resource>
-									<directory>resources</directory>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-					<execution>
-						<id>copy-config</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${basedir}/target/config</outputDirectory>
-							<resources>
-								<resource>
-									<directory>config</directory>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>-->
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
