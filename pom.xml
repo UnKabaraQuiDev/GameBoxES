@@ -8,8 +8,8 @@
 	<name>GameBoxES</name>
 
 	<properties>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
 
 		<lwjgl.version>3.3.3</lwjgl.version>
 		<steamworks4j-server.version>1.9.0</steamworks4j-server.version>
@@ -155,7 +155,6 @@
 			<artifactId>json</artifactId>
 			<version>20240303</version>
 		</dependency>
-
 		<dependency>
 			<groupId>lu.pcy113</groupId>
 			<artifactId>PCLib</artifactId>
@@ -268,8 +267,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.8.1</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
 					<debug>true</debug>
 					<debuglevel>lines,vars,source</debuglevel>
 				</configuration>
