@@ -168,6 +168,7 @@ public class GameBoxES extends GameLogic {
 			worldSceneRenderLayer.setVisible(true);
 			
 			gameState = GameState.PLAYING;
+			playerData.startMarkCount();
 		});
 	}
 

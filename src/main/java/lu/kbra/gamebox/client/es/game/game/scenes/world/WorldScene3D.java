@@ -97,7 +97,6 @@ public class WorldScene3D extends Scene3D {
 		}
 
 		world = new World(this, Math.random());
-		// world.continueWorldGen(4);
 
 		camera.getProjection().setSize(55).update();
 	}

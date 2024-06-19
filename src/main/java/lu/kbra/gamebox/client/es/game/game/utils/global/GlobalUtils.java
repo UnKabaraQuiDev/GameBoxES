@@ -373,6 +373,8 @@ public class GlobalUtils {
 			return;
 		}
 
+		INSTANCE.playerData.stopMarkCount();
+		
 		INSTANCE.gameState = GameState.END;
 		((UISceneGameOverlay) INSTANCE.uiScene.getState()).startGameEndActive();
 	}

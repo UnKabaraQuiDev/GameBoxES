@@ -15,6 +15,8 @@ import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
 
 public class PlayerData {
 
+	private static final float TIME_SCORE_MUL = 0.01f;
+
 	private int health = 2, maxHealth = health;;
 	private int speed = 1;
 
@@ -24,6 +26,9 @@ public class PlayerData {
 	 * To upgrade the cell aka health, from plants or other dead cells
 	 */
 	private int lipid = 0;
+
+	private long startTime = 0;
+	private long score = 0;
 
 	private EvolutionTree tree;
 	private EvolutionTreeNode current;
@@ -176,16 +181,34 @@ public class PlayerData {
 	public void setEnnemyKillCount(int ennemyKillCount) {
 		this.ennemyKillCount = ennemyKillCount;
 	}
-	
+
+	public long getScore() {
+		return score;
+	}
+
+	public void setScore(long score) {
+		this.score = score;
+	}
+
 	public static void main(String[] args) {
 		try {
 			GlobalLogger.init(new File("./config/logs.properties"));
 			GlobalLang.load("english");
-			
+
 			System.out.println(EvolutionTree.load().toString(0));
 		} catch (JSONException | IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void stopMarkCount() {
+		score = (long) ((System.currentTimeMillis() - startTime) * TIME_SCORE_MUL);
+		score += Math.pow(achievements.size(), 3);
+		score += 2 * ennemyKillCount;
+	}
+
+	public void startMarkCount() {
+		startTime = System.currentTimeMillis();
 	}
 
 }

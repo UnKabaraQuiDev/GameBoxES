@@ -61,7 +61,7 @@ public class UISceneGameOverlay extends UISceneState {
 	private float showBGProgress = 1;
 	private Entity gameOverText, gameOverStatsTitles, gameOverStatsValues;
 	private TextEmitter gameOverStatsTitlesText, gameOverStatsValuesText;
-	
+
 	// major upgrade tree - - -
 	private Entity majorUpgradeTree;
 
@@ -118,13 +118,14 @@ public class UISceneGameOverlay extends UISceneState {
 		gameOverStatsTitles = scene.addEntity("gameOverStatsTitles", new TextEmitterComponent(gameOverStatsTitlesText), new Transform3DComponent(GAME_OVER_TITLES_BASE)).setActive(false);
 		gameOverStatsValues = scene.addEntity("gameOverStatsValues", new TextEmitterComponent(gameOverStatsValuesText), new Transform3DComponent(GAME_OVER_VALUES_BASE)).setActive(false);
 
-		
 		// major upgrade tree - - -
 		Mesh majorUpgradeTreeMesh = GlobalUtils.loadCompiledMesh(cache, "upgradeTree", () -> {
-			return cache.loadMesh("upgradeTree", cache.loadOrGetMaterial(MajorUpgradeTreeMaterial.NAME, MajorUpgradeTreeMaterial.class, cache.loadOrGetSingleTexture(MajorUpgradeTreeMaterial.NAME, "./resources/textures/ui/icons.png", TextureFilter.NEAREST)), "./resources/models/ui/upgrade_tree.obj");
+			return cache.loadMesh("upgradeTree",
+					cache.loadOrGetMaterial(MajorUpgradeTreeMaterial.NAME, MajorUpgradeTreeMaterial.class, cache.loadOrGetSingleTexture(MajorUpgradeTreeMaterial.NAME, "./resources/textures/ui/icons.png", TextureFilter.NEAREST)),
+					"./resources/models/ui/upgrade_tree.obj");
 		});
 		majorUpgradeTree = scene.addEntity("majorUpgradeTree", new MeshComponent(majorUpgradeTreeMesh), new Transform3DComponent(new Vector3f(0), new Quaternionf(), new Vector3f(2.5f)));
-		
+
 		// GlobalUtils.compileMeshes(cache);
 
 		cache.dump(System.err);
@@ -201,8 +202,8 @@ public class UISceneGameOverlay extends UISceneState {
 				((FillMaterial) uiBG.getComponent(MeshComponent.class).getMesh(cache).getMaterial()).setColor(new Vector4f(0).lerp(GlobalConsts.TRANS_BG, Interpolators.QUAD_IN_OUT.evaluate(showBGProgress)));
 			}
 		}
-		
-		if(gameEndActive && showBGProgress >= 0.999f && GlobalUtils.anyJoystickButton()) {
+
+		if (gameEndActive && showBGProgress >= 0.999f && GlobalUtils.anyJoystickButton()) {
 			GlobalUtils.triggerNewStartMenu();
 		}
 
@@ -222,7 +223,8 @@ public class UISceneGameOverlay extends UISceneState {
 
 	private String fillGameOverValues(String str) {
 		return str.replace("{MAX_HP}", Integer.toString(GlobalUtils.INSTANCE.playerData.getMaxHealth())).replace("{ENNEMIES_KILLED}", Integer.toString(GlobalUtils.INSTANCE.playerData.getEnnemyKillCount()))
-				.replace("{ACHIEVEMENTS}", Integer.toString(GlobalUtils.INSTANCE.playerData.getAchievements().size())).replace("{MAX_ACHIEVEMENTS}", Integer.toString(Achievements.values().length));
+				.replace("{ACHIEVEMENTS}", Integer.toString(GlobalUtils.INSTANCE.playerData.getAchievements().size())).replace("{MAX_ACHIEVEMENTS}", Integer.toString(Achievements.values().length))
+				.replace("{SCORE}", Long.toString(GlobalUtils.INSTANCE.playerData.getScore()));
 	}
 
 	public void setTreeViewActive(boolean b) {
