@@ -375,5 +375,21 @@ public class GlobalUtils {
 		INSTANCE.gameState = GameState.END;
 		((UISceneGameOverlay) INSTANCE.uiScene.getState()).startGameEndActive();
 	}
+	
+	public static boolean anyJoystickButton() {
+		return Arrays.stream(PCUtils.toIntArray(INSTANCE.window.getJoystickButtonsArray(0))).anyMatch(i -> i > joystickThreshold);
+	}
+
+	public static void triggerNewStartMenu() {
+		if (!GameState.END.equals(INSTANCE.gameState)) {
+			return;
+		}
+
+		pushRender(() -> {
+			INSTANCE.gameState = GameState.START_MENU;
+			INSTANCE.uiScene.clearOverlay();
+			INSTANCE.uiScene.setupStartMenu();
+		});
+	}
 
 }

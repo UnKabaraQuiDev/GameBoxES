@@ -55,6 +55,13 @@ public class UIScene3D extends Scene3D {
 			state = null;
 		}
 	}
+	
+	public void clearOverlay() {
+		if (state instanceof UISceneGameOverlay) {
+			GlobalUtils.cleanup(state);
+			state = null;
+		}
+	}
 
 	public void showUpgradeTree(boolean b) {
 		treeState.setTreeViewActive(b);

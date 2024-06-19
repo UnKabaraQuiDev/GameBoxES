@@ -201,6 +201,10 @@ public class UISceneGameOverlay extends UISceneState {
 				((FillMaterial) uiBG.getComponent(MeshComponent.class).getMesh(cache).getMaterial()).setColor(new Vector4f(0).lerp(GlobalConsts.TRANS_BG, Interpolators.QUAD_IN_OUT.evaluate(showBGProgress)));
 			}
 		}
+		
+		if(gameEndActive && showBGProgress >= 0.999f && GlobalUtils.anyJoystickButton()) {
+			GlobalUtils.triggerNewStartMenu();
+		}
 
 	}
 
