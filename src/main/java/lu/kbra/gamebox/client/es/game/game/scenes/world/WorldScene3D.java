@@ -82,6 +82,15 @@ public class WorldScene3D extends Scene3D {
 	}
 
 	public void setupGame() {
+		Gizmo axis = ObjLoader.loadGizmo("grid_xyz", "./resources/models/gizmos/grid_xyz.obj");
+		cache.addGizmo(axis);
+		this.axis = super.addEntity("grid_xyz", new GizmoComponent(axis), new Transform3DComponent(new Transform3D(new Vector3f(0), new Quaternionf(), new Vector3f(1)))).setActive(true);
+
+		Mesh backgroundMesh = Mesh.newQuad("backgroundMesh", cache.getParent().loadOrGetMaterial(BackgroundShader.BackgroundMaterial.NAME, BackgroundShader.BackgroundMaterial.class,
+				cache.getParent().loadOrGetSingleTexture("worldBgTexture", "./resources/textures/ui/background_water.png", TextureFilter.LINEAR)), new Vector2f(40));
+		cache.addMesh(backgroundMesh);
+		background = addEntity("worldBG", new MeshComponent(backgroundMesh), new Transform3DComponent(new Vector3f(0, 0, -1)), new RenderComponent(10)).setActive(true);
+
 		if (world != null) {
 			world.cleanup();
 			world = null;
@@ -96,20 +105,9 @@ public class WorldScene3D extends Scene3D {
 	public Entity axis;
 
 	public void setupScene() {
-		Gizmo axis = ObjLoader.loadGizmo("grid_xyz", "./resources/models/gizmos/grid_xyz.obj");
-		cache.addGizmo(axis);
-		this.axis = super.addEntity("grid_xyz", new GizmoComponent(axis), new Transform3DComponent(new Transform3D(new Vector3f(0), new Quaternionf(), new Vector3f(1)))).setActive(true);
-
-		Mesh backgroundMesh = Mesh.newQuad("backgroundMesh", cache.getParent().loadOrGetMaterial(BackgroundShader.BackgroundMaterial.NAME, BackgroundShader.BackgroundMaterial.class,
-				cache.getParent().loadOrGetSingleTexture("worldBgTexture", "./resources/textures/ui/background_water.png", TextureFilter.LINEAR)), new Vector2f(40));
-		cache.addMesh(backgroundMesh);
-		background = addEntity("worldBG", new MeshComponent(backgroundMesh), new Transform3DComponent(new Vector3f(0, 0, -1)), new RenderComponent(10)).setActive(true);
-
 		camera.getProjection().setPerspective(false);
 		((Camera3D) camera).setUp(GameEngine.Y_POS);
 		// camera.getProjection().setFov((float) Math.toRadians(70));
-		camera.getProjection().setPerspective(false);
-		camera.getProjection().setSize(size);
 		GlobalUtils.setFixedRatio(camera);
 
 		placeCamera(new Vector2f(0, 0), 5);
@@ -119,10 +117,9 @@ public class WorldScene3D extends Scene3D {
 
 	public void placeCamera(Vector2f pos) {
 		((Camera3D) camera).lookAt(new Vector3f(pos.x, pos.y, cameraDistance), new Vector3f(pos.x, pos.y, 0));
-		background.getComponent(Transform3DComponent.class).getTransform().setTranslation(new Vector3f(pos.x, pos.y, -1)).updateMatrix();
-		/* if (world != null) {
-			world.getPlayer().getComponent(Transform3DComponent.class).getTransform().setTranslation(new Vector3f(pos.x, pos.y, 1)).updateMatrix();
-		}*/ 
+		if (background != null) {
+			background.getComponent(Transform3DComponent.class).getTransform().setTranslation(new Vector3f(pos.x, pos.y, -1)).updateMatrix();
+		}
 		camera.updateMatrix();
 	}
 
@@ -142,7 +139,7 @@ public class WorldScene3D extends Scene3D {
 	public Window getWindow() {
 		return window;
 	}
-	
+
 	@Override
 	public void cleanup() {
 		getEntities().clear();
