@@ -58,6 +58,7 @@ public class UIScene3D extends Scene3D {
 	
 	public void clearOverlay() {
 		if (state instanceof UISceneGameOverlay) {
+			getEntities().clear();
 			GlobalUtils.cleanup(state);
 			state = null;
 		}

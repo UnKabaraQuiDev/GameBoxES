@@ -142,5 +142,12 @@ public class WorldScene3D extends Scene3D {
 	public Window getWindow() {
 		return window;
 	}
+	
+	@Override
+	public void cleanup() {
+		getEntities().clear();
+		cache.cleanup();
+		super.cleanup();
+	}
 
 }

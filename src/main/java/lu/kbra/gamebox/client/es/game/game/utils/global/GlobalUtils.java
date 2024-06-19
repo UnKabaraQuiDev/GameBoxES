@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -92,7 +93,7 @@ public class GlobalUtils {
 		currentLoadCache = gameBoxES.cache;
 		engine = e;
 
-		workers = new NextTaskWorker("workers", 5);
+		enableWorkers();
 	}
 
 	public static float joystickThreshold = 0.1f;
@@ -385,11 +386,28 @@ public class GlobalUtils {
 			return;
 		}
 
-		pushRender(() -> {
+		Optional.ofNullable(INSTANCE.worldScene.getWorld()).ifPresent((w) -> w.setPaused(true));
+		
+		pushWorker(() -> pushRender(() -> {
 			INSTANCE.gameState = GameState.START_MENU;
+			INSTANCE.worldScene.cleanup();
 			INSTANCE.uiScene.clearOverlay();
 			INSTANCE.uiScene.setupStartMenu();
-		});
+		}));
+		
+		workers.clearQueues();
+	}
+
+	public static void enableWorkers() {
+		if(workers != null && !workers.isActive()) {
+			workers = null;
+		}
+		if(workers == null) {
+			workers = new NextTaskWorker("workers", 5);
+		}
+		if(workers.isInputClosed()) {
+			workers.openInput();
+		}
 	}
 
 }

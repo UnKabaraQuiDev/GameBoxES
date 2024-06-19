@@ -101,6 +101,10 @@ public class NextTaskEnvironnment {
 		return thId;
 	}
 
+	public void clearQueues() {
+		getQueues().values().forEach(t -> t.clear());
+	}
+	
 	public Thread[] getThreads() {
 		return threads;
 	}

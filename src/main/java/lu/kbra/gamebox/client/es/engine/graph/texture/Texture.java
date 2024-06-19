@@ -66,6 +66,8 @@ public abstract class Texture implements Cleanupable, UniqueID, FramebufferAttac
 	}
 
 	public void bind() {
+		if(tid == -1)
+			return;
 		GL40.glBindTexture(txtType.getGlId(), tid);
 		PDRUtils.checkGlError("BindTexture[" + txtType + "]=" + tid);
 	}

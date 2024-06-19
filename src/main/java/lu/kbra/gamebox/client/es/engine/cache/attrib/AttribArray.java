@@ -147,7 +147,14 @@ public abstract class AttribArray implements Cleanupable {
 	}
 
 	public static <T> boolean update(AttribArray arr, T[] data) {
+		if(arr == null) {
+			GlobalLogger.log();
+			GlobalLogger.warning("AttribArray is null!");
+			return false;
+		}
+		
 		arr.bind();
+		
 		if (arr instanceof IntAttribArray)
 			return ((IntAttribArray) arr).update(PDRUtils.toPrimitiveInt(data));
 		else if (arr instanceof UIntAttribArray)

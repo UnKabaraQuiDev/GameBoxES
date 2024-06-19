@@ -158,7 +158,10 @@ public class GameBoxES extends GameLogic {
 		gameState = GameState.LOADING;
 		playerData = new PlayerData();
 		uiScene.clearMainMenu();
+		
 		GlobalUtils.pushRender(() -> {
+			GlobalUtils.enableWorkers();
+			
 			uiScene.setupGame();
 			uiScene.showUpgradeTree(false);
 			worldScene.setupGame();
