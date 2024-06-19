@@ -15,7 +15,7 @@ import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
 
 public class PlayerData {
 
-	private static final float TIME_SCORE_MUL = 0.01f;
+	private static final float TIME_SCORE_MUL = 0.001f;
 
 	private int health = 2, maxHealth = health;;
 	private int speed = 1;
