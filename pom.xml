@@ -2,14 +2,14 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>lu.lam.3ci1.kbra</groupId>
+	<groupId>lu.kbra</groupId>
 	<artifactId>gamebox.client.es</artifactId>
 	<version>0.0.3-SNAPSHOT</version>
 	<name>GameBoxES</name>
 
 	<properties>
-		<maven.compiler.source>17</maven.compiler.source>
-		<maven.compiler.target>17</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 
 		<lwjgl.version>3.3.3</lwjgl.version>
 		<steamworks4j-server.version>1.9.0</steamworks4j-server.version>
@@ -41,7 +41,7 @@
 				</os>
 			</activation>
 		</profile>
-		
+
 		<!-- Profile for Linux arm64 -->
 		<profile>
 			<id>arm64</id>
@@ -187,6 +187,28 @@
 							<sources>
 								<source>${project.basedir}/PDRUtils/src</source>
 							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.0.2</version>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/target/resources</outputDirectory>
+							<resources>
+								<resource>
+									<directory>resources</directory>
+								</resource>
+							</resources>
 						</configuration>
 					</execution>
 				</executions>
