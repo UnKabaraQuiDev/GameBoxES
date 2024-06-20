@@ -228,6 +228,7 @@
 					</archive>
 				</configuration>
 			</plugin>
+		
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -250,9 +251,9 @@
 					<arguments>
 						<argument>-cp</argument>
 						<classpath />
-						<!--<argument>-javaagent:libs/lwjglx-debug-1.0.0.jar</argument>
+						<argument>-javaagent:libs/lwjglx-debug-1.0.0.jar</argument>
 						<argument>-Dorg.lwjglx.TRACE</argument>
-						<argument>-Dorg.lwjglx.OUTPUT=./logs/trace.log</argument>-->
+						<argument>-Dorg.lwjglx.OUTPUT=./logs/trace.log</argument>
 						<argument>-Dorg.lwjgl.util.Debug=true</argument>
 						<argument>-Djava.library.path=${project.basedir}/libs</argument>
 						<argument>lu.kbra.gamebox.client.es.game.ClientMain</argument>
