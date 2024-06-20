@@ -61,17 +61,18 @@ public class GLESWindow extends Window {
 			PDRUtils.checkEGLError("glInitialize[" + monitor + ", IB, IB]");
 
 			this.eglCapabilities = EGL.createDisplayCapabilities(monitor, major.get(0), minor.get(0));
+			PDRUtils.checkEGLError("createDisplayCapabilities[" + monitor + ", IB, IB]");
 		}
 
 		if (this.eglCapabilities == null)
 			throw new RuntimeException("Failed to create EGL context");
 
 		try {
-			System.out.println("EGL Capabilities:");
+			GlobalLogger.log("EGL Capabilities:");
 			for (Field f : EGLCapabilities.class.getFields()) {
 				if (f.getType() == boolean.class) {
 					if (f.get(this.eglCapabilities).equals(Boolean.TRUE)) {
-						System.out.println("\t" + f.getName());
+						GlobalLogger.log("\t" + f.getName());
 					}
 				}
 			}
@@ -85,11 +86,11 @@ public class GLESWindow extends Window {
 			throw new RuntimeException("Failed to create OpenGL ES context");
 
 		try {
-			System.out.println("OpenGL ES Capabilities:");
+			GlobalLogger.log("OpenGL ES Capabilities:");
 			for (Field f : GLESCapabilities.class.getFields()) {
 				if (f.getType() == boolean.class) {
 					if (f.get(this.capabilities).equals(Boolean.TRUE)) {
-						System.out.println("\t" + f.getName());
+						GlobalLogger.log("\t" + f.getName());
 					}
 				}
 			}
@@ -102,6 +103,7 @@ public class GLESWindow extends Window {
 		}
 
 		GLES30.glEnable(GLES30.GL_DEPTH_TEST);
+		PDRUtils.checkEGLError("glEnable[DEPTH_TEST]");
 
 		updateOptions();
 
@@ -140,16 +142,20 @@ public class GLESWindow extends Window {
 	public void cleanup() {
 		GlobalLogger.log("Cleaning up: " + getClass().getName() + " (" + handle + ")");
 
-		if (GLES.getCapabilities() != null) {
+		if (capabilities != null) {
 			GLES.setCapabilities(null);
+			capabilities = null;
 		}
 	}
 
 	@Override
 	public void cleanupGLFW() {
-		GlobalLogger.log("Cleaning up: " + getClass().getName() + " (" + handle + ")");
+		GlobalLogger.log("Cleaning up GLFW: " + getClass().getName() + " (" + handle + ")");
 
 		if (handle != -1) {
+			if(!EGL10.eglTerminate(monitor)) {
+				GlobalLogger.severe("Could not terminate EGL context.");
+			}
 			Callbacks.glfwFreeCallbacks(handle);
 			GLFW.glfwDestroyWindow(handle);
 			GLFW.glfwTerminate();

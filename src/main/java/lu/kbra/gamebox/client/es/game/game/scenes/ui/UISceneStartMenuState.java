@@ -211,6 +211,7 @@ public class UISceneStartMenuState extends UISceneState {
 	private SelectableUITextLabel addTextLabel(String name, String txt, Vector3f pos, Alignment alignment, UIInteractRunnable run) {
 		return (SelectableUITextLabel) scene.addEntity(name, new SelectableUITextLabel(cache, name, txt, pos, alignment, run));
 	}
+
 	private UITextLabel addInertTextLabel(String name, String txt, Vector3f pos, Alignment alignment) {
 		return (UITextLabel) scene.addEntity(name, new UITextLabel(cache, name, txt, pos, alignment));
 	}
@@ -232,7 +233,10 @@ public class UISceneStartMenuState extends UISceneState {
 
 			GLFWGamepadState gps = window.getGamepad();
 
-			if (gps.buttons(GLFW.GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER) == GLFW.GLFW_PRESS && menuIndex == MI_MAIN) {
+			cic.updateButton(gps);
+			
+			
+			if (Button.EAST.equals(cic.getButton()) && menuIndex == MI_MAIN) {
 				if (mainVerticalIndex == VI_MAIN_QUIT) {
 					GlobalUtils.requestQuit();
 					return;
@@ -240,8 +244,7 @@ public class UISceneStartMenuState extends UISceneState {
 				startTransition(MI_MAIN, mainVerticalIndex == VI_MAIN_PLAY ? MI_PLAY : (mainVerticalIndex == VI_MAIN_OPTIONS ? MI_OPTIONS : (mainVerticalIndex == VI_MAIN_CREDITS ? MI_CREDITS : MI_NONE)));
 				otherVerticalIndex = 0;
 				return;
-			}
-			if (gps.buttons(GLFW.GLFW_GAMEPAD_BUTTON_LEFT_BUMPER) == GLFW.GLFW_PRESS && menuIndex != MI_MAIN) {
+			}else if (Button.SOUTH.equals(cic.getButton()) && menuIndex != MI_MAIN) {
 				startTransition(menuIndex, MI_MAIN);
 				return;
 			}
@@ -254,7 +257,6 @@ public class UISceneStartMenuState extends UISceneState {
 				// placeMainMenuElements(Direction.NORTH.equals(ddir) ? progress : -progress);
 			}
 
-			cic.updateButton(gps);
 			if (cic.hasNextButton()) {
 				interact(otherVerticalIndex, false, null, cic.consumeButton());
 			}
@@ -388,7 +390,7 @@ public class UISceneStartMenuState extends UISceneState {
 			return entitiesOptionMenu[otherVerticalIndex];
 		} else if (menuIndex == MI_PLAY) {
 			return entitiesPlayMenu[otherVerticalIndex];
-		}else if (menuIndex == MI_CREDITS) {
+		} else if (menuIndex == MI_CREDITS) {
 			return entitiesCreditsMenu[otherVerticalIndex];
 		}
 		return null;
@@ -436,7 +438,7 @@ public class UISceneStartMenuState extends UISceneState {
 		} else if (menuTransitionTarget == MI_OPTIONS) {
 			setPos(entitiesOptionMenu, entitiesOptionMenupos, OTHER_X_POS_END, OTHER_X_POS_START, i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue * (i + 1)));
 		}
-		
+
 		if (menuTransitionBase == MI_CREDITS) {
 			setPos(entitiesCreditsMenu, entitiesCreditsMenupos, OTHER_X_POS_START, OTHER_X_POS_END, i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue * (i + 1)));
 			updateLanguge();
