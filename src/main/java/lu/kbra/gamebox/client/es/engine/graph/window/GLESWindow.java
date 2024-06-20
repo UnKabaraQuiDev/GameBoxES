@@ -34,7 +34,7 @@ public class GLESWindow extends Window {
 
 		handle = GLFW.glfwCreateWindow(options.windowSize.x, options.windowSize.y, options.title, MemoryUtil.NULL, MemoryUtil.NULL);
 
-		takeGLContext();
+		GLFW.glfwMakeContextCurrent(handle);
 
 		if ((this.capabilities = GLES.createCapabilities()) == null)
 			throw new RuntimeException("Failed to create OpenGLES context");
