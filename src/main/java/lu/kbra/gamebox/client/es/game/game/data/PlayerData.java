@@ -17,7 +17,7 @@ public class PlayerData {
 
 	private static final float TIME_SCORE_MUL = 0.001f;
 
-	private int health = 2, maxHealth = health;;
+	private int health = 2, maxHealth = health;
 	private int speed = 1;
 
 	private int glucose = 0;

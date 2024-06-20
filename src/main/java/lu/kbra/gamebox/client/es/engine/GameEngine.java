@@ -5,6 +5,8 @@ import java.util.logging.Level;
 
 import org.joml.Vector3f;
 
+import lu.pcy113.pclib.logger.GlobalLogger;
+
 import lu.kbra.gamebox.client.es.engine.audio.AudioMaster;
 import lu.kbra.gamebox.client.es.engine.cache.SharedCacheManager;
 import lu.kbra.gamebox.client.es.engine.graph.window.GLESWindow;
@@ -18,7 +20,6 @@ import lu.kbra.gamebox.client.es.engine.impl.nexttask.NextTaskEnvironnment;
 import lu.kbra.gamebox.client.es.engine.utils.DebugOptions;
 import lu.kbra.gamebox.client.es.engine.utils.bake.TimeGraphPlot;
 import lu.kbra.gamebox.client.es.engine.utils.file.FileUtils;
-import lu.pcy113.pclib.logger.GlobalLogger;
 
 public class GameEngine implements Cleanupable, UniqueID {
 

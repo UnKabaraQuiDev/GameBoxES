@@ -12,6 +12,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.lwjgl.egl.EGL10;
 import org.lwjgl.openal.AL11;
 import org.lwjgl.openal.ALC11;
 import org.lwjgl.opengl.GL11;
@@ -19,12 +20,21 @@ import org.lwjgl.opengl.GL40;
 import org.lwjgl.opengl.GL45;
 import org.lwjgl.opengles.GLES20;
 
-import lu.kbra.gamebox.client.es.engine.exceptions.egl.GLESBadAccessException;
-import lu.kbra.gamebox.client.es.engine.exceptions.egl.GLESBadAllocException;
-import lu.kbra.gamebox.client.es.engine.exceptions.egl.GLESBadAttributeException;
-import lu.kbra.gamebox.client.es.engine.exceptions.egl.GLESBadContextException;
-import lu.kbra.gamebox.client.es.engine.exceptions.egl.GLESNotInitializedException;
-import lu.kbra.gamebox.client.es.engine.exceptions.egl.GLESRuntimeException;
+import lu.kbra.gamebox.client.es.engine.exceptions.egl.EGLBadAccessException;
+import lu.kbra.gamebox.client.es.engine.exceptions.egl.EGLBadAllocException;
+import lu.kbra.gamebox.client.es.engine.exceptions.egl.EGLBadAttributeException;
+import lu.kbra.gamebox.client.es.engine.exceptions.egl.EGLBadConfigException;
+import lu.kbra.gamebox.client.es.engine.exceptions.egl.EGLBadContextException;
+import lu.kbra.gamebox.client.es.engine.exceptions.egl.EGLBadCurrentSurfaceException;
+import lu.kbra.gamebox.client.es.engine.exceptions.egl.EGLBadDisplayException;
+import lu.kbra.gamebox.client.es.engine.exceptions.egl.EGLBadMatchException;
+import lu.kbra.gamebox.client.es.engine.exceptions.egl.EGLBadNativePixmapException;
+import lu.kbra.gamebox.client.es.engine.exceptions.egl.EGLBadNativeWindowException;
+import lu.kbra.gamebox.client.es.engine.exceptions.egl.EGLBadParameterException;
+import lu.kbra.gamebox.client.es.engine.exceptions.egl.EGLBadSurfaceException;
+import lu.kbra.gamebox.client.es.engine.exceptions.egl.EGLNoContextException;
+import lu.kbra.gamebox.client.es.engine.exceptions.egl.EGLNotInitializedException;
+import lu.kbra.gamebox.client.es.engine.exceptions.egl.EGLRuntimeException;
 import lu.kbra.gamebox.client.es.engine.exceptions.openal.ALInvalidEnumException;
 import lu.kbra.gamebox.client.es.engine.exceptions.openal.ALInvalidNameException;
 import lu.kbra.gamebox.client.es.engine.exceptions.openal.ALInvalidOperationException;
@@ -130,23 +140,65 @@ public final class PDRUtils {
 
 		switch (status) {
 		case GLES20.GL_INVALID_ENUM:
-			throw new GLESNotInitializedException(caller, status, msg);
+			throw new EGLNotInitializedException(caller, status, msg);
 		case GLES20.GL_INVALID_VALUE:
-			throw new GLESBadAccessException(caller, status, msg);
+			throw new EGLBadAccessException(caller, status, msg);
 		case GLES20.GL_INVALID_OPERATION:
-			throw new GLESBadAllocException(caller, status, msg);
+			throw new EGLBadAllocException(caller, status, msg);
 		case GLES20.GL_INVALID_FRAMEBUFFER_OPERATION:
-			throw new GLESBadAttributeException(caller, status, msg);
+			throw new EGLBadAttributeException(caller, status, msg);
 		case GLES20.GL_OUT_OF_MEMORY:
-			throw new GLESBadContextException(caller, status, msg);
+			throw new EGLBadContextException(caller, status, msg);
 		// case GL45.GL_TABLE_TOO_LARGE:
 		default:
 			return true;
 		}
 	}
 	
+	public static boolean checkEGLError(String msg) {
+		int status = EGL10.eglGetError();
+
+		if (status == EGL10.EGL_SUCCESS)
+			return true;
+
+		String caller = getCallerClassName(false);
+
+		switch (status) {
+		case EGL10.EGL_NOT_INITIALIZED:
+			throw new EGLNotInitializedException(caller, status, msg);
+		case EGL10.EGL_BAD_ACCESS:
+			throw new EGLBadAccessException(caller, status, msg);
+		case EGL10.EGL_BAD_ATTRIBUTE:
+			throw new EGLBadAttributeException(caller, status, msg);
+		case EGL10.EGL_BAD_ALLOC:
+			throw new EGLBadAllocException(caller, status, msg);
+		case EGL10.EGL_BAD_CONTEXT:
+			throw new EGLBadContextException(caller, status, msg);
+		case EGL10.EGL_BAD_CONFIG:
+			throw new EGLBadConfigException(caller, status, msg);
+		case EGL10.EGL_BAD_CURRENT_SURFACE:
+			throw new EGLBadCurrentSurfaceException(caller, status, msg);
+		case EGL10.EGL_BAD_DISPLAY:
+			throw new EGLBadDisplayException(caller, status, msg);
+		case EGL10.EGL_BAD_SURFACE:
+			throw new EGLBadSurfaceException(caller, status, msg);
+		case EGL10.EGL_BAD_MATCH:
+			throw new EGLBadMatchException(caller, status, msg);
+		case EGL10.EGL_BAD_PARAMETER:
+			throw new EGLBadParameterException(caller, status, msg);
+		case EGL10.EGL_BAD_NATIVE_PIXMAP:
+			throw new EGLBadNativePixmapException(caller, status, msg);
+		case EGL10.EGL_BAD_NATIVE_WINDOW:
+			throw new EGLBadNativeWindowException(caller, status, msg);
+		/*case EGL10.EGL_NO_CONTEXT:
+			throw new EGLNoContextException(caller, status, msg);*/
+		default:
+			return true;
+		}
+	}
+	
 	public static void throwGLESError(String string) {
-		throw new GLESRuntimeException(string);
+		throw new EGLRuntimeException(string);
 	}
 	
 	public static boolean checkGlError() {
