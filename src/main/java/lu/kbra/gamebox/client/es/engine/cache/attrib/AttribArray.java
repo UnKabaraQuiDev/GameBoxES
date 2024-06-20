@@ -2,7 +2,7 @@ package lu.kbra.gamebox.client.es.engine.cache.attrib;
 
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-import org.lwjgl.opengl.GL40;
+import org.lwjgl.opengles.GLES30;
 
 import lu.pcy113.pclib.logger.GlobalLogger;
 
@@ -21,7 +21,7 @@ public abstract class AttribArray implements Cleanupable {
 	protected final int dataSize, divisor;
 
 	public AttribArray(String name, int index, int dataSize) {
-		this(name, index, dataSize, GL40.GL_ARRAY_BUFFER, true);
+		this(name, index, dataSize, GLES30.GL_ARRAY_BUFFER, true);
 	}
 
 	public AttribArray(String name, int index, int dataSize, int bufferType) {
@@ -29,11 +29,11 @@ public abstract class AttribArray implements Cleanupable {
 	}
 
 	public AttribArray(String name, int index, int dataSize, boolean iStatic) {
-		this(name, index, dataSize, GL40.GL_ARRAY_BUFFER, iStatic);
+		this(name, index, dataSize, GLES30.GL_ARRAY_BUFFER, iStatic);
 	}
 
 	public AttribArray(String name, int index, int dataSize, boolean iStatic, int divisor) {
-		this(name, index, dataSize, GL40.GL_ARRAY_BUFFER, iStatic, divisor);
+		this(name, index, dataSize, GLES30.GL_ARRAY_BUFFER, iStatic, divisor);
 	}
 
 	public AttribArray(String name, int index, int dataSize, int bufferType, boolean iStatic) {
@@ -60,29 +60,29 @@ public abstract class AttribArray implements Cleanupable {
 	public abstract Object get(int i);
 
 	public void enable() {
-		GL40.glEnableVertexAttribArray(index);
-		PDRUtils.checkGlError("EnableVertexAttribArray(" + index + ") (" + name + ")");
-		GL40.glVertexAttribDivisor(index, divisor);
-		PDRUtils.checkGlError("VertexAttribDivisor(" + index + ", " + divisor + ") (" + name + ")");
+		GLES30.glEnableVertexAttribArray(index);
+		PDRUtils.checkGlESError("EnableVertexAttribArray(" + index + ") (" + name + ")");
+		GLES30.glVertexAttribDivisor(index, divisor);
+		PDRUtils.checkGlESError("VertexAttribDivisor(" + index + ", " + divisor + ") (" + name + ")");
 	}
 
 	public void disable() {
-		GL40.glDisableVertexAttribArray(index);
-		PDRUtils.checkGlError("DisableVertexAttribArray(" + index + ") (" + name + ")");
+		GLES30.glDisableVertexAttribArray(index);
+		PDRUtils.checkGlESError("DisableVertexAttribArray(" + index + ") (" + name + ")");
 	}
 
 	public int gen() {
-		return (bufferIndex = GL40.glGenBuffers());
+		return (bufferIndex = GLES30.glGenBuffers());
 	}
 
 	public void bind() {
-		GL40.glBindBuffer(bufferType, bufferIndex);
-		PDRUtils.checkGlError("BindBuffer(" + bufferType + ", " + bufferIndex + ") (" + name + ")");
+		GLES30.glBindBuffer(bufferType, bufferIndex);
+		PDRUtils.checkGlESError("BindBuffer(" + bufferType + ", " + bufferIndex + ") (" + name + ")");
 	}
 
 	public void unbind() {
-		GL40.glBindBuffer(bufferType, 0);
-		PDRUtils.checkGlError("BindBuffer(" + bufferType + ", 0) (" + name + ")");
+		GLES30.glBindBuffer(bufferType, 0);
+		PDRUtils.checkGlESError("BindBuffer(" + bufferType + ", 0) (" + name + ")");
 	}
 
 	@Override
@@ -92,8 +92,8 @@ public abstract class AttribArray implements Cleanupable {
 		if (bufferIndex == -1)
 			return;
 
-		GL40.glDeleteBuffers(bufferIndex);
-		PDRUtils.checkGlError("DeleteBuffers(" + bufferIndex + ") (" + name + ")");
+		GLES30.glDeleteBuffers(bufferIndex);
+		PDRUtils.checkGlESError("DeleteBuffers(" + bufferIndex + ") (" + name + ")");
 		bufferIndex = -1;
 	}
 

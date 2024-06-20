@@ -6,12 +6,11 @@ import java.util.logging.Level;
 
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-import org.lwjgl.opengl.GL40;
+import org.lwjgl.opengles.GLES30;
 
 import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.cache.attrib.AttribArray;
-import lu.kbra.gamebox.client.es.engine.cache.attrib.DrawBuffer;
 import lu.kbra.gamebox.client.es.engine.cache.attrib.MultiAttribArray;
 import lu.kbra.gamebox.client.es.engine.cache.attrib.UIntAttribArray;
 import lu.kbra.gamebox.client.es.engine.cache.attrib.Vec3fAttribArray;
@@ -37,8 +36,6 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 
 	protected int vertexCount, indicesCount;
 
-	protected DrawBuffer drawBuffer;
-
 	/**
 	 * Positions are stored as attribArray 0, normals as attribArray 1, uvs as
 	 * attribArray 2
@@ -46,7 +43,7 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 	public Mesh(String name, Material material, Vec3fAttribArray vertices, UIntAttribArray indices, AttribArray... attribs) {
 		this.name = name;
 		this.vertices = vertices;
-		indices.setBufferType(GL40.GL_ELEMENT_ARRAY_BUFFER);
+		indices.setBufferType(GLES30.GL_ELEMENT_ARRAY_BUFFER);
 		this.indices = indices;
 		this.material = material;
 		this.attribs = attribs;
@@ -54,7 +51,7 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 		this.vertexCount = vertices.getDataCount();
 		this.indicesCount = indices.getLength();
 
-		this.vao = GL40.glGenVertexArrays();
+		this.vao = GLES30.glGenVertexArrays();
 		bind();
 		storeElementArray((UIntAttribArray) indices);
 		vertices.setIndex(0);
@@ -71,17 +68,6 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 		unbind();
 
 		GlobalLogger.log(Level.INFO, "Mesh " + name + ": " + vao + " & " + vbo + "; v:" + vertexCount);
-	}
-
-	public void createDrawBuffer() {
-		if(hasDrawBuffer())
-			return;
-		
-		drawBuffer = new DrawBuffer(indicesCount, 1, 0, 0, 0);
-		drawBuffer.gen();
-		drawBuffer.bind();
-		drawBuffer.init();
-		drawBuffer.unbind();
 	}
 
 	private void storeAttribArray(AttribArray data) {
@@ -122,20 +108,20 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 	}
 
 	private void storeElementArray(UIntAttribArray indices) {
-		indices.setBufferType(GL40.GL_ELEMENT_ARRAY_BUFFER);
+		indices.setBufferType(GLES30.GL_ELEMENT_ARRAY_BUFFER);
 		this.vbo.put(indices.getIndex(), indices.gen());
 		indices.bind();
 		indices.init();
 	}
 
 	public void bind() {
-		GL40.glBindVertexArray(vao);
-		PDRUtils.checkGlError("BindVertexArray(" + vao + ") (" + name + ")");
+		GLES30.glBindVertexArray(vao);
+		PDRUtils.checkGlESError("BindVertexArray(" + vao + ") (" + name + ")");
 	}
 
 	public void unbind() {
-		GL40.glBindVertexArray(0);
-		PDRUtils.checkGlError("BindVertexArray(" + 0 + ") (" + name + ")");
+		GLES30.glBindVertexArray(0);
+		PDRUtils.checkGlESError("BindVertexArray(" + 0 + ") (" + name + ")");
 	}
 
 	@Override
@@ -145,14 +131,11 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 		if (vao == -1)
 			return;
 
-		GL40.glDeleteVertexArrays(vao);
+		GLES30.glDeleteVertexArrays(vao);
 		Arrays.stream(attribs).forEach(AttribArray::cleanup);
 		attribs = null;
 		vbo = null;
 		vao = -1;
-		if(hasDrawBuffer()) {
-			drawBuffer.cleanup();
-		}
 	}
 
 	@Override
@@ -194,14 +177,6 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 
 	public int getIndicesCount() {
 		return indicesCount;
-	}
-
-	public DrawBuffer getDrawBuffer() {
-		return drawBuffer;
-	}
-
-	public boolean hasDrawBuffer() {
-		return drawBuffer != null;
 	}
 
 	@Override

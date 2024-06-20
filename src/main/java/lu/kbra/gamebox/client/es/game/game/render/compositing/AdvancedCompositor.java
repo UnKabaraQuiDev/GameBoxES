@@ -8,7 +8,7 @@ import org.joml.Vector2f;
 import org.joml.Vector2i;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-import org.lwjgl.opengl.GL40;
+import org.lwjgl.opengles.GLES30;
 
 import lu.pcy113.pclib.logger.GlobalLogger;
 
@@ -43,7 +43,7 @@ public class AdvancedCompositor implements Cleanupable {
 	public static final String SCREEN_HEIGHT = "screen_height";
 
 	private static Mesh SCREEN = new Mesh("PASS_SCREEN", null, new Vec3fAttribArray("pos", 0, 1, new Vector3f[] { new Vector3f(-1, 1, 0), new Vector3f(1, 1, 0), new Vector3f(1, -1, 0), new Vector3f(-1, -1, 0) }),
-			new UIntAttribArray("ind", -1, 1, new int[] { 0, 1, 2, 0, 2, 3 }, GL40.GL_ELEMENT_ARRAY_BUFFER), new Vec2fAttribArray("uv", 1, 1, new Vector2f[] { new Vector2f(0, 1), new Vector2f(1, 1), new Vector2f(1, 0), new Vector2f(0, 0) }));
+			new UIntAttribArray("ind", -1, 1, new int[] { 0, 1, 2, 0, 2, 3 }, GLES30.GL_ELEMENT_ARRAY_BUFFER), new Vec2fAttribArray("uv", 1, 1, new Vector2f[] { new Vector2f(0, 1), new Vector2f(1, 1), new Vector2f(1, 0), new Vector2f(0, 0) }));
 
 	protected Vector4f background = GlobalConsts.BG;
 
@@ -116,7 +116,7 @@ public class AdvancedCompositor implements Cleanupable {
 			resolution = new Vector2i(width, height);
 			/*if (!genTextures())
 				throw new RuntimeException("Error while generating textures and framebuffer.");*/
-			GL40.glViewport(0, 0, width, height);
+			GLES30.glViewport(0, 0, width, height);
 		}
 
 		/*if (!framebuffer.isComplete()) {
@@ -124,15 +124,15 @@ public class AdvancedCompositor implements Cleanupable {
 			return;
 		}*/
 
-		GL40.glEnable(GL40.GL_DEPTH_TEST);
-		PDRUtils.checkGlError("Enable(DEPTH_TEST)");
+		GLES30.glEnable(GLES30.GL_DEPTH_TEST);
+		PDRUtils.checkGlESError("Enable(DEPTH_TEST)");
 
 		//framebuffer.bind();
 
-		GL40.glClearColor(background.x, background.y, background.z, background.w);
-		PDRUtils.checkGlError("ClearColor(" + background + ")");
-		GL40.glClear(GL40.GL_COLOR_BUFFER_BIT | GL40.GL_DEPTH_BUFFER_BIT);
-		PDRUtils.checkGlError("Clear(COLOR | DEPTH)");
+		GLES30.glClearColor(background.x, background.y, background.z, background.w);
+		PDRUtils.checkGlESError("ClearColor(" + background + ")");
+		GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT | GLES30.GL_DEPTH_BUFFER_BIT);
+		PDRUtils.checkGlESError("Clear(COLOR | DEPTH)");
 		
 		for (String l : layers) {
 			if (l == null)
@@ -151,17 +151,17 @@ public class AdvancedCompositor implements Cleanupable {
 			rl.render(engine, null);
 		}
 
-		//GL40.glDepthMask(true);
-		//PDRUtils.checkGlError("DepthMask(true)");
+		//GLES30.glDepthMask(true);
+		//PDRUtils.checkGlESError("DepthMask(true)");
 
-		/*GL40.glBindFramebuffer(GL40.GL_FRAMEBUFFER, 0);
-		PDRUtils.checkGlError("BindFramebuffer()=0");
-		GL40.glBindFramebuffer(GL40.GL_DRAW_FRAMEBUFFER, 0);
-		PDRUtils.checkGlError("BindFramebuffer(DRAW)=0");
-		framebuffer.bind(GL40.GL_READ_FRAMEBUFFER);
+		/*GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, 0);
+		PDRUtils.checkGlESError("BindFramebuffer()=0");
+		GLES30.glBindFramebuffer(GLES30.GL_DRAW_FRAMEBUFFER, 0);
+		PDRUtils.checkGlESError("BindFramebuffer(DRAW)=0");
+		framebuffer.bind(GLES30.GL_READ_FRAMEBUFFER);
 
-		GL40.glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL40.GL_COLOR_BUFFER_BIT, GL40.GL_NEAREST);
-		PDRUtils.checkGlError();*/
+		GLES30.glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GLES30.GL_COLOR_BUFFER_BIT, GLES30.GL_NEAREST);
+		PDRUtils.checkGlESError();*/
 
 		//framebuffer.bind();
 	}
@@ -211,13 +211,13 @@ public class AdvancedCompositor implements Cleanupable {
 	public void render(CacheManager cache, GameEngine engine, Framebuffer from, Framebuffer to, Material material) {
 		GlobalLogger.log(Level.INFO, "PassRenderLayer : m:" + material);
 
-		from.bind(GL40.GL_READ_FRAMEBUFFER);
+		from.bind(GLES30.GL_READ_FRAMEBUFFER);
 		if (to == null) {
-			// from.unbind(GL40.GL_DRAW_FRAMEBUFFER);
-			GL40.glBindFramebuffer(GL40.GL_DRAW_FRAMEBUFFER, 0); // rendering to default
+			// from.unbind(GLES30.GL_DRAW_FRAMEBUFFER);
+			GLES30.glBindFramebuffer(GLES30.GL_DRAW_FRAMEBUFFER, 0); // rendering to default
 			//lastFramebuffer = framebuffer;
 		} else {
-			to.bind(GL40.GL_DRAW_FRAMEBUFFER);
+			to.bind(GLES30.GL_DRAW_FRAMEBUFFER);
 			//lastFramebuffer = to;
 		}
 
@@ -255,16 +255,16 @@ public class AdvancedCompositor implements Cleanupable {
 		}
 
 		if (shader.isTransparent()) {
-			GL40.glEnable(GL40.GL_BLEND);
-			GL40.glBlendFunc(GL40.GL_SRC_ALPHA, GL40.GL_ONE_MINUS_SRC_ALPHA);
+			GLES30.glEnable(GLES30.GL_BLEND);
+			GLES30.glBlendFunc(GLES30.GL_SRC_ALPHA, GLES30.GL_ONE_MINUS_SRC_ALPHA);
 		}
 
-		GL40.glDisable(GL40.GL_DEPTH_TEST);
+		GLES30.glDisable(GLES30.GL_DEPTH_TEST);
 
-		GL40.glDrawElements(GL40.GL_TRIANGLES, SCREEN.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);
+		GLES30.glDrawElements(GLES30.GL_TRIANGLES, SCREEN.getIndicesCount(), GLES30.GL_UNSIGNED_INT, 0);
 
-		GL40.glDisable(GL40.GL_BLEND);
-		GL40.glEnable(GL40.GL_DEPTH_TEST);
+		GLES30.glDisable(GLES30.GL_BLEND);
+		GLES30.glEnable(GLES30.GL_DEPTH_TEST);
 
 		SCREEN.unbind();
 	}

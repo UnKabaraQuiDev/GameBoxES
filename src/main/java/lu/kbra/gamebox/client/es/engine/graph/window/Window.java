@@ -18,7 +18,7 @@ import org.lwjgl.glfw.GLFWJoystickCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWScrollCallback;
 import org.lwjgl.glfw.GLFWVidMode;
-import org.lwjgl.opengl.GL40;
+import org.lwjgl.opengles.GLES30;
 import org.lwjgl.system.MemoryUtil;
 
 import lu.pcy113.pclib.logger.GlobalLogger;
@@ -123,7 +123,7 @@ public abstract class Window implements Cleanupable {
 			options.windowSize.set(w, h);
 		if (onResize != null)
 			onResize.accept(w, h);
-		GL40.glViewport(0, 0, w, h);
+		GLES30.glViewport(0, 0, w, h);
 		this.width = w;
 		this.height = h;
 	}

@@ -56,7 +56,7 @@ public class TextureRenderer implements Cleanupable, UniqueID {
 		int colorOffset = -1;
 		for (SingleTexture st : attachedTextures) {
 			FrameBufferAttachment type = st.getFormat().equals(TexelFormat.DEPTH) ? FrameBufferAttachment.DEPTH : FrameBufferAttachment.COLOR_FIRST;
-			type = st.getFormat().equals(TexelFormat.DEPTH_STENCIL) ? FrameBufferAttachment.DEPTH_STENCIL : (st.getFormat().equals(TexelFormat.STENCIL) ? FrameBufferAttachment.STENCIL : type);
+			type = st.getFormat().equals(TexelFormat.DEPTH_STENCIL) ? FrameBufferAttachment.DEPTH_STENCIL : type;
 			if (type.equals(FrameBufferAttachment.COLOR_FIRST))
 				colorOffset++;
 

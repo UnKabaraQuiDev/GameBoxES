@@ -6,7 +6,7 @@ import java.util.logging.Level;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-import org.lwjgl.opengl.GL40;
+import org.lwjgl.opengles.GLES30;
 
 import lu.pcy113.pclib.logger.GlobalLogger;
 
@@ -62,7 +62,7 @@ public class Gizmo implements UniqueID, Cleanupable, Renderable {
 		// System.out.println("gizmo indices
 		// ("+indices.getDataCount()+Arrays.toString(indices.getData()));
 
-		this.vao = GL40.glGenVertexArrays();
+		this.vao = GLES30.glGenVertexArrays();
 		bind();
 		storeElementArray(indices);
 		vertices.setIndex(0);
@@ -85,18 +85,18 @@ public class Gizmo implements UniqueID, Cleanupable, Renderable {
 	private void storeElementArray(UIntAttribArray indices) {
 		if (indices == null)
 			throw new NullPointerException("UintAttribArray indices is null");
-		indices.setBufferType(GL40.GL_ELEMENT_ARRAY_BUFFER);
+		indices.setBufferType(GLES30.GL_ELEMENT_ARRAY_BUFFER);
 		this.vbo.put(indices.getIndex(), indices.gen());
 		indices.bind();
 		indices.init();
 	}
 
 	public void bind() {
-		GL40.glBindVertexArray(vao);
+		GLES30.glBindVertexArray(vao);
 	}
 
 	public void unbind() {
-		GL40.glBindVertexArray(0);
+		GLES30.glBindVertexArray(0);
 	}
 
 	@Override
@@ -106,7 +106,7 @@ public class Gizmo implements UniqueID, Cleanupable, Renderable {
 		if (vao == -1)
 			return;
 		
-		GL40.glDeleteVertexArrays(vao);
+		GLES30.glDeleteVertexArrays(vao);
 		vbo = null;
 		vertices.cleanup();
 		vertices = null;

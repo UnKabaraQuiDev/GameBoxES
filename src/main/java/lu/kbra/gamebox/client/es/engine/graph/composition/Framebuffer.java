@@ -3,7 +3,7 @@ package lu.kbra.gamebox.client.es.engine.graph.composition;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import org.lwjgl.opengl.GL40;
+import org.lwjgl.opengles.GLES30;
 
 import lu.pcy113.pclib.logger.GlobalLogger;
 
@@ -25,7 +25,7 @@ public class Framebuffer implements UniqueID, Cleanupable {
 	public Framebuffer(String name) {
 		this.name = name;
 
-		fbo = GL40.glGenFramebuffers();
+		fbo = GLES30.glGenFramebuffers();
 	}
 
 	public boolean attachTexture(FrameBufferAttachment attach, int offset, SingleTexture texture) {
@@ -34,26 +34,20 @@ public class Framebuffer implements UniqueID, Cleanupable {
 			throw new IllegalStateException("TextureType is null");
 		}
 
-		if (TextureType.TXT1D.equals(txtType)) {
-			GL40.glFramebufferTexture1D(GL40.GL_FRAMEBUFFER, attach.getGlId() + offset, txtType.getGlId(), texture.getTid(), 0);
-		} else if (TextureType.TXT2D.equals(txtType) || TextureType.TXT2DMS.equals(txtType)) {
-			GL40.glFramebufferTexture2D(GL40.GL_FRAMEBUFFER, attach.getGlId() + offset, txtType.getGlId(), texture.getTid(), 0);
+		if (TextureType.TXT2D.equals(txtType)) {
+			GLES30.glFramebufferTexture2D(GLES30.GL_FRAMEBUFFER, attach.getGlId() + offset, txtType.getGlId(), texture.getTid(), 0);
 		} else if (TextureType.TXT3D.equals(txtType)) {
-			// TODO
-			assert true : "TODO: Not implemented yet";
-			// GL40.glFramebufferTexture3D(GL40.GL_FRAMEBUFFER, attach.getGlId()+offset,
-			// texture.getTextureType().getGlId(),
-			// texture.getTid(), 0);
+			PDRUtils.throwGLESError("Cannot attach TXT3D to Framebuffer");
 		}
 
 		this.attachments.put(attach.getGlId() + offset, texture);
-		return PDRUtils.checkGlError("FrameBufferTexture[" + attach + "+" + offset + "][" + name + "]=" + texture.getId());
+		return PDRUtils.checkGlESError("FrameBufferTexture[" + attach + "+" + offset + "][" + name + "]=" + texture.getId());
 	}
 
 	public boolean attachRenderBuffer(FrameBufferAttachment attach, int offset, RenderBuffer texture) {
-		GL40.glFramebufferRenderbuffer(GL40.GL_FRAMEBUFFER, attach.getGlId() + offset, GL40.GL_RENDERBUFFER, texture.getRBid());
+		GLES30.glFramebufferRenderbuffer(GLES30.GL_FRAMEBUFFER, attach.getGlId() + offset, GLES30.GL_RENDERBUFFER, texture.getRBid());
 		this.attachments.put(attach.getGlId() + offset, texture);
-		return PDRUtils.checkGlError("FrameBufferRenderbuffer[" + attach + "+" + offset + "][" + name + "]=" + texture.getId());
+		return PDRUtils.checkGlESError("FrameBufferRenderbuffer[" + attach + "+" + offset + "][" + name + "]=" + texture.getId());
 	}
 
 	public boolean hasAttachment(FrameBufferAttachment attach, int offset) {
@@ -62,37 +56,37 @@ public class Framebuffer implements UniqueID, Cleanupable {
 
 	public boolean clearAttachments() {
 		for (Entry<Integer, FramebufferAttachment> it : attachments.entrySet()) {
-			GL40.glFramebufferTexture(GL40.GL_FRAMEBUFFER, it.getKey(), 0, 0);
-			PDRUtils.checkGlError("FrameBufferTexture[" + it.getKey() + "][" + name + "]=0");
+			PDRUtils.throwGLESError("Cannot clear attachments from Framebuffer");
+			PDRUtils.checkGlESError("FrameBufferTexture[" + it.getKey() + "][" + name + "]=0");
 		}
 		attachments.clear();
 		return true;
 	}
 
 	public boolean isComplete() {
-		return GL40.glCheckFramebufferStatus(GL40.GL_FRAMEBUFFER) == GL40.GL_FRAMEBUFFER_COMPLETE;
+		return GLES30.glCheckFramebufferStatus(GLES30.GL_FRAMEBUFFER) == GLES30.GL_FRAMEBUFFER_COMPLETE;
 	}
 
 	public int getError() {
-		return GL40.glCheckFramebufferStatus(GL40.GL_FRAMEBUFFER);
+		return GLES30.glCheckFramebufferStatus(GLES30.GL_FRAMEBUFFER);
 	}
 
 	public void bind() {
-		bind(GL40.GL_FRAMEBUFFER);
+		bind(GLES30.GL_FRAMEBUFFER);
 	}
 
 	public void bind(int target) {
-		GL40.glBindFramebuffer(target, fbo);
-		PDRUtils.checkGlError("BindFrameBuffer[" + target + "][" + name + "]=" + fbo);
+		GLES30.glBindFramebuffer(target, fbo);
+		PDRUtils.checkGlESError("BindFrameBuffer[" + target + "][" + name + "]=" + fbo);
 	}
 
 	public void unbind() {
-		unbind(GL40.GL_FRAMEBUFFER);
+		unbind(GLES30.GL_FRAMEBUFFER);
 	}
 
 	public void unbind(int target) {
-		GL40.glBindFramebuffer(target, 0);
-		PDRUtils.checkGlError("BindFrameBuffer[" + target + "][" + name + "]=" + fbo);
+		GLES30.glBindFramebuffer(target, 0);
+		PDRUtils.checkGlESError("BindFrameBuffer[" + target + "][" + name + "]=" + fbo);
 	}
 
 	public FramebufferAttachment getAttachment(FrameBufferAttachment attach, int offset) {
@@ -105,8 +99,8 @@ public class Framebuffer implements UniqueID, Cleanupable {
 
 		if (fbo == -1)
 			return;
-		GL40.glDeleteFramebuffers(fbo);
-		PDRUtils.checkGlError("DeleteFrameBuffer[" + fbo + "]");
+		GLES30.glDeleteFramebuffers(fbo);
+		PDRUtils.checkGlESError("DeleteFrameBuffer[" + fbo + "]");
 		fbo = -1;
 	}
 

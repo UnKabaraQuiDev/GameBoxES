@@ -1,7 +1,6 @@
 package lu.kbra.gamebox.client.es.engine.cache.attrib;
 
-import org.lwjgl.opengl.GL40;
-import org.lwjgl.opengl.GL45;
+import org.lwjgl.opengles.GLES30;
 
 public class FloatAttribArray extends AttribArray {
 
@@ -39,9 +38,9 @@ public class FloatAttribArray extends AttribArray {
 
 	@Override
 	public void init() {
-		GL40.glBufferData(bufferType, data, iStatic ? GL40.GL_STATIC_DRAW : GL40.GL_DYNAMIC_DRAW);
-		if (bufferType != GL40.GL_ELEMENT_ARRAY_BUFFER && bufferType != GL45.GL_UNIFORM_BUFFER)
-			GL40.glVertexAttribPointer(index, dataSize, GL40.GL_FLOAT, false, 0, 0);
+		GLES30.glBufferData(bufferType, data, iStatic ? GLES30.GL_STATIC_DRAW : GLES30.GL_DYNAMIC_DRAW);
+		if (bufferType != GLES30.GL_ELEMENT_ARRAY_BUFFER && bufferType != GLES30.GL_UNIFORM_BUFFER)
+			GLES30.glVertexAttribPointer(index, dataSize, GLES30.GL_FLOAT, false, 0, 0);
 	}
 
 	public boolean update(float[] nPos) {
@@ -49,10 +48,10 @@ public class FloatAttribArray extends AttribArray {
 			return false;
 		data = nPos;
 		// try (MemoryStack stack = MemoryStack.stackPush()) {
-		GL40.glBufferSubData(bufferType, 0, data);
+		GLES30.glBufferSubData(bufferType, 0, data);
 		// }
 
-		return GL40.glGetError() == GL40.GL_NO_ERROR;
+		return GLES30.glGetError() == GLES30.GL_NO_ERROR;
 	}
 
 	@Override

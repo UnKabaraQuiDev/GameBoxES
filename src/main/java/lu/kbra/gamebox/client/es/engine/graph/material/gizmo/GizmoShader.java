@@ -5,7 +5,6 @@ import lu.kbra.gamebox.client.es.engine.graph.shader.RenderShader;
 import lu.kbra.gamebox.client.es.engine.impl.shader.AbstractShaderPart;
 import lu.kbra.gamebox.client.es.engine.utils.consts.BeginMode;
 import lu.kbra.gamebox.client.es.engine.utils.consts.FaceMode;
-import lu.kbra.gamebox.client.es.engine.utils.consts.RenderType;
 
 public class GizmoShader extends RenderShader {
 
@@ -16,7 +15,6 @@ public class GizmoShader extends RenderShader {
 		
 		super.setBeginMode(BeginMode.LINES);
 		super.setFaceMode(FaceMode.FRONT_AND_BACK);
-		super.setRenderType(RenderType.LINE);
 	}
 
 	@Override

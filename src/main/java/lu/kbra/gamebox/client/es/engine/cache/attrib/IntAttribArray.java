@@ -2,8 +2,7 @@ package lu.kbra.gamebox.client.es.engine.cache.attrib;
 
 import java.util.Arrays;
 
-import org.lwjgl.opengl.GL40;
-import org.lwjgl.opengl.GL46;
+import org.lwjgl.opengles.GLES30;
 
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 
@@ -38,11 +37,11 @@ public class IntAttribArray extends AttribArray {
 
 	@Override
 	public void init() {
-		GL40.glBufferData(bufferType, data, iStatic ? GL40.GL_STATIC_DRAW : GL40.GL_DYNAMIC_DRAW);
-		PDRUtils.checkGlError("BufferData(" + bufferType + ", " + Arrays.toString(data) + ", " + iStatic + ")");
-		if (bufferType != GL40.GL_ELEMENT_ARRAY_BUFFER && bufferType != GL46.GL_UNIFORM_BUFFER && bufferType != GL46.GL_DRAW_INDIRECT_BUFFER) {
-			GL40.glVertexAttribPointer(index, dataSize, GL40.GL_INT, false, 0, 0);
-			PDRUtils.checkGlError("VertexAttribPointer(" + index + ", " + dataSize + ", INT, FALSE, 0, 0)");
+		GLES30.glBufferData(bufferType, data, iStatic ? GLES30.GL_STATIC_DRAW : GLES30.GL_DYNAMIC_DRAW);
+		PDRUtils.checkGlESError("BufferData(" + bufferType + ", " + Arrays.toString(data) + ", " + iStatic + ")");
+		if (bufferType != GLES30.GL_ELEMENT_ARRAY_BUFFER && bufferType != GLES30.GL_UNIFORM_BUFFER) {
+			GLES30.glVertexAttribPointer(index, dataSize, GLES30.GL_INT, false, 0, 0);
+			PDRUtils.checkGlESError("VertexAttribPointer(" + index + ", " + dataSize + ", INT, FALSE, 0, 0)");
 		}
 	}
 
@@ -68,9 +67,9 @@ public class IntAttribArray extends AttribArray {
 			return false;
 		data = nPos;
 
-		GL40.glBufferSubData(bufferType, 0, data);
+		GLES30.glBufferSubData(bufferType, 0, data);
 
-		return GL40.glGetError() == GL40.GL_NO_ERROR;
+		return GLES30.glGetError() == GLES30.GL_NO_ERROR;
 	}
 
 }

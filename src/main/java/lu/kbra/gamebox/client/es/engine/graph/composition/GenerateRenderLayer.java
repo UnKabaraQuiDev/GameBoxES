@@ -4,7 +4,7 @@ import java.util.logging.Level;
 
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-import org.lwjgl.opengl.GL40;
+import org.lwjgl.opengles.GLES30;
 
 import lu.pcy113.pclib.logger.GlobalLogger;
 
@@ -50,11 +50,11 @@ public class GenerateRenderLayer extends RenderLayer<GameEngine, Framebuffer, Me
 
 		material.bindProperties(cache, this, shader);
 
-		GL40.glDepthMask(false);
+		GLES30.glDepthMask(false);
 
-		GL40.glDrawElements(GL40.GL_TRIANGLES, target.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);
+		GLES30.glDrawElements(GLES30.GL_TRIANGLES, target.getIndicesCount(), GLES30.GL_UNSIGNED_INT, 0);
 
-		GL40.glDepthMask(true);
+		GLES30.glDepthMask(true);
 
 		target.unbind();
 	}

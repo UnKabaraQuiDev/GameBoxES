@@ -3,7 +3,7 @@ package lu.kbra.gamebox.client.es.engine.graph.render;
 import java.util.logging.Level;
 
 import org.joml.Matrix4f;
-import org.lwjgl.opengl.GL40;
+import org.lwjgl.opengles.GLES30;
 
 import lu.pcy113.pclib.logger.GlobalLogger;
 
@@ -31,7 +31,7 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 
 		Mesh mesh = m.getMesh(cache);
 		if (mesh == null) {
-			GlobalLogger.log(Level.WARNING, "Mesh is null, for entity: "+e+"!");
+			GlobalLogger.log(Level.WARNING, "Mesh is null, for entity: " + e + "!");
 			cache.dump(System.err);
 			return;
 		}
@@ -95,24 +95,18 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 
 		GameEngine.DEBUG.start("r_blend");
 		if (shader.isTransparent()) {
-			GL40.glBlendFunc(GL40.GL_SRC_ALPHA, GL40.GL_ONE_MINUS_SRC_ALPHA);
-			GL40.glEnable(GL40.GL_BLEND);
+			GLES30.glBlendFunc(GLES30.GL_SRC_ALPHA, GLES30.GL_ONE_MINUS_SRC_ALPHA);
+			GLES30.glEnable(GLES30.GL_BLEND);
 		}
 		GameEngine.DEBUG.end("r_blend");
 
-		GL40.glPolygonMode(shader.getFaceMode().getGlId(), shader.getRenderType().getGlId());
+		// GLES30.glPolygonMode(shader.getFaceMode().getGlId(), shader.getRenderType().getGlId());
 
 		GameEngine.DEBUG.start("r_draw");
-		if (mesh.hasDrawBuffer()) {
-			mesh.getDrawBuffer().bind();
-			GL40.glDrawElementsIndirect(shader.getBeginMode().getGlId(), GL40.GL_UNSIGNED_INT, 0);
-			mesh.getDrawBuffer().unbind();
-		} else {
-			GL40.glDrawElements(shader.getBeginMode().getGlId(), mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);
-		}
+		GLES30.glDrawElements(shader.getBeginMode().getGlId(), mesh.getIndicesCount(), GLES30.GL_UNSIGNED_INT, 0);
 		GameEngine.DEBUG.end("r_draw");
 
-		GL40.glDisable(GL40.GL_BLEND);
+		GLES30.glDisable(GLES30.GL_BLEND);
 
 		// debug only
 		GameEngine.DEBUG.start("r_debug_wf");

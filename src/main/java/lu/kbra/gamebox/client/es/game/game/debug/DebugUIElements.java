@@ -46,7 +46,6 @@ public class DebugUIElements {
 				32, "FPS: ", new Vector2f(0.1f));
 		fpsDebug.setAlignment(Alignment.TEXT_CENTER);
 		fpsDebug.setBoxed(true);
-		fpsDebug.createDrawBuffer();
 		fpsDebug.updateText();
 		cache.addTextEmitter(fpsDebug);
 		Entity fpsDebugEntity = new Entity("fpsDebug", new TextEmitterComponent(fpsDebug), new Transform3DComponent(new Vector3f(1.3f, 0, 0).add(pos), axis));

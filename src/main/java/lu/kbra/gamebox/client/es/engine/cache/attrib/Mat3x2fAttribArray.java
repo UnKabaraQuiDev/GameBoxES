@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 import org.joml.Matrix3x2f;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL40;
+import org.lwjgl.opengles.GLES30;
 
 public class Mat3x2fAttribArray extends AttribArray {
 
@@ -43,7 +43,7 @@ public class Mat3x2fAttribArray extends AttribArray {
 
 	@Override
 	public void init() {
-		GL40.glBufferData(bufferType, toFlatArray(), iStatic ? GL40.GL_STATIC_DRAW : GL40.GL_DYNAMIC_DRAW);
+		GLES30.glBufferData(bufferType, toFlatArray(), iStatic ? GLES30.GL_STATIC_DRAW : GLES30.GL_DYNAMIC_DRAW);
 	}
 
 	public boolean update(Matrix3x2f[] nPos) {
@@ -52,16 +52,16 @@ public class Mat3x2fAttribArray extends AttribArray {
 		}
 		data = nPos;
 
-		GL40.glBufferSubData(GL40.GL_ARRAY_BUFFER, 0, toFlatArray());
-		return GL40.glGetError() == GL40.GL_NO_ERROR;
+		GLES30.glBufferSubData(GLES30.GL_ARRAY_BUFFER, 0, toFlatArray());
+		return GLES30.glGetError() == GLES30.GL_NO_ERROR;
 	}
 
 	@Override
 	public void enable() {
 		for (int i = 0; i < 3; i++) {
-			GL40.glEnableVertexAttribArray(index + i);
-			GL40.glVertexAttribPointer(index + i, 2, GL40.GL_FLOAT, false, 6 * 3, i * 2 * 4);
-			GL40.glVertexAttribDivisor(index + i, divisor);
+			GLES30.glEnableVertexAttribArray(index + i);
+			GLES30.glVertexAttribPointer(index + i, 2, GLES30.GL_FLOAT, false, 6 * 3, i * 2 * 4);
+			GLES30.glVertexAttribDivisor(index + i, divisor);
 		}
 	}
 

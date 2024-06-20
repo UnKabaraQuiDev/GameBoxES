@@ -24,17 +24,6 @@ public class CellInstanceEmitter extends InstanceEmitter {
 
 		directions = Collections.nCopies(count, new Vector3f());
 		this.description = desc;
-
-		createDrawBuffer();
-	}
-
-	public void createDrawBuffer() {
-		Mesh quad = super.getParticleMesh();
-
-		quad.createDrawBuffer();
-		quad.getDrawBuffer().bind();
-		quad.getDrawBuffer().setInstancesCount(super.getParticleCount());
-		quad.getDrawBuffer().unbind();
 	}
 
 	public List<Vector3f> getDirections() {

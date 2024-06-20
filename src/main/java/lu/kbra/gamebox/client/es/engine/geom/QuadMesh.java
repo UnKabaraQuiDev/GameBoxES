@@ -2,7 +2,7 @@ package lu.kbra.gamebox.client.es.engine.geom;
 
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-import org.lwjgl.opengl.GL40;
+import org.lwjgl.opengles.GLES30;
 
 import lu.kbra.gamebox.client.es.engine.cache.attrib.UIntAttribArray;
 import lu.kbra.gamebox.client.es.engine.cache.attrib.Vec2fAttribArray;
@@ -23,7 +23,7 @@ public class QuadMesh extends Mesh {
 								new Vector3f(1f, 1f, 0f).mul(size.x, size.y, 0).div(2),
 								new Vector3f(-1f, 1f, 0f).mul(size.x, size.y, 0).div(2)
 						}),
-				new UIntAttribArray("ind", -1, 1, new int[] { 0, 1, 2, 0, 2, 3 }, GL40.GL_ELEMENT_ARRAY_BUFFER),
+				new UIntAttribArray("ind", -1, 1, new int[] { 0, 1, 2, 0, 2, 3 }, GLES30.GL_ELEMENT_ARRAY_BUFFER),
 				new Vec3fAttribArray("normal", 1, 1, new Vector3f[] {
 						new Vector3f(0, 0, 1),
 						new Vector3f(0, 0, 1),
@@ -50,7 +50,7 @@ public class QuadMesh extends Mesh {
 								new Vector3f(1f, 1f, 1f).mul(plane.project(size)).div(2),
 								new Vector3f(-1f, 1f, -1f).mul(plane.project(size)).div(2)
 				}),
-				new UIntAttribArray("ind", -1, 1, new int[] { 0, 1, 2, 0, 2, 3 }, GL40.GL_ELEMENT_ARRAY_BUFFER),
+				new UIntAttribArray("ind", -1, 1, new int[] { 0, 1, 2, 0, 2, 3 }, GLES30.GL_ELEMENT_ARRAY_BUFFER),
 				new Vec3fAttribArray("normal", 1, 1, new Vector3f[] {
 						new Vector3f(0, 0, 1),
 						new Vector3f(0, 0, 1),

@@ -32,7 +32,6 @@ import lu.kbra.gamebox.client.es.engine.exceptions.egl.EGLBadNativePixmapExcepti
 import lu.kbra.gamebox.client.es.engine.exceptions.egl.EGLBadNativeWindowException;
 import lu.kbra.gamebox.client.es.engine.exceptions.egl.EGLBadParameterException;
 import lu.kbra.gamebox.client.es.engine.exceptions.egl.EGLBadSurfaceException;
-import lu.kbra.gamebox.client.es.engine.exceptions.egl.EGLNoContextException;
 import lu.kbra.gamebox.client.es.engine.exceptions.egl.EGLNotInitializedException;
 import lu.kbra.gamebox.client.es.engine.exceptions.egl.EGLRuntimeException;
 import lu.kbra.gamebox.client.es.engine.exceptions.openal.ALInvalidEnumException;

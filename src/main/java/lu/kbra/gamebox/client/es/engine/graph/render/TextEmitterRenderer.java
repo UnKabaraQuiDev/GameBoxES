@@ -3,8 +3,7 @@ package lu.kbra.gamebox.client.es.engine.graph.render;
 import java.util.logging.Level;
 
 import org.joml.Matrix4f;
-import org.lwjgl.opengl.GL40;
-import org.lwjgl.opengl.GL46;
+import org.lwjgl.opengles.GLES30;
 
 import lu.pcy113.pclib.logger.GlobalLogger;
 
@@ -100,20 +99,15 @@ public class TextEmitterRenderer extends Renderer<Scene, TextEmitterComponent> {
 		material.bindProperties(cache, scene, shader);
 
 		if (shader.isTransparent()) {
-			GL40.glEnable(GL40.GL_BLEND);
-			GL40.glBlendFunc(GL40.GL_SRC_ALPHA, GL40.GL_ONE_MINUS_SRC_ALPHA);
+			GLES30.glEnable(GLES30.GL_BLEND);
+			GLES30.glBlendFunc(GLES30.GL_SRC_ALPHA, GLES30.GL_ONE_MINUS_SRC_ALPHA);
 		}
 
 		pe.bind();
 
-		if (mesh.hasDrawBuffer()) {
-			mesh.getDrawBuffer().bind();
-			GL46.glDrawElementsIndirect(shader.getBeginMode().getGlId(), GL40.GL_UNSIGNED_INT, 0);
-		} else {
-			GL40.glDrawElementsInstanced(shader.getBeginMode().getGlId(), mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0, pe.getParticleCount());
-		}
+		GLES30.glDrawElementsInstanced(shader.getBeginMode().getGlId(), mesh.getIndicesCount(), GLES30.GL_UNSIGNED_INT, 0, pe.getParticleCount());
 
-		GL40.glDisable(GL40.GL_BLEND);
+		GLES30.glDisable(GLES30.GL_BLEND);
 
 		// debug only
 		// GameEngine.DEBUG.wireframe(cache, scene, mesh, projectionMatrix, viewMatrix, c.getTransform().getMatrix());

@@ -8,7 +8,7 @@ import org.joml.Vector2i;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 import org.joml.Vector4f;
-import org.lwjgl.opengl.GL40;
+import org.lwjgl.opengles.GLES30;
 
 import lu.kbra.gamebox.client.es.engine.cache.attrib.UIntAttribArray;
 import lu.kbra.gamebox.client.es.engine.cache.attrib.Vec2fAttribArray;
@@ -92,7 +92,7 @@ public final class ObjLoader {
 		 * "Indices " + Arrays.toString(indicesArr));
 		 */
 
-		return new Gizmo(name, new Vec3fAttribArray("pos", 0, 1, verticesArr, GL40.GL_ARRAY_BUFFER), new UIntAttribArray("ind", -1, 1, indicesArr, GL40.GL_ELEMENT_ARRAY_BUFFER), new Vec4fAttribArray("col", 1, 1, colorArr, GL40.GL_ARRAY_BUFFER));
+		return new Gizmo(name, new Vec3fAttribArray("pos", 0, 1, verticesArr, GLES30.GL_ARRAY_BUFFER), new UIntAttribArray("ind", -1, 1, indicesArr, GLES30.GL_ELEMENT_ARRAY_BUFFER), new Vec4fAttribArray("col", 1, 1, colorArr, GLES30.GL_ARRAY_BUFFER));
 	}
 
 	public static Mesh loadMesh(String name, Material material, String path) {
@@ -167,10 +167,10 @@ public final class ObjLoader {
 
 		int[] indicesArr = indices.stream().mapToInt((v) -> v).toArray();
 
-		Vec3fAttribArray pos = new Vec3fAttribArray("pos", 0, 1, verticesArr, GL40.GL_ARRAY_BUFFER);
-		UIntAttribArray ind = new UIntAttribArray("ind", -1, 1, indicesArr, GL40.GL_ELEMENT_ARRAY_BUFFER);
-		Vec3fAttribArray norm = new Vec3fAttribArray("norm", 1, 1, normalsArr, GL40.GL_ARRAY_BUFFER);
-		Vec2fAttribArray uv = new Vec2fAttribArray("uv", 2, 1, uvsArr, GL40.GL_ARRAY_BUFFER);
+		Vec3fAttribArray pos = new Vec3fAttribArray("pos", 0, 1, verticesArr, GLES30.GL_ARRAY_BUFFER);
+		UIntAttribArray ind = new UIntAttribArray("ind", -1, 1, indicesArr, GLES30.GL_ELEMENT_ARRAY_BUFFER);
+		Vec3fAttribArray norm = new Vec3fAttribArray("norm", 1, 1, normalsArr, GLES30.GL_ARRAY_BUFFER);
+		Vec2fAttribArray uv = new Vec2fAttribArray("uv", 2, 1, uvsArr, GLES30.GL_ARRAY_BUFFER);
 
 		return new Mesh(name, material, pos, ind, norm, uv);
 	}

@@ -3,7 +3,7 @@ package lu.kbra.gamebox.client.es.engine.cache.attrib;
 import java.util.Arrays;
 
 import org.joml.Vector3f;
-import org.lwjgl.opengl.GL40;
+import org.lwjgl.opengles.GLES30;
 
 public class Vec3fAttribArray extends AttribArray {
 
@@ -36,9 +36,9 @@ public class Vec3fAttribArray extends AttribArray {
 
 	@Override
 	public void init() {
-		GL40.glBufferData(bufferType, toFlatArray(), iStatic ? GL40.GL_STATIC_DRAW : GL40.GL_DYNAMIC_DRAW);
-		if (bufferType != GL40.GL_ELEMENT_ARRAY_BUFFER && bufferType != GL40.GL_UNIFORM_BUFFER)
-			GL40.glVertexAttribPointer(index, dataSize * 3, GL40.GL_FLOAT, false, 0, 0);
+		GLES30.glBufferData(bufferType, toFlatArray(), iStatic ? GLES30.GL_STATIC_DRAW : GLES30.GL_DYNAMIC_DRAW);
+		if (bufferType != GLES30.GL_ELEMENT_ARRAY_BUFFER && bufferType != GLES30.GL_UNIFORM_BUFFER)
+			GLES30.glVertexAttribPointer(index, dataSize * 3, GLES30.GL_FLOAT, false, 0, 0);
 	}
 
 	public boolean update(Vector3f[] nPos) {
@@ -46,8 +46,8 @@ public class Vec3fAttribArray extends AttribArray {
 			throw new IllegalArgumentException("Array's size cannot change");
 		data = nPos;
 
-		GL40.glBufferSubData(GL40.GL_ARRAY_BUFFER, 0, toFlatArray());
-		return GL40.glGetError() == GL40.GL_NO_ERROR;
+		GLES30.glBufferSubData(GLES30.GL_ARRAY_BUFFER, 0, toFlatArray());
+		return GLES30.glGetError() == GLES30.GL_NO_ERROR;
 	}
 
 	public float[] toFlatArray() {

@@ -1,26 +1,20 @@
 package lu.kbra.gamebox.client.es.engine.utils.consts;
 
-import org.lwjgl.opengl.GL46;
+import org.lwjgl.opengles.GLES30;
 
 public enum BeginMode implements GLConstant {
 
-	POINTS(GL46.GL_POINTS, RenderType.POINT), LINES(GL46.GL_LINES, RenderType.LINE), TRIANGLES(GL46.GL_TRIANGLES, RenderType.FILL), POLYGON(GL46.GL_POLYGON, RenderType.FILL);
+	POINTS(GLES30.GL_POINTS), LINES(GLES30.GL_LINES), TRIANGLES(GLES30.GL_TRIANGLES);
 
 	private int glId;
-	private RenderType renderType;
 
-	private BeginMode(int glId, RenderType renderType) {
+	private BeginMode(int glId) {
 		this.glId = glId;
-		this.renderType = renderType;
 	}
 
 	@Override
 	public int getGlId() {
 		return glId;
-	}
-
-	public RenderType getRenderType() {
-		return renderType;
 	}
 
 }

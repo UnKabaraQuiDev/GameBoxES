@@ -5,19 +5,13 @@ import java.util.logging.Level;
 
 import org.joml.Vector2i;
 import org.joml.Vector4f;
-import org.lwjgl.opengl.GL40;
+import org.lwjgl.opengles.GLES30;
 
 import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
-import lu.kbra.gamebox.client.es.engine.graph.texture.SingleTexture;
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
-import lu.kbra.gamebox.client.es.engine.utils.consts.DataType;
-import lu.kbra.gamebox.client.es.engine.utils.consts.FrameBufferAttachment;
-import lu.kbra.gamebox.client.es.engine.utils.consts.TexelFormat;
-import lu.kbra.gamebox.client.es.engine.utils.consts.TexelInternalFormat;
-import lu.kbra.gamebox.client.es.engine.utils.consts.TextureType;
 
 public class Compositor implements Cleanupable {
 
@@ -26,52 +20,9 @@ public class Compositor implements Cleanupable {
 	protected LinkedList<String> layers = new LinkedList<>();
 	protected LinkedList<String> passes = new LinkedList<>();
 
-	protected Framebuffer framebuffer;
-
-	protected SingleTexture depth, color0;
-
 	protected Vector2i resolution = new Vector2i(0, 0);
 
-	private boolean genTextures() {
-		if (depth != null && depth.isValid())
-			depth.cleanup();
-		if (color0 != null && color0.isValid())
-			color0.cleanup();
-
-		framebuffer.clearAttachments();
-
-		depth = new SingleTexture("depth", resolution.x, resolution.y);
-		depth.setTextureType(TextureType.TXT2DMS);
-		depth.setSampleCount(8);
-		depth.setInternalFormat(TexelInternalFormat.DEPTH_COMPONENT32F);
-		depth.setFormat(TexelFormat.DEPTH);
-		depth.setDataType(DataType.FLOAT);
-		depth.setup();
-
-		color0 = new SingleTexture("color", resolution.x, resolution.y);
-		color0.setTextureType(TextureType.TXT2DMS);
-		color0.setSampleCount(8);
-		color0.setInternalFormat(TexelInternalFormat.RGBA);
-		color0.setFormat(TexelFormat.RGBA);
-		color0.setDataType(DataType.UBYTE);
-		color0.setup();
-
-		if (!framebuffer.attachTexture(FrameBufferAttachment.DEPTH, 0, depth))
-			return false;
-
-		if (!framebuffer.attachTexture(FrameBufferAttachment.COLOR_FIRST, 0, color0))
-			return false;
-
-		return true;
-	}
-
 	public void render(CacheManager cache, GameEngine engine) {
-		if (framebuffer == null) {
-			framebuffer = cache.loadFramebuffer(this.getClass().getName() + "#" + hashCode());
-		}
-
-		framebuffer.bind();
-
 		int width = engine.getWindow().getWidth();
 		int height = engine.getWindow().getHeight();
 		
@@ -79,19 +30,10 @@ public class Compositor implements Cleanupable {
 			// keep same texture
 		} else {
 			resolution = new Vector2i(width, height);
-			if (!genTextures())
-				throw new RuntimeException("Error while generating textures and framebuffer.");
-			GL40.glViewport(0, 0, width, height);
+			GLES30.glViewport(0, 0, width, height);
 		}
 
-		color0.bind();
-
-		if (!framebuffer.isComplete()) {
-			GlobalLogger.log(Level.SEVERE, "Framebuffer not complete: " + framebuffer.getError() + ", w:" + width + " h:" + height);
-			return;
-		}
-
-		GL40.glEnable(GL40.GL_DEPTH_TEST);
+		GLES30.glEnable(GLES30.GL_DEPTH_TEST);
 
 		for (String l : layers) {
 			if (l == null)
@@ -106,12 +48,10 @@ public class Compositor implements Cleanupable {
 			if (!rl.isVisible())
 				continue;
 
-			rl.render(engine, framebuffer);
+			rl.render(engine, null);
 		}
 
-		framebuffer.unbind(GL40.GL_FRAMEBUFFER);
-
-		GL40.glDepthMask(false);
+		GLES30.glDepthMask(false);
 		for (String l : passes) {
 			if (l == null)
 				continue;
@@ -128,21 +68,12 @@ public class Compositor implements Cleanupable {
 			// color0.bind(0);
 			// depth.bind
 
-			((PassRenderLayer) prl).render(engine, framebuffer);
+			((PassRenderLayer) prl).render(engine, null);
 		}
-		GL40.glDepthMask(true);
+		GLES30.glDepthMask(true);
 
-		framebuffer.unbind(GL40.GL_FRAMEBUFFER);
-		framebuffer.bind(GL40.GL_READ_FRAMEBUFFER);
-		GL40.glBindFramebuffer(GL40.GL_DRAW_FRAMEBUFFER, 0);
-
-		if (passes.isEmpty())
-			GL40.glBlitFramebuffer(0, 0, resolution.x, resolution.y, 0, 0, resolution.x, resolution.y, GL40.GL_COLOR_BUFFER_BIT, GL40.GL_NEAREST);
-
-		framebuffer.bind();
-
-		GL40.glClearColor(background.x, background.y, background.z, background.w);
-		GL40.glClear(GL40.GL_COLOR_BUFFER_BIT | GL40.GL_DEPTH_BUFFER_BIT);
+		GLES30.glClearColor(background.x, background.y, background.z, background.w);
+		GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT | GLES30.GL_DEPTH_BUFFER_BIT);
 	}
 
 	public void addRenderLayer(int i, RenderLayer id) {
@@ -158,25 +89,6 @@ public class Compositor implements Cleanupable {
 	@Override
 	public void cleanup() {
 		GlobalLogger.log("Cleaning up: "+getClass().getName());
-		
-		if (framebuffer != null) {
-			framebuffer.cleanup();
-			framebuffer = null;
-		}
-		
-		if (depth != null) {
-			depth.cleanup();
-			depth = null;
-		}
-		
-		if (color0 != null) {
-			color0.cleanup();
-			color0 = null;
-		}
-	}
-
-	public Framebuffer getFramebuffer() {
-		return framebuffer;
 	}
 
 }

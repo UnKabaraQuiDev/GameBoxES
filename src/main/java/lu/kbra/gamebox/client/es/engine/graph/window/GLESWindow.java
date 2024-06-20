@@ -4,13 +4,12 @@ import java.lang.reflect.Field;
 import java.nio.IntBuffer;
 
 import org.lwjgl.egl.EGL;
+import org.lwjgl.egl.EGL10;
 import org.lwjgl.egl.EGL15;
 import org.lwjgl.egl.EGLCapabilities;
 import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
-import org.lwjgl.glfw.GLFWVidMode;
-import org.lwjgl.opengl.GL40;
 import org.lwjgl.opengles.GLES;
 import org.lwjgl.opengles.GLES30;
 import org.lwjgl.opengles.GLESCapabilities;
@@ -58,7 +57,7 @@ public class GLESWindow extends Window {
 			IntBuffer major = stack.mallocInt(1);
 			IntBuffer minor = stack.mallocInt(1);
 
-			EGL15.eglInitialize(monitor, major, minor);
+			EGL10.eglInitialize(monitor, major, minor);
 			PDRUtils.checkEGLError("glInitialize[" + monitor + ", IB, IB]");
 
 			this.eglCapabilities = EGL.createDisplayCapabilities(monitor, major.get(0), minor.get(0));
@@ -99,11 +98,10 @@ public class GLESWindow extends Window {
 		}
 
 		if (options.windowMultisample > 1) {
-			GLES30.glEnable(GL40.GL_MULTISAMPLE);
 			GLFW.glfwWindowHint(GLFW.GLFW_SAMPLES, options.windowMultisample);
 		}
 
-		GLES30.glEnable(GL40.GL_DEPTH_TEST);
+		GLES30.glEnable(GLES30.GL_DEPTH_TEST);
 
 		updateOptions();
 
@@ -155,7 +153,6 @@ public class GLESWindow extends Window {
 			Callbacks.glfwFreeCallbacks(handle);
 			GLFW.glfwDestroyWindow(handle);
 			GLFW.glfwTerminate();
-			GLFW.glfwSetErrorCallback(null).free();
 			handle = -1;
 		}
 	}

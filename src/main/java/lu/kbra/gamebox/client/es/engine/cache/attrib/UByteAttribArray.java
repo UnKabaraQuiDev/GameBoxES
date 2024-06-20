@@ -2,7 +2,7 @@ package lu.kbra.gamebox.client.es.engine.cache.attrib;
 
 import java.nio.ByteBuffer;
 
-import org.lwjgl.opengl.GL40;
+import org.lwjgl.opengles.GLES30;
 
 public class UByteAttribArray extends AttribArray {
 
@@ -35,9 +35,9 @@ public class UByteAttribArray extends AttribArray {
 
 	@Override
 	public void init() {
-		GL40.glBufferData(bufferType, bbuffer, iStatic ? GL40.GL_STATIC_DRAW : GL40.GL_DYNAMIC_DRAW);
-		if (bufferType != GL40.GL_ELEMENT_ARRAY_BUFFER)
-			GL40.glVertexAttribIPointer(index, dataSize, GL40.GL_UNSIGNED_BYTE, 0, 0);
+		GLES30.glBufferData(bufferType, bbuffer, iStatic ? GLES30.GL_STATIC_DRAW : GLES30.GL_DYNAMIC_DRAW);
+		if (bufferType != GLES30.GL_ELEMENT_ARRAY_BUFFER)
+			GLES30.glVertexAttribIPointer(index, dataSize, GLES30.GL_UNSIGNED_BYTE, 0, 0);
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class UByteAttribArray extends AttribArray {
 		bbuffer.position(0);
 		bbuffer.put(data);
 
-		GL40.glBufferSubData(GL40.GL_ARRAY_BUFFER, 0, bbuffer);
+		GLES30.glBufferSubData(GLES30.GL_ARRAY_BUFFER, 0, bbuffer);
 	}
 
 }

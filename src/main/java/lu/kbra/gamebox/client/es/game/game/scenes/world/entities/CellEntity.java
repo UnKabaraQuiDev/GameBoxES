@@ -58,7 +58,6 @@ public class CellEntity extends Entity {
 	public static CellEntity load(CacheManager cache, CellDescriptor descriptor) {
 		Material material = descriptor.createMaterial(cache);
 		Mesh mesh = Mesh.newQuad(descriptor.getCellType().getDataPath() + material.hashCode(), material, new Vector2f(1));
-		mesh.createDrawBuffer();
 		cache.addMesh(mesh);
 		CellEntity ce = new CellEntity(descriptor.getId() + mesh.hashCode(), cache, mesh, descriptor, new Vector3f(0));
 		return ce;

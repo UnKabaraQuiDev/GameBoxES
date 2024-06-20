@@ -1,6 +1,6 @@
 package lu.kbra.gamebox.client.es.engine.graph.texture;
 
-import org.lwjgl.opengl.GL40;
+import org.lwjgl.opengles.GLES30;
 
 import lu.pcy113.pclib.logger.GlobalLogger;
 
@@ -18,11 +18,12 @@ import lu.kbra.gamebox.client.es.engine.utils.consts.TextureWrap;
 
 public abstract class Texture implements Cleanupable, UniqueID, FramebufferAttachment {
 
-	public static final int MAX_DEPTH_TEXTURE_SAMPLES = GL40.glGetInteger(GL40.GL_MAX_DEPTH_TEXTURE_SAMPLES);
-	public static final int MAX_COLOR_TEXTURE_SAMPLES = GL40.glGetInteger(GL40.GL_MAX_COLOR_TEXTURE_SAMPLES);
-	public static final int MAX_INTEGER_SAMPLES = GL40.glGetInteger(GL40.GL_MAX_INTEGER_SAMPLES);
-	public static final int MAX_TEXTURE_LOD_BIAS = GL40.glGetInteger(GL40.GL_MAX_TEXTURE_LOD_BIAS);
-	public static final int MAX_TEXTURE_SIZE = GL40.glGetInteger(GL40.GL_MAX_TEXTURE_SIZE);
+	/*
+	 * public static final int MAX_DEPTH_TEXTURE_SAMPLES = GLES30.glGetInteger(GLES30.GL_MAX_DEPTH_TEXTURE_SAMPLES); public static final int MAX_COLOR_TEXTURE_SAMPLES = GLES30.glGetInteger(GLES30.GL_MAX_COLOR_TEXTURE_SAMPLES); public static
+	 * final int MAX_INTEGER_SAMPLES = GLES30.glGetInteger(GLES30.GL_MAX_INTEGER_SAMPLES);
+	 */
+	public static final int MAX_TEXTURE_LOD_BIAS = GLES30.glGetInteger(GLES30.GL_MAX_TEXTURE_LOD_BIAS);
+	public static final int MAX_TEXTURE_SIZE = GLES30.glGetInteger(GLES30.GL_MAX_TEXTURE_SIZE);
 
 	protected final String path;
 	protected final String name;
@@ -48,16 +49,16 @@ public abstract class Texture implements Cleanupable, UniqueID, FramebufferAttac
 	public abstract boolean checkConfigErrors();
 
 	protected int gen() {
-		this.tid = GL40.glGenTextures();
-		PDRUtils.checkGlError("GenTextures");
+		this.tid = GLES30.glGenTextures();
+		PDRUtils.checkGlESError("GenTextures");
 		return tid;
 	}
 
 	public void active(int i) {
 		if (i > 31)
 			return;
-		GL40.glActiveTexture(GL40.GL_TEXTURE0 + i);
-		PDRUtils.checkGlError("ActiveTexture[" + (GL40.GL_TEXTURE0 + i) + "]");
+		GLES30.glActiveTexture(GLES30.GL_TEXTURE0 + i);
+		PDRUtils.checkGlESError("ActiveTexture[" + (GLES30.GL_TEXTURE0 + i) + "]");
 	}
 
 	public void bind(int i) {
@@ -66,10 +67,10 @@ public abstract class Texture implements Cleanupable, UniqueID, FramebufferAttac
 	}
 
 	public void bind() {
-		if(tid == -1)
+		if (tid == -1)
 			return;
-		GL40.glBindTexture(txtType.getGlId(), tid);
-		PDRUtils.checkGlError("BindTexture[" + txtType + "]=" + tid);
+		GLES30.glBindTexture(txtType.getGlId(), tid);
+		PDRUtils.checkGlESError("BindTexture[" + txtType + "]=" + tid);
 	}
 
 	public void unbind(int i) {
@@ -78,33 +79,29 @@ public abstract class Texture implements Cleanupable, UniqueID, FramebufferAttac
 	}
 
 	public void unbind() {
-		GL40.glBindTexture(txtType.getGlId(), 0);
-		PDRUtils.checkGlError("BindTexture[" + txtType + "]=0");
+		GLES30.glBindTexture(txtType.getGlId(), 0);
+		PDRUtils.checkGlESError("BindTexture[" + txtType + "]=0");
 	}
 
 	public void genMipMaps() {
-		GL40.glGenerateMipmap(txtType.getGlId());
-		PDRUtils.checkGlError("GenerateMipmap[" + txtType + "]");
+		GLES30.glGenerateMipmap(txtType.getGlId());
+		PDRUtils.checkGlESError("GenerateMipmap[" + txtType + "]");
 	}
 
 	public void applyFilter() {
-		if (!isMultisampled()) {
-			GL40.glTexParameteri(txtType.getGlId(), TextureParameter.MIN_FILTER.getGlId(), minFilter.getGlId());
-			PDRUtils.checkGlError("TexParameter[" + txtType + "].MinFilter=" + minFilter);
-			GL40.glTexParameteri(txtType.getGlId(), TextureParameter.MAG_FILTER.getGlId(), magFilter.getGlId());
-			PDRUtils.checkGlError("TexParameter[" + txtType + "].MagFilter=" + magFilter);
-		}
+		GLES30.glTexParameteri(txtType.getGlId(), TextureParameter.MIN_FILTER.getGlId(), minFilter.getGlId());
+		PDRUtils.checkGlESError("TexParameter[" + txtType + "].MinFilter=" + minFilter);
+		GLES30.glTexParameteri(txtType.getGlId(), TextureParameter.MAG_FILTER.getGlId(), magFilter.getGlId());
+		PDRUtils.checkGlESError("TexParameter[" + txtType + "].MagFilter=" + magFilter);
 	}
 
 	public void applyWrap() {
-		if (!isMultisampled()) {
-			GL40.glTexParameteri(txtType.getGlId(), TextureParameter.WRAP_HORIZONTAL.getGlId(), hWrap.getGlId());
-			PDRUtils.checkGlError("TexParameter[" + txtType + "].WrapHorizontal=" + hWrap);
-			GL40.glTexParameteri(txtType.getGlId(), TextureParameter.WRAP_VERTICAL.getGlId(), vWrap.getGlId());
-			PDRUtils.checkGlError("TexParameter[" + txtType + "].WrapVertical=" + vWrap);
-			GL40.glTexParameteri(txtType.getGlId(), TextureParameter.WRAP_DEPTH.getGlId(), dWrap.getGlId());
-			PDRUtils.checkGlError("TexParameter[" + txtType + "].WrapDepth=" + dWrap);
-		}
+		GLES30.glTexParameteri(txtType.getGlId(), TextureParameter.WRAP_HORIZONTAL.getGlId(), hWrap.getGlId());
+		PDRUtils.checkGlESError("TexParameter[" + txtType + "].WrapHorizontal=" + hWrap);
+		GLES30.glTexParameteri(txtType.getGlId(), TextureParameter.WRAP_VERTICAL.getGlId(), vWrap.getGlId());
+		PDRUtils.checkGlESError("TexParameter[" + txtType + "].WrapVertical=" + vWrap);
+		GLES30.glTexParameteri(txtType.getGlId(), TextureParameter.WRAP_DEPTH.getGlId(), dWrap.getGlId());
+		PDRUtils.checkGlESError("TexParameter[" + txtType + "].WrapDepth=" + dWrap);
 	}
 
 	@Override
@@ -114,8 +111,8 @@ public abstract class Texture implements Cleanupable, UniqueID, FramebufferAttac
 		if (tid == -1)
 			return;
 
-		GL40.glDeleteTextures(tid);
-		PDRUtils.checkGlError("DeleteTextures[" + tid + "] (" + name + ")");
+		GLES30.glDeleteTextures(tid);
+		PDRUtils.checkGlESError("DeleteTextures[" + tid + "] (" + name + ")");
 		tid = -1;
 	}
 
@@ -236,10 +233,6 @@ public abstract class Texture implements Cleanupable, UniqueID, FramebufferAttac
 
 	public void setGenerateMipmaps(boolean generateMipmaps) {
 		this.generateMipmaps = generateMipmaps;
-	}
-
-	public boolean isMultisampled() {
-		return TextureType.isMultisampled(txtType);
 	}
 
 	public boolean isArray() {

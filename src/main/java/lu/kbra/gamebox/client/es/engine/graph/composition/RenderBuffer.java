@@ -1,6 +1,6 @@
 package lu.kbra.gamebox.client.es.engine.graph.composition;
 
-import org.lwjgl.opengl.GL40;
+import org.lwjgl.opengles.GLES30;
 
 import lu.pcy113.pclib.logger.GlobalLogger;
 
@@ -24,30 +24,30 @@ public class RenderBuffer implements UniqueID, Cleanupable, FramebufferAttachmen
 	public void setup() {
 		gen();
 		bind();
-		GL40.glRenderbufferStorage(GL40.GL_RENDERBUFFER, texelFormat.getGlId(), width, height);
-		PDRUtils.checkGlError("RenderbufferStorage["+texelFormat+"]=("+width+","+height+")");
+		GLES30.glRenderbufferStorage(GLES30.GL_RENDERBUFFER, texelFormat.getGlId(), width, height);
+		PDRUtils.checkGlESError("RenderbufferStorage["+texelFormat+"]=("+width+","+height+")");
 	}
 
 	public void bind() {
-		bind(GL40.GL_RENDERBUFFER);
+		bind(GLES30.GL_RENDERBUFFER);
 	}
 
 	public void unbind() {
-		unbind(GL40.GL_RENDERBUFFER);
+		unbind(GLES30.GL_RENDERBUFFER);
 	}
 
 	public void bind(int target) {
-		GL40.glBindRenderbuffer(target, rbid);
-		PDRUtils.checkGlError("BindRenderbuffer["+target+"] = "+rbid);
+		GLES30.glBindRenderbuffer(target, rbid);
+		PDRUtils.checkGlESError("BindRenderbuffer["+target+"] = "+rbid);
 	}
 
 	public void unbind(int target) {
-		GL40.glBindRenderbuffer(target, 0);
-		PDRUtils.checkGlError("BindRenderbuffer["+target+"] = "+rbid);
+		GLES30.glBindRenderbuffer(target, 0);
+		PDRUtils.checkGlESError("BindRenderbuffer["+target+"] = "+rbid);
 	}
 
 	public int gen() {
-		return (rbid = GL40.glGenRenderbuffers());
+		return (rbid = GLES30.glGenRenderbuffers());
 	}
 
 	public TexelFormat getTexelFormat() {
@@ -90,8 +90,8 @@ public class RenderBuffer implements UniqueID, Cleanupable, FramebufferAttachmen
 		if(rbid == -1)
 			return;
 		
-		GL40.glDeleteRenderbuffers(rbid);
-		PDRUtils.checkGlError("DeleteRenderbuffers("+rbid+")");
+		GLES30.glDeleteRenderbuffers(rbid);
+		PDRUtils.checkGlESError("DeleteRenderbuffers("+rbid+")");
 		rbid = -1;
 	}
 	

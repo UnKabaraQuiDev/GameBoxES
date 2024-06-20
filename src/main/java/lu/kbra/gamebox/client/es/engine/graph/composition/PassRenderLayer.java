@@ -5,7 +5,7 @@ import java.util.logging.Level;
 
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-import org.lwjgl.opengl.GL40;
+import org.lwjgl.opengles.GLES30;
 
 import lu.pcy113.pclib.logger.GlobalLogger;
 
@@ -25,7 +25,7 @@ public class PassRenderLayer extends RenderLayer<GameEngine, Framebuffer, Mesh> 
 	public static final String SCREEN_HEIGHT = "screen_height";
 
 	private static Mesh SCREEN = new Mesh("PASS_SCREEN", null, new Vec3fAttribArray("pos", 0, 1, new Vector3f[] { new Vector3f(-1, 1, 0), new Vector3f(1, 1, 0), new Vector3f(1, -1, 0), new Vector3f(-1, -1, 0) }),
-			new UIntAttribArray("ind", -1, 1, new int[] { 0, 1, 2, 0, 2, 3 }, GL40.GL_ELEMENT_ARRAY_BUFFER), new Vec2fAttribArray("uv", 1, 1, new Vector2f[] { new Vector2f(0, 1), new Vector2f(1, 1), new Vector2f(1, 0), new Vector2f(0, 0) }));
+			new UIntAttribArray("ind", -1, 1, new int[] { 0, 1, 2, 0, 2, 3 }, GLES30.GL_ELEMENT_ARRAY_BUFFER), new Vec2fAttribArray("uv", 1, 1, new Vector2f[] { new Vector2f(0, 1), new Vector2f(1, 1), new Vector2f(1, 0), new Vector2f(0, 0) }));
 
 	protected CacheManager cache;
 	protected Material material;
@@ -68,16 +68,16 @@ public class PassRenderLayer extends RenderLayer<GameEngine, Framebuffer, Mesh> 
 		material.bindProperties(cache, this, shader);
 
 		if (shader.isTransparent()) {
-			GL40.glEnable(GL40.GL_BLEND);
-			GL40.glBlendFunc(GL40.GL_SRC_ALPHA, GL40.GL_ONE_MINUS_SRC_ALPHA);
+			GLES30.glEnable(GLES30.GL_BLEND);
+			GLES30.glBlendFunc(GLES30.GL_SRC_ALPHA, GLES30.GL_ONE_MINUS_SRC_ALPHA);
 		}
 
-		GL40.glDisable(GL40.GL_DEPTH_TEST);
+		GLES30.glDisable(GLES30.GL_DEPTH_TEST);
 
-		GL40.glDrawElements(GL40.GL_TRIANGLES, target.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);
+		GLES30.glDrawElements(GLES30.GL_TRIANGLES, target.getIndicesCount(), GLES30.GL_UNSIGNED_INT, 0);
 
-		GL40.glDisable(GL40.GL_BLEND);
-		GL40.glEnable(GL40.GL_DEPTH_TEST);
+		GLES30.glDisable(GLES30.GL_BLEND);
+		GLES30.glEnable(GLES30.GL_DEPTH_TEST);
 
 		target.unbind();
 	}

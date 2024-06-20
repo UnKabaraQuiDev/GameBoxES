@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.opengl.GL40;
+import org.lwjgl.opengles.GLES30;
 
 import lu.pcy113.jbcodec.CodecManager;
 import lu.pcy113.pclib.PCUtils;
@@ -144,7 +144,7 @@ public class GlobalUtils {
 	public static void project(GeoPlane plane, Consumer<Vector2f> consumer, Scene3D scene) {
 		INSTANCE.createTask(GameEngine.QUEUE_RENDER).exec((t) -> {
 			int[] viewport = new int[4];
-			GL40.glGetIntegerv(GL40.GL_VIEWPORT, viewport);
+			GLES30.glGetIntegerv(GLES30.GL_VIEWPORT, viewport);
 			return viewport;
 		}).then((viewport) -> {
 			Ray ray = scene.getCamera().projectRay(new Vector2f(INSTANCE.window.getMousePos()), (int[]) viewport);
@@ -159,7 +159,7 @@ public class GlobalUtils {
 	public static void project(GeoPlane plane, Consumer<Vector3f> consumer, Scene scene) {
 		INSTANCE.createTask(GameEngine.QUEUE_RENDER).exec((t) -> {
 			int[] viewport = new int[4];
-			GL40.glGetIntegerv(GL40.GL_VIEWPORT, viewport);
+			GLES30.glGetIntegerv(GLES30.GL_VIEWPORT, viewport);
 			return viewport;
 		}).then((viewport) -> {
 			Ray ray = scene.getCamera().projectRay(new Vector2f(INSTANCE.window.getMousePos()), (int[]) viewport);
@@ -201,7 +201,6 @@ public class GlobalUtils {
 
 		TextEmitter text = new TextEmitter(name, mat, bufferSize, txt, new Vector2f(0.35f, 0.5f));
 		text.setAlignment(align);
-		text.createDrawBuffer();
 		text.updateText();
 		cache.addTextEmitter(text);
 

@@ -2,7 +2,7 @@ package lu.kbra.gamebox.client.es.engine.geom;
 
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-import org.lwjgl.opengl.GL40;
+import org.lwjgl.opengles.GLES30;
 
 import lu.kbra.gamebox.client.es.engine.cache.attrib.UIntAttribArray;
 import lu.kbra.gamebox.client.es.engine.cache.attrib.Vec2fAttribArray;
@@ -19,7 +19,7 @@ public class CubeMesh extends Mesh {
 						new Vector3f[] { new Vector3f(-1, -1, -1).mul(size.x, size.y, size.z).div(2), new Vector3f(1, -1, -1).mul(size.x, size.y, size.z).div(2), new Vector3f(1, 1, -1).mul(size.x, size.y, size.z).div(2),
 								new Vector3f(-1, 1, -1).mul(size.x, size.y, size.z).div(2), new Vector3f(-1, -1, 1).mul(size.x, size.y, size.z).div(2), new Vector3f(1, -1, 1).mul(size.x, size.y, size.z).div(2),
 								new Vector3f(1, 1, 1).mul(size.x, size.y, size.z).div(2), new Vector3f(-1, 1, 1).mul(size.x, size.y, size.z).div(2) }),
-				new UIntAttribArray("ind", -1, 1, new int[] { 0, 1, 2, 2, 3, 0, 1, 5, 6, 6, 2, 1, 7, 6, 5, 5, 4, 7, 4, 0, 3, 3, 7, 4, 4, 5, 1, 1, 0, 4, 3, 2, 6, 6, 7, 3 }, GL40.GL_ELEMENT_ARRAY_BUFFER),
+				new UIntAttribArray("ind", -1, 1, new int[] { 0, 1, 2, 2, 3, 0, 1, 5, 6, 6, 2, 1, 7, 6, 5, 5, 4, 7, 4, 0, 3, 3, 7, 4, 4, 5, 1, 1, 0, 4, 3, 2, 6, 6, 7, 3 }, GLES30.GL_ELEMENT_ARRAY_BUFFER),
 				new Vec3fAttribArray("normal", 1, 1,
 						new Vector3f[] { new Vector3f(-1, -1, -1).normalize(), new Vector3f(1, -1, -1).normalize(), new Vector3f(1, 1, -1).normalize(), new Vector3f(-1, 1, -1).normalize(), new Vector3f(-1, -1, 1).normalize(),
 								new Vector3f(1, -1, 1).normalize(), new Vector3f(1, 1, 1).normalize(), new Vector3f(-1, 1, 1).normalize() }),

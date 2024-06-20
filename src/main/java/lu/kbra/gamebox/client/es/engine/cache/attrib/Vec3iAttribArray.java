@@ -3,7 +3,7 @@ package lu.kbra.gamebox.client.es.engine.cache.attrib;
 import java.util.Arrays;
 
 import org.joml.Vector3i;
-import org.lwjgl.opengl.GL40;
+import org.lwjgl.opengles.GLES30;
 
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 
@@ -38,9 +38,9 @@ public class Vec3iAttribArray extends AttribArray {
 
 	@Override
 	public void init() {
-		GL40.glBufferData(bufferType, toFlatArray(), iStatic ? GL40.GL_STATIC_DRAW : GL40.GL_DYNAMIC_DRAW);
-		if (bufferType != GL40.GL_ELEMENT_ARRAY_BUFFER)
-			GL40.glVertexAttribPointer(index, dataSize, GL40.GL_INT, false, 0, 0);
+		GLES30.glBufferData(bufferType, toFlatArray(), iStatic ? GLES30.GL_STATIC_DRAW : GLES30.GL_DYNAMIC_DRAW);
+		if (bufferType != GLES30.GL_ELEMENT_ARRAY_BUFFER)
+			GLES30.glVertexAttribPointer(index, dataSize, GLES30.GL_INT, false, 0, 0);
 	}
 
 	public boolean update(Vector3i[] nPos) {
@@ -48,8 +48,8 @@ public class Vec3iAttribArray extends AttribArray {
 			throw new IllegalArgumentException("Array's size cannot change");
 		data = nPos;
 
-		GL40.glBufferSubData(GL40.GL_ARRAY_BUFFER, 0, toFlatArray());
-		return PDRUtils.checkGlError();
+		GLES30.glBufferSubData(GLES30.GL_ARRAY_BUFFER, 0, toFlatArray());
+		return PDRUtils.checkGlESError();
 	}
 
 	@Override

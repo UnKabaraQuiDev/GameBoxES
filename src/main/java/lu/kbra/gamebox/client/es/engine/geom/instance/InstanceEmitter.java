@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 import java.util.logging.Level;
 
 import org.joml.Matrix4f;
-import org.lwjgl.opengl.GL15;
+import org.lwjgl.opengles.GLES30;
 
 import lu.pcy113.pclib.logger.GlobalLogger;
 
@@ -47,7 +47,7 @@ public class InstanceEmitter implements Renderable, Cleanupable, UniqueID {
 			transforms[i] = this.particles[i].getTransform().getMatrix();
 		}
 
-		this.instancesTransforms = new Mat4fAttribArray("transforms", 3, 1, transforms, GL15.GL_ARRAY_BUFFER, false, 1);
+		this.instancesTransforms = new Mat4fAttribArray("transforms", 3, 1, transforms, GLES30.GL_ARRAY_BUFFER, false, 1);
 
 		this.instancesAttribs = attribs;
 		this.instanceMesh = mesh;
@@ -96,7 +96,7 @@ public class InstanceEmitter implements Renderable, Cleanupable, UniqueID {
 				GlobalLogger.log(Level.WARNING, "Failed to update attrib array: " + this.instancesAttribs[c].getName());
 			}
 		}
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+		GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, 0);
 	}
 
 	public void updateDirect(Matrix4f[] transforms, Object[][] atts) {
@@ -115,7 +115,7 @@ public class InstanceEmitter implements Renderable, Cleanupable, UniqueID {
 			/*else
 				GlobalLogger.info("Updated attrib array: " + this.instancesAttribs[c].getName() + " (" + this.instancesAttribs[c].getIndex() + ") for " + this.getId());*/
 		}
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+		GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, 0);
 	}
 
 	public void updateParticles() {
@@ -139,18 +139,9 @@ public class InstanceEmitter implements Renderable, Cleanupable, UniqueID {
 				GlobalLogger.log(Level.WARNING, "Failed to update attrib array: " + this.instancesAttribs[c].getName());
 			}
 		}
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+		GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, 0);
 	}
 	
-	public void createDrawBuffer() {
-		Mesh quad = getParticleMesh();
-
-		quad.createDrawBuffer();
-		quad.getDrawBuffer().bind();
-		quad.getDrawBuffer().setInstancesCount(getParticleCount());
-		quad.getDrawBuffer().unbind();
-	}
-
 
 	public void updateParticlesTransforms() {
 		Matrix4f[] transforms = new Matrix4f[this.count];
@@ -163,7 +154,7 @@ public class InstanceEmitter implements Renderable, Cleanupable, UniqueID {
 			GlobalLogger.log(Level.WARNING, "Could not update transforms");
 		}
 
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+		GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, 0);
 	}
 
 	public void bind() {

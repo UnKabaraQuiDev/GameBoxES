@@ -8,7 +8,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-import org.lwjgl.opengl.GL40;
+import org.lwjgl.opengles.GLES30;
 
 import lu.pcy113.pclib.datastructure.pair.Pair;
 import lu.pcy113.pclib.logger.GlobalLogger;
@@ -45,8 +45,6 @@ public class DebugOptions implements Cleanupable {
 
 		gizmoXYZ.bind();
 
-		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_LINE);
-
 		GizmoMaterial deb;
 		if (cache.hasMaterial(GizmoShader.GizmoMaterial.NAME)) {
 			deb = (GizmoMaterial) cache.getMaterial(GizmoShader.GizmoMaterial.NAME);
@@ -66,13 +64,12 @@ public class DebugOptions implements Cleanupable {
 		deb.bindProperties(cache, scene, debShader);
 
 		if (GameEngine.DEBUG.ignoreDepth)
-			GL40.glDisable(GL40.GL_DEPTH_TEST);
+			GLES30.glDisable(GLES30.GL_DEPTH_TEST);
 
-		GL40.glLineWidth(2.5f);
-		GL40.glDrawElements(GL40.GL_LINES, gizmoXYZ.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);
+		GLES30.glLineWidth(2.5f);
+		GLES30.glDrawElements(GLES30.GL_LINES, gizmoXYZ.getIndicesCount(), GLES30.GL_UNSIGNED_INT, 0);
 
-		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_FILL);
-		GL40.glEnable(GL40.GL_DEPTH_TEST);
+		GLES30.glEnable(GLES30.GL_DEPTH_TEST);
 
 		gizmoXYZ.unbind();
 	}
@@ -84,7 +81,6 @@ public class DebugOptions implements Cleanupable {
 		if (!wireframe)
 			return;
 
-		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_LINE);
 		Material deb = cache.getMaterial(WireframeMaterial.NAME);
 		if (deb == null) {
 			WireframeShader shader = new WireframeShader();
@@ -105,19 +101,17 @@ public class DebugOptions implements Cleanupable {
 		deb.bindProperties(cache, scene, debShader);
 
 		if (GameEngine.DEBUG.ignoreDepth)
-			GL40.glDisable(GL40.GL_DEPTH_TEST);
+			GLES30.glDisable(GLES30.GL_DEPTH_TEST);
 
-		GL40.glDrawElements(GL40.GL_TRIANGLES, mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);
+		GLES30.glDrawElements(GLES30.GL_TRIANGLES, mesh.getIndicesCount(), GLES30.GL_UNSIGNED_INT, 0);
 
-		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_FILL);
-		GL40.glEnable(GL40.GL_DEPTH_TEST);
+		GLES30.glEnable(GLES30.GL_DEPTH_TEST);
 	}
 
 	public void pointWireframe(CacheManager cache, Scene scene, Mesh mesh, Matrix4f projectionMatrix, Matrix4f viewMatrix, Matrix4f transformationMatrix) {
 		if (!wireframe)
 			return;
 
-		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_POINT);
 		Material deb = cache.getMaterial(WireframeMaterial.NAME);
 		if (deb == null) {
 			WireframeShader shader = new WireframeShader();
@@ -135,12 +129,11 @@ public class DebugOptions implements Cleanupable {
 		deb.bindProperties(cache, scene, debShader);
 
 		if (GameEngine.DEBUG.ignoreDepth)
-			GL40.glDisable(GL40.GL_DEPTH_TEST);
+			GLES30.glDisable(GLES30.GL_DEPTH_TEST);
 
-		GL40.glDrawElements(GL40.GL_POINTS, mesh.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);
+		GLES30.glDrawElements(GLES30.GL_POINTS, mesh.getIndicesCount(), GLES30.GL_UNSIGNED_INT, 0);
 
-		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_FILL);
-		GL40.glEnable(GL40.GL_DEPTH_TEST);
+		GLES30.glEnable(GLES30.GL_DEPTH_TEST);
 	}
 
 	public void boundingRect(CacheManager cache, Scene scene, Matrix4f projectionMatrix, Matrix4f viewMatrix, Matrix4f modelMatrix, Vector2f boxSize) {
@@ -152,8 +145,6 @@ public class DebugOptions implements Cleanupable {
 		}
 
 		gizmoRect.bind();
-
-		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_LINE);
 
 		GizmoMaterial deb;
 		if (cache.hasMaterial(GizmoShader.GizmoMaterial.NAME)) {
@@ -174,13 +165,12 @@ public class DebugOptions implements Cleanupable {
 		deb.bindProperties(cache, scene, debShader);
 
 		if (GameEngine.DEBUG.ignoreDepth)
-			GL40.glDisable(GL40.GL_DEPTH_TEST);
+			GLES30.glDisable(GLES30.GL_DEPTH_TEST);
 
-		GL40.glLineWidth(2.5f);
-		GL40.glDrawElements(GL40.GL_LINES, gizmoRect.getIndicesCount(), GL40.GL_UNSIGNED_INT, 0);
+		GLES30.glLineWidth(2.5f);
+		GLES30.glDrawElements(GLES30.GL_LINES, gizmoRect.getIndicesCount(), GLES30.GL_UNSIGNED_INT, 0);
 
-		GL40.glPolygonMode(GL40.GL_FRONT_AND_BACK, GL40.GL_FILL);
-		GL40.glEnable(GL40.GL_DEPTH_TEST);
+		GLES30.glEnable(GLES30.GL_DEPTH_TEST);
 
 		gizmoRect.unbind();
 	}

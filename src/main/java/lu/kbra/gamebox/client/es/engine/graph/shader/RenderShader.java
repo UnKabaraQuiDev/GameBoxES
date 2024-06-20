@@ -4,7 +4,6 @@ import lu.kbra.gamebox.client.es.engine.impl.shader.AbstractShader;
 import lu.kbra.gamebox.client.es.engine.impl.shader.AbstractShaderPart;
 import lu.kbra.gamebox.client.es.engine.utils.consts.BeginMode;
 import lu.kbra.gamebox.client.es.engine.utils.consts.FaceMode;
-import lu.kbra.gamebox.client.es.engine.utils.consts.RenderType;
 public abstract class RenderShader extends AbstractShader {
 
 	public static final String PROJECTION_MATRIX = "projectionMatrix";
@@ -13,7 +12,6 @@ public abstract class RenderShader extends AbstractShader {
 	public static final String VIEW_POSITION = "viewPos";
 
 	protected boolean transparent;
-	protected RenderType renderType = RenderType.FILL;
 	protected BeginMode beginMode = BeginMode.TRIANGLES;
 	protected FaceMode faceMode = FaceMode.FRONT_AND_BACK;
 
@@ -42,16 +40,8 @@ public abstract class RenderShader extends AbstractShader {
 		this.transparent = transparent;
 	}
 
-	public RenderType getRenderType() {
-		return renderType;
-	}
-
 	public BeginMode getBeginMode() {
 		return beginMode;
-	}
-
-	public void setRenderType(RenderType renderType) {
-		this.renderType = renderType;
 	}
 
 	public void setBeginMode(BeginMode beginMode) {
