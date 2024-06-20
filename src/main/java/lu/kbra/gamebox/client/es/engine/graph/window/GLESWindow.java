@@ -36,9 +36,6 @@ public class GLESWindow extends Window {
 
 		GLFW.glfwMakeContextCurrent(handle);
 
-		if ((this.capabilities = GLES.createCapabilities()) == null)
-			throw new RuntimeException("Failed to create OpenGLES context");
-
 		GLFW.glfwDefaultWindowHints();
 		GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);
 		GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 2);
@@ -46,6 +43,10 @@ public class GLESWindow extends Window {
 		GLFW.glfwWindowHint(GLFW.GLFW_CLIENT_API, GLFW.GLFW_OPENGL_ES_API);
 		GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_PROFILE, GLFW.GLFW_OPENGL_ANY_PROFILE);
 		GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_FORWARD_COMPAT, GLFW.GLFW_TRUE);
+
+		if ((this.capabilities = GLES.createCapabilities()) == null)
+			throw new RuntimeException("Failed to create OpenGLES context");
+
 		if (options.windowMultisample > 1) {
 			GLES20.glEnable(GL40.GL_MULTISAMPLE);
 			GLFW.glfwWindowHint(GLFW.GLFW_SAMPLES, options.windowMultisample);
@@ -77,7 +78,7 @@ public class GLESWindow extends Window {
 	@Override
 	public void cleanupGLFW() {
 		GlobalLogger.log("Cleaning up: " + getClass().getName() + " (" + handle + ")");
-		
+
 		if (handle != -1) {
 			Callbacks.glfwFreeCallbacks(handle);
 			GLFW.glfwDestroyWindow(handle);
