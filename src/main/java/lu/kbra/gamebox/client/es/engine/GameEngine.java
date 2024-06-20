@@ -291,7 +291,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 
 		this.cache = new SharedCacheManager("GameEngineMain");
 
-		this.window = new GLWindow(this.windowOptions);
+		this.window = new GLESWindow(this.windowOptions);
 
 		this.window.runCallbacks();
 		this.window.clearGLContext();
