@@ -24,11 +24,11 @@ public class GLESWindow extends Window {
 
 	@Override
 	protected void init() {
-		errorCallback = GLFWErrorCallback.createPrint(System.err);
-		errorCallback.set();
-
 		if (!GLFW.glfwInit())
 			throw new RuntimeException("Failed to initialize GLFW");
+
+		errorCallback = GLFWErrorCallback.createPrint(System.err);
+		errorCallback.set();
 
 		monitor = getQualifiedMonitor();
 
@@ -43,9 +43,7 @@ public class GLESWindow extends Window {
 		GLFW.glfwWindowHint(GLFW.GLFW_CLIENT_API, GLFW.GLFW_OPENGL_ES_API);
 		GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_PROFILE, GLFW.GLFW_OPENGL_ANY_PROFILE);
 		GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_FORWARD_COMPAT, GLFW.GLFW_TRUE);
-		
-		GLES.create();
-		
+
 		if ((this.capabilities = GLES.createCapabilities()) == null)
 			throw new RuntimeException("Failed to create OpenGLES context");
 
