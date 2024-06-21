@@ -32,7 +32,7 @@ vec3 hash33(vec3 src) {
 
 
 void main() {
-	float angle = hash33(vec3(float(i_scale*10))).x;
+	float angle = hash33(vec3(float(i_scale*10.0))).x;
 	
 	float c = cos(angle);
 	float s = sin(angle);

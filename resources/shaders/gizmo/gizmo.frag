@@ -10,8 +10,5 @@ out vec4 fragColor;
 void main()
 {
 
-	fragColor = mix(color, vec4(0, 0, 0, 0), float(length(fragPos - camPos) > 25));
-	/*fragColor = vec4(fragPos, 1);
-	fragColor = vec4(camPos, 1);
-	fragColor = vec4(mix(fragPos, camPos, float(length(fragPos - camPos) < 5)), 1);*/
+	fragColor = mix(color, vec4(0.0), float(length(fragPos - camPos) > 25.0));
 }

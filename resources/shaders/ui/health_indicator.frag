@@ -47,7 +47,7 @@ void main() {
 		fragColor = mix(BAR_GREEN, mix(BAR_RED, BAR_BG, intMap > progressRed ? 1.0f : 0.0f), intMap > progressGreen ? 1.0f : 0.0f);
 	}
 	
-	if(fragColor.a == 0) {
+	if(fragColor.a == 0.0) {
 		discard;
 	}
 }

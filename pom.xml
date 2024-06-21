@@ -16,6 +16,7 @@
 		<steamworks4j.version>1.9.0</steamworks4j.version>
 		<joml.version>1.10.5</joml.version>
 		<lwjgl.natives>natives-linux</lwjgl.natives>
+		<native.path>libs/natives/lwjgl/x64</native.path>
 	</properties>
 
 	<profiles>
@@ -47,6 +48,7 @@
 			<id>arm64</id>
 			<properties>
 				<lwjgl.natives>natives-linux-arm64</lwjgl.natives>
+				<native.path>libs/natives/lwjgl/arm64</native.path>
 			</properties>
 		</profile>
 	</profiles>
@@ -60,38 +62,18 @@
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>
-			<dependency>
-				<groupId>ant</groupId>
-				<artifactId>ant-nodeps</artifactId>
-				<version>1.10.11</version>
-			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.lwjgl</groupId>
-			<artifactId>lwjgl</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.lwjgl</groupId>
-			<artifactId>lwjgl-assimp</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.lwjgl</groupId>
-			<artifactId>lwjgl-glfw</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.lwjgl</groupId>
-			<artifactId>lwjgl-openal</artifactId>
-		</dependency>
+		<!-- Java dependencies-->
 		<dependency>
 			<groupId>org.lwjgl</groupId>
 			<artifactId>lwjgl-opengles</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.lwjgl</groupId>
-			<artifactId>lwjgl-stb</artifactId>
+			<artifactId>lwjgl-openal</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.lwjgl</groupId>
@@ -100,11 +82,42 @@
 		<dependency>
 			<groupId>org.lwjgl</groupId>
 			<artifactId>lwjgl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.lwjgl</groupId>
+			<artifactId>lwjgl-glfw</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.lwjgl</groupId>
+			<artifactId>lwjgl-openal</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.lwjgl</groupId>
+			<artifactId>lwjgl-opengl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.lwjgl</groupId>
+			<artifactId>lwjgl-stb</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.lwjgl</groupId>
+			<artifactId>lwjgl-egl</artifactId>
+		</dependency>
+		
+		<!-- Natives dependencies-->
+		<dependency>
+			<groupId>org.lwjgl</groupId>
+			<artifactId>lwjgl-opengles</artifactId>
 			<classifier>${lwjgl.natives}</classifier>
 		</dependency>
 		<dependency>
 			<groupId>org.lwjgl</groupId>
-			<artifactId>lwjgl-assimp</artifactId>
+			<artifactId>lwjgl-opengl</artifactId>
+			<classifier>${lwjgl.natives}</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.lwjgl</groupId>
+			<artifactId>lwjgl</artifactId>
 			<classifier>${lwjgl.natives}</classifier>
 		</dependency>
 		<dependency>
@@ -119,20 +132,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.lwjgl</groupId>
-			<artifactId>lwjgl-freetype</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.lwjgl</groupId>
 			<artifactId>lwjgl-opengl</artifactId>
-			<classifier>${lwjgl.natives}</classifier>
-		</dependency>
-		<dependency>
-			<groupId>org.lwjgl</groupId>
-			<artifactId>lwjgl-egl</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.lwjgl</groupId>
-			<artifactId>lwjgl-freetype</artifactId>
 			<classifier>${lwjgl.natives}</classifier>
 		</dependency>
 		<dependency>
@@ -140,6 +140,7 @@
 			<artifactId>lwjgl-stb</artifactId>
 			<classifier>${lwjgl.natives}</classifier>
 		</dependency>
+		
 		<dependency>
 			<groupId>com.code-disaster.steamworks4j</groupId>
 			<artifactId>steamworks4j-server</artifactId>

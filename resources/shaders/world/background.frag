@@ -18,5 +18,5 @@ uniform vec3 viewPos;
 uniform sampler2D txt1;
 
 void main() {
-	fragColor = texture(txt1, vertex.uv+viewPos.xy/60);
+	fragColor = texture(txt1, vertex.uv+viewPos.xy/60.0);
 }
