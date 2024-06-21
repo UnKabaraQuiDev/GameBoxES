@@ -8,7 +8,7 @@ layout (location = 3) in mat4 i_transform;
 layout (location = 7) in uint i_char;
 
 flat out struct per_instance {
-	uint index;
+	int index;
 	uint character;
 } instance;
 

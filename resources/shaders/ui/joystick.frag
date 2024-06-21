@@ -14,17 +14,17 @@ uniform float threshold;
 uniform float button;
 
 void main() {
-	vec2 correctUv = (texCoord-vec2(0.5, 0.5))*2;
+	vec2 correctUv = (texCoord-vec2(0.5, 0.5))*2.0;
 	float leng = length(correctUv);
 
-	if(distance(correctUv, position) < radius+(button*2*radius)) {
+	if(distance(correctUv, position) < radius+(button*2.0*radius)) {
 		fragColor = color;
 		return;
 	}
 	if(leng < threshold) {
-		fragColor = vec4(vec3(0.3), 1);
-	}else if(leng < 1+radius/2 && leng > 1-radius/2) {
-		fragColor = vec4(vec3(0.8), 1);
+		fragColor = vec4(vec3(0.3), 1.0);
+	}else if(leng < 1.0+radius/2.0 && leng > 1.0-radius/2.0) {
+		fragColor = vec4(vec3(0.8), 1.0);
 	}else {
 		discard;
 	}

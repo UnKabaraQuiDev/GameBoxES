@@ -15,20 +15,17 @@ uniform float threshold;
 void main() {
 	float uv = texCoord.y;
 
-	if(abs(uv-value) < radius/2) {
+	if(abs(uv-value) < radius/2.0) {
 		fragColor = color;
 		return;
 	}
 
 	if(abs(texCoord.x-0.5) < radius) {
-		fragColor = vec4(vec3(0.8), 1);
+		fragColor = vec4(vec3(0.8), 1.0);
 	}else if (uv < threshold) {
-		fragColor = vec4(vec3(0.2), 1);
+		fragColor = vec4(vec3(0.2), 1.0);
 	}else {
 		discard;
 	}
 	
-	// fragColor += vec4(texCoord, 0, 1);
-
-	//fragColor = vec4(uv, abs(uv-value) < radius/2, abs(texCoord.x-0.5)<radius, 1);
 }

@@ -2,7 +2,7 @@
 precision mediump float;
 
 flat in struct per_instance {
-	uint index;
+	int index;
 	uint character;
 } instance;
 
@@ -13,8 +13,8 @@ in struct per_Vertex {
 	vec3 normal;
 } vertex;
 
-#define CHAR_START 32.0
-#define CHAR_COUNT 95.0 //255
+#define CHAR_START 32f
+#define CHAR_COUNT 95f //255
 
 out vec4 fragColor;
 
@@ -32,12 +32,13 @@ void main() {
 	vec4 mask = texture(
 			txt1,
 			vec2(
-					vertex.uv.x*(1.0/CHAR_COUNT)+(float(instance.character-CHAR_START)/CHAR_COUNT),
-					vertex.uv.y
+					vertex.uv*vec2(
+					1.0/95.0+((float(instance.character)-32.0)/95.0),
+					1)
 			)
 	);
 
-	if(mask.a == 0 && transparent) {
+	if(mask.a == 0.0 && transparent) {
 		discard;
 	}
 

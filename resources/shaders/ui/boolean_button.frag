@@ -13,13 +13,13 @@ uniform float value;
 #define thickness 0.05
 
 void main() {
-	vec2 correctUv = (texCoord-vec2(0.5, 0.5))*2;
+	vec2 correctUv = (texCoord-vec2(0.5, 0.5))*2.0;
 	vec2 absoluteUv = abs(correctUv);
 
-	if(value != 0) {
+	if(value != 0.0) {
 		fragColor = color;
-	} else if(abs(absoluteUv.x-1) < thickness || abs(absoluteUv.y-1) < thickness) {
-		fragColor = vec4(1);
+	} else if(abs(absoluteUv.x-1.0) < thickness || abs(absoluteUv.y-1.0) < thickness) {
+		fragColor = vec4(1.0);
 	} else {
 		discard;
 	}
