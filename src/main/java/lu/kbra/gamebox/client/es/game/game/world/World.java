@@ -70,7 +70,7 @@ public class World implements Cleanupable {
 	private static final float Y_OFFSET = 0.0001f;
 	public static final int GEN_CIRCLE_SIZE = 1;
 
-	private static final float ATTRACT_DISTANCE = 3f;
+	private static final float ATTRACT_DISTANCE = 2.5f;
 	private static final float PLANT_EAT_DISTANCE = 2f;
 	private static final float CELL_EAT_DISTANCE = 3f;
 	private static final float CELLS_MOV_SPEED = 1f;

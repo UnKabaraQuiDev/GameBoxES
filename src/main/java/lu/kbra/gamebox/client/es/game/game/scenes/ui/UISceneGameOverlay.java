@@ -86,11 +86,10 @@ public class UISceneGameOverlay extends UISceneState {
 		glucoseText = GlobalUtils.createUIText(cache, "glucoseText", 4, "0000", Alignment.TEXT_RIGHT).getTextEmitter(cache);
 		lipidText = GlobalUtils.createUIText(cache, "lipidText", 4, "0000", Alignment.TEXT_RIGHT).getTextEmitter(cache);
 		materialList.addComponent(new SubEntitiesComponent(
-				new Entity("glucoseText", new TextEmitterComponent(glucoseText), new Transform3DComponent(new Vector3f(-3f, -2.25f, GlobalConsts.UI_OVER_COMPONENTS_HEIGHT)), new RenderComponent(GlobalConsts.UI_OVER_COMPONENTS_HEIGHT)),
-				new Entity("lipidText", new TextEmitterComponent(lipidText), new Transform3DComponent(new Vector3f(-3f, -2.7f, GlobalConsts.UI_OVER_COMPONENTS_HEIGHT)), new RenderComponent(GlobalConsts.UI_OVER_COMPONENTS_HEIGHT))));
+				new Entity("glucoseText", new TextEmitterComponent(glucoseText), new Transform3DComponent(new Vector3f(-3f, -2.25f, GlobalConsts.UI_OVER_COMPONENTS_HEIGHT))),
+				new Entity("lipidText", new TextEmitterComponent(lipidText), new Transform3DComponent(new Vector3f(-3f, -2.7f, GlobalConsts.UI_OVER_COMPONENTS_HEIGHT))),
+				new Entity("aminoAcidText", new TextEmitterComponent(aminoAcidText), new Transform3DComponent(new Vector3f(-3f, -1.8f, GlobalConsts.UI_OVER_COMPONENTS_HEIGHT)))));
 
-		scene.addEntity(
-				new Entity("aminoAcidText", new TextEmitterComponent(aminoAcidText), new Transform3DComponent(new Vector3f(-3f, -1.8f, GlobalConsts.UI_OVER_COMPONENTS_HEIGHT)), new RenderComponent(GlobalConsts.UI_OVER_COMPONENTS_HEIGHT)));
 
 		// health indicator - - -
 		Mesh healthIndicatorMesh = GlobalUtils.loadCompiledMesh(cache, "healthIndicator", () -> {
