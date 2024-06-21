@@ -103,7 +103,7 @@ public class DebugOptions implements Cleanupable {
 		if (GameEngine.DEBUG.ignoreDepth)
 			GLES30.glDisable(GLES30.GL_DEPTH_TEST);
 
-		GLES30.glDrawElements(GLES30.GL_TRIANGLES, mesh.getIndicesCount(), GLES30.GL_UNSIGNED_INT, 0);
+		GLES30.glDrawElements(GLES30.GL_LINES, mesh.getIndicesCount(), GLES30.GL_UNSIGNED_INT, 0);
 
 		GLES30.glEnable(GLES30.GL_DEPTH_TEST);
 	}

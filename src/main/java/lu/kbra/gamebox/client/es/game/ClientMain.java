@@ -38,7 +38,7 @@ public class ClientMain {
 			options.fullscreen = false;
 			options.vsync = false;
 			options.fps = 60;
-			options.windowMultisample = 8;
+			options.windowMultisample = 0;
 			
 			GameBoxES gbes = new GameBoxES();
 			

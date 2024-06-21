@@ -2,6 +2,8 @@ package lu.kbra.gamebox.client.es.engine.graph.material.wireframe;
 
 import lu.kbra.gamebox.client.es.engine.graph.shader.RenderShader;
 import lu.kbra.gamebox.client.es.engine.impl.shader.AbstractShaderPart;
+import lu.kbra.gamebox.client.es.engine.utils.consts.BeginMode;
+import lu.kbra.gamebox.client.es.engine.utils.consts.FaceMode;
 
 public class WireframeShader extends RenderShader {
 
@@ -11,6 +13,9 @@ public class WireframeShader extends RenderShader {
 
 	public WireframeShader() {
 		super(NAME, AbstractShaderPart.load("./resources/shaders/debug/debug.vert"), AbstractShaderPart.load("./resources/shaders/debug/debug.frag"));
+
+		super.setFaceMode(FaceMode.FRONT_AND_BACK);
+		super.setBeginMode(BeginMode.LINES);
 	}
 
 	@Override
