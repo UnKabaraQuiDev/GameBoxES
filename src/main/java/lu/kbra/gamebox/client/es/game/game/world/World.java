@@ -43,9 +43,9 @@ import lu.kbra.gamebox.client.es.engine.utils.transform.Transform3D;
 import lu.kbra.gamebox.client.es.game.game.data.Achievements;
 import lu.kbra.gamebox.client.es.game.game.data.CellDescriptor;
 import lu.kbra.gamebox.client.es.game.game.data.CellType;
-import lu.kbra.gamebox.client.es.game.game.render.shaders.CellShader;
-import lu.kbra.gamebox.client.es.game.game.render.shaders.CellShader.CellMaterial;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.PlantWorldParticleMaterial;
+import lu.kbra.gamebox.client.es.game.game.render.shaders.PlayerCellShader;
+import lu.kbra.gamebox.client.es.game.game.render.shaders.PlayerCellShader.PlayerCellMaterial;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.ToxinWorldParticleMaterial;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.WorldParticleShader;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.WorldScene3D;
@@ -53,6 +53,7 @@ import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.CellEntity;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.CellInstanceEmitter;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.CellsEntity;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.PlantsEntity;
+import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.PlayerEntity;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.ToxinsEntity;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.WorldParticleEmitter;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
@@ -110,7 +111,7 @@ public class World implements Cleanupable {
 	private WorldScene3D scene;
 	private CacheManager cache;
 
-	private CellEntity player;
+	private PlayerEntity player;
 
 	private int updateFrameCount;
 
@@ -124,12 +125,15 @@ public class World implements Cleanupable {
 		this.fertilityGen = new NoiseGenerator(seed + SEED_OFFSET_FERTILITY, 32);
 		this.humidityGen = new NoiseGenerator(seed + SEED_OFFSET_HUMIDITY, 64);
 
-		CellMaterial playerMaterial = cache.loadOrGetMaterial("playerMaterial", CellShader.CellMaterial.class, CellType.PLAYER.name(),
-				cache.loadOrGetSingleTexture(CellShader.CellMaterial.PLAYER_TEXTURE_NAME, CellShader.CellMaterial.PLAYER_TEXTURE_PATH));
+		PlayerCellMaterial playerMaterial = cache.loadOrGetMaterial("playerMaterial", PlayerCellShader.PlayerCellMaterial.class, CellType.PLAYER.name(),
+				cache.loadOrGetSingleTexture(PlayerCellShader.PlayerCellMaterial.PLAYER_TEXTURE_NAME, PlayerCellShader.PlayerCellMaterial.PLAYER_TEXTURE_PATH, TextureFilter.NEAREST),
+				cache.loadOrGetSingleTexture(PlayerCellShader.PlayerCellMaterial.PLAYER_OVERLAY_TEXTURE_NAME, PlayerCellShader.PlayerCellMaterial.PLAYER_OVERLAY_TEXTURE_PATH, TextureFilter.NEAREST));
 		Mesh playerMesh = cache.newQuadMesh("playerMesh", playerMaterial, new Vector2f(2.5f * 2));
-		this.player = new CellEntity("player", cache, playerMesh, new CellDescriptor("player", CellType.PLAYER, "noname", null, null, null, 1, 0, 0, 0), new Vector3f(0, 0, 1.5f));
+		this.player = new PlayerEntity("player", cache, playerMesh, new CellDescriptor("player", CellType.PLAYER, "noname", null, null, null, 1, 0, 0, 0), new Vector3f(0, 0, 1.5f));
 		player.addComponent(new RenderComponent(4));
 		scene.addEntity(player);
+		
+		player.getPlayerMaterial(cache).setDamage(3);
 
 		cellDescriptorPool = loadCellDescriptorPool();
 		GlobalLogger.info(cellDescriptorPool.toString());
@@ -495,8 +499,9 @@ public class World implements Cleanupable {
 	private List<Entity> genToxins_render(Vector2f ce, List<Vector2f> toxins) {
 		final Vector2f center = new Vector2f(ce);
 
-		WorldParticleEmitter emit = new WorldParticleEmitter("toxins-" + center, toxins.size(), (ToxinWorldParticleMaterial) cache.loadOrGetMaterial(ToxinWorldParticleMaterial.NAME, ToxinWorldParticleMaterial.class,
-				cache.loadOrGetRenderShader(WorldParticleShader.NAME, WorldParticleShader.class), cache.loadOrGetSingleTexture(ToxinWorldParticleMaterial.TEXTURE_NAME, ToxinWorldParticleMaterial.TEXTURE_PATH, TextureFilter.LINEAR)),
+		WorldParticleEmitter emit = new WorldParticleEmitter(
+				"toxins-" + center, toxins.size(), (ToxinWorldParticleMaterial) cache.loadOrGetMaterial(ToxinWorldParticleMaterial.NAME, ToxinWorldParticleMaterial.class,
+						cache.loadOrGetRenderShader(WorldParticleShader.NAME, WorldParticleShader.class), cache.loadOrGetSingleTexture(ToxinWorldParticleMaterial.TEXTURE_NAME, ToxinWorldParticleMaterial.TEXTURE_PATH, TextureFilter.LINEAR)),
 				new Transform3D());
 		cache.addMesh(emit.getParticleMesh());
 		cache.addInstanceEmitter(emit);
@@ -509,7 +514,7 @@ public class World implements Cleanupable {
 
 			((Transform3D) part.getTransform()).getTranslation().set(pos.x, pos.y, Y_OFFSET * i);
 			((Transform3D) part.getTransform()).updateMatrix();
-			part.getBuffers()[0] = Math.clamp(0.6f, 10f, hostilityGen.noise(pos)*10);
+			part.getBuffers()[0] = Math.clamp(0.6f, 10f, hostilityGen.noise(pos) * 10);
 		}
 
 		emit.updateParticles();
@@ -655,7 +660,7 @@ public class World implements Cleanupable {
 		this.dragForce = dragForce;
 	}
 
-	public void setPlayer(CellEntity player) {
+	public void setPlayer(PlayerEntity player) {
 		this.player = player;
 	}
 
