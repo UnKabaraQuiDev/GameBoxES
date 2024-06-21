@@ -21,7 +21,7 @@ public final class GlobalConsts {
 	public static final float PLAYER_CELL_HEIGHT = -0.1f;
 	public static final float TOXINS_HEIGHT = 0f;
 	
-	public static final float UI_BG_HEIGHT = 1.6f;
+	public static final float UI_BG_HEIGHT = 1f;
 	public static final float UI_COMPONENTS_HEIGHT = 1.7f;
 	public static final float UI_OVER_COMPONENTS_HEIGHT = 1.9f;
 

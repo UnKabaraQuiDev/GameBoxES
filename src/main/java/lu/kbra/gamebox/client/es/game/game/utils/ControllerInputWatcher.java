@@ -24,7 +24,7 @@ public class ControllerInputWatcher {
 	private float highThreshold = 0.6f;
 
 	private Button button = Button.NONE;
-	private boolean waitingForNoneButton = true;
+	private boolean waitingForNoneButton = true, skipWaitingForNone = false;
 	private long lastDirection;
 
 	public void updateButton(GLFWGamepadState gps) {
@@ -40,7 +40,7 @@ public class ControllerInputWatcher {
 		jsaxis = new byte[] { yBtn, bBtn, aBtn, xBtn };
 		int dir = MathUtils.greatestAbsIndex(jsaxis);
 
-		if (waitingForNoneButton && !(xBtn == 0 && aBtn == 0 && bBtn == 0 && yBtn == 0)) {
+		if (!skipWaitingForNone && waitingForNoneButton && !(xBtn == 0 && aBtn == 0 && bBtn == 0 && yBtn == 0)) {
 			return;
 		} else {
 			waitingForNoneButton = false;
@@ -48,7 +48,29 @@ public class ControllerInputWatcher {
 		}
 
 		button = Button.getByIndex(dir);
-		if(xBtn == 0 && aBtn == 0 && bBtn == 0 && yBtn == 0) {
+		if (xBtn == 0 && aBtn == 0 && bBtn == 0 && yBtn == 0) {
+			button = Button.NONE;
+		}
+	}
+
+	public void updateButton(Window window) {
+		byte xBtn = (byte) (window.isKeyPressed(GLFW.GLFW_KEY_Q) ? 1 : 0);
+		byte aBtn = (byte) (window.isKeyPressed(GLFW.GLFW_KEY_S) ? 1 : 0);
+		byte bBtn = (byte) (window.isKeyPressed(GLFW.GLFW_KEY_D) ? 1 : 0);
+		byte yBtn = (byte) (window.isKeyPressed(GLFW.GLFW_KEY_Z) ? 1 : 0);
+
+		byte[] jsaxis = new byte[] { yBtn, bBtn, aBtn, xBtn };
+		int dir = MathUtils.greatestAbsIndex(jsaxis);
+
+		if (!skipWaitingForNone && waitingForNoneButton && !(xBtn == 0 && aBtn == 0 && bBtn == 0 && yBtn == 0)) {
+			return;
+		} else {
+			waitingForNoneButton = false;
+			// continue;
+		}
+
+		button = Button.getByIndex(dir);
+		if (xBtn == 0 && aBtn == 0 && bBtn == 0 && yBtn == 0) {
 			button = Button.NONE;
 		}
 	}
@@ -60,44 +82,38 @@ public class ControllerInputWatcher {
 		jsaxis = new byte[] { jsaxis[GLFW.GLFW_GAMEPAD_BUTTON_DPAD_UP], jsaxis[GLFW.GLFW_GAMEPAD_BUTTON_DPAD_RIGHT], jsaxis[GLFW.GLFW_GAMEPAD_BUTTON_DPAD_DOWN], jsaxis[GLFW.GLFW_GAMEPAD_BUTTON_DPAD_LEFT] };
 		int dir = MathUtils.greatestAbsIndex(jsaxis);
 
-		byte up = jsaxis[0],
-				right = jsaxis[1],
-				down = jsaxis[2],
-				left = jsaxis[3];
-		
-		if(System.currentTimeMillis() - lastDirection > TIME_DIRECTION) {
+		byte up = jsaxis[0], right = jsaxis[1], down = jsaxis[2], left = jsaxis[3];
+
+		if (System.currentTimeMillis() - lastDirection > TIME_DIRECTION) {
 			waitingForNoneDirection = false;
 			lastDirection = System.currentTimeMillis();
-		}else if (waitingForNoneDirection && !(left == 0 && right == 0 && up == 0 && down == 0)) {
+		} else if (!skipWaitingForNone && waitingForNoneDirection && !(left == 0 && right == 0 && up == 0 && down == 0)) {
 			return;
 		} else {
 			waitingForNoneDirection = false;
 			// continue;
 		}
-		
+
 		direction = Direction.getGLFWCross(dir, up, right, down, left);
 	}
-	
+
 	public void updateDirection(Window window) {
-		byte[] jsaxis = new byte[] { (byte) (window.isKeyPressed(GLFW.GLFW_KEY_UP) ? 1
-				: 0), (byte) (window.isKeyPressed(GLFW.GLFW_KEY_RIGHT) ? 1 : 0),(byte) (window.isKeyPressed(GLFW.GLFW_KEY_DOWN) ? 1 : 0),(byte) (window.isKeyPressed(GLFW.GLFW_KEY_LEFT) ? 1 : 0) };
+		byte[] jsaxis = new byte[] { (byte) (window.isKeyPressed(GLFW.GLFW_KEY_UP) ? 1 : 0), (byte) (window.isKeyPressed(GLFW.GLFW_KEY_RIGHT) ? 1 : 0), (byte) (window.isKeyPressed(GLFW.GLFW_KEY_DOWN) ? 1 : 0),
+				(byte) (window.isKeyPressed(GLFW.GLFW_KEY_LEFT) ? 1 : 0) };
 		int dir = MathUtils.greatestAbsIndex(jsaxis);
 
-		byte up = jsaxis[0],
-				right = jsaxis[1],
-				down = jsaxis[2],
-				left = jsaxis[3];
-		
-		if(System.currentTimeMillis() - lastDirection > TIME_DIRECTION) {
+		byte up = jsaxis[0], right = jsaxis[1], down = jsaxis[2], left = jsaxis[3];
+
+		if (System.currentTimeMillis() - lastDirection > TIME_DIRECTION) {
 			waitingForNoneDirection = false;
 			lastDirection = System.currentTimeMillis();
-		}else if (waitingForNoneDirection && !(left == 0 && right == 0 && up == 0 && down == 0)) {
+		} else if (!skipWaitingForNone && waitingForNoneDirection && !(left == 0 && right == 0 && up == 0 && down == 0)) {
 			return;
 		} else {
 			waitingForNoneDirection = false;
 			// continue;
 		}
-		
+
 		direction = Direction.getGLFWCross(dir, up, right, down, left);
 	}
 
@@ -147,6 +163,14 @@ public class ControllerInputWatcher {
 		Button dir = button;
 		button = Button.NONE;
 		return dir;
+	}
+
+	public boolean isSkipWaitingForNone() {
+		return skipWaitingForNone;
+	}
+
+	public void setSkipWaitingForNone(boolean skipWaitingForNone) {
+		this.skipWaitingForNone = skipWaitingForNone;
 	}
 
 }

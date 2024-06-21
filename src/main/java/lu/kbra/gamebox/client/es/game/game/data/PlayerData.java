@@ -18,7 +18,10 @@ public class PlayerData {
 	private static final float TIME_SCORE_MUL = 0.001f;
 
 	private int health = 2, maxHealth = health;
+	private int damage = 1;
+	private int photosynthesis = 0;
 	private int speed = 1;
+	private boolean toxinResistant = false, predatorRepulsion = false, poisonDamage = false, poisonTrail = false;
 
 	private int glucose = 0;
 	private int aminoAcid = 0;
@@ -31,15 +34,15 @@ public class PlayerData {
 	private long score = 0;
 
 	private EvolutionTree tree;
-	private EvolutionTreeNode current;
+	private EvolutionTreeNode currentTreeNode;
 
-	private int ennemyKillCount = 0;
+	private int ennemyKillCount = 0, upgradeTreeCount = 0;
 	private List<Achievements> achievements = new ArrayList<>();
 
 	public PlayerData() {
 		try {
 			tree = EvolutionTree.load();
-			current = tree;
+			currentTreeNode = tree;
 		} catch (JSONException | IOException e) {
 			e.printStackTrace();
 		}
@@ -108,8 +111,8 @@ public class PlayerData {
 		return false;
 	}
 
-	public EvolutionTreeNode getCurrent() {
-		return current;
+	public EvolutionTreeNode getCurrentTreeNode() {
+		return currentTreeNode;
 	}
 
 	public EvolutionTree getTree() {
@@ -182,12 +185,68 @@ public class PlayerData {
 		this.ennemyKillCount = ennemyKillCount;
 	}
 
+	public int getDamage() {
+		return damage;
+	}
+
+	public void setDamage(int damage) {
+		this.damage = damage;
+	}
+
 	public long getScore() {
 		return score;
 	}
 
 	public void setScore(long score) {
 		this.score = score;
+	}
+
+	public int getPhotosynthesis() {
+		return photosynthesis;
+	}
+
+	public void setPhotosynthesis(int photosynthesis) {
+		this.photosynthesis = photosynthesis;
+	}
+
+	public boolean isToxinResistant() {
+		return toxinResistant;
+	}
+
+	public void setToxinResistant(boolean toxinResistant) {
+		this.toxinResistant = toxinResistant;
+	}
+
+	public int getUpgradeTreeCount() {
+		return upgradeTreeCount;
+	}
+
+	public void setUpgradeTreeCount(int upgradeTreeCount) {
+		this.upgradeTreeCount = upgradeTreeCount;
+	}
+
+	public boolean isPredatorRepulsion() {
+		return predatorRepulsion;
+	}
+
+	public void setPredatorRepulsion(boolean predatorRepulsion) {
+		this.predatorRepulsion = predatorRepulsion;
+	}
+
+	public boolean isPoisonDamage() {
+		return poisonDamage;
+	}
+
+	public void setPoisonDamage(boolean poisonDamage) {
+		this.poisonDamage = poisonDamage;
+	}
+
+	public boolean isPoisonTrail() {
+		return poisonTrail;
+	}
+
+	public void setPoisonTrail(boolean poisonTrail) {
+		this.poisonTrail = poisonTrail;
 	}
 
 	public static void main(String[] args) {
@@ -205,10 +264,58 @@ public class PlayerData {
 		score = (long) ((System.currentTimeMillis() - startTime) * TIME_SCORE_MUL);
 		score += Math.pow(achievements.size(), 3);
 		score += 2 * ennemyKillCount;
+		score += 6 * upgradeTreeCount;
 	}
 
 	public void startMarkCount() {
 		startTime = System.currentTimeMillis();
+	}
+
+	public boolean canSelectUpgrade() {
+		int needed = (int) (Math.pow(2.05f, upgradeTreeCount) * 10);
+		return lipid >= needed && aminoAcid >= needed && glucose >= needed;
+	}
+
+	public boolean selectUpgrade(int index) {
+		currentTreeNode = getCurrentTreeNode().getChildren().get(index);
+
+		if (!canRestoreHealth())
+			return false;
+
+		upgradeTreeCount++;
+
+		switch (currentTreeNode.getId()) {
+		case "damage":
+			damage *= 2;
+			break;
+		case "photosynthesis":
+			photosynthesis += 1;
+			break;
+		case "add_max_health":
+			maxHealth += upgradeTreeCount;
+			// ((UISceneGameOverlay) GlobalUtils.INSTANCE.uiScene.getState()).startHealthRestoreAccepted();
+			break;
+		case "double_max_health":
+			maxHealth *= upgradeTreeCount;
+			break;
+		case "speed":
+			speed += upgradeTreeCount;
+			break;
+		case "toxin_resistance":
+			toxinResistant = true;
+			break;
+		case "predator_repulsion":
+			predatorRepulsion = true;
+			break;
+		case "poison_trail":
+			poisonTrail = true;
+			break;
+		case "poison_damage":
+			poisonDamage = true;
+			break;
+		}
+
+		return true;
 	}
 
 }

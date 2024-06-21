@@ -50,18 +50,10 @@ public class WorldScene3D extends Scene3D {
 	float size = 1;
 
 	public void input(float dTime) {
-		if (world != null) {
+		if(GlobalUtils.INSTANCE.uiScene.getState() != null && ((UISceneGameOverlay) GlobalUtils.INSTANCE.uiScene.getState()).isTreeViewActive()) {
+			((UISceneGameOverlay) GlobalUtils.INSTANCE.uiScene.getState()).input(dTime);
+		}else if (world != null) {
 			world.input(dTime);
-		}
-
-		if (window.getJoystickButton(GLFW.GLFW_JOYSTICK_1, GLFW.GLFW_GAMEPAD_BUTTON_LEFT_BUMPER) && System.currentTimeMillis() - lastHealthUpgrade >= MIN_UPGRADE_DELAY) {
-			if (GlobalUtils.INSTANCE.playerData.canRestoreHealth()) {
-				((UISceneGameOverlay) GlobalUtils.INSTANCE.uiScene.getState()).startHealthRestoreAccepted();
-				lastHealthUpgrade = System.currentTimeMillis();
-			} else {
-				((UISceneGameOverlay) GlobalUtils.INSTANCE.uiScene.getState()).startHealthRestoreDenied();
-			}
-			GlobalUtils.INSTANCE.playerData.restoreHealth();
 		}
 
 		if (window.getJoystickButton(GLFW.GLFW_JOYSTICK_1, GLFW.GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER) && (double) (System.currentTimeMillis() - lastTreeView) / 1000 * UISceneGameOverlay.BG_DARKEN_SPEED >= 1) {
@@ -72,6 +64,16 @@ public class WorldScene3D extends Scene3D {
 				((UISceneGameOverlay) GlobalUtils.INSTANCE.uiScene.getState()).setTreeViewActive(true);
 				lastTreeView = System.currentTimeMillis();
 			}
+		}
+		
+		if (window.getJoystickButton(GLFW.GLFW_JOYSTICK_1, GLFW.GLFW_GAMEPAD_BUTTON_LEFT_BUMPER) && System.currentTimeMillis() - lastHealthUpgrade >= MIN_UPGRADE_DELAY) {
+			if (GlobalUtils.INSTANCE.playerData.canRestoreHealth()) {
+				((UISceneGameOverlay) GlobalUtils.INSTANCE.uiScene.getState()).startHealthRestoreAccepted();
+				lastHealthUpgrade = System.currentTimeMillis();
+			} else {
+				((UISceneGameOverlay) GlobalUtils.INSTANCE.uiScene.getState()).startHealthRestoreDenied();
+			}
+			GlobalUtils.INSTANCE.playerData.restoreHealth();
 		}
 	}
 

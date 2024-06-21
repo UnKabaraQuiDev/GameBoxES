@@ -20,6 +20,8 @@ import org.lwjgl.opengl.GL40;
 import org.lwjgl.opengl.GL45;
 import org.lwjgl.opengles.GLES20;
 
+import lu.pcy113.pclib.PCUtils;
+
 import lu.kbra.gamebox.client.es.engine.exceptions.egl.EGLBadAccessException;
 import lu.kbra.gamebox.client.es.engine.exceptions.egl.EGLBadAllocException;
 import lu.kbra.gamebox.client.es.engine.exceptions.egl.EGLBadAttributeException;
@@ -54,6 +56,7 @@ import lu.kbra.gamebox.client.es.engine.impl.nexttask.NextTask;
 
 public final class PDRUtils {
 
+	@Deprecated
 	public static String getCallerClassName(boolean parent) {
 		StackTraceElement[] stElements = Thread.currentThread().getStackTrace();
 		for (int i = 1; i < stElements.length; i++) {
@@ -340,6 +343,7 @@ public final class PDRUtils {
 		return c;
 	}
 
+	@Deprecated
 	public static double round(double round, int decimales) {
 		double places = Math.pow(10, decimales);
 		return Math.round(round * places) / places;
@@ -349,6 +353,7 @@ public final class PDRUtils {
 		return Math.abs(x) < min ? 0 : x;
 	}
 
+	@Deprecated
 	public static Color randomColor(boolean alpha) {
 		if (alpha)
 			return new Color((int) (Math.random() * 255), (int) (Math.random() * 255), (int) (Math.random() * 255), (int) (Math.random() * 255));
@@ -356,18 +361,22 @@ public final class PDRUtils {
 			return new Color((int) (Math.random() * 255), (int) (Math.random() * 255), (int) (Math.random() * 255));
 	}
 
+	@Deprecated
 	public static Color clampColor(int red, int green, int blue) {
 		return new Color(org.joml.Math.clamp(0, 255, red), org.joml.Math.clamp(0, 255, green), org.joml.Math.clamp(0, 255, blue));
 	}
 
+	@Deprecated
 	public static Color clampColor(int red, int green, int blue, int alpha) {
 		return new Color(org.joml.Math.clamp(0, 255, red), org.joml.Math.clamp(0, 255, green), org.joml.Math.clamp(0, 255, blue), org.joml.Math.clamp(0, 255, alpha));
 	}
 
+	@Deprecated
 	public static String fillString(String str, String place, int length) {
 		return (str.length() < length ? repeatString(place, length - str.length()) + str : str);
 	}
 
+	@Deprecated
 	public static String repeatString(String str, int count) {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < count; i++)
@@ -387,18 +396,22 @@ public final class PDRUtils {
 		return IntStream.range(0, arr.length / 3).mapToObj(i -> new Vector3f(arr[i * 3 + 0], arr[i * 3 + 1], arr[i * 3 + 2])).toArray(Vector3f[]::new);
 	}
 
+	@Deprecated
 	public static int[] castInt(Object[] arr) {
 		return Arrays.stream(arr).mapToInt(s -> (int) s).toArray();
 	}
 
+	@Deprecated
 	public static int[] castInt(Integer[] arr) {
 		return Arrays.stream(arr).mapToInt(Integer::valueOf).toArray();
 	}
 
+	@Deprecated
 	public static Object[] toObjectArray(int[] data) {
 		return Arrays.stream(data).mapToObj(Integer::valueOf).toArray();
 	}
 
+	@Deprecated
 	public static ByteBuffer intArrayToByteBuffer(int[] data) {
 		ByteBuffer buffer = ByteBuffer.allocate(data.length * Integer.BYTES);
 		for (int i = 0; i < data.length; i++) {
@@ -407,10 +420,12 @@ public final class PDRUtils {
 		return (ByteBuffer) buffer.flip();
 	}
 
+	@Deprecated
 	public static IntStream intToBytes(int value) {
 		return IntStream.of((value >> 24) & 0xFF, (value >> 16) & 0xFF, (value >> 8) & 0xFF, value & 0xFF);
 	}
 
+	@Deprecated
 	public static int[] byteBufferToIntArray(ByteBuffer bData, int length) {
 		int[] data = new int[length];
 		for (int i = 0; i < length; i++) {
@@ -431,7 +446,8 @@ public final class PDRUtils {
 		JSONArray arr = sobj.getJSONArray(key);
 		return new Vector2f(arr.getFloat(0), arr.getFloat(1));
 	}
-
+	
+	@Deprecated
 	public static int[] randomIntArray(int length, int min, int max) {
 		Random rand = new Random();
 		int[] arr = new int[length];
@@ -449,6 +465,10 @@ public final class PDRUtils {
 		}
 		
 		return nt;
+	}
+
+	public static Vector2f clamp(Vector2f progress) {
+		return progress.set(PCUtils.clamp(0, 1, progress.x), PCUtils.clamp(0, 1, progress.y));
 	}
 
 }

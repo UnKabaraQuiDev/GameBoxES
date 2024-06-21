@@ -353,6 +353,7 @@ public class GlobalUtils {
 		for (Mesh mesh : cache.getMeshes().values()) {
 			if (mesh instanceof QuadMesh)
 				continue;
+			
 			GlobalUtils.compileMesh(mesh, mesh.getName());
 			GlobalLogger.info("Compiled mesh: " + mesh.getId() + " -> " + mesh.getName());
 		}

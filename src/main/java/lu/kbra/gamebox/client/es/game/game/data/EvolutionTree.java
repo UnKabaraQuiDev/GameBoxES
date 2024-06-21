@@ -52,16 +52,18 @@ public class EvolutionTree extends EvolutionTreeNode {
 	}
 
 	private static String getRandomType() {
-		int rand = (int) (Math.random() * 4);
+		int rand = (int) (Math.random() * 5);
 		switch (rand) {
 		case 0:
 			return "photosynthesis";
 		case 1:
 			return "damage";
 		case 2:
-			return "max_health";
+			return "double_max_health";
 		case 3:
 			return "speed";
+		case 4:
+			return "add_max_health";
 		}
 		return null;
 	}

@@ -1,5 +1,6 @@
 package lu.kbra.gamebox.client.es.game.game.scenes.ui;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.joml.Math;
@@ -8,26 +9,31 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+import lu.pcy113.pclib.logger.GlobalLogger;
+
 import lu.kbra.gamebox.client.es.engine.geom.Mesh;
 import lu.kbra.gamebox.client.es.engine.graph.material.text.TextShader.TextMaterial;
 import lu.kbra.gamebox.client.es.engine.objs.entity.Entity;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.MeshComponent;
-import lu.kbra.gamebox.client.es.engine.objs.entity.components.RenderComponent;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.SubEntitiesComponent;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.TextEmitterComponent;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.Transform3DComponent;
 import lu.kbra.gamebox.client.es.engine.objs.text.TextEmitter;
 import lu.kbra.gamebox.client.es.engine.utils.MathUtils;
+import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 import lu.kbra.gamebox.client.es.engine.utils.consts.Alignment;
+import lu.kbra.gamebox.client.es.engine.utils.consts.Button;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
 import lu.kbra.gamebox.client.es.engine.utils.interpolation.Interpolators;
 import lu.kbra.gamebox.client.es.game.game.data.Achievements;
+import lu.kbra.gamebox.client.es.game.game.data.EvolutionTreeNode;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.FillShader;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.FillShader.FillMaterial;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.HealthIndicatorShader;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.HealthIndicatorShader.HealthIndicatorMaterial;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.MajorUpgradeTreeShader.MajorUpgradeTreeMaterial;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.MaterialListShader;
+import lu.kbra.gamebox.client.es.game.game.utils.ControllerInputWatcher;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalConsts;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalLang;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
@@ -64,13 +70,17 @@ public class UISceneGameOverlay extends UISceneState {
 	private TextEmitter gameOverStatsTitlesText, gameOverStatsValuesText;
 
 	// major upgrade tree - - -
-	private Entity majorUpgradeTree;
+	public static final float UPGRADE_TREE_LOADING_SPEED = 25f, UPGRADE_TREE_UNLOADING_SPEED = 10f;
+	private Entity majorUpgradeTree, majorUpgradeTreeTextPrice;
+	private int upgradeTreeSelection = -1;
+
+	private ControllerInputWatcher cic;
 
 	public UISceneGameOverlay(UIScene3D scene) {
 		super("MajorUpgradeTree", scene);
 
 		Mesh bgMesh = cache.newQuadMesh("uiBGMesh", cache.loadOrGetMaterial(FillMaterial.NAME, FillShader.FillMaterial.class, GlobalConsts.TRANS_BG), new Vector2f(12, 6));
-		uiBG = scene.addEntity("uiBG", new MeshComponent(bgMesh), new Transform3DComponent(new Vector3f(0, 0, GlobalConsts.UI_BG_HEIGHT)), new RenderComponent(GlobalConsts.UI_BG_HEIGHT)).setActive(false);
+		uiBG = scene.addEntity("uiBG", new MeshComponent(bgMesh), new Transform3DComponent(new Vector3f(0, 0, GlobalConsts.UI_BG_HEIGHT))).setActive(false);
 
 		// material list - - -
 		Mesh materialListMesh = GlobalUtils.loadCompiledMesh(cache, "materialList", () -> {
@@ -79,17 +89,14 @@ public class UISceneGameOverlay extends UISceneState {
 							cache.loadOrGetSingleTexture(MaterialListShader.MaterialListMaterial.TEXTURE_NAME, MaterialListShader.MaterialListMaterial.TEXTURE_PATH, TextureFilter.NEAREST)),
 					MaterialListShader.MaterialListMaterial.MESH_PATH);
 		});
-		materialList = scene.addEntity("materialList", new MeshComponent(materialListMesh), new Transform3DComponent(new Vector3f(-4f, -2, GlobalConsts.UI_COMPONENTS_HEIGHT), new Quaternionf(), new Vector3f(2)),
-				new RenderComponent(GlobalConsts.UI_COMPONENTS_HEIGHT)).setActive(true);
+		materialList = scene.addEntity("materialList", new MeshComponent(materialListMesh), new Transform3DComponent(new Vector3f(-4f, -2, GlobalConsts.UI_COMPONENTS_HEIGHT), new Quaternionf(), new Vector3f(2))).setActive(true);
 
 		aminoAcidText = GlobalUtils.createUIText(cache, "aminoAcidText", 4, "0000", Alignment.TEXT_RIGHT).getTextEmitter(cache);
 		glucoseText = GlobalUtils.createUIText(cache, "glucoseText", 4, "0000", Alignment.TEXT_RIGHT).getTextEmitter(cache);
 		lipidText = GlobalUtils.createUIText(cache, "lipidText", 4, "0000", Alignment.TEXT_RIGHT).getTextEmitter(cache);
-		materialList.addComponent(new SubEntitiesComponent(
-				new Entity("glucoseText", new TextEmitterComponent(glucoseText), new Transform3DComponent(new Vector3f(-3f, -2.25f, GlobalConsts.UI_OVER_COMPONENTS_HEIGHT))),
+		materialList.addComponent(new SubEntitiesComponent(new Entity("glucoseText", new TextEmitterComponent(glucoseText), new Transform3DComponent(new Vector3f(-3f, -2.25f, GlobalConsts.UI_OVER_COMPONENTS_HEIGHT))),
 				new Entity("lipidText", new TextEmitterComponent(lipidText), new Transform3DComponent(new Vector3f(-3f, -2.7f, GlobalConsts.UI_OVER_COMPONENTS_HEIGHT))),
 				new Entity("aminoAcidText", new TextEmitterComponent(aminoAcidText), new Transform3DComponent(new Vector3f(-3f, -1.8f, GlobalConsts.UI_OVER_COMPONENTS_HEIGHT)))));
-
 
 		// health indicator - - -
 		Mesh healthIndicatorMesh = GlobalUtils.loadCompiledMesh(cache, "healthIndicator", () -> {
@@ -100,13 +107,13 @@ public class UISceneGameOverlay extends UISceneState {
 					HealthIndicatorShader.HealthIndicatorMaterial.MESH_HEALTH_PATH);
 		});
 		maxHealthIndicator = scene.addEntity("healthIndicator", new MeshComponent(healthIndicatorMesh),
-				new Transform3DComponent(new Vector3f(CLICK_OFFSET_END.x, CLICK_OFFSET_END.y, 0).add(HEALTH_INDICATOR_BASE), new Quaternionf(), new Vector3f(1.5f)), new RenderComponent(GlobalConsts.UI_COMPONENTS_HEIGHT));
+				new Transform3DComponent(new Vector3f(CLICK_OFFSET_END.x, CLICK_OFFSET_END.y, 0).add(HEALTH_INDICATOR_BASE), new Quaternionf(), new Vector3f(1.5f)));
 
 		maxHealthIndicatorText = GlobalUtils.createUIText(cache, "healthIndicatorText", 5, GlobalLang.get("ui.hp") + " 00", Alignment.TEXT_RIGHT).getTextEmitter(cache);
 		((TextMaterial) maxHealthIndicatorText.getMesh().getMaterial()).setFgColor(IDLE_COLOR_START);
 		maxHealthIndicatorText.setCharOffset(new Vector2f(0.1f, 0));
 		maxHealthIndicatorTextEntity = new Entity("healthIndicatorText", new TextEmitterComponent(maxHealthIndicatorText),
-				new Transform3DComponent(new Vector3f(CLICK_OFFSET_END.x, CLICK_OFFSET_END.y, 0).add(HEALTH_INDICATOR_TEXT_BASE), new Quaternionf(), new Vector3f(0.9f)), new RenderComponent(GlobalConsts.UI_OVER_COMPONENTS_HEIGHT));
+				new Transform3DComponent(new Vector3f(CLICK_OFFSET_END.x, CLICK_OFFSET_END.y, 0).add(HEALTH_INDICATOR_TEXT_BASE), new Quaternionf(), new Vector3f(0.9f)));
 		maxHealthIndicator.addComponent(new SubEntitiesComponent(maxHealthIndicatorTextEntity));
 
 		healthFillProgress = 0;
@@ -126,17 +133,16 @@ public class UISceneGameOverlay extends UISceneState {
 		// major upgrade tree - - -
 		Mesh majorUpgradeTreeMesh = GlobalUtils.loadCompiledMesh(cache, "upgradeTree", () -> {
 			return cache.loadMesh("upgradeTree",
-					cache.loadOrGetMaterial(MajorUpgradeTreeMaterial.NAME, MajorUpgradeTreeMaterial.class, cache.loadOrGetSingleTexture(MajorUpgradeTreeMaterial.NAME, "./resources/textures/ui/icons.png", TextureFilter.NEAREST)),
+					cache.loadOrGetMaterial(MajorUpgradeTreeMaterial.NAME, MajorUpgradeTreeMaterial.class, cache.loadOrGetSingleTexture(MajorUpgradeTreeMaterial.NAME, "./resources/textures/ui/icons_list.png", TextureFilter.NEAREST)),
 					"./resources/models/ui/upgrade_tree.obj");
 		});
-		majorUpgradeTree = scene.addEntity("majorUpgradeTree", new MeshComponent(majorUpgradeTreeMesh), new Transform3DComponent(new Vector3f(0, 0, GlobalConsts.UI_COMPONENTS_HEIGHT), new Quaternionf(), new Vector3f(2.5f)),
-				new RenderComponent(GlobalConsts.UI_COMPONENTS_HEIGHT));
+		majorUpgradeTree = scene.addEntity("majorUpgradeTree", new MeshComponent(majorUpgradeTreeMesh), new Transform3DComponent(new Vector3f(0, 0, GlobalConsts.UI_COMPONENTS_HEIGHT), new Quaternionf(), new Vector3f(3f)));
 		majorUpgradeTree.setActive(false);
 
 		// GlobalUtils.compileMeshes(cache);
 
-		System.err.println("ui overlay state:");
-		scene.getEntities().values().stream().filter((t) -> t.hasComponent(Transform3DComponent.class)).forEach(t -> System.err.println(t.getId() + " -> " + t.getComponent(Transform3DComponent.class).getTransform().getTranslation()));
+		cic = new ControllerInputWatcher();
+		cic.setSkipWaitingForNone(true);
 
 		cache.dump(System.err);
 	}
@@ -144,8 +150,38 @@ public class UISceneGameOverlay extends UISceneState {
 	@Override
 	public void input(float dTime) {
 		if (treeViewActive) {
+			if (window.isJoystickPresent()) { // joystick
+				if (!window.updateGamepad(0))
+					return;
 
+				cic.updateButton(window.getGamepad());
+			} else { // window
+				cic.updateButton(window);
+			}
+
+			MajorUpgradeTreeMaterial mat = ((MajorUpgradeTreeMaterial) majorUpgradeTree.getComponent(MeshComponent.class).getMesh(cache).getMaterial());
+
+			if (cic.hasNextButton()) {
+				Button btn = cic.consumeButton();
+				
+				upgradeTreeSelection = btn.equals(Button.NORTH) ? 0 : btn.equals(Button.SOUTH) ? 1 : -1;
+				
+				updateTreeInfo();
+				
+				mat.getProgress().add(new Vector2f(btn.equals(Button.NORTH) ? 1 : -1, btn.equals(Button.SOUTH) ? 1 : -1).div(UPGRADE_TREE_LOADING_SPEED));
+			} else {
+				mat.getProgress().sub(new Vector2f(1).div(UPGRADE_TREE_UNLOADING_SPEED));
+			}
+			PDRUtils.clamp(mat.getProgress());
+			
+			if(upgradeTreeSelection != -1 && mat.getProgress().x == 1 || mat.getProgress().y == 0) {
+				GlobalUtils.INSTANCE.playerData.selectUpgrade(upgradeTreeSelection);
+			}
 		}
+	}
+
+	private void updateTreeInfo() {
+		// TODO
 	}
 
 	@Override
@@ -245,6 +281,21 @@ public class UISceneGameOverlay extends UISceneState {
 
 		uiBG.setActive(b);
 		majorUpgradeTree.setActive(b);
+
+		if (b) {
+			List<EvolutionTreeNode> children = GlobalUtils.INSTANCE.playerData.getCurrentTreeNode().getChildren();
+			MajorUpgradeTreeMaterial mat = ((MajorUpgradeTreeMaterial) majorUpgradeTree.getComponent(MeshComponent.class).getMesh(cache).getMaterial());
+			mat.getIcons().x = children.get(0).getIconId();
+			GlobalLogger.info("Upgrade tree n1: "+children.get(0));
+			if (children.size() > 1) {
+				mat.getIcons().y = children.get(1).getIconId();
+				GlobalLogger.info("Upgrade tree n2: "+children.get(1));
+			} else {
+				mat.getIcons().y = children.get(0).getIconId();
+				GlobalLogger.info("Upgrade tree n2: "+children.get(0));
+			}
+			GlobalLogger.info(mat.getIcons());
+		}
 	}
 
 	public void startGameEndActive() {

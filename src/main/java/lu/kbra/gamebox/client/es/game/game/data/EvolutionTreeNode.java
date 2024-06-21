@@ -4,16 +4,34 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import lu.pcy113.pclib.logger.GlobalLogger;
+
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalLang;
 
 public class EvolutionTreeNode {
+
+	public static final Map<String, Integer> ICON_IDS = new HashMap<String, Integer>(1) {
+		{
+			put("damage", 1);
+			put("photosynthesis", 2);
+			put("add_max_health", 3);
+			put("speed", 4);
+			put("double_max_health", 5);
+			put("toxin_resistance", 6);
+			put("poison_damage", 7);
+			put("predator_repulsion", 8);
+			put("poison_trail", 9);
+		}
+	};
 
 	private List<EvolutionTreeNode> parents = new ArrayList<EvolutionTreeNode>();
 	private List<EvolutionTreeNode> children;
@@ -28,8 +46,8 @@ public class EvolutionTreeNode {
 	public EvolutionTreeNode(String id, String type) throws JSONException, IOException {
 		this.id = id;
 		this.type = type;
-		
-		System.out.println("path: "+"./resources/gd/majorTree/" + GlobalLang.getCURRENT_LANG().toLowerCase() + "/" + type + ".json");
+
+		GlobalLogger.info("Node path: " + "./resources/gd/majorTree/" + GlobalLang.getCURRENT_LANG().toLowerCase() + "/" + type + ".json");
 		JSONObject obj = new JSONObject(new String(Files.readAllBytes(Paths.get("./resources/gd/majorTree/" + GlobalLang.getCURRENT_LANG().toLowerCase() + "/" + type + ".json"))));
 		this.title = obj.optString("title", id + "/" + type);
 		this.description = obj.optString("desc", "no desc :/");
@@ -73,7 +91,7 @@ public class EvolutionTreeNode {
 	public boolean isLeaf() {
 		return children == null || children.isEmpty();
 	}
-	
+
 	public boolean isRoot() {
 		return parents == null || parents.isEmpty();
 	}
@@ -82,11 +100,23 @@ public class EvolutionTreeNode {
 		return children;
 	}
 
+	@Override
+	public String toString() {
+		return id + "(name=" + title.replace("\n", "<br>") + ", desc=" + description + ")";
+	}
+
 	public String toString(int i) {
 		String tabs = PDRUtils.repeatString("  ", i);
-		String content = id + "(name=" + title.replace("\n", "<br>") + ", desc=" + description + ")";
+		String content = toString();
 		String ending = isLeaf() ? "" : children.stream().map(c -> c.toString(i + 1)).collect(Collectors.joining(",\n", "[\n", "\n" + tabs + "]"));
 		return tabs + content + ending + "";
+	}
+
+	public int getIconId() {
+		if (!ICON_IDS.containsKey(id)) {
+			GlobalLogger.severe("Icon id not found for: " + id);
+		}
+		return ICON_IDS.get(id);
 	}
 
 }
