@@ -4,17 +4,17 @@ import lu.kbra.gamebox.client.es.engine.objs.entity.Component;
 
 public class RenderComponent extends Component {
 
-	private int priority;
+	private float priority;
 
-	public RenderComponent(int priority) {
+	public RenderComponent(float priority) {
 		this.priority = priority;
 	}
 
-	public int getPriority() {
+	public float getPriority() {
 		return priority;
 	}
 
-	public void setPriority(int priority) {
+	public void setPriority(float priority) {
 		this.priority = priority;
 	}
 

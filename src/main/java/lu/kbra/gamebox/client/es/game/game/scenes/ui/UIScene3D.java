@@ -71,11 +71,13 @@ public class UIScene3D extends Scene3D {
 	public void setupScene() {
 		camera.getProjection().setPerspective(false);
 		camera.getProjection().setSize(180f);
+		camera.getProjection().setFarPlane(1000f);
+		camera.getProjection().setNearPlane(0.1f);
 		camera.getProjection().update(1920, 1080);
 
-		((Camera3D) camera).setPosition(new Vector3f(0, 0, 5));
+		((Camera3D) camera).setPosition(new Vector3f(0, 0, 5.5f));
 		((Camera3D) camera).setUp(GameEngine.Y_POS);
-		((Camera3D) camera).lookAt(new Vector3f(0, 0, 5), new Vector3f(0, 0, 0));
+		((Camera3D) camera).lookAt(new Vector3f(0, 0, 5.5f), new Vector3f(0, 0, 0));
 		((Camera3D) camera).updateMatrix();
 	}
 

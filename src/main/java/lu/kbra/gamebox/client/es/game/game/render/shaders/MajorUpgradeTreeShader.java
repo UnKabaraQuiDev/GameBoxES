@@ -9,6 +9,7 @@ import lu.kbra.gamebox.client.es.engine.graph.texture.SingleTexture;
 import lu.kbra.gamebox.client.es.engine.graph.texture.Texture;
 import lu.kbra.gamebox.client.es.engine.impl.shader.AbstractShaderPart;
 import lu.kbra.gamebox.client.es.engine.utils.codec.DefaultObjectDecoderMethod;
+import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
 
 public class MajorUpgradeTreeShader extends RenderShader {
@@ -59,7 +60,7 @@ public class MajorUpgradeTreeShader extends RenderShader {
 		@DefaultObjectDecoderMethod
 		public static MajorUpgradeTreeMaterial create() {
 			CacheManager cache = GlobalUtils.currentLoadCache;
-			return cache.loadOrGetMaterial(NAME, MajorUpgradeTreeMaterial.class, cache.loadOrGetRenderShader(MajorUpgradeTreeShader.NAME, MajorUpgradeTreeShader.class), cache.loadOrGetSingleTexture(NAME, "./resources/textures/ui/icons.png"));
+			return cache.loadOrGetMaterial(NAME, MajorUpgradeTreeMaterial.class, cache.loadOrGetRenderShader(MajorUpgradeTreeShader.NAME, MajorUpgradeTreeShader.class), cache.loadOrGetSingleTexture(NAME, "./resources/textures/ui/icons.png", TextureFilter.NEAREST));
 		}
 
 	}

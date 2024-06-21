@@ -23,6 +23,7 @@ import lu.kbra.gamebox.client.es.engine.utils.geo.GeoPlane;
 import lu.kbra.gamebox.client.es.engine.utils.transform.Transform3D;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.BackgroundShader;
 import lu.kbra.gamebox.client.es.game.game.scenes.ui.UISceneGameOverlay;
+import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalConsts;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
 import lu.kbra.gamebox.client.es.game.game.world.World;
 
@@ -35,8 +36,7 @@ public class WorldScene3D extends Scene3D {
 
 	private float cameraDistance;
 
-	private long lastHealthUpgrade = System.currentTimeMillis();
-	private long lastSpeedUpgrade = System.currentTimeMillis();
+	private long lastHealthUpgrade = System.currentTimeMillis(), lastTreeView = System.currentTimeMillis();
 
 	private World world;
 	private Entity background;
@@ -62,6 +62,16 @@ public class WorldScene3D extends Scene3D {
 				((UISceneGameOverlay) GlobalUtils.INSTANCE.uiScene.getState()).startHealthRestoreDenied();
 			}
 			GlobalUtils.INSTANCE.playerData.restoreHealth();
+		}
+
+		if (window.getJoystickButton(GLFW.GLFW_JOYSTICK_1, GLFW.GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER) && (double) (System.currentTimeMillis() - lastTreeView) / 1000 * UISceneGameOverlay.BG_DARKEN_SPEED >= 1) {
+			if (((UISceneGameOverlay) GlobalUtils.INSTANCE.uiScene.getState()).isTreeViewActive()) {
+				((UISceneGameOverlay) GlobalUtils.INSTANCE.uiScene.getState()).setTreeViewActive(false);
+				lastTreeView = System.currentTimeMillis() - 700;
+			} else {
+				((UISceneGameOverlay) GlobalUtils.INSTANCE.uiScene.getState()).setTreeViewActive(true);
+				lastTreeView = System.currentTimeMillis();
+			}
 		}
 	}
 
@@ -89,7 +99,7 @@ public class WorldScene3D extends Scene3D {
 		Mesh backgroundMesh = Mesh.newQuad("backgroundMesh", cache.getParent().loadOrGetMaterial(BackgroundShader.BackgroundMaterial.NAME, BackgroundShader.BackgroundMaterial.class,
 				cache.getParent().loadOrGetSingleTexture("worldBgTexture", "./resources/textures/ui/background_water.png", TextureFilter.LINEAR)), new Vector2f(40));
 		cache.addMesh(backgroundMesh);
-		background = addEntity("worldBG", new MeshComponent(backgroundMesh), new Transform3DComponent(new Vector3f(0, 0, -1)), new RenderComponent(10)).setActive(true);
+		background = addEntity("worldBG", new MeshComponent(backgroundMesh), new Transform3DComponent(new Vector3f(0, 0, GlobalConsts.WORLD_BG_HEIGHT)), new RenderComponent(GlobalConsts.WORLD_BG_HEIGHT)).setActive(true);
 
 		if (world != null) {
 			world.cleanup();

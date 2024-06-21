@@ -37,8 +37,12 @@ public class Scene3DRenderer extends Renderer<GameEngine, Scene3D> {
 	}
 
 	private static final Comparator<Entry<String, Entity>> COMPARATOR = (a, b) -> {
-		return !a.getValue().hasComponent(RenderComponent.class) ? 1
-				: (!b.getValue().hasComponent(RenderComponent.class) ? -1 : (b.getValue().getComponent(RenderComponent.class).getPriority() - a.getValue().getComponent(RenderComponent.class).getPriority()));
+		return Float.compare(a.getValue().hasComponent(RenderComponent.class) ? a.getValue().getComponent(RenderComponent.class).getPriority() : 0,
+				b.getValue().hasComponent(RenderComponent.class) ? b.getValue().getComponent(RenderComponent.class).getPriority() : 0);
+	};
+
+	private static final Comparator<Entity> COMPARATOR_ENTITY = (a, b) -> {
+		return Float.compare(a.hasComponent(RenderComponent.class) ? a.getComponent(RenderComponent.class).getPriority() : 0, b.hasComponent(RenderComponent.class) ? b.getComponent(RenderComponent.class).getPriority() : 0);
 	};
 
 	@Override
@@ -66,11 +70,11 @@ public class Scene3DRenderer extends Renderer<GameEngine, Scene3D> {
 			if (!e.isActive()) {
 				return;
 			}
-			
-			/*if(e.hasComponent(RenderConditionComponent.class)) {
-				System.out.println(e+" = "+e.getComponent(RenderConditionComponent.class).get());
-			}*/
-			
+
+			/*
+			 * if(e.hasComponent(RenderConditionComponent.class)) { System.out.println(e+" = "+e.getComponent(RenderConditionComponent.class).get()); }
+			 */
+
 			if (e.hasComponent(RenderConditionComponent.class) && !e.getComponent(RenderConditionComponent.class).get() && GlobalOptions.CULLING_OPTIMISATION) {
 				return;
 			}
@@ -99,11 +103,12 @@ public class Scene3DRenderer extends Renderer<GameEngine, Scene3D> {
 		}
 
 		if (e.hasComponent(SubEntitiesComponent.class)) {
+			e.getComponent(SubEntitiesComponent.class).getEntities().sort(COMPARATOR_ENTITY);
 			for (Entity en : e.getComponent(SubEntitiesComponent.class).getEntities()) {
 				if (!en.isActive()) {
 					return;
 				}
-				
+
 				render(cache, scene, en);
 			}
 		}

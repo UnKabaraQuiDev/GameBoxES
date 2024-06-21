@@ -16,6 +16,7 @@ import java.util.Set;
 import java.util.logging.Level;
 
 import org.joml.Math;
+import org.joml.Quaternionf;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.json.JSONException;
@@ -58,6 +59,7 @@ import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.PlantsEntity;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.PlayerEntity;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.ToxinsEntity;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.WorldParticleEmitter;
+import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalConsts;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
 import lu.kbra.gamebox.client.es.game.game.utils.noise.NoiseGenerator;
 
@@ -65,7 +67,7 @@ public class World implements Cleanupable {
 
 	public static final float CULLING_DISTANCE = 35;
 
-	private static final float Y_OFFSET = 0.001f;
+	private static final float Y_OFFSET = 0.0001f;
 	public static final int GEN_CIRCLE_SIZE = 1;
 
 	private static final float ATTRACT_DISTANCE = 3f;
@@ -83,7 +85,7 @@ public class World implements Cleanupable {
 	private static final long TOXIN_DAMAGE_DELAY = 1000; // ms
 
 	private HashMap<String, List<Entity>> generatedChunks = new HashMap<>();
-	private Set<String> updateTasks = new HashSet<>(20);
+	private Set<String> updateTasks = Collections.synchronizedSet(new HashSet<>(20));
 	private final int chunkSize = 20;
 
 	private boolean paused = false;
@@ -130,11 +132,9 @@ public class World implements Cleanupable {
 				cache.loadOrGetSingleTexture(PlayerCellShader.PlayerCellMaterial.PLAYER_TEXTURE_NAME, PlayerCellShader.PlayerCellMaterial.PLAYER_TEXTURE_PATH, TextureFilter.NEAREST),
 				cache.loadOrGetSingleTexture(PlayerCellShader.PlayerCellMaterial.PLAYER_OVERLAY_TEXTURE_NAME, PlayerCellShader.PlayerCellMaterial.PLAYER_OVERLAY_TEXTURE_PATH, TextureFilter.NEAREST));
 		Mesh playerMesh = cache.newQuadMesh("playerMesh", playerMaterial, new Vector2f(2.5f * 2));
-		this.player = new PlayerEntity("player", cache, playerMesh, new CellDescriptor("player", CellType.PLAYER, "noname", null, null, null, 1, 0, 0, 0), new Vector3f(0, 0, 1.5f));
-		player.addComponent(new RenderComponent(4));
+		this.player = new PlayerEntity("player", cache, playerMesh, new CellDescriptor("player", CellType.PLAYER, "noname", null, null, null, 1, 0, 0, 0), new Vector3f(0, 0, GlobalConsts.PLAYER_CELL_HEIGHT));
+		player.addComponent(new RenderComponent(GlobalConsts.PLAYER_CELL_HEIGHT));
 		scene.addEntity(player);
-
-		player.getPlayerMaterial(cache).setDamage(3);
 
 		cellDescriptorPool = loadCellDescriptorPool();
 		GlobalLogger.info(cellDescriptorPool.toString());
@@ -156,6 +156,8 @@ public class World implements Cleanupable {
 		Window window = scene.getWindow();
 
 		player.update();
+
+		System.err.println("player zee: " + player.getTransform().getTransform().getTranslation());
 
 		if (paused) {
 			return;
@@ -188,7 +190,9 @@ public class World implements Cleanupable {
 		}
 
 		GlobalUtils.dumpThreads(Level.SEVERE);
-		GlobalLogger.info(Arrays.toString(updateTasks.toArray()));
+		if (updateTasks.size() > 0) {
+			GlobalLogger.info(Arrays.toString(updateTasks.toArray()));
+		}
 	}
 
 	public void render(float dTime) {
@@ -218,31 +222,31 @@ public class World implements Cleanupable {
 			Instance part = inst.getParticles()[i];
 
 			final Vector3f partPos = ((Transform3D) part.getTransform()).getTranslation();
-			
+
 			Vector3f objAbsPos = partPos.add(parentAbsPos, new Vector3f()).mul(1, 1, 0);
 			float dist = playerAbsPos.distance(objAbsPos);
 			Vector3f direction = new Vector3f(playerAbsPos).sub(objAbsPos).normalize();
 
 			if ((Math.random() < desc.getAggressivity() && dist < desc.getSoftAggressiveDistance()) || dist < desc.getHardAggressiveDistance()) { // triggers aggressive behaviour
-				
+
 				inst.getDirections().get(i).set(direction.mul(dTime * CELLS_MOV_SPEED));
-				partPos.add(inst.getDirections().get(i));
-				
+				partPos.add(inst.getDirections().get(i).mul(1, 1, 0));
+
 				part.getTransform().updateMatrix();
 			} else if (dist <= CELL_EAT_DISTANCE) {
 				GlobalUtils.INSTANCE.playerData.damage(1);
 
 				inst.getDirections().get(i).set(direction.mul(-2 * dTime * CELLS_MOV_SPEED));
-				partPos.add(inst.getDirections().get(i));
+				partPos.add(inst.getDirections().get(i).mul(1, 1, 0));
 
 				GlobalUtils.INSTANCE.playerData.unlockAchievement(Achievements.ENNEMY_DAMAGE);
-				
+
 				part.getTransform().updateMatrix();
 			} else { // idle
-				
+
 				// inst.getDirections().get(i).add(new Vector3f((float) Math.random() - 0.5f, (float) Math.random() - 0.5f, 0).normalize()).div(2);
 				// partPos.add(inst.getDirections().get(i));
-				
+
 			}
 		}
 
@@ -461,6 +465,8 @@ public class World implements Cleanupable {
 
 		List<Entity> entities = new ArrayList<>();
 
+		float ennemyCellHeight = GlobalConsts.ENNEMY_CELLS_HEIGHT;
+
 		for (Entry<CellDescriptor, ArrayList<Vector2f>> e : cellDesc.entrySet()) {
 			CellDescriptor desc = e.getKey();
 			ArrayList<Vector2f> poss = e.getValue();
@@ -475,18 +481,22 @@ public class World implements Cleanupable {
 				Instance part = emit.getParticles()[i];
 				Vector2f pos = poss.get(i);
 
-				((Transform3D) part.getTransform()).getTranslation().set(pos.x, pos.y, Y_OFFSET * i);
-				((Transform3D) part.getTransform()).getScale().set(Math.clamp(0.6f, 4f, (float) ((1 - hostilityGen.noise(pos)) + fertilityGen.noise(pos) * 0.3f + humidityGen.noise(pos)) * 2));
+				((Transform3D) part.getTransform()).getTranslation().set(pos.x, pos.y, ennemyCellHeight + Y_OFFSET * i);
+				((Transform3D) part.getTransform()).getScale().set(Math.lerp(3f, 4.5f, Math.random()));
+				((Transform3D) part.getTransform()).getRotation().set(new Quaternionf().rotateLocalZ((float) (Math.random() * Math.PI)));
 				((Transform3D) part.getTransform()).updateMatrix();
 				part.getBuffers()[0] = (int) random.nextInt(desc.getTextureVariationCount());
 			}
 
 			emit.updateParticles();
 
-			CellsEntity pe = new CellsEntity(desc.getId() + "-" + center, new InstanceEmitterComponent(emit), new Transform3DComponent(new Vector3f(center.x, center.y, 0.4f)), new RenderComponent(6));
+			CellsEntity pe = new CellsEntity(desc.getId() + "-" + center, new InstanceEmitterComponent(emit), new Transform3DComponent(new Vector3f(center.x, center.y, 0)), new RenderComponent(ennemyCellHeight));
 			pe.addComponent(new RenderConditionComponent(() -> pe.getTransform().getTransform().getTranslation().distance(((Camera3D) scene.getCamera()).getPosition()) < CULLING_DISTANCE));
 
 			entities.add(pe);
+
+			ennemyCellHeight += Y_OFFSET * poss.size();
+			System.err.println("ennemy cell height: " + ennemyCellHeight + Y_OFFSET * poss.size() / 2);
 		}
 
 		return entities;
@@ -510,14 +520,17 @@ public class World implements Cleanupable {
 			Instance part = emit.getParticles()[i];
 			Vector2f pos = toxins.get(i);
 
-			((Transform3D) part.getTransform()).getTranslation().set(pos.x, pos.y, Y_OFFSET * i);
+			((Transform3D) part.getTransform()).getTranslation().set(pos.x, pos.y, GlobalConsts.TOXINS_HEIGHT + Y_OFFSET * i);
 			((Transform3D) part.getTransform()).updateMatrix();
+
 			part.getBuffers()[0] = Math.clamp(0.6f, 10f, hostilityGen.noise(pos) * 10);
 		}
 
 		emit.updateParticles();
 
-		ToxinsEntity pe = new ToxinsEntity("toxins-" + center, new InstanceEmitterComponent(emit), new Transform3DComponent(new Vector3f(center.x, center.y, 0)), new RenderComponent(8));
+		System.err.println("toxins height: " + Y_OFFSET * toxins.size());
+
+		ToxinsEntity pe = new ToxinsEntity("toxins-" + center, new InstanceEmitterComponent(emit), new Transform3DComponent(new Vector3f(center.x, center.y, 0)), new RenderComponent(GlobalConsts.TOXINS_HEIGHT));
 		pe.addComponent(new RenderConditionComponent(() -> pe.getTransform().getTransform().getTranslation().distance(((Camera3D) scene.getCamera()).getPosition()) < CULLING_DISTANCE));
 		return Arrays.asList(pe);
 	}
@@ -537,14 +550,14 @@ public class World implements Cleanupable {
 			Instance part = emit.getParticles()[i];
 			Vector2f pos = plants.get(i);
 
-			((Transform3D) part.getTransform()).getTranslation().set(pos.x, pos.y, Y_OFFSET * i);
+			((Transform3D) part.getTransform()).getTranslation().set(pos.x, pos.y, GlobalConsts.PLANTS_HEIGHT + Y_OFFSET * i);
 			((Transform3D) part.getTransform()).updateMatrix();
 			part.getBuffers()[0] = Math.clamp(0.6f, 2f, (float) humidityGen.noise(pos) * 5);
 		}
 
 		emit.updateParticles();
 
-		PlantsEntity pe = new PlantsEntity("plants-" + center, new InstanceEmitterComponent(emit), new Transform3DComponent(new Vector3f(center.x, center.y, 0.2f)), new RenderComponent(10));
+		PlantsEntity pe = new PlantsEntity("plants-" + center, new InstanceEmitterComponent(emit), new Transform3DComponent(new Vector3f(center.x, center.y, 0)), new RenderComponent(GlobalConsts.PLANTS_HEIGHT));
 		pe.addComponent(new RenderConditionComponent(() -> pe.getTransform().getTransform().getTranslation().distance(((Camera3D) scene.getCamera()).getPosition()) < CULLING_DISTANCE));
 		return Arrays.asList(pe);
 	}

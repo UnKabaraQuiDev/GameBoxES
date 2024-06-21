@@ -6,7 +6,6 @@ import java.util.logging.Level;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-import org.lwjgl.glfw.GLFW;
 
 import lu.pcy113.pclib.logger.GlobalLogger;
 
@@ -14,7 +13,6 @@ import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.graph.composition.SceneRenderLayer;
 import lu.kbra.gamebox.client.es.engine.graph.material.text.TextShader;
 import lu.kbra.gamebox.client.es.engine.impl.GameLogic;
-import lu.kbra.gamebox.client.es.engine.scene.camera.Camera3D;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
 import lu.kbra.gamebox.client.es.game.game.data.PlayerData;
 import lu.kbra.gamebox.client.es.game.game.debug.DebugUIElements;
@@ -127,20 +125,14 @@ public class GameBoxES extends GameLogic {
 		} else {
 			worldScene.input(dTime);
 		}
-
-		if (window.isMouseButtonPressed(GLFW.GLFW_MOUSE_BUTTON_LEFT)) {
-			((Camera3D) worldScene.getCamera()).dump(System.err);
-		}
 	}
 
 	@Override
 	public void update(float dTime) {
-		if (!GameState.START_MENU.equals(gameState)) {
+		if (GameState.PLAYING.equals(gameState)) {
 			worldScene.update(dTime);
 		}
 		uiScene.update(dTime);
-
-		// GlobalUtils.dumpThreads();
 	}
 
 	@Override

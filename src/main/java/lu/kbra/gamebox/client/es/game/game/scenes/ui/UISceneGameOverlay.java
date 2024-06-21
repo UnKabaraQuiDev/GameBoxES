@@ -35,9 +35,9 @@ import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
 public class UISceneGameOverlay extends UISceneState {
 
 	private static final Vector2f CLICK_OFFSET_END = new Vector2f(0f, 0.1f);
-	private static final float CLICK_ANIMATION_SPEED = 10f, ACCEPTED_ANIMATION_SPEED = 10f, DENIED_ANIMATION_SPEED = 10f, CLICK_ANIMATION_AMPLITUDE = 0.8f, HEALTH_FILL_SPEED = 1f;
+	public static final float CLICK_ANIMATION_SPEED = 10f, ACCEPTED_ANIMATION_SPEED = 10f, DENIED_ANIMATION_SPEED = 10f, CLICK_ANIMATION_AMPLITUDE = 0.8f, HEALTH_FILL_SPEED = 1f;
 	private static final Vector4f DENIED_COLOR_START = new Vector4f(1, 0, 0, 1), ACCEPTED_COLOR_START = new Vector4f(0, 1, 0, 1), IDLE_COLOR_START = new Vector4f(1, 1, 1, 1);
-	private static final float DEATH_BG_DARKEN_SPEED = 0.75f;
+	public static final float BG_DARKEN_SPEED = 0.75f;
 
 	private boolean treeViewActive = false, gameEndActive = false;
 
@@ -48,7 +48,7 @@ public class UISceneGameOverlay extends UISceneState {
 	private TextEmitter aminoAcidText, glucoseText, lipidText;
 
 	// health indicator - - -
-	private static final Vector3f HEALTH_INDICATOR_TEXT_BASE = new Vector3f(-2.9f, 2.28f, 1.1f), HEALTH_INDICATOR_BASE = new Vector3f(-3.9f, 2.4f, 1);
+	private static final Vector3f HEALTH_INDICATOR_TEXT_BASE = new Vector3f(-2.8f, 2.28f, GlobalConsts.UI_OVER_COMPONENTS_HEIGHT), HEALTH_INDICATOR_BASE = new Vector3f(-3.9f, 2.4f, GlobalConsts.UI_COMPONENTS_HEIGHT);
 
 	private Entity maxHealthIndicator, maxHealthIndicatorTextEntity;
 	private TextEmitter maxHealthIndicatorText;
@@ -56,7 +56,8 @@ public class UISceneGameOverlay extends UISceneState {
 	private float visibleHealth = 1, oldVisibleHealth = 0;
 
 	// game end - - -
-	private static final Vector3f GAME_OVER_BASE = new Vector3f(0, 1, 2f), GAME_OVER_TITLES_BASE = new Vector3f(-4.2f, 0.5f, 2f), GAME_OVER_VALUES_BASE = new Vector3f(4.1f, 0.5f, 2f);
+	private static final Vector3f GAME_OVER_TEXT_BASE = new Vector3f(0, 1, GlobalConsts.UI_OVER_COMPONENTS_HEIGHT), GAME_OVER_TITLES_BASE = new Vector3f(-4.2f, 0.5f, GlobalConsts.UI_OVER_COMPONENTS_HEIGHT),
+			GAME_OVER_VALUES_BASE = new Vector3f(4.1f, 0.5f, GlobalConsts.UI_OVER_COMPONENTS_HEIGHT);
 
 	private float showBGProgress = 1;
 	private Entity gameOverText, gameOverStatsTitles, gameOverStatsValues;
@@ -69,7 +70,7 @@ public class UISceneGameOverlay extends UISceneState {
 		super("MajorUpgradeTree", scene);
 
 		Mesh bgMesh = cache.newQuadMesh("uiBGMesh", cache.loadOrGetMaterial(FillMaterial.NAME, FillShader.FillMaterial.class, GlobalConsts.TRANS_BG), new Vector2f(12, 6));
-		uiBG = scene.addEntity("uiBG", new MeshComponent(bgMesh), new Transform3DComponent(new Vector3f(0, 0, 1.6f))).setActive(false);
+		uiBG = scene.addEntity("uiBG", new MeshComponent(bgMesh), new Transform3DComponent(new Vector3f(0, 0, GlobalConsts.UI_BG_HEIGHT)), new RenderComponent(GlobalConsts.UI_BG_HEIGHT)).setActive(false);
 
 		// material list - - -
 		Mesh materialListMesh = GlobalUtils.loadCompiledMesh(cache, "materialList", () -> {
@@ -78,14 +79,18 @@ public class UISceneGameOverlay extends UISceneState {
 							cache.loadOrGetSingleTexture(MaterialListShader.MaterialListMaterial.TEXTURE_NAME, MaterialListShader.MaterialListMaterial.TEXTURE_PATH, TextureFilter.NEAREST)),
 					MaterialListShader.MaterialListMaterial.MESH_PATH);
 		});
-		materialList = scene.addEntity("materialList", new MeshComponent(materialListMesh), new Transform3DComponent(new Vector3f(-4f, -2, 1), new Quaternionf(), new Vector3f(2)), new RenderComponent(15));
+		materialList = scene.addEntity("materialList", new MeshComponent(materialListMesh), new Transform3DComponent(new Vector3f(-4f, -2, GlobalConsts.UI_COMPONENTS_HEIGHT), new Quaternionf(), new Vector3f(2)),
+				new RenderComponent(GlobalConsts.UI_COMPONENTS_HEIGHT)).setActive(true);
 
 		aminoAcidText = GlobalUtils.createUIText(cache, "aminoAcidText", 4, "0000", Alignment.TEXT_RIGHT).getTextEmitter(cache);
 		glucoseText = GlobalUtils.createUIText(cache, "glucoseText", 4, "0000", Alignment.TEXT_RIGHT).getTextEmitter(cache);
 		lipidText = GlobalUtils.createUIText(cache, "lipidText", 4, "0000", Alignment.TEXT_RIGHT).getTextEmitter(cache);
-		materialList.addComponent(new SubEntitiesComponent(new Entity("aminoAcidText", new TextEmitterComponent(aminoAcidText), new Transform3DComponent(new Vector3f(-3.1f, -1.8f, 1.1f))),
-				new Entity("glucoseText", new TextEmitterComponent(glucoseText), new Transform3DComponent(new Vector3f(-3.1f, -2.25f, 1.1f))),
-				new Entity("lipidText", new TextEmitterComponent(lipidText), new Transform3DComponent(new Vector3f(-3.1f, -2.7f, 1.1f)))));
+		materialList.addComponent(new SubEntitiesComponent(
+				new Entity("glucoseText", new TextEmitterComponent(glucoseText), new Transform3DComponent(new Vector3f(-3f, -2.25f, GlobalConsts.UI_OVER_COMPONENTS_HEIGHT)), new RenderComponent(GlobalConsts.UI_OVER_COMPONENTS_HEIGHT)),
+				new Entity("lipidText", new TextEmitterComponent(lipidText), new Transform3DComponent(new Vector3f(-3f, -2.7f, GlobalConsts.UI_OVER_COMPONENTS_HEIGHT)), new RenderComponent(GlobalConsts.UI_OVER_COMPONENTS_HEIGHT))));
+
+		scene.addEntity(
+				new Entity("aminoAcidText", new TextEmitterComponent(aminoAcidText), new Transform3DComponent(new Vector3f(-3f, -1.8f, GlobalConsts.UI_OVER_COMPONENTS_HEIGHT)), new RenderComponent(GlobalConsts.UI_OVER_COMPONENTS_HEIGHT)));
 
 		// health indicator - - -
 		Mesh healthIndicatorMesh = GlobalUtils.loadCompiledMesh(cache, "healthIndicator", () -> {
@@ -96,13 +101,13 @@ public class UISceneGameOverlay extends UISceneState {
 					HealthIndicatorShader.HealthIndicatorMaterial.MESH_HEALTH_PATH);
 		});
 		maxHealthIndicator = scene.addEntity("healthIndicator", new MeshComponent(healthIndicatorMesh),
-				new Transform3DComponent(new Vector3f(CLICK_OFFSET_END.x, CLICK_OFFSET_END.y, 0).add(HEALTH_INDICATOR_BASE), new Quaternionf(), new Vector3f(1.5f)), new RenderComponent(15));
+				new Transform3DComponent(new Vector3f(CLICK_OFFSET_END.x, CLICK_OFFSET_END.y, 0).add(HEALTH_INDICATOR_BASE), new Quaternionf(), new Vector3f(1.5f)), new RenderComponent(GlobalConsts.UI_COMPONENTS_HEIGHT));
 
 		maxHealthIndicatorText = GlobalUtils.createUIText(cache, "healthIndicatorText", 5, GlobalLang.get("ui.hp") + " 00", Alignment.TEXT_RIGHT).getTextEmitter(cache);
 		((TextMaterial) maxHealthIndicatorText.getMesh().getMaterial()).setFgColor(IDLE_COLOR_START);
 		maxHealthIndicatorText.setCharOffset(new Vector2f(0.1f, 0));
 		maxHealthIndicatorTextEntity = new Entity("healthIndicatorText", new TextEmitterComponent(maxHealthIndicatorText),
-				new Transform3DComponent(new Vector3f(CLICK_OFFSET_END.x, CLICK_OFFSET_END.y, 0).add(HEALTH_INDICATOR_TEXT_BASE), new Quaternionf(), new Vector3f(0.9f)));
+				new Transform3DComponent(new Vector3f(CLICK_OFFSET_END.x, CLICK_OFFSET_END.y, 0).add(HEALTH_INDICATOR_TEXT_BASE), new Quaternionf(), new Vector3f(0.9f)), new RenderComponent(GlobalConsts.UI_OVER_COMPONENTS_HEIGHT));
 		maxHealthIndicator.addComponent(new SubEntitiesComponent(maxHealthIndicatorTextEntity));
 
 		healthFillProgress = 0;
@@ -112,7 +117,8 @@ public class UISceneGameOverlay extends UISceneState {
 		gameOverStatsTitlesText.getCharoffset().add(0, 0.4f);
 		gameOverStatsValuesText = GlobalUtils.createUIText(cache, "gameOverStatsValuesText", 128, GlobalLang.get("game.over.values"), Alignment.TEXT_RIGHT, true).getTextEmitter(cache);
 		gameOverStatsValuesText.getCharoffset().add(0, 0.4f);
-		gameOverText = scene.addEntity("gameOverText", GlobalUtils.createUIText(cache, "gameOverText", 16, GlobalLang.get("game.over"), Alignment.TEXT_CENTER), new Transform3DComponent(GAME_OVER_BASE, new Quaternionf(), new Vector3f(2.5f)))
+		gameOverText = scene
+				.addEntity("gameOverText", GlobalUtils.createUIText(cache, "gameOverText", 16, GlobalLang.get("game.over"), Alignment.TEXT_CENTER), new Transform3DComponent(GAME_OVER_TEXT_BASE, new Quaternionf(), new Vector3f(2.5f)))
 				.setActive(false);
 		((TextMaterial) gameOverText.getComponent(TextEmitterComponent.class).getTextEmitter(cache).getMesh().getMaterial()).setFgColor(new Vector4f(1, 0, 0, 1));
 		gameOverStatsTitles = scene.addEntity("gameOverStatsTitles", new TextEmitterComponent(gameOverStatsTitlesText), new Transform3DComponent(GAME_OVER_TITLES_BASE)).setActive(false);
@@ -124,9 +130,14 @@ public class UISceneGameOverlay extends UISceneState {
 					cache.loadOrGetMaterial(MajorUpgradeTreeMaterial.NAME, MajorUpgradeTreeMaterial.class, cache.loadOrGetSingleTexture(MajorUpgradeTreeMaterial.NAME, "./resources/textures/ui/icons.png", TextureFilter.NEAREST)),
 					"./resources/models/ui/upgrade_tree.obj");
 		});
-		majorUpgradeTree = scene.addEntity("majorUpgradeTree", new MeshComponent(majorUpgradeTreeMesh), new Transform3DComponent(new Vector3f(0), new Quaternionf(), new Vector3f(2.5f)));
+		majorUpgradeTree = scene.addEntity("majorUpgradeTree", new MeshComponent(majorUpgradeTreeMesh), new Transform3DComponent(new Vector3f(0, 0, GlobalConsts.UI_COMPONENTS_HEIGHT), new Quaternionf(), new Vector3f(2.5f)),
+				new RenderComponent(GlobalConsts.UI_COMPONENTS_HEIGHT));
+		majorUpgradeTree.setActive(false);
 
 		// GlobalUtils.compileMeshes(cache);
+
+		System.err.println("ui overlay state:");
+		scene.getEntities().values().stream().filter((t) -> t.hasComponent(Transform3DComponent.class)).forEach(t -> System.err.println(t.getId() + " -> " + t.getComponent(Transform3DComponent.class).getTransform().getTranslation()));
 
 		cache.dump(System.err);
 	}
@@ -188,16 +199,14 @@ public class UISceneGameOverlay extends UISceneState {
 		if (gameEndActive || treeViewActive) {
 
 			if (showBGProgress < 1) {
-				showBGProgress = Math.clamp(0, 1, showBGProgress + dTime * DEATH_BG_DARKEN_SPEED);
+				showBGProgress = Math.clamp(0, 1, showBGProgress + dTime * BG_DARKEN_SPEED);
 
 				((FillMaterial) uiBG.getComponent(MeshComponent.class).getMesh(cache).getMaterial()).setColor(new Vector4f(0).lerp(GlobalConsts.TRANS_BG, Interpolators.QUAD_IN_OUT.evaluate(showBGProgress)));
 			}
 
-			// uiBG.getComponent(Transform3DComponent.class).getTransform().rotate(0.1f, 0.1f, 0.1f).updateMatrix();
-
 		} else {
 			if (showBGProgress > 0) {
-				showBGProgress = Math.clamp(0, 1, showBGProgress - dTime * DEATH_BG_DARKEN_SPEED);
+				showBGProgress = Math.clamp(0, 1, showBGProgress - dTime * BG_DARKEN_SPEED);
 
 				((FillMaterial) uiBG.getComponent(MeshComponent.class).getMesh(cache).getMaterial()).setColor(new Vector4f(0).lerp(GlobalConsts.TRANS_BG, Interpolators.QUAD_IN_OUT.evaluate(showBGProgress)));
 			}
@@ -233,7 +242,10 @@ public class UISceneGameOverlay extends UISceneState {
 		gameEndActive = false;
 		treeViewActive = b;
 
+		showBGProgress = 0;
+
 		uiBG.setActive(b);
+		majorUpgradeTree.setActive(b);
 	}
 
 	public void startGameEndActive() {
@@ -285,6 +297,14 @@ public class UISceneGameOverlay extends UISceneState {
 		healthFillProgress = 1;
 		visibleHealth = GlobalUtils.INSTANCE.playerData.getHealth();
 		oldVisibleHealth = visibleHealth;
+	}
+
+	public boolean isTreeViewActive() {
+		return treeViewActive;
+	}
+
+	public void toggleTreeViewActive() {
+		setTreeViewActive(!treeViewActive);
 	}
 
 }
