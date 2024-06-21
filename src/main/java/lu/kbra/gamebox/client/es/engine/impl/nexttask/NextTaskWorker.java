@@ -65,8 +65,10 @@ public class NextTaskWorker extends NextTaskEnvironnment implements UniqueID {
 			this.threads[i].join();
 			this.threads[i] = null;
 		}
-
-		this.threadGroup.destroy();
+		
+		if(this.threadGroup.activeCount() == 0) {
+			this.threadGroup.destroy();
+		}
 	}
 
 	public boolean isActive() {
