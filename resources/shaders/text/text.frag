@@ -1,4 +1,5 @@
-#version 400 core
+#version 300 es
+precision mediump float;
 
 flat in struct per_instance {
 	uint index;

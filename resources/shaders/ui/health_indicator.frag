@@ -1,4 +1,5 @@
-#version 400 core
+#version 300 es
+precision mediump float;
 
 in vec3 normal;
 in vec2 texCoord;

@@ -1,4 +1,5 @@
-#version 400 core
+#version 300 es
+precision mediump float;
 
 in struct per_vertex {
 	vec2 uv;

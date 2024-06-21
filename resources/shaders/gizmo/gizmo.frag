@@ -1,4 +1,5 @@
-#version 400 core
+#version 300 es
+precision mediump float;
 
 in vec4 color;
 in vec3 fragPos;

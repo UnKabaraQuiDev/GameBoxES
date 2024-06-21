@@ -1,4 +1,5 @@
-#version 400 core
+#version 300 es
+precision mediump float;
 
 const int MAX_JOINTS = 50;//max joints allowed in a skeleton
 const int MAX_WEIGHTS = 3;//max number of joints that can affect a vertex
