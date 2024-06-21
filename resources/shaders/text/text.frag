@@ -32,10 +32,9 @@ void main() {
 	vec4 mask = texture(
 			txt1,
 			vec2(
-					vertex.uv*vec2(
-					1.0/95.0+((float(instance.character)-32.0)/95.0),
-					1)
-			)
+					vertex.uv.x*(1.0/95.0)+((float(instance.character)-32.0)/95.0),
+					vertex.uv.y
+			).xy
 	);
 
 	if(mask.a == 0.0 && transparent) {
