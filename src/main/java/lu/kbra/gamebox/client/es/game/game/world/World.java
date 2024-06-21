@@ -7,10 +7,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.Set;
 import java.util.logging.Level;
 
 import org.joml.Math;
@@ -67,7 +69,8 @@ public class World implements Cleanupable {
 	public static final int GEN_CIRCLE_SIZE = 1;
 
 	private static final float ATTRACT_DISTANCE = 3f;
-	private static final float EAT_DISTANCE = 3f;
+	private static final float PLANT_EAT_DISTANCE = 2f;
+	private static final float CELL_EAT_DISTANCE = 3f;
 	private static final float CELLS_MOV_SPEED = 1f;
 
 	private static final double SEED_OFFSET_DISTRIBUTION = 11;
@@ -80,7 +83,7 @@ public class World implements Cleanupable {
 	private static final long TOXIN_DAMAGE_DELAY = 1000; // ms
 
 	private HashMap<String, List<Entity>> generatedChunks = new HashMap<>();
-	private List<String> updateTasks = new ArrayList<>(20);
+	private Set<String> updateTasks = new HashSet<>(20);
 	private final int chunkSize = 20;
 
 	private boolean paused = false;
@@ -113,8 +116,6 @@ public class World implements Cleanupable {
 
 	private PlayerEntity player;
 
-	private int updateFrameCount;
-
 	public World(WorldScene3D world, double seed) {
 		this.scene = world;
 
@@ -132,7 +133,7 @@ public class World implements Cleanupable {
 		this.player = new PlayerEntity("player", cache, playerMesh, new CellDescriptor("player", CellType.PLAYER, "noname", null, null, null, 1, 0, 0, 0), new Vector3f(0, 0, 1.5f));
 		player.addComponent(new RenderComponent(4));
 		scene.addEntity(player);
-		
+
 		player.getPlayerMaterial(cache).setDamage(3);
 
 		cellDescriptorPool = loadCellDescriptorPool();
@@ -155,10 +156,6 @@ public class World implements Cleanupable {
 		Window window = scene.getWindow();
 
 		player.update();
-
-		updateFrameCount++;
-
-		System.out.println(updateFrameCount);
 
 		if (paused) {
 			return;
@@ -191,6 +188,7 @@ public class World implements Cleanupable {
 		}
 
 		GlobalUtils.dumpThreads(Level.SEVERE);
+		GlobalLogger.info(Arrays.toString(updateTasks.toArray()));
 	}
 
 	public void render(float dTime) {
@@ -200,12 +198,14 @@ public class World implements Cleanupable {
 	}
 
 	private void simulateCells(float dTime, Vector2f center, CellsEntity e) {
-		if (updateTasks.contains(center.toString() + "-cells-" + e.getId())) {
+		final String taskId = center.x + "-" + center.y + "-cells-" + e.getId();
+
+		if (updateTasks.contains(taskId)) {
 			GlobalLogger.info("Already computing (cells): " + center);
 			return;
 		}
 
-		updateTasks.add(center.toString() + "-cells-" + e.getId());
+		updateTasks.add(taskId);
 
 		final CellInstanceEmitter inst = (CellInstanceEmitter) e.getComponent(InstanceEmitterComponent.class).getInstanceEmitter(cache);
 
@@ -217,53 +217,51 @@ public class World implements Cleanupable {
 		for (int i = 0; i < inst.getParticleCount(); i++) {
 			Instance part = inst.getParticles()[i];
 
-			Vector3f objAbsPos = ((Transform3D) part.getTransform()).getTranslation().add(parentAbsPos, new Vector3f()).mul(1, 1, 0);
+			final Vector3f partPos = ((Transform3D) part.getTransform()).getTranslation();
+			
+			Vector3f objAbsPos = partPos.add(parentAbsPos, new Vector3f()).mul(1, 1, 0);
 			float dist = playerAbsPos.distance(objAbsPos);
 			Vector3f direction = new Vector3f(playerAbsPos).sub(objAbsPos).normalize();
 
 			if ((Math.random() < desc.getAggressivity() && dist < desc.getSoftAggressiveDistance()) || dist < desc.getHardAggressiveDistance()) { // triggers aggressive behaviour
+				
 				inst.getDirections().get(i).set(direction.mul(dTime * CELLS_MOV_SPEED));
-				((Transform3D) part.getTransform()).getTranslation().add(inst.getDirections().get(i));
-			} else if (dist <= EAT_DISTANCE) {
+				partPos.add(inst.getDirections().get(i));
+				
+				part.getTransform().updateMatrix();
+			} else if (dist <= CELL_EAT_DISTANCE) {
 				GlobalUtils.INSTANCE.playerData.damage(1);
 
 				inst.getDirections().get(i).set(direction.mul(-2 * dTime * CELLS_MOV_SPEED));
-				((Transform3D) part.getTransform()).getTranslation().add(inst.getDirections().get(i));
+				partPos.add(inst.getDirections().get(i));
 
 				GlobalUtils.INSTANCE.playerData.unlockAchievement(Achievements.ENNEMY_DAMAGE);
+				
+				part.getTransform().updateMatrix();
 			} else { // idle
-				inst.getDirections().get(i).add(new Vector3f((float) Math.random() - 0.5f, (float) Math.random() - 0.5f, 0).normalize()).div(2);
-				((Transform3D) part.getTransform()).getTranslation().add(inst.getDirections().get(i));
+				
+				// inst.getDirections().get(i).add(new Vector3f((float) Math.random() - 0.5f, (float) Math.random() - 0.5f, 0).normalize()).div(2);
+				// partPos.add(inst.getDirections().get(i));
+				
 			}
-			part.getTransform().updateMatrix();
 		}
 
-		if (updateFrameCount % 10 == 1 || true) {
+		GlobalUtils.pushRender(() -> {
+			inst.updateParticlesTransforms();
+			updateTasks.remove(taskId);
+		});
 
-			System.err.println("push cells update");
-			GlobalUtils.pushRender(() -> {
-				inst.updateParticlesTransforms();
-				updateTasks.remove(center.toString() + "-cells-" + e.getId());
-			});
-
-		} else {
-
-			/*
-			 * for (int i = 0; i < inst.getParticleCount(); i++) { Instance part = inst.getParticles()[i];
-			 * 
-			 * ((Transform3D) part.getTransform()).getTranslation().add(inst.getDirections().get(i)); part.getTransform().updateMatrix(); }
-			 */
-
-		}
 	}
 
 	private void simulatePlants(final float dTime, final Vector2f center, PlantsEntity e) {
-		if (updateTasks.contains(center.toString() + "plants")) {
-			GlobalLogger.info("Already computing: " + center);
+		final String taskId = center.x + "-" + center.y + "-plants-";
+
+		if (updateTasks.contains(taskId)) {
+			GlobalLogger.info("Already computing (plants): " + center);
 			return;
 		}
 
-		updateTasks.add(center.toString() + "plants");
+		updateTasks.add(taskId);
 
 		WorldParticleEmitter inst = (WorldParticleEmitter) e.getComponent(InstanceEmitterComponent.class).getInstanceEmitter(cache);
 
@@ -283,7 +281,7 @@ public class World implements Cleanupable {
 				changed.setValue(true);
 			}
 
-			if (dist < EAT_DISTANCE && !MathUtils.compare((float) part.getBuffers()[0], 0, 0.001f)) {
+			if (dist < PLANT_EAT_DISTANCE && !MathUtils.compare((float) part.getBuffers()[0], 0, 0.001f)) {
 				((Transform3D) part.getTransform()).setScale(0);
 				part.getBuffers()[0] = 0f;
 
@@ -302,10 +300,10 @@ public class World implements Cleanupable {
 		if (changed.getValue()) {
 			GlobalUtils.pushRender(() -> {
 				inst.updateParticlesTransforms();
-				updateTasks.remove(center.toString() + "plants");
+				updateTasks.remove(taskId);
 			});
 		} else {
-			updateTasks.remove(center.toString() + "plants");
+			updateTasks.remove(taskId);
 		}
 	}
 
