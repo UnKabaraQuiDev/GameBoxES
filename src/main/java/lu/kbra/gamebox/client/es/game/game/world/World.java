@@ -32,6 +32,7 @@ import lu.kbra.gamebox.client.es.engine.geom.Mesh;
 import lu.kbra.gamebox.client.es.engine.geom.instance.Instance;
 import lu.kbra.gamebox.client.es.engine.graph.window.Window;
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
+import lu.kbra.gamebox.client.es.engine.objs.entity.Component;
 import lu.kbra.gamebox.client.es.engine.objs.entity.Entity;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.InstanceEmitterComponent;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.RenderComponent;
@@ -68,12 +69,12 @@ public class World implements Cleanupable {
 
 	public static final float CULLING_DISTANCE = 35;
 
-	private static final float Y_OFFSET = 0.05f;
+	private static final float Y_OFFSET = 0.01f;
 	public static final int GEN_CIRCLE_SIZE = 1;
 
 	private static final float ATTRACT_DISTANCE = 2.5f;
 	private static final float PLANT_EAT_DISTANCE = 2f;
-	private static final float CELL_EAT_DISTANCE = 3f;
+	private static final float CELL_EAT_DISTANCE = 2f;
 	private static final float CELLS_MOV_SPEED = 1f;
 
 	private static final double SEED_OFFSET_DISTRIBUTION = 11;
@@ -83,7 +84,7 @@ public class World implements Cleanupable {
 
 	private static final Vector2f ZERO2D = new Vector2f(0);
 
-	private static final long TOXIN_DAMAGE_DELAY = 1000; // ms
+	private static final long TOXIN_DAMAGE_DELAY = 1000, CELL_DAMAGE_DELAY = 1000; // ms
 
 	private HashMap<String, List<Entity>> generatedChunks = new HashMap<>();
 	private Set<String> updateTasks = Collections.synchronizedSet(new HashSet<>(20));
@@ -153,8 +154,9 @@ public class World implements Cleanupable {
 		player.getAcceleration().add(GlobalUtils.getJoystickDirection().mul(dTime * GlobalUtils.INSTANCE.playerData.getSpeed()));
 	}
 
-	private long lastToxinDamage = 0;
+	private long lastToxinDamage = 0, lastCellDamage = 0;
 	private boolean moved = false;
+	private byte frameCount = 0;
 
 	public void update(float dTime) {
 		Window window = scene.getWindow();
@@ -167,6 +169,8 @@ public class World implements Cleanupable {
 		moved = player.getVelocity().getVelocity().lengthSquared() > 0;
 
 		PlayerData pd = GlobalUtils.INSTANCE.playerData;
+
+		pd.setDamage(5);
 
 		if (Math.random() < pd.getPhotosynthesis() / 5) {
 			pd.eatPlant();
@@ -183,7 +187,7 @@ public class World implements Cleanupable {
 				((Transform3D) part.getTransform()).getRotation().set(new Quaternionf().rotateLocalZ((float) (Math.random() * Math.PI)));
 				((Transform3D) part.getTransform()).setTranslation(new Vector3f(playerTrans.x, playerTrans.y, GlobalConsts.TOXINS_HEIGHT + Y_OFFSET * poisonTrailIndex));
 				((Transform3D) part.getTransform()).updateMatrix();
-				part.getBuffers()[0] = Math.clamp(1.2f, 2.8f, (float) (Math.random() * 3f));
+				part.getBuffers()[0] = Math.clamp(1.2f, 2.5f, (float) (Math.random() * 2.5f));
 
 				GlobalUtils.pushRender(inst::updateParticles);
 
@@ -208,6 +212,29 @@ public class World implements Cleanupable {
 				}
 			}
 		}
+
+		if (frameCount == 0) {
+			List<Cleanupable> toBeRemoved = new ArrayList<Cleanupable>(50);
+			GlobalUtils.pushRender(() -> {
+				int entityCount = scene.getEntities().size();
+				scene.getEntities().entrySet().removeIf((e) -> {
+					if (e.getValue().getComponent(Transform3DComponent.class).getTransform().getTranslation().distance(player.getTransform().getTransform().getTranslation()) > chunkSize * 3) {
+						for (Component c : e.getValue().getComponents().values()) {
+							if (c instanceof Cleanupable) {
+								toBeRemoved.add((Cleanupable) c);
+								((Cleanupable) c).cleanup();
+							}
+						}
+						return true;
+					}
+					return false;
+				});
+
+				GlobalLogger.info("Cleaned up " + toBeRemoved.size() + " components");
+				GlobalLogger.info("Removed " + (entityCount - scene.getEntities().size()) + " entities");
+			});
+		}
+		frameCount++;
 
 		if (!pd.isToxinResistant() && isToxic(GeoPlane.XY.projectToPlane(player.getTransform().getTransform().getTranslation()), ZERO2D) && System.currentTimeMillis() - lastToxinDamage > TOXIN_DAMAGE_DELAY) {
 			lastToxinDamage = System.currentTimeMillis();
@@ -253,6 +280,8 @@ public class World implements Cleanupable {
 
 		updateTasks.add(taskId);
 
+		final PlayerData pd = GlobalUtils.INSTANCE.playerData;
+
 		final CellInstanceEmitter inst = (CellInstanceEmitter) e.getComponent(InstanceEmitterComponent.class).getInstanceEmitter(cache);
 
 		final Vector3f parentAbsPos = e.getComponent(Transform3DComponent.class).getTransform().getTranslation().mul(1, 1, 0, new Vector3f());
@@ -265,30 +294,41 @@ public class World implements Cleanupable {
 
 			final Vector3f partPos = ((Transform3D) part.getTransform()).getTranslation();
 
-			Vector3f objAbsPos = partPos.add(parentAbsPos, new Vector3f()).mul(1, 1, 0);
-			float dist = playerAbsPos.distance(objAbsPos);
-			Vector3f direction = new Vector3f(playerAbsPos).sub(objAbsPos).normalize();
+			if (((Transform3D) part.getTransform()).getScale().lengthSquared() == 0) {
+				pd.unlockAchievement(Achievements.KILL_AN_ENNEMY);
+				continue;
+			}
+
+			final Vector3f objAbsPos = partPos.add(parentAbsPos, new Vector3f()).mul(1, 1, 0);
+			final float dist = playerAbsPos.distance(objAbsPos);
+			final Vector3f direction = new Vector3f(playerAbsPos).sub(objAbsPos).normalize();
 
 			if ((Math.random() < desc.getAggressivity() && dist < desc.getSoftAggressiveDistance()) || dist < desc.getHardAggressiveDistance()) { // triggers aggressive behaviour
-
-				inst.getDirections().get(i).set(direction.mul(dTime * CELLS_MOV_SPEED));
+				inst.getDirections().get(i).lerp(direction.mul(dTime * CELLS_MOV_SPEED), 0.5f);
 				partPos.add(inst.getDirections().get(i).mul(1, 1, 0));
 
 				part.getTransform().updateMatrix();
-			} else if (dist <= CELL_EAT_DISTANCE) {
-				GlobalUtils.INSTANCE.playerData.damage(1);
+			}
+			if (dist <= CELL_EAT_DISTANCE) {
+				if (pd.getDamage() > 0 && Math.random() < pd.getDamage() / 5) {
+					// reflect damage
 
-				inst.getDirections().get(i).set(direction.mul(-2 * dTime * CELLS_MOV_SPEED));
-				partPos.add(inst.getDirections().get(i).mul(1, 1, 0));
+					((Transform3D) part.getTransform()).getScale().sub(new Vector3f(0.5f));
+					PDRUtils.clampPositive(((Transform3D) part.getTransform()).getScale());
 
-				GlobalUtils.INSTANCE.playerData.unlockAchievement(Achievements.ENNEMY_DAMAGE);
+					pd.eatCell();
+				} else if (System.currentTimeMillis() - lastCellDamage > CELL_DAMAGE_DELAY) {
+					GlobalUtils.INSTANCE.playerData.damage(1);
+
+					GlobalUtils.INSTANCE.playerData.unlockAchievement(Achievements.ENNEMY_DAMAGE);
+
+					lastCellDamage = System.currentTimeMillis();
+				}
+
+				inst.getDirections().get(i).set(direction.mul(-25 * CELLS_MOV_SPEED));
+				// partPos.add(inst.getDirections().get(i).mul(1, 1, 0));
 
 				part.getTransform().updateMatrix();
-			} else { // idle
-
-				// inst.getDirections().get(i).add(new Vector3f((float) Math.random() - 0.5f, (float) Math.random() - 0.5f, 0).normalize()).div(2);
-				// partPos.add(inst.getDirections().get(i));
-
 			}
 		}
 
@@ -682,6 +722,7 @@ public class World implements Cleanupable {
 	public void cleanup() {
 		GlobalLogger.log("Cleaning up: " + getClass().getName());
 
+		scene.getEntities().clear();
 		cache.cleanup();
 	}
 

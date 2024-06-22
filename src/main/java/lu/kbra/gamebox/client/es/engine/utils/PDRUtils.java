@@ -99,14 +99,12 @@ public final class PDRUtils {
 
 		switch (status) {
 		/*
-		 * case AL11.AL_INVALID_DEVICE: throw new ALInvalidDeviceException(caller,
-		 * status, msg);
+		 * case AL11.AL_INVALID_DEVICE: throw new ALInvalidDeviceException(caller, status, msg);
 		 */
 		case AL11.AL_INVALID_OPERATION:
 			throw new ALInvalidOperationException(caller, status, msg);
 		/*
-		 * case AL11.AL_INVALID_CONTEXT: throw new ALInvalidContextException(caller,
-		 * status, msg);
+		 * case AL11.AL_INVALID_CONTEXT: throw new ALInvalidContextException(caller, status, msg);
 		 */
 		case AL11.AL_INVALID_NAME:
 			throw new ALInvalidNameException(caller, status, msg);
@@ -156,7 +154,7 @@ public final class PDRUtils {
 			return true;
 		}
 	}
-	
+
 	public static boolean checkEGLError(String msg) {
 		int status = EGL10.eglGetError();
 
@@ -192,17 +190,18 @@ public final class PDRUtils {
 			throw new EGLBadNativePixmapException(caller, status, msg);
 		case EGL10.EGL_BAD_NATIVE_WINDOW:
 			throw new EGLBadNativeWindowException(caller, status, msg);
-		/*case EGL10.EGL_NO_CONTEXT:
-			throw new EGLNoContextException(caller, status, msg);*/
+		/*
+		 * case EGL10.EGL_NO_CONTEXT: throw new EGLNoContextException(caller, status, msg);
+		 */
 		default:
 			return true;
 		}
 	}
-	
+
 	public static void throwGLESError(String string) {
 		throw new EGLRuntimeException(string);
 	}
-	
+
 	public static boolean checkGlError() {
 		return checkGlError("");
 	}
@@ -446,29 +445,33 @@ public final class PDRUtils {
 		JSONArray arr = sobj.getJSONArray(key);
 		return new Vector2f(arr.getFloat(0), arr.getFloat(1));
 	}
-	
+
 	@Deprecated
 	public static int[] randomIntArray(int length, int min, int max) {
 		Random rand = new Random();
 		int[] arr = new int[length];
-		for(int i = 0; i < length; i++) {
-			arr[i] = rand.nextInt(max-min)+min;
+		for (int i = 0; i < length; i++) {
+			arr[i] = rand.nextInt(max - min) + min;
 		}
 		return arr;
 	}
 
 	public static NextTask[] castNextTask(Object[] array) {
 		NextTask[] nt = new NextTask[array.length];
-		
-		for(int i = 0; i < array.length; i++) {
+
+		for (int i = 0; i < array.length; i++) {
 			nt[i] = (NextTask) array[i];
 		}
-		
+
 		return nt;
 	}
 
-	public static Vector2f clamp(Vector2f progress) {
-		return progress.set(PCUtils.clamp(0, 1, progress.x), PCUtils.clamp(0, 1, progress.y));
+	public static Vector2f clamp(Vector2f vec) {
+		return vec.set(PCUtils.clamp(0, 1, vec.x), PCUtils.clamp(0, 1, vec.y));
+	}
+
+	public static Vector3f clampPositive(Vector3f vec) {
+		return vec.set(PCUtils.clampGreater(0, vec.x), PCUtils.clampGreater(0, vec.y), PCUtils.clampGreater(0, vec.z));
 	}
 
 }

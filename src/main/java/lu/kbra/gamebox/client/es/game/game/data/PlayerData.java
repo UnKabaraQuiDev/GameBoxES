@@ -67,10 +67,19 @@ public class PlayerData {
 		if (!hasAchievement(Achievements.HEAVY_POCKETS) && glucose >= 100 && aminoAcid >= 100 && lipid >= 100) {
 			unlockAchievement(Achievements.HEAVY_POCKETS);
 		}
-
-		/**
-		 * glucose += Math.random() < 0.4f ? 1 : 0; aminoAcid += Math.random() < 0.1f ? 1 : 0; lipid += Math.random() < 0.1f ? 1 : 0;
-		 */
+	}
+	
+	public void eatCell() {
+		for(int i = 0; i < 5; i++) {
+			int rand = (int) (Math.random() * 3);
+			if (rand < 1) {
+				glucose++;
+			} else if (rand < 2) {
+				aminoAcid++;
+			} else if (rand < 3) {
+				lipid++;
+			}
+		}
 	}
 
 	public void damage(int damage) {
