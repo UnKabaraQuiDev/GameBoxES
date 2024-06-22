@@ -68,7 +68,7 @@ public class World implements Cleanupable {
 
 	public static final float CULLING_DISTANCE = 35;
 
-	private static final float Y_OFFSET = 0.0001f;
+	private static final float Y_OFFSET = 0.05f;
 	public static final int GEN_CIRCLE_SIZE = 1;
 
 	private static final float ATTRACT_DISTANCE = 2.5f;
@@ -118,6 +118,8 @@ public class World implements Cleanupable {
 	private CacheManager cache;
 
 	private PlayerEntity player;
+	private Entity poisonTrail;
+	private int poisonTrailIndex = 0;
 
 	public World(WorldScene3D world, double seed) {
 		this.scene = world;
@@ -152,6 +154,7 @@ public class World implements Cleanupable {
 	}
 
 	private long lastToxinDamage = 0;
+	private boolean moved = false;
 
 	public void update(float dTime) {
 		Window window = scene.getWindow();
@@ -161,13 +164,33 @@ public class World implements Cleanupable {
 		}
 
 		player.update();
+		moved = player.getVelocity().getVelocity().lengthSquared() > 0;
 
 		PlayerData pd = GlobalUtils.INSTANCE.playerData;
 
-		if(Math.random() < pd.getPhotosynthesis()/5) {
+		if (Math.random() < pd.getPhotosynthesis() / 5) {
 			pd.eatPlant();
 		}
-		
+
+		if (pd.hasPoisonTrail() && poisonTrail != null) {
+			if (moved && java.lang.Math.random() < 0.11f) {
+				WorldParticleEmitter inst = (WorldParticleEmitter) poisonTrail.getComponent(InstanceEmitterComponent.class).getInstanceEmitter(cache);
+
+				Instance part = inst.getParticles()[poisonTrailIndex++];
+
+				final Vector3f playerTrans = player.getTransform().getTransform().getTranslation();
+				((Transform3D) part.getTransform()).getScale().set(3f);
+				((Transform3D) part.getTransform()).getRotation().set(new Quaternionf().rotateLocalZ((float) (Math.random() * Math.PI)));
+				((Transform3D) part.getTransform()).setTranslation(new Vector3f(playerTrans.x, playerTrans.y, GlobalConsts.TOXINS_HEIGHT + Y_OFFSET * poisonTrailIndex));
+				((Transform3D) part.getTransform()).updateMatrix();
+				part.getBuffers()[0] = Math.clamp(1.2f, 2.8f, (float) (Math.random() * 3f));
+
+				GlobalUtils.pushRender(inst::updateParticles);
+
+				poisonTrailIndex %= inst.getParticleCount();
+			}
+		}
+
 		for (Vector2f chunkCenter : getNeighbouringChunks(getCenterPlayerPos())) {
 			List<Entity> entities = generatedChunks.get(chunkCenter.toString());
 			if (entities == null)
@@ -186,7 +209,7 @@ public class World implements Cleanupable {
 			}
 		}
 
-		if (isToxic(GeoPlane.XY.projectToPlane(player.getTransform().getTransform().getTranslation()), ZERO2D) && System.currentTimeMillis() - lastToxinDamage > TOXIN_DAMAGE_DELAY) {
+		if (!pd.isToxinResistant() && isToxic(GeoPlane.XY.projectToPlane(player.getTransform().getTransform().getTranslation()), ZERO2D) && System.currentTimeMillis() - lastToxinDamage > TOXIN_DAMAGE_DELAY) {
 			lastToxinDamage = System.currentTimeMillis();
 
 			GlobalUtils.INSTANCE.playerData.damage(1);
@@ -201,6 +224,20 @@ public class World implements Cleanupable {
 	}
 
 	public void render(float dTime) {
+		PlayerData pd = GlobalUtils.INSTANCE.playerData;
+
+		if (pd.hasPoisonTrail() && poisonTrail == null) {
+			WorldParticleEmitter emit = new WorldParticleEmitter("playerToxins", 24, (ToxinWorldParticleMaterial) cache.loadOrGetMaterial(ToxinWorldParticleMaterial.NAME, ToxinWorldParticleMaterial.class,
+					cache.loadOrGetRenderShader(WorldParticleShader.NAME, WorldParticleShader.class), cache.loadOrGetSingleTexture(ToxinWorldParticleMaterial.TEXTURE_NAME, ToxinWorldParticleMaterial.TEXTURE_PATH, TextureFilter.LINEAR)),
+					new Transform3D(new Vector3f(), new Quaternionf(), new Vector3f(0)));
+			cache.addMesh(emit.getParticleMesh());
+			cache.addInstanceEmitter(emit);
+
+			poisonTrail = scene.addEntity("poisonTrail", new InstanceEmitterComponent(emit));
+
+			GlobalLogger.info("Init PoisonTrail !");
+		}
+
 		if (paused) {
 			return;
 		}
@@ -528,7 +565,7 @@ public class World implements Cleanupable {
 			((Transform3D) part.getTransform()).getTranslation().set(pos.x, pos.y, GlobalConsts.TOXINS_HEIGHT + Y_OFFSET * i);
 			((Transform3D) part.getTransform()).updateMatrix();
 
-			part.getBuffers()[0] = Math.clamp(0.6f, 10f, hostilityGen.noise(pos) * 10);
+			part.getBuffers()[0] = Math.clamp(0.6f, 10f, hostilityGen.noise(pos) * 10f);
 		}
 
 		emit.updateParticles();

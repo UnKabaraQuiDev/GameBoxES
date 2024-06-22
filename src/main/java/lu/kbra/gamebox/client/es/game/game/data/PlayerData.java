@@ -242,7 +242,7 @@ public class PlayerData {
 		this.poisonDamage = poisonDamage;
 	}
 
-	public boolean isPoisonTrail() {
+	public boolean hasPoisonTrail() {
 		return poisonTrail;
 	}
 

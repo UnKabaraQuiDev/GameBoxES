@@ -78,6 +78,7 @@ public class UISceneGameOverlay extends UISceneState {
 	private int upgradeTreeSelection = -1;
 
 	private ControllerInputWatcher cic;
+	private boolean init = false;
 
 	public UISceneGameOverlay(UIScene3D scene) {
 		super("MajorUpgradeTree", scene);
@@ -174,6 +175,7 @@ public class UISceneGameOverlay extends UISceneState {
 		cic.setSkipWaitingForNone(true);
 
 		cache.dump(System.err);
+		init = true;
 	}
 
 	@Override
@@ -222,6 +224,10 @@ public class UISceneGameOverlay extends UISceneState {
 
 	@Override
 	public void update(float dTime) {
+		if(!init) {
+			return;
+		}
+		
 		// health
 		if (healthRestoreAcceptedProgress < 1) {
 			healthRestoreAcceptedProgress = Math.clamp(0, 1, healthRestoreAcceptedProgress + dTime * ACCEPTED_ANIMATION_SPEED);

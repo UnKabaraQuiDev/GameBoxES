@@ -59,7 +59,7 @@ public class GameBoxES extends GameLogic {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		GameEngine.DEBUG.wireframe = GlobalOptions.DEBUG && GlobalOptions.WIREFRAME;
 		GameEngine.DEBUG.gizmos = GlobalOptions.DEBUG && GlobalOptions.GIZMOS;
 
@@ -140,7 +140,9 @@ public class GameBoxES extends GameLogic {
 		if (debug != null) {
 			debug.update();
 		}
-		// worldScene.render(dTime);
+		if (worldScene != null) {
+			worldScene.render(dTime);
+		}
 		uiScene.render(dTime);
 		compositor.render(engine);
 	}
@@ -150,15 +152,15 @@ public class GameBoxES extends GameLogic {
 		gameState = GameState.LOADING;
 		playerData = new PlayerData();
 		uiScene.clearMainMenu();
-		
+
 		GlobalUtils.pushRender(() -> {
 			GlobalUtils.enableWorkers();
-			
+
 			uiScene.setupGame();
 			uiScene.showUpgradeTree(false);
 			worldScene.setupGame();
 			worldSceneRenderLayer.setVisible(true);
-			
+
 			gameState = GameState.PLAYING;
 			playerData.startMarkCount();
 		});
