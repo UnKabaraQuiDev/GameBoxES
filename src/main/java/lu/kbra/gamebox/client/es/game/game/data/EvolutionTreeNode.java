@@ -89,6 +89,14 @@ public class EvolutionTreeNode {
 		return description;
 	}
 
+	public String getTitle() {
+		return title;
+	}
+
+	public String getType() {
+		return type;
+	}
+
 	public boolean isLeaf() {
 		return children == null || children.isEmpty();
 	}

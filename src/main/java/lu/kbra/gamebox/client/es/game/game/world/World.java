@@ -76,6 +76,7 @@ public class World implements Cleanupable {
 	private static final float PLANT_EAT_DISTANCE = 2f;
 	private static final float CELL_EAT_DISTANCE = 2f;
 	private static final float CELLS_MOV_SPEED = 1f;
+	private static final float CELL_POISON_DAMAGE_DISTANCE = 5f;
 
 	private static final double SEED_OFFSET_DISTRIBUTION = 11;
 	private static final double SEED_OFFSET_HOSTILITY = 10;
@@ -156,7 +157,7 @@ public class World implements Cleanupable {
 
 	private long lastToxinDamage = 0, lastCellDamage = 0;
 	private boolean moved = false;
-	private byte frameCount = 0;
+	private byte frameCount = 125;
 
 	public void update(float dTime) {
 		Window window = scene.getWindow();
@@ -168,9 +169,9 @@ public class World implements Cleanupable {
 		player.update();
 		moved = player.getVelocity().getVelocity().lengthSquared() > 0;
 
-		PlayerData pd = GlobalUtils.INSTANCE.playerData;
+		GlobalLogger.info("Player absolute world position: "+player.getTransform().getTransform().getTranslation()+", current chunk center: "+getChunkCenter(GeoPlane.XY.projectToPlane(player.getTransform().getTransform().getTranslation())));
 
-		pd.setDamage(5);
+		PlayerData pd = GlobalUtils.INSTANCE.playerData;
 
 		if (Math.random() < pd.getPhotosynthesis() / 5) {
 			pd.eatPlant();
@@ -214,25 +215,7 @@ public class World implements Cleanupable {
 		}
 
 		if (frameCount == 0) {
-			List<Cleanupable> toBeRemoved = new ArrayList<Cleanupable>(50);
-			GlobalUtils.pushRender(() -> {
-				int entityCount = scene.getEntities().size();
-				scene.getEntities().entrySet().removeIf((e) -> {
-					if (e.getValue().getComponent(Transform3DComponent.class).getTransform().getTranslation().distance(player.getTransform().getTransform().getTranslation()) > chunkSize * 3) {
-						for (Component c : e.getValue().getComponents().values()) {
-							if (c instanceof Cleanupable) {
-								toBeRemoved.add((Cleanupable) c);
-								((Cleanupable) c).cleanup();
-							}
-						}
-						return true;
-					}
-					return false;
-				});
-
-				GlobalLogger.info("Cleaned up " + toBeRemoved.size() + " components");
-				GlobalLogger.info("Removed " + (entityCount - scene.getEntities().size()) + " entities");
-			});
+			cleanupExtChunks();
 		}
 		frameCount++;
 
@@ -248,6 +231,28 @@ public class World implements Cleanupable {
 		if (updateTasks.size() > 0) {
 			GlobalLogger.info(Arrays.toString(updateTasks.toArray()));
 		}
+	}
+
+	private void cleanupExtChunks() {
+		List<Cleanupable> toBeRemoved = new ArrayList<Cleanupable>(50);
+		GlobalUtils.pushRender(() -> {
+			int entityCount = scene.getEntities().size();
+			scene.getEntities().entrySet().removeIf((e) -> {
+				if (e.getValue().getComponent(Transform3DComponent.class).getTransform().getTranslation().distance(player.getTransform().getTransform().getTranslation()) > chunkSize * 3) {
+					for (Component c : e.getValue().getComponents().values()) {
+						if (c instanceof Cleanupable) {
+							toBeRemoved.add((Cleanupable) c);
+							((Cleanupable) c).cleanup();
+						}
+					}
+					return true;
+				}
+				return false;
+			});
+
+			GlobalLogger.info("Cleaned up " + toBeRemoved.size() + " components");
+			GlobalLogger.info("Removed " + (entityCount - scene.getEntities().size()) + " entities");
+		});
 	}
 
 	public void render(float dTime) {
@@ -303,11 +308,23 @@ public class World implements Cleanupable {
 			final float dist = playerAbsPos.distance(objAbsPos);
 			final Vector3f direction = new Vector3f(playerAbsPos).sub(objAbsPos).normalize();
 
+			if (pd.isPredatorRepulsion() && dist <= desc.getHardAggressiveDistance()) {
+				partPos.add(direction.mul(-1 * CELLS_MOV_SPEED));
+				inst.getDirections().get(i).set(direction.mul(5));
+
+				part.getTransform().updateMatrix();
+				continue;
+			}
 			if ((Math.random() < desc.getAggressivity() && dist < desc.getSoftAggressiveDistance()) || dist < desc.getHardAggressiveDistance()) { // triggers aggressive behaviour
 				inst.getDirections().get(i).lerp(direction.mul(dTime * CELLS_MOV_SPEED), 0.5f);
 				partPos.add(inst.getDirections().get(i).mul(1, 1, 0));
 
 				part.getTransform().updateMatrix();
+			}
+			if (pd.isPoisonDamage() && dist <= CELL_POISON_DAMAGE_DISTANCE) {
+				((Transform3D) part.getTransform()).getScale().sub(new Vector3f(0.5f));
+				PDRUtils.clampPositive(((Transform3D) part.getTransform()).getScale());
+				continue;
 			}
 			if (dist <= CELL_EAT_DISTANCE) {
 				if (pd.getDamage() > 0 && Math.random() < pd.getDamage() / 5) {
@@ -722,7 +739,6 @@ public class World implements Cleanupable {
 	public void cleanup() {
 		GlobalLogger.log("Cleaning up: " + getClass().getName());
 
-		scene.getEntities().clear();
 		cache.cleanup();
 	}
 

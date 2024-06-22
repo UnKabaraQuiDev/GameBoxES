@@ -325,7 +325,7 @@ public class PlayerData {
 
 		upgradeTreeCount++;
 
-		switch (currentTreeNode.getId()) {
+		switch (currentTreeNode.getType()) {
 		case "damage":
 			damage *= 2;
 			break;
@@ -334,7 +334,7 @@ public class PlayerData {
 			break;
 		case "add_max_health":
 			maxHealth += upgradeTreeCount;
-			// ((UISceneGameOverlay) GlobalUtils.INSTANCE.uiScene.getState()).startHealthRestoreAccepted();
+			((UISceneGameOverlay) GlobalUtils.INSTANCE.uiScene.getState()).startHealthRestoreAccepted();
 			break;
 		case "double_max_health":
 			maxHealth *= upgradeTreeCount;
