@@ -46,6 +46,7 @@ import lu.kbra.gamebox.client.es.engine.utils.transform.Transform3D;
 import lu.kbra.gamebox.client.es.game.game.data.Achievements;
 import lu.kbra.gamebox.client.es.game.game.data.CellDescriptor;
 import lu.kbra.gamebox.client.es.game.game.data.CellType;
+import lu.kbra.gamebox.client.es.game.game.data.PlayerData;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.PlantWorldParticleMaterial;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.PlayerCellShader;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.PlayerCellShader.PlayerCellMaterial;
@@ -155,14 +156,18 @@ public class World implements Cleanupable {
 	public void update(float dTime) {
 		Window window = scene.getWindow();
 
-		player.update();
-
-		System.err.println("player zee: " + player.getTransform().getTransform().getTranslation());
-
 		if (paused) {
 			return;
 		}
 
+		player.update();
+
+		PlayerData pd = GlobalUtils.INSTANCE.playerData;
+
+		if(Math.random() < pd.getPhotosynthesis()/5) {
+			pd.eatPlant();
+		}
+		
 		for (Vector2f chunkCenter : getNeighbouringChunks(getCenterPlayerPos())) {
 			List<Entity> entities = generatedChunks.get(chunkCenter.toString());
 			if (entities == null)

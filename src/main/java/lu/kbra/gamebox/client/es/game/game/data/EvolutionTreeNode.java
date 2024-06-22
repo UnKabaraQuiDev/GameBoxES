@@ -30,6 +30,7 @@ public class EvolutionTreeNode {
 			put("poison_damage", 7);
 			put("predator_repulsion", 8);
 			put("poison_trail", 9);
+			put("root", 3);
 		}
 	};
 
@@ -113,10 +114,11 @@ public class EvolutionTreeNode {
 	}
 
 	public int getIconId() {
-		if (!ICON_IDS.containsKey(id)) {
-			GlobalLogger.severe("Icon id not found for: " + id);
+		if (!ICON_IDS.containsKey(type)) {
+			GlobalLogger.severe("Icon id not found for: " + type);
+			return 0;
 		}
-		return ICON_IDS.get(id);
+		return ICON_IDS.get(type);
 	}
 
 }

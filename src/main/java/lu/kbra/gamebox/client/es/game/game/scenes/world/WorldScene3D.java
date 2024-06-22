@@ -50,13 +50,17 @@ public class WorldScene3D extends Scene3D {
 	float size = 1;
 
 	public void input(float dTime) {
-		if(GlobalUtils.INSTANCE.uiScene.getState() != null && ((UISceneGameOverlay) GlobalUtils.INSTANCE.uiScene.getState()).isTreeViewActive()) {
+		if (GlobalUtils.INSTANCE.uiScene.getState() != null && ((UISceneGameOverlay) GlobalUtils.INSTANCE.uiScene.getState()).isTreeViewActive()) {
 			((UISceneGameOverlay) GlobalUtils.INSTANCE.uiScene.getState()).input(dTime);
-		}else if (world != null) {
+		} else if (world != null) {
 			world.input(dTime);
 		}
 
 		if (window.getJoystickButton(GLFW.GLFW_JOYSTICK_1, GLFW.GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER) && (double) (System.currentTimeMillis() - lastTreeView) / 1000 * UISceneGameOverlay.BG_DARKEN_SPEED >= 1) {
+			GlobalUtils.INSTANCE.playerData.setAminoAcid(GlobalUtils.INSTANCE.playerData.getAminoAcid() + 100);
+			GlobalUtils.INSTANCE.playerData.setGlucose(GlobalUtils.INSTANCE.playerData.getGlucose() + 100);
+			GlobalUtils.INSTANCE.playerData.setLipid(GlobalUtils.INSTANCE.playerData.getLipid() + 100);
+
 			if (((UISceneGameOverlay) GlobalUtils.INSTANCE.uiScene.getState()).isTreeViewActive()) {
 				((UISceneGameOverlay) GlobalUtils.INSTANCE.uiScene.getState()).setTreeViewActive(false);
 				lastTreeView = System.currentTimeMillis() - 700;
@@ -65,7 +69,7 @@ public class WorldScene3D extends Scene3D {
 				lastTreeView = System.currentTimeMillis();
 			}
 		}
-		
+
 		if (window.getJoystickButton(GLFW.GLFW_JOYSTICK_1, GLFW.GLFW_GAMEPAD_BUTTON_LEFT_BUMPER) && System.currentTimeMillis() - lastHealthUpgrade >= MIN_UPGRADE_DELAY) {
 			if (GlobalUtils.INSTANCE.playerData.canRestoreHealth()) {
 				((UISceneGameOverlay) GlobalUtils.INSTANCE.uiScene.getState()).startHealthRestoreAccepted();

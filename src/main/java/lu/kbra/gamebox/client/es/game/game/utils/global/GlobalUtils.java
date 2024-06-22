@@ -331,6 +331,31 @@ public class GlobalUtils {
 
 		return mesh;
 	}
+	
+	public static Mesh loadCompiledMesh(CacheManager cache, String path, String name) {
+		Path filePath = Paths.get("./resources/models/compiled/" + path + ".mesh");
+		if (Files.notExists(filePath)) {
+			throw new RuntimeException("Mesh at " + filePath + ", not found; compile it with `GlobalUtils.compileMesh(Mesh mesh, String path)`");
+		}
+
+		final CacheManager cc = currentLoadCache;
+		currentLoadCache = cache;
+
+		Mesh mesh = null;
+
+		try {
+			mesh = (Mesh) cm.decode(ByteBuffer.wrap(Files.readAllBytes(filePath)));
+			mesh.setName(name);
+
+			cc.addMesh(mesh);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+
+		currentLoadCache = cc;
+
+		return mesh;
+	}
 
 	public static void compileMesh(Mesh mesh, String path) {
 		try {

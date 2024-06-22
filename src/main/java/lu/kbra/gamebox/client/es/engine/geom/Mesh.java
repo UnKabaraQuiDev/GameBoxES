@@ -25,7 +25,7 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 
 	public static final String NAME = Mesh.class.getName();
 
-	protected final String name;
+	protected String name;
 	protected int vao = -1;
 	protected HashMap<Integer, Integer> vbo = new HashMap<>();
 	protected Material material;
@@ -37,8 +37,7 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 	protected int vertexCount, indicesCount;
 
 	/**
-	 * Positions are stored as attribArray 0, normals as attribArray 1, uvs as
-	 * attribArray 2
+	 * Positions are stored as attribArray 0, normals as attribArray 1, uvs as attribArray 2
 	 */
 	public Mesh(String name, Material material, Vec3fAttribArray vertices, UIntAttribArray indices, AttribArray... attribs) {
 		this.name = name;
@@ -126,8 +125,8 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 
 	@Override
 	public void cleanup() {
-		GlobalLogger.log("Cleaning up: "+name+" ("+vao+")");
-		
+		GlobalLogger.log("Cleaning up: " + name + " (" + vao + ")");
+
 		if (vao == -1)
 			return;
 
@@ -179,6 +178,10 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 		return indicesCount;
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	@Override
 	public String toString() {
 		return "{" + name + " | VAO: " + vao + " | VBO: " + vbo + " | V: " + vertexCount + "/" + indicesCount + " | Attribs: " + Arrays.toString(attribs) + "}";
@@ -187,7 +190,7 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 	public static QuadMesh newQuad(String name, Material material2, Vector2f size) {
 		return new QuadMesh(name, material2, size);
 	}
-	
+
 	public static QuadMesh newQuad(GeoPlane plane, String name, Material material2, Vector2f size) {
 		return new QuadMesh(name, material2, size, plane);
 	}

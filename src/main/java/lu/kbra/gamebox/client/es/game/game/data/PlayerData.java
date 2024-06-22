@@ -165,6 +165,7 @@ public class PlayerData {
 
 	public void unlockAchievement(Achievements a) {
 		if (!hasAchievement(a)) {
+			GlobalLogger.info("Unlocked: " + a);
 			achievements.add(a);
 		}
 	}
@@ -272,15 +273,46 @@ public class PlayerData {
 	}
 
 	public boolean canSelectUpgrade() {
-		int needed = (int) (Math.pow(2.05f, upgradeTreeCount) * 10);
+		int needed = getUpgradePrice();
 		return lipid >= needed && aminoAcid >= needed && glucose >= needed;
 	}
 
-	public boolean selectUpgrade(int index) {
-		currentTreeNode = getCurrentTreeNode().getChildren().get(index);
+	public int getUpgradePrice() {
+		return (int) (Math.pow(2.05f, upgradeTreeCount) * 10);
+	}
 
-		if (!canRestoreHealth())
+	public boolean selectUpgrade(int index) {
+		if (index < 0) {
 			return false;
+		}
+
+		if (currentTreeNode == null) {
+			GlobalLogger.warning("Current tree node is null !");
+			return false;
+		}
+
+		if (!canSelectUpgrade()) {
+			return false;
+		}
+
+		if (index >= currentTreeNode.getChildren().size()) {
+			return selectUpgrade(index - 1);
+		}
+
+		unlockAchievement(Achievements.UPGRADE_MK1);
+
+		int price = getUpgradePrice();
+
+		lipid -= price;
+		aminoAcid -= price;
+		glucose -= price;
+
+		currentTreeNode = getCurrentTreeNode().getChildren().get(index);
+		GlobalLogger.info("Unlocked: " + currentTreeNode);
+
+		if (currentTreeNode.isLeaf()) {
+			unlockAchievement(Achievements.UPGRADE_LATEST);
+		}
 
 		upgradeTreeCount++;
 
@@ -308,9 +340,11 @@ public class PlayerData {
 			predatorRepulsion = true;
 			break;
 		case "poison_trail":
+			unlockAchievement(Achievements.UPGRADE_OFFENSIVE);
 			poisonTrail = true;
 			break;
 		case "poison_damage":
+			unlockAchievement(Achievements.UPGRADE_OFFENSIVE);
 			poisonDamage = true;
 			break;
 		}
