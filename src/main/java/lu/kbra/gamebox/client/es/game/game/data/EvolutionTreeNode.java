@@ -12,9 +12,9 @@ import java.util.stream.Collectors;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import lu.pcy113.pclib.PCUtils;
 import lu.pcy113.pclib.logger.GlobalLogger;
 
-import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalLang;
 
 public class EvolutionTreeNode {
@@ -111,11 +111,11 @@ public class EvolutionTreeNode {
 
 	@Override
 	public String toString() {
-		return id + "(name=" + title.replace("\n", "<br>") + ", desc=" + description + ")";
+		return id + "(type="+type+", name=" + title.replace("\n", "<br>") + ", desc=" + description + ")";
 	}
 
 	public String toString(int i) {
-		String tabs = PDRUtils.repeatString("  ", i);
+		String tabs = PCUtils.repeatString("  ", i);
 		String content = toString();
 		String ending = isLeaf() ? "" : children.stream().map(c -> c.toString(i + 1)).collect(Collectors.joining(",\n", "[\n", "\n" + tabs + "]"));
 		return tabs + content + ending + "";

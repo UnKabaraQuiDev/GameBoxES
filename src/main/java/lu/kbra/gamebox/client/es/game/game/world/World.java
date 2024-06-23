@@ -54,7 +54,6 @@ import lu.kbra.gamebox.client.es.game.game.render.shaders.PlayerCellShader.Playe
 import lu.kbra.gamebox.client.es.game.game.render.shaders.ToxinWorldParticleMaterial;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.WorldParticleShader;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.WorldScene3D;
-import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.CellEntity;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.CellInstanceEmitter;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.CellsEntity;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.PlantsEntity;
@@ -152,7 +151,7 @@ public class World implements Cleanupable {
 			return;
 		}
 
-		player.getAcceleration().add(GlobalUtils.getJoystickDirection().mul(dTime * GlobalUtils.INSTANCE.playerData.getSpeed()));
+		player.getAcceleration().add(GlobalUtils.getJoystickDirection().mul(dTime * Math.sqrt(GlobalUtils.INSTANCE.playerData.getSpeed())));
 	}
 
 	private long lastToxinDamage = 0, lastCellDamage = 0;
@@ -238,6 +237,9 @@ public class World implements Cleanupable {
 		GlobalUtils.pushRender(() -> {
 			int entityCount = scene.getEntities().size();
 			scene.getEntities().entrySet().removeIf((e) -> {
+				if(!e.getValue().hasComponent(Transform3DComponent.class)) {
+					return false;
+				}
 				if (e.getValue().getComponent(Transform3DComponent.class).getTransform().getTranslation().distance(player.getTransform().getTransform().getTranslation()) > chunkSize * 3) {
 					for (Component c : e.getValue().getComponents().values()) {
 						if (c instanceof Cleanupable) {
@@ -746,7 +748,7 @@ public class World implements Cleanupable {
 		return cache;
 	}
 
-	public CellEntity getPlayer() {
+	public PlayerEntity getPlayer() {
 		return player;
 	}
 

@@ -4,23 +4,26 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.json.JSONException;
 
 import lu.pcy113.pclib.logger.GlobalLogger;
 
+import lu.kbra.gamebox.client.es.game.game.render.shaders.PlayerCellShader.PlayerCellMaterial;
 import lu.kbra.gamebox.client.es.game.game.scenes.ui.UISceneGameOverlay;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalLang;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
 
 public class PlayerData {
 
-	private static final float TIME_SCORE_MUL = 0.001f;
+	public static final float TIME_SCORE_MUL = 0.001f;
+	public static final int START_HEALTH = 3, START_SPEED = 1;
 
-	private int health = 2, maxHealth = health;
-	private int damage = 1;
+	private int maxHealth = START_HEALTH, health = maxHealth;
+	private int damage = 0;
 	private int photosynthesis = 0;
-	private int speed = 1;
+	private int speed = START_SPEED;
 	private boolean toxinResistant = false, predatorRepulsion = false, poisonDamage = false, poisonTrail = false;
 
 	private int glucose = 0;
@@ -43,6 +46,7 @@ public class PlayerData {
 		try {
 			tree = EvolutionTree.load();
 			currentTreeNode = tree;
+			GlobalLogger.info(tree.toString(0));
 		} catch (JSONException | IOException e) {
 			e.printStackTrace();
 		}
@@ -68,9 +72,9 @@ public class PlayerData {
 			unlockAchievement(Achievements.HEAVY_POCKETS);
 		}
 	}
-	
+
 	public void eatCell() {
-		for(int i = 0; i < 5; i++) {
+		for (int i = 0; i < 5; i++) {
 			int rand = (int) (Math.random() * 3);
 			if (rand < 1) {
 				glucose++;
@@ -283,7 +287,7 @@ public class PlayerData {
 
 	public boolean canSelectUpgrade() {
 		int needed = getUpgradePrice();
-		return lipid >= needed && aminoAcid >= needed && glucose >= needed;
+		return currentTreeNode != null && !currentTreeNode.isLeaf() && lipid >= needed && aminoAcid >= needed && glucose >= needed;
 	}
 
 	public int getUpgradePrice() {
@@ -325,9 +329,17 @@ public class PlayerData {
 
 		upgradeTreeCount++;
 
+		lipid = 9999;
+		aminoAcid = 9999;
+		glucose = 9999;
+		
 		switch (currentTreeNode.getType()) {
 		case "damage":
-			damage *= 2;
+			if (damage < 1) {
+				damage = 1;
+			} else {
+				damage *= 2;
+			}
 			break;
 		case "photosynthesis":
 			photosynthesis += 1;
@@ -337,7 +349,8 @@ public class PlayerData {
 			((UISceneGameOverlay) GlobalUtils.INSTANCE.uiScene.getState()).startHealthRestoreAccepted();
 			break;
 		case "double_max_health":
-			maxHealth *= upgradeTreeCount;
+			maxHealth *= 2;
+			((UISceneGameOverlay) GlobalUtils.INSTANCE.uiScene.getState()).startHealthRestoreAccepted();
 			break;
 		case "speed":
 			speed += upgradeTreeCount;
@@ -358,7 +371,23 @@ public class PlayerData {
 			break;
 		}
 
+		Optional.ofNullable(GlobalUtils.INSTANCE.worldScene.getWorld()).ifPresent((w) -> {
+			PlayerCellMaterial playerMaterial = w.getPlayer().getPlayerMaterial(w.getCache());
+			playerMaterial.setDamage(damage);
+			playerMaterial.setPhoto(photosynthesis);
+			playerMaterial.setSpeed(getSpeedTextureLevel());
+			playerMaterial.setHealth(getHealthTextureLevel());
+		});
+
 		return true;
+	}
+
+	public int getSpeedTextureLevel() {
+		return speed - START_SPEED;
+	}
+
+	public int getHealthTextureLevel() {
+		return (health - START_HEALTH) / 3;
 	}
 
 }
