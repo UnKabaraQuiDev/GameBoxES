@@ -52,6 +52,20 @@
 						}
 					}
 				}
+			},
+			"random_61": {
+				"random_62": {
+					"random_64": [
+						"poison_damage",
+						"poison_trail"
+					]
+				},
+				"random_63": {
+					"random_65": [
+						"poison_damage",
+						"poison_trail"
+					]
+				},
 			}
 		}
 
