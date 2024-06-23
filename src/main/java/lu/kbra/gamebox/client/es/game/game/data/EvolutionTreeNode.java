@@ -29,7 +29,7 @@ public class EvolutionTreeNode {
 			put("toxin_resistance", 6);
 			put("poison_damage", 7);
 			put("predator_repulsion", 8);
-			put("poison_trail", 9);
+			put("poison_trail", 8);
 			put("root", 3);
 		}
 	};
@@ -51,7 +51,7 @@ public class EvolutionTreeNode {
 		GlobalLogger.info("Node path: " + "./resources/gd/majorTree/" + GlobalLang.getCURRENT_LANG().toLowerCase() + "/" + type + ".json");
 		JSONObject obj = new JSONObject(new String(Files.readAllBytes(Paths.get("./resources/gd/majorTree/" + GlobalLang.getCURRENT_LANG().toLowerCase() + "/" + type + ".json"))));
 		this.title = obj.optString("title", id + "/" + type);
-		this.description = obj.optString("desc", "no desc :/");
+		this.description = obj.optString("description", "no desc :/");
 	}
 
 	public void add(EvolutionTreeNode node) {

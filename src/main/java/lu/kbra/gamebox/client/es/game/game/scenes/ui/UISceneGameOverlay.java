@@ -9,6 +9,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+import lu.pcy113.pclib.PCUtils;
 import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.geom.Mesh;
@@ -74,7 +75,7 @@ public class UISceneGameOverlay extends UISceneState {
 
 	// major upgrade tree - - -
 	public static final float UPGRADE_TREE_LOADING_SPEED = 25f, UPGRADE_TREE_UNLOADING_SPEED = 10f;
-	private TextEmitter majorUpgradeTreePriceText;
+	private TextEmitter majorUpgradeTreePriceText, majorUpgradeTreeDesc;
 	private Entity majorUpgradeTreeParent, majorUpgradeTreePrice;
 	private int upgradeTreeSelection = -1;
 
@@ -171,9 +172,14 @@ public class UISceneGameOverlay extends UISceneState {
 		majorUpgradeTreePrice.setActive(false);
 
 		majorUpgradeTreePriceText = GlobalUtils.createUIText(cache, "majorUpgradeTreePriceText", 4, "0000", Alignment.TEXT_RIGHT).getTextEmitter(cache);
+		majorUpgradeTreeDesc = GlobalUtils.createUIText(cache, "majorUpgradeTreeDesc", 128, "_ _ _", Alignment.TEXT_RIGHT).getTextEmitter(cache);
+		majorUpgradeTreeDesc.setCorrectTransform(true);
+		updateTreeInfo();
 
-		majorUpgradeTreePrice.addComponent(new SubEntitiesComponent(new Entity("majorUpgradeTreePriceText", new TextEmitterComponent(majorUpgradeTreePriceText),
-				new Transform3DComponent(new Vector3f(4.95f, 1.95f, GlobalConsts.UI_OVER_COMPONENTS_HEIGHT), new Quaternionf(), new Vector3f(1.3f)))));
+		majorUpgradeTreePrice.addComponent(new SubEntitiesComponent(
+				new Entity("majorUpgradeTreePriceText", new TextEmitterComponent(majorUpgradeTreePriceText),
+						new Transform3DComponent(new Vector3f(4.95f, 1.95f, GlobalConsts.UI_OVER_COMPONENTS_HEIGHT), new Quaternionf(), new Vector3f(1.3f))),
+				new Entity("majorUpgradeTreeDesc", new TextEmitterComponent(majorUpgradeTreeDesc), new Transform3DComponent(new Vector3f(5.3f, 1.2f, GlobalConsts.UI_OVER_COMPONENTS_HEIGHT), new Quaternionf(), new Vector3f(0.75f)))));
 
 		// GlobalUtils.compileMeshes(cache);
 
@@ -233,15 +239,15 @@ public class UISceneGameOverlay extends UISceneState {
 
 			if (!gameEndActive) {
 				uiBG.setActive(false);
-				
+
 				Optional.ofNullable(GlobalUtils.INSTANCE.worldScene.getWorld()).ifPresent((w) -> w.setPaused(false));
-			}else {
+			} else {
 				gameOverStatsTitles.setActive(true);
 				gameOverStatsValues.setActive(true);
 			}
-			
+
 			showBGProgress = 0;
-			
+
 			GlobalUtils.clearCurrentPlayerNote();
 		} else if (gameEndActive && showBGProgress >= 0.999f && GlobalUtils.anyJoystickButton()) {
 			GlobalUtils.triggerNewStartMenu();
@@ -249,7 +255,12 @@ public class UISceneGameOverlay extends UISceneState {
 	}
 
 	private void updateTreeInfo() {
-		// TODO
+		if (upgradeTreeSelection != -1) {
+			EvolutionTreeNode upgr = GlobalUtils.INSTANCE.playerData.getUpgrade(upgradeTreeSelection);
+			majorUpgradeTreeDesc.setText(PCUtils.wrapLine(upgr.getTitle() + "\n\n " + upgr.getDescription(), 13));
+		} else {
+			majorUpgradeTreeDesc.setText("Select an\nupgrade");
+		}
 	}
 
 	@Override
@@ -338,12 +349,12 @@ public class UISceneGameOverlay extends UISceneState {
 			showBGProgress = 0;
 			uiBG.setActive(true);
 
-			if(gameEndActive) {
+			if (gameEndActive) {
 				playerNoteText.setText(cd.getDeathDesc());
-			}else {
+			} else {
 				playerNoteText.setText(cd.getKillDesc());
 			}
-			
+
 			GlobalUtils.pushRender(playerNoteText::updateText);
 			playerNote.setActive(true);
 
@@ -363,8 +374,13 @@ public class UISceneGameOverlay extends UISceneState {
 
 		maxHealthIndicatorText.setText(GlobalLang.get("ui.hp") + MathUtils.fillPrefix(2, '0', Math.clamp(0, 99, GlobalUtils.INSTANCE.playerData.getMaxHealth()) + "")).updateText();
 
-		gameOverStatsTitlesText.setText(GlobalLang.get("game.over.titles")).updateText();
-		gameOverStatsValuesText.setText(fillGameOverValues(GlobalLang.get("game.over.values"))).updateText();
+		if (gameEndActive) {
+			gameOverStatsTitlesText.setText(GlobalLang.get("game.over.titles")).updateText();
+			gameOverStatsValuesText.setText(fillGameOverValues(GlobalLang.get("game.over.values"))).updateText();
+		}
+		if (isTreeViewActive()) {
+			majorUpgradeTreeDesc.updateText();
+		}
 	}
 
 	private String fillGameOverValues(String str) {
@@ -386,6 +402,8 @@ public class UISceneGameOverlay extends UISceneState {
 		sideUiBG.setActive(b);
 		majorUpgradeTreeParent.setActive(b);
 		majorUpgradeTreePrice.setActive(b);
+		
+		majorUpgradeTreeDesc.setText("Select an\nupgrade");
 
 		if (b) {
 			if (GlobalUtils.INSTANCE.playerData.getCurrentTreeNode() == null) {

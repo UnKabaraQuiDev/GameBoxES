@@ -395,4 +395,16 @@ public class PlayerData {
 		glucose++;
 	}
 
+	public EvolutionTreeNode getUpgrade(int index) {
+		if(currentTreeNode.isLeaf()) {
+			return null;
+		}
+		
+		if (index >= currentTreeNode.getChildren().size()) {
+			return getUpgrade(index - 1);
+		}
+		
+		return currentTreeNode.getChildren().get(index);
+	}
+
 }
