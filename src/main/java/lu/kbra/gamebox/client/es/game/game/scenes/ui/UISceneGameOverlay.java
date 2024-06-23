@@ -26,6 +26,7 @@ import lu.kbra.gamebox.client.es.engine.utils.consts.Button;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
 import lu.kbra.gamebox.client.es.engine.utils.interpolation.Interpolators;
 import lu.kbra.gamebox.client.es.game.game.data.Achievements;
+import lu.kbra.gamebox.client.es.game.game.data.CellDescriptor;
 import lu.kbra.gamebox.client.es.game.game.data.EvolutionTreeNode;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.FillShader;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.FillShader.FillMaterial;
@@ -44,7 +45,7 @@ public class UISceneGameOverlay extends UISceneState {
 	private static final Vector2f CLICK_OFFSET_END = new Vector2f(0f, 0.1f);
 	public static final float CLICK_ANIMATION_SPEED = 10f, ACCEPTED_ANIMATION_SPEED = 10f, DENIED_ANIMATION_SPEED = 10f, CLICK_ANIMATION_AMPLITUDE = 0.8f, HEALTH_FILL_SPEED = 1f;
 	private static final Vector4f DENIED_COLOR_START = new Vector4f(1, 0, 0, 1), ACCEPTED_COLOR_START = new Vector4f(0, 1, 0, 1), IDLE_COLOR_START = new Vector4f(1, 1, 1, 1);
-	public static final float BG_DARKEN_SPEED = 0.75f, SIDE_BG_SHOW_SPEED = 0.9f;
+	public static final float BG_DARKEN_SPEED = 0.75f, SIDE_BG_SHOW_SPEED = 1.5f;
 
 	private boolean treeViewActive = false, gameEndActive = false;
 
@@ -79,6 +80,11 @@ public class UISceneGameOverlay extends UISceneState {
 
 	private ControllerInputWatcher cic;
 	private boolean init = false;
+
+	// player notes
+	public static final float PLAYER_NOTES_ANIMATION_SPEED = 25f;
+	private Entity playerNote;
+	private TextEmitter playerNoteText;
 
 	public UISceneGameOverlay(UIScene3D scene) {
 		super("MajorUpgradeTree", scene);
@@ -171,6 +177,11 @@ public class UISceneGameOverlay extends UISceneState {
 
 		// GlobalUtils.compileMeshes(cache);
 
+		// player notes
+		playerNoteText = GlobalUtils.createUIText(cache, "playerUINote", 512, "No text to speech.", Alignment.TEXT_CENTER).getTextEmitter(cache);
+		playerNoteText.setCorrectTransform(true);
+		playerNote = scene.addEntity("playerUINote", new TextEmitterComponent(playerNoteText), new Transform3DComponent(new Vector3f(0, 1f, GlobalConsts.UI_OVER_COMPONENTS_HEIGHT), new Quaternionf(), new Vector3f(0.75f))).setActive(false);
+
 		cic = new ControllerInputWatcher();
 		cic.setSkipWaitingForNone(true);
 
@@ -216,6 +227,25 @@ public class UISceneGameOverlay extends UISceneState {
 				}
 			}
 		}
+
+		if (playerNote.isActive() && showBGProgress >= 0.999f && GlobalUtils.anyJoystickButton()) {
+			playerNote.setActive(false);
+
+			if (!gameEndActive) {
+				uiBG.setActive(false);
+				
+				Optional.ofNullable(GlobalUtils.INSTANCE.worldScene.getWorld()).ifPresent((w) -> w.setPaused(false));
+			}else {
+				gameOverStatsTitles.setActive(true);
+				gameOverStatsValues.setActive(true);
+			}
+			
+			showBGProgress = 0;
+			
+			GlobalUtils.clearCurrentPlayerNote();
+		} else if (gameEndActive && showBGProgress >= 0.999f && GlobalUtils.anyJoystickButton()) {
+			GlobalUtils.triggerNewStartMenu();
+		}
 	}
 
 	private void updateTreeInfo() {
@@ -224,10 +254,10 @@ public class UISceneGameOverlay extends UISceneState {
 
 	@Override
 	public void update(float dTime) {
-		if(!init) {
+		if (!init) {
 			return;
 		}
-		
+
 		// health
 		if (healthRestoreAcceptedProgress < 1) {
 			healthRestoreAcceptedProgress = Math.clamp(0, 1, healthRestoreAcceptedProgress + dTime * ACCEPTED_ANIMATION_SPEED);
@@ -273,7 +303,8 @@ public class UISceneGameOverlay extends UISceneState {
 			maxHealthIndicatorTextEntity.getComponent(Transform3DComponent.class).getTransform().setTranslation(new Vector3f(offset.x, offset.y, 0).add(HEALTH_INDICATOR_TEXT_BASE)).updateMatrix();
 		}
 
-		if (gameEndActive || treeViewActive) {
+		// bgs
+		if (gameEndActive || treeViewActive || playerNote.isActive()) {
 
 			if (showBGProgress < 1) {
 				showBGProgress = Math.clamp(0, 1, showBGProgress + dTime * BG_DARKEN_SPEED);
@@ -301,8 +332,25 @@ public class UISceneGameOverlay extends UISceneState {
 			}
 		}
 
-		if (gameEndActive && showBGProgress >= 0.999f && GlobalUtils.anyJoystickButton()) {
-			GlobalUtils.triggerNewStartMenu();
+		if (!playerNote.isActive() && GlobalUtils.hasPlayerNote()) {
+			CellDescriptor cd = GlobalUtils.getCurrentPlayerNote();
+
+			showBGProgress = 0;
+			uiBG.setActive(true);
+
+			if(gameEndActive) {
+				playerNoteText.setText(cd.getDeathDesc());
+			}else {
+				playerNoteText.setText(cd.getKillDesc());
+			}
+			
+			GlobalUtils.pushRender(playerNoteText::updateText);
+			playerNote.setActive(true);
+
+			gameOverStatsTitles.setActive(false);
+			gameOverStatsValues.setActive(false);
+
+			Optional.ofNullable(GlobalUtils.INSTANCE.worldScene.getWorld()).ifPresent((w) -> w.setPaused(true));
 		}
 
 	}
@@ -433,8 +481,8 @@ public class UISceneGameOverlay extends UISceneState {
 	public void startHealthEmpty() {
 		healthEmptyProgress = 0;
 		healthFillProgress = 1;
-		visibleHealth = GlobalUtils.INSTANCE.playerData.getHealth();
-		oldVisibleHealth = visibleHealth;
+		// visibleHealth = GlobalUtils.INSTANCE.playerData.getHealth();
+		// oldVisibleHealth = visibleHealth;
 	}
 
 	public boolean isTreeViewActive() {
@@ -443,6 +491,11 @@ public class UISceneGameOverlay extends UISceneState {
 
 	public void toggleTreeViewActive() {
 		setTreeViewActive(!treeViewActive);
+	}
+
+	@Override
+	public boolean needsFocus() {
+		return isTreeViewActive() || playerNote.isActive() || gameEndActive;
 	}
 
 }

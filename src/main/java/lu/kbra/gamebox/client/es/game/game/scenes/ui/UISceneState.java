@@ -42,4 +42,6 @@ public abstract class UISceneState implements Cleanupable, UniqueID {
 		return name;
 	}
 
+	public abstract boolean needsFocus();
+
 }

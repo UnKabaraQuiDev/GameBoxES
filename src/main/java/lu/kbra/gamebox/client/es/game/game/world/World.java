@@ -61,6 +61,7 @@ import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.PlayerEntity;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.ToxinsEntity;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.WorldParticleEmitter;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalConsts;
+import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalLang;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
 import lu.kbra.gamebox.client.es.game.game.utils.noise.NoiseGenerator;
 
@@ -136,7 +137,7 @@ public class World implements Cleanupable {
 				cache.loadOrGetSingleTexture(PlayerCellShader.PlayerCellMaterial.PLAYER_TEXTURE_NAME, PlayerCellShader.PlayerCellMaterial.PLAYER_TEXTURE_PATH, TextureFilter.NEAREST),
 				cache.loadOrGetSingleTexture(PlayerCellShader.PlayerCellMaterial.PLAYER_OVERLAY_TEXTURE_NAME, PlayerCellShader.PlayerCellMaterial.PLAYER_OVERLAY_TEXTURE_PATH, TextureFilter.NEAREST));
 		Mesh playerMesh = cache.newQuadMesh("playerMesh", playerMaterial, new Vector2f(2.5f * 2));
-		this.player = new PlayerEntity("player", cache, playerMesh, new CellDescriptor("player", CellType.PLAYER, "noname", null, null, null, 1, 0, 0, 0), new Vector3f(0, 0, GlobalConsts.PLAYER_CELL_HEIGHT));
+		this.player = new PlayerEntity("player", cache, playerMesh, new CellDescriptor("player", CellType.PLAYER, "noname", null, null, null, 1, 0, 0, 0, null, null), new Vector3f(0, 0, GlobalConsts.PLAYER_CELL_HEIGHT));
 		player.addComponent(new RenderComponent(GlobalConsts.PLAYER_CELL_HEIGHT));
 		scene.addEntity(player);
 
@@ -168,12 +169,13 @@ public class World implements Cleanupable {
 		player.update();
 		moved = player.getVelocity().getVelocity().lengthSquared() > 0;
 
-		GlobalLogger.info("Player absolute world position: "+player.getTransform().getTransform().getTranslation()+", current chunk center: "+getChunkCenter(GeoPlane.XY.projectToPlane(player.getTransform().getTransform().getTranslation())));
+		GlobalLogger.info(
+				"Player absolute world position: " + player.getTransform().getTransform().getTranslation() + ", current chunk center: " + getChunkCenter(GeoPlane.XY.projectToPlane(player.getTransform().getTransform().getTranslation())));
 
 		PlayerData pd = GlobalUtils.INSTANCE.playerData;
 
 		if (Math.random() < pd.getPhotosynthesis() / 5) {
-			pd.eatPlant();
+			pd.incGlucose();
 		}
 
 		if (pd.hasPoisonTrail() && poisonTrail != null) {
@@ -237,7 +239,7 @@ public class World implements Cleanupable {
 		GlobalUtils.pushRender(() -> {
 			int entityCount = scene.getEntities().size();
 			scene.getEntities().entrySet().removeIf((e) -> {
-				if(!e.getValue().hasComponent(Transform3DComponent.class)) {
+				if (!e.getValue().hasComponent(Transform3DComponent.class)) {
 					return false;
 				}
 				if (e.getValue().getComponent(Transform3DComponent.class).getTransform().getTranslation().distance(player.getTransform().getTransform().getTranslation()) > chunkSize * 3) {
@@ -303,6 +305,8 @@ public class World implements Cleanupable {
 
 			if (((Transform3D) part.getTransform()).getScale().lengthSquared() == 0) {
 				pd.unlockAchievement(Achievements.KILL_AN_ENNEMY);
+
+				GlobalUtils.showPlayerNote(desc);
 				continue;
 			}
 
@@ -338,6 +342,10 @@ public class World implements Cleanupable {
 					pd.eatCell();
 				} else if (System.currentTimeMillis() - lastCellDamage > CELL_DAMAGE_DELAY) {
 					GlobalUtils.INSTANCE.playerData.damage(1);
+					if (pd.getHealth() <= 0) {
+						// player died
+						GlobalUtils.showPlayerNote(desc);
+					}
 
 					GlobalUtils.INSTANCE.playerData.unlockAchievement(Achievements.ENNEMY_DAMAGE);
 
@@ -471,7 +479,9 @@ public class World implements Cleanupable {
 			for (String k : obj.keySet()) {
 				JSONObject sobj = obj.getJSONObject(k);
 				pool.add(new CellDescriptor(k, sobj.getEnum(CellType.class, "type"), sobj.getString("scientific"), PDRUtils.loadRangeFloat(sobj, "hostility"), PDRUtils.loadRangeFloat(sobj, "fertility"),
-						PDRUtils.loadRangeFloat(sobj, "humidity"), sobj.getInt("textureVariationCount"), sobj.getFloat("aggressivity"), sobj.getFloat("hardAggressiveDistance"), sobj.getFloat("softAggressiveDistance")));
+						PDRUtils.loadRangeFloat(sobj, "humidity"), sobj.getInt("textureVariationCount"), sobj.getFloat("aggressivity"), sobj.getFloat("hardAggressiveDistance"), sobj.getFloat("softAggressiveDistance"),
+						sobj.optString("deathDesc." + GlobalLang.getCURRENT_LANG(), "deathDesc." + GlobalLang.getCURRENT_LANG()).replace("<br>", "\n"),
+						sobj.optString("killDesc." + GlobalLang.getCURRENT_LANG(), "killDesc." + GlobalLang.getCURRENT_LANG()).replace("<br>", "\n")));
 
 				GlobalLogger.info("Added cell type: " + pool.getLast());
 			}

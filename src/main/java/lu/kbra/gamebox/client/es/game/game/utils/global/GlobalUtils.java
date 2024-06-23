@@ -5,7 +5,10 @@ import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Queue;
@@ -71,6 +74,7 @@ import lu.kbra.gamebox.client.es.engine.utils.file.FileUtils;
 import lu.kbra.gamebox.client.es.engine.utils.geo.GeoPlane;
 import lu.kbra.gamebox.client.es.engine.utils.geo.Ray;
 import lu.kbra.gamebox.client.es.game.game.GameBoxES;
+import lu.kbra.gamebox.client.es.game.game.data.CellDescriptor;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.UIButtonShader;
 import lu.kbra.gamebox.client.es.game.game.scenes.ui.UISceneGameOverlay;
 import lu.kbra.gamebox.client.es.game.game.utils.GameState;
@@ -331,7 +335,7 @@ public class GlobalUtils {
 
 		return mesh;
 	}
-	
+
 	public static Mesh loadCompiledMesh(CacheManager cache, String path, String name) {
 		Path filePath = Paths.get("./resources/models/compiled/" + path + ".mesh");
 		if (Files.notExists(filePath)) {
@@ -378,7 +382,7 @@ public class GlobalUtils {
 		for (Mesh mesh : cache.getMeshes().values()) {
 			if (mesh instanceof QuadMesh)
 				continue;
-			
+
 			GlobalUtils.compileMesh(mesh, mesh.getName());
 			GlobalLogger.info("Compiled mesh: " + mesh.getId() + " -> " + mesh.getName());
 		}
@@ -399,11 +403,11 @@ public class GlobalUtils {
 		}
 
 		INSTANCE.playerData.stopMarkCount();
-		
+
 		INSTANCE.gameState = GameState.END;
 		((UISceneGameOverlay) INSTANCE.uiScene.getState()).startGameEndActive();
 	}
-	
+
 	public static boolean anyJoystickButton() {
 		return Arrays.stream(PCUtils.toIntArray(INSTANCE.window.getJoystickButtonsArray(0))).anyMatch(i -> i > joystickThreshold);
 	}
@@ -414,27 +418,56 @@ public class GlobalUtils {
 		}
 
 		Optional.ofNullable(INSTANCE.worldScene.getWorld()).ifPresent((w) -> w.setPaused(true));
-		
+
 		pushWorker(() -> pushRender(() -> {
 			INSTANCE.gameState = GameState.START_MENU;
 			INSTANCE.worldScene.cleanup();
 			INSTANCE.uiScene.clearOverlay();
 			INSTANCE.uiScene.setupStartMenu();
 		}));
-		
+
 		workers.clearQueues();
 	}
 
 	public static void enableWorkers() {
-		if(workers != null && !workers.isActive()) {
+		if (workers != null && !workers.isActive()) {
 			workers = null;
 		}
-		if(workers == null) {
+		if (workers == null) {
 			workers = new NextTaskWorker("workers", 5);
 		}
-		if(workers.isInputClosed()) {
+		if (workers.isInputClosed()) {
 			workers.openInput();
 		}
+	}
+
+	private static LinkedList<CellDescriptor> playerNotes = new LinkedList<>();
+	private static List<CellDescriptor> alreadyShownPlayerNotes = new ArrayList<>();
+
+	public static void showPlayerNote(CellDescriptor desc) {
+		if (alreadyShownPlayerNotes.contains(desc) || playerNotes.contains(desc)) {
+			return;
+		}
+		
+		playerNotes.add(desc);
+		alreadyShownPlayerNotes.add(desc);
+	}
+
+	public static boolean hasPlayerNote() {
+		return !playerNotes.isEmpty();
+	}
+
+	public static void clearCurrentPlayerNote() {
+		if (!hasPlayerNote())
+			return;
+		
+		System.err.println("cleared player note: "+playerNotes);
+		
+		playerNotes.removeFirst();
+	}
+
+	public static CellDescriptor getCurrentPlayerNote() {
+		return playerNotes.getFirst();
 	}
 
 }

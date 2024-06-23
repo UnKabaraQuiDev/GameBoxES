@@ -528,5 +528,10 @@ public class UISceneStartMenuState extends UISceneState {
 
 		super.cleanup();
 	}
+	
+	@Override
+	public boolean needsFocus() {
+		return true;
+	}
 
 }

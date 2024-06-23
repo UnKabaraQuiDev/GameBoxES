@@ -31,13 +31,13 @@ void main() {
 		fragColor = mix(fragColor, over, over.a);
 	}
 	
-	if(speed > 0) {
-		vec4 over = texture(overlay, mix(vec2(1.0)/vec2(3, 4)*vec2(speed-1, 1), vec2(1.0)/vec2(3, 4)*vec2(speed, 2), vertex.uv));
+	if(photo > 0) {
+		vec4 over = texture(overlay, mix(vec2(1.0)/vec2(3, 4)*vec2(photo-1, 1), vec2(1.0)/vec2(3, 4)*vec2(photo, 2), vertex.uv));
 		fragColor = mix(fragColor, over, over.a);
 	}
 	
-	if(photo > 0) {
-		vec4 over = texture(overlay, mix(vec2(1.0)/vec2(3, 4)*vec2(photo-1, 0), vec2(1.0)/vec2(3, 4)*vec2(photo, 1), vertex.uv));
+	if(speed > 0) {
+		vec4 over = texture(overlay, mix(vec2(1.0)/vec2(3, 4)*vec2(speed-1, 0), vec2(1.0)/vec2(3, 4)*vec2(speed, 1), vertex.uv));
 		fragColor = mix(fragColor, over, over.a);
 	}
 }

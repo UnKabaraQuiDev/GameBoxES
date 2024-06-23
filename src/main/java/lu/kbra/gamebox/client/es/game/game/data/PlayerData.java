@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import org.json.JSONException;
 
+import lu.pcy113.pclib.PCUtils;
 import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.game.game.render.shaders.PlayerCellShader.PlayerCellMaterial;
@@ -373,10 +374,10 @@ public class PlayerData {
 
 		Optional.ofNullable(GlobalUtils.INSTANCE.worldScene.getWorld()).ifPresent((w) -> {
 			PlayerCellMaterial playerMaterial = w.getPlayer().getPlayerMaterial(w.getCache());
-			playerMaterial.setDamage(damage);
-			playerMaterial.setPhoto(photosynthesis);
-			playerMaterial.setSpeed(getSpeedTextureLevel());
-			playerMaterial.setHealth(getHealthTextureLevel());
+			playerMaterial.setDamage(PCUtils.clamp(0, 3, damage));
+			playerMaterial.setPhoto(PCUtils.clamp(0, 3, photosynthesis));
+			playerMaterial.setSpeed(PCUtils.clamp(0, 3, getSpeedTextureLevel()));
+			playerMaterial.setHealth(PCUtils.clamp(0, 3, getHealthTextureLevel()));
 		});
 
 		return true;
@@ -388,6 +389,10 @@ public class PlayerData {
 
 	public int getHealthTextureLevel() {
 		return (health - START_HEALTH) / 3;
+	}
+
+	public void incGlucose() {
+		glucose++;
 	}
 
 }

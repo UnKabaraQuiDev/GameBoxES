@@ -21,11 +21,15 @@ public class CellDescriptor {
 	private String id;
 	private String scientificName;
 
+	private String deathDesc;
+	private String killDesc;
+
 	private Vector2f hostilityRange, fertilityRange, humidityRange;
 	private int variationCount;
 	private float aggressivity, hardAggressiveDistance, softAggressiveDistance;
 
-	public CellDescriptor(String id, CellType cellType, String scientificName, Vector2f hostilityRange, Vector2f fertilityRange, Vector2f humidityRange, int variationCount, float aggresiv, float hardAggresivDist, float softAggresivDist) {
+	public CellDescriptor(String id, CellType cellType, String scientificName, Vector2f hostilityRange, Vector2f fertilityRange, Vector2f humidityRange, int variationCount, float aggresiv, float hardAggresivDist, float softAggresivDist,
+			String deathDesc, String killDesc) {
 		this.id = id;
 
 		this.cellType = cellType;
@@ -40,6 +44,9 @@ public class CellDescriptor {
 		this.aggressivity = aggresiv;
 		this.hardAggressiveDistance = hardAggresivDist;
 		this.softAggressiveDistance = softAggresivDist;
+
+		this.deathDesc = deathDesc;
+		this.killDesc = killDesc;
 	}
 
 	public boolean match(float hostility, float fertility, float humidity) {
@@ -150,10 +157,19 @@ public class CellDescriptor {
 	public float getSoftAggressiveDistance() {
 		return softAggressiveDistance;
 	}
-	
+
+	public String getDeathDesc() {
+		return deathDesc;
+	}
+
+	public String getKillDesc() {
+		return killDesc;
+	}
+
 	@Override
 	public String toString() {
-		return this.getClass().getName()+"@"+hashCode()+"{"+cellType+", "+id+", "+scientificName+", "+hostilityRange+", "+fertilityRange+", "+humidityRange+", "+variationCount+", "+aggressivity+", "+hardAggressiveDistance+", "+softAggressiveDistance+"}";
+		return this.getClass().getName() + "@" + hashCode() + "{" + cellType + ", " + id + ", " + scientificName + ", " + hostilityRange + ", " + fertilityRange + ", " + humidityRange + ", " + variationCount + ", " + aggressivity + ", "
+				+ hardAggressiveDistance + ", " + softAggressiveDistance + "}";
 	}
 
 }
