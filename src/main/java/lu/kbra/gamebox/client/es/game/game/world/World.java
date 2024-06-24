@@ -71,6 +71,7 @@ public class World implements Cleanupable {
 
 	private static final float Y_OFFSET = 0.01f;
 	public static final int GEN_CIRCLE_SIZE = 1;
+	public static final float DRAG_FORCE = 0.06f;
 
 	private static final float ATTRACT_DISTANCE = 2.5f;
 	private static final float PLANT_EAT_DISTANCE = 2f;
@@ -109,8 +110,6 @@ public class World implements Cleanupable {
 	 * More plants spawn
 	 */
 	private NoiseGenerator humidityGen;
-
-	private float dragForce = 0.06f;
 
 	private Random random = new Random();
 
@@ -507,7 +506,7 @@ public class World implements Cleanupable {
 			list.forEach(scene::addEntity);
 			generatedChunks.put(center.toString(), list);
 
-			System.err.println("Task gen chunk (render: push): " + (float) (System.nanoTime() - start2) / 1e6f + "ms for " + center);
+			GlobalLogger.info("Task gen chunk (render: push): " + (float) (System.nanoTime() - start2) / 1e6f + "ms for " + center);
 		};
 
 		return GlobalUtils.pushWorker(() -> {
@@ -517,7 +516,7 @@ public class World implements Cleanupable {
 			final List<Vector2f> toxinsPos = genToxinsPos(center, halfSquareSize, numPoint / 3);
 			final List<Vector2f> cellsPos = genCellsPos(center, halfSquareSize, numPoint / 9);
 
-			System.err.println("Task gen chunk (worker): " + (System.currentTimeMillis() - start) + "ms for " + center);
+			GlobalLogger.info("Task gen chunk (worker): " + (System.currentTimeMillis() - start) + "ms for " + center);
 
 			GlobalUtils.pushRender(() -> {
 				long start1 = System.nanoTime();
@@ -525,7 +524,7 @@ public class World implements Cleanupable {
 				final List<Entity> plants = genPlants_render(center, plantPos);
 				list.addAll(plants);
 
-				System.err.println("Task gen chunk (render: plants): " + (float) (System.nanoTime() - start1) / 1e6f + "ms for " + center);
+				GlobalLogger.info("Task gen chunk (render: plants): " + (float) (System.nanoTime() - start1) / 1e6f + "ms for " + center);
 
 				ifLast(finished.increment(), 2, pushList);
 			});
@@ -536,7 +535,7 @@ public class World implements Cleanupable {
 				final List<Entity> toxins = genToxins_render(center, toxinsPos);
 				list.addAll(toxins);
 
-				System.err.println("Task gen chunk (render: toxins): " + (float) (System.nanoTime() - start1) / 1e6f + "ms for " + center);
+				GlobalLogger.info("Task gen chunk (render: toxins): " + (float) (System.nanoTime() - start1) / 1e6f + "ms for " + center);
 
 				ifLast(finished.increment(), 2, pushList);
 			});
@@ -547,7 +546,7 @@ public class World implements Cleanupable {
 				final List<Entity> cells = genCells_render(center, cellsPos);
 				list.addAll(cells);
 
-				System.err.println("Task gen chunk (render: cells): " + (float) (System.nanoTime() - start1) / 1e6f + "ms for " + center);
+				GlobalLogger.info("Task gen chunk (render: cells): " + (float) (System.nanoTime() - start1) / 1e6f + "ms for " + center);
 
 				ifLast(finished.increment(), 2, pushList);
 			});
@@ -607,7 +606,6 @@ public class World implements Cleanupable {
 			entities.add(pe);
 
 			ennemyCellHeight += Y_OFFSET * poss.size();
-			System.err.println("ennemy cell height: " + ennemyCellHeight + Y_OFFSET * poss.size() / 2);
 		}
 
 		return entities;
@@ -638,8 +636,6 @@ public class World implements Cleanupable {
 		}
 
 		emit.updateParticles();
-
-		System.err.println("toxins height: " + Y_OFFSET * toxins.size());
 
 		ToxinsEntity pe = new ToxinsEntity("toxins-" + center, new InstanceEmitterComponent(emit), new Transform3DComponent(new Vector3f(center.x, center.y, 0)), new RenderComponent(GlobalConsts.TOXINS_HEIGHT));
 		pe.addComponent(new RenderConditionComponent(() -> pe.getTransform().getTransform().getTranslation().distance(((Camera3D) scene.getCamera()).getPosition()) < CULLING_DISTANCE));
@@ -772,14 +768,6 @@ public class World implements Cleanupable {
 
 	public NoiseGenerator getHumidityGen() {
 		return humidityGen;
-	}
-
-	public float getDragForce() {
-		return dragForce;
-	}
-
-	public void setDragForce(float dragForce) {
-		this.dragForce = dragForce;
 	}
 
 	public void setPlayer(PlayerEntity player) {

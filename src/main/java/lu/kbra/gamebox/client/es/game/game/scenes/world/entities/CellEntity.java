@@ -13,6 +13,7 @@ import lu.kbra.gamebox.client.es.engine.objs.entity.components.Velocity2DCompone
 import lu.kbra.gamebox.client.es.game.game.data.CellDescriptor;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.components.Acceleration2DComponent;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
+import lu.kbra.gamebox.client.es.game.game.world.World;
 
 public class CellEntity extends Entity {
 
@@ -44,7 +45,7 @@ public class CellEntity extends Entity {
 		// Arrays.stream(forces).forEach(acceleration::add);
 
 		// apply drag
-		acceleration.add(velocity.getVelocity().mul(-GlobalUtils.INSTANCE.worldScene.getWorld().getDragForce(), new Vector2f()));
+		acceleration.add(velocity.getVelocity().mul(-World.DRAG_FORCE, new Vector2f()));
 
 		acceleration.update();
 		velocity.update();
