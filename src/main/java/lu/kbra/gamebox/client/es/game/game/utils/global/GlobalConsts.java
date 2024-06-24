@@ -4,7 +4,8 @@ import org.joml.Vector4f;
 
 public final class GlobalConsts {
 
-	public static final String TEXT_TEXTURE = "text-30px";
+	public static final String TEXT_TEXTURE_PATH = "./resources/textures/fonts/font1row.png";
+	public static final String TEXT_TEXTURE_NAME = "text-30px";
 
 	public static final Vector4f PRIMARY_DARK = new Vector4f(86f, 159f, 217f, 255f).div(255f);
 	public static final Vector4f PRIMARY_LIGHT = new Vector4f(153f, 198f, 233f, 255f).div(255f);

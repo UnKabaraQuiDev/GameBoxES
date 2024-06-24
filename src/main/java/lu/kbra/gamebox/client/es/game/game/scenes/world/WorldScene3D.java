@@ -5,6 +5,8 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
+import lu.pcy113.pclib.logger.GlobalLogger;
+
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
 import lu.kbra.gamebox.client.es.engine.geom.Gizmo;
@@ -127,7 +129,7 @@ public class WorldScene3D extends Scene3D {
 
 		placeCamera(new Vector2f(0, 0), 5);
 
-		cache.dump(System.out);
+		cache.dump(GlobalLogger.getLogger().getFileWriter());
 	}
 
 	public void placeCamera(Vector2f pos) {

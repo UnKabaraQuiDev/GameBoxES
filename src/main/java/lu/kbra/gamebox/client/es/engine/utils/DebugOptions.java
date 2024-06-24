@@ -191,6 +191,8 @@ public class DebugOptions implements Cleanupable {
 	}
 
 	public synchronized void end(String type) {
+		if(eventFileWriter == null)
+			return;
 		try {
 			Pair<Long, Long> status = statuses.remove(type);
 			if (status == null)

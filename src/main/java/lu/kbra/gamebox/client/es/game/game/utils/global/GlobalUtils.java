@@ -179,6 +179,11 @@ public class GlobalUtils {
 		if (engine != null)
 			if (engine.getWindow() != null)
 				engine.getWindow().setWindowShouldClose(true);
+		try {
+			GlobalOptions.save();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		workers.closeInput();
 		workers.block();
 		try {
@@ -200,7 +205,7 @@ public class GlobalUtils {
 	}
 
 	public static TextEmitterComponent createUIText(CacheManager cache, String name, int bufferSize, String txt, Alignment align) {
-		TextMaterial mat = new TextMaterial("TextMaterial-" + GlobalConsts.TEXT_TEXTURE + "-" + name.hashCode(), cache.getRenderShader(TextShader.NAME), cache.getTexture(GlobalConsts.TEXT_TEXTURE));
+		TextMaterial mat = new TextMaterial("TextMaterial-" + GlobalConsts.TEXT_TEXTURE_NAME + "-" + name.hashCode(), cache.getRenderShader(TextShader.NAME), cache.getTexture(GlobalConsts.TEXT_TEXTURE_NAME));
 		cache.addMaterial(mat);
 
 		TextEmitter text = new TextEmitter(name, mat, bufferSize, txt, new Vector2f(0.35f, 0.5f));

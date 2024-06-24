@@ -191,7 +191,7 @@ public class UISceneGameOverlay extends UISceneState {
 		cic = new ControllerInputWatcher();
 		cic.setSkipWaitingForNone(true);
 
-		cache.dump(System.err);
+		cache.dump(GlobalLogger.getLogger().getFileWriter());
 		init = true;
 	}
 

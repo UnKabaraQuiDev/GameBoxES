@@ -56,14 +56,20 @@ public class GameBoxES extends GameLogic {
 			GlobalLogger.log("Loaded lang: " + GlobalOptions.LANGUAGE + " gets: " + GlobalLang.LANGUAGES[GlobalOptions.LANGUAGE]);
 			GlobalLang.load(GlobalLang.LANGUAGES[GlobalOptions.LANGUAGE]);
 			GlobalLogger.log("Loaded volume: " + GlobalLang.get("menu.options.volume"));
-		} catch (IOException e1) {
+			throw new RuntimeException("yikes");
+		} catch (Exception e1) {
 			e1.printStackTrace();
+			GlobalLogger.log(e1);
+			// GlobalUtils.requestQuit();
+			engine.stop();
 		}
 
 		GameEngine.DEBUG.wireframe = GlobalOptions.DEBUG && GlobalOptions.WIREFRAME;
 		GameEngine.DEBUG.gizmos = GlobalOptions.DEBUG && GlobalOptions.GIZMOS;
+		GlobalLogger.getLogger().setMinForwardLevel(Level.parse(GlobalOptions.LOGS_MIN_FORWARD_LEVEL));
+		GlobalLogger.getLogger().setForwardContent(GlobalOptions.LOGS_FORWARD);
 
-		cache.loadOrGetMaterial(TextShader.TextMaterial.NAME, TextShader.TextMaterial.class, cache.loadOrGetSingleTexture(GlobalConsts.TEXT_TEXTURE, "./resources/textures/fonts/font1row.png", TextureFilter.NEAREST));
+		cache.loadOrGetMaterial(TextShader.TextMaterial.NAME, TextShader.TextMaterial.class, cache.loadOrGetSingleTexture(GlobalConsts.TEXT_TEXTURE_NAME, GlobalConsts.TEXT_TEXTURE_PATH, TextureFilter.NEAREST));
 
 		loadWorldScene("world1");
 		loadUiScene("ui");
@@ -72,7 +78,8 @@ public class GameBoxES extends GameLogic {
 
 		compositor = new AdvancedCompositor();
 
-		worldSceneRenderLayer = (SceneRenderLayer) new SceneRenderLayer("worldScene", worldScene, () -> worldScene.getWorld() != null ? worldScene.getWorld().getCache() : worldScene.getCache()).setVisible(false);
+		worldSceneRenderLayer = (SceneRenderLayer) new SceneRenderLayer("worldScene", worldScene, () -> worldScene.getWorld() != null ? worldScene.getWorld().getCache() : worldScene.getCache());
+		worldSceneRenderLayer.setVisible(false);
 		cache.addRenderLayer(worldSceneRenderLayer);
 		compositor.addRenderLayer(0, worldSceneRenderLayer);
 
@@ -93,7 +100,7 @@ public class GameBoxES extends GameLogic {
 
 		GlobalUtils.compileMeshes(cache);
 
-		cache.dump(System.err);
+		cache.dump(GlobalLogger.getLogger().getFileWriter());
 	}
 
 	private void loadUiScene(String path) {

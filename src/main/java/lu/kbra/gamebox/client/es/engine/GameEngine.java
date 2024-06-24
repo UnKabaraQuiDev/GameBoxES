@@ -217,9 +217,9 @@ public class GameEngine implements Cleanupable, UniqueID {
 		this.window.takeGLContext();
 
 		try {
+			running = true;
 			this.gameLogic.register(this);
 			this.gameLogic.init(this);
-			running = true;
 			updateThread.interrupt();
 			mainThread.interrupt();
 
@@ -452,7 +452,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 			// window = null;
 
 			DEBUG.cleanup();
-			DEBUG = null;
+			// DEBUG = null;
 		} else if (getThreadId() == QUEUE_MAIN) {
 			this.window.cleanupGLFW();
 			window = null;

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.logging.Level;
 
+import lu.pcy113.pclib.PCUtils;
 import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
@@ -14,17 +15,10 @@ import lu.kbra.gamebox.client.es.game.game.GameBoxES;
 
 public class ClientMain {
 
-	/*
-	 * TODO: Add other font files x95 V: Add antialiasing to framebuffer renderlayer
-	 * TODO: AttribArray resize TODO: utils.codec.* TODO: Compute shaders TODO:
-	 * Compositor + Compute shader TODO: BATCH FOR SHADER
-	 */
-
 	public static void main(String[] args) throws FileNotFoundException, IOException {
-
 		System.out.println(Arrays.toString(new File("./config/").list()));
 
-		// System.out.println(FileUtils.recursiveTree("./resources"));
+		System.out.println(PCUtils.recursiveTree("./resources"));
 
 		GlobalLogger.init(new File("./config/logs.properties"));
 
@@ -34,17 +28,18 @@ public class ClientMain {
 
 		try {
 
-			WindowOptions options = new WindowOptions();
+			final WindowOptions options = new WindowOptions();
 			options.fullscreen = false;
 			options.vsync = false;
 			options.fps = 60;
 			options.windowMultisample = 0;
-			
-			GameBoxES gbes = new GameBoxES();
-			
-			GameEngine engine = new GameEngine("GameBoxES", gbes, options);
+			options.title = "GameBoxES";
+
+			final GameBoxES gbes = new GameBoxES();
+
+			final GameEngine engine = new GameEngine("GameBoxES", gbes, options);
 			engine.start();
-			
+
 			// when quitting:
 			gbes.eventStop();
 
@@ -53,7 +48,7 @@ public class ClientMain {
 			System.exit(-1);
 		}
 
-		GlobalLogger.log(Level.INFO, "Stopped after " + (System.currentTimeMillis() - start) + "ms");
+		GlobalLogger.log(Level.INFO, "Stopped after " + (double) (System.currentTimeMillis() - start) / 1000 + "s");
 
 	}
 

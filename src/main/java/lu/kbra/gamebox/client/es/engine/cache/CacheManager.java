@@ -1,6 +1,7 @@
 package lu.kbra.gamebox.client.es.engine.cache;
 
 import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
@@ -151,19 +152,15 @@ public class CacheManager implements Cleanupable, UniqueID {
 	}
 
 	/*
-	 * private boolean add(Map<String, UniqueID> map, UniqueID m) { if (m == null)
-	 * return false;
+	 * private boolean add(Map<String, UniqueID> map, UniqueID m) { if (m == null) return false;
 	 * 
-	 * if (map.containsKey(m.getId()) && !map.get(m.getId()).equals(m))
-	 * map.remove(m.getId());
+	 * if (map.containsKey(m.getId()) && !map.get(m.getId()).equals(m)) map.remove(m.getId());
 	 * 
 	 * return map.putIfAbsent(m.getId(), (UniqueID) m) == null; }
 	 * 
-	 * private boolean addCleanup(Map<String, UniqueID> map, UniqueID m) { if (m ==
-	 * null) return false;
+	 * private boolean addCleanup(Map<String, UniqueID> map, UniqueID m) { if (m == null) return false;
 	 * 
-	 * if (map.containsKey(m.getId()) && !map.get(m.getId()).equals(m))
-	 * ((Cleanupable) map.remove(m.getId())).cleanup();
+	 * if (map.containsKey(m.getId()) && !map.get(m.getId()).equals(m)) ((Cleanupable) map.remove(m.getId())).cleanup();
 	 * 
 	 * return map.putIfAbsent(m.getId(), (UniqueID) m) == null; }
 	 */
@@ -277,8 +274,7 @@ public class CacheManager implements Cleanupable, UniqueID {
 
 	public Renderer<?, ?> getRenderer(String name) {
 		/*
-		 * if (name != null && !renderers.containsKey(name))
-		 * GlobalLogger.log("No renderer found for: " + name);
+		 * if (name != null && !renderers.containsKey(name)) GlobalLogger.log("No renderer found for: " + name);
 		 */
 		return this.renderers.getOrDefault(name, parent == null ? null : parent.getRenderer(name));
 	}
@@ -470,7 +466,7 @@ public class CacheManager implements Cleanupable, UniqueID {
 	public SingleTexture loadOrGetSingleTexture(String name, String path) {
 		return loadOrGetSingleTexture(name, path, TextureFilter.LINEAR);
 	}
-	
+
 	public SingleTexture loadOrGetSingleTexture(String name, String path, TextureFilter filter) {
 		return loadOrGetSingleTexture(name, path, filter, TextureWrap.REPEAT);
 	}
@@ -539,7 +535,7 @@ public class CacheManager implements Cleanupable, UniqueID {
 			throw new ShaderInstantiationException(e);
 		}
 	}
-	
+
 	public QuadMesh newQuadMesh(String name, Material mat, Vector2f size) {
 		QuadMesh mesh = Mesh.newQuad(name, mat, size);
 		addMesh(mesh);
@@ -549,7 +545,7 @@ public class CacheManager implements Cleanupable, UniqueID {
 	public SingleTexture loadSingleTexture(String string, String path, TextureFilter filter) {
 		return loadSingleTexture(string, path, filter, TextureType.TXT2D, TextureWrap.REPEAT);
 	}
-	
+
 	public SingleTexture loadSingleTexture(String string, String path, TextureFilter filter, TextureWrap wrap) {
 		return loadSingleTexture(string, path, filter, TextureType.TXT2D, wrap);
 	}
@@ -629,6 +625,29 @@ public class CacheManager implements Cleanupable, UniqueID {
 		out.println("== PARENT ==");
 		if (parent == null) {
 			out.println("null");
+		} else {
+			parent.dump(out);
+		}
+		out.println("== DUMP:" + this.getClass().getName() + ":end ==");
+	}
+
+	public void dump(PrintWriter out) {
+		out.println("== DUMP:" + this.getClass().getName() + " :==: " + getId() + " :start ==");
+		out.println(Mesh.class.getName() + ": " + this.meshes.size() + ": " + this.meshes);
+		out.println(Scene.class.getName() + ": " + this.scenes.size() + ": " + this.scenes);
+		out.println(Renderer.class.getName() + ": " + this.renderers.size() + ": " + this.renderers);
+		out.println(Material.class.getName() + ": " + this.materials.size() + ": " + this.materials);
+		out.println(RenderShader.class.getName() + ": " + this.renderShaders.size() + ": " + this.renderShaders);
+		out.println(Texture.class.getName() + ": " + this.textures.size() + ": " + this.textures);
+		out.println(Gizmo.class.getName() + ": " + this.gizmos.size() + ": " + this.gizmos);
+		out.println(RenderLayer.class.getName() + ": " + this.renderLayers.size() + ": " + this.renderLayers);
+		out.println(TextEmitter.class.getName() + ": " + this.textEmitters.size() + ": " + this.textEmitters);
+		out.println(PointLight.class.getName() + ": " + this.pointLights.size() + ": " + this.pointLights);
+		out.println(Framebuffer.class.getName() + ": " + this.framebuffers.size() + ": " + this.framebuffers);
+		out.println(Sound.class.getName() + ": " + this.sounds.size() + ": " + this.sounds);
+		out.println("== PARENT ==");
+		if (parent == null) {
+			out.println("null (no parent attached)");
 		} else {
 			parent.dump(out);
 		}

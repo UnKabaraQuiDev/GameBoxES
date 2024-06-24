@@ -13,5 +13,5 @@ public class SharedCacheManager extends CacheManager {
 	public SharedCacheManager(String name) {
 		super(name);
 	}
-
+	
 }

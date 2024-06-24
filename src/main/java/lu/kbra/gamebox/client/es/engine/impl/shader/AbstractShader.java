@@ -157,7 +157,7 @@ public abstract class AbstractShader implements UniqueID, Cleanupable {
 			this.uniforms.put(name, new Pair<>(new Property<>(), loc));
 			return true;
 		} else {
-			GlobalLogger.log(Level.SEVERE, "Could not get Uniform location for: " + name + " in program " + this.name + " (" + this.shaderProgram + ") (" + GLES30.glGetError() + ")");
+			GlobalLogger.log(Level.WARNING, "Could not get Uniform location for: " + name + " in program " + this.name + " (" + this.shaderProgram + ") (" + GLES30.glGetError() + ")");
 		}
 
 		return false;
