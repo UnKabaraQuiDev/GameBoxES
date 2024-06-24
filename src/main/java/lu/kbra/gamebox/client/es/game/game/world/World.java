@@ -152,7 +152,7 @@ public class World implements Cleanupable {
 			return;
 		}
 
-		player.getAcceleration().add(GlobalUtils.getJoystickDirection().mul(dTime * Math.sqrt(GlobalUtils.INSTANCE.playerData.getSpeed())));
+		player.getAcceleration().add(GlobalUtils.getJoystickDirection().normalize().mul(dTime * Math.sqrt(GlobalUtils.INSTANCE.playerData.getSpeed())));
 	}
 
 	private long lastToxinDamage = 0, lastCellDamage = 0;
