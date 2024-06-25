@@ -16,7 +16,6 @@
 		<steamworks4j.version>1.9.0</steamworks4j.version>
 		<joml.version>1.10.5</joml.version>
 		<lwjgl.natives>natives-linux</lwjgl.natives>
-		<native.path>libs/natives/lwjgl/x64</native.path>
 	</properties>
 
 	<profiles>
@@ -41,14 +40,35 @@
 					<family>unix</family>
 				</os>
 			</activation>
+			<properties>
+				<lwjgl.natives>natives-linux</lwjgl.natives>
+			</properties>
 		</profile>
 
 		<!-- Profile for Linux arm64 -->
 		<profile>
-			<id>arm64</id>
+			<id>windows_arm64</id>
+			<activation>
+				<os>
+					<family>windows</family>
+					<arch>arm64</arch>
+				</os>
+			</activation>
+			<properties>
+				<lwjgl.natives>natives-windows-arm64</lwjgl.natives>
+			</properties>
+		</profile>
+		
+		<profile>
+			<id>linux_arm64</id>
+			<activation>
+				<os>
+					<family>unix</family>
+					<arch>arm64</arch>
+				</os>
+			</activation>
 			<properties>
 				<lwjgl.natives>natives-linux-arm64</lwjgl.natives>
-				<native.path>libs/natives/lwjgl/arm64</native.path>
 			</properties>
 		</profile>
 	</profiles>
