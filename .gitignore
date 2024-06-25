@@ -97,4 +97,7 @@ test/
 /logs/*
 /target/
 
+mine_format.xml
+options.properties
+
 # pom.xml
