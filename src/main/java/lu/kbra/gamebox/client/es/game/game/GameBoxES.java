@@ -73,8 +73,10 @@ public class GameBoxES extends GameLogic {
 		loadWorldScene("world1");
 		loadUiScene("ui");
 
-		debug = new DebugUIElements(cache, engine, uiScene, new Vector3f(-4f, 1.5f, 0), new Quaternionf());
-
+		if (GlobalOptions.DEBUG) {
+			debug = new DebugUIElements(cache, engine, uiScene, new Vector3f(-4f, 1.5f, 0), new Quaternionf());
+		}
+		
 		compositor = new AdvancedCompositor();
 
 		worldSceneRenderLayer = (SceneRenderLayer) new SceneRenderLayer("worldScene", worldScene, () -> worldScene.getWorld() != null ? worldScene.getWorld().getCache() : worldScene.getCache());
