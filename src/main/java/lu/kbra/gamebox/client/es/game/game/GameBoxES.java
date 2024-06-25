@@ -19,7 +19,6 @@ import lu.kbra.gamebox.client.es.game.game.debug.DebugUIElements;
 import lu.kbra.gamebox.client.es.game.game.render.compositing.AdvancedCompositor;
 import lu.kbra.gamebox.client.es.game.game.scenes.ui.UIScene3D;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.WorldScene3D;
-import lu.kbra.gamebox.client.es.game.game.utils.GameMode;
 import lu.kbra.gamebox.client.es.game.game.utils.GameState;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalConsts;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalLang;
@@ -155,8 +154,8 @@ public class GameBoxES extends GameLogic {
 		compositor.render(engine);
 	}
 
-	public void startGame(GameMode mode) {
-		GlobalLogger.info("Starting: " + mode);
+	public void startGame() {
+		GlobalLogger.info("Starting game");
 		gameState = GameState.LOADING;
 		playerData = new PlayerData();
 		uiScene.clearMainMenu();

@@ -2,6 +2,7 @@ package lu.kbra.gamebox.client.es.game.game.scenes.ui;
 
 import java.io.IOException;
 import java.util.function.Function;
+import java.util.logging.Level;
 
 import org.joml.Math;
 import org.joml.Quaternionf;
@@ -11,6 +12,7 @@ import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWGamepadState;
 
+import lu.pcy113.pclib.PCUtils;
 import lu.pcy113.pclib.datastructure.pair.Pair;
 import lu.pcy113.pclib.logger.GlobalLogger;
 
@@ -26,6 +28,7 @@ import lu.kbra.gamebox.client.es.engine.utils.consts.Button;
 import lu.kbra.gamebox.client.es.engine.utils.consts.Direction;
 import lu.kbra.gamebox.client.es.engine.utils.interpolation.Interpolators;
 import lu.kbra.gamebox.client.es.engine.utils.transform.Transform3D;
+import lu.kbra.gamebox.client.es.game.game.data.PlayerData;
 import lu.kbra.gamebox.client.es.game.game.scenes.ui.entities.SelectableUITextLabel;
 import lu.kbra.gamebox.client.es.game.game.scenes.ui.entities.UIEntity;
 import lu.kbra.gamebox.client.es.game.game.scenes.ui.entities.UIInteractRunnable;
@@ -33,7 +36,6 @@ import lu.kbra.gamebox.client.es.game.game.scenes.ui.entities.UISliderEntity;
 import lu.kbra.gamebox.client.es.game.game.scenes.ui.entities.UITextButton;
 import lu.kbra.gamebox.client.es.game.game.scenes.ui.entities.UITextLabel;
 import lu.kbra.gamebox.client.es.game.game.utils.ControllerInputWatcher;
-import lu.kbra.gamebox.client.es.game.game.utils.GameMode;
 import lu.kbra.gamebox.client.es.game.game.utils.QuaternionArrayCallbackValueInterpolator;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalLang;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalOptions;
@@ -42,22 +44,22 @@ import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
 public class UISceneStartMenuState extends UISceneState {
 
 	private static final float MAIN_X_POS_START = 0f;
-	private static final float MAIN_X_POS_END = -10f;
+	private static final float MAIN_X_POS_END = -12f;
 
 	private static final float OTHER_X_POS_START = 0f;
 	private static final float OTHER_X_POS_END = 10f;
 
-	private static String[] MAIN_MENU_TEXTS = { GlobalLang.get("menu.main.play"), GlobalLang.get("menu.main.options"), GlobalLang.get("menu.main.credits"), GlobalLang.get("menu.main.quit") };
+	private static String[] MAIN_MENU_TEXTS = { GlobalLang.get("menu.main.play"), GlobalLang.get("menu.main.options"), GlobalLang.get("menu.main.credits"), GlobalLang.get("menu.main.quit"), "Loading...\n"+PCUtils.repeatString("00_00\n", 9) };
 
 	private UIEntity[] entitiesMainMenu;
 	private Vector3f[] entitiesMainMenupos;
-	private UIEntity play, options, credits, quit;
+	private UIEntity play, options, credits, quit, scoreboard;
 
-	private static String[] PLAY_MENU_TEXTS = { GlobalLang.get("menu.play.evolution"), GlobalLang.get("menu.play.infection") };
+	private static String[] PLAY_MENU_TEXTS = { GlobalLang.get("menu.play.evolution") };
 
 	private UIEntity[] entitiesPlayMenu;
 	private Vector3f[] entitiesPlayMenupos;
-	private UIEntity playMode1, playMode2;
+	private UIEntity playMode1;
 
 	private static String[] OPTION_MENU_TEXTS = { GlobalLang.LANGUAGES[0], GlobalLang.get("menu.options.volume") + ": 0" + GlobalOptions.VOLUME };
 
@@ -117,14 +119,17 @@ public class UISceneStartMenuState extends UISceneState {
 		options = addTextLabel("optionsText", MAIN_MENU_TEXTS[1], new Vector3f(0, 0, 0), Alignment.TEXT_CENTER);
 		credits = addTextLabel("creditsText", MAIN_MENU_TEXTS[2], new Vector3f(0, -0.8f, 0), Alignment.TEXT_CENTER);
 		quit = addTextLabel("quitText", MAIN_MENU_TEXTS[3], new Vector3f(0, -1.6f, 0), Alignment.TEXT_CENTER);
+		scoreboard = addInertTextLabel("scoreboard", MAIN_MENU_TEXTS[4], new Vector3f(2f, 1.5f, 0), Alignment.TEXT_RIGHT);
+		scoreboard.getComponent(Transform3DComponent.class).getTransform().getScale().mul(0.8f);
+		scoreboard.getComponent(Transform3DComponent.class).getTransform().updateMatrix();
+		scoreboard.getComponent(TextEmitterComponent.class).getTextEmitter(cache).setCorrectTransform(true);
 
-		entitiesMainMenu = new UIEntity[] { play, options, credits, quit };
-		entitiesMainMenupos = new Vector3f[] { new Vector3f(0, 0.8f, 0), new Vector3f(0, 0, 0), new Vector3f(0, -0.8f, 0), new Vector3f(0, -1.6f, 0) };
+		entitiesMainMenu = new UIEntity[] { play, options, credits, quit, scoreboard };
+		entitiesMainMenupos = new Vector3f[] { new Vector3f(0, 0.8f, 0), new Vector3f(0, 0, 0), new Vector3f(0, -0.8f, 0), new Vector3f(0, -1.6f, 0), new Vector3f(5f, 2f, 0) };
 
 		playMode1 = addTextLabel("playMode1", PLAY_MENU_TEXTS[0], new Vector3f(0f, 0.4f, 0), Alignment.TEXT_CENTER, this::interact_playMode1);
-		playMode2 = addTextLabel("playMode2", PLAY_MENU_TEXTS[1], new Vector3f(0f, -0.4f, 0), Alignment.TEXT_CENTER, this::interact_playMode2);
 
-		entitiesPlayMenu = new UIEntity[] { playMode1, playMode2 };
+		entitiesPlayMenu = new UIEntity[] { playMode1 };
 		entitiesPlayMenupos = new Vector3f[] { new Vector3f(0, 0.4f, 0), new Vector3f(0, -0.4f, 0) };
 
 		optionLanguage = addTextLabel("optionslanguage", GlobalLang.getLongestLang(), new Vector3f(0f, 0.4f, 0), Alignment.TEXT_CENTER, (Entity entity, boolean direction, Direction dir, Button button) -> {
@@ -181,18 +186,14 @@ public class UISceneStartMenuState extends UISceneState {
 		menuTransitionValue = 0; // set to active
 		setPos(entitiesMainMenu, entitiesMainMenupos, MAIN_X_POS_START, MAIN_X_POS_END, i -> Interpolators.QUINT_IN_OUT.evaluate(menuTransitionValue));
 
-		rotInterpolator = new QuaternionArrayCallbackValueInterpolator(new Entity[] { play, options, quit, playMode1, playMode2, optionLanguage, optionVolume, credits }, new Quaternionf().rotateLocalZ(Math.toRadians(-ANIMATION_IDLE_ANGLE)),
+		rotInterpolator = new QuaternionArrayCallbackValueInterpolator(new Entity[] { play, options, quit, playMode1, optionLanguage, optionVolume, credits }, new Quaternionf().rotateLocalZ(Math.toRadians(-ANIMATION_IDLE_ANGLE)),
 				new Quaternionf().rotateLocalZ(Math.toRadians(ANIMATION_IDLE_ANGLE)), Interpolators.CUBIC_IN_OUT);
 	}
 
 	private void interact_playMode1(Entity entity1, boolean boolean2, Direction direction3, Button button4) {
-		if (button4.equals(Button.EAST))
-			GlobalUtils.INSTANCE.startGame(GameMode.EVOLUTION);
-	}
-
-	private void interact_playMode2(Entity entity1, boolean boolean2, Direction direction3, Button button4) {
-		if (button4.equals(Button.EAST))
-			GlobalUtils.INSTANCE.startGame(GameMode.INFECTION);
+		if (button4.equals(Button.EAST)) {
+			GlobalUtils.INSTANCE.startGame();
+		}
 	}
 
 	private UISliderEntity addSlider(String name) { // need to also add text, create TextSlideBar entity or smth
@@ -234,8 +235,7 @@ public class UISceneStartMenuState extends UISceneState {
 			GLFWGamepadState gps = window.getGamepad();
 
 			cic.updateButton(gps);
-			
-			
+
 			if (Button.EAST.equals(cic.getButton()) && menuIndex == MI_MAIN) {
 				if (mainVerticalIndex == VI_MAIN_QUIT) {
 					GlobalUtils.requestQuit();
@@ -244,7 +244,7 @@ public class UISceneStartMenuState extends UISceneState {
 				startTransition(MI_MAIN, mainVerticalIndex == VI_MAIN_PLAY ? MI_PLAY : (mainVerticalIndex == VI_MAIN_OPTIONS ? MI_OPTIONS : (mainVerticalIndex == VI_MAIN_CREDITS ? MI_CREDITS : MI_NONE)));
 				otherVerticalIndex = 0;
 				return;
-			}else if (Button.SOUTH.equals(cic.getButton()) && menuIndex != MI_MAIN) {
+			} else if (Button.SOUTH.equals(cic.getButton()) && menuIndex != MI_MAIN) {
 				startTransition(menuIndex, MI_MAIN);
 				return;
 			}
@@ -345,7 +345,7 @@ public class UISceneStartMenuState extends UISceneState {
 		} else if (menuIndex == MI_OPTIONS) {
 			otherVerticalIndex = org.joml.Math.clamp(0, 1, otherVerticalIndex);
 		} else if (menuIndex == MI_PLAY) {
-			otherVerticalIndex = org.joml.Math.clamp(0, 1, otherVerticalIndex);
+			otherVerticalIndex = org.joml.Math.clamp(0, 0, otherVerticalIndex);
 		}
 	}
 
@@ -462,11 +462,11 @@ public class UISceneStartMenuState extends UISceneState {
 		try {
 			GlobalLang.load(langName);
 		} catch (IOException e) {
-			e.printStackTrace();
+			GlobalLogger.log(Level.WARNING, e);
 		}
 
-		MAIN_MENU_TEXTS = new String[] { GlobalLang.get("menu.main.play"), GlobalLang.get("menu.main.options"), GlobalLang.get("menu.main.credits"), GlobalLang.get("menu.main.quit") };
-		PLAY_MENU_TEXTS = new String[] { GlobalLang.get("menu.play.evolution"), GlobalLang.get("menu.play.infection") + "" };
+		MAIN_MENU_TEXTS = new String[] { GlobalLang.get("menu.main.play"), GlobalLang.get("menu.main.options"), GlobalLang.get("menu.main.credits"), GlobalLang.get("menu.main.quit"), PlayerData.loadMarkCounts() };
+		PLAY_MENU_TEXTS = new String[] { GlobalLang.get("menu.play.evolution") };
 		OPTION_MENU_TEXTS = new String[] { langName, GlobalLang.get("menu.options.volume") + ": " + MathUtils.fillPrefix(2, '0', GlobalOptions.VOLUME + "") };
 		CREDITS_MENU_TEXTS = new String[] { GlobalLang.get("credits.list") };
 
@@ -528,7 +528,7 @@ public class UISceneStartMenuState extends UISceneState {
 
 		super.cleanup();
 	}
-	
+
 	@Override
 	public boolean needsFocus() {
 		return true;

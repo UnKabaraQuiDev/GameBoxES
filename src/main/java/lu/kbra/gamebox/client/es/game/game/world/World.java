@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
-import java.util.logging.Level;
 
 import org.joml.Math;
 import org.joml.Quaternionf;
@@ -62,6 +61,7 @@ import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.ToxinsEntity;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.WorldParticleEmitter;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalConsts;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalLang;
+import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalOptions;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
 import lu.kbra.gamebox.client.es.game.game.utils.noise.NoiseGenerator;
 
@@ -227,10 +227,9 @@ public class World implements Cleanupable {
 			GlobalUtils.INSTANCE.playerData.unlockAchievement(Achievements.FOG_DAMAGE);
 		}
 
-		/**GlobalUtils.dumpThreads(Level.SEVERE);
-		if (updateTasks.size() > 0) {
-			GlobalLogger.info(Arrays.toString(updateTasks.toArray()));
-		}*/
+		/**
+		 * GlobalUtils.dumpThreads(Level.SEVERE); if (updateTasks.size() > 0) { GlobalLogger.info(Arrays.toString(updateTasks.toArray())); }
+		 */
 	}
 
 	private void cleanupExtChunks() {
@@ -339,6 +338,12 @@ public class World implements Cleanupable {
 					PDRUtils.clampPositive(((Transform3D) part.getTransform()).getScale());
 
 					pd.eatCell();
+					
+					if (((Transform3D) part.getTransform()).getScale().lengthSquared() == 0) {
+						pd.unlockAchievement(Achievements.KILL_AN_ENNEMY);
+
+						pd.incKillCount();
+					}
 				} else if (System.currentTimeMillis() - lastCellDamage > CELL_DAMAGE_DELAY) {
 					GlobalUtils.INSTANCE.playerData.damage(1);
 					if (pd.getHealth() <= 0) {
@@ -439,8 +444,10 @@ public class World implements Cleanupable {
 	public void continueWorldGen(int radius) {
 		Vector2f center = GeoPlane.XY.projectToPlane(player.getTransform().getTransform().getTranslation());
 		center = getChunkCenter(center);
-		scene.axis.getComponent(Transform3DComponent.class).getTransform().setTranslation(GeoPlane.XY.project(center)).updateMatrix();
-
+		if (GlobalOptions.DEBUG) {
+			scene.axis.getComponent(Transform3DComponent.class).getTransform().setTranslation(GeoPlane.XY.project(center)).updateMatrix();
+		}
+		
 		for (int x = -radius; x <= radius; x++) {
 			for (int y = -radius; y <= radius; y++) {
 

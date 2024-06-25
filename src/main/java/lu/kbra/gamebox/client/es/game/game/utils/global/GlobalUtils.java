@@ -465,8 +465,6 @@ public class GlobalUtils {
 		if (!hasPlayerNote())
 			return;
 		
-		System.err.println("cleared player note: "+playerNotes);
-		
 		playerNotes.removeFirst();
 	}
 

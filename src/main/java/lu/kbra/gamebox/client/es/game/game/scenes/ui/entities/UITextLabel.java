@@ -40,7 +40,7 @@ public class UITextLabel extends UIEntity {
 
 	@Override
 	public void updateUI() {
-		// super.getComponent(TextEmitterComponent.class).getTextEmitter(cache).setText(text).updateText();
+		super.getComponent(TextEmitterComponent.class).getTextEmitter(cache).setText(text).updateText();
 	}
 
 	public void interact(boolean direction, Direction dir, Button button) {

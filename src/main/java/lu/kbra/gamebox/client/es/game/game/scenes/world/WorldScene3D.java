@@ -26,6 +26,7 @@ import lu.kbra.gamebox.client.es.engine.utils.transform.Transform3D;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.BackgroundShader;
 import lu.kbra.gamebox.client.es.game.game.scenes.ui.UISceneGameOverlay;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalConsts;
+import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalOptions;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
 import lu.kbra.gamebox.client.es.game.game.world.World;
 
@@ -59,9 +60,10 @@ public class WorldScene3D extends Scene3D {
 		}
 
 		if (window.getJoystickButton(GLFW.GLFW_JOYSTICK_1, GLFW.GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER) && (double) (System.currentTimeMillis() - lastTreeView) / 1000 * UISceneGameOverlay.SIDE_BG_SHOW_SPEED >= 1) {
-			/**GlobalUtils.INSTANCE.playerData.setAminoAcid(GlobalUtils.INSTANCE.playerData.getAminoAcid() + 100);
-			GlobalUtils.INSTANCE.playerData.setGlucose(GlobalUtils.INSTANCE.playerData.getGlucose() + 100);
-			GlobalUtils.INSTANCE.playerData.setLipid(GlobalUtils.INSTANCE.playerData.getLipid() + 100);*/
+			/**
+			 * GlobalUtils.INSTANCE.playerData.setAminoAcid(GlobalUtils.INSTANCE.playerData.getAminoAcid() + 100); GlobalUtils.INSTANCE.playerData.setGlucose(GlobalUtils.INSTANCE.playerData.getGlucose() + 100);
+			 * GlobalUtils.INSTANCE.playerData.setLipid(GlobalUtils.INSTANCE.playerData.getLipid() + 100);
+			 */
 
 			if (((UISceneGameOverlay) GlobalUtils.INSTANCE.uiScene.getState()).isTreeViewActive()) {
 				((UISceneGameOverlay) GlobalUtils.INSTANCE.uiScene.getState()).setTreeViewActive(false);
@@ -100,9 +102,11 @@ public class WorldScene3D extends Scene3D {
 	}
 
 	public void setupGame() {
-		Gizmo axis = ObjLoader.loadGizmo("grid_xyz", "./resources/models/gizmos/grid_xyz.obj");
-		cache.addGizmo(axis);
-		this.axis = super.addEntity("grid_xyz", new GizmoComponent(axis), new Transform3DComponent(new Transform3D(new Vector3f(0), new Quaternionf(), new Vector3f(1)))).setActive(true);
+		if (GlobalOptions.DEBUG) {
+			Gizmo axis = ObjLoader.loadGizmo("grid_xyz", "./resources/models/gizmos/grid_xyz.obj");
+			cache.addGizmo(axis);
+			this.axis = super.addEntity("grid_xyz", new GizmoComponent(axis), new Transform3DComponent(new Transform3D(new Vector3f(0), new Quaternionf(), new Vector3f(1)))).setActive(true);
+		}
 
 		Mesh backgroundMesh = Mesh.newQuad("backgroundMesh", cache.getParent().loadOrGetMaterial(BackgroundShader.BackgroundMaterial.NAME, BackgroundShader.BackgroundMaterial.class,
 				cache.getParent().loadOrGetSingleTexture("worldBgTexture", "./resources/textures/ui/background_water.png", TextureFilter.LINEAR)), new Vector2f(40));

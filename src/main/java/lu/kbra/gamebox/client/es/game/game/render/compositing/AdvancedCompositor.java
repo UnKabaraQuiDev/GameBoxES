@@ -1,7 +1,6 @@
 package lu.kbra.gamebox.client.es.game.game.render.compositing;
 
 import java.util.LinkedList;
-import java.util.Map.Entry;
 import java.util.logging.Level;
 
 import org.joml.Vector2f;
@@ -13,28 +12,14 @@ import org.lwjgl.opengles.GLES30;
 import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
-import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
 import lu.kbra.gamebox.client.es.engine.cache.attrib.UIntAttribArray;
 import lu.kbra.gamebox.client.es.engine.cache.attrib.Vec2fAttribArray;
 import lu.kbra.gamebox.client.es.engine.cache.attrib.Vec3fAttribArray;
 import lu.kbra.gamebox.client.es.engine.geom.Mesh;
-import lu.kbra.gamebox.client.es.engine.graph.composition.Framebuffer;
-import lu.kbra.gamebox.client.es.engine.graph.composition.FramebufferAttachment;
 import lu.kbra.gamebox.client.es.engine.graph.composition.PassRenderLayer;
-import lu.kbra.gamebox.client.es.engine.graph.composition.RenderBuffer;
 import lu.kbra.gamebox.client.es.engine.graph.composition.RenderLayer;
-import lu.kbra.gamebox.client.es.engine.graph.material.Material;
-import lu.kbra.gamebox.client.es.engine.graph.shader.RenderShader;
-import lu.kbra.gamebox.client.es.engine.graph.texture.SingleTexture;
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
-import lu.kbra.gamebox.client.es.engine.impl.UniqueID;
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
-import lu.kbra.gamebox.client.es.engine.utils.consts.DataType;
-import lu.kbra.gamebox.client.es.engine.utils.consts.FrameBufferAttachment;
-import lu.kbra.gamebox.client.es.engine.utils.consts.TexelFormat;
-import lu.kbra.gamebox.client.es.engine.utils.consts.TexelInternalFormat;
-import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
-import lu.kbra.gamebox.client.es.engine.utils.consts.TextureType;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalConsts;
 
 public class AdvancedCompositor implements Cleanupable {
@@ -46,15 +31,13 @@ public class AdvancedCompositor implements Cleanupable {
 			new UIntAttribArray("ind", -1, 1, new int[] { 0, 1, 2, 0, 2, 3 }, GLES30.GL_ELEMENT_ARRAY_BUFFER),
 			new Vec2fAttribArray("uv", 1, 1, new Vector2f[] { new Vector2f(0, 1), new Vector2f(1, 1), new Vector2f(1, 0), new Vector2f(0, 0) }));
 
-	protected Vector4f background = GlobalConsts.BG;
+	protected Vector4f background = GlobalConsts.BLACK;
 
 	protected LinkedList<String> layers = new LinkedList<>();
 	protected LinkedList<String> passes = new LinkedList<>();
 
 	protected Vector2i resolution = new Vector2i(0, 0);
 	protected int samples = 1;
-
-	private Material backGroundMaterial, highLightsMaterial, scaleMaterial;
 
 	public void render(GameEngine engine) {
 		int width = engine.getWindow().getWidth();

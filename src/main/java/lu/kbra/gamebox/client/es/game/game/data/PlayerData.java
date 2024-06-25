@@ -2,9 +2,13 @@ package lu.kbra.gamebox.client.es.game.game.data;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 import org.json.JSONException;
 
@@ -13,6 +17,7 @@ import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.game.game.render.shaders.PlayerCellShader.PlayerCellMaterial;
 import lu.kbra.gamebox.client.es.game.game.scenes.ui.UISceneGameOverlay;
+import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalConsts;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalLang;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
 
@@ -280,6 +285,32 @@ public class PlayerData {
 		score += Math.pow(achievements.size(), 3);
 		score += 2 * ennemyKillCount;
 		score += 6 * upgradeTreeCount;
+		
+		saveMarkCount();
+	}
+
+	private void saveMarkCount() {
+		try {
+			GlobalConsts.HISTORY_FILE_PATH.toFile().createNewFile();
+			List<String> lines = Files.readAllLines(GlobalConsts.HISTORY_FILE_PATH);
+			lines.add(Long.toString(score));
+			lines.sort((a, b) -> -Long.valueOf(a).compareTo(Long.valueOf(b)));
+			PCUtils.limitSize(lines, 10, true);
+			Files.write(GlobalConsts.HISTORY_FILE_PATH, lines);
+		}catch(Exception e)  {
+			GlobalLogger.log(Level.WARNING, "Couldn't save mark count", e);
+		}
+	}
+	
+	public static String loadMarkCounts() {
+		try {
+			GlobalConsts.HISTORY_FILE_PATH.toFile().createNewFile();
+			List<String> lines = Files.readAllLines(GlobalConsts.HISTORY_FILE_PATH);
+			return lines.stream().collect(Collectors.joining("\n"));
+		}catch(Exception e)  {
+			GlobalLogger.log(Level.WARNING, "Couldn't load mark count", e);
+			return e.getMessage();
+		}
 	}
 
 	public void startMarkCount() {
@@ -330,10 +361,10 @@ public class PlayerData {
 
 		upgradeTreeCount++;
 
-		/*lipid = 9999;
-		aminoAcid = 9999;
-		glucose = 9999;*/
-		
+		/*
+		 * lipid = 9999; aminoAcid = 9999; glucose = 9999;
+		 */
+
 		switch (currentTreeNode.getType()) {
 		case "damage":
 			if (damage < 1) {
@@ -396,15 +427,19 @@ public class PlayerData {
 	}
 
 	public EvolutionTreeNode getUpgrade(int index) {
-		if(currentTreeNode.isLeaf()) {
+		if (currentTreeNode.isLeaf()) {
 			return null;
 		}
-		
+
 		if (index >= currentTreeNode.getChildren().size()) {
 			return getUpgrade(index - 1);
 		}
-		
+
 		return currentTreeNode.getChildren().get(index);
+	}
+
+	public void incKillCount() {
+		ennemyKillCount++;
 	}
 
 }
