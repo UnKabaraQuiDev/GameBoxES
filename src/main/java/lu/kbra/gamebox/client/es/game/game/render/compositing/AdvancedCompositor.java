@@ -101,11 +101,12 @@ public class AdvancedCompositor implements Cleanupable {
 		}
 	}
 
+	@Deprecated
 	public MemImage getStoredImage() {
 		final int channelCount = 3;
 		final int width = resolution.x, height = resolution.y;
-		ByteBuffer buffer = MemoryUtil.memAlloc(width * height * channelCount); // BufferUtils.createByteBuffer(width *
-																				// height * channelCount);
+		ByteBuffer buffer = MemoryUtil.memAlloc(width * height * channelCount);
+
 		GLES30.glReadPixels(0, 0, width, height, GLES30.GL_RGB, GLES30.GL_UNSIGNED_BYTE, buffer);
 		PDRUtils.checkGlESError("glReadPixels(0, 0, " + width + ", " + height + ", RGB, unsigned byte)");
 

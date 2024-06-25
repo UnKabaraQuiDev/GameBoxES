@@ -137,26 +137,8 @@ public class GameBoxES extends GameLogic {
 		}
 	}
 
-	private boolean previousScreenshot = false;
-	
 	@Override
 	public void update(float dTime) {
-		// handle screenshot
-		if (window.isKeyPressed(GLFW.GLFW_KEY_T) && !previousScreenshot) {
-			previousScreenshot = true;
-			createTask(GameEngine.QUEUE_RENDER).exec((s) -> {
-				GlobalLogger.info("Screenshot Thread exec: " + Thread.currentThread().getName());
-				MemImage img = compositor.getStoredImage();
-				boolean success = FileUtils.STBISaveIncremental("./screenshots/shot.png", img);
-				img.cleanup();
-				return success ? 1 : 0;
-			}).then((s) -> {
-				GlobalLogger.info("Screenshot Thread return: " + Thread.currentThread().getName());
-				previousScreenshot = false;
-				return 1;
-			}).push();
-		}
-		
 		if (GameState.PLAYING.equals(gameState)) {
 			worldScene.update(dTime);
 		}

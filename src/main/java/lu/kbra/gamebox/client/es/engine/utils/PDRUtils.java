@@ -19,6 +19,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL40;
 import org.lwjgl.opengl.GL45;
 import org.lwjgl.opengles.GLES20;
+import org.lwjgl.opengles.GLES30;
 
 import lu.pcy113.pclib.PCUtils;
 
@@ -52,6 +53,12 @@ import lu.kbra.gamebox.client.es.engine.exceptions.opengl.GLOutOfMemoryException
 import lu.kbra.gamebox.client.es.engine.exceptions.opengl.GLRuntimeException;
 import lu.kbra.gamebox.client.es.engine.exceptions.opengl.GLStackOverflowException;
 import lu.kbra.gamebox.client.es.engine.exceptions.opengl.GLStackUnderflowException;
+import lu.kbra.gamebox.client.es.engine.exceptions.opengles.GLESInvalidEnumException;
+import lu.kbra.gamebox.client.es.engine.exceptions.opengles.GLESInvalidFramebufferOperationException;
+import lu.kbra.gamebox.client.es.engine.exceptions.opengles.GLESInvalidIndexException;
+import lu.kbra.gamebox.client.es.engine.exceptions.opengles.GLESInvalidOperationException;
+import lu.kbra.gamebox.client.es.engine.exceptions.opengles.GLESInvalidValueException;
+import lu.kbra.gamebox.client.es.engine.exceptions.opengles.GLESOutOfMemoryException;
 import lu.kbra.gamebox.client.es.engine.impl.nexttask.NextTask;
 
 public final class PDRUtils {
@@ -139,20 +146,23 @@ public final class PDRUtils {
 		String caller = getCallerClassName(false);
 
 		switch (status) {
-		case GLES20.GL_INVALID_ENUM:
-			throw new EGLNotInitializedException(caller, status, msg);
-		case GLES20.GL_INVALID_VALUE:
-			throw new EGLBadAccessException(caller, status, msg);
-		case GLES20.GL_INVALID_OPERATION:
-			throw new EGLBadAllocException(caller, status, msg);
-		case GLES20.GL_INVALID_FRAMEBUFFER_OPERATION:
-			throw new EGLBadAttributeException(caller, status, msg);
-		case GLES20.GL_OUT_OF_MEMORY:
-			throw new EGLBadContextException(caller, status, msg);
-		// case GL45.GL_TABLE_TOO_LARGE:
+		case GLES30.GL_INVALID_OPERATION:
+			throw new GLESInvalidOperationException(caller, status, msg);
+		case GLES30.GL_INVALID_INDEX:
+			throw new GLESInvalidIndexException(caller, status, msg);
+		case GLES30.GL_INVALID_ENUM:
+			throw new GLESInvalidEnumException(caller, status, msg);
+		case GLES30.GL_INVALID_VALUE:
+			throw new GLESInvalidValueException(caller, status, msg);
+		case GLES30.GL_INVALID_FRAMEBUFFER_OPERATION:
+			throw new GLESInvalidFramebufferOperationException(caller, status, msg);
+		case GLES30.GL_OUT_OF_MEMORY:
+			throw new GLESOutOfMemoryException(caller, status, msg);
 		default:
 			return true;
+
 		}
+
 	}
 
 	public static boolean checkEGLError(String msg) {
