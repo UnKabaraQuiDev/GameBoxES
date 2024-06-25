@@ -4,12 +4,12 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import lu.kbra.gamebox.client.es.engine.utils.file.FileUtils;
+import lu.pcy113.pclib.PCUtils;
 
 public final class FDicLoader {
 
 	public static FDicFile load(File fdicFile) {
-		String[] lines = FileUtils.readStringFile(fdicFile.getAbsolutePath()).replaceAll("\\ŧ", " ").split("\n+");
+		String[] lines = PCUtils.readStringFile(fdicFile.getAbsolutePath()).replaceAll("\\ŧ", " ").split("\n+");
 		/*
 		 * for(int l = 0; l < lines.length; l++) { System.out.println("-- "+lines[l]); }
 		 */

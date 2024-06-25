@@ -5,6 +5,8 @@ import java.nio.file.Paths;
 
 import org.lwjgl.opengles.GLES30;
 
+import lu.pcy113.pclib.PCUtils;
+
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureType;
 import lu.kbra.gamebox.client.es.engine.utils.file.FileUtils;
@@ -86,7 +88,7 @@ public class CubemapTexture extends Texture {
 	private void generateFileBufferCubeMapTexture() {
 		String[] faces = new String[6];
 		for (int i = 0; i < 6; i++) {
-			faces[i] = FileUtils.appendName(path, FACES[i]);
+			faces[i] = PCUtils.appendFileName(path, FACES[i]);
 			if (!Files.exists(Paths.get(faces[i]))) {
 				throw new RuntimeException("Texture does not exist: " + faces[i]);
 			}

@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.json.JSONObject;
 
-import lu.kbra.gamebox.client.es.engine.utils.file.FileUtils;
+import lu.pcy113.pclib.PCUtils;
 
 /**
  * https://fonts.varg.dev/
@@ -23,7 +23,7 @@ public class FntFontMapRemapper {
 		File inFile = new File(args[0]);
 		if (!inFile.exists())
 			throw new FileNotFoundException(args[0]);
-		File outFile = new File(FileUtils.changeExtension(args[0], "json"));
+		File outFile = new File(PCUtils.replaceFileExtension(args[0], "json"));
 		outFile.createNewFile();
 
 		map(inFile, outFile);

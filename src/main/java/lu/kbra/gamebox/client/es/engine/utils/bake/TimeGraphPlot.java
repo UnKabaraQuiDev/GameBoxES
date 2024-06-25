@@ -15,8 +15,9 @@ import java.util.Map.Entry;
 
 import javax.imageio.ImageIO;
 
+import lu.pcy113.pclib.PCUtils;
+
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
-import lu.kbra.gamebox.client.es.engine.utils.file.FileUtils;
 
 public class TimeGraphPlot {
 
@@ -32,7 +33,7 @@ public class TimeGraphPlot {
 		}
 		String filePath = args[0];
 
-		List<String> dataList = Arrays.asList(FileUtils.readStringFile(filePath).split("\n"));
+		List<String> dataList = Arrays.asList(PCUtils.readStringFile(filePath).split("\n"));
 
 		double firstStartNano = Long.MAX_VALUE, firstStartMs = Long.MAX_VALUE;
 		firstDatas: {
@@ -170,7 +171,7 @@ public class TimeGraphPlot {
 		g.dispose();
 
 		try {
-			File outputImage = new File(FileUtils.changeExtension(filePath, "png"));
+			File outputImage = new File(PCUtils.replaceFileExtension(filePath, "png"));
 			ImageIO.write(image, "png", outputImage);
 			System.out.println("Graph plotted successfully.");
 		} catch (IOException e) {

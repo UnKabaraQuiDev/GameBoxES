@@ -1,13 +1,11 @@
 package lu.kbra.gamebox.client.es.engine.utils.file;
 
-import java.io.File;
-import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import org.lwjgl.stb.STBImage;
 import org.lwjgl.stb.STBImageWrite;
+
+import lu.pcy113.pclib.PCUtils;
 
 import lu.kbra.gamebox.client.es.engine.utils.mem.img.MemImage;
 import lu.kbra.gamebox.client.es.engine.utils.mem.img.MemImageOrigin;
@@ -42,20 +40,8 @@ public final class FileUtils {
 	}
 
 	public static boolean STBISaveIncremental(String filePath, MemImage image) {
-		filePath = FileUtils.getIncrement(filePath);
+		filePath = PCUtils.getIncrement(filePath);
 		return STBISave(filePath, image);
-	}
-
-	public static String getIncrement(String filePath) {
-		String woExt = removeExtension(filePath);
-		String ext = getExtension(filePath);
-
-		int index = 1;
-		while (Files.exists(Paths.get(woExt + "-" + index + "." + ext))) {
-			index++;
-		}
-
-		return woExt + "-" + index + "." + ext;
 	}
 
 	public static boolean STBISave(String filePath, MemImage image) {
@@ -65,52 +51,6 @@ public final class FileUtils {
 
 	public static void STBIFree(ByteBuffer buffer) {
 		STBImage.stbi_image_free(buffer);
-	}
-
-	public static String readStringFile(String filePath) {
-		String str;
-		if (!Files.exists(Paths.get(filePath))) {
-			throw new RuntimeException("File [" + filePath + "] does not exist");
-		}
-		try {
-			str = new String(Files.readAllBytes(Paths.get(filePath)));
-		} catch (IOException excp) {
-			throw new RuntimeException("Error reading file [" + filePath + "]", excp);
-		}
-		return str;
-	}
-
-	public static String recursiveTree(String path) throws IOException {
-		String list = "";
-		// list all the files in the 'path' directory and add them to the string 'list'
-		File directory = new File(path);
-		File[] files = directory.listFiles();
-		if (files != null) {
-			for (File file : files) {
-				if (file.isFile()) {
-					list += file + "\n";
-				} else {
-					list += recursiveTree(file.getCanonicalPath());
-				}
-			}
-		}
-		return list;
-	}
-
-	public static String appendName(String path, String suffix) {
-		return path.replaceAll("(.+)(\\.[^.]+)$", "$1" + suffix + "$2");
-	}
-
-	public static String changeExtension(String path, String ext) {
-		return path.replaceAll("(.+)(\\.[^.]+)$", "$1." + ext);
-	}
-
-	public static String removeExtension(String path) {
-		return path.replaceAll("(.+)(\\.[^.]+)$", "$1");
-	}
-
-	public static String getExtension(String path) {
-		return path.replaceAll("(.+\\.)([^.]+)$", "$2");
 	}
 
 }

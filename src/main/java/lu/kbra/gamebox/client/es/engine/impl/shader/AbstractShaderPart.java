@@ -6,6 +6,7 @@ import java.util.logging.Level;
 
 import org.lwjgl.opengles.GLES30;
 
+import lu.pcy113.pclib.PCUtils;
 import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.graph.shader.part.FragmentShaderPart;
@@ -13,7 +14,6 @@ import lu.kbra.gamebox.client.es.engine.graph.shader.part.VertexShaderPart;
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
 import lu.kbra.gamebox.client.es.engine.impl.UniqueID;
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
-import lu.kbra.gamebox.client.es.engine.utils.file.FileUtils;
 
 public abstract class AbstractShaderPart implements UniqueID, Cleanupable {
 
@@ -44,7 +44,7 @@ public abstract class AbstractShaderPart implements UniqueID, Cleanupable {
 
 		this.sid = GLES30.glCreateShader(type);
 		PDRUtils.checkGlESError("CreateShader(" + type + ") (" + file + ")");
-		GLES30.glShaderSource(sid, FileUtils.readStringFile(file));
+		GLES30.glShaderSource(sid, PCUtils.readStringFile(file));
 		PDRUtils.checkGlESError("ShaderSource(" + sid + ") (" + file + ")");
 		GLES30.glCompileShader(sid);
 		PDRUtils.checkGlESError("CompileShader(" + sid + ") (" + file + ")");
@@ -76,7 +76,7 @@ public abstract class AbstractShaderPart implements UniqueID, Cleanupable {
 	}
 
 	public boolean recompile() {
-		GLES30.glShaderSource(sid, FileUtils.readStringFile(file));
+		GLES30.glShaderSource(sid, PCUtils.readStringFile(file));
 		PDRUtils.checkGlESError("ShaderSource(" + sid + ") (" + file + ")");
 		GLES30.glCompileShader(sid);
 		PDRUtils.checkGlESError("CompileShader(" + sid + ") (" + file + ")");

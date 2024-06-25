@@ -12,7 +12,6 @@ import lu.kbra.gamebox.client.es.engine.objs.entity.components.Transform3DCompon
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.Velocity2DComponent;
 import lu.kbra.gamebox.client.es.game.game.data.CellDescriptor;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.entities.components.Acceleration2DComponent;
-import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
 import lu.kbra.gamebox.client.es.game.game.world.World;
 
 public class CellEntity extends Entity {

@@ -7,7 +7,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import lu.kbra.gamebox.client.es.engine.utils.file.FileUtils;
+import lu.pcy113.pclib.PCUtils;
+
 import lu.kbra.gamebox.client.es.engine.utils.text.fdic.FDicFile;
 import lu.kbra.gamebox.client.es.engine.utils.text.fdic.FDicGlyph;
 import lu.kbra.gamebox.client.es.engine.utils.text.fdic.FDicLoader;
@@ -58,7 +59,7 @@ public final class FDicRemapper {
 
 		g2d.dispose();
 
-		File outFile = new File(FileUtils.appendName(imageFile.getPath(), "_std"));
+		File outFile = new File(PCUtils.appendFileName(imageFile.getPath(), "_std"));
 
 		ImageIO.write(output, "PNG", outFile);
 	}

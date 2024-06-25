@@ -5,12 +5,12 @@ import java.nio.ShortBuffer;
 import org.lwjgl.openal.AL11;
 import org.lwjgl.system.MemoryUtil;
 
+import lu.pcy113.pclib.PCUtils;
 import lu.pcy113.pclib.datastructure.triplet.Triplet;
 import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
 import lu.kbra.gamebox.client.es.engine.impl.UniqueID;
-import lu.kbra.gamebox.client.es.engine.utils.file.FileUtils;
 import lu.kbra.gamebox.client.es.engine.utils.mem.buffer.MemBuffer;
 import lu.kbra.gamebox.client.es.engine.utils.mem.buffer.MemBufferOrigin;
 
@@ -23,12 +23,12 @@ public class Sound implements UniqueID, Cleanupable {
 	public Sound(String name, String file, boolean stereo) {
 		this.name = name;
 
-		switch (FileUtils.getExtension(file)) {
+		switch (PCUtils.getFileExtension(file)) {
 		case "ogg":
 			loadVorbis(file, stereo);
 			break;
 		default:
-			throw new RuntimeException("Unsupported file type: " + FileUtils.getExtension(file));
+			throw new RuntimeException("Unsupported file type: " + PCUtils.getFileExtension(file));
 		}
 	}
 

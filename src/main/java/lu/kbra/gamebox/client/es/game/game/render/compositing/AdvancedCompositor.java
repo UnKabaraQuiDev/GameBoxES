@@ -1,5 +1,6 @@
 package lu.kbra.gamebox.client.es.game.game.render.compositing;
 
+import java.nio.ByteBuffer;
 import java.util.LinkedList;
 import java.util.logging.Level;
 
@@ -8,6 +9,7 @@ import org.joml.Vector2i;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.opengles.GLES30;
+import org.lwjgl.system.MemoryUtil;
 
 import lu.pcy113.pclib.logger.GlobalLogger;
 
@@ -20,6 +22,8 @@ import lu.kbra.gamebox.client.es.engine.graph.composition.PassRenderLayer;
 import lu.kbra.gamebox.client.es.engine.graph.composition.RenderLayer;
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
+import lu.kbra.gamebox.client.es.engine.utils.mem.img.MemImage;
+import lu.kbra.gamebox.client.es.engine.utils.mem.img.MemImageOrigin;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalConsts;
 
 public class AdvancedCompositor implements Cleanupable {
@@ -95,6 +99,17 @@ public class AdvancedCompositor implements Cleanupable {
 			SCREEN.cleanup();
 			SCREEN = null;
 		}
+	}
+
+	public MemImage getStoredImage() {
+		final int channelCount = 3;
+		final int width = resolution.x, height = resolution.y;
+		ByteBuffer buffer = MemoryUtil.memAlloc(width * height * channelCount); // BufferUtils.createByteBuffer(width *
+																				// height * channelCount);
+		GLES30.glReadPixels(0, 0, width, height, GLES30.GL_RGB, GLES30.GL_UNSIGNED_BYTE, buffer);
+		PDRUtils.checkGlESError("glReadPixels(0, 0, " + width + ", " + height + ", RGB, unsigned byte)");
+
+		return new MemImage(width, height, channelCount, buffer, MemImageOrigin.OPENGL);
 	}
 
 }

@@ -9,7 +9,10 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.opengles.GLES30;
-import org.lwjgl.opengles.GLES32;
+
+import lu.pcy113.pclib.PCUtils;
+import lu.pcy113.pclib.datastructure.pair.Pair;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
@@ -24,9 +27,6 @@ import lu.kbra.gamebox.client.es.engine.graph.material.wireframe.WireframeShader
 import lu.kbra.gamebox.client.es.engine.graph.shader.RenderShader;
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
 import lu.kbra.gamebox.client.es.engine.scene.Scene;
-import lu.kbra.gamebox.client.es.engine.utils.file.FileUtils;
-import lu.pcy113.pclib.datastructure.pair.Pair;
-import lu.pcy113.pclib.logger.GlobalLogger;
 
 public class DebugOptions implements Cleanupable {
 
@@ -180,7 +180,7 @@ public class DebugOptions implements Cleanupable {
 
 	public DebugOptions() {
 		try {
-			this.eventFileWriter = new FileWriter(FileUtils.appendName(GlobalLogger.getLogger().getLogFile().getPath(), "-time"));
+			this.eventFileWriter = new FileWriter(PCUtils.appendFileName(GlobalLogger.getLogger().getLogFile().getPath(), "-time"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

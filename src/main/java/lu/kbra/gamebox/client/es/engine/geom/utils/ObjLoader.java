@@ -10,6 +10,8 @@ import org.joml.Vector3i;
 import org.joml.Vector4f;
 import org.lwjgl.opengles.GLES30;
 
+import lu.pcy113.pclib.PCUtils;
+
 import lu.kbra.gamebox.client.es.engine.cache.attrib.UIntAttribArray;
 import lu.kbra.gamebox.client.es.engine.cache.attrib.Vec2fAttribArray;
 import lu.kbra.gamebox.client.es.engine.cache.attrib.Vec3fAttribArray;
@@ -17,12 +19,11 @@ import lu.kbra.gamebox.client.es.engine.cache.attrib.Vec4fAttribArray;
 import lu.kbra.gamebox.client.es.engine.geom.Gizmo;
 import lu.kbra.gamebox.client.es.engine.geom.Mesh;
 import lu.kbra.gamebox.client.es.engine.graph.material.Material;
-import lu.kbra.gamebox.client.es.engine.utils.file.FileUtils;
 
 public final class ObjLoader {
 
 	public static Gizmo loadGizmo(String name, String path) {
-		String[] lines = FileUtils.readStringFile(path).split("\n");
+		String[] lines = PCUtils.readStringFile(path).split("\n");
 
 		List<Vector3f> vertices = new ArrayList<>();
 		/*
@@ -96,7 +97,7 @@ public final class ObjLoader {
 	}
 
 	public static Mesh loadMesh(String name, Material material, String path) {
-		String[] lines = FileUtils.readStringFile(path).split("\n");
+		String[] lines = PCUtils.readStringFile(path).split("\n");
 
 		List<Vector3f> vertices = new ArrayList<>();
 		List<Vector3f> normals = new ArrayList<>();

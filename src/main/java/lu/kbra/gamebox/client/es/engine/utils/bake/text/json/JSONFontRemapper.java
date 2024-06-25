@@ -13,7 +13,7 @@ import javax.imageio.ImageIO;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import lu.kbra.gamebox.client.es.engine.utils.file.FileUtils;
+import lu.pcy113.pclib.PCUtils;
 
 /**
  * https://evanw.github.io/font-texture-generator/
@@ -51,10 +51,10 @@ public class JSONFontRemapper {
 		int height = obj.getInt("height");
 
 		JSONObject chars = obj.getJSONObject("characters");
-		String inImgPath = FileUtils.changeExtension(inJsonPath, "png");
+		String inImgPath = PCUtils.replaceFileExtension(inJsonPath, "png");
 		BufferedImage input = ImageIO.read(new File(inImgPath));
 
-		String outImgPath = FileUtils.appendName(inImgPath, "_norm");
+		String outImgPath = PCUtils.appendFileName(inImgPath, "_norm");
 		BufferedImage output = new BufferedImage(STRING.length() * fontSize, fontSize, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = output.createGraphics();
 		

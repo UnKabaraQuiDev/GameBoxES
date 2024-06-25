@@ -5,7 +5,7 @@ public interface Cleanupable extends AutoCloseable {
 	void cleanup();
 	
 	@Override
-	default void close() throws Exception {
+	default void close() {
 		cleanup();
 	}
 

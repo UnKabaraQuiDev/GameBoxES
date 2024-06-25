@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
+import org.lwjgl.glfw.GLFW;
 
 import lu.pcy113.pclib.logger.GlobalLogger;
 
@@ -14,6 +15,8 @@ import lu.kbra.gamebox.client.es.engine.graph.composition.SceneRenderLayer;
 import lu.kbra.gamebox.client.es.engine.graph.material.text.TextShader;
 import lu.kbra.gamebox.client.es.engine.impl.GameLogic;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
+import lu.kbra.gamebox.client.es.engine.utils.file.FileUtils;
+import lu.kbra.gamebox.client.es.engine.utils.mem.img.MemImage;
 import lu.kbra.gamebox.client.es.game.game.data.PlayerData;
 import lu.kbra.gamebox.client.es.game.game.debug.DebugUIElements;
 import lu.kbra.gamebox.client.es.game.game.render.compositing.AdvancedCompositor;
@@ -134,8 +137,26 @@ public class GameBoxES extends GameLogic {
 		}
 	}
 
+	private boolean previousScreenshot = false;
+	
 	@Override
 	public void update(float dTime) {
+		// handle screenshot
+		if (window.isKeyPressed(GLFW.GLFW_KEY_T) && !previousScreenshot) {
+			previousScreenshot = true;
+			createTask(GameEngine.QUEUE_RENDER).exec((s) -> {
+				GlobalLogger.info("Screenshot Thread exec: " + Thread.currentThread().getName());
+				MemImage img = compositor.getStoredImage();
+				boolean success = FileUtils.STBISaveIncremental("./screenshots/shot.png", img);
+				img.cleanup();
+				return success ? 1 : 0;
+			}).then((s) -> {
+				GlobalLogger.info("Screenshot Thread return: " + Thread.currentThread().getName());
+				previousScreenshot = false;
+				return 1;
+			}).push();
+		}
+		
 		if (GameState.PLAYING.equals(gameState)) {
 			worldScene.update(dTime);
 		}
