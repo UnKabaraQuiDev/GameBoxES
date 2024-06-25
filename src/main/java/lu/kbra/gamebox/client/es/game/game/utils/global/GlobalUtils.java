@@ -22,10 +22,6 @@ import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengles.GLES30;
 
-import lu.pcy113.jbcodec.CodecManager;
-import lu.pcy113.pclib.PCUtils;
-import lu.pcy113.pclib.logger.GlobalLogger;
-
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
 import lu.kbra.gamebox.client.es.engine.geom.Mesh;
@@ -78,6 +74,9 @@ import lu.kbra.gamebox.client.es.game.game.data.CellDescriptor;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.UIButtonShader;
 import lu.kbra.gamebox.client.es.game.game.scenes.ui.UISceneGameOverlay;
 import lu.kbra.gamebox.client.es.game.game.utils.GameState;
+import lu.pcy113.jbcodec.CodecManager;
+import lu.pcy113.pclib.PCUtils;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 public class GlobalUtils {
 
@@ -181,15 +180,15 @@ public class GlobalUtils {
 				engine.getWindow().setWindowShouldClose(true);
 		try {
 			GlobalOptions.save();
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			GlobalLogger.log(Level.WARNING, "Error while saving options", e);
 		}
 		workers.closeInput();
 		workers.block();
 		try {
 			workers.shutdown();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			GlobalLogger.log(Level.WARNING, "Error while shutting down workers", e);
 		}
 	}
 
