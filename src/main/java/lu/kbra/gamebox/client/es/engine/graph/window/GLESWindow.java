@@ -3,6 +3,7 @@ package lu.kbra.gamebox.client.es.engine.graph.window;
 import java.lang.reflect.Field;
 import java.nio.IntBuffer;
 
+import org.lwjgl.PointerBuffer;
 import org.lwjgl.egl.EGL;
 import org.lwjgl.egl.EGL10;
 import org.lwjgl.egl.EGL15;
@@ -50,8 +51,11 @@ public class GLESWindow extends Window {
 		monitor = getQualifiedMonitor();
 
 		handle = GLFW.glfwCreateWindow(options.windowSize.x, options.windowSize.y, options.title, MemoryUtil.NULL, MemoryUtil.NULL);
-		if (handle == MemoryUtil.NULL)
-			throw new RuntimeException("Failed to create GLFW Window");
+		if (handle == MemoryUtil.NULL) {
+			PointerBuffer pb = PointerBuffer.allocateDirect(1024);
+			GLFW.glfwGetError(pb);
+			throw new RuntimeException("Failed to create GLFW Window (" + pb.getStringASCII() + ")");
+		}
 
 		try (MemoryStack stack = MemoryStack.stackPush()) {
 			IntBuffer major = stack.mallocInt(1);
@@ -116,17 +120,17 @@ public class GLESWindow extends Window {
 	public void updateOptions() {
 		GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, options.resizable ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
 		GLFW.glfwSwapInterval(options.vsync ? 1 : 0);
-		/*GLFWVidMode vidMode = GLFW.glfwGetVideoMode(monitor);
-		GLFW.glfwSetWindowMonitor(handle, options.fullscreen ? monitor : MemoryUtil.NULL, 0, 0, !options.fullscreen ? options.windowSize.x : vidMode.width(), !options.fullscreen ? options.windowSize.y : vidMode.height(), options.fps);
-		this.width = !options.fullscreen ? options.windowSize.x : vidMode.width();
-		this.height = !options.fullscreen ? options.windowSize.y : vidMode.height();*/
+		/*
+		 * GLFWVidMode vidMode = GLFW.glfwGetVideoMode(monitor); GLFW.glfwSetWindowMonitor(handle, options.fullscreen ? monitor : MemoryUtil.NULL, 0, 0, !options.fullscreen ? options.windowSize.x : vidMode.width(), !options.fullscreen ?
+		 * options.windowSize.y : vidMode.height(), options.fps); this.width = !options.fullscreen ? options.windowSize.x : vidMode.width(); this.height = !options.fullscreen ? options.windowSize.y : vidMode.height();
+		 */
 	}
-	
+
 	@Override
 	protected long getQualifiedMonitor() {
 		long monitor = EGL15.eglGetDisplay(EGL15.EGL_DEFAULT_DISPLAY);
 		PDRUtils.checkEGLError("eglGetDisplay[DEFAULT]");
-		if(monitor == EGL15.EGL_NO_DISPLAY) {
+		if (monitor == EGL15.EGL_NO_DISPLAY) {
 			throw new EGLNoDisplayException("eglGetDisplay[DEFAULT]");
 		}
 		return monitor;
@@ -153,7 +157,7 @@ public class GLESWindow extends Window {
 		GlobalLogger.log("Cleaning up GLFW: " + getClass().getName() + " (" + handle + ")");
 
 		if (handle != -1) {
-			if(!EGL10.eglTerminate(monitor)) {
+			if (!EGL10.eglTerminate(monitor)) {
 				GlobalLogger.severe("Could not terminate EGL context.");
 			}
 			Callbacks.glfwFreeCallbacks(handle);
