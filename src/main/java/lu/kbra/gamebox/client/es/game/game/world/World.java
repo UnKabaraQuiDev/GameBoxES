@@ -227,10 +227,10 @@ public class World implements Cleanupable {
 			GlobalUtils.INSTANCE.playerData.unlockAchievement(Achievements.FOG_DAMAGE);
 		}
 
-		GlobalUtils.dumpThreads(Level.SEVERE);
+		/**GlobalUtils.dumpThreads(Level.SEVERE);
 		if (updateTasks.size() > 0) {
 			GlobalLogger.info(Arrays.toString(updateTasks.toArray()));
-		}
+		}*/
 	}
 
 	private void cleanupExtChunks() {

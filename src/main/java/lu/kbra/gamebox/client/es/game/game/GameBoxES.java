@@ -56,7 +56,6 @@ public class GameBoxES extends GameLogic {
 			GlobalLogger.log("Loaded lang: " + GlobalOptions.LANGUAGE + " gets: " + GlobalLang.LANGUAGES[GlobalOptions.LANGUAGE]);
 			GlobalLang.load(GlobalLang.LANGUAGES[GlobalOptions.LANGUAGE]);
 			GlobalLogger.log("Loaded volume: " + GlobalLang.get("menu.options.volume"));
-			throw new RuntimeException("yikes");
 		} catch (Exception e1) {
 			e1.printStackTrace();
 			GlobalLogger.log(e1);

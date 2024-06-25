@@ -59,9 +59,9 @@ public class WorldScene3D extends Scene3D {
 		}
 
 		if (window.getJoystickButton(GLFW.GLFW_JOYSTICK_1, GLFW.GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER) && (double) (System.currentTimeMillis() - lastTreeView) / 1000 * UISceneGameOverlay.SIDE_BG_SHOW_SPEED >= 1) {
-			GlobalUtils.INSTANCE.playerData.setAminoAcid(GlobalUtils.INSTANCE.playerData.getAminoAcid() + 100);
+			/**GlobalUtils.INSTANCE.playerData.setAminoAcid(GlobalUtils.INSTANCE.playerData.getAminoAcid() + 100);
 			GlobalUtils.INSTANCE.playerData.setGlucose(GlobalUtils.INSTANCE.playerData.getGlucose() + 100);
-			GlobalUtils.INSTANCE.playerData.setLipid(GlobalUtils.INSTANCE.playerData.getLipid() + 100);
+			GlobalUtils.INSTANCE.playerData.setLipid(GlobalUtils.INSTANCE.playerData.getLipid() + 100);*/
 
 			if (((UISceneGameOverlay) GlobalUtils.INSTANCE.uiScene.getState()).isTreeViewActive()) {
 				((UISceneGameOverlay) GlobalUtils.INSTANCE.uiScene.getState()).setTreeViewActive(false);

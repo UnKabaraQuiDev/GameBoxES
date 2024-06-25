@@ -330,9 +330,9 @@ public class PlayerData {
 
 		upgradeTreeCount++;
 
-		lipid = 9999;
+		/*lipid = 9999;
 		aminoAcid = 9999;
-		glucose = 9999;
+		glucose = 9999;*/
 		
 		switch (currentTreeNode.getType()) {
 		case "damage":
