@@ -9,9 +9,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.opengles.GLES30;
-
-import lu.pcy113.pclib.datastructure.pair.Pair;
-import lu.pcy113.pclib.logger.GlobalLogger;
+import org.lwjgl.opengles.GLES32;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
@@ -27,6 +25,8 @@ import lu.kbra.gamebox.client.es.engine.graph.shader.RenderShader;
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
 import lu.kbra.gamebox.client.es.engine.scene.Scene;
 import lu.kbra.gamebox.client.es.engine.utils.file.FileUtils;
+import lu.pcy113.pclib.datastructure.pair.Pair;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 public class DebugOptions implements Cleanupable {
 
@@ -103,7 +103,7 @@ public class DebugOptions implements Cleanupable {
 		if (GameEngine.DEBUG.ignoreDepth)
 			GLES30.glDisable(GLES30.GL_DEPTH_TEST);
 
-		GLES30.glDrawElements(GLES30.GL_LINES, mesh.getIndicesCount(), GLES30.GL_UNSIGNED_INT, 0);
+		GLES30.glDrawElements(GLES30.GL_LINE_STRIP, mesh.getIndicesCount(), GLES30.GL_UNSIGNED_INT, 0);
 
 		GLES30.glEnable(GLES30.GL_DEPTH_TEST);
 	}
