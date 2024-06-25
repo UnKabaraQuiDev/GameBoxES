@@ -49,7 +49,7 @@ public class GLESWindow extends Window {
 		GLFW.glfwWindowHint(GLFW.GLFW_CLIENT_API, GLFW.GLFW_OPENGL_ES_API);
 
 		monitor = getQualifiedMonitor();
-		
+
 		try (MemoryStack stack = MemoryStack.stackPush()) {
 			IntBuffer major = stack.mallocInt(1);
 			IntBuffer minor = stack.mallocInt(1);
@@ -59,13 +59,6 @@ public class GLESWindow extends Window {
 
 			this.eglCapabilities = EGL.createDisplayCapabilities(monitor, major.get(0), minor.get(0));
 			PDRUtils.checkEGLError("createDisplayCapabilities[" + monitor + ", IB, IB]");
-		}
-
-		handle = GLFW.glfwCreateWindow(options.windowSize.x, options.windowSize.y, options.title, MemoryUtil.NULL, MemoryUtil.NULL);
-		if (handle == MemoryUtil.NULL) {
-			PointerBuffer pb = PointerBuffer.allocateDirect(1024);
-			GLFW.glfwGetError(pb);
-			throw new RuntimeException("Failed to create GLFW Window (" + pb.getStringASCII() + ")");
 		}
 
 		if (this.eglCapabilities == null)
@@ -82,6 +75,13 @@ public class GLESWindow extends Window {
 			}
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
+		}
+
+		handle = GLFW.glfwCreateWindow(options.windowSize.x, options.windowSize.y, options.title, MemoryUtil.NULL, MemoryUtil.NULL);
+		if (handle == MemoryUtil.NULL) {
+			PointerBuffer pb = PointerBuffer.allocateDirect(1024);
+			GLFW.glfwGetError(pb);
+			throw new RuntimeException("Failed to create GLFW Window (" + pb.getStringASCII() + ")");
 		}
 
 		GLFW.glfwMakeContextCurrent(handle);
@@ -101,7 +101,6 @@ public class GLESWindow extends Window {
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
-
 		if (options.windowMultisample > 1) {
 			GLFW.glfwWindowHint(GLFW.GLFW_SAMPLES, options.windowMultisample);
 		}
