@@ -14,8 +14,8 @@ uniform float progress;
 uniform float icon;
 uniform vec4 tint;
 
-#define QUAD_START vec2(0.010, 0.140)
-#define QUAD_END vec2(0.080, 0.850)
+#define QUAD_START vec2(0.015, 0.146)
+#define QUAD_END vec2(0.085, 0.854)
 
 vec2 map(vec2 value, vec2 min1, vec2 max1, vec2 min2, vec2 max2) {
 	return min2 + (value - min1) * (max2 - min2) / (max1 - min1);

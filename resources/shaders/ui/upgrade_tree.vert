@@ -16,13 +16,13 @@ uniform mat4 transformationMatrix;
 
 uniform vec2 progress;
 
-#define START_1 vec2(0.060, 0.250)
-#define END_1 vec2(0.070, 0.270)
+#define START_1 vec2(0.068, 0.252)
+#define END_1 vec2(0.078, 0.273)
 
-#define START_2 vec2(0.060, 0.280)
-#define END_2 vec2(0.070, 0.300)
+#define START_2 vec2(0.068, 0.286)
+#define END_2 vec2(0.078, 0.308)
 
-#define SWIPE_END 0.020
+#define SWIPE_END 0.026
 
 void main() {
 	gl_Position = projectionMatrix * viewMatrix * transformationMatrix * vec4(i_pos, 1.0);
