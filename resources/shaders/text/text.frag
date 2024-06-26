@@ -13,19 +13,19 @@ in struct per_Vertex {
 	vec3 normal;
 } vertex;
 
-#define CHAR_START 32f
-#define CHAR_COUNT 95f //255
+#define CHAR_START 32.0
+#define CHAR_COUNT 95.0 //255
 
 out vec4 fragColor;
 
 uniform sampler2D txt1;
 uniform vec4 bgColor;
 uniform vec4 fgColor;
-uniform int length;
+uniform int textLength;
 uniform bool transparent;
 
 void main() {
-	if (instance.index >= length) {
+	if (instance.index >= textLength) {
 		discard;
 	}
 
