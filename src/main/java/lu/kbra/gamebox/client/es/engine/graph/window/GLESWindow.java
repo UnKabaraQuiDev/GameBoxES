@@ -100,6 +100,7 @@ public class GLESWindow extends Window {
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
+		
 		if (options.windowMultisample > 1) {
 			GLFW.glfwWindowHint(GLFW.GLFW_SAMPLES, options.windowMultisample);
 		}
