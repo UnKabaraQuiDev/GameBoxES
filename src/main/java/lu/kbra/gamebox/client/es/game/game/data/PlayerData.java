@@ -307,7 +307,7 @@ public class PlayerData {
 			return lines.stream().collect(Collectors.joining("\n"));
 		}catch(Exception e)  {
 			GlobalLogger.log(Level.WARNING, "Couldn't load mark count", e);
-			return loadMarkCounts();
+			return "null (exception)";
 		}
 	}
 
