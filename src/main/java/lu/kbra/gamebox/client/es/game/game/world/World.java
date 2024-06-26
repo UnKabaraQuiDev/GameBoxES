@@ -518,7 +518,7 @@ public class World implements Cleanupable {
 		return GlobalUtils.pushWorker(() -> {
 			long start = System.currentTimeMillis();
 
-			final List<Vector2f> plantPos = genPlantsPos(center, halfSquareSize, numPoint / 3 / 3);
+			final List<Vector2f> plantPos = genPlantsPos(center, halfSquareSize, numPoint / 9);
 			final List<Vector2f> toxinsPos = genToxinsPos(center, halfSquareSize, numPoint / 3);
 			final List<Vector2f> cellsPos = genCellsPos(center, halfSquareSize, numPoint / 9);
 
