@@ -21,11 +21,11 @@ out vec4 fragColor;
 uniform sampler2D txt1;
 uniform vec4 bgColor;
 uniform vec4 fgColor;
-uniform int textLength;
+uniform int len;
 uniform bool transparent;
 
 void main() {
-	if (instance.index >= textLength) {
+	if (instance.index >= len) {
 		discard;
 	}
 

@@ -19,7 +19,7 @@ public class TextShader extends RenderShader {
 	public static final String TXT1 = "txt1";
 	public static final String FG_COLOR = "fgColor";
 	public static final String BG_COLOR = "bgColor";
-	public static final String TXT_LENGTH = "textLength";
+	public static final String TXT_LENGTH = "len";
 	public static final String TRANSPARENT = "transparent";
 	public static final String THICKNESS = "thickness";
 
