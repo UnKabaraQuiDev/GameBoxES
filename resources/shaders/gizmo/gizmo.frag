@@ -1,4 +1,4 @@
-#version 300 es
+#version {version}
 precision mediump float;
 
 in vec4 color;

@@ -1,4 +1,4 @@
-#version 300 es
+#version {version}
 precision mediump float;
 
 layout (location=0) in vec3 positions;
