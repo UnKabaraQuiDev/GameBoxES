@@ -41,7 +41,7 @@ void main() {
 		discard;
 	}
 
-	if(mask.r >= 0.5f) {
+	if(mask.r >= 0.0) {
 		fragColor = fgColor;
 	}else{
 		fragColor = bgColor;

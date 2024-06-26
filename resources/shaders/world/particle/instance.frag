@@ -11,7 +11,7 @@ out vec4 fragColor;
 uniform sampler2D txt1;
 uniform int columns; 
 uniform int rows;
-uniform float opacity; // 0.55f
+uniform float opacity; // 0.5.0
 
 void main() {
 	float rcolumns = float(columns);
@@ -24,7 +24,7 @@ void main() {
 	float colWidth = 1.0/float(rcolumns);
 	float rowHeight = 1.0/float(rrows);
 	
-	fragColor = texture(txt1, mix(vec2(colWidth*colIndex, rowHeight*rowIndex), vec2(colWidth*(colIndex+1.0), rowHeight*(rowIndex+1.0)), texCoord)) - vec4(vec3(0.0), distance(texCoord, vec2(0.5f, 0.5f)))- vec4(vec3(0.0), 1.0-opacity);
+	fragColor = texture(txt1, mix(vec2(colWidth*colIndex, rowHeight*rowIndex), vec2(colWidth*(colIndex+1.0), rowHeight*(rowIndex+1.0)), texCoord)) - vec4(vec3(0.0), distance(texCoord, vec2(0.0, 0.0)))- vec4(vec3(0.0), 1.0-opacity);
 	
 	if(fragColor.a == 0.0) {
 		discard;

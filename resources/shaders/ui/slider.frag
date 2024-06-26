@@ -61,5 +61,5 @@ void main() {
 	}
 	
 	
-	// fragColor = vec4(box(vertex.uv, barSize/2, 0.5f), 0, 1, 1);
+	// fragColor = vec4(box(vertex.uv, barSize/2, 0.0), 0, 1, 1);
 }

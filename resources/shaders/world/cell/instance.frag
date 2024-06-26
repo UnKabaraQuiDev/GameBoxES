@@ -15,7 +15,7 @@ uniform int columns;
 void main() {
 	float colIndex = float(index % columns);
 	
-	float colWidth = (1.0f/1.0f);
+	float colWidth = (1.0/1.0);
 	
 	fragColor = texture(txt1, mix(vec2(colWidth*colIndex, 0.0), vec2(colWidth*(colIndex+1.0), 1.0), texCoord));
 	

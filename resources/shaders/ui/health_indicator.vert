@@ -15,7 +15,7 @@ uniform mat4 transformationMatrix;
 
 uniform vec2 barOffset;
 
-#define BAR_MAX_HEIGHT 0.2f
+#define BAR_MAX_HEIGHT 0.0
 
 void main() {
 	vec3 pos = i_pos;

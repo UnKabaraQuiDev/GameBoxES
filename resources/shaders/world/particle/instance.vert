@@ -27,7 +27,7 @@ uvec3 murmurHash33(uvec3 src) {
 }
 vec3 hash33(vec3 src) {
 	uvec3 h = murmurHash33(floatBitsToUint(src));
-	return uintBitsToFloat(h & 0x007fffffu | 0x3f800000u) - 1.0;
+	return uintBitsToFloat(h & 0x00.0ffffu | 0x.0800000u) - 1.0;
 }
 
 
