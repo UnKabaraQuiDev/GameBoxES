@@ -10,6 +10,8 @@ import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
 import lu.kbra.gamebox.client.es.engine.impl.UniqueID;
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 import lu.kbra.gamebox.client.es.engine.utils.gl.wrapper.GL_W;
+import lu.kbra.gamebox.client.es.engine.utils.gl.wrapper.GL_W_GL40;
+
 import lu.pcy113.pclib.PCUtils;
 import lu.pcy113.pclib.logger.GlobalLogger;
 
@@ -37,7 +39,7 @@ public abstract class AbstractShaderPart implements UniqueID, Cleanupable {
 
 		this.sid = GL_W.glCreateShader(type);
 		PDRUtils.checkGL_WError("CreateShader(" + type + ") (" + file + ")");
-		GL_W.glShaderSource(sid, PCUtils.readStringFile(file));
+		GL_W.glShaderSource(sid, PCUtils.readStringFile(file).replace("{version}", GL_W.WRAPPER instanceof GL_W_GL40 ? "400" : "300 es"));
 		PDRUtils.checkGL_WError("ShaderSource(" + sid + ") (" + file + ")");
 		GL_W.glCompileShader(sid);
 		PDRUtils.checkGL_WError("CompileShader(" + sid + ") (" + file + ")");
