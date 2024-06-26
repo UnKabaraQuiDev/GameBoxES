@@ -366,7 +366,7 @@ public class GameEngine implements Cleanupable, UniqueID {
 		// this.window.takeGLContext();
 		this.cleanup();
 
-		TimeGraphPlot.main(new String[] { PCUtils.appendFileName(GlobalLogger.getLogger().getLogFile().getPath(), "-time") });
+		// TimeGraphPlot.main(new String[] { PCUtils.appendFileName(GlobalLogger.getLogger().getLogFile().getPath(), "-time") });
 	}
 
 	public void stop() {

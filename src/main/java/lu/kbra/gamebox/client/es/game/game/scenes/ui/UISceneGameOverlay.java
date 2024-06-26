@@ -185,7 +185,8 @@ public class UISceneGameOverlay extends UISceneState {
 		// player notes
 		playerNoteText = GlobalUtils.createUIText(cache, "playerUINote", 512, "No text to speech.", Alignment.TEXT_CENTER).getTextEmitter(cache);
 		playerNoteText.setCorrectTransform(true);
-		playerNote = scene.addEntity("playerUINote", new TextEmitterComponent(playerNoteText), new Transform3DComponent(new Vector3f(0, 1f, GlobalConsts.UI_OVER_COMPONENTS_HEIGHT), new Quaternionf(), new Vector3f(0.75f))).setActive(false);
+		playerNote = scene.addEntity("playerUINote", new TextEmitterComponent(playerNoteText),
+				new Transform3DComponent(new Vector3f(0, 1f, GlobalConsts.UI_OVER_COMPONENTS_HEIGHT), new Quaternionf(), new Vector3f(GlobalLang.getCURRENT_LANG().equalsIgnoreCase("Francais") ? 0.65f : 0.75f))).setActive(false);
 
 		cic = new ControllerInputWatcher();
 		cic.setSkipWaitingForNone(true);
@@ -401,7 +402,7 @@ public class UISceneGameOverlay extends UISceneState {
 		sideUiBG.setActive(b);
 		majorUpgradeTreeParent.setActive(b);
 		majorUpgradeTreePrice.setActive(b);
-		
+
 		majorUpgradeTreeDesc.setText("Select an\nupgrade");
 
 		if (b) {

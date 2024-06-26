@@ -284,7 +284,6 @@ public class GlobalUtils {
 		if (!INSTANCE.window.isJoystickPresent())
 			return new Vector2f();
 		float[] btns = INSTANCE.window.getJoystickAxis(GLFW.GLFW_JOYSTICK_1);
-		System.err.println(btns[0]+" "+(-btns[1]));
 		return new Vector2f(btns[0], -btns[1]);
 	}
 

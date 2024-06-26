@@ -1,7 +1,7 @@
 {
 	"mushroom": {
 		"type": "MUSHROOM",
-		"scientific": "Scientifico i don't kno 1",
+		"scientific": ".-.",
 		"hostility": [0, 0.5],
 		"fertility": [0, 0.4],
 		"humidity": [0.8, 1],
@@ -11,12 +11,12 @@
 		"softAggressiveDistance": 20,
 		"deathDesc.english": "You've been killed by a fungal cell!<br>Fungal cells are known for their<br>rigid cell walls made of chitin.<br>They decompose dead organic material<br>and reproduce through spores.<br>Interestingly, fungi are more closely<br>related to animals than to plants!",
 		"killDesc.english": "You killed a fungal cell!<br>Fungal cells have a rigid cell wall<br>made of chitin. They act as<br>decomposers, breaking down dead<br>organic material. Fungi reproduce<br>through spores and are more closely<br>related to animals than plants!",
-		"deathDesc.francais": "Tu as été tué par une cellule fongique !<br>Les cellules fongiques sont connues<br>pour leurs parois cellulaires rigides<br>composées de chitine. Elles décomposent<br>les matières organiques mortes et se<br>reproduisent par le biais de spores.<br>Il est intéressant de noter que les<br>champignons sont plus proches des<br>animaux que des plantes !",
-		"killDesc.francais": "Tu as tué une cellule fongique !<br>Les cellules fongiques ont une<br>paroi cellulaire rigide composée de<br>chitine. Elles agissent comme des<br>décomposeurs, en décomposant la<br>matière organique morte. Les<br>champignons se reproduisent par des<br>spores et sont plus proches des<br>animaux que des plantes !"
+		"deathDesc.francais": "Tu as ete tue par une cellule fongique !<br>Les cellules fongiques sont connues<br>pour leurs parois cellulaires rigides<br>composees de chitine. Elles decomposent<br>les matieres organiques mortes et se<br>reproduisent par le biais de spores.<br>Il est interessant de noter que les<br>champignons sont plus proches des<br>animaux que des plantes !",
+		"killDesc.francais": "Tu as tue une cellule fongique !<br>Les cellules fongiques ont une<br>paroi cellulaire rigide composee de<br>chitine. Elles agissent comme des<br>decomposeurs, en decomposant la<br>matiere organique morte. Les<br>champignons se reproduisent par des<br>spores et sont plus proches des<br>animaux que des plantes !"
 	},
 	"flu": {
 		"type": "FLU",
-		"scientific": "Scientifico i don't kno 2",
+		"scientific": ".-.",
 		"hostility": [0.4, 1],
 		"fertility": [0.2, 0.8],
 		"humidity": [0.5, 1],
@@ -26,12 +26,12 @@
 		"softAggressiveDistance": 20,
 		"deathDesc.english": "You've been killed by a virus!<br>Viruses are made up of a protein<br>coat surrounding genetic material.<br>They infect host cells and use them<br>to replicate and spread. Viruses can't<br>reproduce independently and must<br>hijack a host cell's machinery. They<br>blur the line between living and<br>non-living things because they<br>require a host to survive!",
 		"killDesc.english": "You killed a virus!<br>Viruses consist of a protein coat<br>surrounding genetic material. They<br>infect host cells to replicate and<br>spread. Unable to reproduce on their<br>own, viruses hijack a host cell's<br>machinery. They exist on the edge<br>of living and non-living things<br>because they need a host to survive!",
-		"deathDesc.francais": "Tu as été tué par un virus !<br>Les virus sont constitués d'une enveloppe<br>protéique entourant le matériel génétique.<br>Ils infectent les cellules hôtes et les<br>utilisent pour se répliquer et se propager.<br>Les virus ne peuvent pas se reproduire<br>de manière autonome et doivent détourner<br>la machinerie d'une cellule hôte. Ils<br>brouillent la frontière entre le vivant<br>et le non-vivant car ils ont besoin d'un<br>hôte pour survivre !",
-		"killDesc.francais": "Tu as tué un virus !<br>Les virus sont constitués d'une enveloppe<br>protéique entourant le matériel génétique.<br>Ils infectent les cellules hôtes pour se<br>répliquer et se propager. Incapables de<br>se reproduire seuls, les virus détournent<br>la machinerie d'une cellule hôte. Ils<br>existent à la frontière du vivant et du<br>non-vivant car ils ont besoin d'un hôte<br>pour survivre !"
+		"deathDesc.francais": "Tu as ete tue par un virus !<br>Les virus sont constitues d'une enveloppe<br>proteique entourant le materiel genetique.<br>Ils infectent les cellules hôtes et les<br>utilisent pour se repliquer et se propager.<br>Les virus ne peuvent pas se reproduire<br>de maniere autonome et doivent detourner<br>la machinerie d'une cellule hôte. Ils<br>brouillent la frontiere entre le vivant<br>et le non-vivant car ils ont besoin d'un<br>hôte pour survivre !",
+		"killDesc.francais": "Tu as tue un virus !<br>Les virus sont constitues d'une enveloppe<br>proteique entourant le materiel genetique.<br>Ils infectent les cellules hôtes pour se<br>repliquer et se propager. Incapables de<br>se reproduire seuls, les virus detournent<br>la machinerie d'une cellule hôte. Ils<br>existent à la frontiere du vivant et du<br>non-vivant car ils ont besoin d'un hôte<br>pour survivre !"
 	},
 	"plague": {
 		"type": "PLAGUE",
-		"scientific": "Scientifico i don't kno 3",
+		"scientific": ".-.",
 		"hostility": [0.6, 1],
 		"fertility": [0, 0.4],
 		"humidity": [0.3, 1],
@@ -41,7 +41,7 @@
 		"softAggressiveDistance": 20,
 		"deathDesc.english": "You've been killed by a bacterial cell!<br>Bacterial cells feature a simple<br>structure without a nucleus and a<br>cell wall made of peptidoglycan.<br>They can be either beneficial or<br>harmful. Bacteria reproduce asexually<br>through binary fission and have existed<br>for billions of years as some of the<br>oldest life forms on Earth!",
 		"killDesc.english": "You killed a bacterial cell!<br>Bacterial cells have a simple<br>structure without a nucleus and a<br>cell wall made of peptidoglycan.<br>They can be beneficial or harmful.<br>Bacteria reproduce asexually through<br>binary fission and are among the<br>oldest life forms on Earth!",
-		"deathDesc.francais": "Tu as été tué par une cellule bactérienne !<br>Les cellules bactériennes présentent une<br>structure simple sans noyau et une paroi<br>cellulaire composée de peptidoglycane.<br>Elles peuvent être bénéfiques ou nuisibles.<br>Les bactéries se reproduisent de manière<br>asexuée par fission binaire. Elles existent<br>depuis des milliards d'années et comptent<br>parmi les formes de vie les plus anciennes<br>sur Terre !",
-		"killDesc.francais": "Tu as tué une cellule bactérienne !<br>Les cellules bactériennes ont une structure<br>simple, sans noyau, et une paroi cellulaire<br>composée de peptidoglycane. Elles peuvent<br>être bénéfiques, comme les bactéries<br>intestinales, ou nuisibles, comme les<br>agents pathogènes. Les bactéries se<br>reproduisent de manière asexuée par<br>fission binaire et comptent parmi les<br>formes de vie les plus anciennes sur Terre !"
+		"deathDesc.francais": "Tu as ete tue par une cellule bacterienne !<br>Les cellules bacteriennes presentent une<br>structure simple sans noyau et une paroi<br>cellulaire composee de peptidoglycane.<br>Elles peuvent être benefiques ou nuisibles.<br>Les bacteries se reproduisent de maniere<br>asexuee par fission binaire. Elles existent<br>depuis des milliards d'annees et comptent<br>parmi les formes de vie les plus anciennes<br>sur Terre !",
+		"killDesc.francais": "Tu as tue une cellule bacterienne !<br>Les cellules bacteriennes ont une structure<br>simple, sans noyau, et une paroi cellulaire<br>composee de peptidoglycane. Elles peuvent<br>être benefiques, comme les bacteries<br>intestinales, ou nuisibles, comme les<br>agents pathogenes. Les bacteries se<br>reproduisent de maniere asexuee par<br>fission binaire et comptent parmi les<br>formes de vie les plus anciennes sur Terre !"
 	}
 }
