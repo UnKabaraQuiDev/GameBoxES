@@ -6,9 +6,6 @@ import java.util.logging.Level;
 
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-import org.lwjgl.opengles.GLES30;
-
-import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.cache.attrib.AttribArray;
 import lu.kbra.gamebox.client.es.engine.cache.attrib.MultiAttribArray;
@@ -20,6 +17,8 @@ import lu.kbra.gamebox.client.es.engine.impl.Renderable;
 import lu.kbra.gamebox.client.es.engine.impl.UniqueID;
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 import lu.kbra.gamebox.client.es.engine.utils.geo.GeoPlane;
+import lu.kbra.gamebox.client.es.engine.utils.gl.wrapper.GL_W;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 public class Mesh implements UniqueID, Cleanupable, Renderable {
 
@@ -42,7 +41,7 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 	public Mesh(String name, Material material, Vec3fAttribArray vertices, UIntAttribArray indices, AttribArray... attribs) {
 		this.name = name;
 		this.vertices = vertices;
-		indices.setBufferType(GLES30.GL_ELEMENT_ARRAY_BUFFER);
+		indices.setBufferType(GL_W.GL_ELEMENT_ARRAY_BUFFER);
 		this.indices = indices;
 		this.material = material;
 		this.attribs = attribs;
@@ -50,7 +49,7 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 		this.vertexCount = vertices.getDataCount();
 		this.indicesCount = indices.getLength();
 
-		this.vao = GLES30.glGenVertexArrays();
+		this.vao = GL_W.glGenVertexArrays();
 		bind();
 		storeElementArray((UIntAttribArray) indices);
 		vertices.setIndex(0);
@@ -107,20 +106,20 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 	}
 
 	private void storeElementArray(UIntAttribArray indices) {
-		indices.setBufferType(GLES30.GL_ELEMENT_ARRAY_BUFFER);
+		indices.setBufferType(GL_W.GL_ELEMENT_ARRAY_BUFFER);
 		this.vbo.put(indices.getIndex(), indices.gen());
 		indices.bind();
 		indices.init();
 	}
 
 	public void bind() {
-		GLES30.glBindVertexArray(vao);
-		PDRUtils.checkGlESError("BindVertexArray(" + vao + ") (" + name + ")");
+		GL_W.glBindVertexArray(vao);
+		PDRUtils.checkGL_WError("BindVertexArray(" + vao + ") (" + name + ")");
 	}
 
 	public void unbind() {
-		GLES30.glBindVertexArray(0);
-		PDRUtils.checkGlESError("BindVertexArray(" + 0 + ") (" + name + ")");
+		GL_W.glBindVertexArray(0);
+		PDRUtils.checkGL_WError("BindVertexArray(" + 0 + ") (" + name + ")");
 	}
 
 	@Override
@@ -130,7 +129,7 @@ public class Mesh implements UniqueID, Cleanupable, Renderable {
 		if (vao == -1)
 			return;
 
-		GLES30.glDeleteVertexArrays(vao);
+		GL_W.glDeleteVertexArrays(vao);
 		Arrays.stream(attribs).forEach(AttribArray::cleanup);
 		attribs = null;
 		vbo = null;

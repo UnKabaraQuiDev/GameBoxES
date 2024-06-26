@@ -4,11 +4,10 @@ import java.nio.ByteBuffer;
 
 import org.joml.Vector2f;
 
+import lu.kbra.gamebox.client.es.engine.cache.attrib.Vec2fAttribArray;
 import lu.pcy113.jbcodec.decoder.Decoder;
 import lu.pcy113.jbcodec.decoder.DefaultObjectDecoder;
 import lu.pcy113.jbcodec.decoder.StringDecoder;
-
-import lu.kbra.gamebox.client.es.engine.cache.attrib.Vec2fAttribArray;
 
 /**
  * STRING name ; INT index ; INT dataSize ; INT bufferType ; BOOL _static ; INT divisor ; INT arrayLength ; Vector2f[] data ; INT END

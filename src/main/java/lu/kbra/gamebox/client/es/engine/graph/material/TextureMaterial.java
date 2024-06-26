@@ -4,12 +4,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
-import lu.pcy113.pclib.logger.GlobalLogger;
-
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
 import lu.kbra.gamebox.client.es.engine.graph.shader.RenderShader;
 import lu.kbra.gamebox.client.es.engine.graph.texture.Texture;
 import lu.kbra.gamebox.client.es.engine.impl.Renderable;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 public class TextureMaterial extends Material {
 

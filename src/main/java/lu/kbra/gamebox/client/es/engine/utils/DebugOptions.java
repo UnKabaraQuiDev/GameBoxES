@@ -8,11 +8,6 @@ import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-import org.lwjgl.opengles.GLES30;
-
-import lu.pcy113.pclib.PCUtils;
-import lu.pcy113.pclib.datastructure.pair.Pair;
-import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
@@ -27,6 +22,10 @@ import lu.kbra.gamebox.client.es.engine.graph.material.wireframe.WireframeShader
 import lu.kbra.gamebox.client.es.engine.graph.shader.RenderShader;
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
 import lu.kbra.gamebox.client.es.engine.scene.Scene;
+import lu.kbra.gamebox.client.es.engine.utils.gl.wrapper.GL_W;
+import lu.pcy113.pclib.PCUtils;
+import lu.pcy113.pclib.datastructure.pair.Pair;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 public class DebugOptions implements Cleanupable {
 
@@ -64,12 +63,12 @@ public class DebugOptions implements Cleanupable {
 		deb.bindProperties(cache, scene, debShader);
 
 		if (GameEngine.DEBUG.ignoreDepth)
-			GLES30.glDisable(GLES30.GL_DEPTH_TEST);
+			GL_W.glDisable(GL_W.GL_DEPTH_TEST);
 
-		GLES30.glLineWidth(2.5f);
-		GLES30.glDrawElements(GLES30.GL_LINES, gizmoXYZ.getIndicesCount(), GLES30.GL_UNSIGNED_INT, 0);
+		GL_W.glLineWidth(2.5f);
+		GL_W.glDrawElements(GL_W.GL_LINES, gizmoXYZ.getIndicesCount(), GL_W.GL_UNSIGNED_INT, 0);
 
-		GLES30.glEnable(GLES30.GL_DEPTH_TEST);
+		GL_W.glEnable(GL_W.GL_DEPTH_TEST);
 
 		gizmoXYZ.unbind();
 	}
@@ -101,11 +100,11 @@ public class DebugOptions implements Cleanupable {
 		deb.bindProperties(cache, scene, debShader);
 
 		if (GameEngine.DEBUG.ignoreDepth)
-			GLES30.glDisable(GLES30.GL_DEPTH_TEST);
+			GL_W.glDisable(GL_W.GL_DEPTH_TEST);
 
-		GLES30.glDrawElements(GLES30.GL_LINE_STRIP, mesh.getIndicesCount(), GLES30.GL_UNSIGNED_INT, 0);
+		GL_W.glDrawElements(GL_W.GL_LINE_STRIP, mesh.getIndicesCount(), GL_W.GL_UNSIGNED_INT, 0);
 
-		GLES30.glEnable(GLES30.GL_DEPTH_TEST);
+		GL_W.glEnable(GL_W.GL_DEPTH_TEST);
 	}
 
 	public void pointWireframe(CacheManager cache, Scene scene, Mesh mesh, Matrix4f projectionMatrix, Matrix4f viewMatrix, Matrix4f transformationMatrix) {
@@ -129,11 +128,11 @@ public class DebugOptions implements Cleanupable {
 		deb.bindProperties(cache, scene, debShader);
 
 		if (GameEngine.DEBUG.ignoreDepth)
-			GLES30.glDisable(GLES30.GL_DEPTH_TEST);
+			GL_W.glDisable(GL_W.GL_DEPTH_TEST);
 
-		GLES30.glDrawElements(GLES30.GL_POINTS, mesh.getIndicesCount(), GLES30.GL_UNSIGNED_INT, 0);
+		GL_W.glDrawElements(GL_W.GL_POINTS, mesh.getIndicesCount(), GL_W.GL_UNSIGNED_INT, 0);
 
-		GLES30.glEnable(GLES30.GL_DEPTH_TEST);
+		GL_W.glEnable(GL_W.GL_DEPTH_TEST);
 	}
 
 	public void boundingRect(CacheManager cache, Scene scene, Matrix4f projectionMatrix, Matrix4f viewMatrix, Matrix4f modelMatrix, Vector2f boxSize) {
@@ -165,12 +164,12 @@ public class DebugOptions implements Cleanupable {
 		deb.bindProperties(cache, scene, debShader);
 
 		if (GameEngine.DEBUG.ignoreDepth)
-			GLES30.glDisable(GLES30.GL_DEPTH_TEST);
+			GL_W.glDisable(GL_W.GL_DEPTH_TEST);
 
-		GLES30.glLineWidth(2.5f);
-		GLES30.glDrawElements(GLES30.GL_LINES, gizmoRect.getIndicesCount(), GLES30.GL_UNSIGNED_INT, 0);
+		GL_W.glLineWidth(2.5f);
+		GL_W.glDrawElements(GL_W.GL_LINES, gizmoRect.getIndicesCount(), GL_W.GL_UNSIGNED_INT, 0);
 
-		GLES30.glEnable(GLES30.GL_DEPTH_TEST);
+		GL_W.glEnable(GL_W.GL_DEPTH_TEST);
 
 		gizmoRect.unbind();
 	}

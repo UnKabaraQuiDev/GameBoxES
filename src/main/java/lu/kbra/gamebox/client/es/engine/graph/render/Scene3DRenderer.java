@@ -6,8 +6,6 @@ import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
-import lu.pcy113.pclib.logger.GlobalLogger;
-
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
 import lu.kbra.gamebox.client.es.engine.geom.Gizmo;
@@ -24,6 +22,7 @@ import lu.kbra.gamebox.client.es.engine.objs.entity.components.TextEmitterCompon
 import lu.kbra.gamebox.client.es.engine.objs.text.TextEmitter;
 import lu.kbra.gamebox.client.es.engine.scene.Scene3D;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalOptions;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 public class Scene3DRenderer extends Renderer<GameEngine, Scene3D> {
 

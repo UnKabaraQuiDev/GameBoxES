@@ -2,11 +2,10 @@ package lu.kbra.gamebox.client.es.engine.utils.codec.encoder;
 
 import java.nio.ByteBuffer;
 
-import lu.pcy113.jbcodec.encoder.DefaultObjectEncoder;
-import lu.pcy113.jbcodec.encoder.EncoderNotFoundException;
-
 import lu.kbra.gamebox.client.es.engine.cache.attrib.AttribArray;
 import lu.kbra.gamebox.client.es.engine.cache.attrib.UIntAttribArray;
+import lu.pcy113.jbcodec.encoder.DefaultObjectEncoder;
+import lu.pcy113.jbcodec.encoder.EncoderNotFoundException;
 
 public class AttribArrayEncoder extends DefaultObjectEncoder<AttribArray> {
 

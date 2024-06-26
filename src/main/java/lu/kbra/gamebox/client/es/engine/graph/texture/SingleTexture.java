@@ -6,12 +6,12 @@ import java.nio.file.Paths;
 
 import org.joml.Vector2f;
 import org.joml.Vector2i;
-import org.lwjgl.opengles.GLES30;
 import org.lwjgl.system.MemoryUtil;
 
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureType;
 import lu.kbra.gamebox.client.es.engine.utils.file.FileUtils;
+import lu.kbra.gamebox.client.es.engine.utils.gl.wrapper.GL_W;
 import lu.kbra.gamebox.client.es.engine.utils.mem.img.MemImage;
 import lu.kbra.gamebox.client.es.engine.utils.mem.img.MemImageOrigin;
 
@@ -126,14 +126,14 @@ public class SingleTexture extends Texture {
 		gen();
 		bind();
 
-		GLES30.glPixelStorei(GLES30.GL_UNPACK_ALIGNMENT, 1);
-		PDRUtils.checkGlESError("PixelStoreI.UnpackAlignment=1");
+		GL_W.glPixelStorei(GL_W.GL_UNPACK_ALIGNMENT, 1);
+		PDRUtils.checkGL_WError("PixelStoreI.UnpackAlignment=1");
 		if (TextureType.TXT2D.equals(txtType) || TextureType.ARRAY2D.equals(txtType)) {
-			GLES30.glTexImage2D(txtType.getGlId(), 0, internalFormat.getGlId(), width, height, 0, format.getGlId(), dataType.getGlId(), buffer.getBuffer());
+			GL_W.glTexImage2D(txtType.getGlId(), 0, internalFormat.getGlId(), width, height, 0, format.getGlId(), dataType.getGlId(), buffer.getBuffer());
 		} else if (TextureType.TXT3D.equals(txtType)) {
-			GLES30.glTexImage3D(txtType.getGlId(), 0, internalFormat.getGlId(), width, height, depth, 0, format.getGlId(), dataType.getGlId(), buffer.getBuffer());
+			GL_W.glTexImage3D(txtType.getGlId(), 0, internalFormat.getGlId(), width, height, depth, 0, format.getGlId(), dataType.getGlId(), buffer.getBuffer());
 		}
-		PDRUtils.checkGlESError("TexImage_" + txtType);
+		PDRUtils.checkGL_WError("TexImage_" + txtType);
 		applyFilter();
 		applyWrap();
 
@@ -150,17 +150,17 @@ public class SingleTexture extends Texture {
 		bind();
 
 		if (TextureType.TXT2D.equals(txtType) || TextureType.ARRAY2D.equals(txtType)) {
-			GLES30.glTexImage2D(txtType.getGlId(), 0, internalFormat.getGlId(), width, height, 0, format.getGlId(), dataType.getGlId(), MemoryUtil.NULL);
+			GL_W.glTexImage2D(txtType.getGlId(), 0, internalFormat.getGlId(), width, height, 0, format.getGlId(), dataType.getGlId(), MemoryUtil.NULL);
 		} else if (TextureType.TXT3D.equals(txtType)) {
-			GLES30.glTexImage3D(txtType.getGlId(), 0, internalFormat.getGlId(), width, height, depth, 0, format.getGlId(), dataType.getGlId(), MemoryUtil.NULL);
+			GL_W.glTexImage3D(txtType.getGlId(), 0, internalFormat.getGlId(), width, height, depth, 0, format.getGlId(), dataType.getGlId(), MemoryUtil.NULL);
 		}
-		PDRUtils.checkGlESError("TexImage_" + txtType);
+		PDRUtils.checkGL_WError("TexImage_" + txtType);
 		applyFilter();
 		applyWrap();
 
 		if (generateMipmaps) {
-			GLES30.glGenerateMipmap(txtType.getGlId());
-			PDRUtils.checkGlESError("GenerateMipmap[" + txtType + "]");
+			GL_W.glGenerateMipmap(txtType.getGlId());
+			PDRUtils.checkGL_WError("GenerateMipmap[" + txtType + "]");
 		}
 
 		unbind();
@@ -168,9 +168,9 @@ public class SingleTexture extends Texture {
 
 	public MemImage getStoredImage() {
 		/*
-		 * int width = GLES30.glGetTexLevelParameteri(GLES30.GL_TEXTURE_2D, 0, GLES30. GL_TEXTURE_WIDTH); int height = GLES30.glGetTexLevelParameteri(GLES30.GL_TEXTURE_2D, 0, GLES30. GL_TEXTURE_HEIGHT); int internalFormat =
-		 * GLES30.glGetTexLevelParameteri(GLES30.GL_TEXTURE_2D, 0, GLES30.GL_TEXTURE_INTERNAL_FORMAT); int channels = Texture.getChannelsByInternalFormat(internalFormat); int internalType =
-		 * GLES30.glGetTexLevelParameteriv(GLES30.GL_TEXTURE_2D, 0, GLES30.GL_TEXTURE_COMPONENTS);
+		 * int width = GL_W.glGetTexLevelParameteri(GL_W.GL_TEXTURE_2D, 0, GL_W. GL_TEXTURE_WIDTH); int height = GL_W.glGetTexLevelParameteri(GL_W.GL_TEXTURE_2D, 0, GL_W. GL_TEXTURE_HEIGHT); int internalFormat =
+		 * GL_W.glGetTexLevelParameteri(GL_W.GL_TEXTURE_2D, 0, GL_W.GL_TEXTURE_INTERNAL_FORMAT); int channels = Texture.getChannelsByInternalFormat(internalFormat); int internalType =
+		 * GL_W.glGetTexLevelParameteriv(GL_W.GL_TEXTURE_2D, 0, GL_W.GL_TEXTURE_COMPONENTS);
 		 */
 
 		bind();
@@ -178,10 +178,10 @@ public class SingleTexture extends Texture {
 		int channelCount = getChannelsByFormat(format.getGlId());
 		ByteBuffer buffer = MemoryUtil.memAlloc(width * height * channelCount); // BufferUtils.createByteBuffer(width *
 																				// height * channelCount);
-		// GLES30.glBindBuffer(GLES30.GL_PIXEL_PACK_BUFFER, 0);
-		// GLES30.glBindFramebuffer(GLES30.GL_READ_FRAMEBUFFER_BINDING, 0);
-		GLES30.glReadPixels(0, 0, width, height, format.getGlId(), dataType.getGlId(), buffer);
-		PDRUtils.checkGlESError("glReadPixels(0, 0, " + width + ", " + height + ", " + internalFormat + ", " + dataType + ")");
+		// GL_W.glBindBuffer(GL_W.GL_PIXEL_PACK_BUFFER, 0);
+		// GL_W.glBindFramebuffer(GL_W.GL_READ_FRAMEBUFFER_BINDING, 0);
+		GL_W.glReadPixels(0, 0, width, height, format.getGlId(), dataType.getGlId(), buffer);
+		PDRUtils.checkGL_WError("glReadPixels(0, 0, " + width + ", " + height + ", " + internalFormat + ", " + dataType + ")");
 
 		unbind();
 

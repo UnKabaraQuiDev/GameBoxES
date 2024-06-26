@@ -4,11 +4,10 @@ import java.nio.ByteBuffer;
 
 import org.joml.Vector3f;
 
+import lu.kbra.gamebox.client.es.engine.cache.attrib.Vec3fAttribArray;
 import lu.pcy113.jbcodec.decoder.Decoder;
 import lu.pcy113.jbcodec.decoder.DefaultObjectDecoder;
 import lu.pcy113.jbcodec.decoder.StringDecoder;
-
-import lu.kbra.gamebox.client.es.engine.cache.attrib.Vec3fAttribArray;
 
 /**
  * STRING name ; INT index ; INT dataSize ; INT bufferType ; BOOL _static ; INT divisor ; INT arrayLength ; Vector3f[] data ; INT END

@@ -5,8 +5,6 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
-import lu.pcy113.pclib.logger.GlobalLogger;
-
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
 import lu.kbra.gamebox.client.es.engine.geom.Gizmo;
@@ -29,6 +27,7 @@ import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalConsts;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalOptions;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
 import lu.kbra.gamebox.client.es.game.game.world.World;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 public class WorldScene3D extends Scene3D {
 

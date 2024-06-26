@@ -5,14 +5,13 @@ import java.nio.ShortBuffer;
 import org.lwjgl.openal.AL11;
 import org.lwjgl.system.MemoryUtil;
 
-import lu.pcy113.pclib.PCUtils;
-import lu.pcy113.pclib.datastructure.triplet.Triplet;
-import lu.pcy113.pclib.logger.GlobalLogger;
-
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
 import lu.kbra.gamebox.client.es.engine.impl.UniqueID;
 import lu.kbra.gamebox.client.es.engine.utils.mem.buffer.MemBuffer;
 import lu.kbra.gamebox.client.es.engine.utils.mem.buffer.MemBufferOrigin;
+import lu.pcy113.pclib.PCUtils;
+import lu.pcy113.pclib.datastructure.triplet.Triplet;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 public class Sound implements UniqueID, Cleanupable {
 

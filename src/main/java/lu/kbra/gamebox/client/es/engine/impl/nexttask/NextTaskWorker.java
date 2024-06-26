@@ -1,8 +1,7 @@
 package lu.kbra.gamebox.client.es.engine.impl.nexttask;
 
-import lu.pcy113.pclib.logger.GlobalLogger;
-
 import lu.kbra.gamebox.client.es.engine.impl.UniqueID;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 public class NextTaskWorker extends NextTaskEnvironnment implements UniqueID {
 

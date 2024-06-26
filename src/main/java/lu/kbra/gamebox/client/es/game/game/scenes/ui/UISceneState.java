@@ -1,11 +1,10 @@
 package lu.kbra.gamebox.client.es.game.game.scenes.ui;
 
-import lu.pcy113.pclib.logger.GlobalLogger;
-
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
 import lu.kbra.gamebox.client.es.engine.graph.window.Window;
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
 import lu.kbra.gamebox.client.es.engine.impl.UniqueID;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 public abstract class UISceneState implements Cleanupable, UniqueID {
 

@@ -2,11 +2,10 @@ package lu.kbra.gamebox.client.es.engine.impl;
 
 import java.util.HashMap;
 
-import org.lwjgl.opengles.GLES30;
-
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 import lu.kbra.gamebox.client.es.engine.utils.consts.BufferType;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureType;
+import lu.kbra.gamebox.client.es.engine.utils.gl.wrapper.GL_W;
 
 // TODO: maybe
 public class GLWrapper {
@@ -18,9 +17,9 @@ public class GLWrapper {
 			return true;
 		}
 
-		GLES30.glBindTexture(tt.getGlId(), id);
+		GL_W.glBindTexture(tt.getGlId(), id);
 		this.bound.put(tt.getGlId(), id);
-		return PDRUtils.checkGlESError();
+		return PDRUtils.checkGL_WError();
 	}
 
 	public boolean bindBuffer(BufferType tt, int id) {
@@ -28,15 +27,15 @@ public class GLWrapper {
 			return true;
 		}
 
-		GLES30.glBindBuffer(tt.getGlId(), id);
+		GL_W.glBindBuffer(tt.getGlId(), id);
 		this.bound.put(tt.getGlId(), id);
-		return PDRUtils.checkGlESError();
+		return PDRUtils.checkGL_WError();
 	}
 
-	// GLES30.GL_TRIANGLES, mesh.getIndicesCount(), GLES30.GL_UNSIGNED_INT, 0
+	// GL_W.GL_TRIANGLES, mesh.getIndicesCount(), GL_W.GL_UNSIGNED_INT, 0
 	public boolean drawElements() {
-		// GLES30.glDrawElements(tt, count, type, offset);
-		return PDRUtils.checkGlESError();
+		// GL_W.glDrawElements(tt, count, type, offset);
+		return PDRUtils.checkGL_WError();
 	}
 
 }

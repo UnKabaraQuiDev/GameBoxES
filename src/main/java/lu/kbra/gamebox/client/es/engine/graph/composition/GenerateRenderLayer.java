@@ -4,9 +4,6 @@ import java.util.logging.Level;
 
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-import org.lwjgl.opengles.GLES30;
-
-import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
@@ -16,6 +13,8 @@ import lu.kbra.gamebox.client.es.engine.cache.attrib.Vec3fAttribArray;
 import lu.kbra.gamebox.client.es.engine.geom.Mesh;
 import lu.kbra.gamebox.client.es.engine.graph.material.Material;
 import lu.kbra.gamebox.client.es.engine.graph.shader.RenderShader;
+import lu.kbra.gamebox.client.es.engine.utils.gl.wrapper.GL_W;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 public class GenerateRenderLayer extends RenderLayer<GameEngine, Framebuffer, Mesh> {
 
@@ -50,11 +49,11 @@ public class GenerateRenderLayer extends RenderLayer<GameEngine, Framebuffer, Me
 
 		material.bindProperties(cache, this, shader);
 
-		GLES30.glDepthMask(false);
+		GL_W.glDepthMask(false);
 
-		GLES30.glDrawElements(GLES30.GL_TRIANGLES, target.getIndicesCount(), GLES30.GL_UNSIGNED_INT, 0);
+		GL_W.glDrawElements(GL_W.GL_TRIANGLES, target.getIndicesCount(), GL_W.GL_UNSIGNED_INT, 0);
 
-		GLES30.glDepthMask(true);
+		GL_W.glDepthMask(true);
 
 		target.unbind();
 	}

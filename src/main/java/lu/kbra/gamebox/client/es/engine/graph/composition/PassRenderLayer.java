@@ -5,9 +5,6 @@ import java.util.logging.Level;
 
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-import org.lwjgl.opengles.GLES30;
-
-import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
@@ -18,6 +15,8 @@ import lu.kbra.gamebox.client.es.engine.geom.Mesh;
 import lu.kbra.gamebox.client.es.engine.graph.material.Material;
 import lu.kbra.gamebox.client.es.engine.graph.shader.RenderShader;
 import lu.kbra.gamebox.client.es.engine.impl.UniqueID;
+import lu.kbra.gamebox.client.es.engine.utils.gl.wrapper.GL_W;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 public class PassRenderLayer extends RenderLayer<GameEngine, Framebuffer, Mesh> {
 
@@ -25,7 +24,7 @@ public class PassRenderLayer extends RenderLayer<GameEngine, Framebuffer, Mesh> 
 	public static final String SCREEN_HEIGHT = "screen_height";
 
 	private static Mesh SCREEN = new Mesh("PASS_SCREEN", null, new Vec3fAttribArray("pos", 0, 1, new Vector3f[] { new Vector3f(-1, 1, 0), new Vector3f(1, 1, 0), new Vector3f(1, -1, 0), new Vector3f(-1, -1, 0) }),
-			new UIntAttribArray("ind", -1, 1, new int[] { 0, 1, 2, 0, 2, 3 }, GLES30.GL_ELEMENT_ARRAY_BUFFER), new Vec2fAttribArray("uv", 1, 1, new Vector2f[] { new Vector2f(0, 1), new Vector2f(1, 1), new Vector2f(1, 0), new Vector2f(0, 0) }));
+			new UIntAttribArray("ind", -1, 1, new int[] { 0, 1, 2, 0, 2, 3 }, GL_W.GL_ELEMENT_ARRAY_BUFFER), new Vec2fAttribArray("uv", 1, 1, new Vector2f[] { new Vector2f(0, 1), new Vector2f(1, 1), new Vector2f(1, 0), new Vector2f(0, 0) }));
 
 	protected CacheManager cache;
 	protected Material material;
@@ -68,16 +67,16 @@ public class PassRenderLayer extends RenderLayer<GameEngine, Framebuffer, Mesh> 
 		material.bindProperties(cache, this, shader);
 
 		if (shader.isTransparent()) {
-			GLES30.glEnable(GLES30.GL_BLEND);
-			GLES30.glBlendFunc(GLES30.GL_SRC_ALPHA, GLES30.GL_ONE_MINUS_SRC_ALPHA);
+			GL_W.glEnable(GL_W.GL_BLEND);
+			GL_W.glBlendFunc(GL_W.GL_SRC_ALPHA, GL_W.GL_ONE_MINUS_SRC_ALPHA);
 		}
 
-		GLES30.glDisable(GLES30.GL_DEPTH_TEST);
+		GL_W.glDisable(GL_W.GL_DEPTH_TEST);
 
-		GLES30.glDrawElements(GLES30.GL_TRIANGLES, target.getIndicesCount(), GLES30.GL_UNSIGNED_INT, 0);
+		GL_W.glDrawElements(GL_W.GL_TRIANGLES, target.getIndicesCount(), GL_W.GL_UNSIGNED_INT, 0);
 
-		GLES30.glDisable(GLES30.GL_BLEND);
-		GLES30.glEnable(GLES30.GL_DEPTH_TEST);
+		GL_W.glDisable(GL_W.GL_BLEND);
+		GL_W.glEnable(GL_W.GL_DEPTH_TEST);
 
 		target.unbind();
 	}

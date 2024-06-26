@@ -12,10 +12,9 @@ import java.util.stream.Collectors;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalLang;
 import lu.pcy113.pclib.PCUtils;
 import lu.pcy113.pclib.logger.GlobalLogger;
-
-import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalLang;
 
 public class EvolutionTreeNode {
 

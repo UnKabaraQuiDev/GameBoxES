@@ -3,9 +3,6 @@ package lu.kbra.gamebox.client.es.engine.graph.render;
 import java.util.logging.Level;
 
 import org.joml.Matrix4f;
-import org.lwjgl.opengles.GLES30;
-
-import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
@@ -18,6 +15,8 @@ import lu.kbra.gamebox.client.es.engine.objs.entity.components.TransformComponen
 import lu.kbra.gamebox.client.es.engine.scene.Scene;
 import lu.kbra.gamebox.client.es.engine.scene.camera.Camera;
 import lu.kbra.gamebox.client.es.engine.scene.camera.Camera3D;
+import lu.kbra.gamebox.client.es.engine.utils.gl.wrapper.GL_W;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 
@@ -95,18 +94,18 @@ public class MeshRenderer extends Renderer<Scene, MeshComponent> {
 
 		GameEngine.DEBUG.start("r_blend");
 		if (shader.isTransparent()) {
-			GLES30.glBlendFunc(GLES30.GL_SRC_ALPHA, GLES30.GL_ONE_MINUS_SRC_ALPHA);
-			GLES30.glEnable(GLES30.GL_BLEND);
+			GL_W.glBlendFunc(GL_W.GL_SRC_ALPHA, GL_W.GL_ONE_MINUS_SRC_ALPHA);
+			GL_W.glEnable(GL_W.GL_BLEND);
 		}
 		GameEngine.DEBUG.end("r_blend");
 
-		// GLES30.glPolygonMode(shader.getFaceMode().getGlId(), shader.getRenderType().getGlId());
+		// GL_W.glPolygonMode(shader.getFaceMode().getGlId(), shader.getRenderType().getGlId());
 
 		GameEngine.DEBUG.start("r_draw");
-		GLES30.glDrawElements(shader.getBeginMode().getGlId(), mesh.getIndicesCount(), GLES30.GL_UNSIGNED_INT, 0);
+		GL_W.glDrawElements(shader.getBeginMode().getGlId(), mesh.getIndicesCount(), GL_W.GL_UNSIGNED_INT, 0);
 		GameEngine.DEBUG.end("r_draw");
 
-		GLES30.glDisable(GLES30.GL_BLEND);
+		GL_W.glDisable(GL_W.GL_BLEND);
 
 		// debug only
 		GameEngine.DEBUG.start("r_debug_wf");

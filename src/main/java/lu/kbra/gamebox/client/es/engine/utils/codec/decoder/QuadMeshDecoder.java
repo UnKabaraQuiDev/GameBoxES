@@ -4,10 +4,9 @@ import java.nio.ByteBuffer;
 
 import org.joml.Vector2f;
 
-import lu.pcy113.jbcodec.decoder.DefaultObjectDecoder;
-
 import lu.kbra.gamebox.client.es.engine.geom.QuadMesh;
 import lu.kbra.gamebox.client.es.engine.graph.material.Material;
+import lu.pcy113.jbcodec.decoder.DefaultObjectDecoder;
 
 public class QuadMeshDecoder extends DefaultObjectDecoder<QuadMesh> {
 

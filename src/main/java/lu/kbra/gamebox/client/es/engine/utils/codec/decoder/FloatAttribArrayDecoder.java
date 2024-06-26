@@ -2,10 +2,9 @@ package lu.kbra.gamebox.client.es.engine.utils.codec.decoder;
 
 import java.nio.ByteBuffer;
 
+import lu.kbra.gamebox.client.es.engine.cache.attrib.FloatAttribArray;
 import lu.pcy113.jbcodec.decoder.DefaultObjectDecoder;
 import lu.pcy113.jbcodec.decoder.StringDecoder;
-
-import lu.kbra.gamebox.client.es.engine.cache.attrib.FloatAttribArray;
 
 /**
  * STRING name ; INT index ; INT dataSize ; INT bufferType ; BOOL _static ; INT divisor ; INT arrayLength ; FLOAT[] data ; INT END

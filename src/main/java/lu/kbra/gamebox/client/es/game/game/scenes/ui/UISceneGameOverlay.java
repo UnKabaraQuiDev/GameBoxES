@@ -9,9 +9,6 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
-import lu.pcy113.pclib.PCUtils;
-import lu.pcy113.pclib.logger.GlobalLogger;
-
 import lu.kbra.gamebox.client.es.engine.geom.Mesh;
 import lu.kbra.gamebox.client.es.engine.graph.material.text.TextShader.TextMaterial;
 import lu.kbra.gamebox.client.es.engine.objs.entity.Entity;
@@ -40,6 +37,8 @@ import lu.kbra.gamebox.client.es.game.game.utils.ControllerInputWatcher;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalConsts;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalLang;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
+import lu.pcy113.pclib.PCUtils;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 public class UISceneGameOverlay extends UISceneState {
 

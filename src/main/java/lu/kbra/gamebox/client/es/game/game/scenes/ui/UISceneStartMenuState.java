@@ -12,10 +12,6 @@ import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWGamepadState;
 
-import lu.pcy113.pclib.PCUtils;
-import lu.pcy113.pclib.datastructure.pair.Pair;
-import lu.pcy113.pclib.logger.GlobalLogger;
-
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.graph.material.text.TextShader.TextMaterial;
 import lu.kbra.gamebox.client.es.engine.objs.entity.Entity;
@@ -40,6 +36,9 @@ import lu.kbra.gamebox.client.es.game.game.utils.QuaternionArrayCallbackValueInt
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalLang;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalOptions;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
+import lu.pcy113.pclib.PCUtils;
+import lu.pcy113.pclib.datastructure.pair.Pair;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 public class UISceneStartMenuState extends UISceneState {
 

@@ -1,16 +1,16 @@
 package lu.kbra.gamebox.client.es.engine.utils.consts;
 
-import org.lwjgl.opengles.GLES30;
+import lu.kbra.gamebox.client.es.engine.utils.gl.wrapper.GL_W;
 
 public enum TexelFormat implements GLConstant {
 
 	// Base color
-	RED(GLES30.GL_RED, null), GREEN(GLES30.GL_GREEN, null), BLUE(GLES30.GL_BLUE, null), ALPHA(GLES30.GL_ALPHA, null), RG(GLES30.GL_RG, null), RGB(GLES30.GL_RGB, null), RGBA(GLES30.GL_RGBA, null),
+	RED(GL_W.GL_RED, null), GREEN(GL_W.GL_GREEN, null), BLUE(GL_W.GL_BLUE, null), ALPHA(GL_W.GL_ALPHA, null), RG(GL_W.GL_RG, null), RGB(GL_W.GL_RGB, null), RGBA(GL_W.GL_RGBA, null),
 
-	RED_INTEGER(GLES30.GL_RED_INTEGER, RED), RG_INTEGER(GLES30.GL_RG_INTEGER, RG), RGB_INTEGER(GLES30.GL_RGB_INTEGER, RGB), RGBA_INTEGER(GLES30.GL_RGBA_INTEGER, RGBA),
+	RED_INTEGER(GL_W.GL_RED_INTEGER, RED), RG_INTEGER(GL_W.GL_RG_INTEGER, RG), RGB_INTEGER(GL_W.GL_RGB_INTEGER, RGB), RGBA_INTEGER(GL_W.GL_RGBA_INTEGER, RGBA),
 
 	// Non-color
-	DEPTH(GLES30.GL_DEPTH_COMPONENT, null), DEPTH_STENCIL(GLES30.GL_DEPTH_STENCIL, null);
+	DEPTH(GL_W.GL_DEPTH_COMPONENT, null), DEPTH_STENCIL(GL_W.GL_DEPTH_STENCIL, null);
 
 	private int glId;
 	private TexelFormat base;

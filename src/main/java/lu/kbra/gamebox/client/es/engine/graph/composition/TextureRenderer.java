@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.joml.Vector2i;
 
-import lu.pcy113.pclib.logger.GlobalLogger;
-
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
 import lu.kbra.gamebox.client.es.engine.graph.texture.SingleTexture;
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
@@ -14,6 +12,7 @@ import lu.kbra.gamebox.client.es.engine.utils.consts.DataType;
 import lu.kbra.gamebox.client.es.engine.utils.consts.FrameBufferAttachment;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TexelFormat;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TexelInternalFormat;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 public class TextureRenderer implements Cleanupable, UniqueID {
 

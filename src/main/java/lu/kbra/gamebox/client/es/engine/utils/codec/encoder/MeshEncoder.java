@@ -2,14 +2,13 @@ package lu.kbra.gamebox.client.es.engine.utils.codec.encoder;
 
 import java.nio.ByteBuffer;
 
-import lu.pcy113.jbcodec.CodecManager;
-import lu.pcy113.jbcodec.encoder.DefaultObjectEncoder;
-
 import lu.kbra.gamebox.client.es.engine.cache.attrib.AttribArray;
 import lu.kbra.gamebox.client.es.engine.cache.attrib.UIntAttribArray;
 import lu.kbra.gamebox.client.es.engine.cache.attrib.Vec3fAttribArray;
 import lu.kbra.gamebox.client.es.engine.geom.Mesh;
 import lu.kbra.gamebox.client.es.engine.graph.material.Material;
+import lu.pcy113.jbcodec.CodecManager;
+import lu.pcy113.jbcodec.encoder.DefaultObjectEncoder;
 
 public class MeshEncoder extends DefaultObjectEncoder<Mesh> {
 

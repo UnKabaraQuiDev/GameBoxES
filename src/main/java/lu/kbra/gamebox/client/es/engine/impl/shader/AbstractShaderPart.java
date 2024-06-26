@@ -4,23 +4,16 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 
-import org.lwjgl.opengles.GLES30;
-
-import lu.pcy113.pclib.PCUtils;
-import lu.pcy113.pclib.logger.GlobalLogger;
-
 import lu.kbra.gamebox.client.es.engine.graph.shader.part.FragmentShaderPart;
 import lu.kbra.gamebox.client.es.engine.graph.shader.part.VertexShaderPart;
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
 import lu.kbra.gamebox.client.es.engine.impl.UniqueID;
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
+import lu.kbra.gamebox.client.es.engine.utils.gl.wrapper.GL_W;
+import lu.pcy113.pclib.PCUtils;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 public abstract class AbstractShaderPart implements UniqueID, Cleanupable {
-
-	public static final int VERTEX = GLES30.GL_VERTEX_SHADER;
-	// public static final int GEOMETRY = GLES30.GL_GEOMETRY_SHADER;
-	public static final int FRAGMENT = GLES30.GL_FRAGMENT_SHADER;
-	// public static final int COMPUTE = GLES30.GL_COMPUTE_SHADER;
 
 	private final String file;
 	private int sid;
@@ -42,15 +35,15 @@ public abstract class AbstractShaderPart implements UniqueID, Cleanupable {
 			return;
 		}
 
-		this.sid = GLES30.glCreateShader(type);
-		PDRUtils.checkGlESError("CreateShader(" + type + ") (" + file + ")");
-		GLES30.glShaderSource(sid, PCUtils.readStringFile(file));
-		PDRUtils.checkGlESError("ShaderSource(" + sid + ") (" + file + ")");
-		GLES30.glCompileShader(sid);
-		PDRUtils.checkGlESError("CompileShader(" + sid + ") (" + file + ")");
+		this.sid = GL_W.glCreateShader(type);
+		PDRUtils.checkGL_WError("CreateShader(" + type + ") (" + file + ")");
+		GL_W.glShaderSource(sid, PCUtils.readStringFile(file));
+		PDRUtils.checkGL_WError("ShaderSource(" + sid + ") (" + file + ")");
+		GL_W.glCompileShader(sid);
+		PDRUtils.checkGL_WError("CompileShader(" + sid + ") (" + file + ")");
 
-		if (GLES30.glGetShaderi(sid, GLES30.GL_COMPILE_STATUS) == GLES30.GL_FALSE) {
-			GlobalLogger.log(Level.SEVERE, file + "> " + GLES30.glGetShaderInfoLog(sid, 1024));
+		if (GL_W.glGetShaderi(sid, GL_W.GL_COMPILE_STATUS) == GL_W.GL_FALSE) {
+			GlobalLogger.log(Level.SEVERE, file + "> " + GL_W.glGetShaderInfoLog(sid, 1024));
 			cleanup();
 			throw new IllegalStateException(file + "(" + sid + "): Failed to compile shader!");
 		} else {
@@ -60,29 +53,24 @@ public abstract class AbstractShaderPart implements UniqueID, Cleanupable {
 
 	public static AbstractShaderPart load(String file) {
 		int type = shaderType(file.substring(file.lastIndexOf(".") + 1));
-		switch (type) {
-		case VERTEX:
+		if (type == GL_W.GL_VERTEX_SHADER) {
 			return new VertexShaderPart(file);
-		/*case GEOMETRY:
-			return new GeometryShaderPart(file);*/
-		case FRAGMENT:
+		} else if (type == GL_W.GL_FRAGMENT_SHADER) {
 			return new FragmentShaderPart(file);
-		/*case COMPUTE:
-			return new ComputeShaderPart(file);*/
-		default:
+		} else {
 			PDRUtils.throwGLESError("Unknown shader part type: " + file);
 			return null;
 		}
 	}
 
 	public boolean recompile() {
-		GLES30.glShaderSource(sid, PCUtils.readStringFile(file));
-		PDRUtils.checkGlESError("ShaderSource(" + sid + ") (" + file + ")");
-		GLES30.glCompileShader(sid);
-		PDRUtils.checkGlESError("CompileShader(" + sid + ") (" + file + ")");
+		GL_W.glShaderSource(sid, PCUtils.readStringFile(file));
+		PDRUtils.checkGL_WError("ShaderSource(" + sid + ") (" + file + ")");
+		GL_W.glCompileShader(sid);
+		PDRUtils.checkGL_WError("CompileShader(" + sid + ") (" + file + ")");
 
-		if (GLES30.glGetShaderi(sid, GLES30.GL_COMPILE_STATUS) == GLES30.GL_FALSE) {
-			GlobalLogger.log(Level.SEVERE, file + "> " + GLES30.glGetShaderInfoLog(sid, 1024));
+		if (GL_W.glGetShaderi(sid, GL_W.GL_COMPILE_STATUS) == GL_W.GL_FALSE) {
+			GlobalLogger.log(Level.SEVERE, file + "> " + GL_W.glGetShaderInfoLog(sid, 1024));
 			// throw new IllegalStateException(file + "(" + sid + "): Failed to recompile
 			// shader!");
 			return false;
@@ -99,7 +87,7 @@ public abstract class AbstractShaderPart implements UniqueID, Cleanupable {
 		if (sid == -1)
 			return;
 
-		GLES30.glDeleteShader(sid);
+		GL_W.glDeleteShader(sid);
 		sid = -1;
 	}
 
@@ -123,9 +111,9 @@ public abstract class AbstractShaderPart implements UniqueID, Cleanupable {
 	public static int shaderType(String type) {
 		switch (type.toLowerCase()) {
 		case "vert":
-			return VERTEX;
+			return GL_W.GL_VERTEX_SHADER;
 		case "frag":
-			return FRAGMENT;
+			return GL_W.GL_FRAGMENT_SHADER;
 		case "geo":
 		case "comp":
 			PDRUtils.throwGLESError("Cannot load Compute/Geo shader using GLES");

@@ -1,10 +1,10 @@
 package lu.kbra.gamebox.client.es.engine.utils.consts;
 
-import org.lwjgl.opengles.GLES30;
+import lu.kbra.gamebox.client.es.engine.utils.gl.wrapper.GL_W;
 
 public enum FaceMode implements GLConstant {
 
-	FRONT_AND_BACK(GLES30.GL_FRONT_AND_BACK), FRONT(GLES30.GL_FRONT), BACK(GLES30.GL_BACK);
+	FRONT_AND_BACK(GL_W.GL_FRONT_AND_BACK), FRONT(GL_W.GL_FRONT), BACK(GL_W.GL_BACK);
 
 	private int glId;
 

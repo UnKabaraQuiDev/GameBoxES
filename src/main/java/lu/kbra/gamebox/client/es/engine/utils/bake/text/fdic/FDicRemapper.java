@@ -7,11 +7,10 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import lu.pcy113.pclib.PCUtils;
-
 import lu.kbra.gamebox.client.es.engine.utils.text.fdic.FDicFile;
 import lu.kbra.gamebox.client.es.engine.utils.text.fdic.FDicGlyph;
 import lu.kbra.gamebox.client.es.engine.utils.text.fdic.FDicLoader;
+import lu.pcy113.pclib.PCUtils;
 
 public final class FDicRemapper {
 

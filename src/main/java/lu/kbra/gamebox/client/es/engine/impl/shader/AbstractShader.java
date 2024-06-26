@@ -12,17 +12,16 @@ import org.joml.Vector2i;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 import org.joml.Vector4f;
-import org.lwjgl.opengles.GLES30;
 import org.lwjgl.system.MemoryStack;
-
-import lu.pcy113.pclib.datastructure.pair.Pair;
-import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
 import lu.kbra.gamebox.client.es.engine.impl.UniqueID;
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 import lu.kbra.gamebox.client.es.engine.utils.Property;
+import lu.kbra.gamebox.client.es.engine.utils.gl.wrapper.GL_W;
+import lu.pcy113.pclib.datastructure.pair.Pair;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 public abstract class AbstractShader implements UniqueID, Cleanupable {
 
@@ -34,25 +33,25 @@ public abstract class AbstractShader implements UniqueID, Cleanupable {
 	public AbstractShader(String name, AbstractShaderPart... parts) {
 		this.name = name;
 
-		this.shaderProgram = GLES30.glCreateProgram();
-		PDRUtils.checkGlESError("CreateProgram() (" + name + ")");
+		this.shaderProgram = GL_W.glCreateProgram();
+		PDRUtils.checkGL_WError("CreateProgram() (" + name + ")");
 		if (this.shaderProgram == -1) {
 			PDRUtils.throwGLESError(name + ": Failed to create shader program!");
 		}
 		this.parts = new HashMap<>();
 		for (AbstractShaderPart sp : parts) {
 			this.parts.put(sp.getType(), sp);
-			GLES30.glAttachShader(this.shaderProgram, sp.getSid());
-			PDRUtils.checkGlESError("AttachShader(" + this.shaderProgram + ")");
+			GL_W.glAttachShader(this.shaderProgram, sp.getSid());
+			PDRUtils.checkGL_WError("AttachShader(" + this.shaderProgram + ")");
 		}
-		GLES30.glLinkProgram(this.shaderProgram);
-		PDRUtils.checkGlESError("LinkProgram(" + this.shaderProgram + ")");
+		GL_W.glLinkProgram(this.shaderProgram);
+		PDRUtils.checkGL_WError("LinkProgram(" + this.shaderProgram + ")");
 
-		if (GLES30.glGetProgrami(this.shaderProgram, GLES30.GL_LINK_STATUS) == GLES30.GL_FALSE) {
-			GlobalLogger.log(Level.SEVERE, name + "(" + shaderProgram + "): " + GLES30.glGetProgramInfoLog(this.shaderProgram, 1024));
+		if (GL_W.glGetProgrami(this.shaderProgram, GL_W.GL_LINK_STATUS) == GL_W.GL_FALSE) {
+			GlobalLogger.log(Level.SEVERE, name + "(" + shaderProgram + "): " + GL_W.glGetProgramInfoLog(this.shaderProgram, 1024));
 			this.cleanup();
 			throw new IllegalStateException(name + "(" + shaderProgram + "): Failed to link shader program!");
-		} else if (!GLES30.glIsProgram(shaderProgram)) {
+		} else if (!GL_W.glIsProgram(shaderProgram)) {
 			this.cleanup();
 			throw new IllegalStateException(name + "(" + shaderProgram + "): Is not a GL Shader Program!");
 		} else {
@@ -73,11 +72,11 @@ public abstract class AbstractShader implements UniqueID, Cleanupable {
 		}
 		/*
 		 * for (AbstractShaderPart sp : parts.values()) {
-		 * GLES30.glAttachShader(this.shaderProgram, sp.getSid());
-		 * PDRUtils.checkGlESError("AttachShader("+this.shaderProgram+")"); }
+		 * GL_W.glAttachShader(this.shaderProgram, sp.getSid());
+		 * PDRUtils.checkGL_WError("AttachShader("+this.shaderProgram+")"); }
 		 */
-		GLES30.glLinkProgram(this.shaderProgram);
-		PDRUtils.checkGlESError("LinkProgram(" + this.shaderProgram + ")");
+		GL_W.glLinkProgram(this.shaderProgram);
+		PDRUtils.checkGL_WError("LinkProgram(" + this.shaderProgram + ")");
 		return true;
 	}
 
@@ -98,41 +97,41 @@ public abstract class AbstractShader implements UniqueID, Cleanupable {
 
 		GameEngine.DEBUG.start("r_uniforms_bind_single_bind");
 		if (value instanceof Integer) {
-			GLES30.glUniform1i(unif.getValue(), (int) value);
+			GL_W.glUniform1i(unif.getValue(), (int) value);
 		} else if (value instanceof Float) {
-			GLES30.glUniform1f(unif.getValue(), (float) value);
+			GL_W.glUniform1f(unif.getValue(), (float) value);
 		} else if (value instanceof Matrix4f) {
 			try (MemoryStack stack = MemoryStack.stackPush()) {
-				GLES30.glUniformMatrix4fv(unif.getValue(), false, ((Matrix4f) value).get(stack.mallocFloat(16)));
+				GL_W.glUniformMatrix4fv(unif.getValue(), false, ((Matrix4f) value).get(stack.mallocFloat(16)));
 			}
 		} else if (value instanceof Vector3f) {
-			GLES30.glUniform3f(unif.getValue(), ((Vector3f) value).x, ((Vector3f) value).y, ((Vector3f) value).z);
+			GL_W.glUniform3f(unif.getValue(), ((Vector3f) value).x, ((Vector3f) value).y, ((Vector3f) value).z);
 		} else if (value instanceof Vector3i) {
-			GLES30.glUniform3i(unif.getValue(), ((Vector3i) value).x, ((Vector3i) value).y, ((Vector3i) value).z);
+			GL_W.glUniform3i(unif.getValue(), ((Vector3i) value).x, ((Vector3i) value).y, ((Vector3i) value).z);
 		} else if (value instanceof Vector4f) {
-			GLES30.glUniform4f(unif.getValue(), ((Vector4f) value).x, ((Vector4f) value).y, ((Vector4f) value).z, ((Vector4f) value).w);
+			GL_W.glUniform4f(unif.getValue(), ((Vector4f) value).x, ((Vector4f) value).y, ((Vector4f) value).z, ((Vector4f) value).w);
 		} else if (value instanceof Double) {
 			PDRUtils.throwGLESError("Cannot set Double uniform");
-			// GLES30.glUniform1d(unif.getValue(), (double) value);
+			// GL_W.glUniform1d(unif.getValue(), (double) value);
 		} else if (value instanceof Character) {
 			// System.out.println("is char: " + value + " > " + ((char) value) + " > " +
 			// (Integer.valueOf((char) value)));
 			assert value instanceof Character : "Trying to set char uniform";
 			this.setUniform(key, Integer.valueOf((char) value));
 		} else if (value instanceof Vector2f) {
-			GLES30.glUniform2f(unif.getValue(), ((Vector2f) value).x, ((Vector2f) value).y);
+			GL_W.glUniform2f(unif.getValue(), ((Vector2f) value).x, ((Vector2f) value).y);
 		} else if (value instanceof Vector2i) {
-			GLES30.glUniform2i(unif.getValue(), ((Vector2i) value).x, ((Vector2i) value).y);
+			GL_W.glUniform2i(unif.getValue(), ((Vector2i) value).x, ((Vector2i) value).y);
 		} else if (value instanceof Matrix3f) {
 			try (MemoryStack stack = MemoryStack.stackPush()) {
-				GLES30.glUniformMatrix3fv(unif.getValue(), false, ((Matrix3f) value).get(stack.mallocFloat(9)));
+				GL_W.glUniformMatrix3fv(unif.getValue(), false, ((Matrix3f) value).get(stack.mallocFloat(9)));
 			}
 		} else if (value instanceof Matrix3x2f) {
 			try (MemoryStack stack = MemoryStack.stackPush()) {
-				GLES30.glUniformMatrix3x2fv(unif.getValue(), false, ((Matrix3x2f) value).get(stack.mallocFloat(6)));
+				GL_W.glUniformMatrix3x2fv(unif.getValue(), false, ((Matrix3x2f) value).get(stack.mallocFloat(6)));
 			}
 		} else if (value instanceof Boolean) {
-			GLES30.glUniform1i(unif.getValue(), (boolean) value ? 1 : 0);
+			GL_W.glUniform1i(unif.getValue(), (boolean) value ? 1 : 0);
 		}
 		GameEngine.DEBUG.end("r_uniforms_bind_single_bind");
 	}
@@ -150,14 +149,14 @@ public abstract class AbstractShader implements UniqueID, Cleanupable {
 	}
 
 	public boolean createUniform(String name) {
-		int loc = GLES30.glGetUniformLocation(this.shaderProgram, name);
-		PDRUtils.checkGlESError();
+		int loc = GL_W.glGetUniformLocation(this.shaderProgram, name);
+		PDRUtils.checkGL_WError();
 
 		if (loc != -1) {
 			this.uniforms.put(name, new Pair<>(new Property<>(), loc));
 			return true;
 		} else {
-			GlobalLogger.log(Level.WARNING, "Could not get Uniform location for: " + name + " in program " + this.name + " (" + this.shaderProgram + ") (" + GLES30.glGetError() + ")");
+			GlobalLogger.log(Level.WARNING, "Could not get Uniform location for: " + name + " in program " + this.name + " (" + this.shaderProgram + ") (" + GL_W.glGetError() + ")");
 		}
 
 		return false;
@@ -168,13 +167,13 @@ public abstract class AbstractShader implements UniqueID, Cleanupable {
 			GlobalLogger.warning("Shader program is -1 (" + name + ")");
 			return;
 		}
-		GLES30.glUseProgram(this.shaderProgram);
-		PDRUtils.checkGlESError("UseProgram(" + shaderProgram + ") (" + name + ")");
+		GL_W.glUseProgram(this.shaderProgram);
+		PDRUtils.checkGL_WError("UseProgram(" + shaderProgram + ") (" + name + ")");
 	}
 
 	public void unbind() {
-		GLES30.glUseProgram(0);
-		PDRUtils.checkGlESError("UseProgram(0) (" + name + ")");
+		GL_W.glUseProgram(0);
+		PDRUtils.checkGL_WError("UseProgram(0) (" + name + ")");
 	}
 
 	@Override
@@ -187,8 +186,8 @@ public abstract class AbstractShader implements UniqueID, Cleanupable {
 
 		this.parts.values().forEach(AbstractShaderPart::cleanup);
 		this.parts = null;
-		GLES30.glDeleteProgram(this.shaderProgram);
-		PDRUtils.checkGlESError("DeleteProgram(" + shaderProgram + ") (" + name + ")");
+		GL_W.glDeleteProgram(this.shaderProgram);
+		PDRUtils.checkGL_WError("DeleteProgram(" + shaderProgram + ") (" + name + ")");
 		this.shaderProgram = -1;
 	}
 

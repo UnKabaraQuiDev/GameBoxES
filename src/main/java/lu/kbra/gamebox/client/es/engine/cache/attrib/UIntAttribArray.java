@@ -1,6 +1,6 @@
 package lu.kbra.gamebox.client.es.engine.cache.attrib;
 
-import org.lwjgl.opengles.GLES30;
+import lu.kbra.gamebox.client.es.engine.utils.gl.wrapper.GL_W;
 
 public class UIntAttribArray extends AttribArray {
 
@@ -33,9 +33,9 @@ public class UIntAttribArray extends AttribArray {
 
 	@Override
 	public void init() {
-		GLES30.glBufferData(bufferType, data, iStatic ? GLES30.GL_STATIC_DRAW : GLES30.GL_DYNAMIC_DRAW);
-		if (bufferType != GLES30.GL_ELEMENT_ARRAY_BUFFER)
-			GLES30.glVertexAttribIPointer(index, dataSize, GLES30.GL_UNSIGNED_INT, 0, 0);
+		GL_W.glBufferData(bufferType, data, iStatic ? GL_W.GL_STATIC_DRAW : GL_W.GL_DYNAMIC_DRAW);
+		if (bufferType != GL_W.GL_ELEMENT_ARRAY_BUFFER)
+			GL_W.glVertexAttribIPointer(index, dataSize, GL_W.GL_UNSIGNED_INT, 0, 0);
 	}
 
 	@Override
@@ -56,8 +56,8 @@ public class UIntAttribArray extends AttribArray {
 			return false;
 		data = nPos;
 
-		GLES30.glBufferSubData(bufferType, 0, data);
-		return GLES30.glGetError() == GLES30.GL_NO_ERROR;
+		GL_W.glBufferSubData(bufferType, 0, data);
+		return GL_W.glGetError() == GL_W.GL_NO_ERROR;
 	}
 
 }

@@ -12,16 +12,15 @@ import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengles.GLES;
-import org.lwjgl.opengles.GLES30;
 import org.lwjgl.opengles.GLESCapabilities;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
 
-import lu.pcy113.pclib.logger.GlobalLogger;
-
 import lu.kbra.gamebox.client.es.engine.exceptions.egl.EGLNoDisplayException;
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 import lu.kbra.gamebox.client.es.engine.utils.consts.GLType;
+import lu.kbra.gamebox.client.es.engine.utils.gl.wrapper.GL_W;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 public class GLESWindow extends Window {
 
@@ -105,7 +104,7 @@ public class GLESWindow extends Window {
 			GLFW.glfwWindowHint(GLFW.GLFW_SAMPLES, options.windowMultisample);
 		}
 
-		GLES30.glEnable(GLES30.GL_DEPTH_TEST);
+		GL_W.glEnable(GL_W.GL_DEPTH_TEST);
 		PDRUtils.checkEGLError("glEnable[DEPTH_TEST]");
 
 		updateOptions();

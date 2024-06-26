@@ -2,8 +2,6 @@ package lu.kbra.gamebox.client.es.engine.graph.render;
 
 import java.util.logging.Level;
 
-import lu.pcy113.pclib.logger.GlobalLogger;
-
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
 import lu.kbra.gamebox.client.es.engine.geom.Gizmo;
@@ -17,6 +15,7 @@ import lu.kbra.gamebox.client.es.engine.objs.entity.components.MeshComponent;
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.TextEmitterComponent;
 import lu.kbra.gamebox.client.es.engine.objs.text.TextEmitter;
 import lu.kbra.gamebox.client.es.engine.scene.Scene2D;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 public class Scene2DRenderer extends Renderer<GameEngine, Scene2D> {
 

@@ -1,10 +1,9 @@
 package lu.kbra.gamebox.client.es.engine.graph.composition;
 
-import lu.pcy113.pclib.logger.GlobalLogger;
-
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
 import lu.kbra.gamebox.client.es.engine.impl.Renderable;
 import lu.kbra.gamebox.client.es.engine.impl.UniqueID;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 public abstract class RenderLayer<K, J, O extends Renderable> implements Renderable, UniqueID, Cleanupable {
 

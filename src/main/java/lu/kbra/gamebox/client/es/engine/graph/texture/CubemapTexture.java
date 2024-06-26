@@ -3,14 +3,12 @@ package lu.kbra.gamebox.client.es.engine.graph.texture;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import org.lwjgl.opengles.GLES30;
-
-import lu.pcy113.pclib.PCUtils;
-
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TextureType;
 import lu.kbra.gamebox.client.es.engine.utils.file.FileUtils;
+import lu.kbra.gamebox.client.es.engine.utils.gl.wrapper.GL_W;
 import lu.kbra.gamebox.client.es.engine.utils.mem.img.MemImage;
+import lu.pcy113.pclib.PCUtils;
 
 public class CubemapTexture extends Texture {
 
@@ -59,7 +57,7 @@ public class CubemapTexture extends Texture {
 	private void generateBufferCubeMapTexture() {
 		gen();
 		bind();
-		// GLES30.glPixelStorei(GLES30.GL_UNPACK_ALIGNMENT, 1);
+		// GL_W.glPixelStorei(GL_W.GL_UNPACK_ALIGNMENT, 1);
 		for (int i = 0; i < FACE_COUNT; i++) {
 			MemImage image = images[i];
 
@@ -71,8 +69,8 @@ public class CubemapTexture extends Texture {
 			}
 
 			// if (image != null) {
-			GLES30.glTexImage2D(TextureType.CM_PX.getGlId() + i, 0, internalFormat.getGlId(), image.getWidth(), image.getHeight(), 0, format.getGlId(), dataType.getGlId(), image.getBuffer());
-			PDRUtils.checkGlESError("TexImage2D[" + (TextureType.values()[TextureType.CM_PX.ordinal() + i]) + "]");
+			GL_W.glTexImage2D(TextureType.CM_PX.getGlId() + i, 0, internalFormat.getGlId(), image.getWidth(), image.getHeight(), 0, format.getGlId(), dataType.getGlId(), image.getBuffer());
+			PDRUtils.checkGL_WError("TexImage2D[" + (TextureType.values()[TextureType.CM_PX.ordinal() + i]) + "]");
 			// image.free();
 			/*
 			 * } else { cleanup(); throw new RuntimeException("Failed to load texture"); }
@@ -97,7 +95,7 @@ public class CubemapTexture extends Texture {
 
 		gen();
 		bind();
-		// GLES30.glPixelStorei(GLES30.GL_UNPACK_ALIGNMENT, 1);
+		// GL_W.glPixelStorei(GL_W.GL_UNPACK_ALIGNMENT, 1);
 		for (int i = 0; i < faces.length; i++) {
 			MemImage image = FileUtils.STBILoad(path);
 
@@ -119,8 +117,8 @@ public class CubemapTexture extends Texture {
 			}
 
 			// if (image != null) {
-			GLES30.glTexImage2D(TextureType.CM_PX.getGlId() + i, 0, internalFormat.getGlId(), image.getWidth(), image.getHeight(), 0, format.getGlId(), dataType.getGlId(), image.getBuffer());
-			PDRUtils.checkGlESError("TexImage2D[" + (TextureType.values()[TextureType.CM_PX.ordinal() + i]) + "]");
+			GL_W.glTexImage2D(TextureType.CM_PX.getGlId() + i, 0, internalFormat.getGlId(), image.getWidth(), image.getHeight(), 0, format.getGlId(), dataType.getGlId(), image.getBuffer());
+			PDRUtils.checkGL_WError("TexImage2D[" + (TextureType.values()[TextureType.CM_PX.ordinal() + i]) + "]");
 			image.cleanup();
 			/*
 			 * } else { cleanup(); throw new RuntimeException("Failed to load texture"); }

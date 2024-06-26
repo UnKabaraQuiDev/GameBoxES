@@ -7,9 +7,6 @@ import java.util.Map;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import org.lwjgl.opengles.GLES30;
-
-import lu.pcy113.pclib.datastructure.pair.Pair;
 
 import lu.kbra.gamebox.client.es.engine.anim.skeletal.Animation;
 import lu.kbra.gamebox.client.es.engine.anim.skeletal.ArmatureAnimation;
@@ -30,6 +27,8 @@ import lu.kbra.gamebox.client.es.engine.geom.utils.dataStructures.MeshData;
 import lu.kbra.gamebox.client.es.engine.geom.utils.dataStructures.SkeletonData;
 import lu.kbra.gamebox.client.es.engine.graph.material.Material;
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
+import lu.kbra.gamebox.client.es.engine.utils.gl.wrapper.GL_W;
+import lu.pcy113.pclib.datastructure.pair.Pair;
 
 public class ColladaeLoader {
 
@@ -39,12 +38,12 @@ public class ColladaeLoader {
 
 		MeshData ms = amd.getMeshData();
 
-		Vec3fAttribArray vertices = new Vec3fAttribArray("pos", 0, 1, PDRUtils.floatArrayToVec3f(ms.getNormals()), GLES30.GL_ARRAY_BUFFER);
-		UIntAttribArray indices = new UIntAttribArray("ind", -1, 1, ms.getIndices(), GLES30.GL_ELEMENT_ARRAY_BUFFER);
-		Vec3fAttribArray normal = new Vec3fAttribArray("norm", 1, 1, PDRUtils.floatArrayToVec3f(ms.getNormals()), GLES30.GL_ARRAY_BUFFER);
-		Vec2fAttribArray uv = new Vec2fAttribArray("uv", 2, 1, PDRUtils.floatArrayToVec2f(ms.getTextureCoords()), GLES30.GL_ARRAY_BUFFER);
-		Vec3fAttribArray joints = new Vec3fAttribArray("joints", 3, 1, PDRUtils.intArrayToVec3f(ms.getJointIds()), GLES30.GL_ARRAY_BUFFER);
-		Vec3fAttribArray weights = new Vec3fAttribArray("weights", 4, 1, PDRUtils.floatArrayToVec3f(ms.getVertexWeights()), GLES30.GL_ARRAY_BUFFER);
+		Vec3fAttribArray vertices = new Vec3fAttribArray("pos", 0, 1, PDRUtils.floatArrayToVec3f(ms.getNormals()), GL_W.GL_ARRAY_BUFFER);
+		UIntAttribArray indices = new UIntAttribArray("ind", -1, 1, ms.getIndices(), GL_W.GL_ELEMENT_ARRAY_BUFFER);
+		Vec3fAttribArray normal = new Vec3fAttribArray("norm", 1, 1, PDRUtils.floatArrayToVec3f(ms.getNormals()), GL_W.GL_ARRAY_BUFFER);
+		Vec2fAttribArray uv = new Vec2fAttribArray("uv", 2, 1, PDRUtils.floatArrayToVec2f(ms.getTextureCoords()), GL_W.GL_ARRAY_BUFFER);
+		Vec3fAttribArray joints = new Vec3fAttribArray("joints", 3, 1, PDRUtils.intArrayToVec3f(ms.getJointIds()), GL_W.GL_ARRAY_BUFFER);
+		Vec3fAttribArray weights = new Vec3fAttribArray("weights", 4, 1, PDRUtils.floatArrayToVec3f(ms.getVertexWeights()), GL_W.GL_ARRAY_BUFFER);
 
 		Mesh mesh = new Mesh(name, material, vertices, indices, normal, uv, joints, weights);
 
@@ -57,12 +56,12 @@ public class ColladaeLoader {
 		MeshData ms = amd.getMeshData();
 		SkeletonData sd = amd.getJointsData();
 
-		Vec3fAttribArray vertices = new Vec3fAttribArray("pos", 0, 1, PDRUtils.floatArrayToVec3f(ms.getNormals()), GLES30.GL_ARRAY_BUFFER);
-		UIntAttribArray indices = new UIntAttribArray("ind", -1, 1, ms.getIndices(), GLES30.GL_ELEMENT_ARRAY_BUFFER);
-		Vec3fAttribArray normal = new Vec3fAttribArray("norm", 1, 1, PDRUtils.floatArrayToVec3f(ms.getNormals()), GLES30.GL_ARRAY_BUFFER);
-		Vec2fAttribArray uv = new Vec2fAttribArray("uv", 2, 1, PDRUtils.floatArrayToVec2f(ms.getTextureCoords()), GLES30.GL_ARRAY_BUFFER);
-		Vec3fAttribArray joints = new Vec3fAttribArray("joints", 3, 1, PDRUtils.intArrayToVec3f(ms.getJointIds()), GLES30.GL_ARRAY_BUFFER);
-		Vec3fAttribArray weights = new Vec3fAttribArray("weights", 4, 1, PDRUtils.floatArrayToVec3f(ms.getVertexWeights()), GLES30.GL_ARRAY_BUFFER);
+		Vec3fAttribArray vertices = new Vec3fAttribArray("pos", 0, 1, PDRUtils.floatArrayToVec3f(ms.getNormals()), GL_W.GL_ARRAY_BUFFER);
+		UIntAttribArray indices = new UIntAttribArray("ind", -1, 1, ms.getIndices(), GL_W.GL_ELEMENT_ARRAY_BUFFER);
+		Vec3fAttribArray normal = new Vec3fAttribArray("norm", 1, 1, PDRUtils.floatArrayToVec3f(ms.getNormals()), GL_W.GL_ARRAY_BUFFER);
+		Vec2fAttribArray uv = new Vec2fAttribArray("uv", 2, 1, PDRUtils.floatArrayToVec2f(ms.getTextureCoords()), GL_W.GL_ARRAY_BUFFER);
+		Vec3fAttribArray joints = new Vec3fAttribArray("joints", 3, 1, PDRUtils.intArrayToVec3f(ms.getJointIds()), GL_W.GL_ARRAY_BUFFER);
+		Vec3fAttribArray weights = new Vec3fAttribArray("weights", 4, 1, PDRUtils.floatArrayToVec3f(ms.getVertexWeights()), GL_W.GL_ARRAY_BUFFER);
 
 		Mesh mesh = new Mesh(name, material, vertices, indices, normal, uv, joints, weights);
 

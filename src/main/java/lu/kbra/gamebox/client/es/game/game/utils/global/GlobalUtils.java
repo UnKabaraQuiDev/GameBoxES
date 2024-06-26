@@ -20,11 +20,6 @@ import java.util.stream.Collectors;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.opengles.GLES30;
-
-import lu.pcy113.jbcodec.CodecManager;
-import lu.pcy113.pclib.PCUtils;
-import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
@@ -73,11 +68,15 @@ import lu.kbra.gamebox.client.es.engine.utils.consts.TextureFilter;
 import lu.kbra.gamebox.client.es.engine.utils.file.FileUtils;
 import lu.kbra.gamebox.client.es.engine.utils.geo.GeoPlane;
 import lu.kbra.gamebox.client.es.engine.utils.geo.Ray;
+import lu.kbra.gamebox.client.es.engine.utils.gl.wrapper.GL_W;
 import lu.kbra.gamebox.client.es.game.game.GameBoxES;
 import lu.kbra.gamebox.client.es.game.game.data.CellDescriptor;
 import lu.kbra.gamebox.client.es.game.game.render.shaders.UIButtonShader;
 import lu.kbra.gamebox.client.es.game.game.scenes.ui.UISceneGameOverlay;
 import lu.kbra.gamebox.client.es.game.game.utils.GameState;
+import lu.pcy113.jbcodec.CodecManager;
+import lu.pcy113.pclib.PCUtils;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 public class GlobalUtils {
 
@@ -148,7 +147,7 @@ public class GlobalUtils {
 	public static void project(GeoPlane plane, Consumer<Vector2f> consumer, Scene3D scene) {
 		INSTANCE.createTask(GameEngine.QUEUE_RENDER).exec((t) -> {
 			int[] viewport = new int[4];
-			GLES30.glGetIntegerv(GLES30.GL_VIEWPORT, viewport);
+			GL_W.glGetIntegerv(GL_W.GL_VIEWPORT, viewport);
 			return viewport;
 		}).then((viewport) -> {
 			Ray ray = scene.getCamera().projectRay(new Vector2f(INSTANCE.window.getMousePos()), (int[]) viewport);
@@ -163,7 +162,7 @@ public class GlobalUtils {
 	public static void project(GeoPlane plane, Consumer<Vector3f> consumer, Scene scene) {
 		INSTANCE.createTask(GameEngine.QUEUE_RENDER).exec((t) -> {
 			int[] viewport = new int[4];
-			GLES30.glGetIntegerv(GLES30.GL_VIEWPORT, viewport);
+			GL_W.glGetIntegerv(GL_W.GL_VIEWPORT, viewport);
 			return viewport;
 		}).then((viewport) -> {
 			Ray ray = scene.getCamera().projectRay(new Vector2f(INSTANCE.window.getMousePos()), (int[]) viewport);

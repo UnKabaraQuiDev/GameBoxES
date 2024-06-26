@@ -2,13 +2,12 @@ package lu.kbra.gamebox.client.es.engine.utils.codec.encoder;
 
 import java.nio.ByteBuffer;
 
+import lu.kbra.gamebox.client.es.engine.cache.attrib.FloatAttribArray;
+import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.FloatAttribArrayDecoder;
 import lu.pcy113.jbcodec.CodecManager;
 import lu.pcy113.jbcodec.encoder.DefaultObjectEncoder;
 import lu.pcy113.jbcodec.encoder.StringEncoder;
 import lu.pcy113.pclib.logger.GlobalLogger;
-
-import lu.kbra.gamebox.client.es.engine.cache.attrib.FloatAttribArray;
-import lu.kbra.gamebox.client.es.engine.utils.codec.decoder.FloatAttribArrayDecoder;
 
 /**
  * STRING name ; INT index ; INT dataSize ; INT bufferType ; BOOL _static ; INT divisor ; INT arrayLength ; FLOAT[] data ; INT END

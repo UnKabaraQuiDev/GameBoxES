@@ -1,10 +1,10 @@
 package lu.kbra.gamebox.client.es.engine.utils.consts;
 
-import org.lwjgl.opengles.GLES30;
+import lu.kbra.gamebox.client.es.engine.utils.gl.wrapper.GL_W;
 
 public enum TextureWrap implements GLConstant {
 
-	CLAMP_TO_EDGE(GLES30.GL_CLAMP_TO_EDGE), MIRRORED_REPEAT(GLES30.GL_MIRRORED_REPEAT), REPEAT(GLES30.GL_REPEAT);
+	CLAMP_TO_EDGE(GL_W.GL_CLAMP_TO_EDGE), MIRRORED_REPEAT(GL_W.GL_MIRRORED_REPEAT), REPEAT(GL_W.GL_REPEAT);
 
 	private int glId;
 

@@ -3,9 +3,6 @@ package lu.kbra.gamebox.client.es.engine.graph.render;
 import java.util.logging.Level;
 
 import org.joml.Matrix4f;
-import org.lwjgl.opengles.GLES30;
-
-import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
@@ -19,6 +16,8 @@ import lu.kbra.gamebox.client.es.engine.objs.entity.components.TransformComponen
 import lu.kbra.gamebox.client.es.engine.scene.Scene;
 import lu.kbra.gamebox.client.es.engine.scene.camera.Camera;
 import lu.kbra.gamebox.client.es.engine.scene.camera.Camera3D;
+import lu.kbra.gamebox.client.es.engine.utils.gl.wrapper.GL_W;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 public class GizmoRenderer extends Renderer<Scene, GizmoComponent> {
 
@@ -82,17 +81,17 @@ public class GizmoRenderer extends Renderer<Scene, GizmoComponent> {
 		GameEngine.DEBUG.end("r_uniforms");
 
 		if (GameEngine.DEBUG.ignoreDepth)
-			GLES30.glDisable(GLES30.GL_DEPTH_TEST);
+			GL_W.glDisable(GL_W.GL_DEPTH_TEST);
 
-		// GLES30.glPolygonMode(shader.getFaceMode().getGlId(), shader.getRenderType().getGlId());
-		GLES30.glLineWidth(Gizmo.LINE_WIDTH);
+		// GL_W.glPolygonMode(shader.getFaceMode().getGlId(), shader.getRenderType().getGlId());
+		GL_W.glLineWidth(Gizmo.LINE_WIDTH);
 
 		GameEngine.DEBUG.start("r_draw");
-		GLES30.glDrawElements(shader.getBeginMode().getGlId(), gizmo.getIndicesCount(), GLES30.GL_UNSIGNED_INT, 0);
+		GL_W.glDrawElements(shader.getBeginMode().getGlId(), gizmo.getIndicesCount(), GL_W.GL_UNSIGNED_INT, 0);
 		GameEngine.DEBUG.end("r_draw");
 
-		// GLES30.glPolygonMode(GLES30.GL_FRONT_AND_BACK, GLES30.GL_FILL);
-		GLES30.glEnable(GLES30.GL_DEPTH_TEST);
+		// GL_W.glPolygonMode(GL_W.GL_FRONT_AND_BACK, GL_W.GL_FILL);
+		GL_W.glEnable(GL_W.GL_DEPTH_TEST);
 
 		gizmo.unbind();
 

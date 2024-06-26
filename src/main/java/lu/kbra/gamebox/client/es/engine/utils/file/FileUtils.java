@@ -5,10 +5,9 @@ import java.nio.ByteBuffer;
 import org.lwjgl.stb.STBImage;
 import org.lwjgl.stb.STBImageWrite;
 
-import lu.pcy113.pclib.PCUtils;
-
 import lu.kbra.gamebox.client.es.engine.utils.mem.img.MemImage;
 import lu.kbra.gamebox.client.es.engine.utils.mem.img.MemImageOrigin;
+import lu.pcy113.pclib.PCUtils;
 
 public final class FileUtils {
 

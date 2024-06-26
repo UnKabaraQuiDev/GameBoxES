@@ -6,10 +6,9 @@ import java.nio.ShortBuffer;
 import org.lwjgl.stb.STBVorbis;
 import org.lwjgl.system.MemoryUtil;
 
-import lu.pcy113.pclib.datastructure.triplet.Triplet;
-
 import lu.kbra.gamebox.client.es.engine.utils.mem.buffer.MemBuffer;
 import lu.kbra.gamebox.client.es.engine.utils.mem.buffer.MemBufferOrigin;
+import lu.pcy113.pclib.datastructure.triplet.Triplet;
 
 public final class SoundLoaderUtils {
 

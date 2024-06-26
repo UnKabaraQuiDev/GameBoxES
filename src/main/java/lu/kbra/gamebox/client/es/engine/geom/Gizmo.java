@@ -6,9 +6,6 @@ import java.util.logging.Level;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-import org.lwjgl.opengles.GLES30;
-
-import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.cache.attrib.AttribArray;
 import lu.kbra.gamebox.client.es.engine.cache.attrib.UIntAttribArray;
@@ -17,6 +14,8 @@ import lu.kbra.gamebox.client.es.engine.cache.attrib.Vec4fAttribArray;
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
 import lu.kbra.gamebox.client.es.engine.impl.Renderable;
 import lu.kbra.gamebox.client.es.engine.impl.UniqueID;
+import lu.kbra.gamebox.client.es.engine.utils.gl.wrapper.GL_W;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 public class Gizmo implements UniqueID, Cleanupable, Renderable {
 
@@ -62,7 +61,7 @@ public class Gizmo implements UniqueID, Cleanupable, Renderable {
 		// System.out.println("gizmo indices
 		// ("+indices.getDataCount()+Arrays.toString(indices.getData()));
 
-		this.vao = GLES30.glGenVertexArrays();
+		this.vao = GL_W.glGenVertexArrays();
 		bind();
 		storeElementArray(indices);
 		vertices.setIndex(0);
@@ -85,18 +84,18 @@ public class Gizmo implements UniqueID, Cleanupable, Renderable {
 	private void storeElementArray(UIntAttribArray indices) {
 		if (indices == null)
 			throw new NullPointerException("UintAttribArray indices is null");
-		indices.setBufferType(GLES30.GL_ELEMENT_ARRAY_BUFFER);
+		indices.setBufferType(GL_W.GL_ELEMENT_ARRAY_BUFFER);
 		this.vbo.put(indices.getIndex(), indices.gen());
 		indices.bind();
 		indices.init();
 	}
 
 	public void bind() {
-		GLES30.glBindVertexArray(vao);
+		GL_W.glBindVertexArray(vao);
 	}
 
 	public void unbind() {
-		GLES30.glBindVertexArray(0);
+		GL_W.glBindVertexArray(0);
 	}
 
 	@Override
@@ -106,7 +105,7 @@ public class Gizmo implements UniqueID, Cleanupable, Renderable {
 		if (vao == -1)
 			return;
 		
-		GLES30.glDeleteVertexArrays(vao);
+		GL_W.glDeleteVertexArrays(vao);
 		vbo = null;
 		vertices.cleanup();
 		vertices = null;

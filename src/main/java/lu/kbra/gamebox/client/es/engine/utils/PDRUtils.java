@@ -21,8 +21,6 @@ import org.lwjgl.opengl.GL45;
 import org.lwjgl.opengles.GLES20;
 import org.lwjgl.opengles.GLES30;
 
-import lu.pcy113.pclib.PCUtils;
-
 import lu.kbra.gamebox.client.es.engine.exceptions.egl.EGLBadAccessException;
 import lu.kbra.gamebox.client.es.engine.exceptions.egl.EGLBadAllocException;
 import lu.kbra.gamebox.client.es.engine.exceptions.egl.EGLBadAttributeException;
@@ -60,6 +58,10 @@ import lu.kbra.gamebox.client.es.engine.exceptions.opengles.GLESInvalidOperation
 import lu.kbra.gamebox.client.es.engine.exceptions.opengles.GLESInvalidValueException;
 import lu.kbra.gamebox.client.es.engine.exceptions.opengles.GLESOutOfMemoryException;
 import lu.kbra.gamebox.client.es.engine.impl.nexttask.NextTask;
+import lu.kbra.gamebox.client.es.engine.utils.gl.wrapper.GL_W;
+import lu.kbra.gamebox.client.es.engine.utils.gl.wrapper.GL_W_GL40;
+import lu.kbra.gamebox.client.es.engine.utils.gl.wrapper.GL_W_GLES30;
+import lu.pcy113.pclib.PCUtils;
 
 public final class PDRUtils {
 
@@ -131,6 +133,24 @@ public final class PDRUtils {
 		if (b = ALC11.alcGetError(device) != ALC11.ALC_NO_ERROR)
 			throw new RuntimeException("Al error triggered: " + AL11.alGetError());
 		return b;
+	}
+
+	public static boolean checkGL_WError() {
+		if (GL_W.WRAPPER instanceof GL_W_GLES30) {
+			return checkGlESError();
+		} else if (GL_W.WRAPPER instanceof GL_W_GL40) {
+			return checkGlError();
+		}
+		return true;
+	}
+
+	public static boolean checkGL_WError(String str) {
+		if (GL_W.WRAPPER instanceof GL_W_GLES30) {
+			return checkGlESError(str);
+		} else if (GL_W.WRAPPER instanceof GL_W_GL40) {
+			return checkGlError(str);
+		}
+		return true;
 	}
 
 	public static boolean checkGlESError() {

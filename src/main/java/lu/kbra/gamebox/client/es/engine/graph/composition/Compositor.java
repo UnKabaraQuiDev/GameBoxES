@@ -5,13 +5,12 @@ import java.util.logging.Level;
 
 import org.joml.Vector2i;
 import org.joml.Vector4f;
-import org.lwjgl.opengles.GLES30;
-
-import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
+import lu.kbra.gamebox.client.es.engine.utils.gl.wrapper.GL_W;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 public class Compositor implements Cleanupable {
 
@@ -30,10 +29,10 @@ public class Compositor implements Cleanupable {
 			// keep same texture
 		} else {
 			resolution = new Vector2i(width, height);
-			GLES30.glViewport(0, 0, width, height);
+			GL_W.glViewport(0, 0, width, height);
 		}
 
-		GLES30.glEnable(GLES30.GL_DEPTH_TEST);
+		GL_W.glEnable(GL_W.GL_DEPTH_TEST);
 
 		for (String l : layers) {
 			if (l == null)
@@ -51,7 +50,7 @@ public class Compositor implements Cleanupable {
 			rl.render(engine, null);
 		}
 
-		GLES30.glDepthMask(false);
+		GL_W.glDepthMask(false);
 		for (String l : passes) {
 			if (l == null)
 				continue;
@@ -70,10 +69,10 @@ public class Compositor implements Cleanupable {
 
 			((PassRenderLayer) prl).render(engine, null);
 		}
-		GLES30.glDepthMask(true);
+		GL_W.glDepthMask(true);
 
-		GLES30.glClearColor(background.x, background.y, background.z, background.w);
-		GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT | GLES30.GL_DEPTH_BUFFER_BIT);
+		GL_W.glClearColor(background.x, background.y, background.z, background.w);
+		GL_W.glClear(GL_W.GL_COLOR_BUFFER_BIT | GL_W.GL_DEPTH_BUFFER_BIT);
 	}
 
 	public void addRenderLayer(int i, RenderLayer id) {

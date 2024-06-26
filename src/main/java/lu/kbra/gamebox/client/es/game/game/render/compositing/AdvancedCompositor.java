@@ -8,10 +8,7 @@ import org.joml.Vector2f;
 import org.joml.Vector2i;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-import org.lwjgl.opengles.GLES30;
 import org.lwjgl.system.MemoryUtil;
-
-import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.cache.attrib.UIntAttribArray;
@@ -22,9 +19,11 @@ import lu.kbra.gamebox.client.es.engine.graph.composition.PassRenderLayer;
 import lu.kbra.gamebox.client.es.engine.graph.composition.RenderLayer;
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
+import lu.kbra.gamebox.client.es.engine.utils.gl.wrapper.GL_W;
 import lu.kbra.gamebox.client.es.engine.utils.mem.img.MemImage;
 import lu.kbra.gamebox.client.es.engine.utils.mem.img.MemImageOrigin;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalConsts;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 public class AdvancedCompositor implements Cleanupable {
 
@@ -32,7 +31,7 @@ public class AdvancedCompositor implements Cleanupable {
 	public static final String SCREEN_HEIGHT = "screen_height";
 
 	private static Mesh SCREEN = new Mesh("PASS_SCREEN", null, new Vec3fAttribArray("pos", 0, 1, new Vector3f[] { new Vector3f(-1, 1, 0), new Vector3f(1, 1, 0), new Vector3f(1, -1, 0), new Vector3f(-1, -1, 0) }),
-			new UIntAttribArray("ind", -1, 1, new int[] { 0, 1, 2, 0, 2, 3 }, GLES30.GL_ELEMENT_ARRAY_BUFFER),
+			new UIntAttribArray("ind", -1, 1, new int[] { 0, 1, 2, 0, 2, 3 }, GL_W.GL_ELEMENT_ARRAY_BUFFER),
 			new Vec2fAttribArray("uv", 1, 1, new Vector2f[] { new Vector2f(0, 1), new Vector2f(1, 1), new Vector2f(1, 0), new Vector2f(0, 0) }));
 
 	protected Vector4f background = GlobalConsts.BLACK;
@@ -51,16 +50,16 @@ public class AdvancedCompositor implements Cleanupable {
 
 		if (needRegen) {
 			resolution = new Vector2i(width, height);
-			GLES30.glViewport(0, 0, width, height);
+			GL_W.glViewport(0, 0, width, height);
 		}
 
-		GLES30.glEnable(GLES30.GL_DEPTH_TEST);
-		PDRUtils.checkGlESError("Enable(DEPTH_TEST)");
+		GL_W.glEnable(GL_W.GL_DEPTH_TEST);
+		PDRUtils.checkGL_WError("Enable(DEPTH_TEST)");
 
-		GLES30.glClearColor(background.x, background.y, background.z, background.w);
-		PDRUtils.checkGlESError("ClearColor(" + background + ")");
-		GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT | GLES30.GL_DEPTH_BUFFER_BIT);
-		PDRUtils.checkGlESError("Clear(COLOR | DEPTH)");
+		GL_W.glClearColor(background.x, background.y, background.z, background.w);
+		PDRUtils.checkGL_WError("ClearColor(" + background + ")");
+		GL_W.glClear(GL_W.GL_COLOR_BUFFER_BIT | GL_W.GL_DEPTH_BUFFER_BIT);
+		PDRUtils.checkGL_WError("Clear(COLOR | DEPTH)");
 
 		for (String l : layers) {
 			if (l == null)
@@ -107,8 +106,8 @@ public class AdvancedCompositor implements Cleanupable {
 		final int width = resolution.x, height = resolution.y;
 		ByteBuffer buffer = MemoryUtil.memAlloc(width * height * channelCount);
 
-		GLES30.glReadPixels(0, 0, width, height, GLES30.GL_RGB, GLES30.GL_UNSIGNED_BYTE, buffer);
-		PDRUtils.checkGlESError("glReadPixels(0, 0, " + width + ", " + height + ", RGB, unsigned byte)");
+		GL_W.glReadPixels(0, 0, width, height, GL_W.GL_RGB, GL_W.GL_UNSIGNED_BYTE, buffer);
+		PDRUtils.checkGL_WError("glReadPixels(0, 0, " + width + ", " + height + ", RGB, unsigned byte)");
 
 		return new MemImage(width, height, channelCount, buffer, MemImageOrigin.OPENGL);
 	}

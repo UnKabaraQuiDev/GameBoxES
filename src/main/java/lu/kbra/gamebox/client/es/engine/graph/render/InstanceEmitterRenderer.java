@@ -3,9 +3,6 @@ package lu.kbra.gamebox.client.es.engine.graph.render;
 import java.util.logging.Level;
 
 import org.joml.Matrix4f;
-import org.lwjgl.opengles.GLES30;
-
-import lu.pcy113.pclib.logger.GlobalLogger;
 
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
@@ -18,6 +15,8 @@ import lu.kbra.gamebox.client.es.engine.objs.entity.components.PointLightSurface
 import lu.kbra.gamebox.client.es.engine.objs.entity.components.TransformComponent;
 import lu.kbra.gamebox.client.es.engine.scene.Scene;
 import lu.kbra.gamebox.client.es.engine.scene.Scene3D;
+import lu.kbra.gamebox.client.es.engine.utils.gl.wrapper.GL_W;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 public class InstanceEmitterRenderer extends Renderer<Scene, InstanceEmitterComponent> {
 
@@ -81,8 +80,8 @@ public class InstanceEmitterRenderer extends Renderer<Scene, InstanceEmitterComp
 
 		GameEngine.DEBUG.start("r_blend");
 		if (shader.isTransparent()) {
-			GLES30.glEnable(GLES30.GL_BLEND);
-			GLES30.glBlendFunc(GLES30.GL_SRC_ALPHA, GLES30.GL_ONE_MINUS_SRC_ALPHA);
+			GL_W.glEnable(GL_W.GL_BLEND);
+			GL_W.glBlendFunc(GL_W.GL_SRC_ALPHA, GL_W.GL_ONE_MINUS_SRC_ALPHA);
 		}
 		GameEngine.DEBUG.end("r_blend");
 
@@ -94,13 +93,13 @@ public class InstanceEmitterRenderer extends Renderer<Scene, InstanceEmitterComp
 		// pe.updatePull();
 		// GameEngine.DEBUG.end("r_compute");
 
-		// GLES30.glPolygonMode(shader.getFaceMode().getGlId(), shader.getRenderType().getGlId());
+		// GL_W.glPolygonMode(shader.getFaceMode().getGlId(), shader.getRenderType().getGlId());
 
 		GameEngine.DEBUG.start("r_draw");
-		GLES30.glDrawElementsInstanced(shader.getBeginMode().getGlId(), mesh.getIndicesCount(), GLES30.GL_UNSIGNED_INT, 0, pe.getParticleCount());
+		GL_W.glDrawElementsInstanced(shader.getBeginMode().getGlId(), mesh.getIndicesCount(), GL_W.GL_UNSIGNED_INT, 0, pe.getParticleCount());
 		GameEngine.DEBUG.end("r_draw");
 
-		GLES30.glDisable(GLES30.GL_BLEND);
+		GL_W.glDisable(GL_W.GL_BLEND);
 
 		// debug only
 		// GameEngine.DEBUG.wireframe(cache, scene, mesh, projectionMatrix, viewMatrix,

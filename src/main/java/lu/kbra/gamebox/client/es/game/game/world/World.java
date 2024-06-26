@@ -21,11 +21,6 @@ import org.joml.Vector3f;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import lu.pcy113.pclib.PCUtils;
-import lu.pcy113.pclib.logger.GlobalLogger;
-import lu.pcy113.pclib.pointer.prim.BooleanPointer;
-import lu.pcy113.pclib.pointer.prim.IntPointer;
-
 import lu.kbra.gamebox.client.es.engine.cache.CacheManager;
 import lu.kbra.gamebox.client.es.engine.geom.Mesh;
 import lu.kbra.gamebox.client.es.engine.geom.instance.Instance;
@@ -64,6 +59,10 @@ import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalLang;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalOptions;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
 import lu.kbra.gamebox.client.es.game.game.utils.noise.NoiseGenerator;
+import lu.pcy113.pclib.PCUtils;
+import lu.pcy113.pclib.logger.GlobalLogger;
+import lu.pcy113.pclib.pointer.prim.BooleanPointer;
+import lu.pcy113.pclib.pointer.prim.IntPointer;
 
 public class World implements Cleanupable {
 

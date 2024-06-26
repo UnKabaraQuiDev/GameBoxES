@@ -1,13 +1,11 @@
 package lu.kbra.gamebox.client.es.engine.graph.composition;
 
-import org.lwjgl.opengles.GLES30;
-
-import lu.pcy113.pclib.logger.GlobalLogger;
-
 import lu.kbra.gamebox.client.es.engine.impl.Cleanupable;
 import lu.kbra.gamebox.client.es.engine.impl.UniqueID;
 import lu.kbra.gamebox.client.es.engine.utils.PDRUtils;
 import lu.kbra.gamebox.client.es.engine.utils.consts.TexelFormat;
+import lu.kbra.gamebox.client.es.engine.utils.gl.wrapper.GL_W;
+import lu.pcy113.pclib.logger.GlobalLogger;
 
 public class RenderBuffer implements UniqueID, Cleanupable, FramebufferAttachment {
 
@@ -24,30 +22,30 @@ public class RenderBuffer implements UniqueID, Cleanupable, FramebufferAttachmen
 	public void setup() {
 		gen();
 		bind();
-		GLES30.glRenderbufferStorage(GLES30.GL_RENDERBUFFER, texelFormat.getGlId(), width, height);
-		PDRUtils.checkGlESError("RenderbufferStorage["+texelFormat+"]=("+width+","+height+")");
+		GL_W.glRenderbufferStorage(GL_W.GL_RENDERBUFFER, texelFormat.getGlId(), width, height);
+		PDRUtils.checkGL_WError("RenderbufferStorage["+texelFormat+"]=("+width+","+height+")");
 	}
 
 	public void bind() {
-		bind(GLES30.GL_RENDERBUFFER);
+		bind(GL_W.GL_RENDERBUFFER);
 	}
 
 	public void unbind() {
-		unbind(GLES30.GL_RENDERBUFFER);
+		unbind(GL_W.GL_RENDERBUFFER);
 	}
 
 	public void bind(int target) {
-		GLES30.glBindRenderbuffer(target, rbid);
-		PDRUtils.checkGlESError("BindRenderbuffer["+target+"] = "+rbid);
+		GL_W.glBindRenderbuffer(target, rbid);
+		PDRUtils.checkGL_WError("BindRenderbuffer["+target+"] = "+rbid);
 	}
 
 	public void unbind(int target) {
-		GLES30.glBindRenderbuffer(target, 0);
-		PDRUtils.checkGlESError("BindRenderbuffer["+target+"] = "+rbid);
+		GL_W.glBindRenderbuffer(target, 0);
+		PDRUtils.checkGL_WError("BindRenderbuffer["+target+"] = "+rbid);
 	}
 
 	public int gen() {
-		return (rbid = GLES30.glGenRenderbuffers());
+		return (rbid = GL_W.glGenRenderbuffers());
 	}
 
 	public TexelFormat getTexelFormat() {
@@ -90,8 +88,8 @@ public class RenderBuffer implements UniqueID, Cleanupable, FramebufferAttachmen
 		if(rbid == -1)
 			return;
 		
-		GLES30.glDeleteRenderbuffers(rbid);
-		PDRUtils.checkGlESError("DeleteRenderbuffers("+rbid+")");
+		GL_W.glDeleteRenderbuffers(rbid);
+		PDRUtils.checkGL_WError("DeleteRenderbuffers("+rbid+")");
 		rbid = -1;
 	}
 	
