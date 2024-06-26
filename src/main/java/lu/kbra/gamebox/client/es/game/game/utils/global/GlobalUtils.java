@@ -281,7 +281,10 @@ public class GlobalUtils {
 	}
 
 	public static Vector2f getJoystickDirection() {
+		if (!INSTANCE.window.isJoystickPresent())
+			return new Vector2f();
 		float[] btns = INSTANCE.window.getJoystickAxis(GLFW.GLFW_JOYSTICK_1);
+		System.err.println(btns[0]+" "+(-btns[1]));
 		return new Vector2f(btns[0], -btns[1]);
 	}
 
@@ -452,7 +455,7 @@ public class GlobalUtils {
 		if (alreadyShownPlayerNotes.contains(desc) || playerNotes.contains(desc)) {
 			return;
 		}
-		
+
 		playerNotes.add(desc);
 		alreadyShownPlayerNotes.add(desc);
 	}
@@ -464,7 +467,7 @@ public class GlobalUtils {
 	public static void clearCurrentPlayerNote() {
 		if (!hasPlayerNote())
 			return;
-		
+
 		playerNotes.removeFirst();
 	}
 

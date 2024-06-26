@@ -5,8 +5,12 @@ import java.util.logging.Level;
 
 import org.joml.Vector3f;
 
+import lu.pcy113.pclib.PCUtils;
+import lu.pcy113.pclib.logger.GlobalLogger;
+
 import lu.kbra.gamebox.client.es.engine.audio.AudioMaster;
 import lu.kbra.gamebox.client.es.engine.cache.SharedCacheManager;
+import lu.kbra.gamebox.client.es.engine.graph.window.GLESWindow;
 import lu.kbra.gamebox.client.es.engine.graph.window.GLWindow;
 import lu.kbra.gamebox.client.es.engine.graph.window.Window;
 import lu.kbra.gamebox.client.es.engine.graph.window.WindowOptions;
@@ -18,8 +22,7 @@ import lu.kbra.gamebox.client.es.engine.impl.nexttask.NextTaskEnvironnment;
 import lu.kbra.gamebox.client.es.engine.utils.DebugOptions;
 import lu.kbra.gamebox.client.es.engine.utils.bake.TimeGraphPlot;
 import lu.kbra.gamebox.client.es.engine.utils.gl.wrapper.GL_W_GL40;
-import lu.pcy113.pclib.PCUtils;
-import lu.pcy113.pclib.logger.GlobalLogger;
+import lu.kbra.gamebox.client.es.engine.utils.gl.wrapper.GL_W_GLES30;
 
 public class GameEngine implements Cleanupable, UniqueID {
 
@@ -291,9 +294,14 @@ public class GameEngine implements Cleanupable, UniqueID {
 
 		this.cache = new SharedCacheManager("GameEngineMain");
 
-		new GL_W_GL40().init();
-		this.window = new GLWindow(this.windowOptions);
-
+		if(windowOptions.gles) {
+			new GL_W_GLES30().init();
+			this.window = new GLESWindow(this.windowOptions);
+		}else {
+			new GL_W_GL40().init();
+			this.window = new GLWindow(this.windowOptions);
+		}
+		
 		this.window.runCallbacks();
 		this.window.clearGLContext();
 		// this.running = true;

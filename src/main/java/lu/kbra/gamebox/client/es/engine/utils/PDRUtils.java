@@ -8,6 +8,7 @@ import java.util.stream.IntStream;
 
 import org.joml.Matrix3x2f;
 import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.json.JSONArray;
@@ -502,6 +503,13 @@ public final class PDRUtils {
 
 	public static Vector3f clampPositive(Vector3f vec) {
 		return vec.set(PCUtils.clampGreaterOrEquals(0, vec.x), PCUtils.clampGreaterOrEquals(0, vec.y), PCUtils.clampGreaterOrEquals(0, vec.z));
+	}
+
+	public static Vector2f normalizeGreater(Vector2f vec) {
+		if(vec.lengthSquared() > 1) {
+			return vec.normalize();
+		}
+		return vec;
 	}
 
 }

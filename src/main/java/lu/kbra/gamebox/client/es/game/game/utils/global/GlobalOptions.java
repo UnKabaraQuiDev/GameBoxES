@@ -18,6 +18,7 @@ public final class GlobalOptions {
 	public static int LANGUAGE = 0;
 	public static boolean CULLING_OPTIMISATION = true;
 	public static boolean LOGS_FORWARD = true;
+	public static boolean GLES = false;
 
 	public static void load() throws IOException {
 		File defaultFile = new File("resources/gd/config/default_options.properties");
@@ -40,6 +41,7 @@ public final class GlobalOptions {
 		WIREFRAME = Boolean.parseBoolean(prop.getProperty("wireframe"));
 		LOGS_MIN_FORWARD_LEVEL = prop.getProperty("logs.forward.min_level");
 		LOGS_FORWARD = Boolean.parseBoolean(prop.getProperty("logs.forward"));
+		GLES = Boolean.parseBoolean(prop.getProperty("gles"));
 	}
 
 	public static void save() throws IOException {
@@ -54,6 +56,7 @@ public final class GlobalOptions {
 		prop.setProperty("gizmos", GIZMOS + "");
 		prop.setProperty("logs.forward.min_level", LOGS_MIN_FORWARD_LEVEL);
 		prop.setProperty("logs.forward", LOGS_FORWARD + "");
+		prop.setProperty("gles", GLES + "");
 
 		File file = new File("config/options.properties");
 		prop.store(new FileWriter(file), null);

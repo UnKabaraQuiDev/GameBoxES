@@ -7,6 +7,8 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+import lu.pcy113.pclib.logger.GlobalLogger;
+
 import lu.kbra.gamebox.client.es.engine.GameEngine;
 import lu.kbra.gamebox.client.es.engine.graph.composition.SceneRenderLayer;
 import lu.kbra.gamebox.client.es.engine.graph.material.text.TextShader;
@@ -19,10 +21,8 @@ import lu.kbra.gamebox.client.es.game.game.scenes.ui.UIScene3D;
 import lu.kbra.gamebox.client.es.game.game.scenes.world.WorldScene3D;
 import lu.kbra.gamebox.client.es.game.game.utils.GameState;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalConsts;
-import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalLang;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalOptions;
 import lu.kbra.gamebox.client.es.game.game.utils.global.GlobalUtils;
-import lu.pcy113.pclib.logger.GlobalLogger;
 
 public class GameBoxES extends GameLogic {
 
@@ -48,18 +48,6 @@ public class GameBoxES extends GameLogic {
 
 		GlobalUtils.registerRenderers();
 		GlobalUtils.registerCodecs();
-
-		try {
-			GlobalOptions.load();
-			GlobalLogger.log("Loaded lang: " + GlobalOptions.LANGUAGE + " gets: " + GlobalLang.LANGUAGES[GlobalOptions.LANGUAGE]);
-			GlobalLang.load(GlobalLang.LANGUAGES[GlobalOptions.LANGUAGE]);
-			GlobalLogger.log("Loaded volume: " + GlobalLang.get("menu.options.volume"));
-		} catch (Exception e1) {
-			e1.printStackTrace();
-			GlobalLogger.log(e1);
-			// GlobalUtils.requestQuit();
-			engine.stop();
-		}
 
 		GameEngine.DEBUG.wireframe = GlobalOptions.DEBUG && GlobalOptions.WIREFRAME;
 		GameEngine.DEBUG.gizmos = GlobalOptions.DEBUG && GlobalOptions.GIZMOS;

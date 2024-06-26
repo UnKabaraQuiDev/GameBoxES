@@ -14,5 +14,6 @@ public class WindowOptions {
 	public Vector2i windowSize = new Vector2i(800, 600);
 	public String title = Consts.TITLE;
 	public int windowMultisample = 4;
+	public boolean gles = false;
 
 }
