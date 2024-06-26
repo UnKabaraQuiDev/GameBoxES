@@ -279,6 +279,7 @@
 						<!--<argument>-javaagent:libs/lwjglx-debug-1.0.0.jar</argument>
 						<argument>-Dorg.lwjglx.TRACE</argument>
 						<argument>-Dorg.lwjglx.OUTPUT=./logs/trace.log</argument>-->
+						<argument>-Djava.library.path=libs/natives/lwjgl/3.3.3+5/</argument>
 						<argument>-Dorg.lwjgl.util.Debug=true</argument>
 						<argument>lu.kbra.gamebox.client.es.game.ClientMain</argument>
 					</arguments>
