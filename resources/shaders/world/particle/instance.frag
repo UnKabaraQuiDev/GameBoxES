@@ -11,7 +11,7 @@ out vec4 fragColor;
 uniform sampler2D txt1;
 uniform int columns; 
 uniform int rows;
-uniform float opacity; // 0.5.0
+uniform float opacity; // 0.50
 
 void main() {
 	float rcolumns = float(columns);

@@ -12,9 +12,9 @@ uniform float progressGreen;
 uniform float progressRed;
 
 #define BAR_MAX_HEIGHT 0.0
-#define BAR_X_START 0.017.0
-#define BAR_X_END 0.63.0
-#define BAR_Y_START 0.0.0
+#define BAR_X_START 0.017
+#define BAR_X_END 0.63
+#define BAR_Y_START 0.0
 #define BAR_Y_END 0.0
 #define BAR_BG vec4(1.0, 1.0, 1.0, 1.0)
 #define BAR_RED vec4(1.0, 0.0, 0.0, 1.0)
