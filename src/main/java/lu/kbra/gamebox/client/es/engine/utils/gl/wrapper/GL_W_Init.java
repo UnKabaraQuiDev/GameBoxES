@@ -15,93 +15,52 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.lwjgl.opengl.GL40;
+import org.lwjgl.opengl.GL43;
+import org.lwjgl.opengl.GL46;
 import org.lwjgl.opengles.GLES30;
+import org.lwjgl.opengles.GLES32;
 
 public final class GL_W_Init {
 
-	private static final String BASE_CONTENT = "package lu.kbra.gamebox.client.es.engine.utils;\n" + "\n" + "public class GL_W {\n" + "\n";
-	private static final String INSTANCE_CONTENT = "package lu.kbra.gamebox.client.es.engine.utils;\n" + "\n" + "public class {name} implements GL_W_Call {\n" + "\n";
-	private static final String CALLER_CONTENT = "package lu.kbra.gamebox.client.es.engine.utils;\n" + "\n" + "public interface GL_W_Call {\n";
-	private static final List<String> NAME_BLACKLIST = Arrays.asList("wait", "toString", "getClass", "notify", "notifyAll", "equals", "hashCode");
+	private static final String BASE_CONTENT = "package lu.kbra.gamebox.client.es.engine.utils.gl.wrapper;\n" + "\n" + "public class GL_W {\n" + "\n";
+	private static final String INSTANCE_CONTENT = "package lu.kbra.gamebox.client.es.engine.utils.gl.wrapper;\n" + "\n" + "public class {name} implements GL_W_Call {\n";
+	private static final String CALLER_CONTENT = "package lu.kbra.gamebox.client.es.engine.utils.gl.wrapper;\n" + "\n" + "public interface GL_W_Call {\n";
+	private static final List<String> NAME_BLACKLIST = Arrays.stream(Object.class.getDeclaredMethods()).map((c) -> c.getName()).distinct().collect(Collectors.toList()); // .asList("wait", "toString", "getClass", "notify", "notifyAll",
+																																											// "equals", "hashCode");
 
 	public static void main(String[] args) throws IOException {
-		callerBase();
-		base();
-		gles30();
-		gl40();
+		System.out.println("Filtering out: " + NAME_BLACKLIST);
+
+		final List<Class<?>> allGLClasses = Arrays.asList(GL40.class, GLES30.class, GLES32.class, GL43.class, GL46.class);
+
+		callerBase(allGLClasses);
+		System.out.println("GL_W_Call done.");
+		base(allGLClasses);
+		System.out.println("GL_W done.");
+		for (Class c : allGLClasses) {
+			glInit(c, allGLClasses.stream().filter((a) -> !a.equals(c)).collect(Collectors.toList()));
+			System.out.println("GL_W_" + c.getSimpleName() + " done.");
+		}
 	}
 
-	private static void gl40() throws IOException {
-		final String FILE_PATH = "./src/main/java/lu/kbra/gamebox/client/es/engine/utils/gl/wrapper/GL_W_GL40.java";
+	private static void glInit(Class<?> clazz, List<Class<?>> otherClazzes) throws IOException {
+		final String FILE_PATH = "./src/main/java/lu/kbra/gamebox/client/es/engine/utils/gl/wrapper/GL_W_" + clazz.getSimpleName() + ".java";
 
-		List<String> out = Arrays.stream(INSTANCE_CONTENT.replace("{name}", "GL_W_GL40").split("\n")).collect(Collectors.toList());
+		List<String> out = Arrays.stream(INSTANCE_CONTENT.replace("{name}", "GL_W_" + clazz.getSimpleName()).split("\n")).collect(Collectors.toList());
 
-		out.add("public void init() {");
-		out.add("GL_W.WRAPPER = this;");
+		out.add("\n\tpublic void init() {");
+		out.add("\t\tGL_W.WRAPPER = this;");
 
-		for (Field f : GL40.class.getFields()) {
-			if (f.getType() == int.class) {
-				out.add("GL_W." + f.getName() + " = GL40." + f.getName() + ";");
-			}
-		}
+		implementFields(clazz, out);
 
-		out.add("}");
+		out.add("\t}");
 
 		final List<String> methods = new ArrayList<>();
 
-		for (Method m : GL40.class.getMethods()) {
-			if (NAME_BLACKLIST.contains(m.getName()))
-				continue;
-			
-			String ret = getType(m.getReturnType());
+		implementMethods(clazz, methods, out);
 
-			StringBuilder content = new StringBuilder();
-
-			content.append("@Override ");
-			content.append("public " + ret + " " + m.getName() + "(");
-			int arrCount = m.getParameterCount();
-			for (int i = 0; i < arrCount; i++) {
-				content.append(m.getParameters()[i].toString() + (i != arrCount - 1 ? ", " : ""));
-			}
-			content.append(") {");
-
-			content.append((!"void".equals(ret) ? "return " : "") + "GL40." + m.getName() + "(");
-
-			for (int i = 0; i < arrCount; i++) {
-				content.append(m.getParameters()[i].getName() + (i != arrCount - 1 ? ", " : ""));
-			}
-
-			content.append(");");
-
-			content.append("}");
-
-			out.add(content.toString());
-			methods.add(ret + " " + m.getName() + "(" + Arrays.stream(m.getParameters()).map((c) -> c.toString()).collect(Collectors.joining(",")) + ")");
-		}
-
-		for (Method m : GLES30.class.getMethods()) {
-			if (NAME_BLACKLIST.contains(m.getName()))
-				continue;
-			
-			String ret = getType(m.getReturnType());
-
-			StringBuilder content = new StringBuilder();
-
-			content.append("@Override ");
-			content.append("public " + ret + " " + m.getName() + "(");
-			int arrCount = m.getParameterCount();
-			for (int i = 0; i < arrCount; i++) {
-				content.append(m.getParameters()[i].toString() + (i != arrCount - 1 ? ", " : ""));
-			}
-			content.append(") {");
-			content.append("throw new RuntimeException(\"Not implemented by GL40.\");");
-			content.append("}");
-
-			if (methods.contains(ret + " " + m.getName() + "(" + Arrays.stream(m.getParameters()).map((c) -> c.toString()).collect(Collectors.joining(",")) + ")"))
-				continue;
-
-			out.add(content.toString());
-			methods.add(ret + " " + m.getName() + "(" + Arrays.stream(m.getParameters()).map((c) -> c.toString()).collect(Collectors.joining(",")) + ")");
+		for (Class<?> cla : otherClazzes) {
+			implementMethods(cla, methods, out);
 		}
 
 		out.add("}");
@@ -109,78 +68,61 @@ public final class GL_W_Init {
 		Files.write(Paths.get(FILE_PATH), out);
 	}
 
-	private static void callerBase() throws IOException {
+	private static void implementFields(Class<?> clazz, List<String> out) {
+		for (Field f : clazz.getFields()) {
+			if (f.getType() == int.class) {
+				out.add("\t\tGL_W." + f.getName() + " = " + clazz.getName() + "." + f.getName() + ";");
+			}
+		}
+	}
+
+	private static void implementMethods(Class<?> clazz, List<String> methods, List<String> out) {
+		for (Method m : clazz.getMethods()) {
+			if (NAME_BLACKLIST.contains(m.getName()))
+				continue;
+
+			String ret = getType(m.getReturnType());
+
+			StringBuilder content = new StringBuilder();
+
+			content.append("\t@Override\n");
+			content.append("\tpublic " + ret + " " + m.getName() + "(");
+			content.append(Arrays.stream(m.getParameters()).map((c) -> c.toString()).collect(Collectors.joining(",")));
+			content.append(") {");
+
+			content.append("\n\t\t" + (!"void".equals(ret) ? "return " : "") + clazz.getName() + "." + m.getName() + "(");
+
+			content.append(Arrays.stream(m.getParameters()).map((c) -> c.getName()).collect(Collectors.joining(",")));
+
+			content.append(");\n");
+
+			content.append("\t}\n");
+
+			if (methods.contains(m.getName() + "(" + Arrays.stream(m.getParameters()).map((c) -> c.toString()).collect(Collectors.joining(",")) + ")"))
+				continue;
+
+			out.add(content.toString());
+			methods.add(m.getName() + "(" + Arrays.stream(m.getParameters()).map((c) -> c.toString()).collect(Collectors.joining(",")) + ")");
+		}
+	}
+
+	private static void callerBase(List<Class<?>> clazzes) throws IOException {
 		final String FILE_PATH = "./src/main/java/lu/kbra/gamebox/client/es/engine/utils/gl/wrapper/GL_W_Call.java";
 
 		List<String> out = Arrays.stream(CALLER_CONTENT.split("\n")).collect(Collectors.toList());
 
-		final List<String> names = new ArrayList<String>();
+		List<String> names = new ArrayList<String>();
 
-		for (Method m : GLES30.class.getMethods()) {
-			if (NAME_BLACKLIST.contains(m.getName()))
-				continue;
-
-			String ret = getType(m.getReturnType());
-
-			StringBuilder content = new StringBuilder();
-
-			content.append(ret + " " + m.getName() + "(");
-			int arrCount = m.getParameterCount();
-			for (int i = 0; i < arrCount; i++) {
-				content.append(m.getParameters()[i].toString() + (i != arrCount - 1 ? ", " : ""));
-			}
-			content.append(");");
-
-			names.add(content.toString());
-			out.add(content.toString());
+		for (Class<?> clazz : clazzes) {
+			names = implementAbstractMethods(clazz, out, names);
 		}
-
-		for (Method m : GL40.class.getMethods()) {
-			if (NAME_BLACKLIST.contains(m.getName()))
-				continue;
-
-			String ret = getType(m.getReturnType());
-
-			StringBuilder content = new StringBuilder();
-
-			content.append(ret + " " + m.getName() + "(");
-			int arrCount = m.getParameterCount();
-			for (int i = 0; i < arrCount; i++) {
-				content.append(m.getParameters()[i].toString() + (i != arrCount - 1 ? ", " : ""));
-			}
-			content.append(");");
-
-			if (names.contains(content.toString()))
-				continue;
-
-			names.add(content.toString());
-			out.add(content.toString());
-		}
-
 		out.add("}");
 
 		Files.write(Paths.get(FILE_PATH), out);
 	}
 
-	private static void gles30() throws IOException {
-		final String FILE_PATH = "./src/main/java/lu/kbra/gamebox/client/es/engine/utils/gl/wrapper/GL_W_GLES30.java";
-
-		List<String> out = Arrays.stream(INSTANCE_CONTENT.replace("{name}", "GL_W_GLES30").split("\n")).collect(Collectors.toList());
-
-		out.add("public void init() {");
-		out.add("GL_W.WRAPPER = this;");
-
-		for (Field f : GLES30.class.getFields()) {
-			if (f.getType() == int.class) {
-				out.add("GL_W." + f.getName() + " = GLES30." + f.getName() + ";");
-			}
-		}
-
-		out.add("}");
-
-		final List<String> methods = new ArrayList<>();
-
-		for (Method m : GLES30.class.getMethods()) {
+	private static List<String> implementAbstractMethods(Class<?> clazz, List<String> out, List<String> names) {
+		for (Method m : clazz.getMethods()) {
 			if (NAME_BLACKLIST.contains(m.getName()))
 				continue;
 
@@ -188,139 +130,65 @@ public final class GL_W_Init {
 
 			StringBuilder content = new StringBuilder();
 
-			content.append("@Override ");
-			content.append("public " + ret + " " + m.getName() + "(");
-			int arrCount = m.getParameterCount();
-			for (int i = 0; i < arrCount; i++) {
-				content.append(m.getParameters()[i].toString() + (i != arrCount - 1 ? ", " : ""));
-			}
-			content.append(") {");
+			content.append("\tdefault " + ret + " " + m.getName() + "(");
+			content.append(Arrays.stream(m.getParameters()).map((c) -> c.toString()).collect(Collectors.joining(",")));
+			content.append(") {throw new RuntimeException(\"Not implemented yet.\");}\n");
 
-			content.append((!"void".equals(ret) ? "return " : "") + "GLES30." + m.getName() + "(");
-
-			for (int i = 0; i < arrCount; i++) {
-				content.append(m.getParameters()[i].getName() + (i != arrCount - 1 ? ", " : ""));
-			}
-
-			content.append(");");
-
-			content.append("}");
-
-			out.add(content.toString());
-			methods.add(ret + " " + m.getName() + "(" + Arrays.stream(m.getParameters()).map((c) -> c.toString()).collect(Collectors.joining(",")) + ")");
-		}
-
-		for (Method m : GL40.class.getMethods()) {
-			if (NAME_BLACKLIST.contains(m.getName()))
+			if (names.contains(m.getName() + "(" + Arrays.stream(m.getParameters()).map((c) -> c.toString()).collect(Collectors.joining(",")) + ")"))
 				continue;
 
-			String ret = getType(m.getReturnType());
-
-			StringBuilder content = new StringBuilder();
-
-			content.append("@Override ");
-			content.append("public " + ret + " " + m.getName() + "(");
-			int arrCount = m.getParameterCount();
-			for (int i = 0; i < arrCount; i++) {
-				content.append(m.getParameters()[i].toString() + (i != arrCount - 1 ? ", " : ""));
-			}
-			content.append(") {");
-			content.append("throw new RuntimeException(\"Not implemented by GLES30.\");");
-			content.append("}");
-
-			if (methods.contains(ret + " " + m.getName() + "(" + Arrays.stream(m.getParameters()).map((c) -> c.toString()).collect(Collectors.joining(",")) + ")"))
-				continue;
-
+			names.add(m.getName() + "(" + Arrays.stream(m.getParameters()).map((c) -> c.toString()).collect(Collectors.joining(",")) + ")");
 			out.add(content.toString());
-			methods.add(ret + " " + m.getName() + "(" + Arrays.stream(m.getParameters()).map((c) -> c.toString()).collect(Collectors.joining(",")) + ")");
 		}
 
-		out.add("}");
-
-		Files.write(Paths.get(FILE_PATH), out);
+		return names;
 	}
 
-	private static void base() throws IOException {
+	private static void base(List<Class<?>> clazzes) throws IOException {
 		final String FILE_PATH = "./src/main/java/lu/kbra/gamebox/client/es/engine/utils/gl/wrapper/GL_W.java";
 
 		List<String> out = Arrays.stream(BASE_CONTENT.split("\n")).collect(Collectors.toList());
 
-		out.add("public static GL_W_Call WRAPPER;");
+		out.add("\n\tpublic static GL_W_Call WRAPPER;\n");
 
 		final List<String> fields = new ArrayList<String>();
 
-		for (Field f : GLES30.class.getFields()) {
-			if (f.getType() == int.class) {
-				out.add("public static int " + f.getName() + ";");
-				fields.add(f.getName());
-			}
-		}
+		for (Class<?> clazz : clazzes) {
+			for (Field f : clazz.getFields()) {
+				if (fields.contains(f.getName()))
+					continue;
 
-		for (Field f : GL40.class.getFields()) {
-			if (fields.contains(f.getName()))
-				continue;
-
-			if (f.getType() == int.class) {
-				out.add("public static int " + f.getName() + ";");
-				fields.add(f.getName());
+				if (f.getType() == int.class) {
+					out.add("\tpublic static int " + f.getName() + ";");
+					fields.add(f.getName());
+				}
 			}
 		}
 
 		final List<String> names = new ArrayList<String>();
 
-		for (Method m : GLES30.class.getMethods()) {
-			if (NAME_BLACKLIST.contains(m.getName()))
-				continue;
+		for (Class<?> clazz : clazzes) {
+			for (Method m : clazz.getMethods()) {
+				if (NAME_BLACKLIST.contains(m.getName()))
+					continue;
 
-			String ret = getType(m.getReturnType());
+				String ret = getType(m.getReturnType());
 
-			out.add("public static " + ret + " " + m.getName() + "(");
-			int arrCount = m.getParameterCount();
-			for (int i = 0; i < arrCount; i++) {
-				out.add(m.getParameters()[i].toString() + (i != arrCount - 1 ? ", " : ""));
+				StringBuilder content = new StringBuilder();
+
+				content.append("\t/** " + clazz.getSimpleName() + " */\n");
+				content.append("\tpublic static " + ret + " " + m.getName() + "(" + Arrays.stream(m.getParameters()).map((c) -> c.toString()).collect(Collectors.joining(",")) + ") {\n");
+
+				content.append("\t\t" + (!"void".equals(ret) ? "return " : "") + "WRAPPER." + m.getName() + "(" + Arrays.stream(m.getParameters()).map((c) -> c.getName()).collect(Collectors.joining(",")) + ");\n");
+
+				content.append("\t}\n\n");
+
+				if (names.contains(m.getName() + "(" + Arrays.stream(m.getParameters()).map((c) -> c.toString()).collect(Collectors.joining(",")) + ")"))
+					continue;
+
+				out.add(content.toString());
+				names.add(m.getName() + "(" + Arrays.stream(m.getParameters()).map((c) -> c.toString()).collect(Collectors.joining(",")) + ")");
 			}
-			out.add(") {");
-
-			out.add((!"void".equals(ret) ? "return " : "") + "WRAPPER." + m.getName() + "(");
-
-			for (int i = 0; i < arrCount; i++) {
-				out.add(m.getParameters()[i].getName() + (i != arrCount - 1 ? ", " : ""));
-			}
-
-			out.add(");");
-
-			out.add("}");
-
-			names.add(ret + " " + m.getName() + "(" + Arrays.stream(m.getParameters()).map((c) -> c.toString()).collect(Collectors.joining(",")) + ")");
-		}
-
-		for (Method m : GL40.class.getMethods()) {
-			if (NAME_BLACKLIST.contains(m.getName()))
-				continue;
-
-			String ret = getType(m.getReturnType());
-
-			if (names.contains(ret + " " + m.getName() + "(" + Arrays.stream(m.getParameters()).map((c) -> c.toString()).collect(Collectors.joining(",")) + ")"))
-				continue;
-
-			out.add("public static " + ret + " " + m.getName() + "(");
-			int arrCount = m.getParameterCount();
-			for (int i = 0; i < arrCount; i++) {
-				out.add(m.getParameters()[i].toString() + (i != arrCount - 1 ? ", " : ""));
-			}
-			out.add(") {");
-
-			out.add((!"void".equals(ret) ? "return " : "") + "WRAPPER." + m.getName() + "(");
-
-			for (int i = 0; i < arrCount; i++) {
-				out.add(m.getParameters()[i].getName() + (i != arrCount - 1 ? ", " : ""));
-			}
-
-			out.add(");");
-
-			out.add("}");
-
-			names.add(ret + " " + m.getName() + "(" + Arrays.stream(m.getParameters()).map((c) -> c.toString()).collect(Collectors.joining(",")) + ")");
 		}
 
 		out.add("}");
