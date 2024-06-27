@@ -31,7 +31,7 @@ public final class GL_W_Init {
 	public static void main(String[] args) throws IOException {
 		System.out.println("Filtering out: " + NAME_BLACKLIST);
 
-		final List<Class<?>> allGLClasses = Arrays.asList(GL40.class, GLES30.class, GLES32.class, GL43.class, GL46.class);
+		final List<Class<?>> allGLClasses = Arrays.asList(GL40.class, GLES30.class);
 
 		callerBase(allGLClasses);
 		System.out.println("GL_W_Call done.");

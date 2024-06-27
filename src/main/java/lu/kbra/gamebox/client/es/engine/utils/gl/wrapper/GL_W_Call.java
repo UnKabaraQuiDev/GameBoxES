@@ -1,3699 +1,3700 @@
 package lu.kbra.gamebox.client.es.engine.utils.gl.wrapper;
 
 public interface GL_W_Call {
-	void glReadBuffer(int arg0);
+	default void glBlendEquationi(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglDrawRangeElements(int arg0, int arg1, int arg2, int arg3, int arg4, long arg5);
+	default void glBlendEquationSeparatei(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawRangeElements(int arg0, int arg1, int arg2, java.nio.ByteBuffer arg3);
+	default void glBlendFunci(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawRangeElements(int arg0, int arg1, int arg2, int arg3, java.nio.ByteBuffer arg4);
+	default void glBlendFuncSeparatei(int arg0,int arg1,int arg2,int arg3,int arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawRangeElements(int arg0, int arg1, int arg2, java.nio.IntBuffer arg3);
+	default void nglDrawArraysIndirect(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawRangeElements(int arg0, int arg1, int arg2, java.nio.ShortBuffer arg3);
+	default void glDrawArraysIndirect(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawRangeElements(int arg0, int arg1, int arg2, int arg3, int arg4, long arg5);
+	default void glDrawArraysIndirect(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexImage3D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, long arg9);
+	default void glDrawArraysIndirect(int arg0,java.nio.ByteBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexImage3D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, java.nio.FloatBuffer arg9);
+	default void glDrawArraysIndirect(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexImage3D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, java.nio.IntBuffer arg9);
+	default void nglDrawElementsIndirect(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexImage3D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int[] arg9);
+	default void glDrawElementsIndirect(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexImage3D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, float[] arg9);
+	default void glDrawElementsIndirect(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexImage3D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, java.nio.ByteBuffer arg9);
+	default void glDrawElementsIndirect(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexImage3D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, short[] arg9);
+	default void glDrawElementsIndirect(int arg0,int arg1,java.nio.ByteBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexImage3D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, java.nio.ShortBuffer arg9);
+	default void glUniform1d(int arg0,double arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexImage3D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, long arg9);
+	default void glUniform2d(int arg0,double arg1,double arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexSubImage3D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, long arg10);
+	default void glUniform3d(int arg0,double arg1,double arg2,double arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexSubImage3D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, short[] arg10);
+	default void glUniform4d(int arg0,double arg1,double arg2,double arg3,double arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexSubImage3D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int[] arg10);
+	default void nglUniform1dv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexSubImage3D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, float[] arg10);
+	default void glUniform1dv(int arg0,double[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexSubImage3D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, java.nio.ByteBuffer arg10);
+	default void glUniform1dv(int arg0,java.nio.DoubleBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexSubImage3D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, long arg10);
+	default void nglUniform2dv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexSubImage3D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, java.nio.ShortBuffer arg10);
+	default void glUniform2dv(int arg0,double[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexSubImage3D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, java.nio.IntBuffer arg10);
+	default void glUniform2dv(int arg0,java.nio.DoubleBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexSubImage3D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, java.nio.FloatBuffer arg10);
+	default void nglUniform3dv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glCopyTexSubImage3D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8);
+	default void glUniform3dv(int arg0,double[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglCompressedTexImage3D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, long arg8);
+	default void glUniform3dv(int arg0,java.nio.DoubleBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glCompressedTexImage3D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, long arg8);
+	default void nglUniform4dv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glCompressedTexImage3D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, java.nio.ByteBuffer arg7);
+	default void glUniform4dv(int arg0,double[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglCompressedTexSubImage3D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, long arg10);
+	default void glUniform4dv(int arg0,java.nio.DoubleBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glCompressedTexSubImage3D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, long arg10);
+	default void nglUniformMatrix2dv(int arg0,int arg1,boolean arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glCompressedTexSubImage3D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, java.nio.ByteBuffer arg9);
+	default void glUniformMatrix2dv(int arg0,boolean arg1,double[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGenQueries(int arg0, long arg1);
+	default void glUniformMatrix2dv(int arg0,boolean arg1,java.nio.DoubleBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGenQueries(java.nio.IntBuffer arg0);
+	default void nglUniformMatrix3dv(int arg0,int arg1,boolean arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGenQueries(int[] arg0);
+	default void glUniformMatrix3dv(int arg0,boolean arg1,double[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGenQueries();
+	default void glUniformMatrix3dv(int arg0,boolean arg1,java.nio.DoubleBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglDeleteQueries(int arg0, long arg1);
+	default void nglUniformMatrix4dv(int arg0,int arg1,boolean arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDeleteQueries(int[] arg0);
+	default void glUniformMatrix4dv(int arg0,boolean arg1,double[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDeleteQueries(int arg0);
+	default void glUniformMatrix4dv(int arg0,boolean arg1,java.nio.DoubleBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDeleteQueries(java.nio.IntBuffer arg0);
+	default void nglUniformMatrix2x3dv(int arg0,int arg1,boolean arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	boolean glIsQuery(int arg0);
+	default void glUniformMatrix2x3dv(int arg0,boolean arg1,java.nio.DoubleBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBeginQuery(int arg0, int arg1);
+	default void glUniformMatrix2x3dv(int arg0,boolean arg1,double[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glEndQuery(int arg0);
+	default void nglUniformMatrix2x4dv(int arg0,int arg1,boolean arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetQueryiv(int arg0, int arg1, long arg2);
+	default void glUniformMatrix2x4dv(int arg0,boolean arg1,double[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetQueryiv(int arg0, int arg1, int[] arg2);
+	default void glUniformMatrix2x4dv(int arg0,boolean arg1,java.nio.DoubleBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetQueryiv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void nglUniformMatrix3x2dv(int arg0,int arg1,boolean arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetQueryi(int arg0, int arg1);
+	default void glUniformMatrix3x2dv(int arg0,boolean arg1,double[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetQueryObjectuiv(int arg0, int arg1, long arg2);
+	default void glUniformMatrix3x2dv(int arg0,boolean arg1,java.nio.DoubleBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetQueryObjectuiv(int arg0, int arg1, int[] arg2);
+	default void nglUniformMatrix3x4dv(int arg0,int arg1,boolean arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetQueryObjectuiv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void glUniformMatrix3x4dv(int arg0,boolean arg1,double[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetQueryObjectui(int arg0, int arg1);
+	default void glUniformMatrix3x4dv(int arg0,boolean arg1,java.nio.DoubleBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	boolean glUnmapBuffer(int arg0);
+	default void nglUniformMatrix4x2dv(int arg0,int arg1,boolean arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetBufferPointerv(int arg0, int arg1, long arg2);
+	default void glUniformMatrix4x2dv(int arg0,boolean arg1,java.nio.DoubleBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetBufferPointerv(int arg0, int arg1, org.lwjgl.PointerBuffer arg2);
+	default void glUniformMatrix4x2dv(int arg0,boolean arg1,double[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	long glGetBufferPointer(int arg0, int arg1);
+	default void nglUniformMatrix4x3dv(int arg0,int arg1,boolean arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglDrawBuffers(int arg0, long arg1);
+	default void glUniformMatrix4x3dv(int arg0,boolean arg1,double[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawBuffers(int arg0);
+	default void glUniformMatrix4x3dv(int arg0,boolean arg1,java.nio.DoubleBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawBuffers(int[] arg0);
+	default void nglGetUniformdv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawBuffers(java.nio.IntBuffer arg0);
+	default void glGetUniformdv(int arg0,int arg1,double[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniformMatrix2x3fv(int arg0, int arg1, boolean arg2, long arg3);
+	default void glGetUniformdv(int arg0,int arg1,java.nio.DoubleBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix2x3fv(int arg0, boolean arg1, float[] arg2);
+	default double glGetUniformd(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix2x3fv(int arg0, boolean arg1, java.nio.FloatBuffer arg2);
+	default void glMinSampleShading(float arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniformMatrix3x2fv(int arg0, int arg1, boolean arg2, long arg3);
+	default int nglGetSubroutineUniformLocation(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix3x2fv(int arg0, boolean arg1, float[] arg2);
+	default int glGetSubroutineUniformLocation(int arg0,int arg1,java.nio.ByteBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix3x2fv(int arg0, boolean arg1, java.nio.FloatBuffer arg2);
+	default int glGetSubroutineUniformLocation(int arg0,int arg1,java.lang.CharSequence arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniformMatrix2x4fv(int arg0, int arg1, boolean arg2, long arg3);
+	default int nglGetSubroutineIndex(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix2x4fv(int arg0, boolean arg1, float[] arg2);
+	default int glGetSubroutineIndex(int arg0,int arg1,java.lang.CharSequence arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix2x4fv(int arg0, boolean arg1, java.nio.FloatBuffer arg2);
+	default int glGetSubroutineIndex(int arg0,int arg1,java.nio.ByteBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniformMatrix4x2fv(int arg0, int arg1, boolean arg2, long arg3);
+	default void nglGetActiveSubroutineUniformiv(int arg0,int arg1,int arg2,int arg3,long arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix4x2fv(int arg0, boolean arg1, float[] arg2);
+	default void glGetActiveSubroutineUniformiv(int arg0,int arg1,int arg2,int arg3,java.nio.IntBuffer arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix4x2fv(int arg0, boolean arg1, java.nio.FloatBuffer arg2);
+	default void glGetActiveSubroutineUniformiv(int arg0,int arg1,int arg2,int arg3,int[] arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniformMatrix3x4fv(int arg0, int arg1, boolean arg2, long arg3);
+	default int glGetActiveSubroutineUniformi(int arg0,int arg1,int arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix3x4fv(int arg0, boolean arg1, java.nio.FloatBuffer arg2);
+	default void nglGetActiveSubroutineUniformName(int arg0,int arg1,int arg2,int arg3,long arg4,long arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix3x4fv(int arg0, boolean arg1, float[] arg2);
+	default java.lang.String glGetActiveSubroutineUniformName(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniformMatrix4x3fv(int arg0, int arg1, boolean arg2, long arg3);
+	default void glGetActiveSubroutineUniformName(int arg0,int arg1,int arg2,int[] arg3,java.nio.ByteBuffer arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix4x3fv(int arg0, boolean arg1, java.nio.FloatBuffer arg2);
+	default java.lang.String glGetActiveSubroutineUniformName(int arg0,int arg1,int arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix4x3fv(int arg0, boolean arg1, float[] arg2);
+	default void glGetActiveSubroutineUniformName(int arg0,int arg1,int arg2,java.nio.IntBuffer arg3,java.nio.ByteBuffer arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBlitFramebuffer(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9);
+	default void nglGetActiveSubroutineName(int arg0,int arg1,int arg2,int arg3,long arg4,long arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRenderbufferStorageMultisample(int arg0, int arg1, int arg2, int arg3, int arg4);
+	default java.lang.String glGetActiveSubroutineName(int arg0,int arg1,int arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glFramebufferTextureLayer(int arg0, int arg1, int arg2, int arg3, int arg4);
+	default void glGetActiveSubroutineName(int arg0,int arg1,int arg2,int[] arg3,java.nio.ByteBuffer arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	long nglMapBufferRange(int arg0, long arg1, long arg2, int arg3);
+	default void glGetActiveSubroutineName(int arg0,int arg1,int arg2,java.nio.IntBuffer arg3,java.nio.ByteBuffer arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	java.nio.ByteBuffer glMapBufferRange(int arg0, long arg1, long arg2, int arg3);
+	default java.lang.String glGetActiveSubroutineName(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	java.nio.ByteBuffer glMapBufferRange(int arg0, long arg1, long arg2, int arg3, java.nio.ByteBuffer arg4);
+	default void nglUniformSubroutinesuiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glFlushMappedBufferRange(int arg0, long arg1, long arg2);
+	default void glUniformSubroutinesuiv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBindVertexArray(int arg0);
+	default void glUniformSubroutinesuiv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglDeleteVertexArrays(int arg0, long arg1);
+	default void glUniformSubroutinesui(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDeleteVertexArrays(int[] arg0);
+	default void nglGetUniformSubroutineuiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDeleteVertexArrays(int arg0);
+	default void glGetUniformSubroutineuiv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDeleteVertexArrays(java.nio.IntBuffer arg0);
+	default void glGetUniformSubroutineuiv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGenVertexArrays(int arg0, long arg1);
+	default int glGetUniformSubroutineui(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGenVertexArrays();
+	default void nglGetProgramStageiv(int arg0,int arg1,int arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGenVertexArrays(int[] arg0);
+	default void glGetProgramStageiv(int arg0,int arg1,int arg2,java.nio.IntBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGenVertexArrays(java.nio.IntBuffer arg0);
+	default void glGetProgramStageiv(int arg0,int arg1,int arg2,int[] arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	boolean glIsVertexArray(int arg0);
+	default int glGetProgramStagei(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetIntegeri_v(int arg0, int arg1, long arg2);
+	default void glPatchParameteri(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetIntegeri_v(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void nglPatchParameterfv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetIntegeri_v(int arg0, int arg1, int[] arg2);
+	default void glPatchParameterfv(int arg0,float[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetIntegeri(int arg0, int arg1);
+	default void glPatchParameterfv(int arg0,java.nio.FloatBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBeginTransformFeedback(int arg0);
+	default void glBindTransformFeedback(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glEndTransformFeedback();
+	default void nglDeleteTransformFeedbacks(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBindBufferRange(int arg0, int arg1, int arg2, long arg3, long arg4);
+	default void glDeleteTransformFeedbacks(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBindBufferBase(int arg0, int arg1, int arg2);
+	default void glDeleteTransformFeedbacks(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTransformFeedbackVaryings(int arg0, int arg1, long arg2, int arg3);
+	default void glDeleteTransformFeedbacks(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTransformFeedbackVaryings(int arg0, java.lang.CharSequence[] arg1, int arg2);
+	default void nglGenTransformFeedbacks(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTransformFeedbackVaryings(int arg0, java.lang.CharSequence arg1, int arg2);
+	default void glGenTransformFeedbacks(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTransformFeedbackVaryings(int arg0, org.lwjgl.PointerBuffer arg1, int arg2);
+	default int glGenTransformFeedbacks() {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetTransformFeedbackVarying(int arg0, int arg1, int arg2, long arg3, long arg4, long arg5, long arg6);
+	default void glGenTransformFeedbacks(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetTransformFeedbackVarying(int arg0, int arg1, java.nio.IntBuffer arg2, java.nio.IntBuffer arg3, java.nio.IntBuffer arg4, java.nio.ByteBuffer arg5);
+	default boolean glIsTransformFeedback(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	java.lang.String glGetTransformFeedbackVarying(int arg0, int arg1, int arg2, java.nio.IntBuffer arg3, java.nio.IntBuffer arg4);
+	default void glPauseTransformFeedback() {throw new RuntimeException("Not implemented yet.");}
 
-	java.lang.String glGetTransformFeedbackVarying(int arg0, int arg1, java.nio.IntBuffer arg2, java.nio.IntBuffer arg3);
+	default void glResumeTransformFeedback() {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetTransformFeedbackVarying(int arg0, int arg1, int[] arg2, int[] arg3, int[] arg4, java.nio.ByteBuffer arg5);
+	default void glDrawTransformFeedback(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttribIPointer(int arg0, int arg1, int arg2, int arg3, long arg4);
+	default void glDrawTransformFeedbackStream(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribIPointer(int arg0, int arg1, int arg2, int arg3, java.nio.ShortBuffer arg4);
+	default void glBeginQueryIndexed(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribIPointer(int arg0, int arg1, int arg2, int arg3, long arg4);
+	default void glEndQueryIndexed(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribIPointer(int arg0, int arg1, int arg2, int arg3, java.nio.ByteBuffer arg4);
+	default void nglGetQueryIndexediv(int arg0,int arg1,int arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribIPointer(int arg0, int arg1, int arg2, int arg3, java.nio.IntBuffer arg4);
+	default void glGetQueryIndexediv(int arg0,int arg1,int arg2,java.nio.IntBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetVertexAttribIiv(int arg0, int arg1, long arg2);
+	default void glGetQueryIndexediv(int arg0,int arg1,int arg2,int[] arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetVertexAttribIiv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default int glGetQueryIndexedi(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetVertexAttribIiv(int arg0, int arg1, int[] arg2);
+	default void nglBindFragDataLocationIndexed(int arg0,int arg1,int arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetVertexAttribIi(int arg0, int arg1);
+	default void glBindFragDataLocationIndexed(int arg0,int arg1,int arg2,java.nio.ByteBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetVertexAttribIuiv(int arg0, int arg1, long arg2);
+	default void glBindFragDataLocationIndexed(int arg0,int arg1,int arg2,java.lang.CharSequence arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetVertexAttribIuiv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default int nglGetFragDataIndex(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetVertexAttribIuiv(int arg0, int arg1, int[] arg2);
+	default int glGetFragDataIndex(int arg0,java.nio.ByteBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetVertexAttribIui(int arg0, int arg1);
+	default int glGetFragDataIndex(int arg0,java.lang.CharSequence arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribI4i(int arg0, int arg1, int arg2, int arg3, int arg4);
+	default void nglGenSamplers(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribI4ui(int arg0, int arg1, int arg2, int arg3, int arg4);
+	default int glGenSamplers() {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttribI4iv(int arg0, long arg1);
+	default void glGenSamplers(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribI4iv(int arg0, int[] arg1);
+	default void glGenSamplers(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribI4iv(int arg0, java.nio.IntBuffer arg1);
+	default void nglDeleteSamplers(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttribI4uiv(int arg0, long arg1);
+	default void glDeleteSamplers(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribI4uiv(int arg0, int[] arg1);
+	default void glDeleteSamplers(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribI4uiv(int arg0, java.nio.IntBuffer arg1);
+	default void glDeleteSamplers(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetUniformuiv(int arg0, int arg1, long arg2);
+	default boolean glIsSampler(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetUniformuiv(int arg0, int arg1, int[] arg2);
+	default void glBindSampler(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetUniformuiv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void glSamplerParameteri(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetUniformui(int arg0, int arg1);
+	default void glSamplerParameterf(int arg0,int arg1,float arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	int nglGetFragDataLocation(int arg0, long arg1);
+	default void nglSamplerParameteriv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetFragDataLocation(int arg0, java.nio.ByteBuffer arg1);
+	default void glSamplerParameteriv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetFragDataLocation(int arg0, java.lang.CharSequence arg1);
+	default void glSamplerParameteriv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform1ui(int arg0, int arg1);
+	default void nglSamplerParameterfv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform2ui(int arg0, int arg1, int arg2);
+	default void glSamplerParameterfv(int arg0,int arg1,float[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform3ui(int arg0, int arg1, int arg2, int arg3);
+	default void glSamplerParameterfv(int arg0,int arg1,java.nio.FloatBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform4ui(int arg0, int arg1, int arg2, int arg3, int arg4);
+	default void nglSamplerParameterIiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniform1uiv(int arg0, int arg1, long arg2);
+	default void glSamplerParameterIiv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform1uiv(int arg0, java.nio.IntBuffer arg1);
+	default void glSamplerParameterIiv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform1uiv(int arg0, int[] arg1);
+	default void nglSamplerParameterIuiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniform2uiv(int arg0, int arg1, long arg2);
+	default void glSamplerParameterIuiv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform2uiv(int arg0, java.nio.IntBuffer arg1);
+	default void glSamplerParameterIuiv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform2uiv(int arg0, int[] arg1);
+	default void nglGetSamplerParameteriv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniform3uiv(int arg0, int arg1, long arg2);
+	default void glGetSamplerParameteriv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform3uiv(int arg0, int[] arg1);
+	default void glGetSamplerParameteriv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform3uiv(int arg0, java.nio.IntBuffer arg1);
+	default int glGetSamplerParameteri(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniform4uiv(int arg0, int arg1, long arg2);
+	default void nglGetSamplerParameterfv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform4uiv(int arg0, java.nio.IntBuffer arg1);
+	default void glGetSamplerParameterfv(int arg0,int arg1,java.nio.FloatBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform4uiv(int arg0, int[] arg1);
+	default void glGetSamplerParameterfv(int arg0,int arg1,float[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglClearBufferiv(int arg0, int arg1, long arg2);
+	default float glGetSamplerParameterf(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glClearBufferiv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void nglGetSamplerParameterIiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glClearBufferiv(int arg0, int arg1, int[] arg2);
+	default void glGetSamplerParameterIiv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglClearBufferuiv(int arg0, int arg1, long arg2);
+	default void glGetSamplerParameterIiv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glClearBufferuiv(int arg0, int arg1, int[] arg2);
+	default int glGetSamplerParameterIi(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glClearBufferuiv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void nglGetSamplerParameterIuiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglClearBufferfv(int arg0, int arg1, long arg2);
+	default void glGetSamplerParameterIuiv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glClearBufferfv(int arg0, int arg1, java.nio.FloatBuffer arg2);
+	default void glGetSamplerParameterIuiv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glClearBufferfv(int arg0, int arg1, float[] arg2);
+	default int glGetSamplerParameterIui(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glClearBufferfi(int arg0, int arg1, float arg2, int arg3);
+	default void glQueryCounter(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	long nglGetStringi(int arg0, int arg1);
+	default void nglGetQueryObjecti64v(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	java.lang.String glGetStringi(int arg0, int arg1);
+	default void glGetQueryObjecti64v(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glCopyBufferSubData(int arg0, int arg1, long arg2, long arg3, long arg4);
+	default void glGetQueryObjecti64v(int arg0,int arg1,java.nio.LongBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetUniformIndices(int arg0, int arg1, long arg2, long arg3);
+	default void glGetQueryObjecti64v(int arg0,int arg1,long[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetUniformIndices(int arg0, org.lwjgl.PointerBuffer arg1, int[] arg2);
+	default long glGetQueryObjecti64(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetUniformIndices(int arg0, org.lwjgl.PointerBuffer arg1, java.nio.IntBuffer arg2);
+	default void nglGetQueryObjectui64v(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetActiveUniformsiv(int arg0, int arg1, long arg2, int arg3, long arg4);
+	default void glGetQueryObjectui64v(int arg0,int arg1,long[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetActiveUniformsiv(int arg0, int[] arg1, int arg2, int[] arg3);
+	default void glGetQueryObjectui64v(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetActiveUniformsiv(int arg0, java.nio.IntBuffer arg1, int arg2, java.nio.IntBuffer arg3);
+	default void glGetQueryObjectui64v(int arg0,int arg1,java.nio.LongBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	int nglGetUniformBlockIndex(int arg0, long arg1);
+	default long glGetQueryObjectui64(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetUniformBlockIndex(int arg0, java.nio.ByteBuffer arg1);
+	default void glVertexAttribDivisor(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetUniformBlockIndex(int arg0, java.lang.CharSequence arg1);
+	default void glVertexP2ui(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetActiveUniformBlockiv(int arg0, int arg1, int arg2, long arg3);
+	default void glVertexP3ui(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetActiveUniformBlockiv(int arg0, int arg1, int arg2, java.nio.IntBuffer arg3);
+	default void glVertexP4ui(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetActiveUniformBlockiv(int arg0, int arg1, int arg2, int[] arg3);
+	default void nglVertexP2uiv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetActiveUniformBlocki(int arg0, int arg1, int arg2);
+	default void glVertexP2uiv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetActiveUniformBlockName(int arg0, int arg1, int arg2, long arg3, long arg4);
+	default void glVertexP2uiv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	java.lang.String glGetActiveUniformBlockName(int arg0, int arg1, int arg2);
+	default void nglVertexP3uiv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetActiveUniformBlockName(int arg0, int arg1, java.nio.IntBuffer arg2, java.nio.ByteBuffer arg3);
+	default void glVertexP3uiv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetActiveUniformBlockName(int arg0, int arg1, int[] arg2, java.nio.ByteBuffer arg3);
+	default void glVertexP3uiv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	java.lang.String glGetActiveUniformBlockName(int arg0, int arg1);
+	default void nglVertexP4uiv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformBlockBinding(int arg0, int arg1, int arg2);
+	default void glVertexP4uiv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawArraysInstanced(int arg0, int arg1, int arg2, int arg3);
+	default void glVertexP4uiv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglDrawElementsInstanced(int arg0, int arg1, int arg2, long arg3, int arg4);
+	default void glTexCoordP1ui(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawElementsInstanced(int arg0, int arg1, int arg2, long arg3, int arg4);
+	default void glTexCoordP2ui(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawElementsInstanced(int arg0, java.nio.IntBuffer arg1, int arg2);
+	default void glTexCoordP3ui(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawElementsInstanced(int arg0, java.nio.ShortBuffer arg1, int arg2);
+	default void glTexCoordP4ui(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawElementsInstanced(int arg0, java.nio.ByteBuffer arg1, int arg2);
+	default void nglTexCoordP1uiv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawElementsInstanced(int arg0, int arg1, java.nio.ByteBuffer arg2, int arg3);
+	default void glTexCoordP1uiv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	long glFenceSync(int arg0, int arg1);
+	default void glTexCoordP1uiv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	boolean nglIsSync(long arg0);
+	default void nglTexCoordP2uiv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	boolean glIsSync(long arg0);
+	default void glTexCoordP2uiv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglDeleteSync(long arg0);
+	default void glTexCoordP2uiv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDeleteSync(long arg0);
+	default void nglTexCoordP3uiv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int nglClientWaitSync(long arg0, int arg1, long arg2);
+	default void glTexCoordP3uiv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int glClientWaitSync(long arg0, int arg1, long arg2);
+	default void glTexCoordP3uiv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglWaitSync(long arg0, int arg1, long arg2);
+	default void nglTexCoordP4uiv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glWaitSync(long arg0, int arg1, long arg2);
+	default void glTexCoordP4uiv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetInteger64v(int arg0, long arg1);
+	default void glTexCoordP4uiv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetInteger64v(int arg0, java.nio.LongBuffer arg1);
+	default void glMultiTexCoordP1ui(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetInteger64v(int arg0, long[] arg1);
+	default void glMultiTexCoordP2ui(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	long glGetInteger64(int arg0);
+	default void glMultiTexCoordP3ui(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetSynciv(long arg0, int arg1, int arg2, long arg3, long arg4);
+	default void glMultiTexCoordP4ui(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetSynciv(long arg0, int arg1, int[] arg2, int[] arg3);
+	default void nglMultiTexCoordP1uiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetSynciv(long arg0, int arg1, java.nio.IntBuffer arg2, java.nio.IntBuffer arg3);
+	default void glMultiTexCoordP1uiv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetSynci(long arg0, int arg1, java.nio.IntBuffer arg2);
+	default void glMultiTexCoordP1uiv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetInteger64i_v(int arg0, int arg1, long arg2);
+	default void nglMultiTexCoordP2uiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetInteger64i_v(int arg0, int arg1, long[] arg2);
+	default void glMultiTexCoordP2uiv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetInteger64i_v(int arg0, int arg1, java.nio.LongBuffer arg2);
+	default void glMultiTexCoordP2uiv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	long glGetInteger64i(int arg0, int arg1);
+	default void nglMultiTexCoordP3uiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetBufferParameteri64v(int arg0, int arg1, long arg2);
+	default void glMultiTexCoordP3uiv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetBufferParameteri64v(int arg0, int arg1, long[] arg2);
+	default void glMultiTexCoordP3uiv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetBufferParameteri64v(int arg0, int arg1, java.nio.LongBuffer arg2);
+	default void nglMultiTexCoordP4uiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	long glGetBufferParameteri64(int arg0, int arg1);
+	default void glMultiTexCoordP4uiv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGenSamplers(int arg0, long arg1);
+	default void glMultiTexCoordP4uiv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGenSamplers(java.nio.IntBuffer arg0);
+	default void glNormalP3ui(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGenSamplers(int[] arg0);
+	default void nglNormalP3uiv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGenSamplers();
+	default void glNormalP3uiv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglDeleteSamplers(int arg0, long arg1);
+	default void glNormalP3uiv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDeleteSamplers(int arg0);
+	default void glColorP3ui(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDeleteSamplers(java.nio.IntBuffer arg0);
+	default void glColorP4ui(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDeleteSamplers(int[] arg0);
+	default void nglColorP3uiv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	boolean glIsSampler(int arg0);
+	default void glColorP3uiv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBindSampler(int arg0, int arg1);
+	default void glColorP3uiv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSamplerParameteri(int arg0, int arg1, int arg2);
+	default void nglColorP4uiv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglSamplerParameteriv(int arg0, int arg1, long arg2);
+	default void glColorP4uiv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSamplerParameteriv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void glColorP4uiv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSamplerParameteriv(int arg0, int arg1, int[] arg2);
+	default void glSecondaryColorP3ui(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSamplerParameterf(int arg0, int arg1, float arg2);
+	default void nglSecondaryColorP3uiv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglSamplerParameterfv(int arg0, int arg1, long arg2);
+	default void glSecondaryColorP3uiv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSamplerParameterfv(int arg0, int arg1, float[] arg2);
+	default void glSecondaryColorP3uiv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSamplerParameterfv(int arg0, int arg1, java.nio.FloatBuffer arg2);
+	default void glVertexAttribP1ui(int arg0,int arg1,boolean arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetSamplerParameteriv(int arg0, int arg1, long arg2);
+	default void glVertexAttribP2ui(int arg0,int arg1,boolean arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetSamplerParameteriv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void glVertexAttribP3ui(int arg0,int arg1,boolean arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetSamplerParameteriv(int arg0, int arg1, int[] arg2);
+	default void glVertexAttribP4ui(int arg0,int arg1,boolean arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetSamplerParameteri(int arg0, int arg1);
+	default void nglVertexAttribP1uiv(int arg0,int arg1,boolean arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetSamplerParameterfv(int arg0, int arg1, long arg2);
+	default void glVertexAttribP1uiv(int arg0,int arg1,boolean arg2,int[] arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetSamplerParameterfv(int arg0, int arg1, float[] arg2);
+	default void glVertexAttribP1uiv(int arg0,int arg1,boolean arg2,java.nio.IntBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetSamplerParameterfv(int arg0, int arg1, java.nio.FloatBuffer arg2);
+	default void nglVertexAttribP2uiv(int arg0,int arg1,boolean arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	float glGetSamplerParameterf(int arg0, int arg1);
+	default void glVertexAttribP2uiv(int arg0,int arg1,boolean arg2,int[] arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribDivisor(int arg0, int arg1);
+	default void glVertexAttribP2uiv(int arg0,int arg1,boolean arg2,java.nio.IntBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBindTransformFeedback(int arg0, int arg1);
+	default void nglVertexAttribP3uiv(int arg0,int arg1,boolean arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglDeleteTransformFeedbacks(int arg0, long arg1);
+	default void glVertexAttribP3uiv(int arg0,int arg1,boolean arg2,java.nio.IntBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDeleteTransformFeedbacks(int[] arg0);
+	default void glVertexAttribP3uiv(int arg0,int arg1,boolean arg2,int[] arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDeleteTransformFeedbacks(java.nio.IntBuffer arg0);
+	default void nglVertexAttribP4uiv(int arg0,int arg1,boolean arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDeleteTransformFeedbacks(int arg0);
+	default void glVertexAttribP4uiv(int arg0,int arg1,boolean arg2,java.nio.IntBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGenTransformFeedbacks(int arg0, long arg1);
+	default void glVertexAttribP4uiv(int arg0,int arg1,boolean arg2,int[] arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGenTransformFeedbacks(java.nio.IntBuffer arg0);
+	default void nglGetBufferParameteri64v(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGenTransformFeedbacks();
+	default void glGetBufferParameteri64v(int arg0,int arg1,java.nio.LongBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGenTransformFeedbacks(int[] arg0);
+	default void glGetBufferParameteri64v(int arg0,int arg1,long[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	boolean glIsTransformFeedback(int arg0);
+	default long glGetBufferParameteri64(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPauseTransformFeedback();
+	default void nglDrawElementsBaseVertex(int arg0,int arg1,int arg2,long arg3,int arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glResumeTransformFeedback();
+	default void glDrawElementsBaseVertex(int arg0,java.nio.IntBuffer arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetProgramBinary(int arg0, int arg1, long arg2, long arg3, long arg4);
+	default void glDrawElementsBaseVertex(int arg0,java.nio.ShortBuffer arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetProgramBinary(int arg0, int[] arg1, int[] arg2, java.nio.ByteBuffer arg3);
+	default void glDrawElementsBaseVertex(int arg0,java.nio.ByteBuffer arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetProgramBinary(int arg0, java.nio.IntBuffer arg1, java.nio.IntBuffer arg2, java.nio.ByteBuffer arg3);
+	default void glDrawElementsBaseVertex(int arg0,int arg1,java.nio.ByteBuffer arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglProgramBinary(int arg0, int arg1, long arg2, int arg3);
+	default void glDrawElementsBaseVertex(int arg0,int arg1,int arg2,long arg3,int arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glProgramBinary(int arg0, int arg1, java.nio.ByteBuffer arg2);
+	default void nglDrawRangeElementsBaseVertex(int arg0,int arg1,int arg2,int arg3,int arg4,long arg5,int arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void glProgramParameteri(int arg0, int arg1, int arg2);
+	default void glDrawRangeElementsBaseVertex(int arg0,int arg1,int arg2,java.nio.ByteBuffer arg3,int arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglInvalidateFramebuffer(int arg0, int arg1, long arg2);
+	default void glDrawRangeElementsBaseVertex(int arg0,int arg1,int arg2,java.nio.ShortBuffer arg3,int arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glInvalidateFramebuffer(int arg0, java.nio.IntBuffer arg1);
+	default void glDrawRangeElementsBaseVertex(int arg0,int arg1,int arg2,java.nio.IntBuffer arg3,int arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glInvalidateFramebuffer(int arg0, int arg1);
+	default void glDrawRangeElementsBaseVertex(int arg0,int arg1,int arg2,int arg3,java.nio.ByteBuffer arg4,int arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void glInvalidateFramebuffer(int arg0, int[] arg1);
+	default void glDrawRangeElementsBaseVertex(int arg0,int arg1,int arg2,int arg3,int arg4,long arg5,int arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglInvalidateSubFramebuffer(int arg0, int arg1, long arg2, int arg3, int arg4, int arg5, int arg6);
+	default void nglDrawElementsInstancedBaseVertex(int arg0,int arg1,int arg2,long arg3,int arg4,int arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void glInvalidateSubFramebuffer(int arg0, int[] arg1, int arg2, int arg3, int arg4, int arg5);
+	default void glDrawElementsInstancedBaseVertex(int arg0,java.nio.ByteBuffer arg1,int arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glInvalidateSubFramebuffer(int arg0, java.nio.IntBuffer arg1, int arg2, int arg3, int arg4, int arg5);
+	default void glDrawElementsInstancedBaseVertex(int arg0,java.nio.ShortBuffer arg1,int arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glInvalidateSubFramebuffer(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5);
+	default void glDrawElementsInstancedBaseVertex(int arg0,java.nio.IntBuffer arg1,int arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexStorage2D(int arg0, int arg1, int arg2, int arg3, int arg4);
+	default void glDrawElementsInstancedBaseVertex(int arg0,int arg1,java.nio.ByteBuffer arg2,int arg3,int arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexStorage3D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5);
+	default void glDrawElementsInstancedBaseVertex(int arg0,int arg1,int arg2,long arg3,int arg4,int arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetInternalformativ(int arg0, int arg1, int arg2, int arg3, long arg4);
+	default void nglMultiDrawElementsBaseVertex(int arg0,long arg1,int arg2,long arg3,int arg4,long arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetInternalformativ(int arg0, int arg1, int arg2, int[] arg3);
+	default void glMultiDrawElementsBaseVertex(int arg0,int[] arg1,int arg2,org.lwjgl.PointerBuffer arg3,int[] arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetInternalformativ(int arg0, int arg1, int arg2, java.nio.IntBuffer arg3);
+	default void glMultiDrawElementsBaseVertex(int arg0,java.nio.IntBuffer arg1,int arg2,org.lwjgl.PointerBuffer arg3,java.nio.IntBuffer arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetInternalformati(int arg0, int arg1, int arg2);
+	default void glProvokingVertex(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetProgrami(int arg0, int arg1);
+	default void glTexImage2DMultisample(int arg0,int arg1,int arg2,int arg3,int arg4,boolean arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void glActiveTexture(int arg0);
+	default void glTexImage3DMultisample(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,boolean arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void glAttachShader(int arg0, int arg1);
+	default void nglGetMultisamplefv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglBindAttribLocation(int arg0, int arg1, long arg2);
+	default void glGetMultisamplefv(int arg0,int arg1,float[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBindAttribLocation(int arg0, int arg1, java.lang.CharSequence arg2);
+	default void glGetMultisamplefv(int arg0,int arg1,java.nio.FloatBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBindAttribLocation(int arg0, int arg1, java.nio.ByteBuffer arg2);
+	default float glGetMultisamplef(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBindBuffer(int arg0, int arg1);
+	default void glSampleMaski(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBindFramebuffer(int arg0, int arg1);
+	default void glFramebufferTexture(int arg0,int arg1,int arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBindRenderbuffer(int arg0, int arg1);
+	default long glFenceSync(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBindTexture(int arg0, int arg1);
+	default boolean nglIsSync(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBlendColor(float arg0, float arg1, float arg2, float arg3);
+	default boolean glIsSync(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBlendEquation(int arg0);
+	default void nglDeleteSync(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBlendEquationSeparate(int arg0, int arg1);
+	default void glDeleteSync(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBlendFunc(int arg0, int arg1);
+	default int nglClientWaitSync(long arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBlendFuncSeparate(int arg0, int arg1, int arg2, int arg3);
+	default int glClientWaitSync(long arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglBufferData(int arg0, long arg1, long arg2, int arg3);
+	default void nglWaitSync(long arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBufferData(int arg0, java.nio.FloatBuffer arg1, int arg2);
+	default void glWaitSync(long arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBufferData(int arg0, short[] arg1, int arg2);
+	default void nglGetInteger64v(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBufferData(int arg0, int[] arg1, int arg2);
+	default void glGetInteger64v(int arg0,long[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBufferData(int arg0, float[] arg1, int arg2);
+	default void glGetInteger64v(int arg0,java.nio.LongBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBufferData(int arg0, long arg1, int arg2);
+	default long glGetInteger64(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBufferData(int arg0, java.nio.ByteBuffer arg1, int arg2);
+	default void nglGetInteger64i_v(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBufferData(int arg0, java.nio.ShortBuffer arg1, int arg2);
+	default void glGetInteger64i_v(int arg0,int arg1,long[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBufferData(int arg0, java.nio.IntBuffer arg1, int arg2);
+	default void glGetInteger64i_v(int arg0,int arg1,java.nio.LongBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglBufferSubData(int arg0, long arg1, long arg2, long arg3);
+	default long glGetInteger64i(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBufferSubData(int arg0, long arg1, java.nio.ByteBuffer arg2);
+	default void nglGetSynciv(long arg0,int arg1,int arg2,long arg3,long arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBufferSubData(int arg0, long arg1, float[] arg2);
+	default void glGetSynciv(long arg0,int arg1,java.nio.IntBuffer arg2,java.nio.IntBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBufferSubData(int arg0, long arg1, java.nio.ShortBuffer arg2);
+	default void glGetSynciv(long arg0,int arg1,int[] arg2,int[] arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBufferSubData(int arg0, long arg1, int[] arg2);
+	default int glGetSynci(long arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBufferSubData(int arg0, long arg1, short[] arg2);
+	default void glDrawArraysInstanced(int arg0,int arg1,int arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBufferSubData(int arg0, long arg1, java.nio.FloatBuffer arg2);
+	default void nglDrawElementsInstanced(int arg0,int arg1,int arg2,long arg3,int arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBufferSubData(int arg0, long arg1, java.nio.IntBuffer arg2);
+	default void glDrawElementsInstanced(int arg0,java.nio.ShortBuffer arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	int glCheckFramebufferStatus(int arg0);
+	default void glDrawElementsInstanced(int arg0,int arg1,java.nio.ByteBuffer arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glClear(int arg0);
+	default void glDrawElementsInstanced(int arg0,java.nio.IntBuffer arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glClearColor(float arg0, float arg1, float arg2, float arg3);
+	default void glDrawElementsInstanced(int arg0,int arg1,int arg2,long arg3,int arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glClearDepthf(float arg0);
+	default void glDrawElementsInstanced(int arg0,java.nio.ByteBuffer arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glClearStencil(int arg0);
+	default void glCopyBufferSubData(int arg0,int arg1,long arg2,long arg3,long arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColorMask(boolean arg0, boolean arg1, boolean arg2, boolean arg3);
+	default void glPrimitiveRestartIndex(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glCompileShader(int arg0);
+	default void glTexBuffer(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglCompressedTexImage2D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, long arg7);
+	default void nglGetUniformIndices(int arg0,int arg1,long arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glCompressedTexImage2D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, long arg7);
+	default int glGetUniformIndices(int arg0,java.lang.CharSequence arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glCompressedTexImage2D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, java.nio.ByteBuffer arg6);
+	default void glGetUniformIndices(int arg0,java.lang.CharSequence[] arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglCompressedTexSubImage2D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, long arg8);
+	default void glGetUniformIndices(int arg0,org.lwjgl.PointerBuffer arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glCompressedTexSubImage2D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, long arg8);
+	default void glGetUniformIndices(int arg0,org.lwjgl.PointerBuffer arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glCompressedTexSubImage2D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, java.nio.ByteBuffer arg7);
+	default void nglGetActiveUniformsiv(int arg0,int arg1,long arg2,int arg3,long arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glCopyTexImage2D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7);
+	default void glGetActiveUniformsiv(int arg0,int[] arg1,int arg2,int[] arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glCopyTexSubImage2D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7);
+	default void glGetActiveUniformsiv(int arg0,java.nio.IntBuffer arg1,int arg2,java.nio.IntBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	int glCreateProgram();
+	default int glGetActiveUniformsi(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	int glCreateShader(int arg0);
+	default void nglGetActiveUniformName(int arg0,int arg1,int arg2,long arg3,long arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glCullFace(int arg0);
+	default void glGetActiveUniformName(int arg0,int arg1,int[] arg2,java.nio.ByteBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglDeleteBuffers(int arg0, long arg1);
+	default java.lang.String glGetActiveUniformName(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDeleteBuffers(int arg0);
+	default void glGetActiveUniformName(int arg0,int arg1,java.nio.IntBuffer arg2,java.nio.ByteBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDeleteBuffers(java.nio.IntBuffer arg0);
+	default java.lang.String glGetActiveUniformName(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDeleteBuffers(int[] arg0);
+	default int nglGetUniformBlockIndex(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglDeleteFramebuffers(int arg0, long arg1);
+	default int glGetUniformBlockIndex(int arg0,java.nio.ByteBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDeleteFramebuffers(java.nio.IntBuffer arg0);
+	default int glGetUniformBlockIndex(int arg0,java.lang.CharSequence arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDeleteFramebuffers(int[] arg0);
+	default void nglGetActiveUniformBlockiv(int arg0,int arg1,int arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDeleteFramebuffers(int arg0);
+	default void glGetActiveUniformBlockiv(int arg0,int arg1,int arg2,int[] arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDeleteProgram(int arg0);
+	default void glGetActiveUniformBlockiv(int arg0,int arg1,int arg2,java.nio.IntBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglDeleteRenderbuffers(int arg0, long arg1);
+	default int glGetActiveUniformBlocki(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDeleteRenderbuffers(int arg0);
+	default void nglGetActiveUniformBlockName(int arg0,int arg1,int arg2,long arg3,long arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDeleteRenderbuffers(java.nio.IntBuffer arg0);
+	default java.lang.String glGetActiveUniformBlockName(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDeleteRenderbuffers(int[] arg0);
+	default void glGetActiveUniformBlockName(int arg0,int arg1,java.nio.IntBuffer arg2,java.nio.ByteBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDeleteShader(int arg0);
+	default java.lang.String glGetActiveUniformBlockName(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglDeleteTextures(int arg0, long arg1);
+	default void glGetActiveUniformBlockName(int arg0,int arg1,int[] arg2,java.nio.ByteBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDeleteTextures(int[] arg0);
+	default void glUniformBlockBinding(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDeleteTextures(int arg0);
+	default long nglGetStringi(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDeleteTextures(java.nio.IntBuffer arg0);
+	default java.lang.String glGetStringi(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDepthFunc(int arg0);
+	default void nglClearBufferiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDepthMask(boolean arg0);
+	default void glClearBufferiv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDepthRangef(float arg0, float arg1);
+	default void glClearBufferiv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDetachShader(int arg0, int arg1);
+	default void nglClearBufferuiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDisable(int arg0);
+	default void glClearBufferuiv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDisableVertexAttribArray(int arg0);
+	default void glClearBufferuiv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawArrays(int arg0, int arg1, int arg2);
+	default void nglClearBufferfv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglDrawElements(int arg0, int arg1, int arg2, long arg3);
+	default void glClearBufferfv(int arg0,int arg1,float[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawElements(int arg0, int arg1, java.nio.ByteBuffer arg2);
+	default void glClearBufferfv(int arg0,int arg1,java.nio.FloatBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawElements(int arg0, java.nio.ShortBuffer arg1);
+	default void glClearBufferfi(int arg0,int arg1,float arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawElements(int arg0, int arg1, int arg2, long arg3);
+	default void glVertexAttribI1i(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawElements(int arg0, java.nio.ByteBuffer arg1);
+	default void glVertexAttribI2i(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawElements(int arg0, java.nio.IntBuffer arg1);
+	default void glVertexAttribI3i(int arg0,int arg1,int arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glEnable(int arg0);
+	default void glVertexAttribI4i(int arg0,int arg1,int arg2,int arg3,int arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glEnableVertexAttribArray(int arg0);
+	default void glVertexAttribI1ui(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glFinish();
+	default void glVertexAttribI2ui(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glFlush();
+	default void glVertexAttribI3ui(int arg0,int arg1,int arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glFramebufferRenderbuffer(int arg0, int arg1, int arg2, int arg3);
+	default void glVertexAttribI4ui(int arg0,int arg1,int arg2,int arg3,int arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glFramebufferTexture2D(int arg0, int arg1, int arg2, int arg3, int arg4);
+	default void nglVertexAttribI1iv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glFrontFace(int arg0);
+	default void glVertexAttribI1iv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGenBuffers(int arg0, long arg1);
+	default void glVertexAttribI1iv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGenBuffers();
+	default void nglVertexAttribI2iv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGenBuffers(int[] arg0);
+	default void glVertexAttribI2iv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGenBuffers(java.nio.IntBuffer arg0);
+	default void glVertexAttribI2iv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGenerateMipmap(int arg0);
+	default void nglVertexAttribI3iv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGenFramebuffers(int arg0, long arg1);
+	default void glVertexAttribI3iv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGenFramebuffers();
+	default void glVertexAttribI3iv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGenFramebuffers(java.nio.IntBuffer arg0);
+	default void nglVertexAttribI4iv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGenFramebuffers(int[] arg0);
+	default void glVertexAttribI4iv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGenRenderbuffers(int arg0, long arg1);
+	default void glVertexAttribI4iv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGenRenderbuffers();
+	default void nglVertexAttribI1uiv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGenRenderbuffers(java.nio.IntBuffer arg0);
+	default void glVertexAttribI1uiv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGenRenderbuffers(int[] arg0);
+	default void glVertexAttribI1uiv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGenTextures(int arg0, long arg1);
+	default void nglVertexAttribI2uiv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGenTextures();
+	default void glVertexAttribI2uiv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGenTextures(java.nio.IntBuffer arg0);
+	default void glVertexAttribI2uiv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGenTextures(int[] arg0);
+	default void nglVertexAttribI3uiv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetActiveAttrib(int arg0, int arg1, int arg2, long arg3, long arg4, long arg5, long arg6);
+	default void glVertexAttribI3uiv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	java.lang.String glGetActiveAttrib(int arg0, int arg1, java.nio.IntBuffer arg2, java.nio.IntBuffer arg3);
+	default void glVertexAttribI3uiv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetActiveAttrib(int arg0, int arg1, int[] arg2, int[] arg3, int[] arg4, java.nio.ByteBuffer arg5);
+	default void nglVertexAttribI4uiv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetActiveAttrib(int arg0, int arg1, java.nio.IntBuffer arg2, java.nio.IntBuffer arg3, java.nio.IntBuffer arg4, java.nio.ByteBuffer arg5);
+	default void glVertexAttribI4uiv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	java.lang.String glGetActiveAttrib(int arg0, int arg1, int arg2, java.nio.IntBuffer arg3, java.nio.IntBuffer arg4);
+	default void glVertexAttribI4uiv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetActiveUniform(int arg0, int arg1, int arg2, long arg3, long arg4, long arg5, long arg6);
+	default void nglVertexAttribI4bv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetActiveUniform(int arg0, int arg1, int[] arg2, int[] arg3, int[] arg4, java.nio.ByteBuffer arg5);
+	default void glVertexAttribI4bv(int arg0,java.nio.ByteBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetActiveUniform(int arg0, int arg1, java.nio.IntBuffer arg2, java.nio.IntBuffer arg3, java.nio.IntBuffer arg4, java.nio.ByteBuffer arg5);
+	default void nglVertexAttribI4sv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	java.lang.String glGetActiveUniform(int arg0, int arg1, java.nio.IntBuffer arg2, java.nio.IntBuffer arg3);
+	default void glVertexAttribI4sv(int arg0,java.nio.ShortBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	java.lang.String glGetActiveUniform(int arg0, int arg1, int arg2, java.nio.IntBuffer arg3, java.nio.IntBuffer arg4);
+	default void glVertexAttribI4sv(int arg0,short[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetAttachedShaders(int arg0, int arg1, long arg2, long arg3);
+	default void nglVertexAttribI4ubv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetAttachedShaders(int arg0, java.nio.IntBuffer arg1, java.nio.IntBuffer arg2);
+	default void glVertexAttribI4ubv(int arg0,java.nio.ByteBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetAttachedShaders(int arg0, int[] arg1, int[] arg2);
+	default void nglVertexAttribI4usv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int nglGetAttribLocation(int arg0, long arg1);
+	default void glVertexAttribI4usv(int arg0,java.nio.ShortBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetAttribLocation(int arg0, java.lang.CharSequence arg1);
+	default void glVertexAttribI4usv(int arg0,short[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetAttribLocation(int arg0, java.nio.ByteBuffer arg1);
+	default void nglVertexAttribIPointer(int arg0,int arg1,int arg2,int arg3,long arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetBooleanv(int arg0, long arg1);
+	default void glVertexAttribIPointer(int arg0,int arg1,int arg2,int arg3,long arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetBooleanv(int arg0, java.nio.ByteBuffer arg1);
+	default void glVertexAttribIPointer(int arg0,int arg1,int arg2,int arg3,java.nio.ShortBuffer arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	boolean glGetBoolean(int arg0);
+	default void glVertexAttribIPointer(int arg0,int arg1,int arg2,int arg3,java.nio.ByteBuffer arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetBufferParameteriv(int arg0, int arg1, long arg2);
+	default void glVertexAttribIPointer(int arg0,int arg1,int arg2,int arg3,java.nio.IntBuffer arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetBufferParameteriv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void nglGetVertexAttribIiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetBufferParameteriv(int arg0, int arg1, int[] arg2);
+	default void glGetVertexAttribIiv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetBufferParameteri(int arg0, int arg1);
+	default void glGetVertexAttribIiv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetError();
+	default int glGetVertexAttribIi(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetFloatv(int arg0, long arg1);
+	default void nglGetVertexAttribIuiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetFloatv(int arg0, java.nio.FloatBuffer arg1);
+	default void glGetVertexAttribIuiv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetFloatv(int arg0, float[] arg1);
+	default void glGetVertexAttribIuiv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	float glGetFloat(int arg0);
+	default int glGetVertexAttribIui(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetFramebufferAttachmentParameteriv(int arg0, int arg1, int arg2, long arg3);
+	default void glUniform1ui(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetFramebufferAttachmentParameteriv(int arg0, int arg1, int arg2, java.nio.IntBuffer arg3);
+	default void glUniform2ui(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetFramebufferAttachmentParameteriv(int arg0, int arg1, int arg2, int[] arg3);
+	default void glUniform3ui(int arg0,int arg1,int arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetFramebufferAttachmentParameteri(int arg0, int arg1, int arg2);
+	default void glUniform4ui(int arg0,int arg1,int arg2,int arg3,int arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetIntegerv(int arg0, long arg1);
+	default void nglUniform1uiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetIntegerv(int arg0, int[] arg1);
+	default void glUniform1uiv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetIntegerv(int arg0, java.nio.IntBuffer arg1);
+	default void glUniform1uiv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetInteger(int arg0);
+	default void nglUniform2uiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetProgramiv(int arg0, int arg1, long arg2);
+	default void glUniform2uiv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetProgramiv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void glUniform2uiv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetProgramiv(int arg0, int arg1, int[] arg2);
+	default void nglUniform3uiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetProgramInfoLog(int arg0, int arg1, long arg2, long arg3);
+	default void glUniform3uiv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetProgramInfoLog(int arg0, int[] arg1, java.nio.ByteBuffer arg2);
+	default void glUniform3uiv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	java.lang.String glGetProgramInfoLog(int arg0);
+	default void nglUniform4uiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	java.lang.String glGetProgramInfoLog(int arg0, int arg1);
+	default void glUniform4uiv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetProgramInfoLog(int arg0, java.nio.IntBuffer arg1, java.nio.ByteBuffer arg2);
+	default void glUniform4uiv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetRenderbufferParameteriv(int arg0, int arg1, long arg2);
+	default void nglGetUniformuiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetRenderbufferParameteriv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void glGetUniformuiv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetRenderbufferParameteriv(int arg0, int arg1, int[] arg2);
+	default void glGetUniformuiv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetRenderbufferParameteri(int arg0, int arg1);
+	default int glGetUniformui(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetShaderiv(int arg0, int arg1, long arg2);
+	default void nglBindFragDataLocation(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetShaderiv(int arg0, int arg1, int[] arg2);
+	default void glBindFragDataLocation(int arg0,int arg1,java.nio.ByteBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetShaderiv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void glBindFragDataLocation(int arg0,int arg1,java.lang.CharSequence arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetShaderi(int arg0, int arg1);
+	default int nglGetFragDataLocation(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetShaderInfoLog(int arg0, int arg1, long arg2, long arg3);
+	default int glGetFragDataLocation(int arg0,java.nio.ByteBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	java.lang.String glGetShaderInfoLog(int arg0);
+	default int glGetFragDataLocation(int arg0,java.lang.CharSequence arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetShaderInfoLog(int arg0, int[] arg1, java.nio.ByteBuffer arg2);
+	default void glBeginConditionalRender(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	java.lang.String glGetShaderInfoLog(int arg0, int arg1);
+	default void glEndConditionalRender() {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetShaderInfoLog(int arg0, java.nio.IntBuffer arg1, java.nio.ByteBuffer arg2);
+	default long nglMapBufferRange(int arg0,long arg1,long arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetShaderPrecisionFormat(int arg0, int arg1, long arg2, long arg3);
+	default java.nio.ByteBuffer glMapBufferRange(int arg0,long arg1,long arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetShaderPrecisionFormat(int arg0, int arg1, java.nio.IntBuffer arg2, java.nio.IntBuffer arg3);
+	default java.nio.ByteBuffer glMapBufferRange(int arg0,long arg1,long arg2,int arg3,java.nio.ByteBuffer arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetShaderPrecisionFormat(int arg0, int arg1, int[] arg2, int[] arg3);
+	default void glFlushMappedBufferRange(int arg0,long arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetShaderSource(int arg0, int arg1, long arg2, long arg3);
+	default void glClampColor(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	java.lang.String glGetShaderSource(int arg0);
+	default boolean glIsRenderbuffer(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetShaderSource(int arg0, int[] arg1, java.nio.ByteBuffer arg2);
+	default void glBindRenderbuffer(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	java.lang.String glGetShaderSource(int arg0, int arg1);
+	default void nglDeleteRenderbuffers(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetShaderSource(int arg0, java.nio.IntBuffer arg1, java.nio.ByteBuffer arg2);
+	default void glDeleteRenderbuffers(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	long nglGetString(int arg0);
+	default void glDeleteRenderbuffers(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	java.lang.String glGetString(int arg0);
+	default void glDeleteRenderbuffers(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetTexParameterfv(int arg0, int arg1, long arg2);
+	default void nglGenRenderbuffers(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetTexParameterfv(int arg0, int arg1, java.nio.FloatBuffer arg2);
+	default int glGenRenderbuffers() {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetTexParameterfv(int arg0, int arg1, float[] arg2);
+	default void glGenRenderbuffers(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	float glGetTexParameterf(int arg0, int arg1);
+	default void glGenRenderbuffers(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetTexParameteriv(int arg0, int arg1, long arg2);
+	default void glRenderbufferStorage(int arg0,int arg1,int arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetTexParameteriv(int arg0, int arg1, int[] arg2);
+	default void glRenderbufferStorageMultisample(int arg0,int arg1,int arg2,int arg3,int arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetTexParameteriv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void nglGetRenderbufferParameteriv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetTexParameteri(int arg0, int arg1);
+	default void glGetRenderbufferParameteriv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetUniformfv(int arg0, int arg1, long arg2);
+	default void glGetRenderbufferParameteriv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetUniformfv(int arg0, int arg1, java.nio.FloatBuffer arg2);
+	default int glGetRenderbufferParameteri(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetUniformfv(int arg0, int arg1, float[] arg2);
+	default boolean glIsFramebuffer(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	float glGetUniformf(int arg0, int arg1);
+	default void glBindFramebuffer(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetUniformiv(int arg0, int arg1, long arg2);
+	default void nglDeleteFramebuffers(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetUniformiv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void glDeleteFramebuffers(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetUniformiv(int arg0, int arg1, int[] arg2);
+	default void glDeleteFramebuffers(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetUniformi(int arg0, int arg1);
+	default void glDeleteFramebuffers(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	int nglGetUniformLocation(int arg0, long arg1);
+	default void nglGenFramebuffers(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetUniformLocation(int arg0, java.lang.CharSequence arg1);
+	default int glGenFramebuffers() {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetUniformLocation(int arg0, java.nio.ByteBuffer arg1);
+	default void glGenFramebuffers(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetVertexAttribfv(int arg0, int arg1, long arg2);
+	default void glGenFramebuffers(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetVertexAttribfv(int arg0, int arg1, java.nio.FloatBuffer arg2);
+	default int glCheckFramebufferStatus(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetVertexAttribfv(int arg0, int arg1, float[] arg2);
+	default void glFramebufferTexture1D(int arg0,int arg1,int arg2,int arg3,int arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetVertexAttribiv(int arg0, int arg1, long arg2);
+	default void glFramebufferTexture2D(int arg0,int arg1,int arg2,int arg3,int arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetVertexAttribiv(int arg0, int arg1, int[] arg2);
+	default void glFramebufferTexture3D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetVertexAttribiv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void glFramebufferTextureLayer(int arg0,int arg1,int arg2,int arg3,int arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetVertexAttribPointerv(int arg0, int arg1, long arg2);
+	default void glFramebufferRenderbuffer(int arg0,int arg1,int arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetVertexAttribPointerv(int arg0, int arg1, org.lwjgl.PointerBuffer arg2);
+	default void nglGetFramebufferAttachmentParameteriv(int arg0,int arg1,int arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	long glGetVertexAttribPointer(int arg0, int arg1);
+	default void glGetFramebufferAttachmentParameteriv(int arg0,int arg1,int arg2,java.nio.IntBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glHint(int arg0, int arg1);
+	default void glGetFramebufferAttachmentParameteriv(int arg0,int arg1,int arg2,int[] arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	boolean glIsBuffer(int arg0);
+	default int glGetFramebufferAttachmentParameteri(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	boolean glIsEnabled(int arg0);
+	default void glBlitFramebuffer(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,int arg8,int arg9) {throw new RuntimeException("Not implemented yet.");}
 
-	boolean glIsFramebuffer(int arg0);
+	default void glGenerateMipmap(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	boolean glIsProgram(int arg0);
+	default void nglTexParameterIiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	boolean glIsRenderbuffer(int arg0);
+	default void glTexParameterIiv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	boolean glIsShader(int arg0);
+	default void glTexParameterIiv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	boolean glIsTexture(int arg0);
+	default void glTexParameterIi(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glLineWidth(float arg0);
+	default void nglTexParameterIuiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glLinkProgram(int arg0);
+	default void glTexParameterIuiv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPixelStorei(int arg0, int arg1);
+	default void glTexParameterIuiv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPolygonOffset(float arg0, float arg1);
+	default void glTexParameterIui(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglReadPixels(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, long arg6);
+	default void nglGetTexParameterIiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glReadPixels(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, java.nio.ByteBuffer arg6);
+	default void glGetTexParameterIiv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glReadPixels(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, float[] arg6);
+	default void glGetTexParameterIiv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glReadPixels(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, short[] arg6);
+	default int glGetTexParameterIi(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glReadPixels(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int[] arg6);
+	default void nglGetTexParameterIuiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glReadPixels(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, java.nio.FloatBuffer arg6);
+	default void glGetTexParameterIuiv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glReadPixels(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, java.nio.IntBuffer arg6);
+	default void glGetTexParameterIuiv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glReadPixels(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, java.nio.ShortBuffer arg6);
+	default int glGetTexParameterIui(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glReadPixels(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, long arg6);
+	default void glColorMaski(int arg0,boolean arg1,boolean arg2,boolean arg3,boolean arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glReleaseShaderCompiler();
+	default void nglGetBooleani_v(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRenderbufferStorage(int arg0, int arg1, int arg2, int arg3);
+	default void glGetBooleani_v(int arg0,int arg1,java.nio.ByteBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSampleCoverage(float arg0, boolean arg1);
+	default boolean glGetBooleani(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glScissor(int arg0, int arg1, int arg2, int arg3);
+	default void nglGetIntegeri_v(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglShaderBinary(int arg0, long arg1, int arg2, long arg3, int arg4);
+	default void glGetIntegeri_v(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glShaderBinary(int[] arg0, int arg1, java.nio.ByteBuffer arg2);
+	default void glGetIntegeri_v(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glShaderBinary(java.nio.IntBuffer arg0, int arg1, java.nio.ByteBuffer arg2);
+	default int glGetIntegeri(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglShaderSource(int arg0, int arg1, long arg2, long arg3);
+	default void glEnablei(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glShaderSource(int arg0, java.lang.CharSequence arg1);
+	default void glDisablei(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glShaderSource(int arg0, java.lang.CharSequence... arg1);
+	default boolean glIsEnabledi(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glShaderSource(int arg0, org.lwjgl.PointerBuffer arg1, int[] arg2);
+	default void glBindBufferRange(int arg0,int arg1,int arg2,long arg3,long arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glShaderSource(int arg0, org.lwjgl.PointerBuffer arg1, java.nio.IntBuffer arg2);
+	default void glBindBufferBase(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glStencilFunc(int arg0, int arg1, int arg2);
+	default void glBeginTransformFeedback(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glStencilFuncSeparate(int arg0, int arg1, int arg2, int arg3);
+	default void glEndTransformFeedback() {throw new RuntimeException("Not implemented yet.");}
 
-	void glStencilMask(int arg0);
+	default void nglTransformFeedbackVaryings(int arg0,int arg1,long arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glStencilMaskSeparate(int arg0, int arg1);
+	default void glTransformFeedbackVaryings(int arg0,java.lang.CharSequence arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glStencilOp(int arg0, int arg1, int arg2);
+	default void glTransformFeedbackVaryings(int arg0,org.lwjgl.PointerBuffer arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glStencilOpSeparate(int arg0, int arg1, int arg2, int arg3);
+	default void glTransformFeedbackVaryings(int arg0,java.lang.CharSequence[] arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexImage2D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, long arg8);
+	default void nglGetTransformFeedbackVarying(int arg0,int arg1,int arg2,long arg3,long arg4,long arg5,long arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexImage2D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, java.nio.ShortBuffer arg8);
+	default java.lang.String glGetTransformFeedbackVarying(int arg0,int arg1,java.nio.IntBuffer arg2,java.nio.IntBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexImage2D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, long arg8);
+	default void glGetTransformFeedbackVarying(int arg0,int arg1,java.nio.IntBuffer arg2,java.nio.IntBuffer arg3,java.nio.IntBuffer arg4,java.nio.ByteBuffer arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexImage2D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, java.nio.IntBuffer arg8);
+	default void glGetTransformFeedbackVarying(int arg0,int arg1,int[] arg2,int[] arg3,int[] arg4,java.nio.ByteBuffer arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexImage2D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, java.nio.FloatBuffer arg8);
+	default java.lang.String glGetTransformFeedbackVarying(int arg0,int arg1,int arg2,java.nio.IntBuffer arg3,java.nio.IntBuffer arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexImage2D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, short[] arg8);
+	default void glBindVertexArray(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexImage2D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, java.nio.ByteBuffer arg8);
+	default void nglDeleteVertexArrays(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexImage2D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int[] arg8);
+	default void glDeleteVertexArrays(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexImage2D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, float[] arg8);
+	default void glDeleteVertexArrays(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexParameterf(int arg0, int arg1, float arg2);
+	default void glDeleteVertexArrays(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexParameterfv(int arg0, int arg1, long arg2);
+	default void nglGenVertexArrays(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexParameterfv(int arg0, int arg1, float[] arg2);
+	default void glGenVertexArrays(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexParameterfv(int arg0, int arg1, java.nio.FloatBuffer arg2);
+	default void glGenVertexArrays(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexParameteri(int arg0, int arg1, int arg2);
+	default int glGenVertexArrays() {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexParameteriv(int arg0, int arg1, long arg2);
+	default boolean glIsVertexArray(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexParameteriv(int arg0, int arg1, int[] arg2);
+	default void nglUniformMatrix2x3fv(int arg0,int arg1,boolean arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexParameteriv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void glUniformMatrix2x3fv(int arg0,boolean arg1,java.nio.FloatBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexSubImage2D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, long arg8);
+	default void glUniformMatrix2x3fv(int arg0,boolean arg1,float[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexSubImage2D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, java.nio.ByteBuffer arg8);
+	default void nglUniformMatrix3x2fv(int arg0,int arg1,boolean arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexSubImage2D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, float[] arg8);
+	default void glUniformMatrix3x2fv(int arg0,boolean arg1,float[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexSubImage2D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int[] arg8);
+	default void glUniformMatrix3x2fv(int arg0,boolean arg1,java.nio.FloatBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexSubImage2D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, short[] arg8);
+	default void nglUniformMatrix2x4fv(int arg0,int arg1,boolean arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexSubImage2D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, long arg8);
+	default void glUniformMatrix2x4fv(int arg0,boolean arg1,java.nio.FloatBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexSubImage2D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, java.nio.ShortBuffer arg8);
+	default void glUniformMatrix2x4fv(int arg0,boolean arg1,float[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexSubImage2D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, java.nio.IntBuffer arg8);
+	default void nglUniformMatrix4x2fv(int arg0,int arg1,boolean arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexSubImage2D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, java.nio.FloatBuffer arg8);
+	default void glUniformMatrix4x2fv(int arg0,boolean arg1,float[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform1f(int arg0, float arg1);
+	default void glUniformMatrix4x2fv(int arg0,boolean arg1,java.nio.FloatBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniform1fv(int arg0, int arg1, long arg2);
+	default void nglUniformMatrix3x4fv(int arg0,int arg1,boolean arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform1fv(int arg0, float[] arg1);
+	default void glUniformMatrix3x4fv(int arg0,boolean arg1,float[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform1fv(int arg0, java.nio.FloatBuffer arg1);
+	default void glUniformMatrix3x4fv(int arg0,boolean arg1,java.nio.FloatBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform1i(int arg0, int arg1);
+	default void nglUniformMatrix4x3fv(int arg0,int arg1,boolean arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniform1iv(int arg0, int arg1, long arg2);
+	default void glUniformMatrix4x3fv(int arg0,boolean arg1,java.nio.FloatBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform1iv(int arg0, java.nio.IntBuffer arg1);
+	default void glUniformMatrix4x3fv(int arg0,boolean arg1,float[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform1iv(int arg0, int[] arg1);
+	default int glGetProgrami(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform2f(int arg0, float arg1, float arg2);
+	default int glCreateProgram() {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniform2fv(int arg0, int arg1, long arg2);
+	default void glDeleteProgram(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform2fv(int arg0, java.nio.FloatBuffer arg1);
+	default boolean glIsProgram(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform2fv(int arg0, float[] arg1);
+	default int glCreateShader(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform2i(int arg0, int arg1, int arg2);
+	default void glDeleteShader(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniform2iv(int arg0, int arg1, long arg2);
+	default boolean glIsShader(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform2iv(int arg0, java.nio.IntBuffer arg1);
+	default void glAttachShader(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform2iv(int arg0, int[] arg1);
+	default void glDetachShader(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform3f(int arg0, float arg1, float arg2, float arg3);
+	default void nglShaderSource(int arg0,int arg1,long arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniform3fv(int arg0, int arg1, long arg2);
+	default void glShaderSource(int arg0,org.lwjgl.PointerBuffer arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform3fv(int arg0, java.nio.FloatBuffer arg1);
+	default void glShaderSource(int arg0,java.lang.CharSequence arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform3fv(int arg0, float[] arg1);
+	default void glShaderSource(int arg0,org.lwjgl.PointerBuffer arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform3i(int arg0, int arg1, int arg2, int arg3);
+	default void glShaderSource(int arg0,java.lang.CharSequence... arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniform3iv(int arg0, int arg1, long arg2);
+	default void glCompileShader(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform3iv(int arg0, java.nio.IntBuffer arg1);
+	default void glLinkProgram(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform3iv(int arg0, int[] arg1);
+	default void glUseProgram(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform4f(int arg0, float arg1, float arg2, float arg3, float arg4);
+	default void glValidateProgram(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniform4fv(int arg0, int arg1, long arg2);
+	default void glUniform1f(int arg0,float arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform4fv(int arg0, java.nio.FloatBuffer arg1);
+	default void glUniform2f(int arg0,float arg1,float arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform4fv(int arg0, float[] arg1);
+	default void glUniform3f(int arg0,float arg1,float arg2,float arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform4i(int arg0, int arg1, int arg2, int arg3, int arg4);
+	default void glUniform4f(int arg0,float arg1,float arg2,float arg3,float arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniform4iv(int arg0, int arg1, long arg2);
+	default void glUniform1i(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform4iv(int arg0, java.nio.IntBuffer arg1);
+	default void glUniform2i(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform4iv(int arg0, int[] arg1);
+	default void glUniform3i(int arg0,int arg1,int arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniformMatrix2fv(int arg0, int arg1, boolean arg2, long arg3);
+	default void glUniform4i(int arg0,int arg1,int arg2,int arg3,int arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix2fv(int arg0, boolean arg1, float[] arg2);
+	default void nglUniform1fv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix2fv(int arg0, boolean arg1, java.nio.FloatBuffer arg2);
+	default void glUniform1fv(int arg0,float[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniformMatrix3fv(int arg0, int arg1, boolean arg2, long arg3);
+	default void glUniform1fv(int arg0,java.nio.FloatBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix3fv(int arg0, boolean arg1, java.nio.FloatBuffer arg2);
+	default void nglUniform2fv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix3fv(int arg0, boolean arg1, float[] arg2);
+	default void glUniform2fv(int arg0,java.nio.FloatBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniformMatrix4fv(int arg0, int arg1, boolean arg2, long arg3);
+	default void glUniform2fv(int arg0,float[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix4fv(int arg0, boolean arg1, java.nio.FloatBuffer arg2);
+	default void nglUniform3fv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix4fv(int arg0, boolean arg1, float[] arg2);
+	default void glUniform3fv(int arg0,float[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUseProgram(int arg0);
+	default void glUniform3fv(int arg0,java.nio.FloatBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glValidateProgram(int arg0);
+	default void nglUniform4fv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib1f(int arg0, float arg1);
+	default void glUniform4fv(int arg0,float[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttrib1fv(int arg0, long arg1);
+	default void glUniform4fv(int arg0,java.nio.FloatBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib1fv(int arg0, float[] arg1);
+	default void nglUniform1iv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib1fv(int arg0, java.nio.FloatBuffer arg1);
+	default void glUniform1iv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib2f(int arg0, float arg1, float arg2);
+	default void glUniform1iv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttrib2fv(int arg0, long arg1);
+	default void nglUniform2iv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib2fv(int arg0, float[] arg1);
+	default void glUniform2iv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib2fv(int arg0, java.nio.FloatBuffer arg1);
+	default void glUniform2iv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib3f(int arg0, float arg1, float arg2, float arg3);
+	default void nglUniform3iv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttrib3fv(int arg0, long arg1);
+	default void glUniform3iv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib3fv(int arg0, float[] arg1);
+	default void glUniform3iv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib3fv(int arg0, java.nio.FloatBuffer arg1);
+	default void nglUniform4iv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib4f(int arg0, float arg1, float arg2, float arg3, float arg4);
+	default void glUniform4iv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttrib4fv(int arg0, long arg1);
+	default void glUniform4iv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib4fv(int arg0, java.nio.FloatBuffer arg1);
+	default void nglUniformMatrix2fv(int arg0,int arg1,boolean arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib4fv(int arg0, float[] arg1);
+	default void glUniformMatrix2fv(int arg0,boolean arg1,float[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttribPointer(int arg0, int arg1, int arg2, boolean arg3, int arg4, long arg5);
+	default void glUniformMatrix2fv(int arg0,boolean arg1,java.nio.FloatBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribPointer(int arg0, int arg1, int arg2, boolean arg3, int arg4, long arg5);
+	default void nglUniformMatrix3fv(int arg0,int arg1,boolean arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribPointer(int arg0, int arg1, int arg2, boolean arg3, int arg4, java.nio.FloatBuffer arg5);
+	default void glUniformMatrix3fv(int arg0,boolean arg1,float[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribPointer(int arg0, int arg1, int arg2, boolean arg3, int arg4, java.nio.IntBuffer arg5);
+	default void glUniformMatrix3fv(int arg0,boolean arg1,java.nio.FloatBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribPointer(int arg0, int arg1, int arg2, boolean arg3, int arg4, java.nio.ShortBuffer arg5);
+	default void nglUniformMatrix4fv(int arg0,int arg1,boolean arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribPointer(int arg0, int arg1, int arg2, boolean arg3, int arg4, java.nio.ByteBuffer arg5);
+	default void glUniformMatrix4fv(int arg0,boolean arg1,java.nio.FloatBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glViewport(int arg0, int arg1, int arg2, int arg3);
+	default void glUniformMatrix4fv(int arg0,boolean arg1,float[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBlendEquationi(int arg0, int arg1);
+	default void nglGetShaderiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBlendEquationSeparatei(int arg0, int arg1, int arg2);
+	default void glGetShaderiv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBlendFunci(int arg0, int arg1, int arg2);
+	default void glGetShaderiv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBlendFuncSeparatei(int arg0, int arg1, int arg2, int arg3, int arg4);
+	default int glGetShaderi(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglDrawArraysIndirect(int arg0, long arg1);
+	default void nglGetProgramiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawArraysIndirect(int arg0, long arg1);
+	default void glGetProgramiv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawArraysIndirect(int arg0, java.nio.IntBuffer arg1);
+	default void glGetProgramiv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawArraysIndirect(int arg0, int[] arg1);
+	default void nglGetShaderInfoLog(int arg0,int arg1,long arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawArraysIndirect(int arg0, java.nio.ByteBuffer arg1);
+	default java.lang.String glGetShaderInfoLog(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglDrawElementsIndirect(int arg0, int arg1, long arg2);
+	default void glGetShaderInfoLog(int arg0,int[] arg1,java.nio.ByteBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawElementsIndirect(int arg0, int arg1, java.nio.ByteBuffer arg2);
+	default java.lang.String glGetShaderInfoLog(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawElementsIndirect(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void glGetShaderInfoLog(int arg0,java.nio.IntBuffer arg1,java.nio.ByteBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawElementsIndirect(int arg0, int arg1, int[] arg2);
+	default void nglGetProgramInfoLog(int arg0,int arg1,long arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawElementsIndirect(int arg0, int arg1, long arg2);
+	default void glGetProgramInfoLog(int arg0,int[] arg1,java.nio.ByteBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform1d(int arg0, double arg1);
+	default void glGetProgramInfoLog(int arg0,java.nio.IntBuffer arg1,java.nio.ByteBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform2d(int arg0, double arg1, double arg2);
+	default java.lang.String glGetProgramInfoLog(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform3d(int arg0, double arg1, double arg2, double arg3);
+	default java.lang.String glGetProgramInfoLog(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform4d(int arg0, double arg1, double arg2, double arg3, double arg4);
+	default void nglGetAttachedShaders(int arg0,int arg1,long arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniform1dv(int arg0, int arg1, long arg2);
+	default void glGetAttachedShaders(int arg0,java.nio.IntBuffer arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform1dv(int arg0, java.nio.DoubleBuffer arg1);
+	default void glGetAttachedShaders(int arg0,int[] arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform1dv(int arg0, double[] arg1);
+	default int nglGetUniformLocation(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniform2dv(int arg0, int arg1, long arg2);
+	default int glGetUniformLocation(int arg0,java.lang.CharSequence arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform2dv(int arg0, double[] arg1);
+	default int glGetUniformLocation(int arg0,java.nio.ByteBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform2dv(int arg0, java.nio.DoubleBuffer arg1);
+	default void nglGetActiveUniform(int arg0,int arg1,int arg2,long arg3,long arg4,long arg5,long arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniform3dv(int arg0, int arg1, long arg2);
+	default void glGetActiveUniform(int arg0,int arg1,int[] arg2,int[] arg3,int[] arg4,java.nio.ByteBuffer arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform3dv(int arg0, java.nio.DoubleBuffer arg1);
+	default java.lang.String glGetActiveUniform(int arg0,int arg1,int arg2,java.nio.IntBuffer arg3,java.nio.IntBuffer arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform3dv(int arg0, double[] arg1);
+	default void glGetActiveUniform(int arg0,int arg1,java.nio.IntBuffer arg2,java.nio.IntBuffer arg3,java.nio.IntBuffer arg4,java.nio.ByteBuffer arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniform4dv(int arg0, int arg1, long arg2);
+	default java.lang.String glGetActiveUniform(int arg0,int arg1,java.nio.IntBuffer arg2,java.nio.IntBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform4dv(int arg0, double[] arg1);
+	default void nglGetUniformfv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniform4dv(int arg0, java.nio.DoubleBuffer arg1);
+	default void glGetUniformfv(int arg0,int arg1,java.nio.FloatBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniformMatrix2dv(int arg0, int arg1, boolean arg2, long arg3);
+	default void glGetUniformfv(int arg0,int arg1,float[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix2dv(int arg0, boolean arg1, java.nio.DoubleBuffer arg2);
+	default float glGetUniformf(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix2dv(int arg0, boolean arg1, double[] arg2);
+	default void nglGetUniformiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniformMatrix3dv(int arg0, int arg1, boolean arg2, long arg3);
+	default void glGetUniformiv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix3dv(int arg0, boolean arg1, double[] arg2);
+	default void glGetUniformiv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix3dv(int arg0, boolean arg1, java.nio.DoubleBuffer arg2);
+	default int glGetUniformi(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniformMatrix4dv(int arg0, int arg1, boolean arg2, long arg3);
+	default void nglGetShaderSource(int arg0,int arg1,long arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix4dv(int arg0, boolean arg1, double[] arg2);
+	default void glGetShaderSource(int arg0,int[] arg1,java.nio.ByteBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix4dv(int arg0, boolean arg1, java.nio.DoubleBuffer arg2);
+	default java.lang.String glGetShaderSource(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniformMatrix2x3dv(int arg0, int arg1, boolean arg2, long arg3);
+	default void glGetShaderSource(int arg0,java.nio.IntBuffer arg1,java.nio.ByteBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix2x3dv(int arg0, boolean arg1, java.nio.DoubleBuffer arg2);
+	default java.lang.String glGetShaderSource(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix2x3dv(int arg0, boolean arg1, double[] arg2);
+	default void glVertexAttrib1f(int arg0,float arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniformMatrix2x4dv(int arg0, int arg1, boolean arg2, long arg3);
+	default void glVertexAttrib1s(int arg0,short arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix2x4dv(int arg0, boolean arg1, double[] arg2);
+	default void glVertexAttrib1d(int arg0,double arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix2x4dv(int arg0, boolean arg1, java.nio.DoubleBuffer arg2);
+	default void glVertexAttrib2f(int arg0,float arg1,float arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniformMatrix3x2dv(int arg0, int arg1, boolean arg2, long arg3);
+	default void glVertexAttrib2s(int arg0,short arg1,short arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix3x2dv(int arg0, boolean arg1, java.nio.DoubleBuffer arg2);
+	default void glVertexAttrib2d(int arg0,double arg1,double arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix3x2dv(int arg0, boolean arg1, double[] arg2);
+	default void glVertexAttrib3f(int arg0,float arg1,float arg2,float arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniformMatrix3x4dv(int arg0, int arg1, boolean arg2, long arg3);
+	default void glVertexAttrib3s(int arg0,short arg1,short arg2,short arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix3x4dv(int arg0, boolean arg1, double[] arg2);
+	default void glVertexAttrib3d(int arg0,double arg1,double arg2,double arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix3x4dv(int arg0, boolean arg1, java.nio.DoubleBuffer arg2);
+	default void glVertexAttrib4f(int arg0,float arg1,float arg2,float arg3,float arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniformMatrix4x2dv(int arg0, int arg1, boolean arg2, long arg3);
+	default void glVertexAttrib4s(int arg0,short arg1,short arg2,short arg3,short arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix4x2dv(int arg0, boolean arg1, java.nio.DoubleBuffer arg2);
+	default void glVertexAttrib4d(int arg0,double arg1,double arg2,double arg3,double arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix4x2dv(int arg0, boolean arg1, double[] arg2);
+	default void glVertexAttrib4Nub(int arg0,byte arg1,byte arg2,byte arg3,byte arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniformMatrix4x3dv(int arg0, int arg1, boolean arg2, long arg3);
+	default void nglVertexAttrib1fv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix4x3dv(int arg0, boolean arg1, java.nio.DoubleBuffer arg2);
+	default void glVertexAttrib1fv(int arg0,float[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformMatrix4x3dv(int arg0, boolean arg1, double[] arg2);
+	default void glVertexAttrib1fv(int arg0,java.nio.FloatBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetUniformdv(int arg0, int arg1, long arg2);
+	default void nglVertexAttrib1sv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetUniformdv(int arg0, int arg1, double[] arg2);
+	default void glVertexAttrib1sv(int arg0,java.nio.ShortBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetUniformdv(int arg0, int arg1, java.nio.DoubleBuffer arg2);
+	default void glVertexAttrib1sv(int arg0,short[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	double glGetUniformd(int arg0, int arg1);
+	default void nglVertexAttrib1dv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMinSampleShading(float arg0);
+	default void glVertexAttrib1dv(int arg0,java.nio.DoubleBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int nglGetSubroutineUniformLocation(int arg0, int arg1, long arg2);
+	default void glVertexAttrib1dv(int arg0,double[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetSubroutineUniformLocation(int arg0, int arg1, java.nio.ByteBuffer arg2);
+	default void nglVertexAttrib2fv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetSubroutineUniformLocation(int arg0, int arg1, java.lang.CharSequence arg2);
+	default void glVertexAttrib2fv(int arg0,java.nio.FloatBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int nglGetSubroutineIndex(int arg0, int arg1, long arg2);
+	default void glVertexAttrib2fv(int arg0,float[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetSubroutineIndex(int arg0, int arg1, java.nio.ByteBuffer arg2);
+	default void nglVertexAttrib2sv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetSubroutineIndex(int arg0, int arg1, java.lang.CharSequence arg2);
+	default void glVertexAttrib2sv(int arg0,short[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetActiveSubroutineUniformiv(int arg0, int arg1, int arg2, int arg3, long arg4);
+	default void glVertexAttrib2sv(int arg0,java.nio.ShortBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetActiveSubroutineUniformiv(int arg0, int arg1, int arg2, int arg3, java.nio.IntBuffer arg4);
+	default void nglVertexAttrib2dv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetActiveSubroutineUniformiv(int arg0, int arg1, int arg2, int arg3, int[] arg4);
+	default void glVertexAttrib2dv(int arg0,double[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetActiveSubroutineUniformi(int arg0, int arg1, int arg2, int arg3);
+	default void glVertexAttrib2dv(int arg0,java.nio.DoubleBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetActiveSubroutineUniformName(int arg0, int arg1, int arg2, int arg3, long arg4, long arg5);
+	default void nglVertexAttrib3fv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetActiveSubroutineUniformName(int arg0, int arg1, int arg2, int[] arg3, java.nio.ByteBuffer arg4);
+	default void glVertexAttrib3fv(int arg0,float[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	java.lang.String glGetActiveSubroutineUniformName(int arg0, int arg1, int arg2, int arg3);
+	default void glVertexAttrib3fv(int arg0,java.nio.FloatBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetActiveSubroutineUniformName(int arg0, int arg1, int arg2, java.nio.IntBuffer arg3, java.nio.ByteBuffer arg4);
+	default void nglVertexAttrib3sv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	java.lang.String glGetActiveSubroutineUniformName(int arg0, int arg1, int arg2);
+	default void glVertexAttrib3sv(int arg0,java.nio.ShortBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetActiveSubroutineName(int arg0, int arg1, int arg2, int arg3, long arg4, long arg5);
+	default void glVertexAttrib3sv(int arg0,short[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetActiveSubroutineName(int arg0, int arg1, int arg2, java.nio.IntBuffer arg3, java.nio.ByteBuffer arg4);
+	default void nglVertexAttrib3dv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	java.lang.String glGetActiveSubroutineName(int arg0, int arg1, int arg2, int arg3);
+	default void glVertexAttrib3dv(int arg0,double[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	java.lang.String glGetActiveSubroutineName(int arg0, int arg1, int arg2);
+	default void glVertexAttrib3dv(int arg0,java.nio.DoubleBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetActiveSubroutineName(int arg0, int arg1, int arg2, int[] arg3, java.nio.ByteBuffer arg4);
+	default void nglVertexAttrib4fv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglUniformSubroutinesuiv(int arg0, int arg1, long arg2);
+	default void glVertexAttrib4fv(int arg0,float[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformSubroutinesuiv(int arg0, int[] arg1);
+	default void glVertexAttrib4fv(int arg0,java.nio.FloatBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformSubroutinesuiv(int arg0, java.nio.IntBuffer arg1);
+	default void nglVertexAttrib4sv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glUniformSubroutinesui(int arg0, int arg1);
+	default void glVertexAttrib4sv(int arg0,java.nio.ShortBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetUniformSubroutineuiv(int arg0, int arg1, long arg2);
+	default void glVertexAttrib4sv(int arg0,short[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetUniformSubroutineuiv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void nglVertexAttrib4dv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetUniformSubroutineuiv(int arg0, int arg1, int[] arg2);
+	default void glVertexAttrib4dv(int arg0,double[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetUniformSubroutineui(int arg0, int arg1);
+	default void glVertexAttrib4dv(int arg0,java.nio.DoubleBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetProgramStageiv(int arg0, int arg1, int arg2, long arg3);
+	default void nglVertexAttrib4iv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetProgramStageiv(int arg0, int arg1, int arg2, int[] arg3);
+	default void glVertexAttrib4iv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetProgramStageiv(int arg0, int arg1, int arg2, java.nio.IntBuffer arg3);
+	default void glVertexAttrib4iv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetProgramStagei(int arg0, int arg1, int arg2);
+	default void nglVertexAttrib4bv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPatchParameteri(int arg0, int arg1);
+	default void glVertexAttrib4bv(int arg0,java.nio.ByteBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglPatchParameterfv(int arg0, long arg1);
+	default void nglVertexAttrib4ubv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPatchParameterfv(int arg0, float[] arg1);
+	default void glVertexAttrib4ubv(int arg0,java.nio.ByteBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPatchParameterfv(int arg0, java.nio.FloatBuffer arg1);
+	default void nglVertexAttrib4usv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawTransformFeedback(int arg0, int arg1);
+	default void glVertexAttrib4usv(int arg0,java.nio.ShortBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawTransformFeedbackStream(int arg0, int arg1, int arg2);
+	default void glVertexAttrib4usv(int arg0,short[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBeginQueryIndexed(int arg0, int arg1, int arg2);
+	default void nglVertexAttrib4uiv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glEndQueryIndexed(int arg0, int arg1);
+	default void glVertexAttrib4uiv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetQueryIndexediv(int arg0, int arg1, int arg2, long arg3);
+	default void glVertexAttrib4uiv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetQueryIndexediv(int arg0, int arg1, int arg2, java.nio.IntBuffer arg3);
+	default void nglVertexAttrib4Nbv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetQueryIndexediv(int arg0, int arg1, int arg2, int[] arg3);
+	default void glVertexAttrib4Nbv(int arg0,java.nio.ByteBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetQueryIndexedi(int arg0, int arg1, int arg2);
+	default void nglVertexAttrib4Nsv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglBindFragDataLocationIndexed(int arg0, int arg1, int arg2, long arg3);
+	default void glVertexAttrib4Nsv(int arg0,java.nio.ShortBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBindFragDataLocationIndexed(int arg0, int arg1, int arg2, java.nio.ByteBuffer arg3);
+	default void glVertexAttrib4Nsv(int arg0,short[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBindFragDataLocationIndexed(int arg0, int arg1, int arg2, java.lang.CharSequence arg3);
+	default void nglVertexAttrib4Niv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int nglGetFragDataIndex(int arg0, long arg1);
+	default void glVertexAttrib4Niv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetFragDataIndex(int arg0, java.nio.ByteBuffer arg1);
+	default void glVertexAttrib4Niv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetFragDataIndex(int arg0, java.lang.CharSequence arg1);
+	default void nglVertexAttrib4Nubv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglSamplerParameterIiv(int arg0, int arg1, long arg2);
+	default void glVertexAttrib4Nubv(int arg0,java.nio.ByteBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSamplerParameterIiv(int arg0, int arg1, int[] arg2);
+	default void nglVertexAttrib4Nusv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSamplerParameterIiv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void glVertexAttrib4Nusv(int arg0,short[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglSamplerParameterIuiv(int arg0, int arg1, long arg2);
+	default void glVertexAttrib4Nusv(int arg0,java.nio.ShortBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSamplerParameterIuiv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void nglVertexAttrib4Nuiv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSamplerParameterIuiv(int arg0, int arg1, int[] arg2);
+	default void glVertexAttrib4Nuiv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetSamplerParameterIiv(int arg0, int arg1, long arg2);
+	default void glVertexAttrib4Nuiv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetSamplerParameterIiv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void nglVertexAttribPointer(int arg0,int arg1,int arg2,boolean arg3,int arg4,long arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetSamplerParameterIiv(int arg0, int arg1, int[] arg2);
+	default void glVertexAttribPointer(int arg0,int arg1,int arg2,boolean arg3,int arg4,java.nio.FloatBuffer arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetSamplerParameterIi(int arg0, int arg1);
+	default void glVertexAttribPointer(int arg0,int arg1,int arg2,boolean arg3,int arg4,java.nio.ByteBuffer arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetSamplerParameterIuiv(int arg0, int arg1, long arg2);
+	default void glVertexAttribPointer(int arg0,int arg1,int arg2,boolean arg3,int arg4,long arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetSamplerParameterIuiv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void glVertexAttribPointer(int arg0,int arg1,int arg2,boolean arg3,int arg4,java.nio.ShortBuffer arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetSamplerParameterIuiv(int arg0, int arg1, int[] arg2);
+	default void glVertexAttribPointer(int arg0,int arg1,int arg2,boolean arg3,int arg4,java.nio.IntBuffer arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetSamplerParameterIui(int arg0, int arg1);
+	default void glEnableVertexAttribArray(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glQueryCounter(int arg0, int arg1);
+	default void glDisableVertexAttribArray(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetQueryObjecti64v(int arg0, int arg1, long arg2);
+	default void nglBindAttribLocation(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetQueryObjecti64v(int arg0, int arg1, java.nio.LongBuffer arg2);
+	default void glBindAttribLocation(int arg0,int arg1,java.lang.CharSequence arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetQueryObjecti64v(int arg0, int arg1, long[] arg2);
+	default void glBindAttribLocation(int arg0,int arg1,java.nio.ByteBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetQueryObjecti64v(int arg0, int arg1, long arg2);
+	default void nglGetActiveAttrib(int arg0,int arg1,int arg2,long arg3,long arg4,long arg5,long arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	long glGetQueryObjecti64(int arg0, int arg1);
+	default void glGetActiveAttrib(int arg0,int arg1,int[] arg2,int[] arg3,int[] arg4,java.nio.ByteBuffer arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetQueryObjectui64v(int arg0, int arg1, long arg2);
+	default java.lang.String glGetActiveAttrib(int arg0,int arg1,java.nio.IntBuffer arg2,java.nio.IntBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetQueryObjectui64v(int arg0, int arg1, long[] arg2);
+	default java.lang.String glGetActiveAttrib(int arg0,int arg1,int arg2,java.nio.IntBuffer arg3,java.nio.IntBuffer arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetQueryObjectui64v(int arg0, int arg1, java.nio.LongBuffer arg2);
+	default void glGetActiveAttrib(int arg0,int arg1,java.nio.IntBuffer arg2,java.nio.IntBuffer arg3,java.nio.IntBuffer arg4,java.nio.ByteBuffer arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetQueryObjectui64v(int arg0, int arg1, long arg2);
+	default int nglGetAttribLocation(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	long glGetQueryObjectui64(int arg0, int arg1);
+	default int glGetAttribLocation(int arg0,java.nio.ByteBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexP2ui(int arg0, int arg1);
+	default int glGetAttribLocation(int arg0,java.lang.CharSequence arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexP3ui(int arg0, int arg1);
+	default void nglGetVertexAttribiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexP4ui(int arg0, int arg1);
+	default void glGetVertexAttribiv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexP2uiv(int arg0, long arg1);
+	default void glGetVertexAttribiv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexP2uiv(int arg0, java.nio.IntBuffer arg1);
+	default int glGetVertexAttribi(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexP2uiv(int arg0, int[] arg1);
+	default void nglGetVertexAttribfv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexP3uiv(int arg0, long arg1);
+	default void glGetVertexAttribfv(int arg0,int arg1,float[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexP3uiv(int arg0, java.nio.IntBuffer arg1);
+	default void glGetVertexAttribfv(int arg0,int arg1,java.nio.FloatBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexP3uiv(int arg0, int[] arg1);
+	default void nglGetVertexAttribdv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexP4uiv(int arg0, long arg1);
+	default void glGetVertexAttribdv(int arg0,int arg1,java.nio.DoubleBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexP4uiv(int arg0, java.nio.IntBuffer arg1);
+	default void glGetVertexAttribdv(int arg0,int arg1,double[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexP4uiv(int arg0, int[] arg1);
+	default void nglGetVertexAttribPointerv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoordP1ui(int arg0, int arg1);
+	default void glGetVertexAttribPointerv(int arg0,int arg1,org.lwjgl.PointerBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoordP2ui(int arg0, int arg1);
+	default long glGetVertexAttribPointer(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoordP3ui(int arg0, int arg1);
+	default void nglDrawBuffers(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoordP4ui(int arg0, int arg1);
+	default void glDrawBuffers(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexCoordP1uiv(int arg0, long arg1);
+	default void glDrawBuffers(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoordP1uiv(int arg0, int[] arg1);
+	default void glDrawBuffers(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoordP1uiv(int arg0, java.nio.IntBuffer arg1);
+	default void glBlendEquationSeparate(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexCoordP2uiv(int arg0, long arg1);
+	default void glStencilOpSeparate(int arg0,int arg1,int arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoordP2uiv(int arg0, int[] arg1);
+	default void glStencilFuncSeparate(int arg0,int arg1,int arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoordP2uiv(int arg0, java.nio.IntBuffer arg1);
+	default void glStencilMaskSeparate(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexCoordP3uiv(int arg0, long arg1);
+	default void glBindBuffer(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoordP3uiv(int arg0, int[] arg1);
+	default void nglDeleteBuffers(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoordP3uiv(int arg0, java.nio.IntBuffer arg1);
+	default void glDeleteBuffers(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexCoordP4uiv(int arg0, long arg1);
+	default void glDeleteBuffers(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoordP4uiv(int arg0, java.nio.IntBuffer arg1);
+	default void glDeleteBuffers(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoordP4uiv(int arg0, int[] arg1);
+	default void nglGenBuffers(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoordP1ui(int arg0, int arg1, int arg2);
+	default int glGenBuffers() {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoordP2ui(int arg0, int arg1, int arg2);
+	default void glGenBuffers(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoordP3ui(int arg0, int arg1, int arg2);
+	default void glGenBuffers(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoordP4ui(int arg0, int arg1, int arg2);
+	default boolean glIsBuffer(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglMultiTexCoordP1uiv(int arg0, int arg1, long arg2);
+	default void nglBufferData(int arg0,long arg1,long arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoordP1uiv(int arg0, int arg1, int[] arg2);
+	default void glBufferData(int arg0,java.nio.DoubleBuffer arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoordP1uiv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void glBufferData(int arg0,double[] arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglMultiTexCoordP2uiv(int arg0, int arg1, long arg2);
+	default void glBufferData(int arg0,float[] arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoordP2uiv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void glBufferData(int arg0,long[] arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoordP2uiv(int arg0, int arg1, int[] arg2);
+	default void glBufferData(int arg0,short[] arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglMultiTexCoordP3uiv(int arg0, int arg1, long arg2);
+	default void glBufferData(int arg0,int[] arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoordP3uiv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void glBufferData(int arg0,long arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoordP3uiv(int arg0, int arg1, int[] arg2);
+	default void glBufferData(int arg0,java.nio.LongBuffer arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglMultiTexCoordP4uiv(int arg0, int arg1, long arg2);
+	default void glBufferData(int arg0,java.nio.IntBuffer arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoordP4uiv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void glBufferData(int arg0,java.nio.ShortBuffer arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoordP4uiv(int arg0, int arg1, int[] arg2);
+	default void glBufferData(int arg0,java.nio.ByteBuffer arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glNormalP3ui(int arg0, int arg1);
+	default void glBufferData(int arg0,java.nio.FloatBuffer arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglNormalP3uiv(int arg0, long arg1);
+	default void nglBufferSubData(int arg0,long arg1,long arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glNormalP3uiv(int arg0, java.nio.IntBuffer arg1);
+	default void glBufferSubData(int arg0,long arg1,short[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glNormalP3uiv(int arg0, int[] arg1);
+	default void glBufferSubData(int arg0,long arg1,double[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColorP3ui(int arg0, int arg1);
+	default void glBufferSubData(int arg0,long arg1,float[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColorP4ui(int arg0, int arg1);
+	default void glBufferSubData(int arg0,long arg1,long[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglColorP3uiv(int arg0, long arg1);
+	default void glBufferSubData(int arg0,long arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColorP3uiv(int arg0, java.nio.IntBuffer arg1);
+	default void glBufferSubData(int arg0,long arg1,java.nio.ShortBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColorP3uiv(int arg0, int[] arg1);
+	default void glBufferSubData(int arg0,long arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglColorP4uiv(int arg0, long arg1);
+	default void glBufferSubData(int arg0,long arg1,java.nio.LongBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColorP4uiv(int arg0, int[] arg1);
+	default void glBufferSubData(int arg0,long arg1,java.nio.ByteBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColorP4uiv(int arg0, java.nio.IntBuffer arg1);
+	default void glBufferSubData(int arg0,long arg1,java.nio.DoubleBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSecondaryColorP3ui(int arg0, int arg1);
+	default void glBufferSubData(int arg0,long arg1,java.nio.FloatBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglSecondaryColorP3uiv(int arg0, long arg1);
+	default void nglGetBufferSubData(int arg0,long arg1,long arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSecondaryColorP3uiv(int arg0, int[] arg1);
+	default void glGetBufferSubData(int arg0,long arg1,double[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSecondaryColorP3uiv(int arg0, java.nio.IntBuffer arg1);
+	default void glGetBufferSubData(int arg0,long arg1,float[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribP1ui(int arg0, int arg1, boolean arg2, int arg3);
+	default void glGetBufferSubData(int arg0,long arg1,long[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribP2ui(int arg0, int arg1, boolean arg2, int arg3);
+	default void glGetBufferSubData(int arg0,long arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribP3ui(int arg0, int arg1, boolean arg2, int arg3);
+	default void glGetBufferSubData(int arg0,long arg1,short[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribP4ui(int arg0, int arg1, boolean arg2, int arg3);
+	default void glGetBufferSubData(int arg0,long arg1,java.nio.ShortBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttribP1uiv(int arg0, int arg1, boolean arg2, long arg3);
+	default void glGetBufferSubData(int arg0,long arg1,java.nio.DoubleBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribP1uiv(int arg0, int arg1, boolean arg2, int[] arg3);
+	default void glGetBufferSubData(int arg0,long arg1,java.nio.FloatBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribP1uiv(int arg0, int arg1, boolean arg2, java.nio.IntBuffer arg3);
+	default void glGetBufferSubData(int arg0,long arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttribP2uiv(int arg0, int arg1, boolean arg2, long arg3);
+	default void glGetBufferSubData(int arg0,long arg1,java.nio.ByteBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribP2uiv(int arg0, int arg1, boolean arg2, int[] arg3);
+	default void glGetBufferSubData(int arg0,long arg1,java.nio.LongBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribP2uiv(int arg0, int arg1, boolean arg2, java.nio.IntBuffer arg3);
+	default long nglMapBuffer(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttribP3uiv(int arg0, int arg1, boolean arg2, long arg3);
+	default java.nio.ByteBuffer glMapBuffer(int arg0,int arg1,long arg2,java.nio.ByteBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribP3uiv(int arg0, int arg1, boolean arg2, java.nio.IntBuffer arg3);
+	default java.nio.ByteBuffer glMapBuffer(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribP3uiv(int arg0, int arg1, boolean arg2, int[] arg3);
+	default java.nio.ByteBuffer glMapBuffer(int arg0,int arg1,java.nio.ByteBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttribP4uiv(int arg0, int arg1, boolean arg2, long arg3);
+	default boolean glUnmapBuffer(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribP4uiv(int arg0, int arg1, boolean arg2, java.nio.IntBuffer arg3);
+	default void nglGetBufferParameteriv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribP4uiv(int arg0, int arg1, boolean arg2, int[] arg3);
+	default void glGetBufferParameteriv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglDrawElementsBaseVertex(int arg0, int arg1, int arg2, long arg3, int arg4);
+	default void glGetBufferParameteriv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawElementsBaseVertex(int arg0, java.nio.ShortBuffer arg1, int arg2);
+	default int glGetBufferParameteri(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawElementsBaseVertex(int arg0, java.nio.IntBuffer arg1, int arg2);
+	default void nglGetBufferPointerv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawElementsBaseVertex(int arg0, java.nio.ByteBuffer arg1, int arg2);
+	default void glGetBufferPointerv(int arg0,int arg1,org.lwjgl.PointerBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawElementsBaseVertex(int arg0, int arg1, java.nio.ByteBuffer arg2, int arg3);
+	default long glGetBufferPointer(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawElementsBaseVertex(int arg0, int arg1, int arg2, long arg3, int arg4);
+	default void nglGenQueries(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglDrawRangeElementsBaseVertex(int arg0, int arg1, int arg2, int arg3, int arg4, long arg5, int arg6);
+	default void glGenQueries(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawRangeElementsBaseVertex(int arg0, int arg1, int arg2, java.nio.ByteBuffer arg3, int arg4);
+	default int glGenQueries() {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawRangeElementsBaseVertex(int arg0, int arg1, int arg2, int arg3, java.nio.ByteBuffer arg4, int arg5);
+	default void glGenQueries(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawRangeElementsBaseVertex(int arg0, int arg1, int arg2, int arg3, int arg4, long arg5, int arg6);
+	default void nglDeleteQueries(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawRangeElementsBaseVertex(int arg0, int arg1, int arg2, java.nio.ShortBuffer arg3, int arg4);
+	default void glDeleteQueries(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawRangeElementsBaseVertex(int arg0, int arg1, int arg2, java.nio.IntBuffer arg3, int arg4);
+	default void glDeleteQueries(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglDrawElementsInstancedBaseVertex(int arg0, int arg1, int arg2, long arg3, int arg4, int arg5);
+	default void glDeleteQueries(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawElementsInstancedBaseVertex(int arg0, java.nio.ByteBuffer arg1, int arg2, int arg3);
+	default boolean glIsQuery(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawElementsInstancedBaseVertex(int arg0, java.nio.IntBuffer arg1, int arg2, int arg3);
+	default void glBeginQuery(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawElementsInstancedBaseVertex(int arg0, int arg1, java.nio.ByteBuffer arg2, int arg3, int arg4);
+	default void glEndQuery(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawElementsInstancedBaseVertex(int arg0, int arg1, int arg2, long arg3, int arg4, int arg5);
+	default void nglGetQueryiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawElementsInstancedBaseVertex(int arg0, java.nio.ShortBuffer arg1, int arg2, int arg3);
+	default void glGetQueryiv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglMultiDrawElementsBaseVertex(int arg0, long arg1, int arg2, long arg3, int arg4, long arg5);
+	default void glGetQueryiv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiDrawElementsBaseVertex(int arg0, int[] arg1, int arg2, org.lwjgl.PointerBuffer arg3, int[] arg4);
+	default int glGetQueryi(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiDrawElementsBaseVertex(int arg0, java.nio.IntBuffer arg1, int arg2, org.lwjgl.PointerBuffer arg3, java.nio.IntBuffer arg4);
+	default void nglGetQueryObjectiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glProvokingVertex(int arg0);
+	default void glGetQueryObjectiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexImage2DMultisample(int arg0, int arg1, int arg2, int arg3, int arg4, boolean arg5);
+	default void glGetQueryObjectiv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexImage3DMultisample(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, boolean arg6);
+	default void glGetQueryObjectiv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetMultisamplefv(int arg0, int arg1, long arg2);
+	default int glGetQueryObjecti(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetMultisamplefv(int arg0, int arg1, java.nio.FloatBuffer arg2);
+	default void nglGetQueryObjectuiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetMultisamplefv(int arg0, int arg1, float[] arg2);
+	default void glGetQueryObjectuiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	float glGetMultisamplef(int arg0, int arg1);
+	default void glGetQueryObjectuiv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSampleMaski(int arg0, int arg1);
+	default void glGetQueryObjectuiv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glFramebufferTexture(int arg0, int arg1, int arg2, int arg3);
+	default int glGetQueryObjectui(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetUniformIndices(int arg0, java.lang.CharSequence arg1);
+	default void glBlendColor(float arg0,float arg1,float arg2,float arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetUniformIndices(int arg0, java.lang.CharSequence[] arg1, java.nio.IntBuffer arg2);
+	default void glBlendEquation(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPrimitiveRestartIndex(int arg0);
+	default void glFogCoordf(float arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexBuffer(int arg0, int arg1, int arg2);
+	default void glFogCoordd(double arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetActiveUniformsi(int arg0, int arg1, int arg2);
+	default void nglFogCoordfv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetActiveUniformName(int arg0, int arg1, int arg2, long arg3, long arg4);
+	default void glFogCoordfv(java.nio.FloatBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetActiveUniformName(int arg0, int arg1, java.nio.IntBuffer arg2, java.nio.ByteBuffer arg3);
+	default void glFogCoordfv(float[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetActiveUniformName(int arg0, int arg1, int[] arg2, java.nio.ByteBuffer arg3);
+	default void nglFogCoorddv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	java.lang.String glGetActiveUniformName(int arg0, int arg1);
+	default void glFogCoorddv(double[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	java.lang.String glGetActiveUniformName(int arg0, int arg1, int arg2);
+	default void glFogCoorddv(java.nio.DoubleBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribI1i(int arg0, int arg1);
+	default void nglFogCoordPointer(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribI2i(int arg0, int arg1, int arg2);
+	default void glFogCoordPointer(int arg0,int arg1,java.nio.FloatBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribI3i(int arg0, int arg1, int arg2, int arg3);
+	default void glFogCoordPointer(int arg0,int arg1,java.nio.ByteBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribI1ui(int arg0, int arg1);
+	default void glFogCoordPointer(int arg0,int arg1,java.nio.ShortBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribI2ui(int arg0, int arg1, int arg2);
+	default void glFogCoordPointer(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribI3ui(int arg0, int arg1, int arg2, int arg3);
+	default void nglMultiDrawArrays(int arg0,long arg1,long arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttribI1iv(int arg0, long arg1);
+	default void glMultiDrawArrays(int arg0,int[] arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribI1iv(int arg0, java.nio.IntBuffer arg1);
+	default void glMultiDrawArrays(int arg0,java.nio.IntBuffer arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribI1iv(int arg0, int[] arg1);
+	default void nglMultiDrawElements(int arg0,long arg1,int arg2,long arg3,int arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttribI2iv(int arg0, long arg1);
+	default void glMultiDrawElements(int arg0,int[] arg1,int arg2,org.lwjgl.PointerBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribI2iv(int arg0, java.nio.IntBuffer arg1);
+	default void glMultiDrawElements(int arg0,java.nio.IntBuffer arg1,int arg2,org.lwjgl.PointerBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribI2iv(int arg0, int[] arg1);
+	default void glPointParameterf(int arg0,float arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttribI3iv(int arg0, long arg1);
+	default void glPointParameteri(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribI3iv(int arg0, int[] arg1);
+	default void nglPointParameterfv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribI3iv(int arg0, java.nio.IntBuffer arg1);
+	default void glPointParameterfv(int arg0,java.nio.FloatBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttribI1uiv(int arg0, long arg1);
+	default void glPointParameterfv(int arg0,float[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribI1uiv(int arg0, int[] arg1);
+	default void nglPointParameteriv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribI1uiv(int arg0, java.nio.IntBuffer arg1);
+	default void glPointParameteriv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttribI2uiv(int arg0, long arg1);
+	default void glPointParameteriv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribI2uiv(int arg0, int[] arg1);
+	default void glSecondaryColor3b(byte arg0,byte arg1,byte arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribI2uiv(int arg0, java.nio.IntBuffer arg1);
+	default void glSecondaryColor3s(short arg0,short arg1,short arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttribI3uiv(int arg0, long arg1);
+	default void glSecondaryColor3i(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribI3uiv(int arg0, java.nio.IntBuffer arg1);
+	default void glSecondaryColor3f(float arg0,float arg1,float arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribI3uiv(int arg0, int[] arg1);
+	default void glSecondaryColor3d(double arg0,double arg1,double arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttribI4bv(int arg0, long arg1);
+	default void glSecondaryColor3ub(byte arg0,byte arg1,byte arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribI4bv(int arg0, java.nio.ByteBuffer arg1);
+	default void glSecondaryColor3us(short arg0,short arg1,short arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttribI4sv(int arg0, long arg1);
+	default void glSecondaryColor3ui(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribI4sv(int arg0, java.nio.ShortBuffer arg1);
+	default void nglSecondaryColor3bv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribI4sv(int arg0, short[] arg1);
+	default void glSecondaryColor3bv(java.nio.ByteBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttribI4ubv(int arg0, long arg1);
+	default void nglSecondaryColor3sv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribI4ubv(int arg0, java.nio.ByteBuffer arg1);
+	default void glSecondaryColor3sv(short[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttribI4usv(int arg0, long arg1);
+	default void glSecondaryColor3sv(java.nio.ShortBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribI4usv(int arg0, short[] arg1);
+	default void nglSecondaryColor3iv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttribI4usv(int arg0, java.nio.ShortBuffer arg1);
+	default void glSecondaryColor3iv(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglBindFragDataLocation(int arg0, int arg1, long arg2);
+	default void glSecondaryColor3iv(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBindFragDataLocation(int arg0, int arg1, java.lang.CharSequence arg2);
+	default void nglSecondaryColor3fv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBindFragDataLocation(int arg0, int arg1, java.nio.ByteBuffer arg2);
+	default void glSecondaryColor3fv(java.nio.FloatBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBeginConditionalRender(int arg0, int arg1);
+	default void glSecondaryColor3fv(float[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glEndConditionalRender();
+	default void nglSecondaryColor3dv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glClampColor(int arg0, int arg1);
+	default void glSecondaryColor3dv(double[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glFramebufferTexture1D(int arg0, int arg1, int arg2, int arg3, int arg4);
+	default void glSecondaryColor3dv(java.nio.DoubleBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glFramebufferTexture3D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5);
+	default void nglSecondaryColor3ubv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexParameterIiv(int arg0, int arg1, long arg2);
+	default void glSecondaryColor3ubv(java.nio.ByteBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexParameterIiv(int arg0, int arg1, int[] arg2);
+	default void nglSecondaryColor3usv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexParameterIiv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void glSecondaryColor3usv(java.nio.ShortBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexParameterIi(int arg0, int arg1, int arg2);
+	default void glSecondaryColor3usv(short[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexParameterIuiv(int arg0, int arg1, long arg2);
+	default void nglSecondaryColor3uiv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexParameterIuiv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void glSecondaryColor3uiv(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexParameterIuiv(int arg0, int arg1, int[] arg2);
+	default void glSecondaryColor3uiv(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexParameterIui(int arg0, int arg1, int arg2);
+	default void nglSecondaryColorPointer(int arg0,int arg1,int arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetTexParameterIiv(int arg0, int arg1, long arg2);
+	default void glSecondaryColorPointer(int arg0,int arg1,int arg2,java.nio.IntBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetTexParameterIiv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void glSecondaryColorPointer(int arg0,int arg1,int arg2,java.nio.ShortBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetTexParameterIiv(int arg0, int arg1, int[] arg2);
+	default void glSecondaryColorPointer(int arg0,int arg1,int arg2,java.nio.ByteBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetTexParameterIi(int arg0, int arg1);
+	default void glSecondaryColorPointer(int arg0,int arg1,int arg2,java.nio.FloatBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetTexParameterIuiv(int arg0, int arg1, long arg2);
+	default void glSecondaryColorPointer(int arg0,int arg1,int arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetTexParameterIuiv(int arg0, int arg1, int[] arg2);
+	default void glBlendFuncSeparate(int arg0,int arg1,int arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetTexParameterIuiv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void glWindowPos2i(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetTexParameterIui(int arg0, int arg1);
+	default void glWindowPos2s(short arg0,short arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColorMaski(int arg0, boolean arg1, boolean arg2, boolean arg3, boolean arg4);
+	default void glWindowPos2f(float arg0,float arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetBooleani_v(int arg0, int arg1, long arg2);
+	default void glWindowPos2d(double arg0,double arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetBooleani_v(int arg0, int arg1, java.nio.ByteBuffer arg2);
+	default void nglWindowPos2iv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	boolean glGetBooleani(int arg0, int arg1);
+	default void glWindowPos2iv(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glEnablei(int arg0, int arg1);
+	default void glWindowPos2iv(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDisablei(int arg0, int arg1);
+	default void nglWindowPos2sv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	boolean glIsEnabledi(int arg0, int arg1);
+	default void glWindowPos2sv(short[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib1s(int arg0, short arg1);
+	default void glWindowPos2sv(java.nio.ShortBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib1d(int arg0, double arg1);
+	default void nglWindowPos2fv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib2s(int arg0, short arg1, short arg2);
+	default void glWindowPos2fv(java.nio.FloatBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib2d(int arg0, double arg1, double arg2);
+	default void glWindowPos2fv(float[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib3s(int arg0, short arg1, short arg2, short arg3);
+	default void nglWindowPos2dv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib3d(int arg0, double arg1, double arg2, double arg3);
+	default void glWindowPos2dv(java.nio.DoubleBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib4s(int arg0, short arg1, short arg2, short arg3, short arg4);
+	default void glWindowPos2dv(double[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib4d(int arg0, double arg1, double arg2, double arg3, double arg4);
+	default void glWindowPos3i(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib4Nub(int arg0, byte arg1, byte arg2, byte arg3, byte arg4);
+	default void glWindowPos3s(short arg0,short arg1,short arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttrib1sv(int arg0, long arg1);
+	default void glWindowPos3f(float arg0,float arg1,float arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib1sv(int arg0, java.nio.ShortBuffer arg1);
+	default void glWindowPos3d(double arg0,double arg1,double arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib1sv(int arg0, short[] arg1);
+	default void nglWindowPos3iv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttrib1dv(int arg0, long arg1);
+	default void glWindowPos3iv(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib1dv(int arg0, double[] arg1);
+	default void glWindowPos3iv(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib1dv(int arg0, java.nio.DoubleBuffer arg1);
+	default void nglWindowPos3sv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttrib2sv(int arg0, long arg1);
+	default void glWindowPos3sv(java.nio.ShortBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib2sv(int arg0, short[] arg1);
+	default void glWindowPos3sv(short[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib2sv(int arg0, java.nio.ShortBuffer arg1);
+	default void nglWindowPos3fv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttrib2dv(int arg0, long arg1);
+	default void glWindowPos3fv(float[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib2dv(int arg0, double[] arg1);
+	default void glWindowPos3fv(java.nio.FloatBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib2dv(int arg0, java.nio.DoubleBuffer arg1);
+	default void nglWindowPos3dv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttrib3sv(int arg0, long arg1);
+	default void glWindowPos3dv(java.nio.DoubleBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib3sv(int arg0, short[] arg1);
+	default void glWindowPos3dv(double[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib3sv(int arg0, java.nio.ShortBuffer arg1);
+	default void nglCompressedTexImage3D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,long arg8) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttrib3dv(int arg0, long arg1);
+	default void glCompressedTexImage3D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,long arg8) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib3dv(int arg0, double[] arg1);
+	default void glCompressedTexImage3D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,java.nio.ByteBuffer arg7) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib3dv(int arg0, java.nio.DoubleBuffer arg1);
+	default void nglCompressedTexImage2D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,long arg7) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttrib4sv(int arg0, long arg1);
+	default void glCompressedTexImage2D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,long arg7) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib4sv(int arg0, short[] arg1);
+	default void glCompressedTexImage2D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,java.nio.ByteBuffer arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib4sv(int arg0, java.nio.ShortBuffer arg1);
+	default void nglCompressedTexImage1D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,long arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttrib4dv(int arg0, long arg1);
+	default void glCompressedTexImage1D(int arg0,int arg1,int arg2,int arg3,int arg4,java.nio.ByteBuffer arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib4dv(int arg0, java.nio.DoubleBuffer arg1);
+	default void glCompressedTexImage1D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,long arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib4dv(int arg0, double[] arg1);
+	default void nglCompressedTexSubImage3D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,int arg8,int arg9,long arg10) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttrib4iv(int arg0, long arg1);
+	default void glCompressedTexSubImage3D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,int arg8,int arg9,long arg10) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib4iv(int arg0, java.nio.IntBuffer arg1);
+	default void glCompressedTexSubImage3D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,int arg8,java.nio.ByteBuffer arg9) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib4iv(int arg0, int[] arg1);
+	default void nglCompressedTexSubImage2D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,long arg8) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttrib4bv(int arg0, long arg1);
+	default void glCompressedTexSubImage2D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,long arg8) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib4bv(int arg0, java.nio.ByteBuffer arg1);
+	default void glCompressedTexSubImage2D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,java.nio.ByteBuffer arg7) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttrib4ubv(int arg0, long arg1);
+	default void nglCompressedTexSubImage1D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,long arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib4ubv(int arg0, java.nio.ByteBuffer arg1);
+	default void glCompressedTexSubImage1D(int arg0,int arg1,int arg2,int arg3,int arg4,java.nio.ByteBuffer arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttrib4usv(int arg0, long arg1);
+	default void glCompressedTexSubImage1D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,long arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib4usv(int arg0, short[] arg1);
+	default void nglGetCompressedTexImage(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib4usv(int arg0, java.nio.ShortBuffer arg1);
+	default void glGetCompressedTexImage(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttrib4uiv(int arg0, long arg1);
+	default void glGetCompressedTexImage(int arg0,int arg1,java.nio.ByteBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib4uiv(int arg0, int[] arg1);
+	default void glSampleCoverage(float arg0,boolean arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib4uiv(int arg0, java.nio.IntBuffer arg1);
+	default void glActiveTexture(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttrib4Nbv(int arg0, long arg1);
+	default void glClientActiveTexture(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib4Nbv(int arg0, java.nio.ByteBuffer arg1);
+	default void glMultiTexCoord1f(int arg0,float arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttrib4Nsv(int arg0, long arg1);
+	default void glMultiTexCoord1s(int arg0,short arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib4Nsv(int arg0, short[] arg1);
+	default void glMultiTexCoord1i(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib4Nsv(int arg0, java.nio.ShortBuffer arg1);
+	default void glMultiTexCoord1d(int arg0,double arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttrib4Niv(int arg0, long arg1);
+	default void nglMultiTexCoord1fv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib4Niv(int arg0, int[] arg1);
+	default void glMultiTexCoord1fv(int arg0,java.nio.FloatBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib4Niv(int arg0, java.nio.IntBuffer arg1);
+	default void glMultiTexCoord1fv(int arg0,float[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttrib4Nubv(int arg0, long arg1);
+	default void nglMultiTexCoord1sv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib4Nubv(int arg0, java.nio.ByteBuffer arg1);
+	default void glMultiTexCoord1sv(int arg0,short[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttrib4Nusv(int arg0, long arg1);
+	default void glMultiTexCoord1sv(int arg0,java.nio.ShortBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib4Nusv(int arg0, short[] arg1);
+	default void nglMultiTexCoord1iv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib4Nusv(int arg0, java.nio.ShortBuffer arg1);
+	default void glMultiTexCoord1iv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexAttrib4Nuiv(int arg0, long arg1);
+	default void glMultiTexCoord1iv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib4Nuiv(int arg0, int[] arg1);
+	default void nglMultiTexCoord1dv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexAttrib4Nuiv(int arg0, java.nio.IntBuffer arg1);
+	default void glMultiTexCoord1dv(int arg0,double[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetVertexAttribi(int arg0, int arg1);
+	default void glMultiTexCoord1dv(int arg0,java.nio.DoubleBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetVertexAttribdv(int arg0, int arg1, long arg2);
+	default void glMultiTexCoord2f(int arg0,float arg1,float arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetVertexAttribdv(int arg0, int arg1, double[] arg2);
+	default void glMultiTexCoord2s(int arg0,short arg1,short arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetVertexAttribdv(int arg0, int arg1, java.nio.DoubleBuffer arg2);
+	default void glMultiTexCoord2i(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetQueryObjectuiv(int arg0, int arg1, long arg2);
+	default void glMultiTexCoord2d(int arg0,double arg1,double arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBufferData(int arg0, long[] arg1, int arg2);
+	default void nglMultiTexCoord2fv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBufferData(int arg0, java.nio.LongBuffer arg1, int arg2);
+	default void glMultiTexCoord2fv(int arg0,float[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBufferData(int arg0, java.nio.DoubleBuffer arg1, int arg2);
+	default void glMultiTexCoord2fv(int arg0,java.nio.FloatBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBufferData(int arg0, double[] arg1, int arg2);
+	default void nglMultiTexCoord2sv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBufferSubData(int arg0, long arg1, double[] arg2);
+	default void glMultiTexCoord2sv(int arg0,short[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBufferSubData(int arg0, long arg1, java.nio.DoubleBuffer arg2);
+	default void glMultiTexCoord2sv(int arg0,java.nio.ShortBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBufferSubData(int arg0, long arg1, long[] arg2);
+	default void nglMultiTexCoord2iv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBufferSubData(int arg0, long arg1, java.nio.LongBuffer arg2);
+	default void glMultiTexCoord2iv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetBufferSubData(int arg0, long arg1, long arg2, long arg3);
+	default void glMultiTexCoord2iv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetBufferSubData(int arg0, long arg1, short[] arg2);
+	default void nglMultiTexCoord2dv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetBufferSubData(int arg0, long arg1, java.nio.ByteBuffer arg2);
+	default void glMultiTexCoord2dv(int arg0,double[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetBufferSubData(int arg0, long arg1, java.nio.ShortBuffer arg2);
+	default void glMultiTexCoord2dv(int arg0,java.nio.DoubleBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetBufferSubData(int arg0, long arg1, double[] arg2);
+	default void glMultiTexCoord3f(int arg0,float arg1,float arg2,float arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetBufferSubData(int arg0, long arg1, float[] arg2);
+	default void glMultiTexCoord3s(int arg0,short arg1,short arg2,short arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetBufferSubData(int arg0, long arg1, long[] arg2);
+	default void glMultiTexCoord3i(int arg0,int arg1,int arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetBufferSubData(int arg0, long arg1, int[] arg2);
+	default void glMultiTexCoord3d(int arg0,double arg1,double arg2,double arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetBufferSubData(int arg0, long arg1, java.nio.DoubleBuffer arg2);
+	default void nglMultiTexCoord3fv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetBufferSubData(int arg0, long arg1, java.nio.FloatBuffer arg2);
+	default void glMultiTexCoord3fv(int arg0,float[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetBufferSubData(int arg0, long arg1, java.nio.LongBuffer arg2);
+	default void glMultiTexCoord3fv(int arg0,java.nio.FloatBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetBufferSubData(int arg0, long arg1, java.nio.IntBuffer arg2);
+	default void nglMultiTexCoord3sv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	long nglMapBuffer(int arg0, int arg1);
+	default void glMultiTexCoord3sv(int arg0,short[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	java.nio.ByteBuffer glMapBuffer(int arg0, int arg1, long arg2, java.nio.ByteBuffer arg3);
+	default void glMultiTexCoord3sv(int arg0,java.nio.ShortBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	java.nio.ByteBuffer glMapBuffer(int arg0, int arg1, java.nio.ByteBuffer arg2);
+	default void nglMultiTexCoord3iv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	java.nio.ByteBuffer glMapBuffer(int arg0, int arg1);
+	default void glMultiTexCoord3iv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetQueryObjectiv(int arg0, int arg1, long arg2);
+	default void glMultiTexCoord3iv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetQueryObjectiv(int arg0, int arg1, int[] arg2);
+	default void nglMultiTexCoord3dv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetQueryObjectiv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void glMultiTexCoord3dv(int arg0,java.nio.DoubleBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetQueryObjectiv(int arg0, int arg1, long arg2);
+	default void glMultiTexCoord3dv(int arg0,double[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetQueryObjecti(int arg0, int arg1);
+	default void glMultiTexCoord4f(int arg0,float arg1,float arg2,float arg3,float arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glFogCoordf(float arg0);
+	default void glMultiTexCoord4s(int arg0,short arg1,short arg2,short arg3,short arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glFogCoordd(double arg0);
+	default void glMultiTexCoord4i(int arg0,int arg1,int arg2,int arg3,int arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglFogCoordfv(long arg0);
+	default void glMultiTexCoord4d(int arg0,double arg1,double arg2,double arg3,double arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glFogCoordfv(float[] arg0);
+	default void nglMultiTexCoord4fv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glFogCoordfv(java.nio.FloatBuffer arg0);
+	default void glMultiTexCoord4fv(int arg0,float[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglFogCoorddv(long arg0);
+	default void glMultiTexCoord4fv(int arg0,java.nio.FloatBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glFogCoorddv(double[] arg0);
+	default void nglMultiTexCoord4sv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glFogCoorddv(java.nio.DoubleBuffer arg0);
+	default void glMultiTexCoord4sv(int arg0,short[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglFogCoordPointer(int arg0, int arg1, long arg2);
+	default void glMultiTexCoord4sv(int arg0,java.nio.ShortBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glFogCoordPointer(int arg0, int arg1, java.nio.FloatBuffer arg2);
+	default void nglMultiTexCoord4iv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glFogCoordPointer(int arg0, int arg1, java.nio.ByteBuffer arg2);
+	default void glMultiTexCoord4iv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glFogCoordPointer(int arg0, int arg1, long arg2);
+	default void glMultiTexCoord4iv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glFogCoordPointer(int arg0, int arg1, java.nio.ShortBuffer arg2);
+	default void nglMultiTexCoord4dv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglMultiDrawArrays(int arg0, long arg1, long arg2, int arg3);
+	default void glMultiTexCoord4dv(int arg0,double[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiDrawArrays(int arg0, int[] arg1, int[] arg2);
+	default void glMultiTexCoord4dv(int arg0,java.nio.DoubleBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiDrawArrays(int arg0, java.nio.IntBuffer arg1, java.nio.IntBuffer arg2);
+	default void nglLoadTransposeMatrixf(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglMultiDrawElements(int arg0, long arg1, int arg2, long arg3, int arg4);
+	default void glLoadTransposeMatrixf(java.nio.FloatBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiDrawElements(int arg0, java.nio.IntBuffer arg1, int arg2, org.lwjgl.PointerBuffer arg3);
+	default void glLoadTransposeMatrixf(float[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiDrawElements(int arg0, int[] arg1, int arg2, org.lwjgl.PointerBuffer arg3);
+	default void nglLoadTransposeMatrixd(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPointParameterf(int arg0, float arg1);
+	default void glLoadTransposeMatrixd(double[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPointParameteri(int arg0, int arg1);
+	default void glLoadTransposeMatrixd(java.nio.DoubleBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglPointParameterfv(int arg0, long arg1);
+	default void nglMultTransposeMatrixf(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPointParameterfv(int arg0, java.nio.FloatBuffer arg1);
+	default void glMultTransposeMatrixf(float[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPointParameterfv(int arg0, float[] arg1);
+	default void glMultTransposeMatrixf(java.nio.FloatBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglPointParameteriv(int arg0, long arg1);
+	default void nglMultTransposeMatrixd(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPointParameteriv(int arg0, java.nio.IntBuffer arg1);
+	default void glMultTransposeMatrixd(java.nio.DoubleBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPointParameteriv(int arg0, int[] arg1);
+	default void glMultTransposeMatrixd(double[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSecondaryColor3b(byte arg0, byte arg1, byte arg2);
+	default void nglTexImage3D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,int arg8,long arg9) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSecondaryColor3s(short arg0, short arg1, short arg2);
+	default void glTexImage3D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,int arg8,double[] arg9) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSecondaryColor3i(int arg0, int arg1, int arg2);
+	default void glTexImage3D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,int arg8,short[] arg9) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSecondaryColor3f(float arg0, float arg1, float arg2);
+	default void glTexImage3D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,int arg8,java.nio.FloatBuffer arg9) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSecondaryColor3d(double arg0, double arg1, double arg2);
+	default void glTexImage3D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,int arg8,float[] arg9) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSecondaryColor3ub(byte arg0, byte arg1, byte arg2);
+	default void glTexImage3D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,int arg8,int[] arg9) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSecondaryColor3us(short arg0, short arg1, short arg2);
+	default void glTexImage3D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,int arg8,java.nio.ShortBuffer arg9) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSecondaryColor3ui(int arg0, int arg1, int arg2);
+	default void glTexImage3D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,int arg8,long arg9) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglSecondaryColor3bv(long arg0);
+	default void glTexImage3D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,int arg8,java.nio.ByteBuffer arg9) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSecondaryColor3bv(java.nio.ByteBuffer arg0);
+	default void glTexImage3D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,int arg8,java.nio.DoubleBuffer arg9) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglSecondaryColor3sv(long arg0);
+	default void glTexImage3D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,int arg8,java.nio.IntBuffer arg9) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSecondaryColor3sv(short[] arg0);
+	default void nglTexSubImage3D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,int arg8,int arg9,long arg10) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSecondaryColor3sv(java.nio.ShortBuffer arg0);
+	default void glTexSubImage3D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,int arg8,int arg9,double[] arg10) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglSecondaryColor3iv(long arg0);
+	default void glTexSubImage3D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,int arg8,int arg9,short[] arg10) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSecondaryColor3iv(int[] arg0);
+	default void glTexSubImage3D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,int arg8,int arg9,int[] arg10) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSecondaryColor3iv(java.nio.IntBuffer arg0);
+	default void glTexSubImage3D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,int arg8,int arg9,java.nio.FloatBuffer arg10) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglSecondaryColor3fv(long arg0);
+	default void glTexSubImage3D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,int arg8,int arg9,java.nio.IntBuffer arg10) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSecondaryColor3fv(java.nio.FloatBuffer arg0);
+	default void glTexSubImage3D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,int arg8,int arg9,java.nio.ShortBuffer arg10) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSecondaryColor3fv(float[] arg0);
+	default void glTexSubImage3D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,int arg8,int arg9,long arg10) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglSecondaryColor3dv(long arg0);
+	default void glTexSubImage3D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,int arg8,int arg9,java.nio.ByteBuffer arg10) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSecondaryColor3dv(double[] arg0);
+	default void glTexSubImage3D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,int arg8,int arg9,java.nio.DoubleBuffer arg10) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSecondaryColor3dv(java.nio.DoubleBuffer arg0);
+	default void glTexSubImage3D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,int arg8,int arg9,float[] arg10) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglSecondaryColor3ubv(long arg0);
+	default void glCopyTexSubImage3D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,int arg8) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSecondaryColor3ubv(java.nio.ByteBuffer arg0);
+	default void nglDrawRangeElements(int arg0,int arg1,int arg2,int arg3,int arg4,long arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglSecondaryColor3usv(long arg0);
+	default void glDrawRangeElements(int arg0,int arg1,int arg2,java.nio.IntBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSecondaryColor3usv(java.nio.ShortBuffer arg0);
+	default void glDrawRangeElements(int arg0,int arg1,int arg2,int arg3,int arg4,long arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSecondaryColor3usv(short[] arg0);
+	default void glDrawRangeElements(int arg0,int arg1,int arg2,int arg3,java.nio.ByteBuffer arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglSecondaryColor3uiv(long arg0);
+	default void glDrawRangeElements(int arg0,int arg1,int arg2,java.nio.ByteBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSecondaryColor3uiv(int[] arg0);
+	default void glDrawRangeElements(int arg0,int arg1,int arg2,java.nio.ShortBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSecondaryColor3uiv(java.nio.IntBuffer arg0);
+	default void glEnable(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglSecondaryColorPointer(int arg0, int arg1, int arg2, long arg3);
+	default void glDisable(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSecondaryColorPointer(int arg0, int arg1, int arg2, java.nio.IntBuffer arg3);
+	default void glAccum(int arg0,float arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSecondaryColorPointer(int arg0, int arg1, int arg2, java.nio.ShortBuffer arg3);
+	default void glAlphaFunc(int arg0,float arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSecondaryColorPointer(int arg0, int arg1, int arg2, java.nio.ByteBuffer arg3);
+	default boolean nglAreTexturesResident(int arg0,long arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSecondaryColorPointer(int arg0, int arg1, int arg2, java.nio.FloatBuffer arg3);
+	default boolean glAreTexturesResident(java.nio.IntBuffer arg0,java.nio.ByteBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSecondaryColorPointer(int arg0, int arg1, int arg2, long arg3);
+	default boolean glAreTexturesResident(int arg0,java.nio.ByteBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glWindowPos2i(int arg0, int arg1);
+	default boolean glAreTexturesResident(int[] arg0,java.nio.ByteBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glWindowPos2s(short arg0, short arg1);
+	default void glArrayElement(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glWindowPos2f(float arg0, float arg1);
+	default void glBegin(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glWindowPos2d(double arg0, double arg1);
+	default void glBindTexture(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglWindowPos2iv(long arg0);
+	default void nglBitmap(int arg0,int arg1,float arg2,float arg3,float arg4,float arg5,long arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void glWindowPos2iv(java.nio.IntBuffer arg0);
+	default void glBitmap(int arg0,int arg1,float arg2,float arg3,float arg4,float arg5,java.nio.ByteBuffer arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void glWindowPos2iv(int[] arg0);
+	default void glBitmap(int arg0,int arg1,float arg2,float arg3,float arg4,float arg5,long arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglWindowPos2sv(long arg0);
+	default void glBlendFunc(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glWindowPos2sv(java.nio.ShortBuffer arg0);
+	default void glCallList(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glWindowPos2sv(short[] arg0);
+	default void nglCallLists(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglWindowPos2fv(long arg0);
+	default void glCallLists(java.nio.ShortBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glWindowPos2fv(java.nio.FloatBuffer arg0);
+	default void glCallLists(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glWindowPos2fv(float[] arg0);
+	default void glCallLists(java.nio.ByteBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglWindowPos2dv(long arg0);
+	default void glCallLists(int arg0,java.nio.ByteBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glWindowPos2dv(java.nio.DoubleBuffer arg0);
+	default void glClear(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glWindowPos2dv(double[] arg0);
+	default void glClearAccum(float arg0,float arg1,float arg2,float arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glWindowPos3i(int arg0, int arg1, int arg2);
+	default void glClearColor(float arg0,float arg1,float arg2,float arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glWindowPos3s(short arg0, short arg1, short arg2);
+	default void glClearDepth(double arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glWindowPos3f(float arg0, float arg1, float arg2);
+	default void glClearIndex(float arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glWindowPos3d(double arg0, double arg1, double arg2);
+	default void glClearStencil(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglWindowPos3iv(long arg0);
+	default void nglClipPlane(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glWindowPos3iv(java.nio.IntBuffer arg0);
+	default void glClipPlane(int arg0,double[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glWindowPos3iv(int[] arg0);
+	default void glClipPlane(int arg0,java.nio.DoubleBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglWindowPos3sv(long arg0);
+	default void glColor3b(byte arg0,byte arg1,byte arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glWindowPos3sv(short[] arg0);
+	default void glColor3s(short arg0,short arg1,short arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glWindowPos3sv(java.nio.ShortBuffer arg0);
+	default void glColor3i(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglWindowPos3fv(long arg0);
+	default void glColor3f(float arg0,float arg1,float arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glWindowPos3fv(java.nio.FloatBuffer arg0);
+	default void glColor3d(double arg0,double arg1,double arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glWindowPos3fv(float[] arg0);
+	default void glColor3ub(byte arg0,byte arg1,byte arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglWindowPos3dv(long arg0);
+	default void glColor3us(short arg0,short arg1,short arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glWindowPos3dv(java.nio.DoubleBuffer arg0);
+	default void glColor3ui(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glWindowPos3dv(double[] arg0);
+	default void nglColor3bv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglCompressedTexImage1D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, long arg6);
+	default void glColor3bv(java.nio.ByteBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glCompressedTexImage1D(int arg0, int arg1, int arg2, int arg3, int arg4, java.nio.ByteBuffer arg5);
+	default void nglColor3sv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glCompressedTexImage1D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, long arg6);
+	default void glColor3sv(short[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglCompressedTexSubImage1D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, long arg6);
+	default void glColor3sv(java.nio.ShortBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glCompressedTexSubImage1D(int arg0, int arg1, int arg2, int arg3, int arg4, java.nio.ByteBuffer arg5);
+	default void nglColor3iv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glCompressedTexSubImage1D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, long arg6);
+	default void glColor3iv(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetCompressedTexImage(int arg0, int arg1, long arg2);
+	default void glColor3iv(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetCompressedTexImage(int arg0, int arg1, long arg2);
+	default void nglColor3fv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetCompressedTexImage(int arg0, int arg1, java.nio.ByteBuffer arg2);
+	default void glColor3fv(float[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glClientActiveTexture(int arg0);
+	default void glColor3fv(java.nio.FloatBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord1f(int arg0, float arg1);
+	default void nglColor3dv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord1s(int arg0, short arg1);
+	default void glColor3dv(java.nio.DoubleBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord1i(int arg0, int arg1);
+	default void glColor3dv(double[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord1d(int arg0, double arg1);
+	default void nglColor3ubv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglMultiTexCoord1fv(int arg0, long arg1);
+	default void glColor3ubv(java.nio.ByteBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord1fv(int arg0, java.nio.FloatBuffer arg1);
+	default void nglColor3usv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord1fv(int arg0, float[] arg1);
+	default void glColor3usv(short[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglMultiTexCoord1sv(int arg0, long arg1);
+	default void glColor3usv(java.nio.ShortBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord1sv(int arg0, short[] arg1);
+	default void nglColor3uiv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord1sv(int arg0, java.nio.ShortBuffer arg1);
+	default void glColor3uiv(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglMultiTexCoord1iv(int arg0, long arg1);
+	default void glColor3uiv(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord1iv(int arg0, int[] arg1);
+	default void glColor4b(byte arg0,byte arg1,byte arg2,byte arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord1iv(int arg0, java.nio.IntBuffer arg1);
+	default void glColor4s(short arg0,short arg1,short arg2,short arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglMultiTexCoord1dv(int arg0, long arg1);
+	default void glColor4i(int arg0,int arg1,int arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord1dv(int arg0, double[] arg1);
+	default void glColor4f(float arg0,float arg1,float arg2,float arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord1dv(int arg0, java.nio.DoubleBuffer arg1);
+	default void glColor4d(double arg0,double arg1,double arg2,double arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord2f(int arg0, float arg1, float arg2);
+	default void glColor4ub(byte arg0,byte arg1,byte arg2,byte arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord2s(int arg0, short arg1, short arg2);
+	default void glColor4us(short arg0,short arg1,short arg2,short arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord2i(int arg0, int arg1, int arg2);
+	default void glColor4ui(int arg0,int arg1,int arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord2d(int arg0, double arg1, double arg2);
+	default void nglColor4bv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglMultiTexCoord2fv(int arg0, long arg1);
+	default void glColor4bv(java.nio.ByteBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord2fv(int arg0, float[] arg1);
+	default void nglColor4sv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord2fv(int arg0, java.nio.FloatBuffer arg1);
+	default void glColor4sv(java.nio.ShortBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglMultiTexCoord2sv(int arg0, long arg1);
+	default void glColor4sv(short[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord2sv(int arg0, short[] arg1);
+	default void nglColor4iv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord2sv(int arg0, java.nio.ShortBuffer arg1);
+	default void glColor4iv(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglMultiTexCoord2iv(int arg0, long arg1);
+	default void glColor4iv(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord2iv(int arg0, java.nio.IntBuffer arg1);
+	default void nglColor4fv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord2iv(int arg0, int[] arg1);
+	default void glColor4fv(java.nio.FloatBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglMultiTexCoord2dv(int arg0, long arg1);
+	default void glColor4fv(float[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord2dv(int arg0, double[] arg1);
+	default void nglColor4dv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord2dv(int arg0, java.nio.DoubleBuffer arg1);
+	default void glColor4dv(java.nio.DoubleBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord3f(int arg0, float arg1, float arg2, float arg3);
+	default void glColor4dv(double[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord3s(int arg0, short arg1, short arg2, short arg3);
+	default void nglColor4ubv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord3i(int arg0, int arg1, int arg2, int arg3);
+	default void glColor4ubv(java.nio.ByteBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord3d(int arg0, double arg1, double arg2, double arg3);
+	default void nglColor4usv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglMultiTexCoord3fv(int arg0, long arg1);
+	default void glColor4usv(short[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord3fv(int arg0, float[] arg1);
+	default void glColor4usv(java.nio.ShortBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord3fv(int arg0, java.nio.FloatBuffer arg1);
+	default void nglColor4uiv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglMultiTexCoord3sv(int arg0, long arg1);
+	default void glColor4uiv(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord3sv(int arg0, short[] arg1);
+	default void glColor4uiv(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord3sv(int arg0, java.nio.ShortBuffer arg1);
+	default void glColorMask(boolean arg0,boolean arg1,boolean arg2,boolean arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglMultiTexCoord3iv(int arg0, long arg1);
+	default void glColorMaterial(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord3iv(int arg0, int[] arg1);
+	default void nglColorPointer(int arg0,int arg1,int arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord3iv(int arg0, java.nio.IntBuffer arg1);
+	default void glColorPointer(int arg0,int arg1,int arg2,java.nio.ByteBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglMultiTexCoord3dv(int arg0, long arg1);
+	default void glColorPointer(int arg0,int arg1,int arg2,java.nio.FloatBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord3dv(int arg0, java.nio.DoubleBuffer arg1);
+	default void glColorPointer(int arg0,int arg1,int arg2,java.nio.ShortBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord3dv(int arg0, double[] arg1);
+	default void glColorPointer(int arg0,int arg1,int arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord4f(int arg0, float arg1, float arg2, float arg3, float arg4);
+	default void glColorPointer(int arg0,int arg1,int arg2,java.nio.IntBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord4s(int arg0, short arg1, short arg2, short arg3, short arg4);
+	default void glCopyPixels(int arg0,int arg1,int arg2,int arg3,int arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord4i(int arg0, int arg1, int arg2, int arg3, int arg4);
+	default void glCullFace(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord4d(int arg0, double arg1, double arg2, double arg3, double arg4);
+	default void glDeleteLists(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglMultiTexCoord4fv(int arg0, long arg1);
+	default void glDepthFunc(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord4fv(int arg0, float[] arg1);
+	default void glDepthMask(boolean arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord4fv(int arg0, java.nio.FloatBuffer arg1);
+	default void glDepthRange(double arg0,double arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglMultiTexCoord4sv(int arg0, long arg1);
+	default void glDisableClientState(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord4sv(int arg0, short[] arg1);
+	default void glDrawArrays(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord4sv(int arg0, java.nio.ShortBuffer arg1);
+	default void glDrawBuffer(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglMultiTexCoord4iv(int arg0, long arg1);
+	default void nglDrawElements(int arg0,int arg1,int arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord4iv(int arg0, int[] arg1);
+	default void glDrawElements(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord4iv(int arg0, java.nio.IntBuffer arg1);
+	default void glDrawElements(int arg0,java.nio.ShortBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglMultiTexCoord4dv(int arg0, long arg1);
+	default void glDrawElements(int arg0,java.nio.ByteBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord4dv(int arg0, double[] arg1);
+	default void glDrawElements(int arg0,int arg1,java.nio.ByteBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultiTexCoord4dv(int arg0, java.nio.DoubleBuffer arg1);
+	default void glDrawElements(int arg0,int arg1,int arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglLoadTransposeMatrixf(long arg0);
+	default void nglDrawPixels(int arg0,int arg1,int arg2,int arg3,long arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glLoadTransposeMatrixf(java.nio.FloatBuffer arg0);
+	default void glDrawPixels(int arg0,int arg1,int arg2,int arg3,java.nio.ByteBuffer arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glLoadTransposeMatrixf(float[] arg0);
+	default void glDrawPixels(int arg0,int arg1,int arg2,int arg3,long arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglLoadTransposeMatrixd(long arg0);
+	default void glDrawPixels(int arg0,int arg1,int arg2,int arg3,short[] arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glLoadTransposeMatrixd(double[] arg0);
+	default void glDrawPixels(int arg0,int arg1,int arg2,int arg3,int[] arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glLoadTransposeMatrixd(java.nio.DoubleBuffer arg0);
+	default void glDrawPixels(int arg0,int arg1,int arg2,int arg3,float[] arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglMultTransposeMatrixf(long arg0);
+	default void glDrawPixels(int arg0,int arg1,int arg2,int arg3,java.nio.IntBuffer arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultTransposeMatrixf(float[] arg0);
+	default void glDrawPixels(int arg0,int arg1,int arg2,int arg3,java.nio.FloatBuffer arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultTransposeMatrixf(java.nio.FloatBuffer arg0);
+	default void glDrawPixels(int arg0,int arg1,int arg2,int arg3,java.nio.ShortBuffer arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglMultTransposeMatrixd(long arg0);
+	default void glEdgeFlag(boolean arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultTransposeMatrixd(java.nio.DoubleBuffer arg0);
+	default void nglEdgeFlagv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultTransposeMatrixd(double[] arg0);
+	default void glEdgeFlagv(java.nio.ByteBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexImage3D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, double[] arg9);
+	default void nglEdgeFlagPointer(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexImage3D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, java.nio.DoubleBuffer arg9);
+	default void glEdgeFlagPointer(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexSubImage3D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, java.nio.DoubleBuffer arg10);
+	default void glEdgeFlagPointer(int arg0,java.nio.ByteBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexSubImage3D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, double[] arg10);
+	default void glEnableClientState(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexImage2D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, java.nio.DoubleBuffer arg8);
+	default void glEnd() {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexImage2D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, double[] arg8);
+	default void glEvalCoord1f(float arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexSubImage2D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, double[] arg8);
+	default void nglEvalCoord1fv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexSubImage2D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, java.nio.DoubleBuffer arg8);
+	default void glEvalCoord1fv(java.nio.FloatBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glAccum(int arg0, float arg1);
+	default void glEvalCoord1fv(float[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glAlphaFunc(int arg0, float arg1);
+	default void glEvalCoord1d(double arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	boolean nglAreTexturesResident(int arg0, long arg1, long arg2);
+	default void nglEvalCoord1dv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	boolean glAreTexturesResident(int[] arg0, java.nio.ByteBuffer arg1);
+	default void glEvalCoord1dv(double[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	boolean glAreTexturesResident(int arg0, java.nio.ByteBuffer arg1);
+	default void glEvalCoord1dv(java.nio.DoubleBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	boolean glAreTexturesResident(java.nio.IntBuffer arg0, java.nio.ByteBuffer arg1);
+	default void glEvalCoord2f(float arg0,float arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glArrayElement(int arg0);
+	default void nglEvalCoord2fv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBegin(int arg0);
+	default void glEvalCoord2fv(java.nio.FloatBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglBitmap(int arg0, int arg1, float arg2, float arg3, float arg4, float arg5, long arg6);
+	default void glEvalCoord2fv(float[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBitmap(int arg0, int arg1, float arg2, float arg3, float arg4, float arg5, long arg6);
+	default void glEvalCoord2d(double arg0,double arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glBitmap(int arg0, int arg1, float arg2, float arg3, float arg4, float arg5, java.nio.ByteBuffer arg6);
+	default void nglEvalCoord2dv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glCallList(int arg0);
+	default void glEvalCoord2dv(java.nio.DoubleBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglCallLists(int arg0, int arg1, long arg2);
+	default void glEvalCoord2dv(double[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glCallLists(int arg0, java.nio.ByteBuffer arg1);
+	default void glEvalMesh1(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glCallLists(java.nio.IntBuffer arg0);
+	default void glEvalMesh2(int arg0,int arg1,int arg2,int arg3,int arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glCallLists(java.nio.ByteBuffer arg0);
+	default void glEvalPoint1(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glCallLists(java.nio.ShortBuffer arg0);
+	default void glEvalPoint2(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glClearAccum(float arg0, float arg1, float arg2, float arg3);
+	default void nglFeedbackBuffer(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glClearDepth(double arg0);
+	default void glFeedbackBuffer(int arg0,java.nio.FloatBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glClearIndex(float arg0);
+	default void glFeedbackBuffer(int arg0,float[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglClipPlane(int arg0, long arg1);
+	default void glFinish() {throw new RuntimeException("Not implemented yet.");}
 
-	void glClipPlane(int arg0, double[] arg1);
+	default void glFlush() {throw new RuntimeException("Not implemented yet.");}
 
-	void glClipPlane(int arg0, java.nio.DoubleBuffer arg1);
+	default void glFogi(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor3b(byte arg0, byte arg1, byte arg2);
+	default void nglFogiv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor3s(short arg0, short arg1, short arg2);
+	default void glFogiv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor3i(int arg0, int arg1, int arg2);
+	default void glFogiv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor3f(float arg0, float arg1, float arg2);
+	default void glFogf(int arg0,float arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor3d(double arg0, double arg1, double arg2);
+	default void nglFogfv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor3ub(byte arg0, byte arg1, byte arg2);
+	default void glFogfv(int arg0,float[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor3us(short arg0, short arg1, short arg2);
+	default void glFogfv(int arg0,java.nio.FloatBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor3ui(int arg0, int arg1, int arg2);
+	default void glFrontFace(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglColor3bv(long arg0);
+	default int glGenLists(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor3bv(java.nio.ByteBuffer arg0);
+	default void nglGenTextures(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglColor3sv(long arg0);
+	default void glGenTextures(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor3sv(short[] arg0);
+	default int glGenTextures() {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor3sv(java.nio.ShortBuffer arg0);
+	default void glGenTextures(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglColor3iv(long arg0);
+	default void nglDeleteTextures(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor3iv(int[] arg0);
+	default void glDeleteTextures(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor3iv(java.nio.IntBuffer arg0);
+	default void glDeleteTextures(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglColor3fv(long arg0);
+	default void glDeleteTextures(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor3fv(java.nio.FloatBuffer arg0);
+	default void nglGetClipPlane(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor3fv(float[] arg0);
+	default void glGetClipPlane(int arg0,double[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglColor3dv(long arg0);
+	default void glGetClipPlane(int arg0,java.nio.DoubleBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor3dv(double[] arg0);
+	default void nglGetBooleanv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor3dv(java.nio.DoubleBuffer arg0);
+	default void glGetBooleanv(int arg0,java.nio.ByteBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglColor3ubv(long arg0);
+	default boolean glGetBoolean(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor3ubv(java.nio.ByteBuffer arg0);
+	default void nglGetFloatv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglColor3usv(long arg0);
+	default void glGetFloatv(int arg0,float[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor3usv(java.nio.ShortBuffer arg0);
+	default void glGetFloatv(int arg0,java.nio.FloatBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor3usv(short[] arg0);
+	default float glGetFloat(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglColor3uiv(long arg0);
+	default void nglGetIntegerv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor3uiv(int[] arg0);
+	default void glGetIntegerv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor3uiv(java.nio.IntBuffer arg0);
+	default void glGetIntegerv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor4b(byte arg0, byte arg1, byte arg2, byte arg3);
+	default int glGetInteger(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor4s(short arg0, short arg1, short arg2, short arg3);
+	default void nglGetDoublev(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor4i(int arg0, int arg1, int arg2, int arg3);
+	default void glGetDoublev(int arg0,double[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor4f(float arg0, float arg1, float arg2, float arg3);
+	default void glGetDoublev(int arg0,java.nio.DoubleBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor4d(double arg0, double arg1, double arg2, double arg3);
+	default double glGetDouble(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor4ub(byte arg0, byte arg1, byte arg2, byte arg3);
+	default int glGetError() {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor4us(short arg0, short arg1, short arg2, short arg3);
+	default void nglGetLightiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor4ui(int arg0, int arg1, int arg2, int arg3);
+	default void glGetLightiv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglColor4bv(long arg0);
+	default void glGetLightiv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor4bv(java.nio.ByteBuffer arg0);
+	default int glGetLighti(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglColor4sv(long arg0);
+	default void nglGetLightfv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor4sv(java.nio.ShortBuffer arg0);
+	default void glGetLightfv(int arg0,int arg1,java.nio.FloatBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor4sv(short[] arg0);
+	default void glGetLightfv(int arg0,int arg1,float[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglColor4iv(long arg0);
+	default float glGetLightf(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor4iv(java.nio.IntBuffer arg0);
+	default void nglGetMapiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor4iv(int[] arg0);
+	default void glGetMapiv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglColor4fv(long arg0);
+	default void glGetMapiv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor4fv(float[] arg0);
+	default int glGetMapi(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor4fv(java.nio.FloatBuffer arg0);
+	default void nglGetMapfv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglColor4dv(long arg0);
+	default void glGetMapfv(int arg0,int arg1,float[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor4dv(java.nio.DoubleBuffer arg0);
+	default void glGetMapfv(int arg0,int arg1,java.nio.FloatBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor4dv(double[] arg0);
+	default float glGetMapf(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglColor4ubv(long arg0);
+	default void nglGetMapdv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor4ubv(java.nio.ByteBuffer arg0);
+	default void glGetMapdv(int arg0,int arg1,java.nio.DoubleBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglColor4usv(long arg0);
+	default void glGetMapdv(int arg0,int arg1,double[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor4usv(short[] arg0);
+	default double glGetMapd(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor4usv(java.nio.ShortBuffer arg0);
+	default void nglGetMaterialiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglColor4uiv(long arg0);
+	default void glGetMaterialiv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor4uiv(java.nio.IntBuffer arg0);
+	default void glGetMaterialiv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColor4uiv(int[] arg0);
+	default void nglGetMaterialfv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColorMaterial(int arg0, int arg1);
+	default void glGetMaterialfv(int arg0,int arg1,float[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglColorPointer(int arg0, int arg1, int arg2, long arg3);
+	default void glGetMaterialfv(int arg0,int arg1,java.nio.FloatBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColorPointer(int arg0, int arg1, int arg2, java.nio.ByteBuffer arg3);
+	default void nglGetPixelMapfv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColorPointer(int arg0, int arg1, int arg2, java.nio.IntBuffer arg3);
+	default void glGetPixelMapfv(int arg0,java.nio.FloatBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColorPointer(int arg0, int arg1, int arg2, java.nio.FloatBuffer arg3);
+	default void glGetPixelMapfv(int arg0,float[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColorPointer(int arg0, int arg1, int arg2, java.nio.ShortBuffer arg3);
+	default void glGetPixelMapfv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glColorPointer(int arg0, int arg1, int arg2, long arg3);
+	default void nglGetPixelMapusv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glCopyPixels(int arg0, int arg1, int arg2, int arg3, int arg4);
+	default void glGetPixelMapusv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDeleteLists(int arg0, int arg1);
+	default void glGetPixelMapusv(int arg0,java.nio.ShortBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDepthRange(double arg0, double arg1);
+	default void glGetPixelMapusv(int arg0,short[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDisableClientState(int arg0);
+	default void nglGetPixelMapuiv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawBuffer(int arg0);
+	default void glGetPixelMapuiv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglDrawPixels(int arg0, int arg1, int arg2, int arg3, long arg4);
+	default void glGetPixelMapuiv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawPixels(int arg0, int arg1, int arg2, int arg3, java.nio.ShortBuffer arg4);
+	default void glGetPixelMapuiv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawPixels(int arg0, int arg1, int arg2, int arg3, float[] arg4);
+	default void nglGetPointerv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawPixels(int arg0, int arg1, int arg2, int arg3, int[] arg4);
+	default void glGetPointerv(int arg0,org.lwjgl.PointerBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawPixels(int arg0, int arg1, int arg2, int arg3, short[] arg4);
+	default long glGetPointer(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawPixels(int arg0, int arg1, int arg2, int arg3, long arg4);
+	default void nglGetPolygonStipple(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawPixels(int arg0, int arg1, int arg2, int arg3, java.nio.FloatBuffer arg4);
+	default void glGetPolygonStipple(java.nio.ByteBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawPixels(int arg0, int arg1, int arg2, int arg3, java.nio.ByteBuffer arg4);
+	default void glGetPolygonStipple(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glDrawPixels(int arg0, int arg1, int arg2, int arg3, java.nio.IntBuffer arg4);
+	default long nglGetString(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glEdgeFlag(boolean arg0);
+	default java.lang.String glGetString(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglEdgeFlagv(long arg0);
+	default void nglGetTexEnviv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glEdgeFlagv(java.nio.ByteBuffer arg0);
+	default void glGetTexEnviv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglEdgeFlagPointer(int arg0, long arg1);
+	default void glGetTexEnviv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glEdgeFlagPointer(int arg0, java.nio.ByteBuffer arg1);
+	default int glGetTexEnvi(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glEdgeFlagPointer(int arg0, long arg1);
+	default void nglGetTexEnvfv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glEnableClientState(int arg0);
+	default void glGetTexEnvfv(int arg0,int arg1,float[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glEnd();
+	default void glGetTexEnvfv(int arg0,int arg1,java.nio.FloatBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glEvalCoord1f(float arg0);
+	default float glGetTexEnvf(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglEvalCoord1fv(long arg0);
+	default void nglGetTexGeniv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glEvalCoord1fv(float[] arg0);
+	default void glGetTexGeniv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glEvalCoord1fv(java.nio.FloatBuffer arg0);
+	default void glGetTexGeniv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glEvalCoord1d(double arg0);
+	default int glGetTexGeni(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglEvalCoord1dv(long arg0);
+	default void nglGetTexGenfv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glEvalCoord1dv(java.nio.DoubleBuffer arg0);
+	default void glGetTexGenfv(int arg0,int arg1,java.nio.FloatBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glEvalCoord1dv(double[] arg0);
+	default void glGetTexGenfv(int arg0,int arg1,float[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glEvalCoord2f(float arg0, float arg1);
+	default float glGetTexGenf(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglEvalCoord2fv(long arg0);
+	default void nglGetTexGendv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glEvalCoord2fv(float[] arg0);
+	default void glGetTexGendv(int arg0,int arg1,double[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glEvalCoord2fv(java.nio.FloatBuffer arg0);
+	default void glGetTexGendv(int arg0,int arg1,java.nio.DoubleBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glEvalCoord2d(double arg0, double arg1);
+	default double glGetTexGend(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglEvalCoord2dv(long arg0);
+	default void nglGetTexImage(int arg0,int arg1,int arg2,int arg3,long arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glEvalCoord2dv(java.nio.DoubleBuffer arg0);
+	default void glGetTexImage(int arg0,int arg1,int arg2,int arg3,double[] arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glEvalCoord2dv(double[] arg0);
+	default void glGetTexImage(int arg0,int arg1,int arg2,int arg3,short[] arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glEvalMesh1(int arg0, int arg1, int arg2);
+	default void glGetTexImage(int arg0,int arg1,int arg2,int arg3,int[] arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glEvalMesh2(int arg0, int arg1, int arg2, int arg3, int arg4);
+	default void glGetTexImage(int arg0,int arg1,int arg2,int arg3,float[] arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glEvalPoint1(int arg0);
+	default void glGetTexImage(int arg0,int arg1,int arg2,int arg3,java.nio.IntBuffer arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glEvalPoint2(int arg0, int arg1);
+	default void glGetTexImage(int arg0,int arg1,int arg2,int arg3,java.nio.DoubleBuffer arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglFeedbackBuffer(int arg0, int arg1, long arg2);
+	default void glGetTexImage(int arg0,int arg1,int arg2,int arg3,java.nio.ShortBuffer arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glFeedbackBuffer(int arg0, float[] arg1);
+	default void glGetTexImage(int arg0,int arg1,int arg2,int arg3,java.nio.FloatBuffer arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glFeedbackBuffer(int arg0, java.nio.FloatBuffer arg1);
+	default void glGetTexImage(int arg0,int arg1,int arg2,int arg3,java.nio.ByteBuffer arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glFogi(int arg0, int arg1);
+	default void glGetTexImage(int arg0,int arg1,int arg2,int arg3,long arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglFogiv(int arg0, long arg1);
+	default void nglGetTexLevelParameteriv(int arg0,int arg1,int arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glFogiv(int arg0, java.nio.IntBuffer arg1);
+	default void glGetTexLevelParameteriv(int arg0,int arg1,int arg2,int[] arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glFogiv(int arg0, int[] arg1);
+	default void glGetTexLevelParameteriv(int arg0,int arg1,int arg2,java.nio.IntBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glFogf(int arg0, float arg1);
+	default int glGetTexLevelParameteri(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglFogfv(int arg0, long arg1);
+	default void nglGetTexLevelParameterfv(int arg0,int arg1,int arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glFogfv(int arg0, java.nio.FloatBuffer arg1);
+	default void glGetTexLevelParameterfv(int arg0,int arg1,int arg2,float[] arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glFogfv(int arg0, float[] arg1);
+	default void glGetTexLevelParameterfv(int arg0,int arg1,int arg2,java.nio.FloatBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGenLists(int arg0);
+	default float glGetTexLevelParameterf(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetClipPlane(int arg0, long arg1);
+	default void nglGetTexParameteriv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetClipPlane(int arg0, double[] arg1);
+	default void glGetTexParameteriv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetClipPlane(int arg0, java.nio.DoubleBuffer arg1);
+	default void glGetTexParameteriv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetDoublev(int arg0, long arg1);
+	default int glGetTexParameteri(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetDoublev(int arg0, java.nio.DoubleBuffer arg1);
+	default void nglGetTexParameterfv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetDoublev(int arg0, double[] arg1);
+	default void glGetTexParameterfv(int arg0,int arg1,float[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	double glGetDouble(int arg0);
+	default void glGetTexParameterfv(int arg0,int arg1,java.nio.FloatBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetLightiv(int arg0, int arg1, long arg2);
+	default float glGetTexParameterf(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetLightiv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void glHint(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetLightiv(int arg0, int arg1, int[] arg2);
+	default void glIndexi(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetLighti(int arg0, int arg1);
+	default void glIndexub(byte arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetLightfv(int arg0, int arg1, long arg2);
+	default void glIndexs(short arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetLightfv(int arg0, int arg1, float[] arg2);
+	default void glIndexf(float arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetLightfv(int arg0, int arg1, java.nio.FloatBuffer arg2);
+	default void glIndexd(double arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	float glGetLightf(int arg0, int arg1);
+	default void nglIndexiv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetMapiv(int arg0, int arg1, long arg2);
+	default void glIndexiv(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetMapiv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void glIndexiv(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetMapiv(int arg0, int arg1, int[] arg2);
+	default void nglIndexubv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetMapi(int arg0, int arg1);
+	default void glIndexubv(java.nio.ByteBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetMapfv(int arg0, int arg1, long arg2);
+	default void nglIndexsv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetMapfv(int arg0, int arg1, java.nio.FloatBuffer arg2);
+	default void glIndexsv(java.nio.ShortBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetMapfv(int arg0, int arg1, float[] arg2);
+	default void glIndexsv(short[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	float glGetMapf(int arg0, int arg1);
+	default void nglIndexfv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetMapdv(int arg0, int arg1, long arg2);
+	default void glIndexfv(java.nio.FloatBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetMapdv(int arg0, int arg1, java.nio.DoubleBuffer arg2);
+	default void glIndexfv(float[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetMapdv(int arg0, int arg1, double[] arg2);
+	default void nglIndexdv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	double glGetMapd(int arg0, int arg1);
+	default void glIndexdv(double[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetMaterialiv(int arg0, int arg1, long arg2);
+	default void glIndexdv(java.nio.DoubleBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetMaterialiv(int arg0, int arg1, int[] arg2);
+	default void glIndexMask(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetMaterialiv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void nglIndexPointer(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetMaterialfv(int arg0, int arg1, long arg2);
+	default void glIndexPointer(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetMaterialfv(int arg0, int arg1, float[] arg2);
+	default void glIndexPointer(int arg0,java.nio.ShortBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetMaterialfv(int arg0, int arg1, java.nio.FloatBuffer arg2);
+	default void glIndexPointer(int arg0,java.nio.ByteBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetPixelMapfv(int arg0, long arg1);
+	default void glIndexPointer(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetPixelMapfv(int arg0, float[] arg1);
+	default void glIndexPointer(int arg0,int arg1,java.nio.ByteBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetPixelMapfv(int arg0, long arg1);
+	default void glInitNames() {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetPixelMapfv(int arg0, java.nio.FloatBuffer arg1);
+	default void nglInterleavedArrays(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetPixelMapusv(int arg0, long arg1);
+	default void glInterleavedArrays(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetPixelMapusv(int arg0, java.nio.ShortBuffer arg1);
+	default void glInterleavedArrays(int arg0,int arg1,java.nio.DoubleBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetPixelMapusv(int arg0, long arg1);
+	default void glInterleavedArrays(int arg0,int arg1,java.nio.FloatBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetPixelMapusv(int arg0, short[] arg1);
+	default void glInterleavedArrays(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetPixelMapuiv(int arg0, long arg1);
+	default void glInterleavedArrays(int arg0,int arg1,java.nio.ShortBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetPixelMapuiv(int arg0, int[] arg1);
+	default void glInterleavedArrays(int arg0,int arg1,java.nio.ByteBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetPixelMapuiv(int arg0, long arg1);
+	default void glInterleavedArrays(int arg0,int arg1,double[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetPixelMapuiv(int arg0, java.nio.IntBuffer arg1);
+	default void glInterleavedArrays(int arg0,int arg1,float[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetPointerv(int arg0, long arg1);
+	default void glInterleavedArrays(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetPointerv(int arg0, org.lwjgl.PointerBuffer arg1);
+	default void glInterleavedArrays(int arg0,int arg1,short[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	long glGetPointer(int arg0);
+	default boolean glIsEnabled(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetPolygonStipple(long arg0);
+	default boolean glIsList(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetPolygonStipple(long arg0);
+	default boolean glIsTexture(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetPolygonStipple(java.nio.ByteBuffer arg0);
+	default void glLightModeli(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetTexEnviv(int arg0, int arg1, long arg2);
+	default void glLightModelf(int arg0,float arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetTexEnviv(int arg0, int arg1, int[] arg2);
+	default void nglLightModeliv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetTexEnviv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void glLightModeliv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetTexEnvi(int arg0, int arg1);
+	default void glLightModeliv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetTexEnvfv(int arg0, int arg1, long arg2);
+	default void nglLightModelfv(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetTexEnvfv(int arg0, int arg1, float[] arg2);
+	default void glLightModelfv(int arg0,float[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetTexEnvfv(int arg0, int arg1, java.nio.FloatBuffer arg2);
+	default void glLightModelfv(int arg0,java.nio.FloatBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	float glGetTexEnvf(int arg0, int arg1);
+	default void glLighti(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetTexGeniv(int arg0, int arg1, long arg2);
+	default void glLightf(int arg0,int arg1,float arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetTexGeniv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void nglLightiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetTexGeniv(int arg0, int arg1, int[] arg2);
+	default void glLightiv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetTexGeni(int arg0, int arg1);
+	default void glLightiv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetTexGenfv(int arg0, int arg1, long arg2);
+	default void nglLightfv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetTexGenfv(int arg0, int arg1, float[] arg2);
+	default void glLightfv(int arg0,int arg1,java.nio.FloatBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetTexGenfv(int arg0, int arg1, java.nio.FloatBuffer arg2);
+	default void glLightfv(int arg0,int arg1,float[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	float glGetTexGenf(int arg0, int arg1);
+	default void glLineStipple(int arg0,short arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetTexGendv(int arg0, int arg1, long arg2);
+	default void glLineWidth(float arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetTexGendv(int arg0, int arg1, double[] arg2);
+	default void glListBase(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetTexGendv(int arg0, int arg1, java.nio.DoubleBuffer arg2);
+	default void nglLoadMatrixf(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	double glGetTexGend(int arg0, int arg1);
+	default void glLoadMatrixf(float[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetTexImage(int arg0, int arg1, int arg2, int arg3, long arg4);
+	default void glLoadMatrixf(java.nio.FloatBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetTexImage(int arg0, int arg1, int arg2, int arg3, java.nio.ShortBuffer arg4);
+	default void nglLoadMatrixd(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetTexImage(int arg0, int arg1, int arg2, int arg3, double[] arg4);
+	default void glLoadMatrixd(double[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetTexImage(int arg0, int arg1, int arg2, int arg3, java.nio.FloatBuffer arg4);
+	default void glLoadMatrixd(java.nio.DoubleBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetTexImage(int arg0, int arg1, int arg2, int arg3, java.nio.DoubleBuffer arg4);
+	default void glLoadIdentity() {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetTexImage(int arg0, int arg1, int arg2, int arg3, long arg4);
+	default void glLoadName(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetTexImage(int arg0, int arg1, int arg2, int arg3, java.nio.IntBuffer arg4);
+	default void glLogicOp(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetTexImage(int arg0, int arg1, int arg2, int arg3, java.nio.ByteBuffer arg4);
+	default void nglMap1f(int arg0,float arg1,float arg2,int arg3,int arg4,long arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetTexImage(int arg0, int arg1, int arg2, int arg3, float[] arg4);
+	default void glMap1f(int arg0,float arg1,float arg2,int arg3,int arg4,float[] arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetTexImage(int arg0, int arg1, int arg2, int arg3, short[] arg4);
+	default void glMap1f(int arg0,float arg1,float arg2,int arg3,int arg4,java.nio.FloatBuffer arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetTexImage(int arg0, int arg1, int arg2, int arg3, int[] arg4);
+	default void nglMap1d(int arg0,double arg1,double arg2,int arg3,int arg4,long arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetTexLevelParameteriv(int arg0, int arg1, int arg2, long arg3);
+	default void glMap1d(int arg0,double arg1,double arg2,int arg3,int arg4,java.nio.DoubleBuffer arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetTexLevelParameteriv(int arg0, int arg1, int arg2, java.nio.IntBuffer arg3);
+	default void glMap1d(int arg0,double arg1,double arg2,int arg3,int arg4,double[] arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetTexLevelParameteriv(int arg0, int arg1, int arg2, int[] arg3);
+	default void nglMap2f(int arg0,float arg1,float arg2,int arg3,int arg4,float arg5,float arg6,int arg7,int arg8,long arg9) {throw new RuntimeException("Not implemented yet.");}
 
-	int glGetTexLevelParameteri(int arg0, int arg1, int arg2);
+	default void glMap2f(int arg0,float arg1,float arg2,int arg3,int arg4,float arg5,float arg6,int arg7,int arg8,float[] arg9) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglGetTexLevelParameterfv(int arg0, int arg1, int arg2, long arg3);
+	default void glMap2f(int arg0,float arg1,float arg2,int arg3,int arg4,float arg5,float arg6,int arg7,int arg8,java.nio.FloatBuffer arg9) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetTexLevelParameterfv(int arg0, int arg1, int arg2, java.nio.FloatBuffer arg3);
+	default void nglMap2d(int arg0,double arg1,double arg2,int arg3,int arg4,double arg5,double arg6,int arg7,int arg8,long arg9) {throw new RuntimeException("Not implemented yet.");}
 
-	void glGetTexLevelParameterfv(int arg0, int arg1, int arg2, float[] arg3);
+	default void glMap2d(int arg0,double arg1,double arg2,int arg3,int arg4,double arg5,double arg6,int arg7,int arg8,java.nio.DoubleBuffer arg9) {throw new RuntimeException("Not implemented yet.");}
 
-	float glGetTexLevelParameterf(int arg0, int arg1, int arg2);
+	default void glMap2d(int arg0,double arg1,double arg2,int arg3,int arg4,double arg5,double arg6,int arg7,int arg8,double[] arg9) {throw new RuntimeException("Not implemented yet.");}
 
-	void glIndexi(int arg0);
+	default void glMapGrid1f(int arg0,float arg1,float arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glIndexub(byte arg0);
+	default void glMapGrid1d(int arg0,double arg1,double arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glIndexs(short arg0);
+	default void glMapGrid2f(int arg0,float arg1,float arg2,int arg3,float arg4,float arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void glIndexf(float arg0);
+	default void glMapGrid2d(int arg0,double arg1,double arg2,int arg3,double arg4,double arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void glIndexd(double arg0);
+	default void glMateriali(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglIndexiv(long arg0);
+	default void glMaterialf(int arg0,int arg1,float arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glIndexiv(java.nio.IntBuffer arg0);
+	default void nglMaterialiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glIndexiv(int[] arg0);
+	default void glMaterialiv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglIndexubv(long arg0);
+	default void glMaterialiv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glIndexubv(java.nio.ByteBuffer arg0);
+	default void nglMaterialfv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglIndexsv(long arg0);
+	default void glMaterialfv(int arg0,int arg1,float[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glIndexsv(java.nio.ShortBuffer arg0);
+	default void glMaterialfv(int arg0,int arg1,java.nio.FloatBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glIndexsv(short[] arg0);
+	default void glMatrixMode(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglIndexfv(long arg0);
+	default void nglMultMatrixf(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glIndexfv(float[] arg0);
+	default void glMultMatrixf(java.nio.FloatBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glIndexfv(java.nio.FloatBuffer arg0);
+	default void glMultMatrixf(float[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglIndexdv(long arg0);
+	default void nglMultMatrixd(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glIndexdv(double[] arg0);
+	default void glMultMatrixd(java.nio.DoubleBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glIndexdv(java.nio.DoubleBuffer arg0);
+	default void glMultMatrixd(double[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glIndexMask(int arg0);
+	default void glFrustum(double arg0,double arg1,double arg2,double arg3,double arg4,double arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglIndexPointer(int arg0, int arg1, long arg2);
+	default void glNewList(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glIndexPointer(int arg0, int arg1, long arg2);
+	default void glEndList() {throw new RuntimeException("Not implemented yet.");}
 
-	void glIndexPointer(int arg0, java.nio.ByteBuffer arg1);
+	default void glNormal3f(float arg0,float arg1,float arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glIndexPointer(int arg0, java.nio.IntBuffer arg1);
+	default void glNormal3b(byte arg0,byte arg1,byte arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glIndexPointer(int arg0, int arg1, java.nio.ByteBuffer arg2);
+	default void glNormal3s(short arg0,short arg1,short arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glIndexPointer(int arg0, java.nio.ShortBuffer arg1);
+	default void glNormal3i(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glInitNames();
+	default void glNormal3d(double arg0,double arg1,double arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglInterleavedArrays(int arg0, int arg1, long arg2);
+	default void nglNormal3fv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glInterleavedArrays(int arg0, int arg1, double[] arg2);
+	default void glNormal3fv(java.nio.FloatBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glInterleavedArrays(int arg0, int arg1, float[] arg2);
+	default void glNormal3fv(float[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glInterleavedArrays(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void nglNormal3bv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glInterleavedArrays(int arg0, int arg1, int[] arg2);
+	default void glNormal3bv(java.nio.ByteBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glInterleavedArrays(int arg0, int arg1, short[] arg2);
+	default void nglNormal3sv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glInterleavedArrays(int arg0, int arg1, java.nio.FloatBuffer arg2);
+	default void glNormal3sv(short[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glInterleavedArrays(int arg0, int arg1, java.nio.ByteBuffer arg2);
+	default void glNormal3sv(java.nio.ShortBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glInterleavedArrays(int arg0, int arg1, long arg2);
+	default void nglNormal3iv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glInterleavedArrays(int arg0, int arg1, java.nio.DoubleBuffer arg2);
+	default void glNormal3iv(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glInterleavedArrays(int arg0, int arg1, java.nio.ShortBuffer arg2);
+	default void glNormal3iv(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	boolean glIsList(int arg0);
+	default void nglNormal3dv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glLightModeli(int arg0, int arg1);
+	default void glNormal3dv(double[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glLightModelf(int arg0, float arg1);
+	default void glNormal3dv(java.nio.DoubleBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglLightModeliv(int arg0, long arg1);
+	default void nglNormalPointer(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glLightModeliv(int arg0, int[] arg1);
+	default void glNormalPointer(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glLightModeliv(int arg0, java.nio.IntBuffer arg1);
+	default void glNormalPointer(int arg0,int arg1,java.nio.FloatBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglLightModelfv(int arg0, long arg1);
+	default void glNormalPointer(int arg0,int arg1,java.nio.ByteBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glLightModelfv(int arg0, float[] arg1);
+	default void glNormalPointer(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glLightModelfv(int arg0, java.nio.FloatBuffer arg1);
+	default void glNormalPointer(int arg0,int arg1,java.nio.ShortBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glLighti(int arg0, int arg1, int arg2);
+	default void glOrtho(double arg0,double arg1,double arg2,double arg3,double arg4,double arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void glLightf(int arg0, int arg1, float arg2);
+	default void glPassThrough(float arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglLightiv(int arg0, int arg1, long arg2);
+	default void nglPixelMapfv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glLightiv(int arg0, int arg1, int[] arg2);
+	default void glPixelMapfv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glLightiv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void glPixelMapfv(int arg0,float[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglLightfv(int arg0, int arg1, long arg2);
+	default void glPixelMapfv(int arg0,java.nio.FloatBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glLightfv(int arg0, int arg1, float[] arg2);
+	default void nglPixelMapusv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glLightfv(int arg0, int arg1, java.nio.FloatBuffer arg2);
+	default void glPixelMapusv(int arg0,short[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glLineStipple(int arg0, short arg1);
+	default void glPixelMapusv(int arg0,java.nio.ShortBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glListBase(int arg0);
+	default void glPixelMapusv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglLoadMatrixf(long arg0);
+	default void nglPixelMapuiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glLoadMatrixf(java.nio.FloatBuffer arg0);
+	default void glPixelMapuiv(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glLoadMatrixf(float[] arg0);
+	default void glPixelMapuiv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglLoadMatrixd(long arg0);
+	default void glPixelMapuiv(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glLoadMatrixd(java.nio.DoubleBuffer arg0);
+	default void glPixelStorei(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glLoadMatrixd(double[] arg0);
+	default void glPixelStoref(int arg0,float arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glLoadIdentity();
+	default void glPixelTransferi(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glLoadName(int arg0);
+	default void glPixelTransferf(int arg0,float arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glLogicOp(int arg0);
+	default void glPixelZoom(float arg0,float arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglMap1f(int arg0, float arg1, float arg2, int arg3, int arg4, long arg5);
+	default void glPointSize(float arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMap1f(int arg0, float arg1, float arg2, int arg3, int arg4, java.nio.FloatBuffer arg5);
+	default void glPolygonMode(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMap1f(int arg0, float arg1, float arg2, int arg3, int arg4, float[] arg5);
+	default void glPolygonOffset(float arg0,float arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglMap1d(int arg0, double arg1, double arg2, int arg3, int arg4, long arg5);
+	default void nglPolygonStipple(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMap1d(int arg0, double arg1, double arg2, int arg3, int arg4, java.nio.DoubleBuffer arg5);
+	default void glPolygonStipple(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMap1d(int arg0, double arg1, double arg2, int arg3, int arg4, double[] arg5);
+	default void glPolygonStipple(java.nio.ByteBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglMap2f(int arg0, float arg1, float arg2, int arg3, int arg4, float arg5, float arg6, int arg7, int arg8, long arg9);
+	default void glPushAttrib(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMap2f(int arg0, float arg1, float arg2, int arg3, int arg4, float arg5, float arg6, int arg7, int arg8, java.nio.FloatBuffer arg9);
+	default void glPushClientAttrib(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMap2f(int arg0, float arg1, float arg2, int arg3, int arg4, float arg5, float arg6, int arg7, int arg8, float[] arg9);
+	default void glPopAttrib() {throw new RuntimeException("Not implemented yet.");}
 
-	void nglMap2d(int arg0, double arg1, double arg2, int arg3, int arg4, double arg5, double arg6, int arg7, int arg8, long arg9);
+	default void glPopClientAttrib() {throw new RuntimeException("Not implemented yet.");}
 
-	void glMap2d(int arg0, double arg1, double arg2, int arg3, int arg4, double arg5, double arg6, int arg7, int arg8, java.nio.DoubleBuffer arg9);
+	default void glPopMatrix() {throw new RuntimeException("Not implemented yet.");}
 
-	void glMap2d(int arg0, double arg1, double arg2, int arg3, int arg4, double arg5, double arg6, int arg7, int arg8, double[] arg9);
+	default void glPopName() {throw new RuntimeException("Not implemented yet.");}
 
-	void glMapGrid1f(int arg0, float arg1, float arg2);
+	default void nglPrioritizeTextures(int arg0,long arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMapGrid1d(int arg0, double arg1, double arg2);
+	default void glPrioritizeTextures(java.nio.IntBuffer arg0,java.nio.FloatBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMapGrid2f(int arg0, float arg1, float arg2, int arg3, float arg4, float arg5);
+	default void glPrioritizeTextures(int[] arg0,float[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMapGrid2d(int arg0, double arg1, double arg2, int arg3, double arg4, double arg5);
+	default void glPushMatrix() {throw new RuntimeException("Not implemented yet.");}
 
-	void glMateriali(int arg0, int arg1, int arg2);
+	default void glPushName(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMaterialf(int arg0, int arg1, float arg2);
+	default void glRasterPos2i(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglMaterialiv(int arg0, int arg1, long arg2);
+	default void glRasterPos2s(short arg0,short arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMaterialiv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void glRasterPos2f(float arg0,float arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMaterialiv(int arg0, int arg1, int[] arg2);
+	default void glRasterPos2d(double arg0,double arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglMaterialfv(int arg0, int arg1, long arg2);
+	default void nglRasterPos2iv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMaterialfv(int arg0, int arg1, java.nio.FloatBuffer arg2);
+	default void glRasterPos2iv(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMaterialfv(int arg0, int arg1, float[] arg2);
+	default void glRasterPos2iv(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMatrixMode(int arg0);
+	default void nglRasterPos2sv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglMultMatrixf(long arg0);
+	default void glRasterPos2sv(java.nio.ShortBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultMatrixf(java.nio.FloatBuffer arg0);
+	default void glRasterPos2sv(short[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultMatrixf(float[] arg0);
+	default void nglRasterPos2fv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglMultMatrixd(long arg0);
+	default void glRasterPos2fv(float[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultMatrixd(java.nio.DoubleBuffer arg0);
+	default void glRasterPos2fv(java.nio.FloatBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glMultMatrixd(double[] arg0);
+	default void nglRasterPos2dv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glFrustum(double arg0, double arg1, double arg2, double arg3, double arg4, double arg5);
+	default void glRasterPos2dv(double[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glNewList(int arg0, int arg1);
+	default void glRasterPos2dv(java.nio.DoubleBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glEndList();
+	default void glRasterPos3i(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glNormal3f(float arg0, float arg1, float arg2);
+	default void glRasterPos3s(short arg0,short arg1,short arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glNormal3b(byte arg0, byte arg1, byte arg2);
+	default void glRasterPos3f(float arg0,float arg1,float arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glNormal3s(short arg0, short arg1, short arg2);
+	default void glRasterPos3d(double arg0,double arg1,double arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glNormal3i(int arg0, int arg1, int arg2);
+	default void nglRasterPos3iv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glNormal3d(double arg0, double arg1, double arg2);
+	default void glRasterPos3iv(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglNormal3fv(long arg0);
+	default void glRasterPos3iv(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glNormal3fv(java.nio.FloatBuffer arg0);
+	default void nglRasterPos3sv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glNormal3fv(float[] arg0);
+	default void glRasterPos3sv(short[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglNormal3bv(long arg0);
+	default void glRasterPos3sv(java.nio.ShortBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glNormal3bv(java.nio.ByteBuffer arg0);
+	default void nglRasterPos3fv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglNormal3sv(long arg0);
+	default void glRasterPos3fv(java.nio.FloatBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glNormal3sv(short[] arg0);
+	default void glRasterPos3fv(float[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glNormal3sv(java.nio.ShortBuffer arg0);
+	default void nglRasterPos3dv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglNormal3iv(long arg0);
+	default void glRasterPos3dv(java.nio.DoubleBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glNormal3iv(int[] arg0);
+	default void glRasterPos3dv(double[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glNormal3iv(java.nio.IntBuffer arg0);
+	default void glRasterPos4i(int arg0,int arg1,int arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglNormal3dv(long arg0);
+	default void glRasterPos4s(short arg0,short arg1,short arg2,short arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glNormal3dv(double[] arg0);
+	default void glRasterPos4f(float arg0,float arg1,float arg2,float arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glNormal3dv(java.nio.DoubleBuffer arg0);
+	default void glRasterPos4d(double arg0,double arg1,double arg2,double arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglNormalPointer(int arg0, int arg1, long arg2);
+	default void nglRasterPos4iv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glNormalPointer(int arg0, int arg1, java.nio.ShortBuffer arg2);
+	default void glRasterPos4iv(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glNormalPointer(int arg0, int arg1, long arg2);
+	default void glRasterPos4iv(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glNormalPointer(int arg0, int arg1, java.nio.ByteBuffer arg2);
+	default void nglRasterPos4sv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glNormalPointer(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void glRasterPos4sv(java.nio.ShortBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glNormalPointer(int arg0, int arg1, java.nio.FloatBuffer arg2);
+	default void glRasterPos4sv(short[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glOrtho(double arg0, double arg1, double arg2, double arg3, double arg4, double arg5);
+	default void nglRasterPos4fv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPassThrough(float arg0);
+	default void glRasterPos4fv(java.nio.FloatBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglPixelMapfv(int arg0, int arg1, long arg2);
+	default void glRasterPos4fv(float[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPixelMapfv(int arg0, float[] arg1);
+	default void nglRasterPos4dv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPixelMapfv(int arg0, java.nio.FloatBuffer arg1);
+	default void glRasterPos4dv(java.nio.DoubleBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPixelMapfv(int arg0, int arg1, long arg2);
+	default void glRasterPos4dv(double[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglPixelMapusv(int arg0, int arg1, long arg2);
+	default void glReadBuffer(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPixelMapusv(int arg0, int arg1, long arg2);
+	default void nglReadPixels(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,long arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPixelMapusv(int arg0, java.nio.ShortBuffer arg1);
+	default void glReadPixels(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,java.nio.ByteBuffer arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPixelMapusv(int arg0, short[] arg1);
+	default void glReadPixels(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,java.nio.ShortBuffer arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglPixelMapuiv(int arg0, int arg1, long arg2);
+	default void glReadPixels(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int[] arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPixelMapuiv(int arg0, java.nio.IntBuffer arg1);
+	default void glReadPixels(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,float[] arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPixelMapuiv(int arg0, int[] arg1);
+	default void glReadPixels(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,short[] arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPixelMapuiv(int arg0, int arg1, long arg2);
+	default void glReadPixels(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,long arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPixelStoref(int arg0, float arg1);
+	default void glReadPixels(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,java.nio.IntBuffer arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPixelTransferi(int arg0, int arg1);
+	default void glReadPixels(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,java.nio.FloatBuffer arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPixelTransferf(int arg0, float arg1);
+	default void glRecti(int arg0,int arg1,int arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPixelZoom(float arg0, float arg1);
+	default void glRects(short arg0,short arg1,short arg2,short arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPointSize(float arg0);
+	default void glRectf(float arg0,float arg1,float arg2,float arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPolygonMode(int arg0, int arg1);
+	default void glRectd(double arg0,double arg1,double arg2,double arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglPolygonStipple(long arg0);
+	default void nglRectiv(long arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPolygonStipple(long arg0);
+	default void glRectiv(int[] arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPolygonStipple(java.nio.ByteBuffer arg0);
+	default void glRectiv(java.nio.IntBuffer arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPushAttrib(int arg0);
+	default void nglRectsv(long arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPushClientAttrib(int arg0);
+	default void glRectsv(java.nio.ShortBuffer arg0,java.nio.ShortBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPopAttrib();
+	default void glRectsv(short[] arg0,short[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPopClientAttrib();
+	default void nglRectfv(long arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPopMatrix();
+	default void glRectfv(java.nio.FloatBuffer arg0,java.nio.FloatBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPopName();
+	default void glRectfv(float[] arg0,float[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglPrioritizeTextures(int arg0, long arg1, long arg2);
+	default void nglRectdv(long arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPrioritizeTextures(int[] arg0, float[] arg1);
+	default void glRectdv(java.nio.DoubleBuffer arg0,java.nio.DoubleBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPrioritizeTextures(java.nio.IntBuffer arg0, java.nio.FloatBuffer arg1);
+	default void glRectdv(double[] arg0,double[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPushMatrix();
+	default int glRenderMode(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glPushName(int arg0);
+	default void glRotatef(float arg0,float arg1,float arg2,float arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos2i(int arg0, int arg1);
+	default void glRotated(double arg0,double arg1,double arg2,double arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos2s(short arg0, short arg1);
+	default void glScalef(float arg0,float arg1,float arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos2f(float arg0, float arg1);
+	default void glScaled(double arg0,double arg1,double arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos2d(double arg0, double arg1);
+	default void glScissor(int arg0,int arg1,int arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglRasterPos2iv(long arg0);
+	default void nglSelectBuffer(int arg0,long arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos2iv(java.nio.IntBuffer arg0);
+	default void glSelectBuffer(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos2iv(int[] arg0);
+	default void glSelectBuffer(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglRasterPos2sv(long arg0);
+	default void glShadeModel(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos2sv(short[] arg0);
+	default void glStencilFunc(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos2sv(java.nio.ShortBuffer arg0);
+	default void glStencilMask(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglRasterPos2fv(long arg0);
+	default void glStencilOp(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos2fv(java.nio.FloatBuffer arg0);
+	default void glTexCoord1f(float arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos2fv(float[] arg0);
+	default void glTexCoord1s(short arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglRasterPos2dv(long arg0);
+	default void glTexCoord1i(int arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos2dv(double[] arg0);
+	default void glTexCoord1d(double arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos2dv(java.nio.DoubleBuffer arg0);
+	default void nglTexCoord1fv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos3i(int arg0, int arg1, int arg2);
+	default void glTexCoord1fv(java.nio.FloatBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos3s(short arg0, short arg1, short arg2);
+	default void glTexCoord1fv(float[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos3f(float arg0, float arg1, float arg2);
+	default void nglTexCoord1sv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos3d(double arg0, double arg1, double arg2);
+	default void glTexCoord1sv(java.nio.ShortBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglRasterPos3iv(long arg0);
+	default void glTexCoord1sv(short[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos3iv(java.nio.IntBuffer arg0);
+	default void nglTexCoord1iv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos3iv(int[] arg0);
+	default void glTexCoord1iv(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglRasterPos3sv(long arg0);
+	default void glTexCoord1iv(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos3sv(java.nio.ShortBuffer arg0);
+	default void nglTexCoord1dv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos3sv(short[] arg0);
+	default void glTexCoord1dv(java.nio.DoubleBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglRasterPos3fv(long arg0);
+	default void glTexCoord1dv(double[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos3fv(float[] arg0);
+	default void glTexCoord2f(float arg0,float arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos3fv(java.nio.FloatBuffer arg0);
+	default void glTexCoord2s(short arg0,short arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglRasterPos3dv(long arg0);
+	default void glTexCoord2i(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos3dv(java.nio.DoubleBuffer arg0);
+	default void glTexCoord2d(double arg0,double arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos3dv(double[] arg0);
+	default void nglTexCoord2fv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos4i(int arg0, int arg1, int arg2, int arg3);
+	default void glTexCoord2fv(java.nio.FloatBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos4s(short arg0, short arg1, short arg2, short arg3);
+	default void glTexCoord2fv(float[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos4f(float arg0, float arg1, float arg2, float arg3);
+	default void nglTexCoord2sv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos4d(double arg0, double arg1, double arg2, double arg3);
+	default void glTexCoord2sv(short[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglRasterPos4iv(long arg0);
+	default void glTexCoord2sv(java.nio.ShortBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos4iv(int[] arg0);
+	default void nglTexCoord2iv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos4iv(java.nio.IntBuffer arg0);
+	default void glTexCoord2iv(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglRasterPos4sv(long arg0);
+	default void glTexCoord2iv(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos4sv(short[] arg0);
+	default void nglTexCoord2dv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos4sv(java.nio.ShortBuffer arg0);
+	default void glTexCoord2dv(java.nio.DoubleBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglRasterPos4fv(long arg0);
+	default void glTexCoord2dv(double[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos4fv(java.nio.FloatBuffer arg0);
+	default void glTexCoord3f(float arg0,float arg1,float arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos4fv(float[] arg0);
+	default void glTexCoord3s(short arg0,short arg1,short arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglRasterPos4dv(long arg0);
+	default void glTexCoord3i(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos4dv(java.nio.DoubleBuffer arg0);
+	default void glTexCoord3d(double arg0,double arg1,double arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRasterPos4dv(double[] arg0);
+	default void nglTexCoord3fv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRecti(int arg0, int arg1, int arg2, int arg3);
+	default void glTexCoord3fv(float[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRects(short arg0, short arg1, short arg2, short arg3);
+	default void glTexCoord3fv(java.nio.FloatBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRectf(float arg0, float arg1, float arg2, float arg3);
+	default void nglTexCoord3sv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRectd(double arg0, double arg1, double arg2, double arg3);
+	default void glTexCoord3sv(java.nio.ShortBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglRectiv(long arg0, long arg1);
+	default void glTexCoord3sv(short[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRectiv(int[] arg0, int[] arg1);
+	default void nglTexCoord3iv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRectiv(java.nio.IntBuffer arg0, java.nio.IntBuffer arg1);
+	default void glTexCoord3iv(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglRectsv(long arg0, long arg1);
+	default void glTexCoord3iv(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRectsv(short[] arg0, short[] arg1);
+	default void nglTexCoord3dv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRectsv(java.nio.ShortBuffer arg0, java.nio.ShortBuffer arg1);
+	default void glTexCoord3dv(java.nio.DoubleBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglRectfv(long arg0, long arg1);
+	default void glTexCoord3dv(double[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRectfv(java.nio.FloatBuffer arg0, java.nio.FloatBuffer arg1);
+	default void glTexCoord4f(float arg0,float arg1,float arg2,float arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRectfv(float[] arg0, float[] arg1);
+	default void glTexCoord4s(short arg0,short arg1,short arg2,short arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglRectdv(long arg0, long arg1);
+	default void glTexCoord4i(int arg0,int arg1,int arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRectdv(java.nio.DoubleBuffer arg0, java.nio.DoubleBuffer arg1);
+	default void glTexCoord4d(double arg0,double arg1,double arg2,double arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRectdv(double[] arg0, double[] arg1);
+	default void nglTexCoord4fv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	int glRenderMode(int arg0);
+	default void glTexCoord4fv(java.nio.FloatBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRotatef(float arg0, float arg1, float arg2, float arg3);
+	default void glTexCoord4fv(float[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glRotated(double arg0, double arg1, double arg2, double arg3);
+	default void nglTexCoord4sv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glScalef(float arg0, float arg1, float arg2);
+	default void glTexCoord4sv(short[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glScaled(double arg0, double arg1, double arg2);
+	default void glTexCoord4sv(java.nio.ShortBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglSelectBuffer(int arg0, long arg1);
+	default void nglTexCoord4iv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSelectBuffer(java.nio.IntBuffer arg0);
+	default void glTexCoord4iv(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glSelectBuffer(int[] arg0);
+	default void glTexCoord4iv(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glShadeModel(int arg0);
+	default void nglTexCoord4dv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord1f(float arg0);
+	default void glTexCoord4dv(java.nio.DoubleBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord1s(short arg0);
+	default void glTexCoord4dv(double[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord1i(int arg0);
+	default void nglTexCoordPointer(int arg0,int arg1,int arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord1d(double arg0);
+	default void glTexCoordPointer(int arg0,int arg1,int arg2,java.nio.ShortBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexCoord1fv(long arg0);
+	default void glTexCoordPointer(int arg0,int arg1,int arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord1fv(float[] arg0);
+	default void glTexCoordPointer(int arg0,int arg1,int arg2,java.nio.ByteBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord1fv(java.nio.FloatBuffer arg0);
+	default void glTexCoordPointer(int arg0,int arg1,int arg2,java.nio.IntBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexCoord1sv(long arg0);
+	default void glTexCoordPointer(int arg0,int arg1,int arg2,java.nio.FloatBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord1sv(java.nio.ShortBuffer arg0);
+	default void glTexEnvi(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord1sv(short[] arg0);
+	default void nglTexEnviv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexCoord1iv(long arg0);
+	default void glTexEnviv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord1iv(java.nio.IntBuffer arg0);
+	default void glTexEnviv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord1iv(int[] arg0);
+	default void glTexEnvf(int arg0,int arg1,float arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexCoord1dv(long arg0);
+	default void nglTexEnvfv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord1dv(java.nio.DoubleBuffer arg0);
+	default void glTexEnvfv(int arg0,int arg1,java.nio.FloatBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord1dv(double[] arg0);
+	default void glTexEnvfv(int arg0,int arg1,float[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord2f(float arg0, float arg1);
+	default void glTexGeni(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord2s(short arg0, short arg1);
+	default void nglTexGeniv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord2i(int arg0, int arg1);
+	default void glTexGeniv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord2d(double arg0, double arg1);
+	default void glTexGeniv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexCoord2fv(long arg0);
+	default void glTexGenf(int arg0,int arg1,float arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord2fv(float[] arg0);
+	default void nglTexGenfv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord2fv(java.nio.FloatBuffer arg0);
+	default void glTexGenfv(int arg0,int arg1,java.nio.FloatBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexCoord2sv(long arg0);
+	default void glTexGenfv(int arg0,int arg1,float[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord2sv(short[] arg0);
+	default void glTexGend(int arg0,int arg1,double arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord2sv(java.nio.ShortBuffer arg0);
+	default void nglTexGendv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexCoord2iv(long arg0);
+	default void glTexGendv(int arg0,int arg1,double[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord2iv(java.nio.IntBuffer arg0);
+	default void glTexGendv(int arg0,int arg1,java.nio.DoubleBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord2iv(int[] arg0);
+	default void nglTexImage1D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,long arg7) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexCoord2dv(long arg0);
+	default void glTexImage1D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,java.nio.FloatBuffer arg7) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord2dv(java.nio.DoubleBuffer arg0);
+	default void glTexImage1D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,java.nio.ByteBuffer arg7) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord2dv(double[] arg0);
+	default void glTexImage1D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,long arg7) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord3f(float arg0, float arg1, float arg2);
+	default void glTexImage1D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,java.nio.IntBuffer arg7) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord3s(short arg0, short arg1, short arg2);
+	default void glTexImage1D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,java.nio.DoubleBuffer arg7) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord3i(int arg0, int arg1, int arg2);
+	default void glTexImage1D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,short[] arg7) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord3d(double arg0, double arg1, double arg2);
+	default void glTexImage1D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,double[] arg7) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexCoord3fv(long arg0);
+	default void glTexImage1D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,float[] arg7) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord3fv(float[] arg0);
+	default void glTexImage1D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int[] arg7) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord3fv(java.nio.FloatBuffer arg0);
+	default void glTexImage1D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,java.nio.ShortBuffer arg7) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexCoord3sv(long arg0);
+	default void nglTexImage2D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,long arg8) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord3sv(java.nio.ShortBuffer arg0);
+	default void glTexImage2D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,double[] arg8) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord3sv(short[] arg0);
+	default void glTexImage2D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,short[] arg8) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexCoord3iv(long arg0);
+	default void glTexImage2D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,float[] arg8) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord3iv(int[] arg0);
+	default void glTexImage2D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,int[] arg8) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord3iv(java.nio.IntBuffer arg0);
+	default void glTexImage2D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,java.nio.ShortBuffer arg8) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexCoord3dv(long arg0);
+	default void glTexImage2D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,java.nio.IntBuffer arg8) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord3dv(double[] arg0);
+	default void glTexImage2D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,java.nio.FloatBuffer arg8) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord3dv(java.nio.DoubleBuffer arg0);
+	default void glTexImage2D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,java.nio.DoubleBuffer arg8) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord4f(float arg0, float arg1, float arg2, float arg3);
+	default void glTexImage2D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,long arg8) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord4s(short arg0, short arg1, short arg2, short arg3);
+	default void glTexImage2D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,java.nio.ByteBuffer arg8) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord4i(int arg0, int arg1, int arg2, int arg3);
+	default void glCopyTexImage1D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord4d(double arg0, double arg1, double arg2, double arg3);
+	default void glCopyTexImage2D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexCoord4fv(long arg0);
+	default void glCopyTexSubImage1D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord4fv(float[] arg0);
+	default void glCopyTexSubImage2D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord4fv(java.nio.FloatBuffer arg0);
+	default void glTexParameteri(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexCoord4sv(long arg0);
+	default void nglTexParameteriv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord4sv(short[] arg0);
+	default void glTexParameteriv(int arg0,int arg1,java.nio.IntBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord4sv(java.nio.ShortBuffer arg0);
+	default void glTexParameteriv(int arg0,int arg1,int[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexCoord4iv(long arg0);
+	default void glTexParameterf(int arg0,int arg1,float arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord4iv(java.nio.IntBuffer arg0);
+	default void nglTexParameterfv(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord4iv(int[] arg0);
+	default void glTexParameterfv(int arg0,int arg1,java.nio.FloatBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexCoord4dv(long arg0);
+	default void glTexParameterfv(int arg0,int arg1,float[] arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord4dv(double[] arg0);
+	default void nglTexSubImage1D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,long arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoord4dv(java.nio.DoubleBuffer arg0);
+	default void glTexSubImage1D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,java.nio.ByteBuffer arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexCoordPointer(int arg0, int arg1, int arg2, long arg3);
+	default void glTexSubImage1D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,short[] arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoordPointer(int arg0, int arg1, int arg2, java.nio.IntBuffer arg3);
+	default void glTexSubImage1D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int[] arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoordPointer(int arg0, int arg1, int arg2, java.nio.ByteBuffer arg3);
+	default void glTexSubImage1D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,float[] arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoordPointer(int arg0, int arg1, int arg2, long arg3);
+	default void glTexSubImage1D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,java.nio.FloatBuffer arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoordPointer(int arg0, int arg1, int arg2, java.nio.ShortBuffer arg3);
+	default void glTexSubImage1D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,java.nio.IntBuffer arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexCoordPointer(int arg0, int arg1, int arg2, java.nio.FloatBuffer arg3);
+	default void glTexSubImage1D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,java.nio.ShortBuffer arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexEnvi(int arg0, int arg1, int arg2);
+	default void glTexSubImage1D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,java.nio.DoubleBuffer arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexEnviv(int arg0, int arg1, long arg2);
+	default void glTexSubImage1D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,long arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexEnviv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void glTexSubImage1D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,double[] arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexEnviv(int arg0, int arg1, int[] arg2);
+	default void nglTexSubImage2D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,long arg8) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexEnvf(int arg0, int arg1, float arg2);
+	default void glTexSubImage2D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,java.nio.FloatBuffer arg8) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexEnvfv(int arg0, int arg1, long arg2);
+	default void glTexSubImage2D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,java.nio.ShortBuffer arg8) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexEnvfv(int arg0, int arg1, float[] arg2);
+	default void glTexSubImage2D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,java.nio.IntBuffer arg8) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexEnvfv(int arg0, int arg1, java.nio.FloatBuffer arg2);
+	default void glTexSubImage2D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,java.nio.ByteBuffer arg8) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexGeni(int arg0, int arg1, int arg2);
+	default void glTexSubImage2D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,double[] arg8) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexGeniv(int arg0, int arg1, long arg2);
+	default void glTexSubImage2D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,float[] arg8) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexGeniv(int arg0, int arg1, java.nio.IntBuffer arg2);
+	default void glTexSubImage2D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,java.nio.DoubleBuffer arg8) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexGeniv(int arg0, int arg1, int[] arg2);
+	default void glTexSubImage2D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,long arg8) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexGenf(int arg0, int arg1, float arg2);
+	default void glTexSubImage2D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,short[] arg8) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexGenfv(int arg0, int arg1, long arg2);
+	default void glTexSubImage2D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,int[] arg8) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexGenfv(int arg0, int arg1, float[] arg2);
+	default void glTranslatef(float arg0,float arg1,float arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexGenfv(int arg0, int arg1, java.nio.FloatBuffer arg2);
+	default void glTranslated(double arg0,double arg1,double arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexGend(int arg0, int arg1, double arg2);
+	default void glVertex2f(float arg0,float arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexGendv(int arg0, int arg1, long arg2);
+	default void glVertex2s(short arg0,short arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexGendv(int arg0, int arg1, double[] arg2);
+	default void glVertex2i(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexGendv(int arg0, int arg1, java.nio.DoubleBuffer arg2);
+	default void glVertex2d(double arg0,double arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexImage1D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, long arg7);
+	default void nglVertex2fv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexImage1D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, double[] arg7);
+	default void glVertex2fv(java.nio.FloatBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexImage1D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, float[] arg7);
+	default void glVertex2fv(float[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexImage1D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, java.nio.FloatBuffer arg7);
+	default void nglVertex2sv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexImage1D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, java.nio.IntBuffer arg7);
+	default void glVertex2sv(short[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexImage1D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int[] arg7);
+	default void glVertex2sv(java.nio.ShortBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexImage1D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, short[] arg7);
+	default void nglVertex2iv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexImage1D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, java.nio.DoubleBuffer arg7);
+	default void glVertex2iv(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexImage1D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, java.nio.ByteBuffer arg7);
+	default void glVertex2iv(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexImage1D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, long arg7);
+	default void nglVertex2dv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexImage1D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, java.nio.ShortBuffer arg7);
+	default void glVertex2dv(java.nio.DoubleBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glCopyTexImage1D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6);
+	default void glVertex2dv(double[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glCopyTexSubImage1D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5);
+	default void glVertex3f(float arg0,float arg1,float arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglTexSubImage1D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, long arg6);
+	default void glVertex3s(short arg0,short arg1,short arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexSubImage1D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, long arg6);
+	default void glVertex3i(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexSubImage1D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, java.nio.ShortBuffer arg6);
+	default void glVertex3d(double arg0,double arg1,double arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexSubImage1D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, java.nio.IntBuffer arg6);
+	default void nglVertex3fv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexSubImage1D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, java.nio.FloatBuffer arg6);
+	default void glVertex3fv(float[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexSubImage1D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, java.nio.DoubleBuffer arg6);
+	default void glVertex3fv(java.nio.FloatBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexSubImage1D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, double[] arg6);
+	default void nglVertex3sv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexSubImage1D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, float[] arg6);
+	default void glVertex3sv(short[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexSubImage1D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int[] arg6);
+	default void glVertex3sv(java.nio.ShortBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexSubImage1D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, short[] arg6);
+	default void nglVertex3iv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTexSubImage1D(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, java.nio.ByteBuffer arg6);
+	default void glVertex3iv(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTranslatef(float arg0, float arg1, float arg2);
+	default void glVertex3iv(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glTranslated(double arg0, double arg1, double arg2);
+	default void nglVertex3dv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex2f(float arg0, float arg1);
+	default void glVertex3dv(java.nio.DoubleBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex2s(short arg0, short arg1);
+	default void glVertex3dv(double[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex2i(int arg0, int arg1);
+	default void glVertex4f(float arg0,float arg1,float arg2,float arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex2d(double arg0, double arg1);
+	default void glVertex4s(short arg0,short arg1,short arg2,short arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertex2fv(long arg0);
+	default void glVertex4i(int arg0,int arg1,int arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex2fv(float[] arg0);
+	default void glVertex4d(double arg0,double arg1,double arg2,double arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex2fv(java.nio.FloatBuffer arg0);
+	default void nglVertex4fv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertex2sv(long arg0);
+	default void glVertex4fv(float[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex2sv(short[] arg0);
+	default void glVertex4fv(java.nio.FloatBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex2sv(java.nio.ShortBuffer arg0);
+	default void nglVertex4sv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertex2iv(long arg0);
+	default void glVertex4sv(short[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex2iv(int[] arg0);
+	default void glVertex4sv(java.nio.ShortBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex2iv(java.nio.IntBuffer arg0);
+	default void nglVertex4iv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertex2dv(long arg0);
+	default void glVertex4iv(int[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex2dv(java.nio.DoubleBuffer arg0);
+	default void glVertex4iv(java.nio.IntBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex2dv(double[] arg0);
+	default void nglVertex4dv(long arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex3f(float arg0, float arg1, float arg2);
+	default void glVertex4dv(double[] arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex3s(short arg0, short arg1, short arg2);
+	default void glVertex4dv(java.nio.DoubleBuffer arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex3i(int arg0, int arg1, int arg2);
+	default void nglVertexPointer(int arg0,int arg1,int arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex3d(double arg0, double arg1, double arg2);
+	default void glVertexPointer(int arg0,int arg1,int arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertex3fv(long arg0);
+	default void glVertexPointer(int arg0,int arg1,int arg2,java.nio.FloatBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex3fv(float[] arg0);
+	default void glVertexPointer(int arg0,int arg1,int arg2,java.nio.IntBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex3fv(java.nio.FloatBuffer arg0);
+	default void glVertexPointer(int arg0,int arg1,int arg2,java.nio.ShortBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertex3sv(long arg0);
+	default void glVertexPointer(int arg0,int arg1,int arg2,java.nio.ByteBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex3sv(short[] arg0);
+	default void glViewport(int arg0,int arg1,int arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex3sv(java.nio.ShortBuffer arg0);
+	default void glTexStorage3D(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertex3iv(long arg0);
+	default void glTexStorage2D(int arg0,int arg1,int arg2,int arg3,int arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex3iv(int[] arg0);
+	default void glProgramBinary(int arg0,int arg1,java.nio.ByteBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex3iv(java.nio.IntBuffer arg0);
+	default void nglGetProgramBinary(int arg0,int arg1,long arg2,long arg3,long arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertex3dv(long arg0);
+	default void glGetProgramBinary(int arg0,int[] arg1,int[] arg2,java.nio.ByteBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex3dv(java.nio.DoubleBuffer arg0);
+	default void glGetProgramBinary(int arg0,java.nio.IntBuffer arg1,java.nio.IntBuffer arg2,java.nio.ByteBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex3dv(double[] arg0);
+	default void glProgramParameteri(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex4f(float arg0, float arg1, float arg2, float arg3);
+	default void nglInvalidateFramebuffer(int arg0,int arg1,long arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex4s(short arg0, short arg1, short arg2, short arg3);
+	default void glInvalidateFramebuffer(int arg0,int arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex4i(int arg0, int arg1, int arg2, int arg3);
+	default void glInvalidateFramebuffer(int arg0,java.nio.IntBuffer arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex4d(double arg0, double arg1, double arg2, double arg3);
+	default void glInvalidateFramebuffer(int arg0,int[] arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertex4fv(long arg0);
+	default void nglInvalidateSubFramebuffer(int arg0,int arg1,long arg2,int arg3,int arg4,int arg5,int arg6) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex4fv(java.nio.FloatBuffer arg0);
+	default void glInvalidateSubFramebuffer(int arg0,int arg1,int arg2,int arg3,int arg4,int arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex4fv(float[] arg0);
+	default void glInvalidateSubFramebuffer(int arg0,java.nio.IntBuffer arg1,int arg2,int arg3,int arg4,int arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertex4sv(long arg0);
+	default void glInvalidateSubFramebuffer(int arg0,int[] arg1,int arg2,int arg3,int arg4,int arg5) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex4sv(java.nio.ShortBuffer arg0);
+	default void nglGetInternalformativ(int arg0,int arg1,int arg2,int arg3,long arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex4sv(short[] arg0);
+	default void glGetInternalformativ(int arg0,int arg1,int arg2,java.nio.IntBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertex4iv(long arg0);
+	default void glGetInternalformativ(int arg0,int arg1,int arg2,int[] arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex4iv(int[] arg0);
+	default int glGetInternalformati(int arg0,int arg1,int arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex4iv(java.nio.IntBuffer arg0);
+	default void nglProgramBinary(int arg0,int arg1,long arg2,int arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertex4dv(long arg0);
+	default void glClearDepthf(float arg0) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex4dv(java.nio.DoubleBuffer arg0);
+	default void glDepthRangef(float arg0,float arg1) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertex4dv(double[] arg0);
+	default void nglGetShaderPrecisionFormat(int arg0,int arg1,long arg2,long arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void nglVertexPointer(int arg0, int arg1, int arg2, long arg3);
+	default void glGetShaderPrecisionFormat(int arg0,int arg1,int[] arg2,int[] arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexPointer(int arg0, int arg1, int arg2, java.nio.FloatBuffer arg3);
+	default void glGetShaderPrecisionFormat(int arg0,int arg1,java.nio.IntBuffer arg2,java.nio.IntBuffer arg3) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexPointer(int arg0, int arg1, int arg2, long arg3);
+	default void glReleaseShaderCompiler() {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexPointer(int arg0, int arg1, int arg2, java.nio.ByteBuffer arg3);
+	default void nglShaderBinary(int arg0,long arg1,int arg2,long arg3,int arg4) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexPointer(int arg0, int arg1, int arg2, java.nio.ShortBuffer arg3);
+	default void glShaderBinary(int[] arg0,int arg1,java.nio.ByteBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
 
-	void glVertexPointer(int arg0, int arg1, int arg2, java.nio.IntBuffer arg3);
+	default void glShaderBinary(java.nio.IntBuffer arg0,int arg1,java.nio.ByteBuffer arg2) {throw new RuntimeException("Not implemented yet.");}
+
 }
