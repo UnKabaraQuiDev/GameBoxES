@@ -15,10 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.lwjgl.opengl.GL40;
-import org.lwjgl.opengl.GL43;
-import org.lwjgl.opengl.GL46;
 import org.lwjgl.opengles.GLES30;
-import org.lwjgl.opengles.GLES32;
 
 public final class GL_W_Init {
 
