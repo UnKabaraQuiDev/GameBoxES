@@ -54,6 +54,7 @@ public class WorldScene3D extends Scene3D {
 	public void input(float dTime) {
 		if (GlobalUtils.INSTANCE.uiScene.getState() != null && GlobalUtils.INSTANCE.uiScene.getState().needsFocus()) {
 			((UISceneGameOverlay) GlobalUtils.INSTANCE.uiScene.getState()).input(dTime);
+			return;
 		} else if (world != null) {
 			world.input(dTime);
 		}
